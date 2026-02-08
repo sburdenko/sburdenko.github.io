@@ -1,119 +1,176 @@
 <!doctype html>
 <html lang="ru">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Evagria — Portfolio</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="cursor" aria-hidden="true"></div>
-    <header class="site-header">
-      <nav class="nav-left">
-        <a href="#works">Works</a>
-        <a href="#about">About</a>
-      </nav>
-      <div class="brand">OLENA BURDENKO</div>
-      <nav class="nav-right">
-        <a href="https://www.instagram.com/lechundra/" target="_blank" rel="noopener">Instagram</a>
-      </nav>
-    </header>
 
-    <main>
-      <section class="h-scroll" id="works">
-        <div class="h-sticky">
-          <div class="h-track">
-            <!-- Filled by script.js -->
-          </div>
-        </div>
-      </section>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Olena Burdenko Portfolio</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
 
-      <section class="grid-section">
-        <div class="grid">
+<body>
+  <div class="cursor" aria-hidden="true"></div>
+  <header class="site-header">
+    <nav class="nav-left">
+      <button class="nav-series" type="button" data-series="serie_1">serie_1</button>
+      <button class="nav-series" type="button" data-series="serie_2">serie_2</button>
+      <a href="#about">About</a>
+    </nav>
+    <div class="brand">OLENA BURDENKO</div>
+    <nav class="nav-right">
+      <a href="https://www.instagram.com/lechundra/" target="_blank" rel="noopener">Instagram</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="h-scroll" id="works">
+      <div class="h-sticky">
+        <div class="h-track">
           <!-- Filled by script.js -->
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="about" id="about">
-        <div class="about-card">
-          <h2>About</h2>
-          <p>
-            Emerging fashion and fine-art photographer creating intimate portraits,
-            editorials, and campaign imagery. Open for collaborations worldwide and
-            always looking to tell new visual stories.
-          </p>
-          <div class="about-actions">
-            <a class="button" href="mailto:polishuk013@gmail.com">polishuk013@gmail.com</a>
-            <a class="button ghost" href="#works">Смотреть работы</a>
-          </div>
+    <section class="grid-section">
+      <div class="grid">
+        <!-- Filled by script.js -->
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="about-card">
+        <h2>About</h2>
+        <p>
+          Emerging fashion and fine-art photographer creating intimate portraits,
+          editorials, and campaign imagery. Open for collaborations worldwide and
+          always looking to tell new visual stories.
+        </p>
+        <div class="about-actions">
+          <a class="button" href="mailto:polishuk013@gmail.com">polishuk013@gmail.com</a>
+          <a class="button ghost" href="#works">Works</a>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
+  </main>
 
-    <footer class="site-footer">
-      <p>OLENA BURDENKO © 2026</p>
-    </footer>
+  <footer class="site-footer">
+    <p>OLENA BURDENKO © 2026</p>
+  </footer>
 
-    <script id="portfolio-data" type="application/json">
+  <script id="portfolio-data" type="application/json">
       {
-        "horizontal": [
-          "hor/IMG_6241.JPG",
-          "hor/IMG_6248.JPG",
-          "hor/IMG_6249.JPG",
-          "hor/IMG_6252.JPG"
-        ],
-        "rows": [
-          3,
-          4,
-          3,
-          2,
-          3,
-          1,
-          5,
-          2,
-          1,
-          3,
-          4,
-          3
-        ],
-        "vertical": [
-          "vert/IMG_6253.JPG",
-          "vert/IMG_6254.JPG",
-          "vert/IMG_6255.JPG",
-          "vert/IMG_6257.JPG",
-          "vert/IMG_6258.JPG",
-          "vert/IMG_6259.JPG",
-          "vert/IMG_6260.JPG",
-          "vert/IMG_6261.JPG",
-          "vert/IMG_6262.JPG",
-          "vert/IMG_6264.JPG",
-          "vert/IMG_6268.JPG",
-          "vert/IMG_6269.JPG",
-          "vert/IMG_6270.JPG",
-          "vert/IMG_6273.JPG",
-          "vert/IMG_6274.JPG",
-          "vert/IMG_6275.JPG",
-          "vert/IMG_6277.JPG",
-          "vert/IMG_6278.JPG",
-          "vert/IMG_6279.JPG",
-          "vert/IMG_6280.JPG",
-          "vert/IMG_6281.JPG",
-          "vert/IMG_6282.JPG",
-          "vert/IMG_6283.JPG",
-          "vert/IMG_6288.JPG",
-          "vert/IMG_6289.JPG",
-          "vert/IMG_6290.JPG",
-          "vert/IMG_6292.JPG",
-          "vert/IMG_6294.JPG",
-          "vert/IMG_6295.JPG",
-          "vert/IMG_6297.JPG",
-          "vert/IMG_6299.JPG",
-          "vert/IMG_6304.JPG",
-          "vert/IMG_6307.JPG",
-          "vert/IMG_6308.JPG"
-        ]
+        "active": "serie_1",
+        "series": {
+          "serie_1": {
+            "horizontal": [
+              "serie1/hor/IMG_6241.JPG",
+              "serie1/hor/IMG_6248.JPG",
+              "serie1/hor/IMG_6249.JPG",
+              "serie1/hor/IMG_6252.JPG",
+              "serie1/hor/IMG_6253.JPG",
+              "serie1/hor/IMG_6254.JPG",
+              "serie1/hor/IMG_6255.JPG"
+            ],
+            "rows": [
+              4,
+              3,
+              4,
+              3,
+              2,
+              4,
+              4,
+              2,
+              1,
+              3,
+              3
+            ],
+            "vertical": [
+              "serie1/vert/IMG_6257.JPG",
+              "serie1/vert/IMG_6258.JPG",
+              "serie1/vert/IMG_6259.JPG",
+              "serie1/vert/IMG_6260.JPG",
+              "serie1/vert/IMG_6261.JPG",
+              "serie1/vert/IMG_6262.JPG",
+              "serie1/vert/IMG_6264.JPG",
+              "serie1/vert/IMG_6268.JPG",
+              "serie1/vert/IMG_6269.JPG",
+              "serie1/vert/IMG_6270.JPG",
+              "serie1/vert/IMG_6273.JPG",
+              "serie1/vert/IMG_6274.JPG",
+              "serie1/vert/IMG_6275.JPG",
+              "serie1/vert/IMG_6277.JPG",
+              "serie1/vert/IMG_6278.JPG",
+              "serie1/vert/IMG_6279.JPG",
+              "serie1/vert/IMG_6280.JPG",
+              "serie1/vert/IMG_6281.JPG",
+              "serie1/vert/IMG_6282.JPG",
+              "serie1/vert/IMG_6283.JPG",
+              "serie1/vert/IMG_6288.JPG",
+              "serie1/vert/IMG_6289.JPG",
+              "serie1/vert/IMG_6290.JPG",
+              "serie1/vert/IMG_6292.JPG",
+              "serie1/vert/IMG_6294.JPG",
+              "serie1/vert/IMG_6295.JPG",
+              "serie1/vert/IMG_6297.JPG",
+              "serie1/vert/IMG_6299.JPG",
+              "serie1/vert/IMG_6304.JPG",
+              "serie1/vert/IMG_6307.JPG",
+              "serie1/vert/IMG_6308.JPG"
+            ]
+          },
+          "serie_2": {
+            "horizontal": [
+              "serie2/hor/IMG_5090.JPG",
+              "serie2/hor/IMG_5091.JPG",
+              "serie2/hor/IMG_5093.JPG",
+              "serie2/hor/IMG_5095.JPG",
+              "serie2/hor/IMG_5097.JPG"
+            ],
+            "rows": [
+              4,
+              3,
+              4,
+              3,
+              2,
+              4,
+              4,
+              4
+            ],
+            "vertical": [
+              "serie2/vert/IMG_5099.JPG",
+              "serie2/vert/IMG_5100.JPG",
+              "serie2/vert/IMG_5101.JPG",
+              "serie2/vert/IMG_5102.JPG",
+              "serie2/vert/IMG_5103.JPG",
+              "serie2/vert/IMG_5104.JPG",
+              "serie2/vert/IMG_5111.JPG",
+              "serie2/vert/IMG_5112.JPG",
+              "serie2/vert/IMG_5113.JPG",
+              "serie2/vert/IMG_5117.JPG",
+              "serie2/vert/IMG_5118.JPG",
+              "serie2/vert/IMG_5126.JPG",
+              "serie2/vert/IMG_5128.JPG",
+              "serie2/vert/IMG_5134.JPG",
+              "serie2/vert/IMG_5135.JPG",
+              "serie2/vert/IMG_5137.JPG",
+              "serie2/vert/IMG_5138.JPG",
+              "serie2/vert/IMG_5143.JPG",
+              "serie2/vert/IMG_5144.JPG",
+              "serie2/vert/IMG_5145.JPG",
+              "serie2/vert/IMG_5150.JPG",
+              "serie2/vert/IMG_5170.JPG",
+              "serie2/vert/IMG_5171.JPG",
+              "serie2/vert/IMG_5178.JPG",
+              "serie2/vert/IMG_5179.JPG",
+              "serie2/vert/IMG_5184.JPG",
+              "serie2/vert/IMG_5188.JPG",
+              "serie2/vert/IMG_5189.JPG"
+            ]
+          }
+        }
       }
     </script>
-    <script src="script.js"></script>
-  </body>
+  <script src="script.js"></script>
+</body>
+
 </html>

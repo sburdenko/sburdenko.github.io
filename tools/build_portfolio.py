@@ -7,8 +7,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 IMAGES_DIR = ROOT / "images"
-HOR_DIR = IMAGES_DIR / "hor"
-VERT_DIR = IMAGES_DIR / "vert"
 CONFIG_PATH = ROOT / "portfolio.config.json"
 HTML_PATH = ROOT / "index.html"
 
@@ -16,12 +14,13 @@ HTML_PATH = ROOT / "index.html"
 def load_config() -> dict:
     if CONFIG_PATH.exists():
         return json.loads(CONFIG_PATH.read_text())
-    return {"rows": [4, 3, 4, 3, 2, 4, 4, 2, 1, 3, 3]}
-
-
-def ensure_dirs() -> None:
-    HOR_DIR.mkdir(parents=True, exist_ok=True)
-    VERT_DIR.mkdir(parents=True, exist_ok=True)
+    return {
+        "active": "serie_1",
+        "series": {
+            "serie_1": {"dir": "images", "rows": [4, 3, 4, 3, 2, 4, 4, 2, 1, 3, 3]},
+            "serie_2": {"dir": "images/serie2", "rows": [4, 3, 4, 3, 2, 4, 4, 4]},
+        },
+    }
 
 
 def convert_cr3(folder: Path) -> None:
@@ -42,19 +41,22 @@ def list_images(folder: Path) -> list[str]:
     return files
 
 
-def build_data(rows: list[int]) -> dict:
-    ensure_dirs()
-    convert_cr3(HOR_DIR)
-    convert_cr3(VERT_DIR)
+def build_series(dir_path: Path, rows: list[int]) -> dict:
+    hor_dir = dir_path / "hor"
+    vert_dir = dir_path / "vert"
+    hor_dir.mkdir(parents=True, exist_ok=True)
+    vert_dir.mkdir(parents=True, exist_ok=True)
 
-    horizontal = [f"hor/{name}" for name in list_images(HOR_DIR)]
-    vertical = [f"vert/{name}" for name in list_images(VERT_DIR)]
+    convert_cr3(hor_dir)
+    convert_cr3(vert_dir)
 
-    return {
-        "horizontal": horizontal,
-        "rows": rows,
-        "vertical": vertical,
-    }
+    prefix_path = dir_path.relative_to(IMAGES_DIR)
+    prefix = "" if prefix_path == Path(".") else f"{prefix_path.as_posix()}/"
+
+    horizontal = [f"{prefix}hor/{name}" for name in list_images(hor_dir)]
+    vertical = [f"{prefix}vert/{name}" for name in list_images(vert_dir)]
+
+    return {"horizontal": horizontal, "rows": rows, "vertical": vertical}
 
 
 def update_html(data: dict) -> None:
@@ -77,12 +79,21 @@ def update_html(data: dict) -> None:
 
 def main() -> None:
     config = load_config()
-    rows = config.get("rows") or [4, 3, 4, 3, 2, 4, 4, 2, 1, 3, 3]
-    data = build_data(rows)
+    series_config = config.get("series") or {}
+    active = config.get("active") or next(iter(series_config.keys()), "serie_1")
+
+    series_data: dict[str, dict] = {}
+    for name, series in series_config.items():
+        dir_value = series.get("dir", "images")
+        dir_path = (ROOT / dir_value).resolve()
+        rows = series.get("rows") or []
+        series_data[name] = build_series(dir_path, rows)
+
+    data = {"active": active, "series": series_data}
     update_html(data)
     print("Updated portfolio-data in index.html")
-    print(f"Horizontal: {len(data['horizontal'])} images")
-    print(f"Vertical:   {len(data['vertical'])} images")
+    for name, series in series_data.items():
+        print(f"{name}: {len(series['horizontal'])} horizontal, {len(series['vertical'])} vertical")
 
 
 if __name__ == "__main__":

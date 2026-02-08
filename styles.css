@@ -8,6 +8,7 @@
   --accent: #b9915a;
   --gap: 0.2rem;
   --shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+  --header-height: 72px;
 }
 
 * {
@@ -37,6 +38,10 @@ a:hover {
   color: var(--accent);
 }
 
+.site-header nav button:hover {
+  color: var(--accent);
+}
+
 .site-header {
   position: fixed;
   top: 0;
@@ -46,7 +51,8 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.7rem 4vw;
+  height: var(--header-height);
+  padding: 0 4vw;
   background: linear-gradient(180deg, rgba(9, 9, 10, 0.92), rgba(9, 9, 10, 0.65), rgba(9, 9, 10, 0));
   backdrop-filter: blur(8px);
 }
@@ -59,6 +65,22 @@ a:hover {
   letter-spacing: 0.16em;
 }
 
+.site-header nav a,
+.site-header nav button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+}
+
+.site-header nav button.active {
+  color: var(--accent);
+}
+
 .brand {
   font-family: "Bodoni Moda", serif;
   font-size: clamp(0.9rem, 1.8vw, 1.5rem);
@@ -66,7 +88,7 @@ a:hover {
 }
 
 main {
-  padding-top: 72px;
+  padding-top: var(--header-height);
 }
 
 .h-scroll {
@@ -75,8 +97,8 @@ main {
 
 .h-sticky {
   position: sticky;
-  top: 0;
-  height: 100vh;
+  top: var(--header-height);
+  height: calc(100vh - var(--header-height));
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -87,6 +109,26 @@ main {
   gap: var(--gap);
   padding: 0 var(--gap);
   will-change: transform;
+  height: 100%;
+  align-items: stretch;
+}
+
+.h-track .work-card {
+  width: auto;
+  height: calc(100vh - var(--header-height));
+  aspect-ratio: auto;
+  background: #0a0a0a;
+}
+
+.h-track .work-card img {
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+  transform: none;
+}
+
+.h-track .work-card:hover img {
+  transform: none;
 }
 
 .work-card {

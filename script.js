@@ -27,14 +27,14 @@ const createFigure = (filename, index, loading) => {
   return figure;
 };
 
-const buildGallery = (data) => {
-  if (!track || !grid || !data) return;
+const buildGallery = (series) => {
+  if (!track || !grid || !series) return;
   track.innerHTML = "";
   grid.innerHTML = "";
 
-  const horizontal = Array.isArray(data.horizontal) ? data.horizontal : [];
-  const vertical = Array.isArray(data.vertical) ? data.vertical : [];
-  const rows = Array.isArray(data.rows) ? data.rows : [];
+  const horizontal = Array.isArray(series.horizontal) ? series.horizontal : [];
+  const vertical = Array.isArray(series.vertical) ? series.vertical : [];
+  const rows = Array.isArray(series.rows) ? series.rows : [];
 
   let index = 1;
   horizontal.forEach((name) => {
@@ -79,10 +79,64 @@ const buildGallery = (data) => {
   }
 };
 
+let recalcHorizontal = () => {};
+
+const applyLoadingStrategy = (preloadCount = 12) => {
+  const images = Array.from(document.querySelectorAll(".work-card img"));
+  images.forEach((img, index) => {
+    img.decoding = "async";
+    img.loading = index < preloadCount ? "eager" : "lazy";
+    if (index < 4) {
+      img.fetchPriority = "high";
+    }
+  });
+  return images;
+};
+
+const waitForImages = (images) =>
+  Promise.all(
+    images.map((img) => {
+      if (img.complete) return Promise.resolve();
+      if (img.decode) {
+        return img.decode().catch(() => undefined);
+      }
+      return new Promise((resolve) => {
+        img.addEventListener("load", resolve, { once: true });
+        img.addEventListener("error", resolve, { once: true });
+      });
+    })
+  );
+
 const portfolioData = loadPortfolioData();
+const seriesButtons = Array.from(document.querySelectorAll("[data-series]"));
+
+const setActiveSeries = (name) => {
+  if (!portfolioData || !portfolioData.series) return;
+  const series = portfolioData.series[name];
+  if (!series) return;
+  buildGallery(series);
+  applyLoadingStrategy(12);
+  const trackImages = track ? Array.from(track.querySelectorAll("img")) : [];
+  waitForImages(trackImages).then(() => recalcHorizontal());
+  recalcHorizontal();
+
+  seriesButtons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.series === name);
+  });
+};
+
 if (portfolioData) {
-  buildGallery(portfolioData);
+  const initial = portfolioData.active || (portfolioData.series ? Object.keys(portfolioData.series)[0] : null);
+  if (initial) {
+    setActiveSeries(initial);
+  }
 }
+
+seriesButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    setActiveSeries(button.dataset.series);
+  });
+});
 
 const updateCursorColor = () => {
   if (!cursor) return;
@@ -109,13 +163,14 @@ if (!section || !track || prefersReduced) {
   const setHeight = () => {
     const trackWidth = track.scrollWidth;
     const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
+    const stickyHeight = section.querySelector(".h-sticky")?.offsetHeight || window.innerHeight;
     const scrollLength = Math.max(0, trackWidth - viewportWidth);
-    section.style.height = `${scrollLength + viewportHeight}px`;
+    section.style.height = `${scrollLength + stickyHeight}px`;
   };
 
   const update = () => {
-    const scrollDistance = section.offsetHeight - window.innerHeight;
+    const stickyHeight = section.querySelector(".h-sticky")?.offsetHeight || window.innerHeight;
+    const scrollDistance = Math.max(0, section.offsetHeight - stickyHeight);
     if (scrollDistance <= 0) return;
 
     const rect = section.getBoundingClientRect();
@@ -124,12 +179,16 @@ if (!section || !track || prefersReduced) {
     track.style.transform = `translateX(${-maxTranslate * progress}px)`;
   };
 
-  setHeight();
-  update();
-
-  window.addEventListener("resize", () => {
+  recalcHorizontal = () => {
     setHeight();
     update();
-  });
+    if (window.scrollY === 0) {
+      track.style.transform = "translateX(0px)";
+    }
+  };
+
+  recalcHorizontal();
+
+  window.addEventListener("resize", recalcHorizontal);
   window.addEventListener("scroll", update, { passive: true });
 }
