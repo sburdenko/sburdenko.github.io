@@ -114,6 +114,7 @@ const setActiveSeries = (name) => {
   if (!portfolioData || !portfolioData.series) return;
   const series = portfolioData.series[name];
   if (!series) return;
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   buildGallery(series);
   applyLoadingStrategy(12);
   const trackImages = track ? Array.from(track.querySelectorAll("img")) : [];
