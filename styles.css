@@ -1,0 +1,272 @@
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=Syne:wght@400;500;600&display=swap");
+
+:root {
+  --bg: #0b0b0c;
+  --bg-soft: #151211;
+  --text: #f3efe8;
+  --muted: #c8bdb1;
+  --accent: #b9915a;
+  --gap: 0.2rem;
+  --shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+figure {
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  font-family: "Syne", "Avenir Next", sans-serif;
+  color: var(--text);
+  background: radial-gradient(circle at top left, #1b1612 0%, #0b0b0c 45%, #050505 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 4vw;
+  background: linear-gradient(180deg, rgba(9, 9, 10, 0.92), rgba(9, 9, 10, 0.65), rgba(9, 9, 10, 0));
+  backdrop-filter: blur(8px);
+}
+
+.site-header nav {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+.brand {
+  font-family: "Bodoni Moda", serif;
+  font-size: clamp(0.9rem, 1.8vw, 1.5rem);
+  letter-spacing: 0.28em;
+}
+
+main {
+  padding-top: 72px;
+}
+
+.h-scroll {
+  position: relative;
+}
+
+.h-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.h-track {
+  display: flex;
+  gap: var(--gap);
+  padding: 0 var(--gap);
+  will-change: transform;
+}
+
+.work-card {
+  position: relative;
+  width: min(72vw, 860px);
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--bg-soft);
+  box-shadow: var(--shadow);
+}
+
+.work-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.02);
+  transition: transform 0.8s ease;
+}
+
+.work-card figcaption {
+  display: none;
+}
+
+.work-card:hover img {
+  transform: scale(1.08);
+}
+
+.grid-section {
+  padding: var(--gap);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap);
+}
+
+.grid .work-card {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+}
+
+.about {
+  padding: 4rem 6vw 6rem;
+}
+
+.about-card {
+  max-width: 720px;
+  background: linear-gradient(145deg, rgba(28, 23, 20, 0.9), rgba(12, 10, 10, 0.95));
+  border-radius: 32px;
+  padding: 3rem;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+}
+
+.about-card h2 {
+  font-family: "Bodoni Moda", serif;
+  font-size: 2.4rem;
+  margin: 0 0 1rem;
+}
+
+.about-card p {
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 0 0 2rem;
+}
+
+.about-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.button {
+  padding: 0.9rem 1.6rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #120f0c;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.button.ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--text);
+}
+
+.site-footer {
+  padding: 2rem 6vw 3rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-size: 0.7rem;
+}
+
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: background-color 0.2s ease;
+  z-index: 9999;
+}
+
+.reduce-motion .h-scroll {
+  height: auto;
+}
+
+.reduce-motion .h-sticky {
+  position: relative;
+  height: auto;
+  overflow-x: auto;
+}
+
+.reduce-motion .h-track {
+  transform: none !important;
+  padding-bottom: 2rem;
+  scroll-snap-type: x mandatory;
+}
+
+.reduce-motion .work-card {
+  scroll-snap-align: start;
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .site-header nav {
+    gap: 1rem;
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (max-width: 720px) {
+  .site-header {
+    padding: 0.6rem 4vw;
+  }
+
+  .site-header nav {
+    font-size: 0.65rem;
+  }
+
+  .brand {
+    letter-spacing: 0.2em;
+  }
+
+  .hero {
+    padding: 3rem 5vw 1rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .work-card {
+    width: 88vw;
+  }
+
+  .grid .work-card {
+    width: 100%;
+  }
+}
+
+@media (pointer: coarse) {
+  body {
+    cursor: auto;
+  }
+
+  .cursor {
+    display: none;
+  }
+}
