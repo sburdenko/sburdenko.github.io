@@ -266,7 +266,7 @@ export function traverse({ start, neighbors, order = 'bfs', goal = null, stopAtG
     }
   }
 
-  push({ t: 'done', line: 3, frontier: [], note: found ? 'Цель достигнута' : 'Очередь пуста — обход закончен' });
+  push({ t: 'done', line: 3, frontier: [], found, note: found ? 'Цель достигнута' : 'Фронт пуст — обход закончен' });
 
   return {
     order, events, parent, depth, visitIndex, found,

@@ -87,7 +87,9 @@ export function noteFor(order, ev, labelOf) {
     case 'skip': return { tag: ACTION.skip, text: `Сосед <b>${A}</b> уже ${order === 'bfs' ? 'в очереди или посещён' : 'посещён'} — второй раз не открываем.` };
     case 'dup': return { tag: ACTION.dup, text: `<b>${A}</b> лежал в стеке дважды. Эта копия устарела — выбрасываем.` };
     case 'goal': return { tag: ACTION.goal, text: `<b>${A}</b> — это цель. Путь восстанавливаем по родителям назад до старта.` };
-    case 'done': return { tag: ACTION.done, text: `${order === 'bfs' ? 'Очередь' : 'Стек'} пуст: всё, до чего можно дойти, обойдено.` };
+    case 'done': return ev.found
+      ? { tag: ACTION.done, text: 'Цель найдена — дальше обход можно не продолжать. Путь уже собран по родителям.' }
+      : { tag: ACTION.done, text: `${order === 'bfs' ? 'Очередь' : 'Стек'} ${order === 'bfs' ? 'пуста' : 'пуст'}: всё, до чего можно дойти, обойдено.` };
     default: return { tag: '—', text: '' };
   }
 }
