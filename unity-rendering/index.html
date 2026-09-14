@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0715">
+<title>Батчинг в Unity — кто что склеивает · Кассета №1</title>
+<meta name="description" content="Static и dynamic batching, SRP Batcher, GPU instancing и GPU Resident Drawer в Unity 6: что экономится, что уходит на видеокарту и где платит процессор.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
+<link rel="stylesheet" href="../assets/vhs.css">
+<link rel="stylesheet" href="./page.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
+</head>
+<body>
+<div class="fx fx-scan" aria-hidden="true"></div>
+<div class="fx fx-vig" aria-hidden="true"></div>
+<div class="fx fx-track" aria-hidden="true"></div>
+<canvas id="noise" width="160" height="90" aria-hidden="true"></canvas>
+
+<header class="osd" aria-label="Навигация по кассете">
+  <div class="l"><a class="home" href="../">◀ ПОЛКА</a><span class="play">PLAY ►</span><span class="ch" id="osdCh">CH.00 INTRO</span></div>
+  <div class="r"><nav id="osdNav" aria-label="Главы"></nav><span>SP</span><span class="ctr" id="osdCtr">0:00:00</span></div>
+</header>
+
+<main>
+<!-- ============ HERO ============ -->
+<section class="hero chapter" id="intro" data-ch="CH.00 INTRO" style="padding-top:56px">
+  <p class="eyebrow">Кассета №1 · Рендер в Unity · для собеседования</p>
+  <h1 class="title">Батчинг<span class="title-2">кто что склеивает и кто за это платит</span></h1>
+  <p class="kicker" style="font-size:clamp(17px,1.8vw,20px);color:#e3dcfb">Static batching, dynamic batching, SRP Batcher, GPU instancing и GPU Resident Drawer из Unity 6. Для каждого разберём, что именно экономится, что уходит на видеокарту и где за это платит процессор. Всё на странице можно щёлкать.</p>
+
+  <div class="thesis panel">
+    <div class="thesis-head">
+      <p class="thesis-q"><b>Главная мысль кассеты:</b> батчинг почти всегда экономит время <span class="cpu">CPU</span>, а не <span class="gpu">GPU</span>. Вершин рисуется столько же. Меньше становится подготовки к каждому вызову отрисовки.</p>
+      <div class="seg" role="group" aria-label="Как рисуем">
+        <button id="lnSep" aria-pressed="true">По одному</button><button id="lnBat" aria-pressed="false">Батчем</button>
+      </div>
+    </div>
+    <canvas id="lanes" aria-label="Временная шкала кадра: дорожка CPU и дорожка GPU"></canvas>
+    <div class="ctl-row" style="max-width:520px">
+      <label for="lnN" style="flex:1">Объектов в кадре <output id="lnNo">200</output></label>
+    </div>
+    <input type="range" id="lnN" min="20" max="400" step="10" value="200" style="max-width:520px">
+    <div class="readouts" id="lnRead"></div>
+  </div>
+</section>
+
+<!-- ============ TERMS ============ -->
+<section class="chapter" id="terms" data-ch="CH.01 TERMS">
+  <div class="ch-head">
+    <p class="osdtag">CH.01 // TERMS</p>
+    <h2>Четыре слова, без которых дальше никак</h2>
+  </div>
+  <dl class="gloss">
+    <div><dt>Draw call <i style="background:rgba(38,227,234,.14);color:var(--gpu)">GPU</i></dt><dd>Команда видеокарте: «нарисуй этот диапазон индексов этого меша». Для GPU сам вызов дешёвый. Дорого то, что CPU делает перед ним: проверки, выставление состояния, заливка констант.</dd></div>
+    <div><dt>SetPass call <i style="background:rgba(255,62,165,.16);color:var(--cpu)">CPU</i></dt><dd>Смена шейдерного прохода и состояния рендера: шейдер, текстуры, блендинг, свойства материала. Самое тяжёлое переключение для CPU. В окне Stats у него своя строка.</dd></div>
+    <div><dt>Batches / Saved by batching</dt><dd>Строки в окне Stats. Batches — сколько групп отрисовки ушло в кадре (static, dynamic и instanced батчи считаются по одному). Saved by batching — сколько вызовов удалось не делать.</dd></div>
+    <div><dt>Render thread</dt><dd>Поток, который превращает список видимых объектов в команды графического API. Если в Profiler он дольше GPU-времени, ты упираешься в CPU, и батчинг поможет. Если нет — ищи проблему в шейдерах, overdraw или количестве вершин.</dd></div>
+  </dl>
+</section>
+
+<!-- ============ DECK ============ -->
+<section class="chapter" id="deck" data-ch="CH.02 FRAME DECK">
+  <div class="ch-head">
+    <p class="osdtag">CH.02 // FRAME DECK</p>
+    <h2>Пульт кадра</h2>
+    <p class="kicker">Квартал неонового города: 63 объекта, 13 материалов, 3 шейдерных варианта. Включай и выключай техники и смотри, как меняется поток команд от CPU к GPU. Клик по объекту в кадре открывает его «инспектор», клик по блоку на ленте объясняет, что за батч и почему оборвался предыдущий.</p>
+  </div>
+
+  <div class="deck panel">
+    <div class="deck-ctl">
+      <div class="ctl-group"><span class="ctl-label">PIPELINE</span>
+        <div class="seg" id="pipe" role="group" aria-label="Рендер-пайплайн"><button data-v="birp" aria-pressed="false">Built-in</button><button data-v="urp" aria-pressed="true">URP</button><button data-v="hdrp" aria-pressed="false">HDRP</button></div></div>
+      <div class="ctl-group"><span class="ctl-label">SCALE</span>
+        <div class="seg" id="scale" role="group" aria-label="Сколько кварталов в кадре"><button data-v="1" aria-pressed="false">×1</button><button data-v="10" aria-pressed="true">×10</button><button data-v="100" aria-pressed="false">×100</button></div></div>
+      <div class="ctl-group"><span class="ctl-label">PRESETS</span>
+        <div class="presets" id="presets">
+          <button class="btn" data-p="none">Всё выключено</button>
+          <button class="btn" data-p="birp">Built-in классика</button>
+          <button class="btn" data-p="urp">URP по умолчанию</button>
+          <button class="btn" data-p="u6">Unity 6 · совет доков</button>
+        </div></div>
+      <div class="ctl-group" style="flex-basis:100%"><span class="ctl-label">TECHNIQUES</span>
+        <div class="toggles" id="tgs">
+          <button class="tg" data-k="stat">Static batching</button>
+          <button class="tg" data-k="dyn">Dynamic batching</button>
+          <button class="tg" data-k="srp">SRP Batcher</button>
+          <button class="tg" data-k="inst">GPU instancing</button>
+          <button class="tg" data-k="grd">GPU Resident Drawer</button>
+          <button class="chip" id="wire" aria-pressed="false">◇ Каркас</button>
+        </div></div>
+    </div>
+
+    <div class="deck-main">
+      <div class="crt" id="crt">
+        <canvas id="scene" aria-label="Изометрический квартал: кликни по объекту, чтобы открыть инспектор"></canvas>
+        <div class="crt-osd"><span id="crtL">CAM 01</span><span class="rec" id="crtR">● REC</span></div>
+      </div>
+      <aside class="side" id="side" aria-live="polite"></aside>
+    </div>
+
+    <div class="tape-wrap">
+      <div class="tape-head">
+        <span class="t" id="tapeT">COMMAND STREAM</span>
+        <div class="ctl-row"><button class="btn primary" id="play">► Проиграть кадр</button><button class="btn" id="clearSel">Сбросить выбор</button></div>
+      </div>
+      <div class="tape" id="tape" role="group" aria-label="Батчи кадра по порядку"></div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+    <p class="note">Миллисекунды и байты — упрощённая модель, чтобы сравнивать техники между собой, а не замер реального железа. Жёлтая риска на полосах — бюджет 16,7 мс (60 FPS).</p>
+  </div>
+</section>
+
+<!-- ============ COMPARE ============ -->
+<section class="chapter" id="compare" data-ch="CH.03 COMPARE">
+  <div class="ch-head">
+    <p class="osdtag">CH.03 // ONE SCENE, ALL TECHNIQUES</p>
+    <h2>Одна сцена. Все техники по отдельности</h2>
+    <p class="kicker">Таблица считает ту же сцену, что стоит на пульте выше: меняешь пайплайн или масштаб — цифры пересчитываются. Каждая строка включает ровно одну технику, чтобы было видно её собственный вклад.</p>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Техника</th><th>Draw calls</th><th>SetPass</th><th>CPU, мс</th><th>CPU → GPU</th><th>Доп. память</th><th>В этой сцене</th></tr></thead>
+      <tbody id="cmpBody"></tbody>
+    </table>
+  </div>
+  <p class="note" id="cmpNote"></p>
+
+  <div class="ch-head" style="margin-top:20px">
+    <h3 style="font-size:24px">Три маленьких эксперимента</h3>
+    <p class="kicker">Каждая карточка настраивает пульт и прокручивает к нему. Сначала ответь себе, что произойдёт, потом нажимай.</p>
+  </div>
+  <div class="exps" id="exps">
+    <button class="exp" data-p="forest">
+      <span class="n">ЭКСПЕРИМЕНТ 01 ↗</span>
+      <h3>Лес из одинаковых объектов</h3>
+      <p>Built-in, только GPU instancing. Посмотри, какие материалы схлопнулись в один вызов, а какие остались сами по себе — и почему.</p>
+      <em>Загрузить сцену →</em>
+    </button>
+    <button class="exp" data-p="materials">
+      <span class="n">ЭКСПЕРИМЕНТ 02 ↗</span>
+      <h3>Много материалов. Один шейдер.</h3>
+      <p>URP, только SRP Batcher. Draw calls не изменились ни на один — почему тогда CPU-время упало почти вдвое?</p>
+      <em>Загрузить сцену →</em>
+    </button>
+    <button class="exp" data-p="heavy">
+      <span class="n">ЭКСПЕРИМЕНТ 03 ↗</span>
+      <h3>Цена «бесплатного» батчинга</h3>
+      <p>100 кварталов и один dynamic batching. Вызовов стало меньше, а CPU — больше. Открой ленту и найди оранжевые блоки.</p>
+      <em>Загрузить сцену →</em>
+    </button>
+  </div>
+</section>
+
+<!-- ============ STATIC ============ -->
+<section class="chapter" id="static" data-ch="CH.04 STATIC">
+  <div class="ch-head">
+    <p class="osdtag">CH.04 // STATIC BATCHING</p>
+    <h2>Static batching: склеить заранее</h2>
+  </div>
+  <div class="two">
+    <div class="prose">
+      <p>Объекты с флагом <code>Batching Static</code> Unity ещё при сборке (или при загрузке сцены) переводит в мировые координаты и складывает в один общий вершинный и один индексный буфер. Каждый такой буфер вмещает до 64 000 вершин; если нужно больше, Unity создаёт несколько батчей.</p>
+      <p>В кадре CPU уже не пересчитывает и не перевязывает меши: один вызов рисует целый диапазон индексов с одним материалом. На каждый кадр почти ничего не тратится, но цена платится заранее.</p>
+      <p>Первая цена — <b>память</b>. Сто одинаковых фонарей раньше ссылались на один меш, а теперь это сто копий вершин в общем буфере. Вторая — <b>неподвижность</b>: вершины уже запечены в мире, двигать такой объект нельзя. Третья — <b>culling</b>: если камера видит объекты вразнобой, один диапазон рвётся на несколько вызовов.</p>
+      <p>Работает только с <code>MeshRenderer</code> (не со skinned) и с объектами одного материала внутри батча. Для склейки в рантайме есть <code>StaticBatchingUtility.Combine</code>.</p>
+    </div>
+    <div class="facts">
+      <div><span class="k save">Экономит</span><p>Draw calls и смену буферов на CPU. Затраты на кадр почти нулевые.</p></div>
+      <div><span class="k cost">Цена</span><p>Память (копия каждого меша в мировых координатах), объём сборки, объекты нельзя двигать.</p></div>
+      <div><span class="k need">Условия</span><p>Флаг Static, MeshRenderer, общий материал. В Unity 6 для URP/HDRP доки советуют выключить его в пользу GPU Resident Drawer.</p></div>
+    </div>
+  </div>
+  <div class="mini panel">
+    <div class="mini-col">
+      <h4>Что видит камера</h4>
+      <p class="hint">Это один static batch: 16 зданий подряд в общем индексном буфере. Щёлкай сегменты — прячь объекты из кадра, как это делает frustum culling.</p>
+      <div class="ibuf" id="ibuf" role="group" aria-label="Объекты в индексном буфере"></div>
+      <div class="ibuf-cap"><span>индекс 0</span><span>общий index buffer →</span><span>индекс N</span></div>
+      <p class="bigout" id="ibufOut"></p>
+      <div class="ctl-row"><button class="btn" id="ibufRnd">Повернуть камеру</button><button class="btn" id="ibufAll">Видно всё</button></div>
+    </div>
+    <div class="mini-col">
+      <h4>Цена в памяти</h4>
+      <label for="stN">Копий забора, 800 вершин × 48 байт <output id="stNo">120</output></label>
+      <input type="range" id="stN" min="1" max="500" value="120">
+      <div class="membars" id="stMem"></div>
+      <div class="ctl-row"><button class="btn" id="stMove">Сдвинуть объект в рантайме</button></div>
+      <p class="toast" id="stToast" hidden>Transform изменится, а картинка — нет: вершины уже запечены в общем буфере в мировых координатах. Движущимся объектам флаг <code>Batching Static</code> ставить нельзя.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DYNAMIC ============ -->
+<section class="chapter" id="dynamic" data-ch="CH.05 DYNAMIC">
+  <div class="ch-head">
+    <p class="osdtag">CH.05 // DYNAMIC BATCHING</p>
+    <h2>Dynamic batching: CPU пересобирает меши каждый кадр</h2>
+  </div>
+  <div class="two">
+    <div class="prose">
+      <p>Для мелких движущихся мешей Unity каждый кадр берёт их вершины, <b>на CPU</b> умножает на матрицы объектов, складывает в общий динамический буфер и рисует одним вызовом. Draw calls экономятся, но взамен CPU делает работу, которую обычно делает вершинный шейдер на GPU.</p>
+      <p>Поэтому жёсткие лимиты: меш не больше <b>300 вершин</b> и <b>900 вершинных атрибутов</b> — чем больше каналов (нормали, UV1, тангенты), тем меньше допустимых вершин. Один и тот же материал, в многопроходном шейдере батчится только первый проход, при запечённом свете — один lightmap.</p>
+      <p>В документации Unity 6 прямо сказано: для большинства случаев dynamic batching больше не рекомендуется — накладные расходы на CPU могут оказаться больше, чем цена самого draw call. В HDRP его нет, в URP он выключен по умолчанию.</p>
+    </div>
+    <div class="facts">
+      <div><span class="k save">Экономит</span><p>Draw calls для кучи крошечных мешей: частиц-мешей, UI-подобных квадов, мелкого мусора.</p></div>
+      <div><span class="k cost">Цена</span><p>CPU каждый кадр трансформирует вершины и заново заливает их на GPU — даже если объект стоит.</p></div>
+      <div><span class="k need">Условия</span><p>≤ 300 вершин и ≤ 900 атрибутов, один материал, не skinned, только первый проход шейдера.</p></div>
+    </div>
+  </div>
+  <div class="mini panel">
+    <div class="mini-col">
+      <h4>Настрой меш</h4>
+      <label for="dyV">Вершин в меше <output id="dyVo">120</output></label>
+      <input type="range" id="dyV" min="4" max="600" step="4" value="120">
+      <label for="dyC">Сколько таких объектов <output id="dyCo">80</output></label>
+      <input type="range" id="dyC" min="2" max="300" value="80">
+      <span class="ctl-label">VERTEX ATTRIBUTES</span>
+      <div class="ctl-row" id="dyAttrs"></div>
+      <p class="bigout" id="dyLimit"></p>
+    </div>
+    <div class="mini-col">
+      <h4>CPU за кадр</h4>
+      <div class="membars" id="dyBars"></div>
+      <span class="badge" id="dyVerdict"></span>
+      <p class="hint" id="dyNote"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SRP ============ -->
+<section class="chapter" id="srp" data-ch="CH.06 SRP BATCHER">
+  <div class="ch-head">
+    <p class="osdtag">CH.06 // SRP BATCHER</p>
+    <h2>SRP Batcher: draw calls те же, подготовка дешевле</h2>
+  </div>
+  <div class="two">
+    <div class="prose">
+      <p>Самый частый вопрос-ловушка: <b>SRP Batcher не уменьшает количество draw calls</b>. Каждый объект всё так же рисуется своим вызовом. Уменьшается то, что CPU делает между вызовами.</p>
+      <p>Классический путь для каждого объекта заново выставляет материал и заливает его константы. SRP Batcher держит свойства всех материалов <b>постоянно в памяти GPU</b> (буфер <code>UnityPerMaterial</code>) и перезаливает материал, только если его свойства поменялись. Данные объектов — матрицы, пробы света — пишутся одним большим буфером (<code>UnityPerDraw</code>) по быстрому отдельному пути.</p>
+      <p>Батч держится, пока не меняется <b>шейдерный вариант</b>, а не материал. Десять материалов на одном шейдере с одинаковыми keywords — это один SetPass и десять дешёвых вызовов. Меняешь keyword — новый вариант, новый батч.</p>
+      <p>Работает только в URP и HDRP. Все стандартные шейдеры URP/HDRP совместимы, кроме вариантов для частиц.</p>
+    </div>
+    <div class="facts">
+      <div><span class="k save">Экономит</span><p>SetPass calls и заливку констант на CPU. Сколько бы ни было материалов, если шейдер один.</p></div>
+      <div><span class="k cost">Цена</span><p>Почти никакой. Нужен совместимый шейдер, и нельзя пользоваться MaterialPropertyBlock.</p></div>
+      <div><span class="k need">Условия</span><p>Свойства материала в <code>CBUFFER UnityPerMaterial</code>, встроенные — в <code>UnityPerDraw</code>. Меш или skinned mesh, не частицы, без MPB.</p></div>
+    </div>
+  </div>
+
+  <div class="panel" style="display:grid;gap:16px">
+    <div class="tape-head">
+      <h4>Один кадр · 6 объектов · 3 материала · 1 шейдер Lit</h4>
+      <div class="ctl-row">
+        <button class="btn primary" id="srpRun">► Кадр 1</button>
+        <button class="btn" id="srpNext">Следующий кадр (ничего не меняли)</button>
+        <button class="btn" id="srpDirty">Поменять цвет у Mat B</button>
+      </div>
+    </div>
+    <div class="srp-cols">
+      <div class="cmdlist" id="srpA"><div class="hd"><span>Без SRP Batcher</span><span>CPU → GPU</span></div></div>
+      <div class="cmdlist" id="srpB"><div class="hd"><span>SRP Batcher</span><span>CPU → GPU</span></div></div>
+    </div>
+    <div class="vram">
+      <div class="row"><span>VRAM · UnityPerMaterial</span><div class="slots" id="vMat"></div></div>
+      <div class="row"><span>VRAM · UnityPerDraw</span><div class="slots" id="vDraw"></div></div>
+    </div>
+  </div>
+
+  <div class="mini panel">
+    <div class="mini-col">
+      <h4>Совместим ли объект?</h4>
+      <p class="hint">В Inspector шейдера Unity пишет «SRP Batcher: compatible» или «not compatible». Поиграй условиями:</p>
+      <div class="checks" id="srpChecks"></div>
+      <span class="badge" id="srpBadge"></span>
+    </div>
+    <div class="mini-col">
+      <h4>Как это выглядит в шейдере</h4>
+<pre class="code"><span class="c">// все свойства материала — в одном буфере</span>
+<span class="k">CBUFFER_START</span>(<span class="t">UnityPerMaterial</span>)
+    float4 _BaseColor;
+    float4 _BaseMap_ST;
+    float  _Smoothness;
+<span class="k">CBUFFER_END</span>
+
+<span class="c">// встроенные свойства движка — в UnityPerDraw
+// (unity_ObjectToWorld, unity_SHAr, …)
+// в URP это уже сделано в инклюдах Core</span></pre>
+      <p class="hint">Текстуры в CBUFFER не кладутся — только числовые свойства. Если хотя бы одно свойство объявлено вне буфера, шейдер становится несовместимым.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INSTANCING ============ -->
+<section class="chapter" id="instancing" data-ch="CH.07 GPU INSTANCING">
+  <div class="ch-head">
+    <p class="osdtag">CH.07 // GPU INSTANCING</p>
+    <h2>GPU instancing: один меш, тысяча копий</h2>
+  </div>
+  <div class="two">
+    <div class="prose">
+      <p>Если у объектов <b>один и тот же меш и один и тот же материал</b>, GPU может нарисовать их все одним вызовом. Меш отправляется один раз, а к нему прикладывается массив per-instance данных: матрицы и, по желанию, свои свойства (цвет, масштаб). Вершинный шейдер сам берёт нужную матрицу по индексу инстанса.</p>
+      <p>Включается галочкой <code>Enable GPU Instancing</code> на материале. Из кода — <code>Graphics.RenderMeshInstanced</code> или старый <code>DrawMeshInstanced</code> (до 1023 инстансов за вызов). Автоматически рисуемые инстансы режутся на батчи по размеру constant buffer — обычно до 500 штук.</p>
+      <p><b>Ловушка в URP:</b> у SRP Batcher приоритет выше. Если объект совместим с SRP Batcher, галочка instancing на нём ничего не делает. Instancing сработает, если отключить SRP Batcher, сделать шейдер несовместимым — или у объекта есть MaterialPropertyBlock. Самый удобный вариант в Unity 6 — GPU Resident Drawer: он делает instancing сам.</p>
+    </div>
+    <div class="facts">
+      <div><span class="k save">Экономит</span><p>Draw calls и SetPass при массовых одинаковых объектах: трава, деревья, камни, толпы пуль.</p></div>
+      <div><span class="k cost">Цена</span><p>Per-instance буфер каждый кадр, дополнительные шейдерные варианты. На мешах с малым числом копий выгоды почти нет.</p></div>
+      <div><span class="k need">Условия</span><p>Один меш + один материал, MeshRenderer (не skinned), шейдер с поддержкой instancing.</p></div>
+    </div>
+  </div>
+  <div class="mini panel">
+    <div class="mini-col wide">
+      <canvas id="instCv" aria-label="Поле инстансов: цвет показывает, в какой draw call попал инстанс"></canvas>
+    </div>
+    <div class="mini-col">
+      <label for="inN">Инстансов <output id="inNo">1200</output></label>
+      <input type="range" id="inN" min="1" max="5000" value="1200">
+      <div class="ctl-row">
+        <button class="chip" id="inMesh" aria-pressed="false">3 разных меша</button>
+        <button class="chip" id="inCol" aria-pressed="false">Свой цвет у каждого</button>
+        <button class="chip" id="inMax" aria-pressed="false">Лимит 1023 (DrawMeshInstanced)</button>
+      </div>
+    </div>
+    <div class="mini-col">
+      <p class="bigout" id="inOut"></p>
+      <p class="hint" id="inNote"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GRD ============ -->
+<section class="chapter" id="grd" data-ch="CH.08 RESIDENT DRAWER">
+  <div class="ch-head">
+    <p class="osdtag">CH.08 // GPU RESIDENT DRAWER</p>
+    <h2>GPU Resident Drawer: данные живут на видеокарте</h2>
+  </div>
+  <div class="two">
+    <div class="prose">
+      <p>Новая фишка Unity 6 для URP и HDRP. Под капотом — API <code>BatchRendererGroup</code>: данные всех подходящих <code>MeshRenderer</code> один раз загружаются в память GPU и там живут. Каждый кадр CPU почти ничего не делает на объект — обновляет только то, что поменялось.</p>
+      <p>Одинаковые меш + материал автоматически рисуются инстансингом, без галочек на материалах и без ручного кода. В Frame Debugger такие вызовы подписаны <b>Hybrid Batch Group</b>. Дополнительно можно включить GPU occlusion culling: видимость проверяет сама видеокарта.</p>
+      <p>Если объект не подходит (skinned mesh, MaterialPropertyBlock, неподходящий шейдер), Unity тихо рисует его обычным путём. Включается в URP Asset → Rendering → <code>GPU Resident Drawer: Instanced Drawing</code>.</p>
+    </div>
+    <div class="facts">
+      <div><span class="k save">Экономит</span><p>Почти всё CPU-время рендера для статичных и редко меняющихся MeshRenderer и draw calls через авто-instancing.</p></div>
+      <div><span class="k cost">Цена</span><p>Больше шейдерных вариантов (BRG нужно оставить в сборке), дольше сборка, нужны compute shaders.</p></div>
+      <div><span class="k need">Условия</span><p>Forward+, включённый SRP Batcher, BatchRendererGroup Variants = Keep All, платформа с compute (не OpenGL ES).</p></div>
+    </div>
+  </div>
+  <div class="mini panel">
+    <div class="mini-col">
+      <h4>Чеклист включения</h4>
+      <div class="checks" id="grdChecks"></div>
+    </div>
+    <div class="mini-col">
+      <h4>Результат</h4>
+      <span class="badge" id="grdBadge"></span>
+      <p class="hint" id="grdOut"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHEAT SHEET ============ -->
+<section class="chapter" id="cheat" data-ch="CH.09 CHEAT SHEET">
+  <div class="ch-head">
+    <p class="osdtag">CH.09 // CHEAT SHEET</p>
+    <h2>Шпаргалка и порядок приоритета</h2>
+    <p class="kicker">Если объекту подходит несколько техник, Unity выбирает по порядку:</p>
+  </div>
+  <div class="prio">
+    <div><span class="n">1</span><h3>SRP Batcher + static batching</h3><p>Если включены и объект совместим — всё, дальше не смотрим.</p></div>
+    <div><span class="n">2</span><h3>GPU instancing</h3><p>Включая GPU Resident Drawer и ручной BatchRendererGroup.</p></div>
+    <div><span class="n">3</span><h3>Dynamic batching</h3><p>Последний шанс для мелких мешей.</p></div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Техника</th><th>Что экономит</th><th>Чем платишь</th><th>Условия</th><th>Где работает</th><th>Frame Debugger</th></tr></thead>
+      <tbody id="cheatBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ INTERVIEW ============ -->
+<section class="chapter" id="interview" data-ch="CH.10 INTERVIEW">
+  <div class="ch-head">
+    <p class="osdtag">CH.10 // INTERVIEW</p>
+    <h2>Вопросы, которые спросят</h2>
+    <p class="kicker">Сначала ответь вслух сам, потом открывай.</p>
+  </div>
+  <div class="qa" id="qa"></div>
+</section>
+</main>
+
+<footer>
+  <span class="stop">■ STOP · END OF TAPE 01</span>
+  <p style="font-size:16px;color:#fff">Конец кассеты №1.</p>
+  <p>Факты сверены с документацией Unity 6:</p>
+  <ul>
+    <li><a href="https://docs.unity3d.com/6000.0/Documentation/Manual/static-batching.html">Static batching</a> · <a href="https://docs.unity3d.com/6000.0/Documentation/Manual/dynamic-batching.html">Dynamic batching</a></li>
+    <li><a href="https://docs.unity3d.com/6000.0/Documentation/Manual/SRPBatcher-Materials.html">SRP Batcher: совместимость</a> · <a href="https://docs.unity3d.com/6000.0/Documentation/Manual/GPUInstancing.html">GPU instancing</a></li>
+    <li><a href="https://docs.unity3d.com/6000.0/Documentation/Manual/urp/gpu-resident-drawer.html">GPU Resident Drawer</a> · <a href="https://docs.unity.cn/6000.4/Documentation/Manual/optimizing-draw-calls-choose-method.html">Выбор метода и приоритеты</a></li>
+    <li><a href="../">◀ Вернуться на полку</a> · <a href="../algorithms/bfs-dfs/">Кассета №2: BFS и DFS</a></li>
+  </ul>
+</footer>
+
+<script type="module" src="./page.js"></script>
+</body>
+</html>

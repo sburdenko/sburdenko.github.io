@@ -1,178 +1,85 @@
 <!doctype html>
 <html lang="ru">
-
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Olena Burdenko Portfolio</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0715">
+<title>Полка кассет — интерактивные конспекты</title>
+<meta name="description" content="Интерактивные разборы для собеседования: батчинг в Unity 6 и обход графа BFS/DFS. Всё можно щёлкать, крутить и проигрывать по шагам.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
+<link rel="stylesheet" href="./assets/vhs.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
 </head>
-
 <body>
-  <div class="cursor" aria-hidden="true"></div>
-  <header class="site-header">
-    <nav class="nav-left">
-      <button class="nav-series" type="button" data-series="serie_1">serie_1</button>
-      <button class="nav-series" type="button" data-series="serie_2">serie_2</button>
-      <a href="#about">About</a>
-    </nav>
-    <div class="brand">OLENA BURDENKO</div>
-    <nav class="nav-right">
-      <a href="https://www.instagram.com/lechundra/" target="_blank" rel="noopener">Instagram</a>
-    </nav>
-  </header>
+<div class="fx fx-scan" aria-hidden="true"></div>
+<div class="fx fx-vig" aria-hidden="true"></div>
+<div class="fx fx-track" aria-hidden="true"></div>
+<canvas id="noise" width="160" height="90" aria-hidden="true"></canvas>
 
-  <main>
-    <section class="h-scroll" id="works">
-      <div class="h-sticky">
-        <div class="h-track">
-          <!-- Filled by script.js -->
-        </div>
-      </div>
-    </section>
+<header class="osd" aria-label="Строка состояния">
+  <div class="l"><span class="play">PLAY ►</span><span class="ch" id="osdCh">CH.00 SHELF</span></div>
+  <div class="r"><nav id="osdNav" aria-label="Разделы"></nav><span>SP</span><span class="ctr" id="osdCtr">0:00:00</span></div>
+</header>
 
-    <section class="grid-section">
-      <div class="grid">
-        <!-- Filled by script.js -->
-      </div>
-    </section>
+<main>
+<section class="chapter" id="shelf" data-ch="CH.00 SHELF" style="padding-top:56px">
+  <p class="eyebrow">Интерактивные конспекты · разбираем по шагам</p>
+  <h1 class="title">Полка<span class="title-2">кассеты, которые можно щёлкать</span></h1>
+  <p class="kicker" style="font-size:clamp(17px,1.8vw,20px);color:#e3dcfb">Каждая кассета — одна тема, разобранная до конца: теория короткими абзацами, живые стенды вместо картинок и блок вопросов, которые обычно задают на собеседовании. Ничего не нужно устанавливать — всё считается прямо в браузере.</p>
 
-    <section class="about" id="about">
-      <div class="about-card">
-        <h2>About</h2>
-        <p>
-          Emerging fashion and fine-art photographer creating intimate portraits,
-          editorials, and campaign imagery. Open for collaborations worldwide and
-          always looking to tell new visual stories.
-        </p>
-        <div class="about-actions">
-          <a class="button" href="mailto:polishuk013@gmail.com">polishuk013@gmail.com</a>
-          <a class="button ghost" href="#works">Works</a>
-        </div>
-      </div>
-    </section>
-  </main>
+  <div class="shelf">
+    <a class="cassette" href="./unity-rendering/">
+      <div class="spine"><span>TAPE 01</span><span>UNITY 6</span></div>
+      <div class="reels"><div class="reel"><i></i></div><div class="win"></div><div class="reel"><i></i></div></div>
+      <h3>Батчинг в Unity</h3>
+      <p>Static и dynamic batching, SRP Batcher, GPU instancing и GPU Resident Drawer. Пульт кадра с живой сценой, лента команд CPU → GPU и таблица «одна сцена — все техники».</p>
+      <div class="tags"><span>Рендер</span><span>Draw calls</span><span>SetPass</span><span>URP · HDRP</span></div>
+      <span class="go">ВСТАВИТЬ КАССЕТУ ►</span>
+    </a>
 
-  <footer class="site-footer">
-    <p>OLENA BURDENKO © 2026</p>
-  </footer>
+    <a class="cassette" href="./algorithms/bfs-dfs/">
+      <div class="spine"><span>TAPE 02</span><span>ALGORITHMS</span></div>
+      <div class="reels"><div class="reel"><i></i></div><div class="win"></div><div class="reel"><i></i></div></div>
+      <h3>Обход графа: BFS и DFS</h3>
+      <p>Очередь против стека на двумерном массиве и на графе: генерируем данные, мотаем по шагам, смотрим на фронт, дерево обхода и кратчайший путь. Плюс гонка двух обходов в одном лабиринте.</p>
+      <div class="tags"><span>Алгоритмы</span><span>Очередь · Стек</span><span>O(V + E)</span><span>Кратчайший путь</span></div>
+      <span class="go">ВСТАВИТЬ КАССЕТУ ►</span>
+    </a>
 
-  <script id="portfolio-data" type="application/json">
-      {
-        "active": "serie_1",
-        "series": {
-          "serie_1": {
-            "horizontal": [
-              "serie1/hor/IMG_6241.JPG",
-              "serie1/hor/IMG_6248.JPG",
-              "serie1/hor/IMG_6249.JPG",
-              "serie1/hor/IMG_6252.JPG",
-              "serie1/hor/IMG_6307.JPG",
-              "serie1/hor/IMG_6308.JPG",
-              "serie1/hor/IMG_6309.JPG"
-            ],
-            "rows": [
-              3,
-              3,
-              4,
-              2,
-              4,
-              3,
-              3,
-              1,
-              2,
-              6
-            ],
-            "vertical": [
-              "serie1/vert/IMG_6253.JPG",
-              "serie1/vert/IMG_6254.JPG",
-              "serie1/vert/IMG_6255.JPG",
-              "serie1/vert/IMG_6257.JPG",
-              "serie1/vert/IMG_6258.JPG",
-              "serie1/vert/IMG_6259.JPG",
-              "serie1/vert/IMG_6260.JPG",
-              "serie1/vert/IMG_6261.JPG",
-              "serie1/vert/IMG_6262.JPG",
-              "serie1/vert/IMG_6264.JPG",
-              "serie1/vert/IMG_6268.JPG",
-              "serie1/vert/IMG_6269.JPG",
-              "serie1/vert/IMG_6270.JPG",
-              "serie1/vert/IMG_6273.JPG",
-              "serie1/vert/IMG_6274.JPG",
-              "serie1/vert/IMG_6275.JPG",
-              "serie1/vert/IMG_6277.JPG",
-              "serie1/vert/IMG_6278.JPG",
-              "serie1/vert/IMG_6279.JPG",
-              "serie1/vert/IMG_6280.JPG",
-              "serie1/vert/IMG_6282.JPG",
-              "serie1/vert/IMG_6283.JPG",
-              "serie1/vert/IMG_6284.JPG",
-              "serie1/vert/IMG_6288.JPG",
-              "serie1/vert/IMG_6289.JPG",
-              "serie1/vert/IMG_6290.JPG",
-              "serie1/vert/IMG_6292.JPG",
-              "serie1/vert/IMG_6294.JPG",
-              "serie1/vert/IMG_6295.JPG",
-              "serie1/vert/IMG_6297.JPG",
-              "serie1/vert/IMG_6299.JPG"
-            ]
-          },
-          "serie_2": {
-            "horizontal": [
-              "serie2/hor/IMG_5134.JPG",
-              "serie2/hor/IMG_5135.JPG",
-              "serie2/hor/IMG_5137.JPG",
-              "serie2/hor/IMG_5138.JPG",
-              "serie2/hor/IMG_6090.JPG",
-              "serie2/hor/IMG_6091.JPG",
-              "serie2/hor/IMG_6093.JPG"
-            ],
-            "rows": [
-              2,
-              4,
-              5,
-              2,
-              2,
-              2,
-              3,
-              4,
-              2,
-              2,
-              2
-            ],
-            "vertical": [
-              "serie2/vert/IMG_5099.JPG",
-              "serie2/vert/IMG_5100.JPG",
-              "serie2/vert/IMG_5101.JPG",
-              "serie2/vert/IMG_5102.JPG",
-              "serie2/vert/IMG_5103.JPG",
-              "serie2/vert/IMG_5104.JPG",
-              "serie2/vert/IMG_5111.JPG",
-              "serie2/vert/IMG_5112.JPG",
-              "serie2/vert/IMG_5113.JPG",
-              "serie2/vert/IMG_5117.JPG",
-              "serie2/vert/IMG_5118.JPG",
-              "serie2/vert/IMG_5126.JPG",
-              "serie2/vert/IMG_5128.JPG",
-              "serie2/vert/IMG_5143.JPG",
-              "serie2/vert/IMG_5144.JPG",
-              "serie2/vert/IMG_5145.JPG",
-              "serie2/vert/IMG_5150.JPG",
-              "serie2/vert/IMG_5170.JPG",
-              "serie2/vert/IMG_5171.JPG",
-              "serie2/vert/IMG_5178.JPG",
-              "serie2/vert/IMG_5179.JPG",
-              "serie2/vert/IMG_5184.JPG",
-              "serie2/vert/IMG_5188.JPG",
-              "serie2/vert/IMG_5189.JPG",
-              "serie2/vert/IMG_6095.JPG",
-              "serie2/vert/IMG_6097.JPG"
-            ]
-          }
-        }
-      }
-    </script>
-  <script src="script.js"></script>
+    <div class="cassette soon">
+      <div class="spine"><span>TAPE 03</span><span>SOON</span></div>
+      <div class="reels"><div class="reel"><i></i></div><div class="win"></div><div class="reel"><i></i></div></div>
+      <h3>Следующая тема</h3>
+      <p>Место под следующий разбор: сортировки и структуры данных, память и GC, корутины и планировщик кадра — что-нибудь из этого.</p>
+      <div class="tags"><span>Скоро</span></div>
+      <span class="go">■ ЗАПИСЬ НЕ НАЧАТА</span>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="how" data-ch="CH.01 HOW">
+  <div class="ch-head">
+    <p class="osdtag">CH.01 // HOW IT WORKS</p>
+    <h2>Как этим пользоваться</h2>
+  </div>
+  <div class="prio">
+    <div><span class="n">1</span><h3>Сначала ответь сам</h3><p>В каждой кассете есть блок вопросов. Полезнее сформулировать ответ вслух и только потом открыть карточку.</p></div>
+    <div><span class="n">2</span><h3>Крути стенды</h3><p>Ползунки, переключатели и клики по сцене меняют модель, а не картинку: цифры пересчитываются на лету.</p></div>
+    <div><span class="n">3</span><h3>Проверяй на практике</h3><p>Модели здесь учебные и упрощённые. Настоящие ответы дают Unity Profiler, Frame Debugger и замеры на целевом железе.</p></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <span class="stop">■ КОНЕЦ ПОЛКИ</span>
+  <p>Исходники и модели: <a href="https://github.com/sburdenko/sburdenko.github.io">github.com/sburdenko/sburdenko.github.io</a></p>
+</footer>
+
+<script type="module">
+  import { bootVhs } from './assets/vhs.js';
+  bootVhs();
+</script>
 </body>
-
 </html>

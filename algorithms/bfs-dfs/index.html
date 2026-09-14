@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0715">
+<title>BFS и DFS — обход графа · Кассета №2</title>
+<meta name="description" content="Интерактивный разбор обхода в ширину и в глубину: очередь против стека, сетка и граф, пошаговая перемотка, кратчайший путь и память.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
+<link rel="stylesheet" href="../../assets/vhs.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
+</head>
+<body>
+<div class="fx fx-scan" aria-hidden="true"></div>
+<div class="fx fx-vig" aria-hidden="true"></div>
+<div class="fx fx-track" aria-hidden="true"></div>
+<canvas id="noise" width="160" height="90" aria-hidden="true"></canvas>
+
+<header class="osd" aria-label="Навигация по кассете">
+  <div class="l"><a class="home" href="../../">◀ ПОЛКА</a><span class="play">PLAY ►</span><span class="ch" id="osdCh">CH.00 INTRO</span></div>
+  <div class="r"><nav id="osdNav" aria-label="Главы"></nav><span>SP</span><span class="ctr" id="osdCtr">0:00:00</span></div>
+</header>
+
+<main>
+<!-- ============ HERO ============ -->
+<section class="hero chapter" id="intro" data-ch="CH.00 INTRO" style="padding-top:56px">
+  <p class="eyebrow">Кассета №2 · Алгоритмы · для собеседования</p>
+  <h1 class="title">Обход графа<span class="title-2">BFS и DFS: очередь против стека</span></h1>
+  <p class="kicker" style="font-size:clamp(17px,1.8vw,20px);color:#e3dcfb">Оба алгоритма делают одно и то же: аккуратно обходят всё, до чего можно дойти, за O(V + E). Разница ровно в одной строчке — <b>откуда мы достаём следующую вершину</b>. Из головы очереди — получается волна. С вершины стека — получается щуп, уходящий вглубь.</p>
+
+  <div class="panel" style="display:grid;gap:14px">
+    <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <p style="max-width:62ch;font-size:16.5px"><b>Главная мысль кассеты:</b> код BFS и DFS отличается одной структурой данных. Всё остальное — следствие: кратчайший путь, расход памяти, склонность к рекурсии и список задач, где алгоритм уместен.</p>
+      <div class="legend" style="min-width:210px">
+        <div><i style="background:#26e3ea"></i><span>слева — BFS, очередь</span><b>FIFO</b></div>
+        <div><i style="background:#ff3ea5"></i><span>справа — DFS, стек</span><b>LIFO</b></div>
+      </div>
+    </div>
+    <div class="crt"><canvas id="introCv" aria-label="Слева обход в ширину расходится кругами, справа обход в глубину уходит по одной линии"></canvas></div>
+    <p class="note">Одно и то же пустое поле, один и тот же старт в центре. Слева фронт — окружность, справа — длинная змейка.</p>
+  </div>
+</section>
+
+<!-- ============ TERMS ============ -->
+<section class="chapter" id="terms" data-ch="CH.01 TERMS">
+  <div class="ch-head">
+    <p class="osdtag">CH.01 // TERMS</p>
+    <h2>Шесть слов, без которых дальше никак</h2>
+  </div>
+  <dl class="gloss">
+    <div><dt>Граф</dt><dd>Вершины (узлы) и рёбра между ними. Двумерный массив клеток — тоже граф: клетка — вершина, сосед по стороне — ребро. Поэтому один и тот же код работает и на сетке, и на схеме.</dd></div>
+    <div><dt>Фронт <i style="background:rgba(255,210,63,.16);color:var(--osd)">FRONTIER</i></dt><dd>Вершины, которые уже открыты, но ещё не обработаны. Всё различие BFS и DFS — в том, какой контейнер хранит фронт.</dd></div>
+    <div><dt>Очередь <i style="background:rgba(38,227,234,.14);color:var(--gpu)">FIFO</i></dt><dd>Кладём в хвост, берём из головы. Кто раньше открыт, тот раньше обработан — отсюда обход по слоям и кратчайший путь.</dd></div>
+    <div><dt>Стек <i style="background:rgba(255,62,165,.16);color:var(--cpu)">LIFO</i></dt><dd>Кладём и берём с одного конца. Обрабатывается самый свежий сосед — отсюда спуск вглубь и возврат только из тупика.</dd></div>
+    <div><dt>Открыт ≠ посещён</dt><dd>«Открыт» — лежит во фронте и ждёт. «Посещён» — уже достали и обработали. В BFS вершину помечают при добавлении, иначе она попадёт в очередь по разу на каждого соседа.</dd></div>
+    <div><dt>Дерево обхода</dt><dd>Массив <code>parent[]</code>: из кого мы впервые пришли в вершину. По нему восстанавливают путь назад к старту. У BFS это дерево кратчайших путей, у DFS — длинные ветки спуска.</dd></div>
+  </dl>
+</section>
+
+<!-- ============ GRID ============ -->
+<section class="chapter" id="grid" data-ch="CH.02 GRID">
+  <div class="ch-head">
+    <p class="osdtag">CH.02 // GRID DECK</p>
+    <h2>Двумерный массив: волна против щупа</h2>
+    <p class="kicker">Сетка клеток — самый наглядный граф. Рисуй стены мышкой, переноси старт и финиш, жми «Пуск» и мотай по шагам. Цвет клетки — порядок посещения, рамка — что сейчас лежит во фронте, жёлтая линия — путь по родителям.</p>
+  </div>
+
+  <div class="panel" style="display:grid;gap:18px">
+    <div class="ctl-row" style="gap:14px 22px;align-items:flex-end">
+      <div class="ctl-group"><span class="ctl-label">АЛГОРИТМ</span>
+        <div class="seg bfs" id="gAlg" role="group" aria-label="Алгоритм"><button data-v="bfs" aria-pressed="true">BFS · очередь</button><button data-v="dfs" aria-pressed="false">DFS · стек</button></div></div>
+      <div class="ctl-group"><span class="ctl-label">ДАННЫЕ</span>
+        <div class="seg" id="gKind" role="group" aria-label="Тип поля"><button data-v="maze" aria-pressed="true">Лабиринт</button><button data-v="cave" aria-pressed="false">Пещера</button></div></div>
+      <div class="ctl-group"><span class="ctl-label">КЛИК ПО ПОЛЮ</span>
+        <div class="seg" id="gMode" role="group" aria-label="Что делает клик"><button data-v="wall" aria-pressed="true">Стена</button><button data-v="start" aria-pressed="false">Старт</button><button data-v="goal" aria-pressed="false">Финиш</button></div></div>
+      <div class="ctl-group"><span class="ctl-label">ДЕЙСТВИЯ</span>
+        <div class="ctl-row"><button class="btn primary" id="gRnd">🎲 Новые данные</button><button class="btn" id="gClear">Очистить поле</button></div></div>
+      <div class="ctl-group"><span class="ctl-label">ПОКАЗАТЬ</span>
+        <div class="ctl-row">
+          <button class="chip" id="gTree" aria-pressed="true">Дерево обхода</button>
+          <button class="chip" id="gDepth" aria-pressed="false">Цвет по слоям</button>
+          <button class="chip" id="gDiag" aria-pressed="false">8 направлений</button>
+        </div></div>
+    </div>
+
+    <div class="ctl-row" style="gap:22px">
+      <div class="ctl-group" style="flex:1;min-width:210px">
+        <label for="gSize">Размер поля <output id="gSizeOut">31×19</output></label>
+        <input type="range" id="gSize" min="11" max="51" step="2" value="31">
+      </div>
+      <div class="ctl-group" style="flex:1;min-width:210px">
+        <label for="gDens">Плотность стен <output id="gDensOut">30%</output></label>
+        <input type="range" id="gDens" min="0" max="45" value="30">
+      </div>
+    </div>
+
+    <div class="deck-main">
+      <div class="crt">
+        <canvas id="gridCv" aria-label="Поле клеток: обход по шагам"></canvas>
+        <div class="crt-osd"><span id="gridL">GRID</span><span class="rec" id="gridR">❚❚ PAUSE</span></div>
+        <div class="crt-tip" id="gridTip" hidden></div>
+      </div>
+      <aside class="side" id="gridSide" aria-live="polite"></aside>
+    </div>
+
+    <div class="transport" id="gridTransport">
+      <button class="btn" data-t="first" title="В начало">|◀</button>
+      <button class="btn" data-t="back" title="Шаг назад">◀</button>
+      <button class="btn primary" data-t="play">► ПУСК</button>
+      <button class="btn" data-t="fwd" title="Шаг вперёд">▶</button>
+      <button class="btn" data-t="end" title="В конец">▶|</button>
+      <span class="spd"><span>СКОРОСТЬ</span><input type="range" min="1" max="60" value="8" aria-label="Скорость, шагов в секунду"><b data-t="sps">8</b>/с</span>
+      <span class="lbl" data-t="pos">ШАГ 0 / 0</span>
+    </div>
+
+    <div class="two even">
+      <div class="frontier" id="gridFront">
+        <span class="lbl">Фронт: что лежит в контейнере прямо сейчас</span>
+        <div class="rail"></div>
+        <div class="ends"></div>
+      </div>
+      <div>
+        <span class="lbl">Псевдокод · подсвечена текущая строка</span>
+        <div class="pseudo" id="gridCode" style="margin-top:6px"></div>
+      </div>
+    </div>
+
+    <div class="stats c4" id="gridStats"></div>
+    <p class="note">Лабиринт генерируется тем же DFS со стеком — «прокопать до упора, вернуться в развилку». Пещера — случайные стены; если цель оказалась отрезана, коридор к ней прокапывается принудительно.</p>
+  </div>
+</section>
+
+<!-- ============ GRAPH ============ -->
+<section class="chapter" id="graph" data-ch="CH.03 GRAPH">
+  <div class="ch-head">
+    <p class="osdtag">CH.03 // GRAPH DECK</p>
+    <h2>Граф: узлы, рёбра и дерево обхода</h2>
+    <p class="kicker">Тот же код, другие данные. Жирные рёбра — дерево обхода (<code>parent[]</code>), тонкие — рёбра, по которым мы прошли, но узел уже был открыт. Клик по узлу делает его стартом.</p>
+  </div>
+
+  <div class="panel" style="display:grid;gap:18px">
+    <div class="ctl-row" style="gap:14px 22px;align-items:flex-end">
+      <div class="ctl-group"><span class="ctl-label">АЛГОРИТМ</span>
+        <div class="seg bfs" id="hAlg" role="group" aria-label="Алгоритм"><button data-v="bfs" aria-pressed="true">BFS</button><button data-v="dfs" aria-pressed="false">DFS</button></div></div>
+      <div class="ctl-group"><span class="ctl-label">ФОРМА ГРАФА</span>
+        <div class="seg" id="hKind" role="group" aria-label="Форма графа"><button data-v="geo" aria-pressed="true">Случайный</button><button data-v="tree" aria-pressed="false">Дерево</button><button data-v="ring" aria-pressed="false">Кольцо</button></div></div>
+      <div class="ctl-group" style="flex:1;min-width:200px">
+        <label for="hNodes">Узлов <output id="hNodesOut">16</output></label>
+        <input type="range" id="hNodes" min="6" max="40" value="16">
+      </div>
+      <div class="ctl-group"><span class="ctl-label">ДЕЙСТВИЯ</span>
+        <div class="ctl-row"><button class="btn primary" id="hRnd">🎲 Новый граф</button><button class="chip" id="hDepth" aria-pressed="false">Цвет по слоям</button></div></div>
+    </div>
+
+    <div class="deck-main">
+      <div class="crt">
+        <canvas id="graphCv" aria-label="Граф: узлы и рёбра, обход по шагам"></canvas>
+        <div class="crt-osd"><span id="graphL">GRAPH</span><span class="rec" id="graphR">❚❚ PAUSE</span></div>
+        <div class="crt-tip" id="graphTip" hidden></div>
+      </div>
+      <aside class="side" id="graphSide" aria-live="polite"></aside>
+    </div>
+
+    <div class="transport" id="graphTransport">
+      <button class="btn" data-t="first" title="В начало">|◀</button>
+      <button class="btn" data-t="back" title="Шаг назад">◀</button>
+      <button class="btn primary" data-t="play">► ПУСК</button>
+      <button class="btn" data-t="fwd" title="Шаг вперёд">▶</button>
+      <button class="btn" data-t="end" title="В конец">▶|</button>
+      <span class="spd"><span>СКОРОСТЬ</span><input type="range" min="1" max="30" value="4" aria-label="Скорость, шагов в секунду"><b data-t="sps">4</b>/с</span>
+      <span class="lbl" data-t="pos">ШАГ 0 / 0</span>
+    </div>
+
+    <div class="two even">
+      <div class="frontier" id="graphFront">
+        <span class="lbl">Фронт: что лежит в контейнере прямо сейчас</span>
+        <div class="rail"></div>
+        <div class="ends"></div>
+      </div>
+      <div>
+        <span class="lbl">Псевдокод · подсвечена текущая строка</span>
+        <div class="pseudo" id="graphCode" style="margin-top:6px"></div>
+      </div>
+    </div>
+
+    <div class="stats c4" id="graphStats"></div>
+    <p class="note">Здесь обход идёт до конца, а не до цели: видно, что оба алгоритма посещают одно и то же множество вершин — различается только порядок.</p>
+  </div>
+</section>
+
+<!-- ============ RACE ============ -->
+<section class="chapter" id="race" data-ch="CH.04 RACE">
+  <div class="ch-head">
+    <p class="osdtag">CH.04 // SIDE BY SIDE</p>
+    <h2>Один лабиринт, два обхода, общая перемотка</h2>
+    <p class="kicker">Оба ищут финиш и останавливаются, как только его нашли. Смотри не только на длину пути, но и на пик фронта — это та память, которую алгоритм держит в самый тяжёлый момент.</p>
+  </div>
+
+  <div class="panel" style="display:grid;gap:16px">
+    <div class="ctl-row">
+      <div class="seg" id="raceKind" role="group" aria-label="Тип поля"><button data-v="maze" aria-pressed="true">Лабиринт</button><button data-v="cave" aria-pressed="false">Пещера</button></div>
+      <button class="btn primary" id="raceRnd">🎲 Новое поле</button>
+    </div>
+    <div class="race">
+      <div class="race-col b">
+        <h3><span>◀ BFS · очередь</span></h3>
+        <div class="crt"><canvas id="raceB" aria-label="Обход в ширину в лабиринте"></canvas></div>
+        <p class="note" id="raceStatB"></p>
+      </div>
+      <div class="race-col d">
+        <h3><span>DFS · стек ▶</span></h3>
+        <div class="crt"><canvas id="raceD" aria-label="Обход в глубину в том же лабиринте"></canvas></div>
+        <p class="note" id="raceStatD"></p>
+      </div>
+    </div>
+    <div class="transport" id="raceTransport">
+      <button class="btn" data-t="first" title="В начало">|◀</button>
+      <button class="btn" data-t="back" title="Шаг назад">◀</button>
+      <button class="btn primary" data-t="play">► ПУСК</button>
+      <button class="btn" data-t="fwd" title="Шаг вперёд">▶</button>
+      <button class="btn" data-t="end" title="В конец">▶|</button>
+      <span class="spd"><span>СКОРОСТЬ</span><input type="range" min="1" max="60" value="14" aria-label="Скорость, шагов в секунду"><b data-t="sps">14</b>/с</span>
+      <span class="lbl" data-t="pos">ШАГ 0 / 0</span>
+    </div>
+    <div class="stats" id="raceStats"></div>
+    <p class="reason" id="raceVerdict"></p>
+  </div>
+</section>
+
+<!-- ============ CHEAT ============ -->
+<section class="chapter" id="cheat" data-ch="CH.05 CHEAT SHEET">
+  <div class="ch-head">
+    <p class="osdtag">CH.05 // CHEAT SHEET</p>
+    <h2>Шпаргалка: что спросить у себя перед выбором</h2>
+    <p class="kicker">Нужен кратчайший путь в невзвешенном графе — BFS. Нужно просто всё обойти, найти цикл или уйти вглубь — DFS. Появились веса — это уже Дейкстра.</p>
+  </div>
+  <div class="prio">
+    <div><span class="n">1</span><h3>Нужен кратчайший путь?</h3><p>Невзвешенный граф — BFS. Веса 0 и 1 — 0-1 BFS на деке. Произвольные веса — Дейкстра. Есть эвристика (знаем, куда идти) — A*.</p></div>
+    <div><span class="n">2</span><h3>Граф глубокий или широкий?</h3><p>Широкий и мелкий — очередь распухнет, дешевле DFS. Глубокий и узкий — рекурсия рискует переполнить стек, берём BFS или DFS на явном стеке.</p></div>
+    <div><span class="n">3</span><h3>Что делаем при выходе?</h3><p>Топологическая сортировка, поиск мостов, подсчёт размеров поддеревьев — всё это про момент <b>возврата</b> из вершины, а он есть только у DFS.</p></div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Свойство</th><th>BFS · обход в ширину</th><th>DFS · обход в глубину</th></tr></thead>
+      <tbody id="cheatBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ INTERVIEW ============ -->
+<section class="chapter" id="interview" data-ch="CH.06 INTERVIEW">
+  <div class="ch-head">
+    <p class="osdtag">CH.06 // INTERVIEW</p>
+    <h2>Вопросы, которые спросят</h2>
+    <p class="kicker">Сначала ответь вслух сам, потом открывай.</p>
+  </div>
+  <div class="qa" id="qa"></div>
+</section>
+</main>
+
+<footer>
+  <span class="stop">■ STOP · END OF TAPE 02</span>
+  <p style="font-size:16px;color:#fff">Конец кассеты №2.</p>
+  <ul>
+    <li><a href="../../">◀ Вернуться на полку с кассетами</a></li>
+    <li><a href="../../unity-rendering/">Кассета №1: батчинг в Unity</a></li>
+  </ul>
+</footer>
+
+<script type="module" src="./page.js"></script>
+</body>
+</html>

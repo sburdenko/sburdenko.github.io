@@ -1,0 +1,59 @@
+/* Стенды, которые встречаются только на кассете про батчинг. */
+
+/* hero: дорожки кадра */
+.hero{padding-block:56px 0;display:grid;gap:22px}
+#lanes{width:100%;height:170px;display:block}
+.readouts{display:flex;flex-wrap:wrap;gap:8px 26px;font-family:var(--f-mono);font-size:13.5px;color:var(--ink2)}
+.readouts b{font-variant-numeric:tabular-nums}
+.verdict{padding:3px 8px;border-radius:3px;font-weight:700}
+.verdict.cpu-b{background:rgba(255,62,165,.16);color:var(--cpu)}
+.verdict.gpu-b{background:rgba(38,227,234,.14);color:var(--gpu)}
+.thesis{display:grid;gap:14px;margin-top:10px}
+.thesis-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.thesis-q{max-width:62ch;font-size:16.5px}
+
+/* пульт кадра */
+.deck{display:grid;gap:18px}
+.deck-ctl{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:flex-end}
+.toggles,.presets{display:flex;flex-wrap:wrap;gap:6px}
+
+/* static: индексный буфер */
+.ibuf{display:grid;grid-template-columns:repeat(16,1fr);gap:3px}
+.ibuf button{height:46px;border:1px solid var(--line2);border-radius:2px;background:var(--bg3);cursor:pointer;padding:0;font:600 10px var(--f-mono);color:var(--ink3)}
+.ibuf button[aria-pressed="true"]{background:var(--osd);border-color:var(--osd);color:#0b0715}
+.ibuf button.r0[aria-pressed="true"]{background:#ffd23f}
+.ibuf button.r1[aria-pressed="true"]{background:#ff9a3d}
+.ibuf button.r2[aria-pressed="true"]{background:#ff6fb0}
+.ibuf button.r3[aria-pressed="true"]{background:#b28bff}
+.ibuf button.r4[aria-pressed="true"]{background:#6cc9ff}
+.ibuf button.r5[aria-pressed="true"]{background:#5dfc9a}
+.ibuf button.r6[aria-pressed="true"]{background:#ffe9a8}
+.ibuf button.r7[aria-pressed="true"]{background:#ff8b8b}
+.ibuf-cap{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:11px;color:var(--ink3)}
+
+/* SRP: поток команд и VRAM */
+.srp-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:640px){.srp-cols{grid-template-columns:1fr}}
+.cmdlist{background:#07040f;border:1px solid var(--line);border-radius:5px;padding:10px;display:grid;gap:3px;align-content:start;min-height:300px;font-family:var(--f-mono);font-size:12px;line-height:1.35}
+.cmdlist .hd{display:flex;justify-content:space-between;font-weight:700;color:#fff;font-size:12.5px;padding-bottom:6px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.cmd{padding:3px 7px;border-radius:2px;display:flex;justify-content:space-between;gap:8px;animation:cmdIn .25s ease-out}
+.cmd.sp{background:rgba(255,62,165,.16);color:#ffb6dd}
+.cmd.up{background:rgba(255,177,61,.12);color:#ffd79a}
+.cmd.dr{background:rgba(38,227,234,.1);color:#aef8fb}
+.cmd.bd{color:var(--ink2)}
+.cmd.no{color:var(--ink3);font-style:italic}
+.cmd span:last-child{opacity:.75;white-space:nowrap}
+@keyframes cmdIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.cmdsum{display:flex;gap:12px;flex-wrap:wrap;font-family:var(--f-mono);font-size:12px;color:var(--ink2);padding-top:6px;border-top:1px solid var(--line);margin-top:4px}
+.cmdsum b{color:#fff}
+.vram{display:grid;gap:8px;font-family:var(--f-mono);font-size:12px}
+.vram .row{display:grid;grid-template-columns:190px 1fr;gap:10px;align-items:center;color:var(--ink2)}
+@media (max-width:480px){.vram .row{grid-template-columns:1fr}}
+.slots{display:flex;gap:4px;flex-wrap:wrap}
+.slot{min-width:44px;height:30px;display:grid;place-items:center;border:1px solid var(--line2);border-radius:2px;background:var(--bg3);color:#fff;font-weight:700;font-size:11.5px;transition:box-shadow .2s,background .2s}
+.slot.flash{background:var(--warn);color:#0b0715;box-shadow:0 0 14px var(--warn)}
+
+/* instancing */
+#instCv{width:100%;height:280px;display:block;background:#07040f;border:1px solid var(--line);border-radius:6px}
+
+@media (prefers-reduced-motion:reduce){.cmd{animation:none}}
