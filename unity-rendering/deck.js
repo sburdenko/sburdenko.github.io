@@ -1,7 +1,8 @@
 /** Пульт кадра: переключаем техники и смотрим, во что превращается поток команд. */
-import { $, $$, fmt, fmtI, bytes, esc, press, onVisible, RM } from '../../assets/vhs.js';
+import { $, $$, fmt, fmtI, bytes, esc, press, onVisible, RM } from '../assets/vhs.js';
+import { t, onLang } from '../assets/i18n.js';
 import {
-  OBJECTS, DEFAULT_FLAGS, MATERIALS, MESHES, PATHS, PATH_INFO, TECHNIQUES,
+  OBJECTS, DEFAULT_FLAGS, MATERIALS, MESHES, PATHS, TECHNIQUES,
   evaluate, compareTechniques, available, unavailableReason, shaderVariant, ALL_OFF
 } from './model.js';
 import { createScene } from './scene.js';
@@ -38,46 +39,46 @@ export function initDeck() {
     if (S.selRun != null && ev.runs[S.selRun]) {
       const r = ev.runs[S.selRun];
       const mats = [...r.mats].map(m => MATERIALS[m].n).join(', ');
-      sideEl.innerHTML = `<span class="lbl">Батч ${S.selRun + 1} из ${ev.runs.length}</span>${pill(r.p)}
-        <dl class="kv"><dt>Объектов</dt><dd>${fmtI(r.n)}</dd><dt>Draw calls</dt><dd>${fmtI(r.draws)}</dd>
-        <dt>SetPass</dt><dd>${r.setpass ? 'новый проход' : 'тот же проход'}</dd><dt>Вершин</dt><dd>${fmtI(r.verts)}</dd>
-        <dt>CPU ≈</dt><dd>${fmt(r.cpu, 3)} мс</dd></dl>
-        <div><span class="lbl">Материалы</span><p style="font-size:14px">${esc(mats)}</p></div>
-        <div class="reason"><span class="lbl" style="color:var(--osd)">Почему не склеилось с предыдущим</span><br>${esc(r.reason[0])}${r.reason[1] ? `<br><code>${esc(r.reason[1])}</code>` : ''}</div>
-        <p class="hint">${PATH_INFO[r.p]}</p>`;
+      sideEl.innerHTML = `<span class="lbl">${t('side.batchOf', S.selRun + 1, ev.runs.length)}</span>${pill(r.p)}
+        <dl class="kv"><dt>${t('side.objects')}</dt><dd>${fmtI(r.n)}</dd><dt>${t('side.draws')}</dt><dd>${fmtI(r.draws)}</dd>
+        <dt>${t('side.setpass')}</dt><dd>${t(r.setpass ? 'side.setpassNew' : 'side.setpassSame')}</dd><dt>${t('side.verts')}</dt><dd>${fmtI(r.verts)}</dd>
+        <dt>${t('side.cpu')}</dt><dd>${fmt(r.cpu, 3)} ${t('stats.ms')}</dd></dl>
+        <div><span class="lbl">${t('side.materials')}</span><p style="font-size:14px">${esc(mats)}</p></div>
+        <div class="reason"><span class="lbl" style="color:var(--osd)">${t('side.whyBroke')}</span><br>${esc(t(r.reason[0]))}${r.reason[1] ? `<br><code>${esc(r.reason[1])}</code>` : ''}</div>
+        <p class="hint">${t('path.info.' + r.p)}</p>`;
       return;
     }
     if (S.selObj != null) {
       const o = OBJECTS[S.selObj], rt = ev.routes[o.id], m = MATERIALS[o.mat];
-      sideEl.innerHTML = `<span class="lbl">Inspector</span><h3>${esc(o.name)}</h3>
-        <dl class="kv"><dt>Компонент</dt><dd>${o.skinned ? 'SkinnedMeshRenderer' : 'MeshRenderer'}</dd>
-        <dt>Меш</dt><dd>${MESHES[o.mesh].n} · ${fmtI(MESHES[o.mesh].v)} верш.</dd>
-        <dt>Материал</dt><dd>${m.n}</dd><dt>Шейдер</dt><dd>${esc(shaderVariant(o, S.pipe))}</dd>
-        <dt>Instancing</dt><dd>${m.inst ? 'включён' : '—'}</dd></dl>
+      sideEl.innerHTML = `<span class="lbl">${t('side.inspector')}</span><h3>${esc(o.name)}</h3>
+        <dl class="kv"><dt>${t('side.component')}</dt><dd>${o.skinned ? 'SkinnedMeshRenderer' : 'MeshRenderer'}</dd>
+        <dt>${t('side.mesh')}</dt><dd>${MESHES[o.mesh].n} · ${t('side.meshVerts', MESHES[o.mesh].v)}</dd>
+        <dt>${t('side.material')}</dt><dd>${m.n}</dd><dt>${t('side.shader')}</dt><dd>${esc(shaderVariant(o, S.pipe))}</dd>
+        <dt>${t('side.instancing')}</dt><dd>${m.inst ? t('side.instOn') : '—'}</dd></dl>
         <div class="inline-tg"><button class="tg" data-flag="static" aria-pressed="${o.static}" ${o.skinned ? 'disabled' : ''}>Static</button><button class="tg" data-flag="mpb" aria-pressed="${o.mpb}">MaterialPropertyBlock</button></div>
-        <span class="lbl">Как Unity его нарисует</span>${pill(rt.p)}
-        <ul class="why">${rt.why.map(([k, t]) => `<li class="${k}">${esc(t)}</li>`).join('')}</ul>
-        <p class="note">Флаги меняются у этого объекта во всех кварталах.</p>`;
+        <span class="lbl">${t('side.howDraw')}</span>${pill(rt.p)}
+        <ul class="why">${rt.why.map(([kind, key, ...args]) => `<li class="${kind}">${esc(t(key, ...args))}</li>`).join('')}</ul>
+        <p class="note">${t('side.flagsNote')}</p>`;
       return;
     }
     const cnt = {};
     OBJECTS.forEach(o => { const p = ev.routes[o.id].p; cnt[p] = (cnt[p] || 0) + 1; });
-    sideEl.innerHTML = `<span class="lbl">Как рисуется квартал</span>
+    sideEl.innerHTML = `<span class="lbl">${t('side.legendTitle')}</span>
       <div class="legend">${Object.keys(PATHS).filter(p => cnt[p]).map(p => `<div><i style="background:${stripe(p)}"></i><span>${PATHS[p].l}</span><b>${cnt[p]}</b></div>`).join('')}</div>
-      <p class="hint">Цифры — сколько из ${OBJECTS.length} объектов квартала идёт каждым путём. Цвет объекта в кадре — его материал.</p>
-      <p class="hint"><b>Кликни</b> объект в кадре, чтобы увидеть, почему он попал именно сюда, или блок на ленте — чтобы подсветить батч.</p>`;
+      <p class="hint">${t('side.legendHint', OBJECTS.length)}</p>
+      <p class="hint">${t('side.clickHint')}</p>`;
   }
 
   function renderTape() {
-    $('#tapeT').textContent = `COMMAND STREAM · ${ev.runs.length} GROUPS · ${ev.T.draws} DRAW CALLS`;
+    $('#tapeT').textContent = t('deck.tapeTitle', ev.runs.length, ev.T.draws);
     tapeEl.innerHTML = ev.runs.map((r, i) => {
       const w = Math.round(62 + Math.min(96, Math.log2(r.draws + 1) * 13));
       const st = S.play >= 0 ? (i < S.play ? ' done' : i === S.play ? '' : ' todo') : '';
       const dots = [...r.mats].slice(0, 8).map(m => `<i style="background:${MATERIALS[m].c}"></i>`).join('');
-      return `<button class="run${st}" data-i="${i}" style="width:${w}px" aria-pressed="${S.selRun === i || S.play === i}" aria-label="${esc(PATHS[r.p].l)}: ${r.draws} draw calls, ${r.n} объектов${r.setpass ? ', новый SetPass' : ''}">
+      return `<button class="run${st}" data-i="${i}" style="width:${w}px" aria-pressed="${S.selRun === i || S.play === i}" aria-label="${esc(PATHS[r.p].l)}: ${r.draws} draw calls, ${r.n} obj${r.setpass ? ', SetPass' : ''}">
         <span class="stripe" style="background:${stripe(r.p)}"></span><span class="nm">${PATHS[r.p].s}</span>
         <span class="dots">${dots}</span>
-        <span class="ct"><span>×${fmtI(r.draws)}</span>${r.setpass ? '<span class="sp" title="новый SetPass">SP</span>' : ''}</span></button>`;
+        <span class="ct"><span>×${fmtI(r.draws)}</span>${r.setpass ? `<span class="sp" title="${t('deck.spTitle')}">SP</span>` : ''}</span></button>`;
     }).join('');
   }
 
@@ -85,10 +86,9 @@ export function initDeck() {
     `<div class="tile ${cls}"><span class="lbl">${lbl}</span><span class="val">${val}${unit ? `<small>${unit}</small>` : ''}</span>${bar}<span class="d ${d[1] || ''}">${d[0]}</span></div>`;
 
   const delta = (cur, b, lowerBetter = true) => {
-    if (b === 0 && cur === 0) return ['как без батчинга', ''];
-    if (Math.abs(cur - b) / Math.max(b, 1e-9) < 0.005) return ['как без батчинга', ''];
+    if ((b === 0 && cur === 0) || Math.abs(cur - b) / Math.max(b, 1e-9) < 0.005) return [t('stats.same'), ''];
     const pct = Math.round((cur - b) / b * 100);
-    return [(pct > 0 ? '+' : '') + pct + '% к «всё выключено»', (pct < 0) === lowerBetter ? 'good' : 'badc'];
+    return [t('stats.delta', pct), (pct < 0) === lowerBetter ? 'good' : 'badc'];
   };
 
   function renderStats() {
@@ -96,14 +96,15 @@ export function initDeck() {
     const cmax = Math.max(B.cpu, T.cpu, 16.7) * 1.08, gmax = Math.max(B.gpu, T.gpu, 16.7) * 1.08;
     const bar = (v, max, col) => `<div class="bar"><i style="width:${Math.min(100, v / max * 100)}%;background:${col};box-shadow:0 0 10px ${col}"></i><span class="budget" style="left:${16.7 / max * 100}%"></span></div>`;
     const saved = T.objects - T.draws;
+    const ms = t('stats.ms');
     statsEl.innerHTML =
-      tile('Draw calls', fmtI(T.draws), '', [`сэкономлено батчингом: ${fmtI(Math.max(0, saved))}`, saved > 0 ? 'good' : '']) +
-      tile('SetPass calls', fmtI(T.setpass), '', delta(T.setpass, B.setpass)) +
-      tile('CPU · render thread', fmt(T.cpu, T.cpu < 10 ? 2 : 1), 'мс', delta(T.cpu, B.cpu), 'cpu-t', bar(T.cpu, cmax, '#ff3ea5')) +
-      tile('GPU', fmt(T.gpu, T.gpu < 10 ? 2 : 1), 'мс', delta(T.gpu, B.gpu), 'gpu-t', bar(T.gpu, gmax, '#26e3ea')) +
-      tile('CPU → GPU за кадр', bytes(T.upload), '', delta(T.upload, B.upload)) +
-      tile('Доп. память', T.memory ? bytes(T.memory) : '0', '', T.memory ? ['копии вершин static batching', 'badc'] : ['лишних копий нет', '']);
-    $('#crtL').textContent = `CAM 01 · ${OBJECTS.length} OBJ${S.k > 1 ? ` · ×${S.k} = ${OBJECTS.length * S.k} OBJ` : ''}`;
+      tile(t('stats.draws'), fmtI(T.draws), '', [t('stats.savedFoot', Math.max(0, saved)), saved > 0 ? 'good' : '']) +
+      tile(t('stats.setpass'), fmtI(T.setpass), '', delta(T.setpass, B.setpass)) +
+      tile(t('stats.cpu'), fmt(T.cpu, T.cpu < 10 ? 2 : 1), ms, delta(T.cpu, B.cpu), 'cpu-t', bar(T.cpu, cmax, '#ff3ea5')) +
+      tile(t('stats.gpu'), fmt(T.gpu, T.gpu < 10 ? 2 : 1), ms, delta(T.gpu, B.gpu), 'gpu-t', bar(T.gpu, gmax, '#26e3ea')) +
+      tile(t('stats.upload'), bytes(T.upload), '', delta(T.upload, B.upload)) +
+      tile(t('stats.memory'), T.memory ? bytes(T.memory) : '0', '', T.memory ? [t('stats.memYes'), 'badc'] : [t('stats.memNo'), '']);
+    $('#crtL').textContent = t('deck.crt', OBJECTS.length, S.k);
   }
 
   /** Идея из первой версии лаборатории: одна сцена — и сразу все техники по отдельности. */
@@ -112,24 +113,24 @@ export function initDeck() {
     const cell = (v, b, unit, lowerBetter = true) => {
       const d = b === 0 ? 0 : Math.round((v - b) / b * 100);
       const cls = d === 0 ? '' : (d < 0) === lowerBetter ? 'style="color:var(--ok)"' : 'style="color:var(--bad)"';
-      return `${unit === 'мс' ? fmt(v, 2) : unit === 'Б' ? bytes(v) : fmtI(v)} <small ${cls}>${d === 0 ? '—' : (d > 0 ? '+' : '') + d + '%'}</small>`;
+      return `${unit === 'ms' ? fmt(v, 2) : unit === 'b' ? bytes(v) : fmtI(v)} <small ${cls}>${d === 0 ? '—' : (d > 0 ? '+' : '') + d + '%'}</small>`;
     };
     const B = cmpBase.T;
     $('#cmpBody').innerHTML = [
-      `<tr><td>Без батчинга</td><td>${fmtI(B.draws)}</td><td>${fmtI(B.setpass)}</td><td>${fmt(B.cpu, 2)}</td><td>${bytes(B.upload)}</td><td>0</td><td class="note">точка отсчёта</td></tr>`,
+      `<tr><td>${t('compare.baseline')}</td><td>${fmtI(B.draws)}</td><td>${fmtI(B.setpass)}</td><td>${fmt(B.cpu, 2)}</td><td>${bytes(B.upload)}</td><td>0</td><td class="note">${t('compare.baselineNote')}</td></tr>`,
       ...rows.map(r => {
         const T = r.result.T;
         const on = S[r.key] && available(r.key, S);
         return `<tr class="${on ? 'hl' : ''}"><td>${r.name}</td>
           <td>${cell(T.draws, B.draws)}</td>
           <td>${cell(T.setpass, B.setpass)}</td>
-          <td>${cell(T.cpu, B.cpu, 'мс')}</td>
-          <td>${cell(T.upload, B.upload, 'Б')}</td>
+          <td>${cell(T.cpu, B.cpu, 'ms')}</td>
+          <td>${cell(T.upload, B.upload, 'b')}</td>
           <td>${T.memory ? bytes(T.memory) : '0'}</td>
-          <td class="note">${r.available ? (on ? 'включена сейчас' : 'доступна в этой сцене') : '↪ ' + esc(r.reason)}</td></tr>`;
+          <td class="note">${r.available ? t(on ? 'compare.on' : 'compare.available') : '↪ ' + esc(t(r.reason))}</td></tr>`;
       })
     ].join('');
-    $('#cmpNote').textContent = `Каждая строка — та же сцена (${OBJECTS.length * S.k} объектов, ${S.pipe.toUpperCase()}) с одной включённой техникой. Проценты — к строке «без батчинга».`;
+    $('#cmpNote').textContent = t('compare.note', OBJECTS.length * S.k, S.pipe.toUpperCase());
   }
 
   function renderControls() {
@@ -139,7 +140,7 @@ export function initDeck() {
       const k = b.dataset.k, ok = available(k, S);
       b.disabled = !ok;
       b.setAttribute('aria-pressed', S[k] && ok ? 'true' : 'false');
-      b.title = ok ? '' : unavailableReason(k, S);
+      b.title = ok ? '' : t(unavailableReason(k, S));
     });
     $('#wire').setAttribute('aria-pressed', S.wire);
   }
@@ -242,7 +243,7 @@ export function initDeck() {
     if (S.play >= 0) {
       S.play = -1;
       $('#crtR').textContent = '● REC';
-      playBtn.textContent = '► Проиграть кадр';
+      playBtn.textContent = t('deck.play');
     }
   }
   function stepPlay() {
@@ -251,7 +252,7 @@ export function initDeck() {
       return;
     }
     S.play++;
-    $('#crtR').textContent = `► STEP ${S.play + 1}/${ev.runs.length}`;
+    $('#crtR').textContent = t('deck.step', S.play + 1, ev.runs.length);
     renderTape();
     if (RM) paintScene();
     const el = tapeEl.children[S.play];
@@ -263,7 +264,7 @@ export function initDeck() {
     S.selRun = null; S.selObj = null;
     renderSide();
     S.play = -1;
-    playBtn.textContent = '■ Стоп';
+    playBtn.textContent = t('deck.stop');
     stepPlay();
   };
 
@@ -277,6 +278,8 @@ export function initDeck() {
     requestAnimationFrame(loop);
   }
   addEventListener('resize', () => { scene.resize(); paintScene(); });
+
+  onLang(() => { if (S.play < 0) playBtn.textContent = t('deck.play'); refreshUI(); });
 
   recompute();
   refreshUI();

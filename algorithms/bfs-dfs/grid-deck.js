@@ -1,5 +1,6 @@
 /** Пульт «двумерный массив»: лабиринт, обход по клеткам, пошаговая перемотка. */
 import { $, $$, fitCanvas, press, fmtI, onVisible } from '../../assets/vhs.js';
+import { t, onLang } from '../../assets/i18n.js';
 import { makeGrid, gridNeighbors, gridXY, traverse, stateAt, pathTo, WALL, FREE } from './traversal.js';
 import { drawGrid, gridLayout, cellAtPoint } from './grid-view.js';
 import { renderPseudo, renderFrontier, noteFor, tile, COL } from './panels.js';
@@ -49,8 +50,10 @@ export function initGridDeck() {
       colorBy: S.colorBy, total: Math.max(1, run.visited), hover
     });
 
-    $('#gridL').textContent = `${S.order.toUpperCase()} · ${grid.cols}×${grid.rows} · ${S.kind === 'maze' ? 'ЛАБИРИНТ' : 'ПЕЩЕРА'} #${S.seed}`;
-    $('#gridR').textContent = st.done ? (st.found ? '■ ЦЕЛЬ НАЙДЕНА' : '■ ОБХОД ЗАКОНЧЕН') : (f.playing ? '● REC' : '❚❚ PAUSE');
+    $('#gridL').textContent = t('grid.osd', S.order, grid.cols, grid.rows, S.kind, S.seed);
+    $('#gridR').textContent = st.done
+      ? t(st.found ? 'grid.osdGoal' : 'grid.osdDone')
+      : t(f.playing ? 'grid.osdRec' : 'grid.osdPause');
 
     renderPseudo($('#gridCode'), S.order, st.event ? st.event.line : 0);
     renderFrontier($('#gridFront'), st.frontier, S.order, labelOf);
@@ -61,42 +64,49 @@ export function initGridDeck() {
 
   function renderSide(st, path) {
     const n = noteFor(S.order, st.event, labelOf);
-    const free = grid.cells.reduce((s, v) => s + (v === FREE ? 1 : 0), 0);
+    const free = freeCells();
+    const depthNow = st.current >= 0 && st.depth[st.current] >= 0 ? st.depth[st.current] : '—';
     side.innerHTML = `
-      <span class="lbl">Что происходит на этом шаге</span>
+      <span class="lbl">${t('ui.stepTitle')}</span>
       <span class="badge ${badgeCls(st)}">${n.tag}</span>
       <p style="font-size:15px">${n.text}</p>
       <dl class="kv">
-        <dt>${S.order === 'bfs' ? 'В очереди' : 'В стеке'}</dt><dd>${fmtI(st.frontier.length)}</dd>
-        <dt>Посещено</dt><dd>${fmtI(st.visited)} из ${fmtI(free)}</dd>
-        <dt>Глубина текущей</dt><dd>${st.current >= 0 && st.depth[st.current] >= 0 ? st.depth[st.current] : '—'}</dd>
-        <dt>Путь до финиша</dt><dd>${path.length ? fmtI(path.length - 1) + ' шаг.' : '—'}</dd>
+        <dt>${t('grid.kvFrontier', S.order)}</dt><dd>${fmtI(st.frontier.length)}</dd>
+        <dt>${t('grid.kvVisited')}</dt><dd>${t('grid.kvOf', st.visited, free)}</dd>
+        <dt>${t('grid.kvDepth')}</dt><dd>${depthNow}</dd>
+        <dt>${t('grid.kvPath')}</dt><dd>${path.length ? fmtI(path.length - 1) : '—'}</dd>
       </dl>
       <div class="legend">
-        <div><i style="background:${COL.start}"></i><span>старт</span><b>S</b></div>
-        <div><i style="background:${COL.goal}"></i><span>финиш</span><b>F</b></div>
-        <div><i style="background:${S.order === 'bfs' ? COL.bfs : COL.dfs}"></i><span>${S.order === 'bfs' ? 'в очереди (открыты)' : 'в стеке (открыты)'}</span><b>${fmtI(st.frontier.length)}</b></div>
-        <div><i style="background:${S.colorBy === 'depth' ? 'linear-gradient(90deg,#1c9fd4,#d43b1c)' : S.order === 'bfs' ? 'linear-gradient(90deg,#265aa0,#46c8dc)' : 'linear-gradient(90deg,#82286e,#ff78be)'}"></i><span>посещённые ${S.colorBy === 'depth' ? '(цвет = слой)' : '(цвет = порядок)'}</span><b>${fmtI(st.visited)}</b></div>
-        <div><i style="background:${COL.path}"></i><span>найденный путь</span><b>${path.length ? path.length - 1 : '—'}</b></div>
+        <div><i style="background:${COL.start}"></i><span>${t('grid.legStart')}</span><b>S</b></div>
+        <div><i style="background:${COL.goal}"></i><span>${t('grid.legGoal')}</span><b>F</b></div>
+        <div><i style="background:${S.order === 'bfs' ? COL.bfs : COL.dfs}"></i><span>${t('grid.legFrontier', S.order)}</span><b>${fmtI(st.frontier.length)}</b></div>
+        <div><i style="background:${visitedRamp()}"></i><span>${t('grid.legVisited', S.colorBy === 'depth')}</span><b>${fmtI(st.visited)}</b></div>
+        <div><i style="background:${COL.path}"></i><span>${t('grid.legPath')}</span><b>${path.length ? path.length - 1 : '—'}</b></div>
       </div>
-      <p class="note">Клик по полю: ${S.mode === 'wall' ? 'ставит и убирает стену' : S.mode === 'start' ? 'переносит старт' : 'переносит финиш'}. Переключить — кнопками «Клик».</p>`;
+      <p class="note">${t('grid.clickNote', S.mode)}</p>`;
   }
 
+  const visitedRamp = () => S.colorBy === 'depth'
+    ? 'linear-gradient(90deg,#1c9fd4,#d43b1c)'
+    : S.order === 'bfs' ? 'linear-gradient(90deg,#265aa0,#46c8dc)' : 'linear-gradient(90deg,#82286e,#ff78be)';
+
+  const freeCells = () => grid.cells.reduce((sum, v) => sum + (v === FREE ? 1 : 0), 0);
+
   const badgeCls = st => {
-    const t = st.event ? st.event.t : '';
-    if (t === 'skip' || t === 'dup') return 'warn';
-    if (t === 'goal') return 'ok';
-    if (t === 'done') return st.found ? 'ok' : 'warn';
+    const type = st.event ? st.event.t : '';
+    if (type === 'skip' || type === 'dup') return 'warn';
+    if (type === 'goal') return 'ok';
+    if (type === 'done') return st.found ? 'ok' : 'warn';
     return 'neutral';
   };
 
   function renderStats(st, path) {
-    const free = grid.cells.reduce((s, v) => s + (v === FREE ? 1 : 0), 0);
+    const free = freeCells();
     statsEl.innerHTML =
-      tile('Посещено клеток', fmtI(st.visited), `из ${fmtI(free)}`, st.done ? (st.found ? 'обход остановлен на цели' : 'цель не найдена') : 'обход идёт') +
-      tile('Фронт сейчас', fmtI(st.frontier.length), S.order === 'bfs' ? 'в очереди' : 'в стеке', `максимум за прогон: ${fmtI(run.maxFrontier)}`, S.order === 'bfs' ? 'gpu-t' : 'cpu-t') +
-      tile('Длина пути', path.length ? fmtI(path.length - 1) : '—', path.length ? 'шагов' : '', S.order === 'bfs' ? 'BFS: это кратчайший путь' : 'DFS: путь любой, не кратчайший') +
-      tile('Шагов алгоритма', fmtI(run.events.length), 'событий', `просмотрено ${fmtI(st.index + 1)}`);
+      tile(t('grid.tileVisited'), fmtI(st.visited), t('grid.tileVisitedUnit', free), t('grid.tileVisitedFoot', st.done, st.found)) +
+      tile(t('grid.tileFrontier'), fmtI(st.frontier.length), t('grid.tileFrontierUnit', S.order), t('grid.tileFrontierFoot', run.maxFrontier), S.order === 'bfs' ? 'gpu-t' : 'cpu-t') +
+      tile(t('grid.tilePath'), path.length ? fmtI(path.length - 1) : '—', path.length ? t('grid.tilePathUnit') : '', t('grid.tilePathFoot', S.order)) +
+      tile(t('grid.tileSteps'), fmtI(run.events.length), t('grid.tileStepsUnit'), t('grid.tileStepsFoot', st.index + 1));
   }
 
   /* ---------------- управление ---------------- */
@@ -121,6 +131,7 @@ export function initGridDeck() {
 
   const sizeIn = $('#gSize'), densIn = $('#gDens');
   sizeIn.oninput = () => { S.cols = ODD(+sizeIn.value); $('#gSizeOut').textContent = `${S.cols}×${rows()}`; rebuild(); };
+  onLang(() => paint());
   densIn.oninput = () => { S.density = +densIn.value / 100; $('#gDensOut').textContent = densIn.value + '%'; if (S.kind === 'cave') rebuild(); };
   function syncDensity() {
     densIn.disabled = S.kind !== 'cave';
@@ -137,9 +148,9 @@ export function initGridDeck() {
         const [x, y] = gridXY(grid, id);
         const vi = view.visitIndex[id];
         tip.hidden = false;
-        tip.textContent = grid.cells[id] === WALL ? `${x},${y} · стена`
-          : vi >= 0 ? `${x},${y} · посещена ${vi + 1}-й, глубина ${view.depth[id]}`
-          : view.inFrontier[id] ? `${x},${y} · открыта, ждёт во фронте` : `${x},${y} · ещё не открыта`;
+        tip.textContent = grid.cells[id] === WALL ? t('grid.tipWall', x, y)
+          : vi >= 0 ? t('grid.tipVisited', x, y, vi + 1, view.depth[id])
+          : view.inFrontier[id] ? t('grid.tipOpen', x, y) : t('grid.tipClosed', x, y);
         tip.style.left = Math.min(e.clientX - r.left + 14, r.width - 190) + 'px';
         tip.style.top = (e.clientY - r.top + 14) + 'px';
       } else tip.hidden = true;

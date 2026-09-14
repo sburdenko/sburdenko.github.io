@@ -1,5 +1,6 @@
 /** Пульт «граф»: узлы и рёбра, дерево обхода, слои BFS и глубина DFS. */
-import { $, $$, fitCanvas, press, fmtI, esc, onVisible } from '../../assets/vhs.js';
+import { $, $$, fitCanvas, press, fmtI, onVisible } from '../../assets/vhs.js';
+import { t, onLang } from '../../assets/i18n.js';
 import { makeGraph, graphNeighbors, traverse, stateAt, pathTo } from './traversal.js';
 import { drawGraph, graphLayout, nodeAtPoint } from './graph-view.js';
 import { renderPseudo, renderFrontier, noteFor, tile, COL } from './panels.js';
@@ -39,18 +40,19 @@ export function initGraphDeck() {
     const path = st.visitIndex[graph.goal] >= 0 ? pathTo(st.parent, st.visitIndex, graph.goal) : [];
     drawGraph(c, w, h, graph, { state: st, order: S.order, lay, path, colorBy: S.colorBy, total: Math.max(1, run.visited), hover });
 
-    const edges = graph.adj.reduce((s, l) => s + l.length, 0) / 2;
-    $('#graphL').textContent = `${S.order.toUpperCase()} · V=${graph.nodes} E=${edges} · ${({ geo: 'СЛУЧАЙНЫЙ', tree: 'ДЕРЕВО', ring: 'КОЛЬЦО' })[S.kind]} #${S.seed}`;
-    $('#graphR').textContent = st.done ? '■ ОБХОД ЗАКОНЧЕН' : (f.playing ? '● REC' : '❚❚ PAUSE');
+    const edges = graph.adj.reduce((sum, l) => sum + l.length, 0) / 2;
+    $('#graphL').textContent = t('graph.osd', S.order, graph.nodes, edges, S.kind, S.seed);
+    $('#graphR').textContent = st.done ? t('grid.osdDone') : t(f.playing ? 'grid.osdRec' : 'grid.osdPause');
 
     renderPseudo($('#graphCode'), S.order, st.event ? st.event.line : 0);
     renderFrontier($('#graphFront'), st.frontier, S.order, labelOf);
     renderSide(st, path, edges);
+    const treeDepth = Math.max(0, ...[...st.depth].filter((d, i) => st.visitIndex[i] >= 0));
     statsEl.innerHTML =
-      tile('Посещено', fmtI(st.visited), `из ${fmtI(graph.nodes)}`, 'узлов графа') +
-      tile('Фронт', fmtI(st.frontier.length), S.order === 'bfs' ? 'в очереди' : 'в стеке', `максимум: ${fmtI(run.maxFrontier)}`, S.order === 'bfs' ? 'gpu-t' : 'cpu-t') +
-      tile('Глубина дерева', fmtI(Math.max(0, ...[...st.depth].filter((d, i) => st.visitIndex[i] >= 0))), 'ур.', S.order === 'bfs' ? 'BFS: это и есть расстояние' : 'DFS: длина спуска') +
-      tile('Путь S → F', path.length ? fmtI(path.length - 1) : '—', path.length ? 'рёбер' : '', S.order === 'bfs' ? 'кратчайший' : 'какой получился');
+      tile(t('graph.tileVisited'), fmtI(st.visited), t('graph.tileVisitedUnit', graph.nodes), t('graph.tileVisitedFoot')) +
+      tile(t('graph.tileFrontier'), fmtI(st.frontier.length), t('grid.tileFrontierUnit', S.order), t('graph.tileFrontierFoot', run.maxFrontier), S.order === 'bfs' ? 'gpu-t' : 'cpu-t') +
+      tile(t('graph.tileDepth'), fmtI(treeDepth), t('graph.tileDepthUnit'), t('graph.tileDepthFoot', S.order)) +
+      tile(t('graph.tilePath'), path.length ? fmtI(path.length - 1) : '—', path.length ? t('graph.tilePathUnit') : '', t('graph.tilePathFoot', S.order));
     syncTransport(f);
   }
 
@@ -62,34 +64,36 @@ export function initGraphDeck() {
         (levels[st.depth[i]] ||= []).push(i);
       }
       const rows = Object.keys(levels).sort((a, b) => a - b).map(d =>
-        `<div><i style="background:${COL.bfs};opacity:${0.25 + 0.75 * Math.min(1, 1 - d / 8)}"></i><span>слой ${d}</span><b>${levels[d].map(labelOf).join(' ')}</b></div>`);
-      return `<span class="lbl">Слои от старта</span><div class="legend">${rows.join('') || '<div><span>пока пусто</span></div>'}</div>`;
+        `<div><i style="background:${COL.bfs};opacity:${0.25 + 0.75 * Math.min(1, 1 - d / 8)}"></i><span>${t('graph.layer', d)}</span><b>${levels[d].map(labelOf).join(' ')}</b></div>`);
+      return `<span class="lbl">${t('graph.layers')}</span><div class="legend">${rows.join('') || `<div><span>${t('graph.empty')}</span></div>`}</div>`;
     }
     const chain = st.current >= 0 ? pathTo(st.parent, st.visitIndex, st.current) : [];
-    return `<span class="lbl">Цепочка спуска (как рекурсия)</span>
-      <p style="font-family:var(--f-mono);font-size:13px;color:#fff;line-height:1.7">${chain.length ? chain.map(labelOf).join(' <span style="color:var(--ink3)">→</span> ') : '<span class="note">пока пусто</span>'}</p>`;
+    return `<span class="lbl">${t('graph.chain')}</span>
+      <p style="font-family:var(--f-mono);font-size:13px;color:#fff;line-height:1.7">${chain.length
+        ? chain.map(labelOf).join(' <span style="color:var(--ink3)">→</span> ')
+        : `<span class="note">${t('graph.empty')}</span>`}</p>`;
   }
 
   function renderSide(st, path, edges) {
     const n = noteFor(S.order, st.event, labelOf);
     side.innerHTML = `
-      <span class="lbl">Что происходит на этом шаге</span>
+      <span class="lbl">${t('ui.stepTitle')}</span>
       <span class="badge ${badgeCls(st)}">${n.tag}</span>
       <p style="font-size:15px">${n.text}</p>
       <dl class="kv">
-        <dt>${S.order === 'bfs' ? 'Очередь' : 'Стек'}</dt><dd>${st.frontier.map(labelOf).join(' ') || 'пусто'}</dd>
-        <dt>Посещено</dt><dd>${fmtI(st.visited)} / ${fmtI(graph.nodes)}</dd>
-        <dt>Рёбер в графе</dt><dd>${fmtI(edges)}</dd>
+        <dt>${t('graph.kvBox', S.order)}</dt><dd>${st.frontier.map(labelOf).join(' ') || t('ui.empty')}</dd>
+        <dt>${t('graph.kvVisited')}</dt><dd>${fmtI(st.visited)} / ${fmtI(graph.nodes)}</dd>
+        <dt>${t('graph.kvEdges')}</dt><dd>${fmtI(edges)}</dd>
       </dl>
       ${ladder(st)}
-      <p class="note">Клик по узлу — сделать его стартом. Финиш — последний узел (${labelOf(graph.goal)}).</p>`;
+      <p class="note">${t('graph.clickNote', labelOf(graph.goal))}</p>`;
   }
 
   const badgeCls = st => {
-    const t = st.event ? st.event.t : '';
-    if (t === 'skip' || t === 'dup') return 'warn';
-    if (t === 'goal') return 'ok';
-    if (t === 'done') return st.found ? 'ok' : 'warn';
+    const type = st.event ? st.event.t : '';
+    if (type === 'skip' || type === 'dup') return 'warn';
+    if (type === 'goal') return 'ok';
+    if (type === 'done') return st.found ? 'ok' : 'warn';
     return 'neutral';
   };
 
@@ -104,6 +108,7 @@ export function initGraphDeck() {
   };
   const nIn = $('#hNodes');
   nIn.oninput = () => { S.nodes = +nIn.value; $('#hNodesOut').textContent = S.nodes; rebuild(); };
+  onLang(() => paint());
 
   cv.addEventListener('mousemove', e => {
     const r = cv.getBoundingClientRect();
@@ -114,7 +119,9 @@ export function initGraphDeck() {
       if (id >= 0 && view) {
         const vi = view.visitIndex[id];
         tip.hidden = false;
-        tip.textContent = `${labelOf(id)} · соседи: ${graph.adj[id].map(labelOf).join(' ')} · ${vi >= 0 ? `посещён ${vi + 1}-м, глубина ${view.depth[id]}` : view.inFrontier[id] ? 'открыт, ждёт' : 'ещё не открыт'}`;
+        const state = vi >= 0 ? t('graph.tipVisited', vi + 1, view.depth[id])
+          : view.inFrontier[id] ? t('graph.tipOpen') : t('graph.tipClosed');
+        tip.textContent = t('graph.tip', labelOf(id), graph.adj[id].map(labelOf).join(' '), state);
         tip.style.left = Math.min(e.clientX - r.left + 14, Math.max(4, r.width - 260)) + 'px';
         tip.style.top = (e.clientY - r.top + 14) + 'px';
       } else tip.hidden = true;

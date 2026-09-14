@@ -3,13 +3,22 @@ export { rng } from './rand.js';
 
 export const $ = (s, r = document) => r.querySelector(s);
 export const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-export const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+/** В node (тесты) matchMedia нет — считаем, что анимации разрешены. */
+export const RM = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-export const fmt = (v, d = 1) => v.toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d });
-export const fmtI = v => Math.round(v).toLocaleString('ru-RU');
-export const bytes = b => b < 1024 ? fmtI(b) + ' Б'
-  : b < 1048576 ? fmt(b / 1024, b < 10240 ? 1 : 0) + ' КБ'
-  : fmt(b / 1048576, b < 10485760 ? 1 : 0) + ' МБ';
+let locale = 'en-US';
+/** Локаль для чисел и единиц измерения; переключается вместе с языком страницы. */
+export const setLocale = l => { locale = l; };
+export const getLocale = () => locale;
+
+export const fmt = (v, d = 1) => v.toLocaleString(locale, { minimumFractionDigits: d, maximumFractionDigits: d });
+export const fmtI = v => Math.round(v).toLocaleString(locale);
+export const bytes = b => {
+  const u = locale.startsWith('ru') ? ['Б', 'КБ', 'МБ'] : ['B', 'KB', 'MB'];
+  return b < 1024 ? fmtI(b) + ' ' + u[0]
+    : b < 1048576 ? fmt(b / 1024, b < 10240 ? 1 : 0) + ' ' + u[1]
+    : fmt(b / 1048576, b < 10485760 ? 1 : 0) + ' ' + u[2];
+};
 export const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 export const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 export const plural = (n, one, few, many) => {

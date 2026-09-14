@@ -1,5 +1,6 @@
 /** Заставка: две дорожки кадра — что делает CPU и что в это время делает GPU. */
-import { $, fitCanvas, fmt, press, RM, onVisible } from '../../assets/vhs.js';
+import { $, fitCanvas, fmt, press, RM, onVisible } from '../assets/vhs.js';
+import { t, onLang } from '../assets/i18n.js';
 
 const CULL = 0.004, CPU_DRAW = 0.055, GPU_DRAW = 0.018, BATCHES = 5, CPU_BATCH = 0.09;
 
@@ -11,35 +12,36 @@ export function initLanes() {
 
   function compute() {
     const n = +nIn.value, cpu = [], gpu = [];
-    let t = n * CULL;
-    cpu.push({ s: 0, e: t, cull: true });
+    let cursor = n * CULL;
+    cpu.push({ s: 0, e: cursor, cull: true });
     let gEnd = 0, busy = 0;
     if (mode === 'sep') {
       for (let i = 0; i < n; i++) {
-        const s = t, e = t + CPU_DRAW;
-        cpu.push({ s, e }); t = e;
+        const s = cursor, e = cursor + CPU_DRAW;
+        cpu.push({ s, e }); cursor = e;
         const gs = Math.max(e, gEnd), ge = gs + GPU_DRAW;
         gpu.push({ s: gs, e: ge }); gEnd = ge; busy += GPU_DRAW;
       }
     } else {
       const per = n / BATCHES;
       for (let i = 0; i < BATCHES; i++) {
-        const s = t, e = t + CPU_BATCH;
-        cpu.push({ s, e }); t = e;
+        const s = cursor, e = cursor + CPU_BATCH;
+        cpu.push({ s, e }); cursor = e;
         const w = per * GPU_DRAW + 0.01;
         const gs = Math.max(e, gEnd), ge = gs + w;
         gpu.push({ s: gs, e: ge }); gEnd = ge; busy += w;
       }
     }
-    const frame = Math.max(t, gEnd);
-    model = { cpu, gpu, cpuT: t, gpuT: busy, frame, idle: 1 - busy / frame, bound: t > busy ? 'CPU' : 'GPU' };
+    const frame = Math.max(cursor, gEnd);
+    model = { cpu, gpu, cpuT: cursor, gpuT: busy, frame, idle: 1 - busy / frame, bound: cursor > busy ? 'CPU' : 'GPU' };
     nOut.textContent = n;
     const fps = 1000 / model.frame;
-    read.innerHTML = `<span>CPU (render thread): <b class="cpu">${fmt(model.cpuT, 1)} мс</b></span>`
-      + `<span>GPU работает: <b class="gpu">${fmt(model.gpuT, 1)} мс</b></span>`
-      + `<span>GPU простаивает: <b>${Math.round(model.idle * 100)}%</b> кадра</span>`
-      + `<span>Кадр: <b>${fmt(model.frame, 1)} мс</b> (${fps > 999 ? '999+' : Math.round(fps)} FPS)</span>`
-      + `<span class="verdict ${model.bound === 'CPU' ? 'cpu-b' : 'gpu-b'}">упираемся в ${model.bound}</span>`;
+    const ms = t('lanes.ms');
+    read.innerHTML = `<span>${t('lanes.cpu')} <b class="cpu">${fmt(model.cpuT, 1)} ${ms}</b></span>`
+      + `<span>${t('lanes.gpu')} <b class="gpu">${fmt(model.gpuT, 1)} ${ms}</b></span>`
+      + `<span>${t('lanes.idle')} <b>${Math.round(model.idle * 100)}%</b> ${t('lanes.idleUnit')}</span>`
+      + `<span>${t('lanes.frame')} <b>${fmt(model.frame, 1)} ${ms}</b> (${fps > 999 ? '999+' : Math.round(fps)} FPS)</span>`
+      + `<span class="verdict ${model.bound === 'CPU' ? 'cpu-b' : 'gpu-b'}">${t('lanes.bound', model.bound)}</span>`;
     t0 = performance.now();
   }
 
@@ -83,7 +85,7 @@ export function initLanes() {
     ctx.textAlign = 'center';
     for (let v = 0; v <= scale; v += 4) {
       ctx.fillRect(X(v), 137, 1, 6);
-      ctx.fillText(v + ' мс', X(v), 156);
+      ctx.fillText(v + ' ' + t('lanes.ms'), X(v), 156);
     }
     ctx.textAlign = 'left';
     const bx = X(16.7);
@@ -108,6 +110,7 @@ export function initLanes() {
   bSep.onclick = () => { mode = 'sep'; press([bSep, bBat], b => b === bSep); compute(); };
   bBat.onclick = () => { mode = 'bat'; press([bSep, bBat], b => b === bBat); compute(); };
   nIn.oninput = compute;
+  onLang(compute);
   addEventListener('resize', resize);
   onVisible(cv, v => visible = v);
   resize();

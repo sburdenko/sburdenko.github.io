@@ -1,5 +1,6 @@
 /** Плеер ленты событий: шаг вперёд/назад, перемотка, автопрогон с заданной скоростью. */
 import { clamp, RM } from '../../assets/vhs.js';
+import { t, onLang } from '../../assets/i18n.js';
 
 export function createPlayer(onChange) {
   let run = null, index = 0, playing = false, sps = 6, acc = 0, last = 0, raf = 0;
@@ -13,10 +14,10 @@ export function createPlayer(onChange) {
     raf = 0;
   }
 
-  function frame(t) {
+  function frame(now) {
     if (!playing) return;
-    const dt = Math.min(200, t - last);
-    last = t;
+    const dt = Math.min(200, now - last);
+    last = now;
     acc += dt * sps / 1000;
     let moved = false;
     while (acc >= 1) {
@@ -67,8 +68,13 @@ export function bindTransport(root, player) {
   const applySpeed = () => { player.speed(+spd.value); sps.textContent = spd.value; };
   spd.oninput = applySpeed;
   applySpeed();
-  return ({ index, playing, total }) => {
-    play.textContent = playing ? '❚❚ ПАУЗА' : '► ПУСК';
-    pos.textContent = `ШАГ ${index + 1} / ${total}`;
+
+  let last = { index: 0, playing: false, total: 0 };
+  const update = frame => {
+    last = frame;
+    play.textContent = frame.playing ? t('tr.pause') : t('tr.play');
+    pos.textContent = t('tr.step', frame.index + 1, frame.total);
   };
+  onLang(() => update(last));
+  return update;
 }

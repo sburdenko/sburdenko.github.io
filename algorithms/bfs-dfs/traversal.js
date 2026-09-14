@@ -182,33 +182,6 @@ export const graphNeighbors = graph => id => graph.adj[id];
 
 /* ------------------------------------------------------------------ обход */
 
-export const LINES = {
-  bfs: [
-    'BFS(start):',
-    '  queue ← [start]      // очередь, FIFO',
-    '  seen  ← {start}',
-    '  while queue не пуст:',
-    '    v ← queue.dequeue()   // из головы',
-    '    visit(v)',
-    '    for u in соседи(v):',
-    '      if u ∈ seen: continue',
-    '      seen.add(u); parent[u] ← v',
-    '      queue.enqueue(u)    // в хвост'
-  ],
-  dfs: [
-    'DFS(start):',
-    '  stack ← [start]      // стек, LIFO',
-    '  visited ← {}',
-    '  while stack не пуст:',
-    '    v ← stack.pop()       // с вершины',
-    '    if v ∈ visited: continue',
-    '    visited.add(v)',
-    '    for u in соседи(v) обратно:',
-    '      if u ∉ visited:',
-    '        parent[u] ← v; stack.push(u)'
-  ]
-};
-
 /**
  * Разворачивает обход в ленту событий: каждое событие — один шаг плеера.
  * Событие: { t, node, from, line, frontier, order, depth, note }

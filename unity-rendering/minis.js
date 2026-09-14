@@ -1,5 +1,6 @@
 /** Маленькие стенды к главам: static, dynamic, SRP Batcher, instancing, GPU Resident Drawer. */
-import { $, $$, fmt, fmtI, bytes, fitCanvas, RM, plural } from '../../assets/vhs.js';
+import { $, $$, fmt, fmtI, bytes, fitCanvas, RM } from '../assets/vhs.js';
+import { t, onLang } from '../assets/i18n.js';
 
 /* ---------------- CH.03 static batching ---------------- */
 export function initStaticMini() {
@@ -15,11 +16,9 @@ export function initStaticMini() {
       return v ? 'r' + (r % 8) : '';
     });
     box.innerHTML = vis.map((v, i) =>
-      `<button class="${cls[i]}" aria-pressed="${!!v}" aria-label="Здание ${i + 1}: ${v ? 'видно' : 'скрыто'}">${i + 1}</button>`).join('');
+      `<button class="${cls[i]}" aria-pressed="${!!v}" aria-label="${t('static.cellAria', i + 1, v)}">${i + 1}</button>`).join('');
     const n = vis.filter(Boolean).length;
-    out.innerHTML = n
-      ? `Видно <b>${n}</b> из 16 → <b>${runs}</b> ${plural(runs, 'draw call', 'draw calla', 'draw callов')}. Каждый непрерывный кусок видимых индексов — отдельный вызов.${runs === 1 && n === 16 ? ' Всё видно — весь буфер одним вызовом.' : ''}`
-      : 'Камера ничего не видит — <b>0</b> draw calls. Но буфер всё равно лежит в памяти.';
+    out.innerHTML = n ? t('static.out', n, runs) : t('static.outEmpty');
   }
   box.addEventListener('click', e => {
     const b = e.target.closest('button');
@@ -38,13 +37,14 @@ export function initStaticMini() {
     $('#stNo').textContent = k;
     const a = MESH_BYTES, b = MESH_BYTES * k, max = Math.max(MESH_BYTES * 500, b);
     mem.innerHTML = `
-      <div class="mb"><div class="top"><span>Без static batching: 1 меш на всех</span><b>${bytes(a)}</b></div>
+      <div class="mb"><div class="top"><span>${t('static.memWithout')}</span><b>${bytes(a)}</b></div>
         <div class="track"><i style="width:${Math.max(.6, a / max * 100)}%;background:var(--ok)"></i></div></div>
-      <div class="mb"><div class="top"><span>Со static batching: ${k} ${plural(k, 'копия', 'копии', 'копий')} в мировых координатах</span><b>${bytes(b)}</b></div>
+      <div class="mb"><div class="top"><span>${t('static.memWith', k)}</span><b>${bytes(b)}</b></div>
         <div class="track"><i style="width:${b / max * 100}%;background:var(--bad)"></i></div></div>`;
   }
   n.oninput = renderMemory;
   renderMemory();
+  onLang(() => { render(); renderMemory(); });
 
   $('#stMove').onclick = () => {
     $('#stToast').hidden = false;
@@ -62,7 +62,7 @@ export function initDynamicMini() {
   const ATTRS = [['Position', 12, true], ['Normal', 12, false], ['UV0', 8, false], ['UV1', 8, false], ['Tangent', 16, false], ['Color', 4, false]];
   const sel = new Set(['Position', 'Normal', 'UV0']);
   wrap.innerHTML = ATTRS.map(([name, , lock]) =>
-    `<button class="chip" data-a="${name}" aria-pressed="${sel.has(name)}" ${lock ? 'disabled title="Позиция есть всегда"' : ''}>${name}</button>`).join('');
+    `<button class="chip" data-a="${name}" aria-pressed="${sel.has(name)}" ${lock ? `disabled data-i18n-title="dyn.posLock" title="${t('dyn.posLock')}"` : ''}>${name}</button>`).join('');
   wrap.addEventListener('click', e => {
     const b = e.target.closest('[data-a]');
     if (!b || b.disabled) return;
@@ -81,27 +81,29 @@ export function initDynamicMini() {
     const bytesPerVertex = ATTRS.filter(a => sel.has(a[0])).reduce((s, a) => s + a[1], 0);
     $('#dyVo').textContent = V;
     $('#dyCo').textContent = C;
-    $('#dyLimit').innerHTML = `Атрибутов: <b>${na}</b> → лимит: min(300, 900 / ${na}) = <b>${limit}</b> вершин. Меш на ${V} — ${ok ? '<span style="color:var(--ok)">проходит</span>' : '<span style="color:var(--bad)">не проходит</span>'}.`;
+    $('#dyLimit').innerHTML = t('dyn.limit', na, limit, V, ok);
 
     const without = C * 0.020, withBatch = 0.020 + C * V * na * 0.00004;
     const max = Math.max(without, withBatch) * 1.1;
+    const ms = t('stats.ms');
     $('#dyBars').innerHTML = `
-      <div class="mb"><div class="top"><span>Без батчинга: ${C} draw calls</span><b>${fmt(without, 2)} мс</b></div>
+      <div class="mb"><div class="top"><span>${t('dyn.barWithout', C)}</span><b>${fmt(without, 2)} ${ms}</b></div>
         <div class="track"><i style="width:${without / max * 100}%;background:var(--cpu)"></i></div></div>
-      <div class="mb"><div class="top"><span>${ok ? `Dynamic batch: 1 вызов + ${fmtI(C * V)} вершин на CPU` : 'Dynamic batching: не применится'}</span><b>${ok ? fmt(withBatch, 2) + ' мс' : '—'}</b></div>
+      <div class="mb"><div class="top"><span>${t('dyn.barWith', ok, C * V)}</span><b>${ok ? fmt(withBatch, 2) + ' ' + ms : '—'}</b></div>
         <div class="track"><i style="width:${ok ? withBatch / max * 100 : 0}%;background:var(--warn)"></i></div></div>`;
 
     const vd = $('#dyVerdict');
-    if (!ok) { vd.className = 'badge no'; vd.textContent = '✗ Меш слишком большой — Unity нарисует по одному'; }
-    else if (withBatch < without * 0.9) { vd.className = 'badge ok'; vd.textContent = `✓ Выгодно: −${Math.round((1 - withBatch / without) * 100)}% CPU`; }
-    else if (withBatch <= without * 1.05) { vd.className = 'badge warn'; vd.textContent = '≈ Почти без разницы'; }
-    else { vd.className = 'badge no'; vd.textContent = `✗ Хуже: +${Math.round((withBatch / without - 1) * 100)}% CPU — батчинг дороже draw calls`; }
+    if (!ok) { vd.className = 'badge no'; vd.textContent = t('dyn.verdictTooBig'); }
+    else if (withBatch < without * 0.9) { vd.className = 'badge ok'; vd.textContent = t('dyn.verdictGood', Math.round((1 - withBatch / without) * 100)); }
+    else if (withBatch <= without * 1.05) { vd.className = 'badge warn'; vd.textContent = t('dyn.verdictSame'); }
+    else { vd.className = 'badge no'; vd.textContent = t('dyn.verdictBad', Math.round((withBatch / without - 1) * 100)); }
 
     $('#dyNote').innerHTML = ok
-      ? `Плюс каждый кадр на GPU заново уезжает <b>${bytes(C * V * bytesPerVertex)}</b> вершин (${bytesPerVertex} байт на вершину) — даже если объекты стоят на месте.`
-      : 'Попробуй уменьшить число вершин или убрать лишние атрибуты — например, UV1 и Tangent.';
+      ? t('dyn.noteOk', bytes(C * V * bytesPerVertex), bytesPerVertex)
+      : t('dyn.noteBad');
   }
   render();
+  onLang(render);
 }
 
 /* ---------------- CH.05 SRP Batcher ---------------- */
@@ -114,45 +116,49 @@ export function initSrpMini() {
 
   vMat.innerHTML = ['A', 'B', 'C'].map(m => `<span class="slot" data-m="${m}">Mat ${m}</span>`).join('');
   vDraw.innerHTML = objs.map(([o]) => `<span class="slot" data-o="${o}">${o.replace('Obj', '#')}</span>`).join('');
-  const head = t => `<div class="hd"><span>${t}</span><span>кадр ${frame || '—'}</span></div>`;
+  const head = title => `<div class="hd"><span>${title}</span><span>${t('srp.frameNo', frame)}</span></div>`;
 
   const seqPlain = () => {
     const L = [];
     let cur = null;
     objs.forEach(([o, m]) => {
-      if (m !== cur) { L.push(['sp', `SetPass · Lit · Mat ${m}`, 'CPU']); L.push(['up', `↑ свойства Mat ${m}`, '128 Б']); cur = m; }
-      L.push(['up', `↑ матрицы ${o}`, '256 Б']);
-      L.push(['dr', `Draw ${o}`, '']);
+      if (m !== cur) {
+        L.push(['sp', t('srp.cmdSetPass', m), 'CPU']);
+        L.push(['up', t('srp.cmdMatProps', m), bytes(128)]);
+        cur = m;
+      }
+      L.push(['up', t('srp.cmdMatrices', o), bytes(256)]);
+      L.push(['dr', t('srp.cmdDraw', o), '']);
     });
     return L;
   };
   const seqSrp = () => {
-    const L = [['sp', 'SetPass · Lit (один вариант)', 'CPU']];
-    const d = [...dirty];
-    if (frame === 1) L.push(['up', '↑ Mat A, B, C → VRAM (один раз)', '384 Б']);
-    else if (d.length) d.forEach(m => L.push(['up', `↑ только Mat ${m} (изменился)`, '128 Б']));
-    else L.push(['no', 'материалы уже в VRAM — заливать нечего', '0 Б']);
-    L.push(['up', '↑ UnityPerDraw: 6 объектов одним куском', '1,5 КБ']);
-    objs.forEach(([o, m]) => L.push(['bd', `bind Mat ${m} · Draw ${o}`, '']));
+    const L = [['sp', t('srp.cmdSetPassOne'), 'CPU']];
+    const changed = [...dirty];
+    if (frame === 1) L.push(['up', t('srp.cmdUploadAll'), bytes(384)]);
+    else if (changed.length) changed.forEach(m => L.push(['up', t('srp.cmdUploadOne', m), bytes(128)]));
+    else L.push(['no', t('srp.cmdNothing'), bytes(0)]);
+    L.push(['up', t('srp.cmdPerDraw'), bytes(1536)]);
+    objs.forEach(([o, m]) => L.push(['bd', t('srp.cmdBind', m, o), '']));
     return L;
   };
   const summary = L => {
     const sp = L.filter(x => x[0] === 'sp').length;
     const up = L.filter(x => x[0] === 'up').length;
     const dr = L.filter(x => x[0] === 'dr' || x[0] === 'bd').length;
-    return `<div class="cmdsum"><span>SetPass: <b>${sp}</b></span><span>Заливок: <b>${up}</b></span><span>Draw calls: <b>${dr}</b></span></div>`;
+    return `<div class="cmdsum"><span>${t('srp.sumSetPass')} <b>${sp}</b></span><span>${t('srp.sumUploads')} <b>${up}</b></span><span>${t('srp.sumDraws')} <b>${dr}</b></span></div>`;
   };
 
   function play() {
     timers.forEach(clearTimeout);
     timers = [];
     const A = seqPlain(), B = seqSrp();
-    colA.innerHTML = head('Без SRP Batcher');
-    colB.innerHTML = head('SRP Batcher');
-    const add = (col, [k, t, r]) => {
+    colA.innerHTML = head(t('srp.colA'));
+    colB.innerHTML = head(t('srp.colB'));
+    const add = (col, [kind, text, right]) => {
       const d = document.createElement('div');
-      d.className = 'cmd ' + k;
-      d.innerHTML = `<span>${t}</span><span>${r}</span>`;
+      d.className = 'cmd ' + kind;
+      d.innerHTML = `<span>${text}</span><span>${right}</span>`;
       col.appendChild(d);
     };
     const flash = sel => {
@@ -166,10 +172,9 @@ export function initSrpMini() {
       if (A[i]) add(colA, A[i]);
       if (B[i]) {
         add(colB, B[i]);
-        const t = B[i][1];
         if (B[i][0] === 'up') {
-          if (t.includes('UnityPerDraw')) objs.forEach(([o]) => flash(`#vDraw [data-o="${o}"]`));
-          else ['A', 'B', 'C'].forEach(m => { if (frame === 1 || t.includes('Mat ' + m)) flash(`#vMat [data-m="${m}"]`); });
+          if (B[i][1] === t('srp.cmdPerDraw')) objs.forEach(([o]) => flash(`#vDraw [data-o="${o}"]`));
+          else ['A', 'B', 'C'].forEach(m => { if (frame === 1 || B[i][1].includes('Mat ' + m)) flash(`#vMat [data-m="${m}"]`); });
         }
       }
     }, i * step));
@@ -187,37 +192,34 @@ export function initSrpMini() {
   play();
 
   const checks = [
-    ['cb', 'Свойства материала в CBUFFER UnityPerMaterial', false],
-    ['pd', 'Встроенные свойства в CBUFFER UnityPerDraw', false],
-    ['mpb', 'Объект использует MaterialPropertyBlock', true],
-    ['ps', 'Это Particle System', true]
+    ['cb', 'srp.chkCbuffer', false],
+    ['pd', 'srp.chkPerDraw', false],
+    ['mpb', 'srp.chkMpb', true],
+    ['ps', 'srp.chkParticles', true]
   ];
   const st = { cb: true, pd: true, mpb: false, ps: false };
   const wrap = $('#srpChecks');
-  wrap.innerHTML = checks.map(([k, t, neg]) =>
-    `<button class="check${neg ? ' neg' : ''}" data-k="${k}" aria-pressed="${st[k]}"><span>${t}</span><span class="sw">${st[k] ? 'ДА' : 'НЕТ'}</span></button>`).join('');
-  function upd() {
-    $$('.check', wrap).forEach(b => {
-      const v = st[b.dataset.k];
-      b.setAttribute('aria-pressed', v);
-      b.querySelector('.sw').textContent = v ? 'ДА' : 'НЕТ';
-    });
+
+  function renderChecks() {
+    wrap.innerHTML = checks.map(([k, key, neg]) =>
+      `<button class="check${neg ? ' neg' : ''}" data-k="${k}" aria-pressed="${st[k]}"><span>${t(key)}</span><span class="sw">${t(st[k] ? 'chk.yes' : 'chk.no')}</span></button>`).join('');
     const bad = [];
-    if (!st.cb) bad.push('свойства материала вне UnityPerMaterial');
-    if (!st.pd) bad.push('встроенные свойства вне UnityPerDraw');
-    if (st.mpb) bad.push('MaterialPropertyBlock');
-    if (st.ps) bad.push('частицы');
-    const b = $('#srpBadge');
-    if (bad.length) { b.className = 'badge no'; b.textContent = 'SRP Batcher: not compatible — ' + bad.join(', '); }
-    else { b.className = 'badge ok'; b.textContent = 'SRP Batcher: compatible'; }
+    if (!st.cb) bad.push(t('srp.badMat'));
+    if (!st.pd) bad.push(t('srp.badDraw'));
+    if (st.mpb) bad.push(t('srp.badMpb'));
+    if (st.ps) bad.push(t('srp.badParticles'));
+    const badge = $('#srpBadge');
+    badge.className = bad.length ? 'badge no' : 'badge ok';
+    badge.textContent = bad.length ? t('srp.badgeNo', bad.join(', ')) : t('srp.badgeOk');
   }
   wrap.addEventListener('click', e => {
     const b = e.target.closest('.check');
     if (!b) return;
     st[b.dataset.k] = !st[b.dataset.k];
-    upd();
+    renderChecks();
   });
-  upd();
+  renderChecks();
+  onLang(() => { renderChecks(); play(); });
 }
 
 /* ---------------- CH.06 GPU instancing ---------------- */
@@ -256,13 +258,9 @@ export function initInstancingMini() {
     c.globalAlpha = 1;
     const draws = per.reduce((a, v) => a + Math.ceil(v / max), 0);
     const bytesPer = 128 + (perInstanceColor ? 16 : 0);
-    $('#inOut').innerHTML = `Draw calls: <b>${fmtI(draws)}</b> вместо <b>${fmtI(N)}</b><br>`
-      + `Per-instance буфер: <b>${bytes(N * bytesPer)}</b> за кадр (${bytesPer} Б на инстанс: 2 матрицы${perInstanceColor ? ' + цвет' : ''})<br>`
-      + `Меш на GPU: <b>1 копия</b>${meshes > 1 ? ' каждого из 3' : ''}`;
-    $('#inNote').innerHTML = (perInstanceColor
-      ? 'Цвет у каждого инстанса — это per-instance свойство. В Built-in его задают через MaterialPropertyBlock и <code>UNITY_INSTANCING_BUFFER</code>, instancing при этом не ломается. Но в URP MaterialPropertyBlock выбивает объект из SRP Batcher. '
-      : 'Цвет точки — номер draw call, в который попал инстанс. ')
-      + (meshes > 1 ? 'Разные меши не инстансятся вместе — у каждого своя серия вызовов.' : `Лимит ${max} инстансов на вызов: следующий инстанс открывает новый draw call.`);
+    $('#inOut').innerHTML = t('inst.out', draws, N, bytes(N * bytesPer), bytesPer, perInstanceColor, meshes);
+    $('#inNote').innerHTML = t(perInstanceColor ? 'inst.noteColor' : 'inst.notePlain')
+      + (meshes > 1 ? t('inst.noteMeshes') : t('inst.noteLimit', max));
   }
 
   [mB, cB, xB].forEach(b => b.onclick = () => {
@@ -271,6 +269,7 @@ export function initInstancingMini() {
   });
   n.oninput = render;
   addEventListener('resize', () => { resize(); render(); });
+  onLang(render);
   resize();
   render();
 }
@@ -280,46 +279,39 @@ export function initGrdMini() {
   const wrap = $('#grdChecks');
   if (!wrap) return;
   const checks = [
-    ['fp', 'Rendering Path: Forward+'],
-    ['srp', 'SRP Batcher включён'],
-    ['brg', 'BatchRendererGroup Variants: Keep All'],
-    ['cs', 'Платформа с compute shaders (не OpenGL ES)'],
-    ['mr', 'Объект — MeshRenderer, не SkinnedMeshRenderer'],
-    ['mpb', 'Без MaterialPropertyBlock']
+    ['fp', 'grd.chkFp'], ['srp', 'grd.chkSrp'], ['brg', 'grd.chkBrg'],
+    ['cs', 'grd.chkCs'], ['mr', 'grd.chkMr'], ['mpb', 'grd.chkMpb']
   ];
   const st = {};
   checks.forEach(([k]) => st[k] = true);
-  wrap.innerHTML = checks.map(([k, t]) => `<button class="check" data-k="${k}" aria-pressed="true"><span>${t}</span><span class="sw">ДА</span></button>`).join('');
-  const nameOf = k => checks.find(x => x[0] === k)[1];
+  const nameOf = k => t(checks.find(x => x[0] === k)[1]);
 
-  function upd() {
-    $$('.check', wrap).forEach(b => {
-      const v = st[b.dataset.k];
-      b.setAttribute('aria-pressed', v);
-      b.querySelector('.sw').textContent = v ? 'ДА' : 'НЕТ';
-    });
+  function render() {
+    wrap.innerHTML = checks.map(([k, key]) =>
+      `<button class="check" data-k="${k}" aria-pressed="${st[k]}"><span>${t(key)}</span><span class="sw">${t(st[k] ? 'chk.yes' : 'chk.no')}</span></button>`).join('');
     const project = ['fp', 'srp', 'brg', 'cs'].filter(k => !st[k]);
     const obj = ['mr', 'mpb'].filter(k => !st[k]);
     const badge = $('#grdBadge'), out = $('#grdOut');
     if (project.length) {
       badge.className = 'badge no';
-      badge.textContent = 'GPU Resident Drawer не работает';
-      out.innerHTML = `Не выполнено на уровне проекта: <b>${project.map(nameOf).join('; ')}</b>. Всё рисуется обычным путём SRP Batcher${st.srp ? '' : ' (или вообще без него)'}.`;
+      badge.textContent = t('grd.badgeNo');
+      out.innerHTML = t('grd.outNo', project.map(nameOf).join('; '), st.srp);
     } else if (obj.length) {
       badge.className = 'badge warn';
-      badge.textContent = 'Fallback для этого объекта';
-      out.innerHTML = `Проект настроен, но этот объект не подходит: <b>${obj.map(nameOf).join('; ')}</b>. Unity тихо нарисует его без GPU instancing — обычным путём.`;
+      badge.textContent = t('grd.badgeFallback');
+      out.innerHTML = t('grd.outFallback', obj.map(nameOf).join('; '));
     } else {
       badge.className = 'badge ok';
-      badge.textContent = '✓ Hybrid Batch Group';
-      out.innerHTML = 'Объект живёт в GPU-памяти через BatchRendererGroup. Все объекты с тем же мешем и материалом рисуются одним instanced-вызовом, CPU почти не тратит время на объект. В Frame Debugger ищи <b>Hybrid Batch Group</b>.';
+      badge.textContent = t('grd.badgeOk');
+      out.innerHTML = t('grd.outOk');
     }
   }
   wrap.addEventListener('click', e => {
     const b = e.target.closest('.check');
     if (!b) return;
     st[b.dataset.k] = !st[b.dataset.k];
-    upd();
+    render();
   });
-  upd();
+  render();
+  onLang(render);
 }

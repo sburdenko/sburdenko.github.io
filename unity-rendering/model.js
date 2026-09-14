@@ -47,16 +47,6 @@ export const PATHS = {
   dyn: { l: 'Dynamic Batch', s: 'DYN', c: '#ff9a3d', rank: 4 }
 };
 
-export const PATH_INFO = {
-  plain: 'Обычный путь: для каждого объекта CPU заново выставляет состояние, заливает константы материала и объекта и шлёт отдельный вызов. Самый дорогой путь по CPU.',
-  srp: 'Draw calls не уменьшились — каждый объект по-прежнему отдельный вызов. Но материалы уже лежат в памяти GPU, SetPass один на шейдерный вариант, а данные объектов уходят одним большим буфером. Каждый вызов дешёвый.',
-  stat: 'Меши заранее склеены в общий вершинный и индексный буфер в мировых координатах. Один вызов рисует целый диапазон индексов. Платим памятью, и двигать такие объекты нельзя.',
-  statsrp: 'Static batch внутри SRP Batcher: геометрия склеена заранее, а подготовку вызовов делает быстрый путь SRP Batcher. Платим памятью, двигать нельзя.',
-  grd: 'GPU Resident Drawer: данные объектов постоянно живут на GPU (BatchRendererGroup). CPU почти ничего не делает на объект, одинаковые меш + материал рисуются инстансингом автоматически.',
-  inst: 'GPU instancing: меш и материал выставляются один раз, к ним прикладывается массив матриц — GPU рисует N копий одним вызовом.',
-  dyn: 'Dynamic batching: CPU каждый кадр пересчитывает вершины мелких мешей в мировые координаты и заливает их в общий буфер — один вызов вместо многих.'
-};
-
 export const TECHNIQUES = {
   stat: 'Static batching',
   dyn: 'Dynamic batching',
@@ -118,10 +108,11 @@ export function available(key, state) {
   return true;
 }
 
+/** Ключ причины недоступности — текст подставляет страница. */
 export const unavailableReason = (key, state) => {
-  if (key === 'srp') return 'SRP Batcher есть только в URP и HDRP';
-  if (key === 'grd') return isScriptable(state.pipe) ? 'Нужен включённый SRP Batcher' : 'GPU Resident Drawer есть только в URP и HDRP (Unity 6+)';
-  if (key === 'dyn') return 'HDRP не поддерживает dynamic batching';
+  if (key === 'srp') return 'na.srp';
+  if (key === 'grd') return isScriptable(state.pipe) ? 'na.grdNeedsSrp' : 'na.grd';
+  if (key === 'dyn') return 'na.dyn';
   return '';
 };
 
@@ -142,54 +133,54 @@ export function route(o, state) {
   const scriptable = isScriptable(state.pipe);
 
   if (on('stat') && o.static && !o.skinned) {
-    why.push(['y', 'Флаг Static + Static batching включён: меш запечён в общий буфер']);
+    why.push(['y', 'why.staticBatched']);
     return { p: (scriptable && on('srp') && !o.mpb) ? 'statsrp' : 'stat', why };
   }
-  if (o.static && !on('stat')) why.push(['n', 'Static-объект, но Static batching выключен']);
-  else if (!o.static && on('stat') && !o.skinned) why.push(['n', 'Не помечен Static — в static batch не попадает']);
+  if (o.static && !on('stat')) why.push(['n', 'why.staticOff']);
+  else if (!o.static && on('stat') && !o.skinned) why.push(['n', 'why.notStatic']);
 
   if (scriptable && on('srp')) {
     if (o.mpb) {
-      why.push(['n', 'MaterialPropertyBlock — SRP Batcher пропускает объект']);
+      why.push(['n', 'why.mpbSkipsSrp']);
     } else {
       if (on('grd')) {
         if (!o.skinned) {
-          why.push(['y', 'MeshRenderer без MPB: GPU Resident Drawer рисует его через BatchRendererGroup']);
+          why.push(['y', 'why.grdTakes']);
           return { p: 'grd', why };
         }
-        why.push(['n', 'SkinnedMeshRenderer — GPU Resident Drawer его не берёт']);
+        why.push(['n', 'why.grdSkinned']);
       }
-      why.push(['y', 'Шейдер совместим (CBUFFER UnityPerMaterial) → SRP Batcher']);
+      why.push(['y', 'why.srpCompatible']);
       return { p: 'srp', why };
     }
   } else if (scriptable) {
-    why.push(['n', 'SRP Batcher выключен']);
+    why.push(['n', 'why.srpOff']);
   } else {
-    why.push(['n', 'Built-in RP: SRP Batcher и GPU Resident Drawer недоступны']);
+    why.push(['n', 'why.birpNoSrp']);
   }
 
   if (o.skinned) {
-    why.push(['n', 'SkinnedMeshRenderer: ни static, ни dynamic, ни instancing']);
+    why.push(['n', 'why.skinned']);
   } else if (on('inst') && mat.inst) {
-    why.push(['y', 'У материала Enable GPU Instancing → instancing по паре меш + материал']);
+    why.push(['y', 'why.instOn']);
     return { p: 'inst', why };
   } else if (!mat.inst) {
-    why.push(['n', 'У материала не стоит Enable GPU Instancing']);
+    why.push(['n', 'why.noInstFlag']);
   } else {
-    why.push(['n', 'GPU instancing выключен']);
+    why.push(['n', 'why.instOff']);
   }
 
   if (!o.skinned) {
     if (on('dyn')) {
       if (verts <= 300) {
-        why.push(['y', `${verts} вершин ≤ 300 → CPU пересчитает вершины и склеит`]);
+        why.push(['y', 'why.dynFits', verts]);
         return { p: 'dyn', why };
       }
-      why.push(['n', `${verts} вершин > 300 — для dynamic batching слишком тяжёлый`]);
+      why.push(['n', 'why.dynTooBig', verts]);
     } else if (state.pipe === 'hdrp') {
-      why.push(['n', 'В HDRP dynamic batching не поддерживается']);
+      why.push(['n', 'why.dynHdrp']);
     } else {
-      why.push(['n', 'Dynamic batching выключен']);
+      why.push(['n', 'why.dynOff']);
     }
   }
   return { p: 'plain', why };
@@ -197,25 +188,25 @@ export function route(o, state) {
 
 const COST = { setpass: 0.040, cull: 0.0012 };
 
-/** Почему очередной батч не склеился с предыдущим. */
+/** Ключ причины, по которой очередной батч не склеился с предыдущим. */
 export function breakReason(prev, next, state) {
   const a = prev.items[0].o, b = next.items[0].o;
   const ma = MATERIALS[a.mat], mb = MATERIALS[b.mat];
   const vn = o => shaderVariant(o, state.pipe);
   if (prev.p !== next.p) {
     if (next.p === 'plain' && b.mpb && isScriptable(state.pipe) && state.srp) {
-      return ['У объекта MaterialPropertyBlock — он выпадает из SRP Batcher', `${PATHS[prev.p].l} → ${PATHS[next.p].l}`];
+      return ['brk.mpb', `${PATHS[prev.p].l} → ${PATHS[next.p].l}`];
     }
-    if (next.p === 'plain' && b.skinned) return ['SkinnedMeshRenderer — обычный путь', `${PATHS[prev.p].l} → ${PATHS[next.p].l}`];
-    if (ma.sh !== mb.sh) return ['Другой шейдерный вариант и другой способ отрисовки', `${vn(a)} → ${vn(b)}`];
-    return ['Другой способ отрисовки', `${PATHS[prev.p].l} → ${PATHS[next.p].l}`];
+    if (next.p === 'plain' && b.skinned) return ['brk.skinned', `${PATHS[prev.p].l} → ${PATHS[next.p].l}`];
+    if (ma.sh !== mb.sh) return ['brk.variantAndPath', `${vn(a)} → ${vn(b)}`];
+    return ['brk.path', `${PATHS[prev.p].l} → ${PATHS[next.p].l}`];
   }
   switch (next.p) {
-    case 'srp': case 'grd': return ['Разные шейдерные варианты (шейдер или keywords)', `${vn(a)} → ${vn(b)}`];
+    case 'srp': case 'grd': return ['brk.variant', `${vn(a)} → ${vn(b)}`];
     case 'inst': return a.mesh !== b.mesh
-      ? ['Другой меш — instancing требует один меш', `${MESHES[a.mesh].n} → ${MESHES[b.mesh].n}`]
-      : ['Другой материал', `${ma.n} → ${mb.n}`];
-    default: return ['Другой материал', `${ma.n} → ${mb.n}`];
+      ? ['brk.mesh', `${MESHES[a.mesh].n} → ${MESHES[b.mesh].n}`]
+      : ['brk.material', `${ma.n} → ${mb.n}`];
+    default: return ['brk.material', `${ma.n} → ${mb.n}`];
   }
 }
 
@@ -291,7 +282,7 @@ export function evaluate(state, objects = OBJECTS) {
     Object.assign(run, batchCost(run));
     run.cpu += run.setpass * COST.setpass + run.n * (run.p === 'grd' ? 0.0002 : COST.cull);
     run.gpu = run.verts * 0.00001 + run.draws * 0.0015;
-    run.reason = i ? breakReason(runs[i - 1], run, state) : ['Первый вызов в кадре', ''];
+    run.reason = i ? breakReason(runs[i - 1], run, state) : ['brk.first', ''];
 
     T.draws += run.draws; T.setpass += run.setpass; T.cpu += run.cpu;
     T.gpu += run.gpu; T.upload += run.upload; T.memory += run.memory; T.verts += run.verts;

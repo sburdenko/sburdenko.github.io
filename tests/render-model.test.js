@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   OBJECTS, MESHES, MATERIALS, evaluate, route, available, isOn,
-  compareTechniques, shaderVariant, ALL_OFF
+  compareTechniques, shaderVariant, unavailableReason, ALL_OFF
 } from '../unity-rendering/model.js';
 
 const urp = { pipe: 'urp', k: 1, ...ALL_OFF };
@@ -87,14 +87,21 @@ test('масштаб сцены умножает количество объек
   assert.equal(ten.T.setpass, one.T.setpass, 'SetPass зависит от вариантов, а не от числа объектов');
 });
 
-test('каждый батч объясняет, почему он не склеился с предыдущим', () => {
+test('модель возвращает ключи текстов, а не готовые фразы — их подставляет страница', () => {
   const r = evaluate({ ...urp, srp: true, stat: true });
-  assert.deepEqual(r.runs[0].reason, ['Первый вызов в кадре', '']);
+  assert.deepEqual(r.runs[0].reason, ['brk.first', '']);
   r.runs.slice(1).forEach(run => {
-    assert.equal(typeof run.reason[0], 'string');
-    assert.ok(run.reason[0].length > 0);
+    assert.match(run.reason[0], /^brk\./, 'причина — ключ словаря');
   });
   assert.ok(r.runs.every(run => run.items.length > 0 && run.draws >= 1));
+
+  const { why } = route(find('Crate_1'), { ...urp, dyn: true });
+  why.forEach(([kind, key]) => {
+    assert.ok(kind === 'y' || kind === 'n');
+    assert.match(key, /^why\./);
+  });
+  assert.equal(unavailableReason('srp', birp), 'na.srp');
+  assert.equal(unavailableReason('grd', { ...urp, srp: false }), 'na.grdNeedsSrp');
 });
 
 test('таблица сравнения помечает недоступные техники и не врёт про baseline', () => {

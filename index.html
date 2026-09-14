@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0b0715">
-<title>Полка кассет — интерактивные конспекты</title>
-<meta name="description" content="Интерактивные разборы для собеседования: батчинг в Unity 6 и обход графа BFS/DFS. Всё можно щёлкать, крутить и проигрывать по шагам.">
+<title data-i18n="page.title">Tape shelf — interactive notes</title>
+<meta name="description" content="Interactive interview notes: batching in Unity 6 and graph traversal with BFS and DFS. Everything can be clicked, tweaked and played step by step.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
@@ -14,47 +14,52 @@
 </head>
 <body>
 <div class="fx fx-scan" aria-hidden="true"></div>
+<div class="fx fx-grain" aria-hidden="true"></div>
 <div class="fx fx-vig" aria-hidden="true"></div>
 <div class="fx fx-track" aria-hidden="true"></div>
 <canvas id="noise" width="160" height="90" aria-hidden="true"></canvas>
 
-<header class="osd" aria-label="Строка состояния">
+<header class="osd" data-i18n-aria="osd.bar">
   <div class="l"><span class="play">PLAY ►</span><span class="ch" id="osdCh">CH.00 SHELF</span></div>
-  <div class="r"><nav id="osdNav" aria-label="Разделы"></nav><span>SP</span><span class="ctr" id="osdCtr">0:00:00</span></div>
+  <div class="r">
+    <nav id="osdNav" data-i18n-aria="osd.nav"></nav>
+    <div class="seg lang" id="langSeg" role="group" data-i18n-aria="osd.lang"><button data-l="en" aria-pressed="true">EN</button><button data-l="ru" aria-pressed="false">RU</button></div>
+    <span>SP</span><span class="ctr" id="osdCtr">0:00:00</span>
+  </div>
 </header>
 
 <main>
 <section class="chapter" id="shelf" data-ch="CH.00 SHELF" style="padding-top:56px">
-  <p class="eyebrow">Интерактивные конспекты · разбираем по шагам</p>
-  <h1 class="title">Полка<span class="title-2">кассеты, которые можно щёлкать</span></h1>
-  <p class="kicker" style="font-size:clamp(17px,1.8vw,20px);color:#e3dcfb">Каждая кассета — одна тема, разобранная до конца: теория короткими абзацами, живые стенды вместо картинок и блок вопросов, которые обычно задают на собеседовании. Ничего не нужно устанавливать — всё считается прямо в браузере.</p>
+  <p class="eyebrow" data-i18n="hub.eyebrow">Interactive notes · taken apart step by step</p>
+  <h1 class="title"><span data-i18n="hub.title">The shelf</span><span class="title-2" data-i18n="hub.subtitle">tapes you can click</span></h1>
+  <p class="kicker" style="font-size:clamp(17px,1.8vw,20px);color:#e3dcfb" data-i18n="hub.lede">Every tape is one topic taken all the way through: short paragraphs of theory, live rigs instead of pictures, and the block of questions you usually get asked at an interview. Nothing to install — everything is computed right in the browser.</p>
 
   <div class="shelf">
     <a class="cassette" href="./unity-rendering/">
       <div class="spine"><span>TAPE 01</span><span>UNITY 6</span></div>
       <div class="reels"><div class="reel"><i></i></div><div class="win"></div><div class="reel"><i></i></div></div>
-      <h3>Батчинг в Unity</h3>
-      <p>Static и dynamic batching, SRP Batcher, GPU instancing и GPU Resident Drawer. Пульт кадра с живой сценой, лента команд CPU → GPU и таблица «одна сцена — все техники».</p>
-      <div class="tags"><span>Рендер</span><span>Draw calls</span><span>SetPass</span><span>URP · HDRP</span></div>
-      <span class="go">ВСТАВИТЬ КАССЕТУ ►</span>
+      <h3 data-i18n="hub.tape1Title">Batching in Unity</h3>
+      <p data-i18n="hub.tape1Desc">Static and dynamic batching, the SRP Batcher, GPU instancing and the GPU Resident Drawer. A frame deck with a live scene, the CPU → GPU command tape and a “one scene, every technique” table.</p>
+      <div class="tags" data-i18n="hub.tape1Tags"><span>Rendering</span><span>Draw calls</span><span>SetPass</span><span>URP · HDRP</span></div>
+      <span class="go" data-i18n="hub.go">INSERT TAPE ►</span>
     </a>
 
     <a class="cassette" href="./algorithms/bfs-dfs/">
       <div class="spine"><span>TAPE 02</span><span>ALGORITHMS</span></div>
       <div class="reels"><div class="reel"><i></i></div><div class="win"></div><div class="reel"><i></i></div></div>
-      <h3>Обход графа: BFS и DFS</h3>
-      <p>Очередь против стека на двумерном массиве и на графе: генерируем данные, мотаем по шагам, смотрим на фронт, дерево обхода и кратчайший путь. Плюс гонка двух обходов в одном лабиринте.</p>
-      <div class="tags"><span>Алгоритмы</span><span>Очередь · Стек</span><span>O(V + E)</span><span>Кратчайший путь</span></div>
-      <span class="go">ВСТАВИТЬ КАССЕТУ ►</span>
+      <h3 data-i18n="hub.tape2Title">Graph traversal: BFS and DFS</h3>
+      <p data-i18n="hub.tape2Desc">Queue versus stack on a 2D array and on a graph: generate the data, scrub step by step, watch the frontier, the traversal tree and the shortest path. Plus a race of the two traversals through one maze.</p>
+      <div class="tags" data-i18n="hub.tape2Tags"><span>Algorithms</span><span>Queue · Stack</span><span>O(V + E)</span><span>Shortest path</span></div>
+      <span class="go" data-i18n="hub.go">INSERT TAPE ►</span>
     </a>
 
     <div class="cassette soon">
       <div class="spine"><span>TAPE 03</span><span>SOON</span></div>
       <div class="reels"><div class="reel"><i></i></div><div class="win"></div><div class="reel"><i></i></div></div>
-      <h3>Следующая тема</h3>
-      <p>Место под следующий разбор: сортировки и структуры данных, память и GC, корутины и планировщик кадра — что-нибудь из этого.</p>
-      <div class="tags"><span>Скоро</span></div>
-      <span class="go">■ ЗАПИСЬ НЕ НАЧАТА</span>
+      <h3 data-i18n="hub.tape3Title">Next topic</h3>
+      <p data-i18n="hub.tape3Desc">Room for the next walkthrough: sorting and data structures, memory and GC, coroutines and the frame scheduler — something along those lines.</p>
+      <div class="tags" data-i18n="hub.soonTag"><span>Soon</span></div>
+      <span class="go" data-i18n="hub.soonGo">■ NOT RECORDED YET</span>
     </div>
   </div>
 </section>
@@ -62,24 +67,21 @@
 <section class="chapter" id="how" data-ch="CH.01 HOW">
   <div class="ch-head">
     <p class="osdtag">CH.01 // HOW IT WORKS</p>
-    <h2>Как этим пользоваться</h2>
+    <h2 data-i18n="how.h2">How to use this</h2>
   </div>
   <div class="prio">
-    <div><span class="n">1</span><h3>Сначала ответь сам</h3><p>В каждой кассете есть блок вопросов. Полезнее сформулировать ответ вслух и только потом открыть карточку.</p></div>
-    <div><span class="n">2</span><h3>Крути стенды</h3><p>Ползунки, переключатели и клики по сцене меняют модель, а не картинку: цифры пересчитываются на лету.</p></div>
-    <div><span class="n">3</span><h3>Проверяй на практике</h3><p>Модели здесь учебные и упрощённые. Настоящие ответы дают Unity Profiler, Frame Debugger и замеры на целевом железе.</p></div>
+    <div data-i18n="how.1"><span class="n">1</span><h3>Answer for yourself first</h3><p>Every tape ends with a block of questions. It pays to say your answer out loud before opening the card.</p></div>
+    <div data-i18n="how.2"><span class="n">2</span><h3>Turn the knobs</h3><p>Sliders, switches and clicks on the scene change the model, not a picture: the numbers are recomputed live.</p></div>
+    <div data-i18n="how.3"><span class="n">3</span><h3>Check it in practice</h3><p>The models here are simplified teaching models. The real answers come from the Unity Profiler, the Frame Debugger and measurements on the target hardware.</p></div>
   </div>
 </section>
 </main>
 
 <footer>
-  <span class="stop">■ КОНЕЦ ПОЛКИ</span>
-  <p>Исходники и модели: <a href="https://github.com/sburdenko/sburdenko.github.io">github.com/sburdenko/sburdenko.github.io</a></p>
+  <span class="stop" data-i18n="foot.stop">■ END OF SHELF</span>
+  <p><span data-i18n="foot.src">Source code and models:</span> <a href="https://github.com/sburdenko/sburdenko.github.io">github.com/sburdenko/sburdenko.github.io</a></p>
 </footer>
 
-<script type="module">
-  import { bootVhs } from './assets/vhs.js';
-  bootVhs();
-</script>
+<script type="module" src="./assets/hub.js"></script>
 </body>
 </html>

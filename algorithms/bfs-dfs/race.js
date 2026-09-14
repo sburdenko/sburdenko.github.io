@@ -1,5 +1,6 @@
 /** Гонка: один и тот же лабиринт, слева BFS, справа DFS, общая перемотка. */
-import { $, $$, fitCanvas, fmtI, press, plural } from '../../assets/vhs.js';
+import { $, $$, fitCanvas, fmtI, press } from '../../assets/vhs.js';
+import { t, onLang } from '../../assets/i18n.js';
 import { makeGrid, gridNeighbors, traverse, stateAt, pathTo, FREE } from './traversal.js';
 import { drawGrid, gridLayout } from './grid-view.js';
 import { tile } from './panels.js';
@@ -41,25 +42,27 @@ export function initRace() {
     if (!grid) return;
     const b = side(cvB, runs[0], f.index), d = side(cvD, runs[1], f.index);
     const free = grid.cells.reduce((s, v) => s + (v === FREE ? 1 : 0), 0);
-    const stat = (r, s, p) => `${fmtI(s.visited)} / ${fmtI(free)} клеток · фронт ${fmtI(s.frontier.length)} · путь ${p.length ? fmtI(p.length - 1) : '—'}`;
-    $('#raceStatB').textContent = stat(runs[0], b.st, b.path);
-    $('#raceStatD').textContent = stat(runs[1], d.st, d.path);
+    const line = (s, p) => t('race.line', s.visited, free, s.frontier.length, p.length ? fmtI(p.length - 1) : '—');
+    $('#raceStatB').textContent = line(b.st, b.path);
+    $('#raceStatD').textContent = line(d.st, d.path);
 
     const done = b.st.done && d.st.done;
     const pb = runs[0].path.length - 1, pd = runs[1].path.length - 1;
     const peak = (run, st) => run.events.slice(0, st.index + 1).reduce((m, e) => Math.max(m, e.frontier ? e.frontier.length : 0), 0);
     const len = p => p.length ? fmtI(p.length - 1) : '—';
+    const steps = t('race.tileSteps');
     $('#raceStats').innerHTML =
-      tile('Путь BFS', len(b.path), b.path.length ? 'шагов' : '', b.path.length ? 'кратчайший по определению' : 'финиш ещё не найден', 'gpu-t') +
-      tile('Путь DFS', len(d.path), d.path.length ? 'шагов' : '', !d.path.length ? 'финиш ещё не найден' : pd > pb ? `длиннее BFS на ${Math.round((pd / pb - 1) * 100)}%` : 'здесь совпал с кратчайшим', 'cpu-t') +
-      tile('Обошёл клеток · BFS', fmtI(b.st.visited), '', 'растёт как площадь круга', 'gpu-t') +
-      tile('Обошёл клеток · DFS', fmtI(d.st.visited), '', d.st.visited < b.st.visited ? 'пока меньше: коридор ведёт к цели' : 'блуждает дольше', 'cpu-t') +
-      tile('Пик фронта · BFS', fmtI(peak(runs[0], b.st)), 'клеток', 'память = ширина волны', 'gpu-t') +
-      tile('Пик фронта · DFS', fmtI(peak(runs[1], d.st)), 'клеток', 'память = глубина спуска', 'cpu-t');
+      tile(t('race.tilePathB'), len(b.path), b.path.length ? steps : '', t(b.path.length ? 'race.footShortest' : 'race.footNotFound'), 'gpu-t') +
+      tile(t('race.tilePathD'), len(d.path), d.path.length ? steps : '',
+        !d.path.length ? t('race.footNotFound') : pd > pb ? t('race.footLonger', Math.round((pd / pb - 1) * 100)) : t('race.footSame'), 'cpu-t') +
+      tile(t('race.tileCellsB'), fmtI(b.st.visited), '', t('race.footArea'), 'gpu-t') +
+      tile(t('race.tileCellsD'), fmtI(d.st.visited), '', t(d.st.visited < b.st.visited ? 'race.footLucky' : 'race.footWander'), 'cpu-t') +
+      tile(t('race.tilePeakB'), fmtI(peak(runs[0], b.st)), t('race.tilePeakUnit'), t('race.footWidth'), 'gpu-t') +
+      tile(t('race.tilePeakD'), fmtI(peak(runs[1], d.st)), t('race.tilePeakUnit'), t('race.footDepth'), 'cpu-t');
 
     $('#raceVerdict').innerHTML = done
-      ? `<b>Итог.</b> BFS обошёл ${fmtI(runs[0].visited)} ${plural(runs[0].visited, 'клетку', 'клетки', 'клеток')} и выдал путь в ${fmtI(pb)} ${plural(pb, 'шаг', 'шага', 'шагов')} — короче не бывает. DFS обошёл ${fmtI(runs[1].visited)} и выдал ${fmtI(pd)}. ${pd > pb ? 'Дальше от оптимума, зато фронт ' + (runs[1].maxFrontier < runs[0].maxFrontier ? 'уже' : 'не шире') + ': DFS хранит одну ветку, BFS — весь слой.' : 'В идеальном лабиринте путь единственный, поэтому длина совпала — разница осталась только в порядке обхода и в памяти.'}`
-      : '<b>Идёт прогон.</b> Слева волна расходится кругами, справа щуп уходит в один коридор до упора и возвращается только в тупике.';
+      ? t('race.verdictDone', runs[0].visited, pb, runs[1].visited, pd, runs[1].maxFrontier < runs[0].maxFrontier)
+      : t('race.verdictRunning');
     syncTransport(f);
   }
 
@@ -71,5 +74,6 @@ export function initRace() {
   });
   press($$('#raceKind button'), b => b.dataset.v === S.kind);
   addEventListener('resize', () => paint());
+  onLang(() => paint());
   rebuild();
 }
