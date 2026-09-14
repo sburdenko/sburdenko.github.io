@@ -9,8 +9,34 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
-<link rel="stylesheet" href="./assets/vhs.css">
+<link rel="stylesheet" href="./assets/vhs.css?v=202609141732">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
+<script>
+/* Страница живёт на модулях: если граф импортов не собрался, всё замирает молча.
+   Этот сторож показывает, что именно упало, и подсказывает жёсткую перезагрузку. */
+(function () {
+  var shown = false;
+  function report(what) {
+    if (shown) return;
+    shown = true;
+    var box = document.createElement('div');
+    box.setAttribute('role', 'alert');
+    box.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99;padding:12px 16px;' +
+      'background:#ff5c6c;color:#1a0009;font:600 13px/1.5 ui-monospace,Menlo,Consolas,monospace';
+    box.textContent = 'Scripts failed to load — press Cmd/Ctrl + Shift + R to hard-reload. ' +
+      'Скрипты не загрузились — обнови страницу с Cmd/Ctrl + Shift + R. [' + what + ']';
+    (document.body || document.documentElement).appendChild(box);
+  }
+  addEventListener('error', function (e) {
+    var el = e.target;
+    if (el && (el.tagName === 'SCRIPT' || el.tagName === 'LINK')) report(el.src || el.href);
+    else report(e.message || 'script error');
+  }, true);
+  addEventListener('unhandledrejection', function (e) {
+    report(String((e.reason && e.reason.message) || e.reason));
+  });
+})();
+</script>
 </head>
 <body>
 <div class="fx fx-scan" aria-hidden="true"></div>
@@ -82,6 +108,6 @@
   <p><span data-i18n="foot.src">Source code and models:</span> <a href="https://github.com/sburdenko/sburdenko.github.io">github.com/sburdenko/sburdenko.github.io</a></p>
 </footer>
 
-<script type="module" src="./assets/hub.js"></script>
+<script type="module" src="./assets/hub.js?v=202609141732"></script>
 </body>
 </html>

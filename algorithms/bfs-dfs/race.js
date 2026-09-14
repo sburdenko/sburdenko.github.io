@@ -1,10 +1,10 @@
 /** Гонка: один и тот же лабиринт, слева BFS, справа DFS, общая перемотка. */
-import { $, $$, fitCanvas, fmtI, press } from '../../assets/vhs.js';
-import { t, onLang } from '../../assets/i18n.js';
-import { makeGrid, gridNeighbors, traverse, stateAt, pathTo, FREE } from './traversal.js';
-import { drawGrid, gridLayout } from './grid-view.js';
-import { tile } from './panels.js';
-import { createPlayer, bindTransport } from './player.js';
+import { $, $$, fitCanvas, fmtI, press } from '../../assets/vhs.js?v=202609141732';
+import { t, onLang } from '../../assets/i18n.js?v=202609141732';
+import { makeGrid, gridNeighbors, traverse, stateAt, pathTo, FREE } from './traversal.js?v=202609141732';
+import { drawGrid, gridLayout } from './grid-view.js?v=202609141732';
+import { tile } from './panels.js?v=202609141732';
+import { createPlayer, bindTransport } from './player.js?v=202609141732';
 
 export function initRace() {
   const cvB = $('#raceB'), cvD = $('#raceD');

@@ -2,5 +2,8 @@
   "name": "sburdenko-tapes",
   "private": true,
   "type": "module",
-  "scripts": { "test": "node --test tests/*.test.js" }
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "stamp": "node tools/stamp.mjs"
+  }
 }
