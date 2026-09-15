@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
-<link rel="stylesheet" href="../../assets/vhs.css?v=202609150438">
+<link rel="stylesheet" href="../../assets/vhs.css?v=202609150502">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
 <script>
 
@@ -35,7 +35,7 @@
   });
 })();
 </script>
-<link rel="stylesheet" href="./style.css?v=202609150438">
+<link rel="stylesheet" href="./style.css?v=202609150502">
 </head>
 <body>
 <div class="fx fx-scan" aria-hidden="true"></div>
@@ -109,7 +109,7 @@
  <label>REWIND THE TRACE <input class="scrub" type="range" min="0" max="1" value="0" aria-label="floyd trace position"></label>
  <p class="lbl">PSEUDOCODE · CURRENT LINE HIGHLIGHTED</p><div class="pseudo"></div>
  </div>
-<p class="note">Node numbers are identities, not values. The back edge is printed under the nodes: “7 → node 2” means follow a real link back to node 2. S + F in yellow means both pointers occupy that same node.</p>
+<p class="note">The yellow arrow closes the loop: TAIL.next points back to the entrance. The shaded ring is the cycle; HEAD is where the walk starts. Pink S and cyan F badges show the current nodes. Moving paths show one pink link and two cyan links in phase 1; one each in phase 2.</p>
 <div class="two even"><div><h3>Why the reset finds the entrance</h3><p>Let the head-to-entrance distance be μ and the cycle length be c. At the meeting, slow has taken t steps and fast 2t. Their difference t must be a multiple of c. After μ more steps, the pointer at the head reaches the entrance; the pointer at the meeting has travelled t + μ in total, which lands at that same entrance. Both move one step in this phase.</p></div><div><h3>Fast &amp; slow can also find the middle</h3><p>On a list without a cycle, start both at the head and move 1 versus 2 until fast reaches the end. Slow is halfway along. With the usual loop condition, an even-length list returns the second of its two middle nodes.</p><p><b>Cost:</b> O(n) time for n distinct reachable nodes, O(1) extra memory. The snapshots on this page use extra memory for rewinding; the algorithm itself does not.</p></div></div>
 <h3>C# · detect the cycle and return its entrance</h3><pre class="code-example">// ListNode is a reference type with a ListNode next field.
 ListNode FindCycleEntry(ListNode head)
@@ -149,7 +149,7 @@ ListNode FindCycleEntry(ListNode head)
  <label>REWIND THE TRACE <input class="scrub" type="range" min="0" max="1" value="0" aria-label="duplicate trace position"></label>
  <p class="lbl">PSEUDOCODE · CURRENT LINE HIGHLIGHTED</p><div class="pseudo"></div>
  </div>
-<p class="note"><b>Read the boxes carefully:</b> the small label is the index where a pointer stands; the big number is nums[index], its next destination. For slow, read once. For fast, read twice: nums[nums[fast]].</p>
+<p class="note"><b>Two views, one algorithm:</b> above, the array shows index and stored value; below, each graph node is an index and each arrow follows its value. S and F appear in both views. At the answer, the repeated array values are outlined in yellow. Follow the colored arrows to see each lookup.</p>
 <h3>Why a cycle is guaranteed here</h3><p>Every value is a valid index, so no link reaches null. There are finitely many indices, so a walk must revisit one. Index 0 cannot be pointed to because values start at 1. The walk therefore has a tail before entering the cycle. At the entrance, the tail and the cycle supply two distinct incoming links: two array entries contain the same value. Since only one value repeats, this must be the answer.</p>
 <h3>C# · the same algorithm, with array lookups</h3><pre class="code-example">int FindDuplicate(int[] nums)
 {
@@ -187,4 +187,4 @@ ListNode FindCycleEntry(ListNode head)
 <details><summary><span class="q">Q04</span><span>Is the first meeting the cycle entrance?</span></summary><div class="a"><p>Not necessarily. In the default example the first meeting is node 6, but the entrance is node 2. Rewind and watch phase 2.</p></div></details>
 <details><summary><span class="q">Q05</span><span>Why not keep a set of visited nodes?</span></summary><div class="a"><p>That works too: the first repeated node is the entrance. It uses O(n) memory; Floyd uses O(1).</p></div></details>
 <details><summary><span class="q">Q06</span><span>What should I practise next?</span></summary><div class="a"><p>Try Two Sum II, Valid Palindrome, Linked List Cycle, Linked List Cycle II and Middle of the Linked List. Write the movement rule before the code.</p></div></details>
-</div></section></main><footer><span class="stop">■ END OF TAPE</span><p><a href="../../">◀ Back to the shelf</a> · <a href="../bfs-dfs/">BFS and DFS</a></p></footer><script type="module" src="./page.js?v=202609150438"></script></body></html>
+</div></section></main><footer><span class="stop">■ END OF TAPE</span><p><a href="../../">◀ Back to the shelf</a> · <a href="../bfs-dfs/">BFS and DFS</a></p></footer><script type="module" src="./page.js?v=202609150502"></script></body></html>

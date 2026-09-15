@@ -1,8 +1,9 @@
-import { bootVhs } from '../../assets/vhs.js?v=202609150438';
-import { register } from '../../assets/i18n.js?v=202609150438';
-import { COMMON } from '../../assets/i18n-common.js?v=202609150438';
-import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202609150438';
-import { oppositeTrace, floydTrace, floydLinks } from './model.js?v=202609150438';
+import { renderGraph } from './graph-view.js?v=202609150502';
+import { bootVhs } from '../../assets/vhs.js?v=202609150502';
+import { register } from '../../assets/i18n.js?v=202609150502';
+import { COMMON } from '../../assets/i18n-common.js?v=202609150502';
+import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202609150502';
+import { oppositeTrace, floydTrace, floydLinks } from './model.js?v=202609150502';
 
 register(COMMON);
 bootVhs();
@@ -22,6 +23,17 @@ for (const kind of ['opposite', 'floyd', 'duplicate']) {
   const rail = root.querySelector('.pointer-rail');
   const scrub = root.querySelector('.scrub');
   const select = root.querySelector('select');
+  const scene = root.querySelector('.crt');
+  const graph = document.createElement('div');
+  graph.className = 'graph-scene';
+  const movement = document.createElement('div');
+  movement.className = 'movement-readout';
+  scene.after(movement);
+  scene.before(root.querySelector('.transport'));
+  if (kind !== 'opposite') {
+    scene.append(graph);
+    if (kind === 'floyd') rail.hidden = true;
+  }
   let updateTransport, current;
   const player = createPlayer(frame => {
     const state = frame.run.events[frame.index];
@@ -41,14 +53,26 @@ for (const kind of ['opposite', 'floyd', 'duplicate']) {
       number.textContent = value;
       const markers = document.createElement('span');
       markers.className = 'markers';
-      markers.textContent = [l ? (isPair ? 'L' : 'S') : '', r ? (isPair ? 'R' : 'F') : ''].filter(Boolean).join(' + ');
+      markers.textContent = [l ? (isPair ? 'L →' : 'S') : '', r ? (isPair ? '← R' : 'F') : ''].filter(Boolean).join(' + ');
       cell.append(label, number, markers);
+      if (isDuplicate) {
+        const destination = document.createElement('small');
+        destination.textContent = `next → ${value}`;
+        cell.append(destination);
+        if (state.done && value === frame.run.entry) cell.classList.add('duplicate-value');
+      }
       return cell;
     }));
+    if (!isPair) {
+      movement.innerHTML = renderGraph(graph, frame.run.next, state, frame.run.events[frame.index - 1], kind);
+    } else {
+      const sum = values[state.left] + values[state.right];
+      movement.textContent = state.left >= state.right ? 'L and R met · no pair found' : `${values[state.left]} + ${values[state.right]} = ${sum} ${sum < current.target ? '<' : sum > current.target ? '>' : '='} ${current.target} · ${sum < current.target ? 'need a larger sum → move L right' : sum > current.target ? 'need a smaller sum → move R left' : 'target reached'}`;
+    }
     root.querySelector('.link-note').textContent = isPair
       ? `Target: ${current.target} · pair checks: ${state.checks} · ${values.length * (values.length - 1) / 2} possible pairs by brute force`
       : isDuplicate ? `Array links: ${frame.run.next.map((value, i) => `${i} → ${value}`).join(' · ')} · phase: ${state.phase === 'entry' ? 'find entrance, 1 + 1' : 'detect cycle, 1 + 2'}`
-      : `Links: ${values.join(' → ')} → ${frame.run.next.at(-1) === -1 ? 'null' : `node ${frame.run.next.at(-1)} (back edge)`} · phase: ${state.phase === 'entry' ? 'find entrance, 1 + 1' : 'detect cycle, 1 + 2'}`;
+      : `PHASE ${state.phase === 'entry' ? '2 · FIND ENTRANCE · both move 1 link' : '1 · DETECT CYCLE · slow 1 link / fast 2 links'}`;
     root.querySelector('.explanation').textContent = isDuplicate && state.done ? `The cycle entrance is index ${frame.run.entry}. So the duplicate VALUE is ${frame.run.entry}: multiple array positions point here. The input array was never changed.` : state.message;
     root.querySelector('.pseudo').replaceChildren(...(kind === 'duplicate' ? ['slow = fast = 0', 'repeat:', '    slow = nums[slow]; fast = nums[nums[fast]]', '    until slow == fast', '// A cycle is guaranteed by the input constraints', 'slow = 0', 'while slow != fast:', '    slow = nums[slow]; fast = nums[fast]', 'return slow  // duplicate value'] : code[kind]).map((text, i) => {
       const line = document.createElement('div');
