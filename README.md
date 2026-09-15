@@ -17,6 +17,8 @@
 | 01 | [Батчинг в Unity](./unity-rendering/) | Static и dynamic batching, SRP Batcher, GPU instancing, GPU Resident Drawer. Пульт кадра с изометрической сценой, лента команд CPU → GPU, таблица «одна сцена — все техники», стенды к каждой главе. |
 | 02 | [Обход графа: BFS и DFS](./algorithms/bfs-dfs/) | Очередь против стека на двумерном массиве и на графе: генерация данных по seed, пошаговая перемотка, фронт, дерево обхода, кратчайший путь и гонка двух обходов в одном лабиринте. |
 
+| 03 | [Two Pointers](./algorithms/two-pointers/) | Opposite pointers, fast & slow / Floyd, and LeetCode 287. Rewindable array and linked-list examples, highlighted pseudocode, C# templates, and interview questions. This lesson is in English. |
+
 ## Структура
 
 ```

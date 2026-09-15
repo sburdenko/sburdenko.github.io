@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0715">
+<title>Two Pointers — opposite ends and Floyd · Tape 03</title>
+<meta name="description" content="Learn opposite pointers and Floyd with interactive, rewindable examples. See why each pointer moves and how to find a cycle entrance.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
+<link rel="stylesheet" href="../../assets/vhs.css?v=202609150438">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
+<script>
+
+(function () {
+  var shown = false;
+  function report(what) {
+    if (shown) return;
+    shown = true;
+    var box = document.createElement('div');
+    box.setAttribute('role', 'alert');
+    box.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99;padding:12px 16px;' +
+      'background:#ff5c6c;color:#1a0009;font:600 13px/1.5 ui-monospace,Menlo,Consolas,monospace';
+    box.textContent = 'Scripts failed to load. Press Cmd/Ctrl + Shift + R to reload. [' + what + ']';
+    (document.body || document.documentElement).appendChild(box);
+  }
+  addEventListener('error', function (e) {
+    var el = e.target;
+    if (el && (el.tagName === 'SCRIPT' || el.tagName === 'LINK')) report(el.src || el.href);
+    else report(e.message || 'script error');
+  }, true);
+  addEventListener('unhandledrejection', function (e) {
+    report(String((e.reason && e.reason.message) || e.reason));
+  });
+})();
+</script>
+<link rel="stylesheet" href="./style.css?v=202609150438">
+</head>
+<body>
+<div class="fx fx-scan" aria-hidden="true"></div>
+<div class="fx fx-grain" aria-hidden="true"></div>
+<div class="fx fx-vig" aria-hidden="true"></div>
+<div class="fx fx-track" aria-hidden="true"></div>
+<canvas id="noise" width="160" height="90" aria-hidden="true"></canvas>
+
+<header class="osd">
+  <div class="l"><a class="home" href="../../">◀ SHELF</a><span class="play">PLAY ►</span><span class="ch" id="osdCh">CH.00 INTRO</span></div>
+  <div class="r">
+    <nav id="osdNav"></nav>
+    
+    <span>SP</span><span class="ctr" id="osdCtr">0:00:00</span>
+  </div>
+</header>
+
+<main>
+<section class="hero chapter" id="intro" data-ch="CH.00 INTRO" style="padding-top:56px">
+<p class="eyebrow">Tape 03 · Algorithms · Pattern 2</p>
+<h1 class="title">Two Pointers<span class="title-2">Two markers. One useful rule.</span></h1>
+<p class="kicker">Imagine putting two fingers on a row of numbers. Instead of trying every pair, move the finger that can help. Or put two runners on a linked list: one walks, one runs. If the path loops, they meet.</p>
+<div class="prio"><div><span class="n">1</span><h3>Opposite pointers</h3><p>Start at both ends. Each comparison tells you which end you can safely discard.</p></div><div><span class="n">2</span><h3>Fast &amp; slow / Floyd</h3><p>Follow links at different speeds. A meeting after moving proves there is a loop.</p></div><div><span class="n">►</span><h3>Predict, then step</h3><p>Before pressing ▶, say which pointer should move and why. Rewind whenever a step feels unclear.</p></div></div>
+<div class="lesson-links"><a href="#opposite">01 · Opposite pointers ↓</a><a href="#floyd">02 · Fast &amp; slow ↓</a><a href="#duplicate">03 · LeetCode 287 ↓</a><a href="#cheat">04 · Cheat sheet ↓</a></div>
+</section>
+<section class="chapter" id="opposite" data-ch="CH.01 OPPOSITE">
+<div class="ch-head"><p class="osdtag">CH.01 // OPPOSITE POINTERS</p><h2>Find two numbers that add up to a target</h2><p class="kicker">The array is sorted from smallest to largest. L starts on the left, R on the right. A pointer is simply an index: the position of an element.</p></div>
+<dl class="gloss"><div><dt>Sum too small → move L</dt><dd>With [1, 2, 4, 7, 11, 15] and target 15, first 1 + 15 = 16, so discard 15. Now 1 + 11 = 12. Every other remaining partner for 1 is at most 11. None can reach 15. Discard 1.</dd></div><div><dt>Sum too large → move R</dt><dd>If even the smallest remaining number makes the right-hand number too large, every larger partner does too. That right-hand number cannot be in the answer.</dd></div><div><dt>Equal → you found the pair</dt><dd>Return the two indices. Stop when L meets R: the task requires two distinct elements, so a number cannot pair with itself.</dd></div></dl>
+<div class="panel pointer-deck" id="oppositeDeck">
+ <div class="deck-top"><label>EXAMPLE <select aria-label="opposite example"><option value="0">Target 15 · find a pair</option><option value="1">Target 10 · no pair</option><option value="2">Target 4 · negative numbers</option><option value="3">Target 6 · duplicate values</option></select></label></div>
+ <div class="pointer-key"><span>L · left pointer</span><span>R · right pointer</span></div>
+ <div class="crt"><div class="pointer-rail" aria-label="Pointer positions"></div><div class="link-note"></div></div>
+ <div class="explanation" aria-live="polite"></div>
+ <div class="transport">
+ <button class="btn" data-t="first" aria-label="Restart">|◀</button><button class="btn" data-t="back" aria-label="Previous step">◀</button>
+ <button class="btn primary" data-t="play">► PLAY</button><button class="btn" data-t="fwd" aria-label="Next step">▶</button><button class="btn" data-t="end" aria-label="Jump to result">▶|</button>
+ <span class="spd">SPEED <input type="range" min="1" max="8" value="2" aria-label="Steps per second"><b data-t="sps">2</b>/s</span><span class="lbl" data-t="pos"></span>
+ </div>
+ <label>REWIND THE TRACE <input class="scrub" type="range" min="0" max="1" value="0" aria-label="opposite trace position"></label>
+ <p class="lbl">PSEUDOCODE · CURRENT LINE HIGHLIGHTED</p><div class="pseudo"></div>
+ </div>
+<p class="note"><b>Try this:</b> pick target 10 and jump to the end. No pair exists. Pick duplicate values: 3 + 3 works because the two 3s occupy different positions.</p>
+<div class="two even"><div><h3>Why this is O(n)</h3><p>Every failed comparison removes one position from consideration. The pointers never move back, so there are at most n − 1 pair checks. Trying all pairs takes n(n − 1)/2 checks in the worst case. Two indices use O(1) extra memory.</p></div><div><h3>The condition that makes it work</h3><p><b>The pair-sum rule needs sorted data.</b> On [3, 2, 4], target 6, it can miss 2 + 4. Sorting first costs O(n log n) and changes the original indices. If original indices matter on unsorted data, consider a hash map.</p></div></div>
+<h3>C# · sorted pair sum</h3><pre class="code-example">(int, int) FindPair(int[] a, int target)
+{
+    int left = 0, right = a.Length - 1;
+    while (left &lt; right)
+    {
+        long sum = (long)a[left] + a[right];
+        if (sum == target) return (left, right);
+        if (sum &lt; target) left++;
+        else right--;
+    }
+    return (-1, -1);
+}</pre>
+<p class="note">Opposite pointers also check palindromes: compare the first and last characters, then move both inward. That rule uses symmetry, so it does not need sorted characters.</p>
+</section>
+<section class="chapter" id="floyd" data-ch="CH.02 FLOYD">
+<div class="ch-head"><p class="osdtag">CH.02 // FAST &amp; SLOW POINTERS / FLOYD</p><h2>Does this path ever end?</h2><p class="kicker">A linked list is a chain of nodes. Each node holds a link called next. Follow next to walk the chain. A last link pointing back to an earlier node creates a cycle: you can keep walking forever.</p></div>
+<dl class="gloss"><div><dt>Phase 1 · one step, two steps</dt><dd>Slow follows one link per turn. Fast follows two. If fast reaches null, the chain ends. If they meet at the same node after moving, the chain loops.</dd></div><div><dt>Why a meeting is inevitable</dt><dd>Picture runners on a circular track. Once both are inside the loop, fast gains exactly one node per turn. In a cycle of length c, it closes any gap in at most c turns.</dd></div><div><dt>Phase 2 · find the entrance</dt><dd>A meeting proves a loop, but may happen deep inside it. Reset slow to the head. Now move both one link per turn. Their next meeting is the entrance.</dd></div></dl>
+<div class="panel pointer-deck" id="floydDeck">
+ <div class="deck-top"><label>EXAMPLE <select aria-label="floyd example"><option value="2">Tail points to node 2</option><option value="0">Tail points to head</option><option value="7">Tail points to itself</option><option value="-1">No cycle · tail points to null</option></select></label></div>
+ <div class="pointer-key"><span>S · slow pointer</span><span>F · fast pointer</span></div>
+ <div class="crt"><div class="pointer-rail" aria-label="Pointer positions"></div><div class="link-note"></div></div>
+ <div class="explanation" aria-live="polite"></div>
+ <div class="transport">
+ <button class="btn" data-t="first" aria-label="Restart">|◀</button><button class="btn" data-t="back" aria-label="Previous step">◀</button>
+ <button class="btn primary" data-t="play">► PLAY</button><button class="btn" data-t="fwd" aria-label="Next step">▶</button><button class="btn" data-t="end" aria-label="Jump to result">▶|</button>
+ <span class="spd">SPEED <input type="range" min="1" max="8" value="2" aria-label="Steps per second"><b data-t="sps">2</b>/s</span><span class="lbl" data-t="pos"></span>
+ </div>
+ <label>REWIND THE TRACE <input class="scrub" type="range" min="0" max="1" value="0" aria-label="floyd trace position"></label>
+ <p class="lbl">PSEUDOCODE · CURRENT LINE HIGHLIGHTED</p><div class="pseudo"></div>
+ </div>
+<p class="note">Node numbers are identities, not values. The back edge is printed under the nodes: “7 → node 2” means follow a real link back to node 2. S + F in yellow means both pointers occupy that same node.</p>
+<div class="two even"><div><h3>Why the reset finds the entrance</h3><p>Let the head-to-entrance distance be μ and the cycle length be c. At the meeting, slow has taken t steps and fast 2t. Their difference t must be a multiple of c. After μ more steps, the pointer at the head reaches the entrance; the pointer at the meeting has travelled t + μ in total, which lands at that same entrance. Both move one step in this phase.</p></div><div><h3>Fast &amp; slow can also find the middle</h3><p>On a list without a cycle, start both at the head and move 1 versus 2 until fast reaches the end. Slow is halfway along. With the usual loop condition, an even-length list returns the second of its two middle nodes.</p><p><b>Cost:</b> O(n) time for n distinct reachable nodes, O(1) extra memory. The snapshots on this page use extra memory for rewinding; the algorithm itself does not.</p></div></div>
+<h3>C# · detect the cycle and return its entrance</h3><pre class="code-example">// ListNode is a reference type with a ListNode next field.
+ListNode FindCycleEntry(ListNode head)
+{
+    ListNode slow = head, fast = head;
+    while (fast != null &amp;&amp; fast.next != null)
+    {
+        slow = slow.next;
+        fast = fast.next.next;
+        if (ReferenceEquals(slow, fast))
+        {
+            slow = head;
+            while (!ReferenceEquals(slow, fast))
+            {
+                slow = slow.next;
+                fast = fast.next;
+            }
+            return slow;
+        }
+    }
+    return null;
+}</pre>
+</section>
+<section class="chapter" id="duplicate" data-ch="CH.03 LEETCODE 287">
+<div class="ch-head"><p class="osdtag">CH.03 // LEETCODE 287 · FIND THE DUPLICATE NUMBER</p><h2>An array can hide a linked list</h2><p class="kicker">Given n + 1 integers, each in [1, n], find the one repeated value. It can appear more than twice. Do not change the array; use O(1) extra space. These constraints are what make Floyd fit.</p></div>
+<div class="prio"><div><span class="n">1</span><h3>Index = node</h3><p>In [1, 3, 4, 2, 2], index 0 stores 1. Read that as a link: 0 → 1. Then index 1 stores 3: 1 → 3.</p></div><div><span class="n">2</span><h3>Value = next index</h3><p>Following from 0 gives 0 → 1 → 3 → 2 → 4 → 2 → 4… The same array entry plays the role of a next link. Nothing is sorted or modified.</p></div><div><span class="n">3</span><h3>Entrance = duplicate value</h3><p>Indices 3 and 4 both contain 2: both arrows lead to index 2. One arrives from the tail, one from the cycle. That repeated destination is the duplicate number.</p></div></div>
+<div class="panel pointer-deck" id="duplicateDeck">
+ <div class="deck-top"><label>EXAMPLE <select aria-label="Duplicate array example"><option value="0">[1, 3, 4, 2, 2] · duplicate 2</option><option value="1">[3, 1, 3, 4, 2] · duplicate 3</option></select></label></div>
+ <div class="pointer-key"><span>S · slow pointer</span><span>F · fast pointer</span></div>
+ <div class="crt"><div class="pointer-rail" aria-label="Pointer positions"></div><div class="link-note"></div></div>
+ <div class="explanation" aria-live="polite"></div>
+ <div class="transport">
+ <button class="btn" data-t="first" aria-label="Restart">|◀</button><button class="btn" data-t="back" aria-label="Previous step">◀</button>
+ <button class="btn primary" data-t="play">► PLAY</button><button class="btn" data-t="fwd" aria-label="Next step">▶</button><button class="btn" data-t="end" aria-label="Jump to result">▶|</button>
+ <span class="spd">SPEED <input type="range" min="1" max="8" value="2" aria-label="Steps per second"><b data-t="sps">2</b>/s</span><span class="lbl" data-t="pos"></span>
+ </div>
+ <label>REWIND THE TRACE <input class="scrub" type="range" min="0" max="1" value="0" aria-label="duplicate trace position"></label>
+ <p class="lbl">PSEUDOCODE · CURRENT LINE HIGHLIGHTED</p><div class="pseudo"></div>
+ </div>
+<p class="note"><b>Read the boxes carefully:</b> the small label is the index where a pointer stands; the big number is nums[index], its next destination. For slow, read once. For fast, read twice: nums[nums[fast]].</p>
+<h3>Why a cycle is guaranteed here</h3><p>Every value is a valid index, so no link reaches null. There are finitely many indices, so a walk must revisit one. Index 0 cannot be pointed to because values start at 1. The walk therefore has a tail before entering the cycle. At the entrance, the tail and the cycle supply two distinct incoming links: two array entries contain the same value. Since only one value repeats, this must be the answer.</p>
+<h3>C# · the same algorithm, with array lookups</h3><pre class="code-example">int FindDuplicate(int[] nums)
+{
+    int slow = 0, fast = 0;
+    do
+    {
+        slow = nums[slow];
+        fast = nums[nums[fast]];
+    } while (slow != fast);
+
+    slow = 0;
+    while (slow != fast)
+    {
+        slow = nums[slow];
+        fast = nums[fast];
+    }
+    return slow;
+}</pre><p class="note">O(n) time, O(1) extra space. No null checks are needed for this array under the problem constraints. A general array with arbitrary values does not satisfy this model. <a href="https://leetcode.com/problems/find-the-duplicate-number/">Practise LeetCode 287 ↗</a></p>
+</section>
+<section class="chapter" id="cheat" data-ch="CH.04 CHEAT SHEET">
+<div class="ch-head"><p class="osdtag">CH.04 // TAKE THIS TO THE INTERVIEW</p><h2>Which two pointers?</h2></div>
+<div class="table-wrap"><table><thead><tr><th>Signal</th><th>Move</th><th>Reason</th></tr></thead><tbody>
+<tr><td>Sorted array + target pair</td><td>L or R inward</td><td>Discard an end that cannot form an answer</td></tr>
+<tr><td>Palindrome</td><td>Both inward</td><td>Matching ends leave a smaller version of the same task</td></tr>
+<tr><td>Linked-list cycle</td><td>Slow 1, fast 2</td><td>Fast catches slow inside a loop</td></tr>
+<tr><td>Cycle entrance</td><td>Reset one to head, both 1</td><td>The remaining distances align modulo cycle length</td></tr>
+<tr><td>Middle of an acyclic list</td><td>Slow 1, fast 2</td><td>Slow covers half the distance</td></tr>
+</tbody></table></div>
+<div class="prio"><div><span class="n">!</span><h3>Do not move at random</h3><p>Explain why the discarded candidates cannot contain an answer. Two variables alone do not make an algorithm correct.</p></div><div><span class="n">!</span><h3>Compare nodes, not values</h3><p>Two different nodes may both store 7. Floyd needs the very same node object, not equal numbers.</p></div><div><span class="n">!</span><h3>Check before two hops</h3><p>Fast and fast.next must exist before reading fast.next.next. This is how the no-cycle case safely stops.</p></div></div>
+</section>
+<section class="chapter" id="questions" data-ch="CH.05 QUESTIONS"><div class="ch-head"><p class="osdtag">CH.05 // CHECK YOUR UNDERSTANDING</p><h2>Say it before you reveal it</h2></div><div class="qa">
+<details><summary><span class="q">Q01</span><span>Why move only L when the sum is too small?</span></summary><div class="a"><p>R already gives L its largest remaining partner. If that sum is too small, every other partner for this L also fails.</p></div></details>
+<details><summary><span class="q">Q02</span><span>Does pair sum work with negative numbers?</span></summary><div class="a"><p>Yes, if the array is sorted. The argument depends on ordering, not on values being positive.</p></div></details>
+<details><summary><span class="q">Q03</span><span>Why is the initial slow == fast not a cycle?</span></summary><div class="a"><p>Both were deliberately placed at the head. Compare them only after moving.</p></div></details>
+<details><summary><span class="q">Q04</span><span>Is the first meeting the cycle entrance?</span></summary><div class="a"><p>Not necessarily. In the default example the first meeting is node 6, but the entrance is node 2. Rewind and watch phase 2.</p></div></details>
+<details><summary><span class="q">Q05</span><span>Why not keep a set of visited nodes?</span></summary><div class="a"><p>That works too: the first repeated node is the entrance. It uses O(n) memory; Floyd uses O(1).</p></div></details>
+<details><summary><span class="q">Q06</span><span>What should I practise next?</span></summary><div class="a"><p>Try Two Sum II, Valid Palindrome, Linked List Cycle, Linked List Cycle II and Middle of the Linked List. Write the movement rule before the code.</p></div></details>
+</div></section></main><footer><span class="stop">■ END OF TAPE</span><p><a href="../../">◀ Back to the shelf</a> · <a href="../bfs-dfs/">BFS and DFS</a></p></footer><script type="module" src="./page.js?v=202609150438"></script></body></html>

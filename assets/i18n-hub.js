@@ -31,10 +31,10 @@ export const HUB = {
     en: '<span>Algorithms</span><span>Queue · Stack</span><span>O(V + E)</span><span>Shortest path</span>',
     ru: '<span>Алгоритмы</span><span>Очередь · Стек</span><span>O(V + E)</span><span>Кратчайший путь</span>'
   },
-  'hub.tape3Title': { en: 'Next topic', ru: 'Следующая тема' },
+  'hub.tape3Title': { en: 'Two Pointers', ru: 'Two Pointers' },
   'hub.tape3Desc': {
-    en: 'Room for the next walkthrough: sorting and data structures, memory and GC, coroutines and the frame scheduler — something along those lines.',
-    ru: 'Место под следующий разбор: сортировки и структуры данных, память и GC, корутины и планировщик кадра — что-нибудь из этого.'
+    en: 'Opposite pointers and fast & slow / Floyd. Find a pair, detect a cycle and locate its entrance. Rewind every move and see why it works.',
+    ru: 'Opposite pointers and fast & slow / Floyd. Find a pair, detect a cycle and locate its entrance. Rewind every move and see why it works.'
   },
   'hub.soonTag': { en: '<span>Soon</span>', ru: '<span>Скоро</span>' },
   'hub.soonGo': { en: '■ NOT RECORDED YET', ru: '■ ЗАПИСЬ НЕ НАЧАТА' },
