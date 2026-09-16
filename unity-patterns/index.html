@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b0715">
+<title data-i18n="page.title">Unity Design Patterns — interactive field guide</title>
+<meta name="description" content="An interactive guide to SOLID and eleven Unity design patterns with live labs and interview questions.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
+<link rel="stylesheet" href="../assets/vhs.css?v=202609161617"><link rel="stylesheet" href="./style.css?v=202609161617">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
+</head>
+<body>
+<div class="fx fx-scan"></div><div class="fx fx-grain"></div><div class="fx fx-vig"></div><div class="fx fx-track"></div><canvas id="noise" width="160" height="90"></canvas>
+<header class="osd"><div class="l"><span class="play">PLAY ►</span><span class="ch" id="osdCh">CH.00 MAP</span></div><div class="r"><nav id="osdNav"></nav><div class="seg lang" id="langSeg"><button data-l="en" aria-pressed="true">EN</button><button data-l="ru" aria-pressed="false">RU</button></div><a class="home" href="../">SHELF</a></div></header>
+<main>
+<section class="chapter hero" id="map" data-ch="CH.00 MAP">
+  <p class="eyebrow" data-i18n="hero.eyebrow">Unity 6 · architecture without ritual</p>
+  <h1 class="title"><span data-i18n="hero.title">Design patterns</span><span class="title-2" data-i18n="hero.sub">see the pressure, then choose the tool</span></h1>
+  <p class="kicker" data-i18n="hero.lede">Patterns are names for recurring design pressures. Each lab starts with the problem, lets you operate the solution, and shows the extra complexity you bought.</p>
+  <div class="ch-head"><p class="osdtag">CH.00 // 5 PRINCIPLES · 11 PATTERNS</p><h2 data-i18n="map.h2">One map before the details</h2><p class="kicker" data-i18n="map.copy"></p></div>
+  <div class="pattern-map panel">
+    <div data-i18n="map.pressures"><b>DESIGN PRESSURE</b><span>creation</span><span>lifetime</span><span>global access</span><span>action history</span><span>object mode</span><span>broadcast</span><span>UI flow</span><span>algorithm</span><span>memory</span><span>recalculation</span></div>
+    <i>→</i>
+    <div class="map-patterns"><b data-i18n="map.tool">TOOL</b><span>Factory</span><span>Object Pool</span><span>Singleton</span><span>Command</span><span>State</span><span>Observer</span><span>MVP / MVVM</span><span>Strategy</span><span>Flyweight</span><span>Dirty Flag</span></div>
+  </div>
+</section>
+
+<section class="chapter" id="solid" data-ch="CH.01 SOLID">
+  <div class="ch-head"><p class="osdtag">CH.01 // SOLID</p><h2 data-i18n="solid.h2">SOLID: move the responsibility</h2><p class="kicker" data-i18n="solid.copy"></p></div>
+  <div class="solid-lab panel">
+    <div class="solid-tabs" id="solidTabs"></div>
+    <div class="solid-stage">
+      <div class="pressure bad"><small data-i18n="solid.bad"></small><strong id="solidProblem"></strong><p id="solidBefore"></p><div class="tangle"><i></i><i></i><i></i><i></i></div></div>
+      <div class="solid-arrow">→</div>
+      <div class="pressure good"><small data-i18n="solid.good"></small><strong id="solidRule"></strong><p id="solidAfter"></p><div class="clean-flow"><i></i><b>interface</b><i></i></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="lifetime" data-ch="CH.02 LIFETIME">
+  <div class="ch-head"><p class="osdtag">CH.02 // FACTORY · POOL · SINGLETON</p><h2 data-i18n="life.h2">Creation and lifetime</h2><p class="kicker" data-i18n="life.copy"></p></div>
+  <div class="three-labs">
+    <article class="panel factory-lab"><h3 data-i18n="factory.title"></h3><div class="seg" id="enemySeg"><button data-v="drone" aria-pressed="true">DRONE</button><button data-v="tank">TANK</button><button data-v="healer">HEALER</button></div><button class="btn primary" id="factorySpawn" data-i18n="factory.spawn"></button><div class="factory-line"><span>Spawner</span><i>→ IEnemy →</i><strong id="factoryProduct">Drone</strong></div><div class="spawn-bay" id="spawnBay"></div><p class="hint" data-i18n="factory.hint">The caller knows <code>IEnemy</code>. The factory owns concrete selection and common initialization.</p></article>
+    <article class="panel"><h3 data-i18n="pool.title"></h3><button class="tg" id="poolToggle" aria-pressed="true" data-i18n="pool.on"></button><div class="ctl-group"><label><span data-i18n="pool.rate"></span><output id="rateOut"></output></label><input id="spawnRate" type="range" min="2" max="40" value="18"></div><div class="ctl-group"><label><span data-i18n="pool.life"></span><output id="lifeOut"></output></label><input id="objectLife" type="range" min="1" max="8" value="3"></div><div class="ctl-group"><label><span data-i18n="pool.size"></span><output id="sizeOut"></output></label><input id="poolSize" type="range" min="5" max="120" value="60"></div><div class="pool-strip" id="poolStrip"></div><div class="stats c4" id="poolStats"></div></article>
+    <article class="panel singleton-lab"><h3 data-i18n="singleton.title"></h3><div class="seg" id="dependencySeg"><button data-v="hidden" aria-pressed="true" data-i18n="singleton.hidden"></button><button data-v="explicit" data-i18n="singleton.explicit"></button></div><div class="dependency-map" id="dependencyMap"><div>Enemy</div><div>Shop</div><div>UI</div><strong>GameManager<br><small>static Instance</small></strong></div><p class="reason" data-i18n="singleton.note"></p></article>
+  </div>
+</section>
+
+<section class="chapter" id="command" data-ch="CH.03 COMMAND">
+  <div class="ch-head"><p class="osdtag">CH.03 // COMMAND</p><h2 data-i18n="command.h2"></h2><p class="kicker" data-i18n="command.copy"></p></div>
+  <div class="command-layout panel"><div><div class="move-pad"><button data-dir="up">↑</button><button data-dir="left">←</button><button data-dir="down">↓</button><button data-dir="right">→</button></div><div class="ctl-row"><button class="btn" id="undoBtn" data-i18n="command.undo"></button><button class="btn" id="redoBtn" data-i18n="command.redo"></button><button class="btn" id="resetCommand" data-i18n="command.reset"></button></div><p class="hint" data-i18n="command.hint"><code>MoveCommand.Execute()</code> stores the previous cell. <code>Undo()</code> restores it.</p></div><div class="command-grid" id="commandGrid"></div><div class="command-tape"><span class="lbl" data-i18n="command.history"></span><div id="commandHistory"></div></div></div>
+</section>
+
+<section class="chapter" id="state" data-ch="CH.04 STATE">
+  <div class="ch-head"><p class="osdtag">CH.04 // STATE</p><h2 data-i18n="state.h2"></h2><p class="kicker" data-i18n="state.copy"></p></div>
+  <div class="state-lab panel"><div class="state-events" id="stateEvents"></div><div class="state-machine" id="stateMachine"><span id="validEvents"></span><div data-state="idle">IDLE</div><div data-state="move">MOVE</div><div data-state="jump">JUMP</div><div data-state="attack">ATTACK</div><div data-state="dead">DEAD</div></div><div class="state-readout"><small data-i18n="state.current"></small><strong id="currentState">IDLE</strong><p id="stateMessage"></p></div></div>
+</section>
+
+<section class="chapter" id="observer" data-ch="CH.05 OBSERVER">
+  <div class="ch-head"><p class="osdtag">CH.05 // OBSERVER</p><h2 data-i18n="observer.h2"></h2><p class="kicker" data-i18n="observer.copy"></p></div>
+  <div class="observer-lab panel"><div class="publisher"><strong>PLAYER</strong><button class="btn primary" id="emitDamage" data-i18n="observer.emit"></button><span>event Damage(int)</span></div><div class="signal" id="signalLine">••••••••••••••••••</div><div class="subscribers" id="subscribers"><button aria-pressed="true" data-name="HEALTH UI"><b>HEALTH UI</b><span>0 events</span></button><button aria-pressed="true" data-name="SOUND"><b>SOUND</b><span>0 events</span></button><button aria-pressed="false" data-name="ACHIEVEMENT"><b>ACHIEVEMENT</b><span>0 events</span></button></div><p class="toast" data-i18n="observer.caveat"></p></div>
+</section>
+
+<section class="chapter" id="ui-flow" data-ch="CH.06 UI FLOW">
+  <div class="ch-head"><p class="osdtag">CH.06 // MVP · MVVM</p><h2 data-i18n="ui.h2"></h2><p class="kicker" data-i18n="ui.copy"></p></div>
+  <div class="ui-lab panel"><div class="seg" id="uiMode"><button data-v="mvp" aria-pressed="true">MVP</button><button data-v="mvvm">MVVM</button></div><div class="health-view"><span>VIEW</span><div><i id="healthFill"></i></div><strong id="healthText">100 / 100</strong></div><div class="flow-diagram" id="flowDiagram"></div><div class="ctl-row"><button class="btn" id="damageHealth" data-i18n="ui.damage"></button><button class="btn" id="healHealth" data-i18n="ui.heal"></button></div><p class="reason" id="uiReason"></p></div>
+</section>
+
+<section class="chapter" id="performance" data-ch="CH.07 DATA">
+  <div class="ch-head"><p class="osdtag">CH.07 // STRATEGY · FLYWEIGHT · DIRTY FLAG</p><h2 data-i18n="perf.h2"></h2><p class="kicker" data-i18n="perf.copy"></p></div>
+  <div class="three-labs performance-labs">
+    <article class="panel"><h3 data-i18n="strategy.title"></h3><div class="seg" id="strategySeg"><button data-v="radar" aria-pressed="true">RADAR</button><button data-v="heal">FIRST AID</button><button data-v="air">AIR SUPPORT</button></div><div class="strategy-slot"><span>AbilityRunner</span><i>uses IAbility →</i><strong id="strategyName">RadarAbility</strong></div><button class="btn primary" id="runStrategy" data-i18n="strategy.run"></button><div class="strategy-screen" id="strategyScreen">READY</div></article>
+    <article class="panel"><h3 data-i18n="fly.title"></h3><div class="ctl-group"><label><span data-i18n="fly.units"></span><output id="unitsOut"></output></label><input id="unitCount" type="range" min="100" max="10000" step="100" value="3000"></div><div class="ctl-group"><label><span data-i18n="fly.shared"></span><output id="sharedOut"></output></label><input id="sharedSize" type="range" min="4" max="128" value="48"></div><div class="memory-bars" id="flyBars"></div><p class="hint" data-i18n="fly.hint">Mesh, material and stats definition are shared. Position, health and current target remain per unit.</p></article>
+    <article class="panel"><h3 data-i18n="dirty.title"></h3><div class="ctl-group"><label><span data-i18n="dirty.frames"></span><output id="framesOut"></output></label><input id="frameCount" type="range" min="60" max="600" step="60" value="300"></div><div class="ctl-group"><label><span data-i18n="dirty.changes"></span><output id="changesOut"></output></label><input id="changeCount" type="range" min="1" max="300" value="20"></div><div class="ctl-group"><label><span data-i18n="dirty.reads"></span><output id="readsOut"></output></label><input id="readCount" type="range" min="1" max="300" value="80"></div><div class="memory-bars" id="dirtyBars"></div><p class="hint" data-i18n="dirty.hint">Mutation sets <code>dirty = true</code>. The next read recalculates once and clears the flag.</p></article>
+  </div>
+</section>
+
+<section class="chapter" id="chooser" data-ch="CH.08 CHOOSE">
+  <div class="ch-head"><p class="osdtag">CH.08 // DECISION DECK</p><h2 data-i18n="choose.h2"></h2><p class="kicker" data-i18n="choose.copy"></p></div>
+  <div class="chooser panel"><div class="problem-list" id="problemList"></div><div class="prescription"><small>PATTERN</small><strong id="recommendation">Factory</strong><small>COST YOU ACCEPT</small><p id="recommendationCost"></p></div></div>
+</section>
+
+<section class="chapter" id="interview" data-ch="CH.09 INTERVIEW">
+  <div class="ch-head"><p class="osdtag">CH.09 // INTERVIEW</p><h2 data-i18n="qa.h2"></h2><p class="kicker" data-i18n="qa.copy"></p></div><div class="qa-list" id="qaList"></div>
+</section>
+</main>
+<footer><span class="stop" data-i18n="foot.stop"></span><p data-i18n="foot.source">Source: Unity · <em>Level up your code with design patterns and SOLID</em>, Unity 6 edition.</p></footer>
+<script type="module" src="./page.js?v=202609161617"></script>
+</body></html>

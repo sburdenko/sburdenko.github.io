@@ -36,6 +36,15 @@ export const HUB = {
     en: 'Opposite pointers and fast & slow / Floyd. Find a pair, detect a cycle and locate its entrance. Rewind every move and see why it works.',
     ru: 'Opposite pointers and fast & slow / Floyd. Find a pair, detect a cycle and locate its entrance. Rewind every move and see why it works.'
   },
+  'hub.tape5Title': { en: 'Unity Design Patterns', ru: 'Паттерны проектирования Unity' },
+  'hub.tape5Desc': {
+    en: 'SOLID and eleven patterns as working rigs: build objects, reuse a pool, undo commands, transition states, broadcast events and measure shared data.',
+    ru: 'SOLID и одиннадцать паттернов в живых стендах: создавай объекты, используй пул, отменяй команды, переключай состояния, рассылай события и измеряй общие данные.'
+  },
+  'hub.tape5Tags': {
+    en: '<span>SOLID</span><span>Patterns</span><span>Architecture</span><span>Unity 6</span>',
+    ru: '<span>SOLID</span><span>Паттерны</span><span>Архитектура</span><span>Unity 6</span>'
+  },
   'hub.soonTag': { en: '<span>Soon</span>', ru: '<span>Скоро</span>' },
   'hub.soonGo': { en: '■ NOT RECORDED YET', ru: '■ ЗАПИСЬ НЕ НАЧАТА' },
   'how.h2': { en: 'How to use this', ru: 'Как этим пользоваться' },

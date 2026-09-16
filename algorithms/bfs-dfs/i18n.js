@@ -1,5 +1,5 @@
 /** Словарь кассеты «BFS и DFS». Значение-функция получает аргументы из t(). */
-import { fmtI, plural } from '../../assets/vhs.js?v=202609161601';
+import { fmtI, plural } from '../../assets/vhs.js?v=202609161617';
 
 const pl = (n, one, many) => `${fmtI(n)} ${n === 1 ? one : many}`;
 const plRu = (n, one, few, many) => `${fmtI(n)} ${plural(n, one, few, many)}`;

@@ -1,7 +1,7 @@
-import { $, $$, bootVhs, fitCanvas, press, clamp } from '../assets/vhs.js?v=202609161601';
-import { initI18n, t, onLang } from '../assets/i18n.js?v=202609161601';
-import { COMMON } from '../assets/i18n-common.js?v=202609161601';
-import { DICT } from './i18n.js?v=202609161601';
+import { $, $$, bootVhs, fitCanvas, press, clamp } from '../assets/vhs.js?v=202609161617';
+import { initI18n, t, onLang } from '../assets/i18n.js?v=202609161617';
+import { COMMON } from '../assets/i18n-common.js?v=202609161617';
+import { DICT } from './i18n.js?v=202609161617';
 import {
   RENDERERS,
   MSAA_PATTERNS,
@@ -12,7 +12,7 @@ import {
   probeRecommendation,
   shadowBudget,
   upscalingModel,
-} from './model.js?v=202609161601';
+} from './model.js?v=202609161617';
 
 initI18n({ ...COMMON, ...DICT });
 bootVhs();
