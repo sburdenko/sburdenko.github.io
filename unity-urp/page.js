@@ -1,7 +1,7 @@
-import { $, $$, bootVhs, fitCanvas, press, clamp } from '../assets/vhs.js?v=202609161526';
-import { initI18n, t, onLang } from '../assets/i18n.js?v=202609161526';
-import { COMMON } from '../assets/i18n-common.js?v=202609161526';
-import { DICT } from './i18n.js?v=202609161526';
+import { $, $$, bootVhs, fitCanvas, press, clamp } from '../assets/vhs.js?v=202609161544';
+import { initI18n, t, onLang } from '../assets/i18n.js?v=202609161544';
+import { COMMON } from '../assets/i18n-common.js?v=202609161544';
+import { DICT } from './i18n.js?v=202609161544';
 import {
   RENDERERS,
   MSAA_PATTERNS,
@@ -12,7 +12,7 @@ import {
   probeRecommendation,
   shadowBudget,
   upscalingModel,
-} from './model.js?v=202609161526';
+} from './model.js?v=202609161544';
 
 initI18n({ ...COMMON, ...DICT });
 bootVhs();
@@ -130,40 +130,136 @@ function initShadowLab() {
   const canvas = $('#shadowCanvas');
   let latest;
   function paint() {
-    const { c, w, h } = fitCanvas(canvas, canvas.clientWidth < 620 ? 300 : 360);
+    const { c, w, h } = fitCanvas(canvas, canvas.clientWidth < 620 ? 340 : 430);
     const distance = +controls.distance.value, cascades = +controls.cascades.value;
+    const resolution = 2 ** +controls.resolution.value, soft = bool(controls.soft);
+    const horizon = h * .31, bottom = h * .93, center = w * .53, sceneDepth = 200;
+    const palette = ['#ff3ea5', '#8a4dff', '#26e3ea', '#5dfc9a'];
+    const objects = [
+      { meters: 8, lane: -.42, label: 'shadow.near', color: '#ff5ca8' },
+      { meters: 45, lane: .34, label: 'shadow.middle', color: '#8a7dff' },
+      { meters: 120, lane: -.18, label: 'shadow.far', color: '#26e3ea' },
+    ];
+    const splits = Array.from({ length: cascades }, (_, index) => Math.round(distance * ((index + 1) / cascades) ** 1.45));
+    splits[splits.length - 1] = distance;
+    const screenY = meters => bottom - Math.sqrt(clamp(meters / sceneDepth, 0, 1)) * (bottom - horizon);
+    const halfWidth = y => 42 + clamp((y - horizon) / (bottom - horizon), 0, 1) * (w * .48 - 42);
+    const groundPath = (nearMeters, farMeters) => {
+      const nearY = screenY(nearMeters), farY = screenY(farMeters);
+      const nearW = halfWidth(nearY), farW = halfWidth(farY);
+      c.beginPath(); c.moveTo(center - nearW, nearY); c.lineTo(center + nearW, nearY);
+      c.lineTo(center + farW, farY); c.lineTo(center - farW, farY); c.closePath();
+    };
+    const cascadeFor = meters => {
+      const index = Math.max(0, splits.findIndex(split => meters <= split));
+      const start = index === 0 ? 0 : splits[index - 1];
+      const end = splits[index];
+      return { index, start, end, density: resolution / Math.max(1, end - start) };
+    };
+
     c.clearRect(0, 0, w, h);
-    c.fillStyle = '#08050f'; c.fillRect(0, 0, w, h);
-    const horizon = h * .62;
-    const gradient = c.createLinearGradient(0, 0, 0, horizon);
-    gradient.addColorStop(0, '#171348'); gradient.addColorStop(1, '#6a315c');
-    c.fillStyle = gradient; c.fillRect(0, 0, w, horizon);
-    c.fillStyle = '#171025'; c.fillRect(0, horizon, w, h - horizon);
-    c.fillStyle = '#ffd76a'; c.beginPath(); c.arc(w * .82, h * .2, 22, 0, Math.PI * 2); c.fill();
-    const start = 46, end = w - 35, usable = end - start;
-    c.strokeStyle = '#ffd23f'; c.lineWidth = 2; c.setLineDash([6, 5]);
-    c.beginPath(); c.moveTo(start, horizon + 40); c.lineTo(end, horizon + 40); c.stroke(); c.setLineDash([]);
-    const palette = ['#ff3ea544', '#8a4dff44', '#26e3ea44', '#5dfc9a44'];
-    let previous = start;
-    for (let i = 0; i < cascades; i++) {
-      const fraction = (i + 1) / cascades;
-      const next = start + usable * fraction ** 1.35;
-      c.fillStyle = palette[i]; c.fillRect(previous, 36, next - previous, horizon - 36);
-      c.strokeStyle = palette[i].slice(0, 7); c.strokeRect(previous, 36, next - previous, horizon - 36);
-      c.fillStyle = '#e9e2ff'; c.font = '11px JetBrains Mono'; c.fillText(`C${i + 1}`, previous + 8, 54);
-      previous = next;
+    const sky = c.createLinearGradient(0, 0, 0, horizon);
+    sky.addColorStop(0, '#100d35'); sky.addColorStop(.58, '#593064'); sky.addColorStop(1, '#ed8178');
+    c.fillStyle = sky; c.fillRect(0, 0, w, horizon);
+    c.fillStyle = '#100b1d'; c.fillRect(0, horizon, w, h - horizon);
+
+    const sunX = w * .84, sunY = h * .14;
+    const glow = c.createRadialGradient(sunX, sunY, 4, sunX, sunY, 48);
+    glow.addColorStop(0, '#fffbd1'); glow.addColorStop(.28, '#ffd76a'); glow.addColorStop(1, '#ffd23f00');
+    c.fillStyle = glow; c.beginPath(); c.arc(sunX, sunY, 48, 0, Math.PI * 2); c.fill();
+    c.fillStyle = '#fff3a0'; c.beginPath(); c.arc(sunX, sunY, 18, 0, Math.PI * 2); c.fill();
+
+    groundPath(0, sceneDepth);
+    const ground = c.createLinearGradient(0, horizon, 0, bottom);
+    ground.addColorStop(0, '#17162f'); ground.addColorStop(1, '#28203b');
+    c.fillStyle = ground; c.fill();
+
+    let previous = 0;
+    splits.forEach((split, index) => {
+      groundPath(previous, split);
+      c.fillStyle = `${palette[index]}20`; c.fill();
+      c.strokeStyle = `${palette[index]}88`; c.lineWidth = 1.5; c.stroke();
+      const labelY = (screenY(previous) + screenY(split)) / 2;
+      c.fillStyle = '#f5efff'; c.font = '10px JetBrains Mono';
+      c.fillText(t('shadow.cascade', index + 1, previous, split), center - halfWidth(labelY) + 10, labelY - 5);
+      previous = split;
+    });
+
+    c.strokeStyle = '#ffffff13'; c.lineWidth = 1;
+    [-.66, -.33, 0, .33, .66].forEach(lane => {
+      c.beginPath(); c.moveTo(center + lane * halfWidth(bottom), bottom); c.lineTo(center + lane * halfWidth(horizon), horizon); c.stroke();
+    });
+    [25, 50, 100, 150, 200].forEach(meters => {
+      const y = screenY(meters), hw = halfWidth(y);
+      c.beginPath(); c.moveTo(center - hw, y); c.lineTo(center + hw, y); c.stroke();
+    });
+
+    const cutoffY = screenY(distance), cutoffW = halfWidth(cutoffY);
+    c.strokeStyle = '#ffd23f'; c.lineWidth = 3; c.setLineDash([8, 6]);
+    c.beginPath(); c.moveTo(center - cutoffW, cutoffY); c.lineTo(center + cutoffW, cutoffY); c.stroke(); c.setLineDash([]);
+    c.fillStyle = '#ffd23f'; c.font = '600 10px JetBrains Mono';
+    c.fillText(t('shadow.cutoff', distance), center + cutoffW - Math.min(150, cutoffW * 1.3), cutoffY - 8);
+
+    const quantize = (value, step) => Math.round(value / step) * step;
+    function drawShadow(x, y, scale, density) {
+      const length = 32 + 88 * scale, dx = -length * .92, dy = length * .3;
+      const width = 14 * scale, step = clamp(22 / Math.sqrt(Math.max(.4, density)), 2, 15);
+      const count = Math.max(5, Math.ceil(length / step));
+      const points = [];
+      for (let i = 0; i <= count; i++) {
+        const amount = i / count, spread = width * (.72 + amount * .48);
+        points.push([quantize(x + dx * amount, step), quantize(y + dy * amount - spread * .12, step)]);
+      }
+      for (let i = count; i >= 0; i--) {
+        const amount = i / count, spread = width * (.72 + amount * .48);
+        points.push([quantize(x + dx * amount, step), quantize(y + dy * amount + spread * .5, step)]);
+      }
+      const trace = () => {
+        c.beginPath(); c.moveTo(points[0][0], points[0][1]);
+        points.slice(1).forEach(point => c.lineTo(point[0], point[1]));
+        c.closePath();
+      };
+      if (soft) {
+        c.save(); c.filter = `blur(${clamp(step * .65, 3, 9)}px)`; c.fillStyle = '#020108a8'; trace(); c.fill(); c.restore();
+      }
+      c.fillStyle = soft ? '#0301099c' : '#020108dc'; trace(); c.fill();
+      c.strokeStyle = soft ? '#0000' : '#ff5c8766'; c.lineWidth = 1; c.stroke();
+      if (step > 5) {
+        c.fillStyle = '#ff5c873d';
+        points.filter((_, index) => index % 2 === 0).forEach(([px, py]) => c.fillRect(px - step * .25, py - step * .25, step * .5, step * .5));
+      }
     }
-    const poles = Math.max(3, Math.round(distance / 20));
-    for (let i = 1; i <= poles; i++) {
-      const x = start + usable * i / poles;
-      const height = 80 * (1 - i / (poles + 3));
-      c.fillStyle = '#ddd5f5'; c.fillRect(x - 3, horizon - height, 6, height);
-      c.fillStyle = `rgba(0,0,0,${controls.soft && bool(controls.soft) ? .36 : .62})`;
-      c.beginPath(); c.ellipse(x + height * .48, horizon + 8, height * .56, 7, 0, 0, Math.PI * 2); c.fill();
-    }
-    c.fillStyle = '#ff3ea5'; c.fillRect(20, horizon - 28, 22, 28);
-    c.fillStyle = '#ffbadc'; c.font = '11px JetBrains Mono'; c.fillText(t('post.cam'), 16, horizon - 36);
-    c.fillStyle = '#ffd23f'; c.fillText(`${distance} m`, end - 30, horizon + 62);
+
+    let visibleShadows = 0;
+    [...objects].sort((a, b) => b.meters - a.meters).forEach(object => {
+      const y = screenY(object.meters), hw = halfWidth(y), x = center + object.lane * hw;
+      const scale = clamp(1.18 - object.meters / 165, .34, 1.15);
+      const casts = object.meters <= distance;
+      if (casts) {
+        visibleShadows++;
+        drawShadow(x, y, scale, cascadeFor(object.meters).density);
+      }
+
+      const bodyW = 31 * scale, bodyH = 72 * scale, top = 9 * scale;
+      const body = c.createLinearGradient(x - bodyW / 2, 0, x + bodyW / 2, 0);
+      body.addColorStop(0, object.color); body.addColorStop(.68, '#e9faff'); body.addColorStop(1, '#26375f');
+      c.fillStyle = body; c.fillRect(x - bodyW / 2, y - bodyH, bodyW, bodyH);
+      c.fillStyle = '#ffffffcc'; c.beginPath(); c.moveTo(x - bodyW / 2, y - bodyH); c.lineTo(x - bodyW / 2 + top, y - bodyH - top);
+      c.lineTo(x + bodyW / 2 + top, y - bodyH - top); c.lineTo(x + bodyW / 2, y - bodyH); c.closePath(); c.fill();
+      c.fillStyle = '#1b1833'; c.beginPath(); c.ellipse(x, y + 2, bodyW * .7, 4 * scale, 0, 0, Math.PI * 2); c.fill();
+      c.font = '600 9px JetBrains Mono'; c.textAlign = 'center';
+      c.fillStyle = casts ? '#ffffff' : '#ff6f8e';
+      c.fillText(`${t(object.label)} · ${object.meters} m`, x, y - bodyH - top - 9);
+      if (!casts) c.fillText(t('shadow.noShadow'), x, y + 17);
+    });
+    c.textAlign = 'left';
+
+    c.fillStyle = '#ff3ea5'; c.beginPath(); c.moveTo(center - 16, bottom + 4); c.lineTo(center + 16, bottom + 4); c.lineTo(center, bottom - 18); c.closePath(); c.fill();
+    c.fillStyle = '#ffb8dd'; c.font = '10px JetBrains Mono'; c.fillText(t('shadow.camera'), center + 22, bottom);
+    c.strokeStyle = '#2f2346'; c.beginPath(); c.moveTo(0, bottom + 5); c.lineTo(w, bottom + 5); c.stroke();
+
+    const nearDensity = cascadeFor(objects[0].meters).density;
+    $('#shadowSceneExplain').textContent = t('shadow.sceneCaption', visibleShadows, nearDensity.toFixed(1));
   }
   function render() {
     const state = {
