@@ -1,15 +1,18 @@
-import { $, $$, bootVhs, fitCanvas, press, clamp } from '../assets/vhs.js?v=202609161139';
-import { initI18n, t, onLang } from '../assets/i18n.js?v=202609161139';
-import { COMMON } from '../assets/i18n-common.js?v=202609161139';
-import { DICT } from './i18n.js?v=202609161139';
+import { $, $$, bootVhs, fitCanvas, press, clamp } from '../assets/vhs.js?v=202609161526';
+import { initI18n, t, onLang } from '../assets/i18n.js?v=202609161526';
+import { COMMON } from '../assets/i18n-common.js?v=202609161526';
+import { DICT } from './i18n.js?v=202609161526';
 import {
   RENDERERS,
+  MSAA_PATTERNS,
   buildFrameGraph,
   chooseRenderer,
+  msaaCost,
+  msaaCoverage,
   probeRecommendation,
   shadowBudget,
   upscalingModel,
-} from './model.js?v=202609161139';
+} from './model.js?v=202609161526';
 
 initI18n({ ...COMMON, ...DICT });
 bootVhs();
@@ -49,6 +52,72 @@ function initRendererLab() {
   [lights, transparent].forEach(input => input.addEventListener('input', render));
   msaa.onclick = () => { toggle(msaa); render(); };
   targets.forEach(button => button.onclick = () => { press(targets, candidate => candidate === button); render(); });
+  render();
+  return render;
+}
+
+function initMsaaLab() {
+  const sampleButtons = $$('#msaaSamples button'), problemButtons = $$('#msaaProblem button');
+  const edge = $('#msaaEdge'), canvas = $('#msaaCanvas');
+
+  function paint(samples) {
+    const { c, w, h } = fitCanvas(canvas, canvas.clientWidth < 620 ? 330 : 390);
+    const columns = 10, rows = 6, pad = 24;
+    const cell = Math.min((w - pad * 2) / columns, (h - pad * 2) / rows);
+    const left = (w - cell * columns) / 2, top = (h - cell * rows) / 2;
+    const slope = -0.35, edgeLine = 2.1 + (+edge.value / 100) * 3.1;
+    const selectedX = Math.floor(columns / 2);
+    const selectedY = clamp(Math.floor(slope * (selectedX + .5) + edgeLine), 0, rows - 1);
+    let selected;
+
+    c.clearRect(0, 0, w, h);
+    c.fillStyle = '#08050f'; c.fillRect(0, 0, w, h);
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < columns; x++) {
+        const result = msaaCoverage({ samples, pixelX: x, pixelY: y, slope, edge: edgeLine });
+        const px = left + x * cell, py = top + y * cell;
+        c.fillStyle = `rgba(38,227,234,${.05 + result.coverage * .68})`;
+        c.fillRect(px, py, cell, cell);
+        c.strokeStyle = '#493b66'; c.lineWidth = 1; c.strokeRect(px, py, cell, cell);
+        MSAA_PATTERNS[samples].forEach(([sx, sy], index) => {
+          c.fillStyle = result.mask[index] ? '#5dfc9a' : '#ff5c87';
+          c.beginPath(); c.arc(px + sx * cell, py + sy * cell, samples > 4 ? 2.2 : 3, 0, Math.PI * 2); c.fill();
+        });
+        if (x === selectedX && y === selectedY) selected = result;
+      }
+    }
+    const lineStartY = top + edgeLine * cell, lineEndY = top + (slope * columns + edgeLine) * cell;
+    c.strokeStyle = '#ffd23f'; c.lineWidth = 4; c.beginPath(); c.moveTo(left, lineStartY); c.lineTo(left + columns * cell, lineEndY); c.stroke();
+    c.strokeStyle = '#fff'; c.lineWidth = 3; c.strokeRect(left + selectedX * cell + 2, top + selectedY * cell + 2, cell - 4, cell - 4);
+    return selected || msaaCoverage({ samples, pixelX: selectedX, pixelY: selectedY, slope, edge: edgeLine });
+  }
+
+  function render() {
+    const samples = +(sampleButtons.find(bool) || sampleButtons[2]).dataset.samples;
+    const problem = (problemButtons.find(bool) || problemButtons[0]).dataset.problem;
+    const coverage = paint(samples), cost = msaaCost(samples);
+    const [title, copy] = t('msaa.problemData')[problem];
+    const verdictKey = problem === 'geometry' ? 'msaa.works' : problem === 'alpha' ? 'msaa.conditional' : 'msaa.no';
+    $('#msaaEdgeOut').textContent = `${edge.value}%`;
+    $('#msaaMode').textContent = `${samples}× MSAA`;
+    $('#msaaVerdict').textContent = t(verdictKey);
+    $('#msaaVerdict').dataset.verdict = problem;
+    $('#msaaProblemTitle').textContent = title;
+    $('#msaaProblemCopy').textContent = copy;
+    $('#msaaMask').innerHTML = MSAA_PATTERNS[samples].map(([x, y], index) => `<i class="${coverage.mask[index] ? 'covered' : ''}" style="left:${x * 100}%;top:${y * 100}%"></i>`).join('');
+    $('#msaaResolve').textContent = t('msaa.resolve', coverage.covered, samples, Math.round(coverage.coverage * 100));
+    $('#msaaStats').innerHTML = [
+      tile(t('msaa.coverageStat'), `${Math.round(coverage.coverage * 100)}%`, t('msaa.coverageDetail')),
+      tile(t('msaa.testsStat'), `${samples}×`, t('msaa.perPixel')),
+      tile(t('msaa.memoryStat'), `${cost.attachmentMemoryMB.toFixed(1)} MB`, t('msaa.memoryDetail')),
+      tile(t('msaa.resolveStat'), samples > 1 ? `${cost.resolveTargetMB.toFixed(1)} MB` : '—', samples > 1 ? t('msaa.oneFinal') : t('msaa.noResolve')),
+    ].join('');
+  }
+
+  sampleButtons.forEach(button => button.onclick = () => { press(sampleButtons, candidate => candidate === button); render(); });
+  problemButtons.forEach(button => button.onclick = () => { press(problemButtons, candidate => candidate === button); render(); });
+  edge.addEventListener('input', render);
+  addEventListener('resize', render);
   render();
   return render;
 }
@@ -397,7 +466,7 @@ function initInterview() {
 }
 
 const refreshers = [
-  initRendererLab(), initShadowLab(), initLightModes(), initProbeLab(), initShaderLab(),
+  initRendererLab(), initMsaaLab(), initShadowLab(), initLightModes(), initProbeLab(), initShaderLab(),
   initGraphLab(), initMergeLab(), initPostLab(), initUnity6Lab(), initDiagnostics(), initInterview(),
 ];
 onLang(() => refreshers.forEach(render => render()));

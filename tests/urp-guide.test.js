@@ -5,6 +5,9 @@ import {
   buildFrameGraph,
   chooseRenderer,
   diagnose,
+  MSAA_PATTERNS,
+  msaaCost,
+  msaaCoverage,
   probeRecommendation,
   shadowBudget,
   upscalingModel,
@@ -48,6 +51,27 @@ test('renderer chooser respects hard renderer constraints', () => {
   assert.equal(chooseRenderer({ lights: 5, msaa: false, transparent: 10, mobile: false }).key, 'forward');
   assert.equal(chooseRenderer({ lights: 30, msaa: true, transparent: 10, mobile: false }).key, 'forward-plus');
   assert.equal(chooseRenderer({ lights: 80, msaa: false, transparent: 5, mobile: false }).key, 'deferred');
+});
+
+test('MSAA patterns keep every sample inside its pixel and quantize coverage', () => {
+  for (const samples of [1, 2, 4, 8]) {
+    assert.equal(MSAA_PATTERNS[samples].length, samples);
+    for (const position of MSAA_PATTERNS[samples]) {
+      assert.ok(position.every(value => value >= 0 && value <= 1));
+    }
+    const result = msaaCoverage({ samples, slope: 0, edge: 0.5 });
+    assert.equal(result.coverage, result.covered / samples);
+  }
+  assert.equal(msaaCoverage({ samples: 1, slope: 0, edge: 0.5 }).coverage, 1);
+  assert.equal(msaaCoverage({ samples: 4, slope: 0, edge: 0.5 }).coverage, 0.5);
+});
+
+test('MSAA attachment estimate scales with samples and resolve exists above 1x', () => {
+  const one = msaaCost(1);
+  const four = msaaCost(4);
+  assert.equal(four.attachmentMemoryMB, one.attachmentMemoryMB * 4);
+  assert.equal(one.resolveTargetMB, 0);
+  assert.ok(four.resolveTargetMB > 0);
 });
 
 test('point-light shadows add six maps per light', () => {

@@ -33,6 +33,27 @@ export function chooseRenderer({ lights, msaa, transparent, mobile }) {
   return { key, scores, reasonKey: `renderer.reason.${key}` };
 }
 
+export const MSAA_PATTERNS = {
+  1: [[0.5, 0.5]],
+  2: [[0.25, 0.25], [0.75, 0.75]],
+  4: [[0.375, 0.125], [0.875, 0.375], [0.125, 0.625], [0.625, 0.875]],
+  8: [[0.5625, 0.3125], [0.4375, 0.6875], [0.8125, 0.5625], [0.3125, 0.1875], [0.1875, 0.8125], [0.0625, 0.4375], [0.6875, 0.9375], [0.9375, 0.0625]],
+};
+
+export function msaaCoverage({ samples, pixelX = 0, pixelY = 0, slope = -0.35, edge = 1 }) {
+  const pattern = MSAA_PATTERNS[samples];
+  const mask = pattern.map(([x, y]) => pixelY + y >= slope * (pixelX + x) + edge);
+  const covered = mask.filter(Boolean).length;
+  return { mask, covered, samples, coverage: covered / samples };
+}
+
+export function msaaCost(samples, width = 1920, height = 1080) {
+  const bytesPerSample = 8;
+  const attachmentMemoryMB = width * height * bytesPerSample * samples / 1048576;
+  const resolveTargetMB = samples > 1 ? width * height * 4 / 1048576 : 0;
+  return { attachmentMemoryMB, resolveTargetMB, sampleWork: samples };
+}
+
 export function shadowBudget({ resolution, distance, cascades, spotLights, pointLights, soft }) {
   const mainMemoryMB = resolution * resolution * 4 / 1048576;
   const maps = cascades + spotLights + pointLights * 6;

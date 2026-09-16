@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
-<link rel="stylesheet" href="../assets/vhs.css?v=202609161139">
-<link rel="stylesheet" href="./style.css?v=202609161139">
+<link rel="stylesheet" href="../assets/vhs.css?v=202609161526">
+<link rel="stylesheet" href="./style.css?v=202609161526">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='10' y='10' width='80' height='80' rx='16' fill='%230b0715'/><path d='M25 68V32h13v24h24V32h13v36z' fill='%2326e3ea'/></svg>">
 <script>
 (function () {
@@ -92,6 +92,37 @@
     </div>
     <div class="renderer-cards" id="rendererCards"></div>
     <p class="note" data-i18n="setup.note">This chooser encodes the trade-offs, not a hardware benchmark. Validate the result on the target device.</p>
+  </div>
+
+  <div class="panel lab" id="msaaLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="msaa.tag">INTERACTIVE · HOW MSAA WORKS</p><h3 data-i18n="msaa.h3">One pixel, several coverage tests</h3></div><span class="page-tag" data-i18n="msaa.pages">Book p. 36</span></div>
+    <p class="reason" data-i18n="msaa.intro">A pixel is still resolved to one final color. MSAA places several sample points inside it, asks which samples the triangle covers, stores coverage/depth per sample, then averages them at resolve.</p>
+    <div class="msaa-controls">
+      <div class="ctl-group"><span class="ctl-label" data-i18n="msaa.samples">SAMPLES PER PIXEL</span><div class="seg" id="msaaSamples"><button data-samples="1" aria-pressed="false">1×</button><button data-samples="2" aria-pressed="false">2×</button><button data-samples="4" aria-pressed="true">4×</button><button data-samples="8" aria-pressed="false">8×</button></div></div>
+      <label><span data-i18n="msaa.move">Move the triangle edge</span> <output id="msaaEdgeOut">50%</output><input id="msaaEdge" type="range" min="0" max="100" value="50"></label>
+      <div class="ctl-group"><span class="ctl-label" data-i18n="msaa.problem">WHAT IS ALIASING?</span><div class="seg" id="msaaProblem"><button data-problem="geometry" aria-pressed="true" data-i18n="msaa.geometry">Geometry edge</button><button data-problem="alpha" aria-pressed="false" data-i18n="msaa.alpha">Cutout foliage</button><button data-problem="shader" aria-pressed="false" data-i18n="msaa.shader">Shader shimmer</button></div></div>
+    </div>
+    <div class="msaa-layout">
+      <div class="crt msaa-stage"><canvas id="msaaCanvas" data-i18n-aria="msaa.canvas"></canvas><div class="crt-osd"><span data-i18n="msaa.raster">RASTERIZER · COVERAGE MASK</span><span class="rec" id="msaaMode">4× MSAA</span></div></div>
+      <div class="msaa-readout">
+        <span class="verdict" id="msaaVerdict"></span>
+        <h4 id="msaaProblemTitle"></h4>
+        <p id="msaaProblemCopy"></p>
+        <div class="sample-mask" id="msaaMask" data-i18n-aria="msaa.maskAria"></div>
+        <p class="resolve-copy" id="msaaResolve"></p>
+      </div>
+    </div>
+    <div class="stats c4" id="msaaStats"></div>
+    <div class="three compact msaa-flow">
+      <div><b data-i18n="msaa.step1h">1 · COVERAGE</b><p data-i18n="msaa.step1p">Rasterization tests every sample position against the triangle edge.</p></div>
+      <div><b data-i18n="msaa.step2h">2 · STORE</b><p data-i18n="msaa.step2p">Color, depth and stencil can carry multiple samples for edge pixels.</p></div>
+      <div><b data-i18n="msaa.step3h">3 · RESOLVE</b><p data-i18n="msaa.step3p">Covered and uncovered samples are averaged into one display pixel.</p></div>
+    </div>
+    <div class="two even msaa-tradeoffs">
+      <div class="facts"><div><span class="k save" data-i18n="msaa.prosH">Where MSAA wins</span><p data-i18n="msaa.prosP">Sharp geometric edges, stable VR images and little temporal ghosting. Forward and Forward+ support it in URP.</p></div></div>
+      <div class="facts"><div><span class="k cost" data-i18n="msaa.consH">What you pay</span><p data-i18n="msaa.consP">More multisampled color/depth memory, bandwidth and resolve work. Deferred does not support MSAA in URP.</p></div></div>
+    </div>
+    <p class="note" data-i18n="msaa.note">The memory number below estimates RGBA8 color + 32-bit depth at 1920×1080. Real cost depends on the GPU, formats, tile memory and enabled buffers. Fragment shading is not automatically multiplied by the sample count unless per-sample shading is used.</p>
   </div>
 
   <div class="two even">
@@ -332,6 +363,6 @@
 </main>
 
 <footer><span class="stop" data-i18n="foot.end">■ END OF TAPE</span><p data-i18n="foot.copy">Condensed from Unity’s 2024 e-book <i>Introduction to the Universal Render Pipeline for advanced Unity creators — Unity 6 edition</i>. Teaching estimates on this page are not performance measurements.</p></footer>
-<script type="module" src="./page.js?v=202609161139"></script>
+<script type="module" src="./page.js?v=202609161526"></script>
 </body>
 </html>
