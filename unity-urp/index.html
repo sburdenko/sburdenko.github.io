@@ -4,14 +4,38 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0b0715">
-<title>URP Field Guide · Unity 6 · Tape 04</title>
+<title data-i18n="page.title">URP Field Guide · Unity 6 · Tape 04</title>
 <meta name="description" content="A concise interactive guide to Unity 6 URP: renderer paths, lighting, probes, shaders, Render Graph, post-processing and performance.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
-<link rel="stylesheet" href="../assets/vhs.css?v=202609161105">
-<link rel="stylesheet" href="./style.css?v=202609161105">
+<link rel="stylesheet" href="../assets/vhs.css?v=202609161139">
+<link rel="stylesheet" href="./style.css?v=202609161139">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='10' y='10' width='80' height='80' rx='16' fill='%230b0715'/><path d='M25 68V32h13v24h24V32h13v36z' fill='%2326e3ea'/></svg>">
+<script>
+(function () {
+  var shown = false;
+  function report(what) {
+    if (shown) return;
+    shown = true;
+    var box = document.createElement('div');
+    box.setAttribute('role', 'alert');
+    box.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99;padding:12px 16px;' +
+      'background:#ff5c6c;color:#1a0009;font:600 13px/1.5 ui-monospace,Menlo,Consolas,monospace';
+    box.textContent = 'Scripts failed to load — press Cmd/Ctrl + Shift + R. ' +
+      'Скрипты не загрузились — обнови страницу с Cmd/Ctrl + Shift + R. [' + what + ']';
+    (document.body || document.documentElement).appendChild(box);
+  }
+  addEventListener('error', function (event) {
+    var element = event.target;
+    if (element && (element.tagName === 'SCRIPT' || element.tagName === 'LINK')) report(element.src || element.href);
+    else report(event.message || 'script error');
+  }, true);
+  addEventListener('unhandledrejection', function (event) {
+    report(String((event.reason && event.reason.message) || event.reason));
+  });
+})();
+</script>
 </head>
 <body>
 <div class="fx fx-scan" aria-hidden="true"></div>
@@ -20,64 +44,64 @@
 <div class="fx fx-track" aria-hidden="true"></div>
 <canvas id="noise" width="160" height="90" aria-hidden="true"></canvas>
 
-<header class="osd" aria-label="Tape navigation">
-  <div class="l"><a class="home" href="../">◀ SHELF</a><span class="play">PLAY ►</span><span class="ch" id="osdCh">CH.00 MAP</span></div>
-  <div class="r"><nav id="osdNav" aria-label="Chapters"></nav><span>SP</span><span class="ctr" id="osdCtr">0:00:00</span></div>
+<header class="osd" data-i18n-aria="osd.bar">
+  <div class="l"><a class="home" href="../" data-i18n="osd.shelf">◀ SHELF</a><span class="play">PLAY ►</span><span class="ch" id="osdCh">CH.00 MAP</span></div>
+  <div class="r"><nav id="osdNav" data-i18n-aria="osd.nav"></nav><div class="seg lang" id="langSeg" role="group" data-i18n-aria="osd.lang"><button data-l="en" aria-pressed="true">EN</button><button data-l="ru" aria-pressed="false">RU</button></div><span>SP</span><span class="ctr" id="osdCtr">0:00:00</span></div>
 </header>
 
 <main>
 <section class="hero chapter" id="map" data-ch="CH.00 MAP" style="padding-top:56px">
-  <p class="eyebrow">Tape 04 · Unity 6 · 189 pages compressed</p>
-  <h1 class="title">URP<span class="title-2">the frame, from asset to pixels</span></h1>
-  <p class="kicker">The book becomes useful when its settings form one mental model: a <b>URP Asset</b> sets the budget, a <b>Renderer</b> decides the path, passes produce buffers, shaders turn those buffers into pixels, and profiling tells you which choice actually hurts.</p>
+  <p class="eyebrow" data-i18n="hero.eyebrow">Tape 04 · Unity 6 · 189 pages compressed</p>
+  <h1 class="title">URP<span class="title-2" data-i18n="hero.subtitle">the frame, from asset to pixels</span></h1>
+  <p class="kicker" data-i18n="hero.lede">The book becomes useful when its settings form one mental model: a <b>URP Asset</b> sets the budget, a <b>Renderer</b> decides the path, passes produce buffers, shaders turn those buffers into pixels, and profiling tells you which choice actually hurts.</p>
 
-  <div class="frame-map" aria-label="URP frame map">
-    <a href="#setup"><span>01</span><b>URP Asset</b><small>quality + renderer</small></a>
-    <i>→</i><a href="#lighting"><span>02</span><b>Lighting</b><small>shadows + modes</small></a>
-    <i>→</i><a href="#shaders"><span>04</span><b>Shaders</b><small>materials → passes</small></a>
-    <i>→</i><a href="#render-graph"><span>05</span><b>Render Graph</b><small>passes + resources</small></a>
-    <i>→</i><a href="#post"><span>06</span><b>Final image</b><small>volumes + cameras</small></a>
+  <div class="frame-map" data-i18n-aria="map.aria">
+    <a href="#setup"><span>01</span><b>URP Asset</b><small data-i18n="map.asset">quality + renderer</small></a>
+    <i>→</i><a href="#lighting"><span>02</span><b data-i18n="map.lightTitle">Lighting</b><small data-i18n="map.light">shadows + modes</small></a>
+    <i>→</i><a href="#shaders"><span>04</span><b data-i18n="map.shaderTitle">Shaders</b><small data-i18n="map.shader">materials → passes</small></a>
+    <i>→</i><a href="#render-graph"><span>05</span><b>Render Graph</b><small data-i18n="map.graph">passes + resources</small></a>
+    <i>→</i><a href="#post"><span>06</span><b data-i18n="map.finalTitle">Final image</b><small data-i18n="map.final">volumes + cameras</small></a>
   </div>
 
   <div class="three takeaways">
-    <article><span class="n">1</span><h3>Choose by constraints</h3><p>MSAA, light count, transparency, memory and target hardware decide the renderer. There is no universally best path.</p></article>
-    <article><span class="n">2</span><h3>Pay only for what you use</h3><p>Shadow distance, depth texture, opaque texture, extra lights and full-screen passes are budget decisions.</p></article>
-    <article><span class="n">3</span><h3>Measure the actual frame</h3><p>Frame Debugger explains the draw sequence. Profiler tells you where the time goes. Use both before cutting quality.</p></article>
+    <article><span class="n">1</span><h3 data-i18n="hero.take1h">Choose by constraints</h3><p data-i18n="hero.take1p">MSAA, light count, transparency, memory and target hardware decide the renderer. There is no universally best path.</p></article>
+    <article><span class="n">2</span><h3 data-i18n="hero.take2h">Pay only for what you use</h3><p data-i18n="hero.take2p">Shadow distance, depth texture, opaque texture, extra lights and full-screen passes are budget decisions.</p></article>
+    <article><span class="n">3</span><h3 data-i18n="hero.take3h">Measure the actual frame</h3><p data-i18n="hero.take3p">Frame Debugger explains the draw sequence. Profiler tells you where the time goes. Use both before cutting quality.</p></article>
   </div>
-  <p class="source-line">Source map · Unity 6 URP e-book · Introduction and contents · pages 7–188</p>
+  <p class="source-line" data-i18n="hero.source">Source map · Unity 6 URP e-book · Introduction and contents · pages 7–188</p>
 </section>
 
 <section class="chapter" id="setup" data-ch="CH.01 PATH">
   <div class="ch-head">
     <p class="osdtag">CH.01 // SETUP &amp; RENDERER PATH</p>
-    <h2>Choose the path before tuning the pixels</h2>
-    <p class="kicker">The URP Asset is the global quality contract. The Renderer Data asset defines how the frame is built. Quality levels can point at different URP Assets, so mobile and desktop do not need the same settings.</p>
+    <h2 data-i18n="setup.h2">Choose the path before tuning the pixels</h2>
+    <p class="kicker" data-i18n="setup.kicker">The URP Asset is the global quality contract. The Renderer Data asset defines how the frame is built. Quality levels can point at different URP Assets, so mobile and desktop do not need the same settings.</p>
   </div>
 
   <div class="panel lab" id="rendererLab">
-    <div class="lab-head"><div><p class="lbl">INTERACTIVE · RENDERER CHOOSER</p><h3>Describe one camera</h3></div><span class="page-tag">Book pp. 27–36</span></div>
+    <div class="lab-head"><div><p class="lbl" data-i18n="setup.labTag">INTERACTIVE · RENDERER CHOOSER</p><h3 data-i18n="setup.labH">Describe one camera</h3></div><span class="page-tag" data-i18n="setup.pages">Book pp. 27–36</span></div>
     <div class="control-grid">
-      <label>Visible real-time lights <output id="lightOut">18</output><input id="lightCount" type="range" min="1" max="80" value="18"></label>
-      <label>Transparent screen area <output id="transparentOut">20%</output><input id="transparent" type="range" min="0" max="80" value="20"></label>
-      <div class="ctl-group"><span class="ctl-label">TARGET</span><div class="seg" id="targetSeg"><button data-v="desktop" aria-pressed="true">Desktop</button><button data-v="mobile" aria-pressed="false">Mobile / XR</button></div></div>
-      <button class="tg" id="msaaToggle" aria-pressed="true">MSAA required</button>
+      <label><span data-i18n="setup.lights">Visible real-time lights</span> <output id="lightOut">18</output><input id="lightCount" type="range" min="1" max="80" value="18"></label>
+      <label><span data-i18n="setup.transparent">Transparent screen area</span> <output id="transparentOut">20%</output><input id="transparent" type="range" min="0" max="80" value="20"></label>
+      <div class="ctl-group"><span class="ctl-label" data-i18n="setup.target">TARGET</span><div class="seg" id="targetSeg"><button data-v="desktop" aria-pressed="true" data-i18n="setup.desktop">Desktop</button><button data-v="mobile" aria-pressed="false" data-i18n="setup.mobile">Mobile / XR</button></div></div>
+      <button class="tg" id="msaaToggle" aria-pressed="true" data-i18n="setup.msaa">MSAA required</button>
     </div>
     <div class="renderer-result">
-      <div class="signal-screen"><span class="signal-label">RECOMMENDED START</span><strong id="rendererName">Forward+</strong><p id="rendererIdea"></p></div>
+      <div class="signal-screen"><span class="signal-label" data-i18n="setup.recommended">RECOMMENDED START</span><strong id="rendererName">Forward+</strong><p id="rendererIdea"></p></div>
       <div><p id="rendererReason" class="reason"></p><div class="score-bars" id="rendererScores"></div></div>
     </div>
     <div class="renderer-cards" id="rendererCards"></div>
-    <p class="note">This chooser encodes the trade-offs, not a hardware benchmark. Validate the result on the target device.</p>
+    <p class="note" data-i18n="setup.note">This chooser encodes the trade-offs, not a hardware benchmark. Validate the result on the target device.</p>
   </div>
 
   <div class="two even">
     <div class="facts">
-      <div><span class="k need">Migration order</span><p>Commit or back up → install URP → create URP Asset and Renderer → assign it in Graphics/Quality → run Render Pipeline Converter → inspect custom shaders and every important scene.</p></div>
-      <div><span class="k cost">Why source control first</span><p>Material and asset conversion changes files and has no single Undo button. A clean commit is the rollback plan.</p></div>
+      <div><span class="k need" data-i18n="setup.migrationH">Migration order</span><p data-i18n="setup.migrationP">Commit or back up → install URP → create URP Asset and Renderer → assign it in Graphics/Quality → run Render Pipeline Converter → inspect custom shaders and every important scene.</p></div>
+      <div><span class="k cost" data-i18n="setup.sourceH">Why source control first</span><p data-i18n="setup.sourceP">Material and asset conversion changes files and has no single Undo button. A clean commit is the rollback plan.</p></div>
     </div>
     <div class="facts">
-      <div><span class="k save">Forward+</span><p>Spatially clusters lights, keeps MSAA and camera stacking, and is the path required by the GPU Resident Drawer.</p></div>
-      <div><span class="k cost">Deferred</span><p>Handles many opaque lit pixels well, but spends memory on G-buffers, does not support MSAA, and still renders transparents forward.</p></div>
+      <div><span class="k save">Forward+</span><p data-i18n="setup.fp">Spatially clusters lights, keeps MSAA and camera stacking, and is the path required by the GPU Resident Drawer.</p></div>
+      <div><span class="k cost">Deferred</span><p data-i18n="setup.deferred">Handles many opaque lit pixels well, but spends memory on G-buffers, does not support MSAA, and still renders transparents forward.</p></div>
     </div>
   </div>
 </section>
@@ -85,31 +109,31 @@
 <section class="chapter" id="lighting" data-ch="CH.02 LIGHT">
   <div class="ch-head">
     <p class="osdtag">CH.02 // LIGHTING &amp; SHADOWS</p>
-    <h2>A shadow map is a fixed sheet you keep stretching</h2>
-    <p class="kicker">Resolution alone does not make a shadow sharp. Distance spreads the same map over more world space; cascades redistribute it; every shadowed light renders more geometry.</p>
+    <h2 data-i18n="light.h2">A shadow map is a fixed sheet you keep stretching</h2>
+    <p class="kicker" data-i18n="light.kicker">Resolution alone does not make a shadow sharp. Distance spreads the same map over more world space; cascades redistribute it; every shadowed light renders more geometry.</p>
   </div>
 
   <div class="panel lab" id="shadowLab">
-    <div class="lab-head"><div><p class="lbl">INTERACTIVE · SHADOW BUDGET</p><h3>Spend the atlas deliberately</h3></div><span class="page-tag">Book pp. 42–47</span></div>
+    <div class="lab-head"><div><p class="lbl" data-i18n="light.labTag">INTERACTIVE · SHADOW BUDGET</p><h3 data-i18n="light.labH">Spend the atlas deliberately</h3></div><span class="page-tag" data-i18n="light.pages">Book pp. 42–47</span></div>
     <div class="shadow-layout">
       <div class="controls-stack">
-        <label>Shadow distance <output id="distanceOut">60 m</output><input id="shadowDistance" type="range" min="10" max="200" step="10" value="60"></label>
-        <label>Map resolution <output id="resolutionOut">2048</output><input id="shadowResolution" type="range" min="8" max="12" value="11"></label>
-        <label>Cascades <output id="cascadeOut">2</output><input id="cascades" type="range" min="1" max="4" value="2"></label>
-        <label>Shadowed Spot Lights <output id="spotOut">1</output><input id="spotLights" type="range" min="0" max="6" value="1"></label>
-        <label>Shadowed Point Lights <output id="pointOut">0</output><input id="pointLights" type="range" min="0" max="3" value="0"></label>
-        <button class="tg" id="softToggle" aria-pressed="true">Soft shadows</button>
+        <label><span data-i18n="light.distance">Shadow distance</span> <output id="distanceOut">60 m</output><input id="shadowDistance" type="range" min="10" max="200" step="10" value="60"></label>
+        <label><span data-i18n="light.resolution">Map resolution</span> <output id="resolutionOut">2048</output><input id="shadowResolution" type="range" min="8" max="12" value="11"></label>
+        <label><span data-i18n="light.cascades">Cascades</span> <output id="cascadeOut">2</output><input id="cascades" type="range" min="1" max="4" value="2"></label>
+        <label><span data-i18n="light.spots">Shadowed Spot Lights</span> <output id="spotOut">1</output><input id="spotLights" type="range" min="0" max="6" value="1"></label>
+        <label><span data-i18n="light.points">Shadowed Point Lights</span> <output id="pointOut">0</output><input id="pointLights" type="range" min="0" max="3" value="0"></label>
+        <button class="tg" id="softToggle" aria-pressed="true" data-i18n="light.soft">Soft shadows</button>
       </div>
-      <div class="crt shadow-stage"><canvas id="shadowCanvas" aria-label="Shadow distance and cascade visualization"></canvas><div class="crt-osd"><span>CAMERA → SHADOW FRUSTUM</span><span class="rec" id="shadowQuality">BALANCED</span></div></div>
+      <div class="crt shadow-stage"><canvas id="shadowCanvas" data-i18n-aria="light.canvas"></canvas><div class="crt-osd"><span data-i18n="light.frustum">CAMERA → SHADOW FRUSTUM</span><span class="rec" id="shadowQuality">BALANCED</span></div></div>
     </div>
     <div class="stats c4" id="shadowStats"></div>
     <p class="reason" id="shadowAdvice"></p>
   </div>
 
   <div class="mode-switcher panel" id="lightModes">
-    <div class="lab-head"><div><p class="lbl">INTERACTIVE · LIGHT MODES</p><h3>What changes at runtime?</h3></div><span class="page-tag">Book pp. 48–54</span></div>
-    <div class="seg" role="group" aria-label="Lighting mode"><button data-v="realtime" aria-pressed="true">Realtime</button><button data-v="mixed" aria-pressed="false">Mixed</button><button data-v="baked" aria-pressed="false">Baked</button></div>
-    <div class="light-mode-scene"><div class="sun">☀</div><div class="static-block">STATIC</div><div class="dynamic-ball">DYNAMIC</div><div class="mode-rays"></div></div>
+    <div class="lab-head"><div><p class="lbl" data-i18n="modes.labTag">INTERACTIVE · LIGHT MODES</p><h3 data-i18n="modes.labH">What changes at runtime?</h3></div><span class="page-tag" data-i18n="modes.pages">Book pp. 48–54</span></div>
+    <div class="seg" role="group" data-i18n-aria="modes.aria"><button data-v="realtime" aria-pressed="true" data-i18n="modes.realtime">Realtime</button><button data-v="mixed" aria-pressed="false" data-i18n="modes.mixed">Mixed</button><button data-v="baked" aria-pressed="false" data-i18n="modes.baked">Baked</button></div>
+    <div class="light-mode-scene"><div class="sun">☀</div><div class="static-block" data-i18n="modes.static">STATIC</div><div class="dynamic-ball" data-i18n="modes.dynamic">DYNAMIC</div><div class="mode-rays"></div></div>
     <div class="three compact" id="modeFacts"></div>
   </div>
 </section>
@@ -117,55 +141,55 @@
 <section class="chapter" id="probes" data-ch="CH.03 PROBES">
   <div class="ch-head">
     <p class="osdtag">CH.03 // PROBES, APV &amp; REFLECTIONS</p>
-    <h2>Baked worlds still need moving objects to belong</h2>
-    <p class="kicker">Lightmaps illuminate static surfaces. Light Probes and APVs give dynamic objects sampled indirect light. Reflection Probes provide a local cubemap for shiny surfaces. These solve different missing data.</p>
+    <h2 data-i18n="probes.h2">Baked worlds still need moving objects to belong</h2>
+    <p class="kicker" data-i18n="probes.kicker">Lightmaps illuminate static surfaces. Light Probes and APVs give dynamic objects sampled indirect light. Reflection Probes provide a local cubemap for shiny surfaces. These solve different missing data.</p>
   </div>
 
   <div class="panel lab" id="probeLab">
-    <div class="lab-head"><div><p class="lbl">INTERACTIVE · PROBE INTERPOLATION</p><h3>Move the dynamic object through baked light</h3></div><span class="page-tag">Book pp. 58–81</span></div>
+    <div class="lab-head"><div><p class="lbl" data-i18n="probes.labTag">INTERACTIVE · PROBE INTERPOLATION</p><h3 data-i18n="probes.labH">Move the dynamic object through baked light</h3></div><span class="page-tag" data-i18n="probes.pages">Book pp. 58–81</span></div>
     <div class="probe-layout">
-      <div class="crt"><canvas id="probeCanvas" aria-label="Movable object interpolating light probes"></canvas><div class="crt-osd"><span>BAKED PROBES</span><span class="rec" id="probeReadout">RGB 0 · 0 · 0</span></div></div>
+      <div class="crt"><canvas id="probeCanvas" data-i18n-aria="probes.canvas"></canvas><div class="crt-osd"><span data-i18n="probes.baked">BAKED PROBES</span><span class="rec" id="probeReadout">RGB 0 · 0 · 0</span></div></div>
       <div class="controls-stack">
-        <label>Object position <output id="objectOut">50%</output><input id="objectPosition" type="range" min="5" max="95" value="50"></label>
-        <label>Lighting scenario <output id="timeOut">DAY</output><input id="timeBlend" type="range" min="0" max="100" value="15"></label>
+        <label><span data-i18n="probes.position">Object position</span> <output id="objectOut">50%</output><input id="objectPosition" type="range" min="5" max="95" value="50"></label>
+        <label><span data-i18n="probes.scenario">Lighting scenario</span> <output id="timeOut">DAY</output><input id="timeBlend" type="range" min="0" max="100" value="15"></label>
         <div class="checks">
-          <button class="check" data-probe="dynamic" aria-pressed="true"><span>Dynamic objects</span><span class="sw">YES</span></button>
-          <button class="check" data-probe="large" aria-pressed="false"><span>Large / streamed world</span><span class="sw">NO</span></button>
-          <button class="check" data-probe="changing" aria-pressed="true"><span>Day/night states</span><span class="sw">YES</span></button>
+          <button class="check" data-probe="dynamic" aria-pressed="true"><span data-i18n="probes.dynamic">Dynamic objects</span><span class="sw">YES</span></button>
+          <button class="check" data-probe="large" aria-pressed="false"><span data-i18n="probes.large">Large / streamed world</span><span class="sw">NO</span></button>
+          <button class="check" data-probe="changing" aria-pressed="true"><span data-i18n="probes.changing">Day/night states</span><span class="sw">YES</span></button>
         </div>
-        <div class="probe-answer"><span class="lbl">START WITH</span><strong id="probeChoice">Adaptive Probe Volumes</strong><p id="probeWhy"></p><small id="probeWatch"></small></div>
+        <div class="probe-answer"><span class="lbl" data-i18n="probes.start">START WITH</span><strong id="probeChoice">Adaptive Probe Volumes</strong><p id="probeWhy"></p><small id="probeWatch"></small></div>
       </div>
     </div>
   </div>
 
   <div class="three concept-grid">
-    <article><h3>Lightmaps</h3><p>Best data for static surfaces. Cheap at runtime, but baked direct light loses real-time specular response.</p></article>
-    <article><h3>Light Probes / APV</h3><p>Spherical-harmonic lighting sampled in space and interpolated for moving renderers.</p></article>
-    <article><h3>Reflection Probes</h3><p>Local cubemaps for environment reflections. Use the smallest resolution that survives the closest camera view.</p></article>
+    <article><h3>Lightmaps</h3><p data-i18n="probes.lightmaps">Best data for static surfaces. Cheap at runtime, but baked direct light loses real-time specular response.</p></article>
+    <article><h3>Light Probes / APV</h3><p data-i18n="probes.lightProbes">Spherical-harmonic lighting sampled in space and interpolated for moving renderers.</p></article>
+    <article><h3>Reflection Probes</h3><p data-i18n="probes.reflections">Local cubemaps for environment reflections. Use the smallest resolution that survives the closest camera view.</p></article>
   </div>
 </section>
 
 <section class="chapter" id="shaders" data-ch="CH.04 SHADERS">
   <div class="ch-head">
     <p class="osdtag">CH.04 // SHADERS</p>
-    <h2>A shader is a contract with the pipeline</h2>
-    <p class="kicker">URP shader code uses HLSL and URP includes. A useful shader is more than its visible color: passes and tags tell URP when it participates in depth, lighting and shadows.</p>
+    <h2 data-i18n="shader.h2">A shader is a contract with the pipeline</h2>
+    <p class="kicker" data-i18n="shader.kicker">URP shader code uses HLSL and URP includes. A useful shader is more than its visible color: passes and tags tell URP when it participates in depth, lighting and shadows.</p>
   </div>
 
   <div class="panel shader-lab" id="shaderLab">
-    <div class="lab-head"><div><p class="lbl">INTERACTIVE · SHADER ANATOMY</p><h3>Select a pass to see what disappears without it</h3></div><span class="page-tag">Book pp. 93–104</span></div>
+    <div class="lab-head"><div><p class="lbl" data-i18n="shader.labTag">INTERACTIVE · SHADER ANATOMY</p><h3 data-i18n="shader.labH">Select a pass to see what disappears without it</h3></div><span class="page-tag" data-i18n="shader.pages">Book pp. 93–104</span></div>
     <div class="shader-layout">
       <div class="shader-object"><div class="orb"></div><div class="ground-shadow"></div><span id="shaderPreviewLabel">LIT · SHADOWS ON</span></div>
       <div class="shader-passes" id="shaderPasses">
-        <button data-pass="forward" aria-pressed="true"><b>UniversalForward</b><span>Draw the visible lit surface</span></button>
-        <button data-pass="shadow" aria-pressed="true"><b>ShadowCaster</b><span>Write depth from the light</span></button>
-        <button data-pass="depth" aria-pressed="true"><b>DepthOnly</b><span>Participate in depth-based effects</span></button>
+        <button data-pass="forward" aria-pressed="true"><b>UniversalForward</b><span data-i18n="shader.forward">Draw the visible lit surface</span></button>
+        <button data-pass="shadow" aria-pressed="true"><b>ShadowCaster</b><span data-i18n="shader.shadow">Write depth from the light</span></button>
+        <button data-pass="depth" aria-pressed="true"><b>DepthOnly</b><span data-i18n="shader.depth">Participate in depth-based effects</span></button>
       </div>
     </div>
     <div class="shader-code" id="shaderCode"></div>
     <div class="two even">
-      <p class="reason"><b>Lit</b> uses physically based lighting and supports more material features. <b>Simple Lit</b> trades some fidelity for a cheaper shading model.</p>
-      <p class="reason"><b>Shader Graph</b> is the artist-facing authoring tool. Handwritten HLSL remains useful when you need exact control, reusable includes, or a custom Renderer Feature.</p>
+      <p class="reason" data-i18n="shader.lit"><b>Lit</b> uses physically based lighting and supports more material features. <b>Simple Lit</b> trades some fidelity for a cheaper shading model.</p>
+      <p class="reason" data-i18n="shader.graph"><b>Shader Graph</b> is the artist-facing authoring tool. Handwritten HLSL remains useful when you need exact control, reusable includes, or a custom Renderer Feature.</p>
     </div>
   </div>
 </section>
@@ -173,45 +197,69 @@
 <section class="chapter" id="render-graph" data-ch="CH.05 GRAPH">
   <div class="ch-head">
     <p class="osdtag">CH.05 // RENDERER FEATURES &amp; RENDER GRAPH</p>
-    <h2>The frame is a dependency graph, not a pile of callbacks</h2>
-    <p class="kicker">Each pass declares what it reads and writes. Render Graph can derive resource lifetimes, reuse transient memory and remove work whose result nobody consumes.</p>
+    <h2 data-i18n="graph.h2">The frame is a dependency graph, not a pile of callbacks</h2>
+    <p class="kicker" data-i18n="graph.kicker">Each pass declares what it reads and writes. Render Graph can derive resource lifetimes, reuse transient memory and remove work whose result nobody consumes.</p>
   </div>
 
   <div class="panel lab" id="graphLab">
-    <div class="lab-head"><div><p class="lbl">INTERACTIVE · FRAME GRAPH</p><h3>Turn features into passes and buffers</h3></div><span class="page-tag">Book pp. 105–121</span></div>
-    <div class="ctl-row">
-      <button class="tg graph-toggle" data-feature="ssao" aria-pressed="true">SSAO</button>
-      <button class="tg graph-toggle" data-feature="decals" aria-pressed="true">Decals</button>
-      <button class="tg graph-toggle" data-feature="bloom" aria-pressed="true">Bloom</button>
+    <div class="lab-head"><div><p class="lbl" data-i18n="graph.labTag">INTERACTIVE · FRAME GRAPH</p><h3 data-i18n="graph.labH">Build, compile, then execute one frame</h3></div><span class="page-tag" data-i18n="graph.pages">Book pp. 105–121</span></div>
+    <div class="graph-toolbar">
+      <div class="ctl-group"><span class="ctl-label" data-i18n="graph.phase">PHASE</span><div class="seg" id="graphPhaseSeg"><button data-phase="setup" aria-pressed="true" data-i18n="graph.setup">1 · Setup</button><button data-phase="compile" aria-pressed="false" data-i18n="graph.compile">2 · Compile</button><button data-phase="execute" aria-pressed="false" data-i18n="graph.execute">3 · Execute</button></div></div>
+      <div class="ctl-group"><span class="ctl-label" data-i18n="graph.features">FEATURES DECLARED THIS FRAME</span><div class="ctl-row">
+        <button class="tg graph-toggle" data-feature="ssao" aria-pressed="true">SSAO</button>
+        <button class="tg graph-toggle" data-feature="decals" aria-pressed="true">Decals</button>
+        <button class="tg graph-toggle" data-feature="bloom" aria-pressed="true">Bloom</button>
+        <button class="tg graph-toggle" data-feature="debug" aria-pressed="false" data-i18n="graph.unused">Unused debug output</button>
+      </div></div>
     </div>
-    <div class="frame-graph" id="frameGraph"></div>
+    <div class="graph-phase-copy" id="graphPhaseCopy" aria-live="polite"></div>
+    <div class="stats c4" id="graphStats"></div>
+    <div class="frame-graph" id="frameGraph" aria-live="polite"></div>
+    <div class="graph-transport" id="graphTransport">
+      <button class="btn" id="graphPrev" data-i18n-aria="graph.prev">◀</button>
+      <input id="graphStep" type="range" min="0" max="0" value="0" data-i18n-aria="graph.stepAria">
+      <button class="btn" id="graphNext" data-i18n-aria="graph.next">▶</button>
+      <span id="graphStepLabel" class="lbl"></span>
+    </div>
+    <div class="graph-focus" id="graphFocus" aria-live="polite"></div>
     <div class="resource-table" id="resourceTable"></div>
-    <p class="note">The exact URP frame is more complex. This reduced graph shows the important contract: declare reads and writes, then let the graph own transient resources.</p>
+    <div class="graph-legend"><span><i class="life-cell born"></i><b data-i18n="graph.allocate">allocate</b></span><span><i class="life-cell alive"></i><b data-i18n="graph.live">live</b></span><span><i class="life-cell release"></i><b data-i18n="graph.release">last use / release</b></span><span><i class="life-cell access"></i><b data-i18n="graph.access">current pass access</b></span></div>
+    <p class="note" data-i18n="graph.note">Render Graph is a code API, not a node editor. Unity’s Render Graph Viewer is the inspection window: Window → Analysis → Render Graph Viewer.</p>
   </div>
 
   <div class="two even">
-    <div class="facts"><div><span class="k need">Render Objects</span><p>A built-in Renderer Feature that filters objects by Layer Mask and can override material or render state at a chosen pipeline event.</p></div></div>
-    <div class="facts"><div><span class="k save">Custom Renderer Feature</span><p>The right seam for a custom pass. Record it through Render Graph instead of hiding render lifecycle work in unrelated scripts.</p></div></div>
+    <div class="facts"><div><span class="k need">Render Objects</span><p data-i18n="graph.renderObjects">A built-in Renderer Feature that filters objects by Layer Mask and can override material or render state at a chosen pipeline event.</p></div></div>
+    <div class="facts"><div><span class="k save" data-i18n="graph.customH">Custom Renderer Feature</span><p data-i18n="graph.customP">The right seam for a custom pass. Record it through Render Graph instead of hiding render lifecycle work in unrelated scripts.</p></div></div>
+  </div>
+
+  <div class="panel lab merge-lab" id="mergeLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="merge.tag">INTERACTIVE · MOBILE PASS MERGING</p><h3 data-i18n="merge.h3">Sample a texture, or fetch the current framebuffer?</h3></div><span class="page-tag" data-i18n="merge.pages">Book pp. 117–120</span></div>
+    <div class="merge-layout">
+      <button class="tg" id="fetchToggle" aria-pressed="false" data-i18n="merge.toggle">Use Framebuffer Fetch</button>
+      <div class="merge-track" id="mergeTrack"></div>
+      <div class="merge-result"><strong id="mergeResult"></strong><p id="mergeReason"></p></div>
+    </div>
+    <p class="note" data-i18n="merge.note">On supported Vulkan, Metal and DirectX 12 mobile targets, input attachments can keep data in tile memory. Unsupported platforms fall back to texture sampling.</p>
   </div>
 </section>
 
 <section class="chapter" id="post" data-ch="CH.06 POST">
   <div class="ch-head">
     <p class="osdtag">CH.06 // POST-PROCESSING &amp; CAMERAS</p>
-    <h2>Volumes describe intent; cameras decide where it applies</h2>
-    <p class="kicker">A Global Volume affects every eligible camera. A Local Volume blends by position. Camera stacking composes a Base camera with Overlay cameras, useful for UI or a cockpit layer.</p>
+    <h2 data-i18n="post.h2">Volumes describe intent; cameras decide where it applies</h2>
+    <p class="kicker" data-i18n="post.kicker">A Global Volume affects every eligible camera. A Local Volume blends by position. Camera stacking composes a Base camera with Overlay cameras, useful for UI or a cockpit layer.</p>
   </div>
 
   <div class="panel lab" id="postLab">
-    <div class="lab-head"><div><p class="lbl">INTERACTIVE · VOLUME BLEND</p><h3>Move the camera into a local volume</h3></div><span class="page-tag">Book pp. 122–137</span></div>
+    <div class="lab-head"><div><p class="lbl" data-i18n="post.labTag">INTERACTIVE · VOLUME BLEND</p><h3 data-i18n="post.labH">Move the camera into a local volume</h3></div><span class="page-tag" data-i18n="post.pages">Book pp. 122–137</span></div>
     <div class="post-layout">
-      <div class="post-preview" id="postPreview"><div class="sky"></div><div class="sun-dot"></div><div class="mountains"></div><div class="local-zone">LOCAL VOLUME</div><div class="camera-marker">CAM</div><div class="cockpit" id="cockpit">OVERLAY CAMERA · HUD</div></div>
+      <div class="post-preview" id="postPreview"><div class="sky"></div><div class="sun-dot"></div><div class="mountains"></div><div class="local-zone" data-i18n="post.local">LOCAL VOLUME</div><div class="camera-marker" data-i18n="post.cam">CAM</div><div class="cockpit" id="cockpit" data-i18n="post.overlayLabel">OVERLAY CAMERA · HUD</div></div>
       <div class="controls-stack">
-        <label>Camera position <output id="cameraOut">20%</output><input id="cameraPosition" type="range" min="0" max="100" value="20"></label>
+        <label><span data-i18n="post.position">Camera position</span> <output id="cameraOut">20%</output><input id="cameraPosition" type="range" min="0" max="100" value="20"></label>
         <button class="tg post-toggle" data-effect="bloom" aria-pressed="true">Bloom</button>
-        <button class="tg post-toggle" data-effect="grade" aria-pressed="true">Color grading</button>
-        <button class="tg post-toggle" data-effect="vignette" aria-pressed="false">Vignette</button>
-        <button class="tg" id="overlayToggle" aria-pressed="true">Overlay camera</button>
+        <button class="tg post-toggle" data-effect="grade" aria-pressed="true" data-i18n="post.grade">Color grading</button>
+        <button class="tg post-toggle" data-effect="vignette" aria-pressed="false" data-i18n="post.vignette">Vignette</button>
+        <button class="tg" id="overlayToggle" aria-pressed="true" data-i18n="post.overlay">Overlay camera</button>
         <p class="reason" id="postReadout"></p>
       </div>
     </div>
@@ -221,25 +269,25 @@
 <section class="chapter" id="unity6" data-ch="CH.07 UNITY 6">
   <div class="ch-head">
     <p class="osdtag">CH.07 // UNITY 6 FEATURES</p>
-    <h2>Render fewer pixels; prevent first-use stalls</h2>
-    <p class="kicker">Spatial-Temporal Post-Processing reconstructs a high-resolution image from a lower internal resolution. Pipeline State Object tracing and precooking move expensive driver work away from gameplay.</p>
+    <h2 data-i18n="u6.h2">Render fewer pixels; prevent first-use stalls</h2>
+    <p class="kicker" data-i18n="u6.kicker">Spatial-Temporal Post-Processing reconstructs a high-resolution image from a lower internal resolution. Pipeline State Object tracing and precooking move expensive driver work away from gameplay.</p>
   </div>
 
   <div class="two">
     <div class="panel lab" id="stpLab">
-      <div class="lab-head"><div><p class="lbl">INTERACTIVE · STP</p><h3>Internal resolution → output</h3></div><span class="page-tag">pp. 156–158</span></div>
-      <label>Render scale <output id="scaleOut">70%</output><input id="renderScale" type="range" min="40" max="100" value="70"></label>
-      <button class="tg" id="stpToggle" aria-pressed="true">STP reconstruction</button>
+      <div class="lab-head"><div><p class="lbl" data-i18n="stp.tag">INTERACTIVE · STP</p><h3 data-i18n="stp.h3">Internal resolution → output</h3></div><span class="page-tag" data-i18n="stp.pages">pp. 156–158</span></div>
+      <label><span data-i18n="stp.scale">Render scale</span> <output id="scaleOut">70%</output><input id="renderScale" type="range" min="40" max="100" value="70"></label>
+      <button class="tg" id="stpToggle" aria-pressed="true" data-i18n="stp.toggle">STP reconstruction</button>
       <div class="pixel-demo"><div class="internal-pixels" id="internalPixels"></div><span>→</span><div class="output-pixels">1920 × 1080</div></div>
       <div class="stats" id="stpStats"></div>
       <p class="reason" id="stpQuality"></p>
     </div>
     <div class="panel pso-lab" id="psoLab">
-      <div class="lab-head"><div><p class="lbl">INTERACTIVE · PSO WARMUP</p><h3>Where should compilation happen?</h3></div><span class="page-tag">pp. 159–162</span></div>
-      <div class="pso-track"><div class="pso-loading">LOADING</div><div class="pso-gameplay">GAMEPLAY</div><i id="psoSpike"></i></div>
-      <div class="seg" id="psoSeg"><button data-v="runtime" aria-pressed="true">First use</button><button data-v="sync" aria-pressed="false">Precook on load</button><button data-v="async" aria-pressed="false">Async warmup</button></div>
+      <div class="lab-head"><div><p class="lbl" data-i18n="pso.tag">INTERACTIVE · PSO WARMUP</p><h3 data-i18n="pso.h3">Where should compilation happen?</h3></div><span class="page-tag" data-i18n="pso.pages">pp. 159–162</span></div>
+      <div class="pso-track"><div class="pso-loading" data-i18n="pso.loading">LOADING</div><div class="pso-gameplay" data-i18n="pso.gameplay">GAMEPLAY</div><i id="psoSpike"></i></div>
+      <div class="seg" id="psoSeg"><button data-v="runtime" aria-pressed="true" data-i18n="pso.runtime">First use</button><button data-v="sync" aria-pressed="false" data-i18n="pso.sync">Precook on load</button><button data-v="async" aria-pressed="false" data-i18n="pso.async">Async warmup</button></div>
       <p class="reason" id="psoExplanation"></p>
-      <ol class="mini-steps"><li>Trace representative rendering.</li><li>Save the GraphicsStateCollection.</li><li>Warm synchronously, time-sliced, or asynchronously.</li></ol>
+      <ol class="mini-steps"><li data-i18n="pso.step1">Trace representative rendering.</li><li data-i18n="pso.step2">Save the GraphicsStateCollection.</li><li data-i18n="pso.step3">Warm synchronously, time-sliced, or asynchronously.</li></ol>
     </div>
   </div>
 </section>
@@ -247,55 +295,43 @@
 <section class="chapter" id="performance" data-ch="CH.08 PROFILE">
   <div class="ch-head">
     <p class="osdtag">CH.08 // PERFORMANCE</p>
-    <h2>Start with the symptom, then choose the tool</h2>
-    <p class="kicker">Optimization is a diagnosis loop: capture a representative frame, locate the limiting side, inspect the expensive work, change one cause, and measure again on target hardware.</p>
+    <h2 data-i18n="perf.h2">Start with the symptom, then choose the tool</h2>
+    <p class="kicker" data-i18n="perf.kicker">Optimization is a diagnosis loop: capture a representative frame, locate the limiting side, inspect the expensive work, change one cause, and measure again on target hardware.</p>
   </div>
 
   <div class="panel lab" id="diagnosticLab">
-    <div class="lab-head"><div><p class="lbl">INTERACTIVE · DIAGNOSTIC ROUTER</p><h3>What does the frame look like?</h3></div><span class="page-tag">Book pp. 163–174</span></div>
+    <div class="lab-head"><div><p class="lbl" data-i18n="perf.labTag">INTERACTIVE · DIAGNOSTIC ROUTER</p><h3 data-i18n="perf.labH">What does the frame look like?</h3></div><span class="page-tag" data-i18n="perf.pages">Book pp. 163–174</span></div>
     <div class="diagnostic-grid">
       <div class="checks" id="symptoms">
-        <button class="check" data-symptom="too-many-draws" aria-pressed="true"><span>Unexpectedly many draw calls</span><span class="sw">SELECT</span></button>
-        <button class="check" data-symptom="gpu-frame" aria-pressed="false"><span>GPU frame is too long</span><span class="sw">SELECT</span></button>
-        <button class="check" data-symptom="stutter" aria-pressed="false"><span>First-use hitch / stutter</span><span class="sw">SELECT</span></button>
-        <button class="check" data-symptom="overdraw" aria-pressed="false"><span>Transparency / full-screen overdraw</span><span class="sw">SELECT</span></button>
+        <button class="check" data-symptom="too-many-draws" aria-pressed="true"><span data-i18n="perf.draws">Unexpectedly many draw calls</span><span class="sw" data-i18n="perf.select">SELECT</span></button>
+        <button class="check" data-symptom="gpu-frame" aria-pressed="false"><span data-i18n="perf.gpu">GPU frame is too long</span><span class="sw" data-i18n="perf.select">SELECT</span></button>
+        <button class="check" data-symptom="stutter" aria-pressed="false"><span data-i18n="perf.stutter">First-use hitch / stutter</span><span class="sw" data-i18n="perf.select">SELECT</span></button>
+        <button class="check" data-symptom="overdraw" aria-pressed="false"><span data-i18n="perf.overdraw">Transparency / full-screen overdraw</span><span class="sw" data-i18n="perf.select">SELECT</span></button>
       </div>
-      <div class="diagnosis"><span class="lbl">OPEN FIRST</span><strong id="diagnosticTool">Frame Debugger</strong><p id="diagnosticFirst"></p><ol id="diagnosticActions"></ol></div>
+      <div class="diagnosis"><span class="lbl" data-i18n="perf.open">OPEN FIRST</span><strong id="diagnosticTool">Frame Debugger</strong><p id="diagnosticFirst"></p><ol id="diagnosticActions"></ol></div>
     </div>
   </div>
 
   <div class="priority-stack">
-    <div><b>1 · Remove invisible work</b><span>Occlusion, distance, unused textures and passes</span></div>
-    <div><b>2 · Reduce expensive work</b><span>Shadow maps, full-screen effects, real-time lights</span></div>
-    <div><b>3 · Improve submission</b><span>SRP Batcher, compatible materials, GPU Resident Drawer</span></div>
-    <div><b>4 · Reprofile</b><span>The bottleneck may move after every successful change</span></div>
+    <div><b data-i18n="perf.p1h">1 · Remove invisible work</b><span data-i18n="perf.p1p">Occlusion, distance, unused textures and passes</span></div>
+    <div><b data-i18n="perf.p2h">2 · Reduce expensive work</b><span data-i18n="perf.p2p">Shadow maps, full-screen effects, real-time lights</span></div>
+    <div><b data-i18n="perf.p3h">3 · Improve submission</b><span data-i18n="perf.p3p">SRP Batcher, compatible materials, GPU Resident Drawer</span></div>
+    <div><b data-i18n="perf.p4h">4 · Reprofile</b><span data-i18n="perf.p4p">The bottleneck may move after every successful change</span></div>
   </div>
 </section>
 
 <section class="chapter" id="cheat" data-ch="CH.09 CHEAT">
-  <div class="ch-head"><p class="osdtag">CH.09 // THE BOOK IN ONE TABLE</p><h2>Decision sheet</h2></div>
+  <div class="ch-head"><p class="osdtag">CH.09 // THE BOOK IN ONE TABLE</p><h2 data-i18n="cheat.h2">Decision sheet + interview drill</h2><p class="kicker" data-i18n="cheat.kicker">Use the table to choose a starting point. Use the questions below to practise explaining the reason, trade-off and verification tool.</p></div>
   <div class="table-wrap"><table class="decision-table">
-    <thead><tr><th>Question</th><th>Start here</th><th>Verify with</th></tr></thead>
-    <tbody>
-      <tr><td>Few lights, MSAA, simple materials?</td><td>Forward</td><td>Profiler on target device</td></tr>
-      <tr><td>Many lights but still need MSAA?</td><td>Forward+</td><td>GPU timing + light count</td></tr>
-      <tr><td>Many opaque lit pixels, no MSAA?</td><td>Deferred</td><td>G-buffer bandwidth / memory</td></tr>
-      <tr><td>Dynamic object in baked lighting?</td><td>Light Probes or APV</td><td>Lighting Debug view</td></tr>
-      <tr><td>Custom full-screen or object pass?</td><td>Renderer Feature + Render Graph</td><td>Frame Debugger</td></tr>
-      <tr><td>Visual hitch on first material use?</td><td>Trace and warm PSOs</td><td>GraphicsPipelineImpl markers</td></tr>
-      <tr><td>Need more GPU headroom?</td><td>Reduce work, then consider STP</td><td>GPU Profiler on target</td></tr>
-    </tbody>
+    <thead><tr><th data-i18n="cheat.question">Question</th><th data-i18n="cheat.start">Start here</th><th data-i18n="cheat.verify">Verify with</th></tr></thead>
+    <tbody id="decisionBody"></tbody>
   </table></div>
-  <div class="qa" id="qa">
-    <details><summary><span class="q">Q01</span><span>Why can increasing Shadow Distance make nearby shadows worse?</span></summary><div class="a"><p>The same shadow-map resolution covers a larger world area, so fewer texels describe each nearby meter. Use the shortest acceptable distance, then place cascade splits around visible shadow casters.</p></div></details>
-    <details><summary><span class="q">Q02</span><span>Why does a shadowed Point Light cost more than a Spot Light?</span></summary><div class="a"><p>A Point Light emits in every direction, so Unity renders six shadow maps for its cubemap. A Spot Light needs one.</p></div></details>
-    <details><summary><span class="q">Q03</span><span>What is the main Render Graph idea?</span></summary><div class="a"><p>A pass explicitly declares the resources it reads and writes. The graph can then schedule work, calculate resource lifetimes, reuse memory and remove unused passes safely.</p></div></details>
-    <details><summary><span class="q">Q04</span><span>Frame Debugger or Profiler?</span></summary><div class="a"><p>Frame Debugger answers “what was drawn, in what order, and with which state?” Profiler answers “where did CPU/GPU time and memory go?” A rendering investigation commonly needs both.</p></div></details>
-  </div>
+  <div class="interview-toolbar"><span class="ctl-label" data-i18n="qa.filter">FILTER QUESTIONS</span><div class="seg" id="qaFilters"><button data-category="all" aria-pressed="true" data-i18n="qa.all">All</button><button data-category="renderer" aria-pressed="false" data-i18n="qa.renderer">Renderer</button><button data-category="lighting" aria-pressed="false" data-i18n="qa.lighting">Lighting</button><button data-category="graph" aria-pressed="false">Render Graph</button><button data-category="performance" aria-pressed="false" data-i18n="qa.performance">Performance</button></div><span class="lbl" id="qaCount"></span></div>
+  <div class="qa" id="qa"></div>
 </section>
 </main>
 
-<footer><span class="stop">■ END OF TAPE</span><p>Condensed from Unity’s 2024 e-book <i>Introduction to the Universal Render Pipeline for advanced Unity creators — Unity 6 edition</i>. Teaching estimates on this page are not performance measurements.</p></footer>
-<script type="module" src="./page.js?v=202609161105"></script>
+<footer><span class="stop" data-i18n="foot.end">■ END OF TAPE</span><p data-i18n="foot.copy">Condensed from Unity’s 2024 e-book <i>Introduction to the Universal Render Pipeline for advanced Unity creators — Unity 6 edition</i>. Teaching estimates on this page are not performance measurements.</p></footer>
+<script type="module" src="./page.js?v=202609161139"></script>
 </body>
 </html>

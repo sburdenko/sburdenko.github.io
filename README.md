@@ -18,7 +18,7 @@
 | 02 | [Обход графа: BFS и DFS](./algorithms/bfs-dfs/) | Очередь против стека на двумерном массиве и на графе: генерация данных по seed, пошаговая перемотка, фронт, дерево обхода, кратчайший путь и гонка двух обходов в одном лабиринте. |
 
 | 03 | [Two Pointers](./algorithms/two-pointers/) | Opposite pointers, fast & slow / Floyd, and LeetCode 287. Rewindable array and linked-list examples, highlighted pseudocode, C# templates, and interview questions. This lesson is in English. |
-| 04 | [URP Field Guide](./unity-urp/) | A concise interactive edition of Unity’s advanced URP e-book: renderer choice, shadow budget, probes and APV, shader passes, Render Graph, Volumes, camera stacking, STP, PSO warmup, and profiling. |
+| 04 | [URP Field Guide](./unity-urp/) | Bilingual interactive edition of Unity’s advanced URP e-book: renderer choice, shadow budget, probes and APV, shader passes, step-by-step Render Graph, Volumes, camera stacking, STP, PSO warmup, profiling, and an interview drill. |
 
 ## Структура
 

@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import {
   buildFrameGraph,
   chooseRenderer,
@@ -8,6 +9,40 @@ import {
   shadowBudget,
   upscalingModel,
 } from '../unity-urp/model.js';
+import { DICT } from '../unity-urp/i18n.js';
+import { COMMON } from '../assets/i18n-common.js';
+
+test('every URP translation has English and Russian values of the same type', () => {
+  for (const [key, entry] of Object.entries(DICT)) {
+    assert.ok('en' in entry, `${key} has no English value`);
+    assert.ok('ru' in entry, `${key} has no Russian value`);
+    assert.equal(typeof entry.en, typeof entry.ru, `${key} changes value type between languages`);
+  }
+});
+
+test('every static URP translation key in markup exists', () => {
+  const html = readFileSync(new URL('../unity-urp/index.html', import.meta.url), 'utf8');
+  const known = new Set([...Object.keys(COMMON), ...Object.keys(DICT)]);
+  for (const match of html.matchAll(/data-i18n(?:-aria|-title)?="([^"]+)"/g)) {
+    assert.ok(known.has(match[1]), `missing translation: ${match[1]}`);
+  }
+});
+
+test('every literal URP translation key requested by page code exists', () => {
+  const source = readFileSync(new URL('../unity-urp/page.js', import.meta.url), 'utf8');
+  const known = new Set([...Object.keys(COMMON), ...Object.keys(DICT)]);
+  for (const match of source.matchAll(/\bt\('([^']+)'/g)) {
+    assert.ok(known.has(match[1]), `missing translation: ${match[1]}`);
+  }
+});
+
+test('interview drill covers every major URP topic in both languages', () => {
+  for (const lang of ['en', 'ru']) {
+    const items = DICT['qa.items'][lang];
+    assert.ok(items.length >= 16);
+    assert.deepEqual(new Set(items.map(item => item.category)), new Set(['renderer', 'lighting', 'graph', 'performance']));
+  }
+});
 
 test('renderer chooser respects hard renderer constraints', () => {
   assert.equal(chooseRenderer({ lights: 5, msaa: false, transparent: 10, mobile: false }).key, 'forward');
@@ -43,6 +78,22 @@ test('render graph removes disabled resources from the final composite', () => {
   const composite = graph.passes.find(pass => pass.id === 'composite');
   assert.deepEqual(composite.reads, ['color']);
   assert.deepEqual(graph.resources.map(resource => resource.name), ['shadow', 'depth', 'color', 'camera']);
+});
+
+test('render graph culls unused output and aliases non-overlapping resources', () => {
+  const graph = buildFrameGraph({ ssao: true, decals: true, bloom: true, debug: true });
+  assert.equal(graph.declared.find(pass => pass.id === 'debug').culled, true);
+  assert.equal(graph.passes.some(pass => pass.id === 'debug'), false);
+  assert.equal(graph.resources.some(resource => resource.name === 'debug'), false);
+  assert.ok(graph.transientMB < graph.dedicatedMB);
+  for (const slot of graph.slots) {
+    const resources = slot.resources.map(name => graph.resources.find(resource => resource.name === name));
+    for (let left = 0; left < resources.length; left++) {
+      for (let right = left + 1; right < resources.length; right++) {
+        assert.ok(resources[left].last < resources[right].first || resources[right].last < resources[left].first);
+      }
+    }
+  }
 });
 
 test('lower render scale reduces internal pixels and STP adds reconstruction cost', () => {

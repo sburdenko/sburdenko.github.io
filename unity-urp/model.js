@@ -30,12 +30,7 @@ export function chooseRenderer({ lights, msaa, transparent, mobile }) {
   if (transparent > 45) { scores.forward += 2; scores['forward-plus'] += 3; scores.deferred -= 2; }
   if (mobile) { scores.forward += 2; scores['forward-plus'] += 2; scores.deferred -= 2; }
   const key = Object.keys(scores).sort((a, b) => scores[b] - scores[a])[0];
-  const reason = key === 'forward'
-    ? 'The scene is simple enough that the direct path stays easy and efficient.'
-    : key === 'forward-plus'
-      ? 'Clustered light culling handles the light count while keeping MSAA and camera stacking.'
-      : 'Many opaque lit pixels make a G-buffer worth its memory cost.';
-  return { key, scores, reason };
+  return { key, scores, reasonKey: `renderer.reason.${key}` };
 }
 
 export function shadowBudget({ resolution, distance, cascades, spotLights, pointLights, soft }) {
@@ -50,19 +45,21 @@ export function shadowBudget({ resolution, distance, cascades, spotLights, point
     relativeCost,
     density,
     quality,
-    warning: pointLights > 0
-      ? `Each shadowed Point Light renders six maps. ${pointLights} Point Light${pointLights > 1 ? 's' : ''} adds ${pointLights * 6}.`
+    warningKey: pointLights > 0
+      ? 'shadow.warning.point'
       : distance > 120
-        ? 'The shadow map is stretched across a large distance. Nearby shadows lose detail.'
+        ? 'shadow.warning.distance'
         : cascades === 1 && distance > 70
-          ? 'A long shadow distance usually benefits from 2 or 3 cascades.'
-          : 'Start here, then verify the result in the target scene and on target hardware.',
+          ? 'shadow.warning.cascades'
+          : 'shadow.warning.default',
+    warningArgs: pointLights > 0 ? [pointLights, pointLights * 6] : [],
   };
 }
 
 export function probeRecommendation({ dynamicObjects, largeWorld, lightingChanges }) {
   if (largeWorld || lightingChanges) {
     return {
+      key: 'apv',
       name: 'Adaptive Probe Volumes',
       why: largeWorld
         ? 'Automatic 3D probe placement and streaming suit a large world.'
@@ -72,12 +69,14 @@ export function probeRecommendation({ dynamicObjects, largeWorld, lightingChange
   }
   if (dynamicObjects) {
     return {
+      key: 'probes',
       name: 'Light Probes',
       why: 'A small or controlled scene can use manually placed tetrahedral probes for dynamic objects.',
       watch: 'Place probes where lighting changes, not as a uniform carpet everywhere.',
     };
   }
   return {
+    key: 'lightmaps',
     name: 'Lightmaps',
     why: 'Static geometry can read baked indirect light directly from lightmaps.',
     watch: 'Baked light is diffuse; keep direct/specular contribution where the scene needs it.',
@@ -85,36 +84,83 @@ export function probeRecommendation({ dynamicObjects, largeWorld, lightingChange
 }
 
 const PASS_LIBRARY = {
-  shadows: { name: 'Shadow maps', reads: ['scene'], writes: ['shadow'] },
-  depth: { name: 'Depth prepass', reads: ['scene'], writes: ['depth'] },
-  opaques: { name: 'Opaque draw', reads: ['scene', 'shadow'], writes: ['color', 'depth'] },
-  ssao: { name: 'SSAO', reads: ['depth'], writes: ['ao'] },
-  decals: { name: 'Decals', reads: ['depth', 'color'], writes: ['color'] },
-  transparents: { name: 'Transparent draw', reads: ['scene', 'depth', 'color'], writes: ['color'] },
-  bloom: { name: 'Bloom', reads: ['color'], writes: ['bloom'] },
-  composite: { name: 'Final composite', reads: ['color', 'ao', 'bloom'], writes: ['camera'] },
+  shadows: { reads: ['scene'], writes: ['shadow'] },
+  depth: { reads: ['scene'], writes: ['depth'] },
+  opaques: { reads: ['scene', 'shadow'], writes: ['color', 'depth'] },
+  ssao: { reads: ['depth'], writes: ['ao'] },
+  decals: { reads: ['depth', 'color'], writes: ['color'] },
+  debug: { reads: ['depth'], writes: ['debug'] },
+  transparents: { reads: ['scene', 'depth', 'color'], writes: ['color'] },
+  bloom: { reads: ['color'], writes: ['bloom'] },
+  composite: { reads: ['color', 'ao', 'bloom'], writes: ['camera'] },
 };
 
-export function buildFrameGraph({ ssao, decals, bloom }) {
+const RESOURCE_MB = { shadow: 16, depth: 8, color: 16, ao: 4, debug: 4, bloom: 8, camera: 16 };
+
+function assignTransientSlots(resources) {
+  const slots = [];
+  for (const resource of resources.filter(item => item.name !== 'camera').sort((a, b) => a.first - b.first || b.sizeMB - a.sizeMB)) {
+    let slot = slots.find(candidate => candidate.last < resource.first && candidate.sizeMB >= resource.sizeMB);
+    if (!slot) {
+      slot = { id: slots.length + 1, sizeMB: resource.sizeMB, last: -1, resources: [] };
+      slots.push(slot);
+    }
+    slot.last = resource.last;
+    slot.sizeMB = Math.max(slot.sizeMB, resource.sizeMB);
+    slot.resources.push(resource.name);
+    resource.slot = slot.id;
+  }
+  return slots;
+}
+
+export function buildFrameGraph({ ssao, decals, bloom, debug = false }) {
   const ids = ['shadows', 'depth', 'opaques'];
   if (ssao) ids.push('ssao');
   if (decals) ids.push('decals');
+  if (debug) ids.push('debug');
   ids.push('transparents');
   if (bloom) ids.push('bloom');
   ids.push('composite');
-  const passes = ids.map(id => {
+  const declared = ids.map(id => {
     const pass = { id, ...PASS_LIBRARY[id] };
     if (id === 'composite') {
       pass.reads = ['color', ...(ssao ? ['ao'] : []), ...(bloom ? ['bloom'] : [])];
     }
     return pass;
   });
-  const resources = ['shadow', 'depth', 'color', ...(ssao ? ['ao'] : []), ...(bloom ? ['bloom'] : []), 'camera']
+
+  const needed = new Set(['camera']);
+  for (let index = declared.length - 1; index >= 0; index--) {
+    const pass = declared[index];
+    pass.culled = !pass.writes.some(resource => needed.has(resource));
+    if (!pass.culled) pass.reads.forEach(resource => needed.add(resource));
+  }
+  const passes = declared.filter(pass => !pass.culled).map((pass, index) => ({ ...pass, activeIndex: index }));
+  const activeIndices = new Map(passes.map(pass => [pass.id, pass.activeIndex]));
+  declared.forEach(pass => { pass.activeIndex = activeIndices.get(pass.id); });
+  const resourceNames = [...new Set(passes.flatMap(pass => [...pass.reads, ...pass.writes]))].filter(name => name !== 'scene');
+  const resources = resourceNames
     .map(name => {
       const touched = passes.flatMap((pass, index) => [...pass.reads, ...pass.writes].includes(name) ? [index] : []);
-      return { name, first: Math.min(...touched), last: Math.max(...touched) };
+      return { name, sizeMB: RESOURCE_MB[name], first: Math.min(...touched), last: Math.max(...touched) };
     });
-  return { passes, resources };
+  const slots = assignTransientSlots(resources);
+  const peaks = passes.map((_, index) => resources
+    .filter(resource => resource.name !== 'camera' && index >= resource.first && index <= resource.last)
+    .reduce((sum, resource) => sum + resource.sizeMB, 0));
+  const dedicatedMB = resources.filter(resource => resource.name !== 'camera').reduce((sum, resource) => sum + resource.sizeMB, 0);
+  const transientMB = slots.reduce((sum, slot) => sum + slot.sizeMB, 0);
+  return {
+    declared,
+    passes,
+    resources,
+    slots,
+    culledCount: declared.length - passes.length,
+    peakMB: Math.max(...peaks),
+    dedicatedMB,
+    transientMB,
+    savedMB: dedicatedMB - transientMB,
+  };
 }
 
 export function upscalingModel({ scale, stp }) {
@@ -122,10 +168,10 @@ export function upscalingModel({ scale, stp }) {
   const outputMP = 1920 * 1080 / 1000000;
   const internalMP = outputMP * pixelFraction;
   const relativeGpu = Math.max(0.28, pixelFraction + (stp ? 0.1 : 0));
-  const quality = stp
-    ? scale >= 0.75 ? 'Very close to native' : scale >= 0.6 ? 'Good temporal reconstruction' : 'Visible reconstruction pressure'
-    : scale >= 0.9 ? 'Near native' : scale >= 0.75 ? 'Softer image' : 'Clearly undersampled';
-  return { internalMP, outputMP, relativeGpu, quality };
+  const qualityKey = stp
+    ? scale >= 0.75 ? 'stp.quality.close' : scale >= 0.6 ? 'stp.quality.good' : 'stp.quality.pressure'
+    : scale >= 0.9 ? 'stp.quality.native' : scale >= 0.75 ? 'stp.quality.soft' : 'stp.quality.under';
+  return { internalMP, outputMP, relativeGpu, qualityKey };
 }
 
 export const DIAGNOSES = {

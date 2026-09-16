@@ -1,14 +1,17 @@
-import { $, $$, bootVhs, fitCanvas, press, clamp } from '../assets/vhs.js?v=202609161105';
+import { $, $$, bootVhs, fitCanvas, press, clamp } from '../assets/vhs.js?v=202609161139';
+import { initI18n, t, onLang } from '../assets/i18n.js?v=202609161139';
+import { COMMON } from '../assets/i18n-common.js?v=202609161139';
+import { DICT } from './i18n.js?v=202609161139';
 import {
   RENDERERS,
   buildFrameGraph,
   chooseRenderer,
-  diagnose,
   probeRecommendation,
   shadowBudget,
   upscalingModel,
-} from './model.js?v=202609161105';
+} from './model.js?v=202609161139';
 
+initI18n({ ...COMMON, ...DICT });
 bootVhs();
 
 const bool = button => button.getAttribute('aria-pressed') === 'true';
@@ -19,13 +22,8 @@ function initRendererLab() {
   const lights = $('#lightCount'), transparent = $('#transparent'), msaa = $('#msaaToggle');
   const targets = $$('#targetSeg button');
   const cards = $('#rendererCards');
-  cards.innerHTML = Object.entries(RENDERERS).map(([key, renderer]) => `
-    <article class="renderer-card" data-renderer="${key}">
-      <h4>${renderer.name}</h4><p>${renderer.idea}</p>
-      <ul><li>${renderer.wins.slice(0, 2).join('</li><li>')}</li></ul>
-    </article>`).join('');
-
   function render() {
+    const catalog = t('renderer.catalog');
     const result = chooseRenderer({
       lights: +lights.value,
       transparent: +transparent.value,
@@ -35,17 +33,24 @@ function initRendererLab() {
     $('#lightOut').textContent = lights.value;
     $('#transparentOut').textContent = `${transparent.value}%`;
     $('#rendererName').textContent = RENDERERS[result.key].name;
-    $('#rendererIdea').textContent = RENDERERS[result.key].idea;
-    $('#rendererReason').textContent = result.reason;
+    $('#rendererIdea').textContent = catalog[result.key].idea;
+    $('#rendererReason').textContent = t(result.reasonKey);
     const max = Math.max(...Object.values(result.scores), 1);
     $('#rendererScores').innerHTML = Object.entries(result.scores).map(([key, score]) => `
       <div class="score-row"><span>${RENDERERS[key].name}</span><i style="width:${Math.max(0, score) / max * 100}%"></i><b>${score}</b></div>`).join('');
+    cards.innerHTML = Object.entries(RENDERERS).map(([key, renderer]) => `
+      <article class="renderer-card" data-renderer="${key}">
+        <h4>${renderer.name}</h4><p>${catalog[key].idea}</p>
+        <small>${t('renderer.wins')}</small><ul><li>${catalog[key].wins.join('</li><li>')}</li></ul>
+        <small>${t('renderer.costs')}</small><ul class="cost-list"><li>${catalog[key].costs.join('</li><li>')}</li></ul>
+      </article>`).join('');
     $$('.renderer-card', cards).forEach(card => card.classList.toggle('selected', card.dataset.renderer === result.key));
   }
   [lights, transparent].forEach(input => input.addEventListener('input', render));
   msaa.onclick = () => { toggle(msaa); render(); };
   targets.forEach(button => button.onclick = () => { press(targets, candidate => candidate === button); render(); });
   render();
+  return render;
 }
 
 function initShadowLab() {
@@ -88,7 +93,7 @@ function initShadowLab() {
       c.beginPath(); c.ellipse(x + height * .48, horizon + 8, height * .56, 7, 0, 0, Math.PI * 2); c.fill();
     }
     c.fillStyle = '#ff3ea5'; c.fillRect(20, horizon - 28, 22, 28);
-    c.fillStyle = '#ffbadc'; c.font = '11px JetBrains Mono'; c.fillText('CAM', 16, horizon - 36);
+    c.fillStyle = '#ffbadc'; c.font = '11px JetBrains Mono'; c.fillText(t('post.cam'), 16, horizon - 36);
     c.fillStyle = '#ffd23f'; c.fillText(`${distance} m`, end - 30, horizon + 62);
   }
   function render() {
@@ -106,14 +111,14 @@ function initShadowLab() {
     $('#cascadeOut').textContent = state.cascades;
     $('#spotOut').textContent = state.spotLights;
     $('#pointOut').textContent = state.pointLights;
-    $('#shadowQuality').textContent = latest.quality.toUpperCase();
+    $('#shadowQuality').textContent = t(`shadow.quality.${latest.quality}`);
     $('#shadowStats').innerHTML = [
-      tile('Shadow maps', latest.maps, 'Point Light = 6'),
-      tile('Main map memory', `${latest.mainMemoryMB.toFixed(1)} MB`, '32-bit teaching estimate'),
-      tile('Texels / meter', latest.density.toFixed(1), latest.quality),
-      tile('Relative cost', `${latest.relativeCost.toFixed(1)}×`, 'compare settings here'),
+      tile(t('shadow.views'), latest.maps, t('shadow.point6')),
+      tile(t('shadow.memory'), `${latest.mainMemoryMB.toFixed(1)} MB`, t('shadow.estimate')),
+      tile(t('shadow.density'), latest.density.toFixed(1), t(`shadow.quality.${latest.quality}`)),
+      tile(t('shadow.cost'), `${latest.relativeCost.toFixed(1)}×`, t('shadow.compare')),
     ].join('');
-    $('#shadowAdvice').textContent = latest.warning;
+    $('#shadowAdvice').textContent = t(latest.warningKey, ...latest.warningArgs);
     paint();
   }
   Object.values(controls).forEach(control => {
@@ -122,31 +127,22 @@ function initShadowLab() {
   });
   addEventListener('resize', paint);
   render();
+  return render;
 }
 
 function initLightModes() {
   const buttons = $$('#lightModes .seg button');
-  const data = {
-    realtime: [
-      ['Moves?', 'Lights and objects can move freely.'], ['Runtime cost', 'Highest: direct light and shadows update every frame.'], ['Use when', 'Gameplay changes lighting or shadow casters continuously.'],
-    ],
-    mixed: [
-      ['Moves?', 'Dynamic objects receive real-time direct light; static indirect light is baked.'], ['Runtime cost', 'Middle ground. Shadowmask extends static shadows beyond dynamic distance.'], ['Use when', 'A mostly static world still has moving characters and lights.'],
-    ],
-    baked: [
-      ['Moves?', 'Baked lights cannot change at runtime. Dynamic objects need probes.'], ['Runtime cost', 'Lowest lighting cost; textures carry static diffuse illumination.'], ['Use when', 'Architecture and lighting stay fixed.'],
-    ],
-  };
   const render = button => {
     press(buttons, candidate => candidate === button);
     const mode = button.dataset.v;
-    $('#modeFacts').innerHTML = data[mode].map(([name, text]) => `<div><b>${name}</b><p>${text}</p></div>`).join('');
+    $('#modeFacts').innerHTML = t('modes.data')[mode].map(([name, text]) => `<div><b>${name}</b><p>${text}</p></div>`).join('');
     $('.light-mode-scene').dataset.mode = mode;
     $('.dynamic-ball').style.filter = mode === 'baked' ? 'brightness(.65)' : 'none';
     $('.mode-rays').style.opacity = mode === 'baked' ? '.25' : mode === 'mixed' ? '.65' : '1';
   };
   buttons.forEach(button => button.onclick = () => render(button));
   render(buttons[0]);
+  return () => render(buttons.find(bool) || buttons[0]);
 }
 
 function initProbeLab() {
@@ -180,60 +176,143 @@ function initProbeLab() {
     const gradient = c.createRadialGradient(x - 15, y - 18, 4, x, y, 45);
     gradient.addColorStop(0, '#fff'); gradient.addColorStop(.18, `rgb(${color.join(',')})`); gradient.addColorStop(1, '#171025');
     c.fillStyle = gradient; c.beginPath(); c.arc(x, y, 42, 0, Math.PI * 2); c.fill();
-    c.fillStyle = '#efeaff'; c.font = '11px JetBrains Mono'; c.fillText('DYNAMIC OBJECT', x - 50, y + 67);
+    c.fillStyle = '#efeaff'; c.font = '11px JetBrains Mono'; c.fillText(t('probes.object'), x - 50, y + 67);
     $('#probeReadout').textContent = `RGB ${color.join(' · ')}`;
   }
   function render() {
     $('#objectOut').textContent = `${position.value}%`;
-    $('#timeOut').textContent = +time.value < 50 ? 'DAY' : 'NIGHT';
+    $('#timeOut').textContent = +time.value < 50 ? t('probes.day') : t('probes.night');
     const result = probeRecommendation({ dynamicObjects: checks.dynamic, largeWorld: checks.large, lightingChanges: checks.changing });
-    $('#probeChoice').textContent = result.name;
-    $('#probeWhy').textContent = result.why;
-    $('#probeWatch').textContent = result.watch;
+    const [name, why, watch] = t('probe.data')[result.key];
+    $('#probeChoice').textContent = name;
+    $('#probeWhy').textContent = why;
+    $('#probeWatch').textContent = watch;
+    probeButtons.forEach(button => $('.sw', button).textContent = checks[button.dataset.probe] ? t('probes.yes') : t('probes.no'));
     paint();
   }
   [position, time].forEach(input => input.addEventListener('input', render));
   probeButtons.forEach(button => button.onclick = () => {
     checks[button.dataset.probe] = !checks[button.dataset.probe];
     button.setAttribute('aria-pressed', checks[button.dataset.probe]);
-    $('.sw', button).textContent = checks[button.dataset.probe] ? 'YES' : 'NO';
     render();
   });
   addEventListener('resize', paint);
   render();
+  return render;
 }
 
 function initShaderLab() {
   const buttons = $$('#shaderPasses button'), object = $('.shader-object');
-  const snippets = {
-    forward: 'Tags { "LightMode" = "UniversalForward" }\n// Vertex + fragment stages produce the visible surface.',
-    shadow: 'Tags { "LightMode" = "ShadowCaster" }\n// Writes object depth into the light\'s shadow map.',
-    depth: 'Tags { "LightMode" = "DepthOnly" }\nColorMask R\n// Makes depth-based effects see this object.',
-  };
+  let focused = 'forward';
   function render(focused = 'forward') {
     const active = Object.fromEntries(buttons.map(button => [button.dataset.pass, bool(button)]));
     object.classList.toggle('unlit', !active.forward);
     object.classList.toggle('no-shadow', !active.shadow);
     object.classList.toggle('no-depth', !active.depth);
-    $('#shaderPreviewLabel').textContent = `${active.forward ? 'VISIBLE' : 'NO FORWARD PASS'} · ${active.shadow ? 'CASTS SHADOW' : 'NO SHADOW'} · ${active.depth ? 'IN DEPTH' : 'MISSING FROM DEPTH'}`;
-    $('#shaderCode').textContent = snippets[focused];
+    $('#shaderPreviewLabel').textContent = `${active.forward ? t('shader.visible') : t('shader.noForward')} · ${active.shadow ? t('shader.casts') : t('shader.noShadow')} · ${active.depth ? t('shader.inDepth') : t('shader.noDepth')}`;
+    $('#shaderCode').textContent = t('shader.snippets')[focused];
   }
-  buttons.forEach(button => button.onclick = () => { toggle(button); render(button.dataset.pass); });
+  buttons.forEach(button => button.onclick = () => { toggle(button); focused = button.dataset.pass; render(focused); });
   render();
+  return () => render(focused);
 }
 
 function initGraphLab() {
-  const toggles = $$('.graph-toggle');
+  const toggles = $$('.graph-toggle'), phases = $$('#graphPhaseSeg button');
+  const step = $('#graphStep'), transport = $('#graphTransport');
+  let phase = 'setup', cursor = 0, inspectedId = null;
+
+  const resourceName = id => t('graph.resourceNames')[id] || id;
+  const passData = id => t('graph.pass')[id];
+
   function render() {
     const settings = Object.fromEntries(toggles.map(button => [button.dataset.feature, bool(button)]));
     const graph = buildFrameGraph(settings);
-    $('#frameGraph').innerHTML = graph.passes.map(pass => `<div class="pass-card"><b>${pass.name}</b><small>READ ${pass.reads.join(', ')}</small><small>WRITE ${pass.writes.join(', ')}</small></div>`).join('');
-    const header = `<div class="resource-row resource-head" style="--pass-count:${graph.passes.length}"><b>RESOURCE</b>${graph.passes.map(pass => `<span class="life-cell">${pass.name}</span>`).join('')}</div>`;
+    cursor = clamp(cursor, 0, graph.passes.length - 1);
+    const shown = phase === 'execute' ? graph.passes : graph.declared;
+    $('#graphPhaseCopy').innerHTML = t(`graph.phase.${phase}.copy`);
+    $('#graphStats').innerHTML = [
+      tile(t('graph.declared'), graph.declared.length),
+      tile(t('graph.survived'), graph.passes.length),
+      tile(t('graph.culled'), graph.culledCount),
+      tile(t('graph.memory'), `${graph.transientMB} MB`, t('graph.saved', graph.savedMB)),
+    ].join('');
+    $('#frameGraph').innerHTML = shown.map(pass => {
+      const [name, purpose] = passData(pass.id);
+      const active = phase === 'execute' && pass.activeIndex === cursor;
+      const culled = phase !== 'setup' && pass.culled;
+      return `<button class="pass-card${active ? ' active' : ''}${culled ? ' culled' : ''}" data-pass="${pass.id}" ${culled ? '' : `data-active-index="${pass.activeIndex}"`}>
+        <span class="pass-state">${culled ? t('graph.culledBadge') : `${t('graph.read')} ${pass.reads.map(resourceName).join(', ')}`}</span>
+        <b>${name}</b><small>${purpose}</small><small>${t('graph.write')} ${pass.writes.map(resourceName).join(', ')}</small>
+      </button>`;
+    }).join('');
+
+    const header = `<div class="resource-row resource-head" style="--pass-count:${graph.passes.length}"><b>${t('graph.resource')}</b>${graph.passes.map(pass => `<span class="life-cell">${passData(pass.id)[0]}</span>`).join('')}</div>`;
     $('#resourceTable').innerHTML = header + graph.resources.map(resource => `
-      <div class="resource-row" style="--pass-count:${graph.passes.length}"><b>${resource.name}</b>${graph.passes.map((_, index) => `<span class="life-cell${index >= resource.first && index <= resource.last ? ' alive' : ''}"></span>`).join('')}</div>`).join('');
+      <div class="resource-row" style="--pass-count:${graph.passes.length}"><b>${resourceName(resource.name)}<small>${resource.sizeMB} MB · ${t('graph.slot', resource.slot || '—')}</small></b>${graph.passes.map((pass, index) => {
+        const alive = index >= resource.first && index <= resource.last;
+        const access = phase === 'execute' && index === cursor && [...pass.reads, ...pass.writes].includes(resource.name);
+        const writes = pass.writes.includes(resource.name), reads = pass.reads.includes(resource.name);
+        const state = [alive ? 'alive' : '', index === resource.first ? 'born' : '', index === resource.last ? 'release' : '', access ? 'access' : ''].filter(Boolean).join(' ');
+        return `<span class="life-cell ${state}">${access ? (writes && reads ? 'R/W' : writes ? 'W' : 'R') : ''}</span>`;
+      }).join('')}</div>`).join('');
+    $('#resourceTable').classList.toggle('pending', phase === 'setup');
+
+    transport.hidden = phase !== 'execute';
+    step.max = Math.max(0, graph.passes.length - 1); step.value = cursor;
+    $('#graphStepLabel').textContent = t('graph.step', cursor + 1, graph.passes.length);
+    $('#graphPrev').disabled = cursor === 0; $('#graphNext').disabled = cursor === graph.passes.length - 1;
+
+    if (phase === 'execute') {
+      const pass = graph.passes[cursor], [name, purpose] = passData(pass.id);
+      const allocate = graph.resources.filter(resource => resource.first === cursor).map(resource => resourceName(resource.name)).join(', ');
+      const release = graph.resources.filter(resource => resource.last === cursor && resource.name !== 'camera').map(resource => resourceName(resource.name)).join(', ');
+      $('#graphFocus').innerHTML = `<span class="lbl">${t('graph.step', cursor + 1, graph.passes.length)}</span><strong>${name}</strong><p>${purpose}</p><code>${t('graph.read')} ${pass.reads.map(resourceName).join(', ')} → ${t('graph.write')} ${pass.writes.map(resourceName).join(', ')}</code><small>${t('graph.events', allocate, release)}</small>`;
+    } else if (phase === 'compile' && inspectedId) {
+      const pass = graph.declared.find(candidate => candidate.id === inspectedId);
+      if (pass) {
+        const [name, purpose] = passData(pass.id);
+        $('#graphFocus').innerHTML = `<span class="lbl">${pass.culled ? t('graph.culledBadge') : t('graph.survived')}</span><strong>${name}</strong><p>${purpose}</p>`;
+      } else {
+        inspectedId = null;
+        $('#graphFocus').innerHTML = '';
+      }
+    } else {
+      $('#graphFocus').innerHTML = '';
+    }
+
+    $$('#frameGraph .pass-card').forEach(card => card.onclick = () => {
+      const pass = graph.declared.find(candidate => candidate.id === card.dataset.pass);
+      inspectedId = pass.id;
+      if (!pass.culled) {
+        phase = 'execute'; cursor = pass.activeIndex;
+        press(phases, button => button.dataset.phase === phase);
+      }
+      render();
+    });
   }
   toggles.forEach(button => button.onclick = () => { toggle(button); render(); });
+  phases.forEach(button => button.onclick = () => { phase = button.dataset.phase; inspectedId = null; press(phases, candidate => candidate === button); render(); });
+  step.addEventListener('input', () => { cursor = +step.value; render(); });
+  $('#graphPrev').onclick = () => { cursor--; render(); };
+  $('#graphNext').onclick = () => { cursor++; render(); };
   render();
+  return render;
+}
+
+function initMergeLab() {
+  const toggleButton = $('#fetchToggle');
+  function render() {
+    const fetch = bool(toggleButton);
+    $('#mergeTrack').innerHTML = fetch
+      ? `<div class="merge-pass merged">${t('merge.merged')}</div>`
+      : [t('merge.draw'), t('merge.copy'), t('merge.tint')].map(name => `<div class="merge-pass">${name}</div>`).join('<i>→</i>');
+    $('#mergeResult').textContent = fetch ? t('merge.fetch') : t('merge.regular');
+    $('#mergeReason').textContent = fetch ? t('merge.fetchReason') : t('merge.regularReason');
+  }
+  toggleButton.onclick = () => { toggle(toggleButton); render(); };
+  render();
+  return render;
 }
 
 function initPostLab() {
@@ -251,14 +330,15 @@ function initPostLab() {
     preview.classList.toggle('vignette', bool(toggles.find(button => button.dataset.effect === 'vignette')));
     $('#cockpit').hidden = !bool(overlay);
     $('#postReadout').textContent = blend === 0
-      ? 'Outside the Local Volume: only Global Volume settings apply.'
+      ? t('post.outside')
       : blend === 1
-        ? 'Inside the Local Volume: its overrides have full weight.'
-        : `Blend weight ${Math.round(blend * 100)}%: local overrides mix with the global profile.`;
+        ? t('post.inside')
+        : t('post.blend', Math.round(blend * 100));
   }
   position.addEventListener('input', render);
   [...toggles, overlay].forEach(button => button.onclick = () => { toggle(button); render(); });
   render();
+  return render;
 }
 
 function initUnity6Lab() {
@@ -269,47 +349,55 @@ function initUnity6Lab() {
     $('#internalPixels').style.setProperty('--pixel-size', `${Math.round(7 / value)}px`);
     $('#internalPixels').textContent = `${Math.round(1920 * value)} × ${Math.round(1080 * value)}`;
     $('#stpStats').innerHTML = [
-      tile('Internal pixels', `${result.internalMP.toFixed(2)} MP`),
-      tile('Output pixels', `${result.outputMP.toFixed(2)} MP`),
-      tile('Relative GPU', `${Math.round(result.relativeGpu * 100)}%`),
+      tile(t('stp.internal'), `${result.internalMP.toFixed(2)} MP`),
+      tile(t('stp.output'), `${result.outputMP.toFixed(2)} MP`),
+      tile(t('stp.gpu'), `${Math.round(result.relativeGpu * 100)}%`),
     ].join('');
-    $('#stpQuality').textContent = `${result.quality}. STP spends some reconstruction work to avoid shading every output pixel.`;
+    $('#stpQuality').textContent = `${t(result.qualityKey)}. ${t('stp.explain')}`;
   }
   scale.addEventListener('input', renderStp); stp.onclick = () => { toggle(stp); renderStp(); }; renderStp();
 
   const buttons = $$('#psoSeg button');
-  const copy = {
-    runtime: ['72%', '18%', 'A new graphics state is compiled during gameplay: the frame hitches exactly when the player first sees it.'],
-    sync: ['20%', '48%', 'Precook during loading: the load takes longer, but gameplay starts with the required PSOs ready.'],
-    async: ['42%', '35%', 'Warm in the background: no blocking spike, but temporary CPU pressure can compete with the game.'],
-  };
+  const placement = { runtime: ['72%', '18%'], sync: ['20%', '48%'], async: ['42%', '35%'] };
   function renderPso(button) {
     press(buttons, candidate => candidate === button);
-    const [left, top, text] = copy[button.dataset.v];
+    const [left, top] = placement[button.dataset.v];
     $('#psoSpike').style.left = left; $('#psoSpike').style.top = top;
-    $('#psoExplanation').textContent = text;
+    $('#psoExplanation').textContent = t('pso.copy')[button.dataset.v];
   }
   buttons.forEach(button => button.onclick = () => renderPso(button)); renderPso(buttons[0]);
+  return () => { renderStp(); renderPso(buttons.find(bool) || buttons[0]); };
 }
 
 function initDiagnostics() {
   const buttons = $$('#symptoms button');
   function render(button) {
     press(buttons, candidate => candidate === button);
-    const result = diagnose(button.dataset.symptom);
-    $('#diagnosticTool').textContent = result.tool;
-    $('#diagnosticFirst').textContent = result.first;
-    $('#diagnosticActions').innerHTML = result.actions.map(action => `<li>${action}</li>`).join('');
+    const [tool, first, actions] = t('perf.data')[button.dataset.symptom];
+    $('#diagnosticTool').textContent = tool;
+    $('#diagnosticFirst').textContent = first;
+    $('#diagnosticActions').innerHTML = actions.map(action => `<li>${action}</li>`).join('');
   }
   buttons.forEach(button => button.onclick = () => render(button)); render(buttons[0]);
+  return () => render(buttons.find(bool) || buttons[0]);
 }
 
-initRendererLab();
-initShadowLab();
-initLightModes();
-initProbeLab();
-initShaderLab();
-initGraphLab();
-initPostLab();
-initUnity6Lab();
-initDiagnostics();
+function initInterview() {
+  const filters = $$('#qaFilters button');
+  let category = 'all';
+  function render() {
+    $('#decisionBody').innerHTML = t('cheat.rows').map(row => `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td></tr>`).join('');
+    const items = t('qa.items').filter(item => category === 'all' || item.category === category);
+    $('#qaCount').textContent = t('qa.count', items.length);
+    $('#qa').innerHTML = items.map((item, index) => `<details data-category="${item.category}"><summary><span class="q">Q${String(index + 1).padStart(2, '0')}</span><span>${item.q}</span></summary><div class="a"><p>${item.a}</p></div></details>`).join('');
+  }
+  filters.forEach(button => button.onclick = () => { category = button.dataset.category; press(filters, candidate => candidate === button); render(); });
+  render();
+  return render;
+}
+
+const refreshers = [
+  initRendererLab(), initShadowLab(), initLightModes(), initProbeLab(), initShaderLab(),
+  initGraphLab(), initMergeLab(), initPostLab(), initUnity6Lab(), initDiagnostics(), initInterview(),
+];
+onLang(() => refreshers.forEach(render => render()));
