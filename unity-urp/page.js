@@ -1,7 +1,7 @@
-import { $, $$, bootVhs, fitCanvas, press, clamp } from '../assets/vhs.js?v=202609161554';
-import { initI18n, t, onLang } from '../assets/i18n.js?v=202609161554';
-import { COMMON } from '../assets/i18n-common.js?v=202609161554';
-import { DICT } from './i18n.js?v=202609161554';
+import { $, $$, bootVhs, fitCanvas, press, clamp } from '../assets/vhs.js?v=202609161601';
+import { initI18n, t, onLang } from '../assets/i18n.js?v=202609161601';
+import { COMMON } from '../assets/i18n-common.js?v=202609161601';
+import { DICT } from './i18n.js?v=202609161601';
 import {
   RENDERERS,
   MSAA_PATTERNS,
@@ -12,7 +12,7 @@ import {
   probeRecommendation,
   shadowBudget,
   upscalingModel,
-} from './model.js?v=202609161554';
+} from './model.js?v=202609161601';
 
 initI18n({ ...COMMON, ...DICT });
 bootVhs();
@@ -340,6 +340,7 @@ function initLightModes() {
 
 function initProbeLab() {
   const canvas = $('#probeCanvas'), position = $('#objectPosition'), time = $('#timeBlend');
+  const lightSwatch = $('#probeLightSwatch'), objectSwatch = $('#probeObjectSwatch'), mixLabel = $('#probeMixLabel');
   const checks = { dynamic: true, large: false, changing: true };
   const probeButtons = $$('[data-probe]');
   function colors(day) {
@@ -350,27 +351,51 @@ function initProbeLab() {
   function paint() {
     const { c, w, h } = fitCanvas(canvas, canvas.clientWidth < 620 ? 310 : 390);
     const day = 1 - +time.value / 100;
-    const palette = colors(day);
-    const probes = palette.map((color, i) => ({ x: w * (.12 + i * .19), y: h * (.25 + (i % 2) * .48), color }));
+    const palette = colors(day), stops = [.08, .29, .5, .71, .92];
+    const probes = palette.map((color, i) => ({ x: w * stops[i], y: h * (.28 + (i % 2) * .44), color }));
     const x = w * +position.value / 100, y = h * .53;
-    c.fillStyle = day > .45 ? '#2a2855' : '#090d25'; c.fillRect(0, 0, w, h);
-    const mix = [0, 0, 0], weights = probes.map(probe => 1 / Math.max(18, Math.hypot(x - probe.x, y - probe.y)));
-    const total = weights.reduce((a, b) => a + b, 0);
+    c.fillStyle = day > .45 ? '#24244c' : '#080c22'; c.fillRect(0, 0, w, h);
+    for (let i = 0; i < probes.length - 1; i++) {
+      const field = c.createLinearGradient(probes[i].x, 0, probes[i + 1].x, 0);
+      field.addColorStop(0, `rgba(${probes[i].color.join(',')},.18)`);
+      field.addColorStop(1, `rgba(${probes[i + 1].color.join(',')},.18)`);
+      c.fillStyle = field; c.fillRect(probes[i].x, 0, probes[i + 1].x - probes[i].x, h);
+    }
+    const nx = +position.value / 100;
+    let left = 0;
+    while (left < stops.length - 2 && nx > stops[left + 1]) left++;
+    const right = Math.min(left + 1, stops.length - 1);
+    const blend = clamp((nx - stops[left]) / (stops[right] - stops[left]), 0, 1);
+    const weights = probes.map((_, i) => i === left ? 1 - blend : i === right ? blend : 0);
+    const mix = [0, 0, 0];
     probes.forEach((probe, i) => {
-      const weight = weights[i] / total;
+      const weight = weights[i];
       for (let channel = 0; channel < 3; channel++) mix[channel] += probe.color[channel] * weight;
-      c.strokeStyle = `rgba(${probe.color.join(',')},${.15 + weight})`; c.lineWidth = 1 + weight * 8;
-      c.beginPath(); c.moveTo(probe.x, probe.y); c.lineTo(x, y); c.stroke();
-      c.fillStyle = `rgb(${probe.color.join(',')})`; c.shadowColor = c.fillStyle; c.shadowBlur = 18;
-      c.beginPath(); c.arc(probe.x, probe.y, 8 + weight * 12, 0, Math.PI * 2); c.fill(); c.shadowBlur = 0;
-      c.fillStyle = '#efeaff'; c.font = '10px JetBrains Mono'; c.fillText(`${Math.round(weight * 100)}%`, probe.x - 12, probe.y - 16);
+      if (weight > 0) {
+        c.strokeStyle = `rgba(${probe.color.join(',')},${.45 + weight * .55})`; c.lineWidth = 2 + weight * 8;
+        c.beginPath(); c.moveTo(probe.x, probe.y); c.lineTo(x, y); c.stroke();
+      }
+      c.globalAlpha = weight > 0 ? 1 : .28;
+      c.fillStyle = `rgb(${probe.color.join(',')})`; c.shadowColor = c.fillStyle; c.shadowBlur = weight > 0 ? 20 : 0;
+      c.beginPath(); c.arc(probe.x, probe.y, 9 + weight * 10, 0, Math.PI * 2); c.fill(); c.shadowBlur = 0;
+      if (weight > 0) {
+        c.fillStyle = '#fff'; c.font = '10px JetBrains Mono'; c.fillText(`${Math.round(weight * 100)}%`, probe.x - 12, probe.y - 17);
+      }
+      c.globalAlpha = 1;
     });
     const color = mix.map(Math.round);
-    const gradient = c.createRadialGradient(x - 15, y - 18, 4, x, y, 45);
-    gradient.addColorStop(0, '#fff'); gradient.addColorStop(.18, `rgb(${color.join(',')})`); gradient.addColorStop(1, '#171025');
-    c.fillStyle = gradient; c.beginPath(); c.arc(x, y, 42, 0, Math.PI * 2); c.fill();
+    const highlight = color.map(channel => Math.round(channel + (255 - channel) * .38));
+    const shade = color.map(channel => Math.round(channel * .22));
+    const gradient = c.createRadialGradient(x - 15, y - 18, 3, x, y, 47);
+    gradient.addColorStop(0, `rgb(${highlight.join(',')})`); gradient.addColorStop(.18, `rgb(${color.join(',')})`); gradient.addColorStop(.72, `rgb(${color.join(',')})`); gradient.addColorStop(1, `rgb(${shade.join(',')})`);
+    c.shadowColor = `rgb(${color.join(',')})`; c.shadowBlur = 28; c.fillStyle = gradient; c.beginPath(); c.arc(x, y, 45, 0, Math.PI * 2); c.fill(); c.shadowBlur = 0;
+    c.strokeStyle = `rgba(${highlight.join(',')},.9)`; c.lineWidth = 2; c.stroke();
     c.fillStyle = '#efeaff'; c.font = '11px JetBrains Mono'; c.fillText(t('probes.object'), x - 50, y + 67);
     $('#probeReadout').textContent = `RGB ${color.join(' · ')}`;
+    $('#probeReadout').style.color = `rgb(${highlight.join(',')})`;
+    lightSwatch.style.background = `rgb(${color.join(',')})`;
+    objectSwatch.style.background = `radial-gradient(circle at 35% 30%,rgb(${highlight.join(',')}),rgb(${color.join(',')}) 45%,rgb(${shade.join(',')}))`;
+    mixLabel.textContent = `P${left + 1} ${Math.round((1 - blend) * 100)}% + P${right + 1} ${Math.round(blend * 100)}%`;
   }
   function render() {
     $('#objectOut').textContent = `${position.value}%`;

@@ -3,7 +3,7 @@
  * Значение может быть строкой или функцией — тогда t('ключ', ...args) вызывает её.
  * Разметка помечается data-i18n / data-i18n-title / data-i18n-aria.
  */
-import { setLocale } from './vhs.js?v=202609161554';
+import { setLocale } from './vhs.js?v=202609161601';
 
 export const LANGS = ['en', 'ru'];
 const STORE_KEY = 'tape-lang';
