@@ -158,6 +158,46 @@ export const DICT = {
   'modes.baked': { en: 'Baked', ru: 'Baked' },
   'modes.static': { en: 'STATIC', ru: 'СТАТИКА' },
   'modes.dynamic': { en: 'DYNAMIC', ru: 'ДИНАМИКА' },
+  'modes.move': { en: 'Move the dynamic object', ru: 'Двигай динамический объект' },
+  'modes.scene': { en: 'Lighting data flow for static and dynamic objects', ru: 'Поток данных освещения для статического и динамического объектов' },
+  'modes.direct': { en: 'DIRECT LIGHT', ru: 'ПРЯМОЙ СВЕТ' },
+  'modes.lightmap': { en: 'LIGHTMAP · BAKED DATA', ru: 'LIGHTMAP · ЗАПЕЧЁННЫЕ ДАННЫЕ' },
+  'modes.visual': {
+    en: {
+      realtime: {
+        source: 'LIVE LIGHT · EVERY FRAME', staticObject: 'LIVE LIGHT + LIVE SHADOW', dynamicObject: 'LIVE LIGHT + MOVING SHADOW',
+        staticShadow: 'LIVE SHADOW', dynamicShadow: 'MOVING SHADOW', runtime: 'GPU UPDATES LIGHT + BOTH SHADOWS',
+        explain: 'Move the sphere: its light and shadow stay attached because the light is evaluated again every frame.'
+      },
+      mixed: {
+        source: 'DIRECT LIVE · INDIRECT BAKED', staticObject: 'LIGHTMAP + LIVE DIRECT', dynamicObject: 'LIVE DIRECT + PROBES',
+        staticShadow: 'BAKED / SHADOWMASK', dynamicShadow: 'MOVING SHADOW', runtime: 'GPU UPDATES DIRECT LIGHT + DYNAMIC SHADOW',
+        explain: 'Static indirect light stays in the lightmap. Direct light and the moving object’s shadow still react during gameplay.'
+      },
+      baked: {
+        source: 'LIGHT STORED IN LIGHTMAP', staticObject: 'LIGHTMAP + BAKED SHADOW', dynamicObject: 'LIGHT PROBES · NO NEW SHADOW',
+        staticShadow: 'BAKED SHADOW', dynamicShadow: 'NO SHADOW UPDATE', runtime: 'GPU READS BAKED DATA · NO LIGHT UPDATE',
+        explain: 'Move the sphere: the baked texture cannot change. Static light and shadow remain fixed; the moving object needs probes and cannot add a new baked shadow.'
+      },
+    },
+    ru: {
+      realtime: {
+        source: 'ЖИВОЙ СВЕТ · КАЖДЫЙ КАДР', staticObject: 'ЖИВОЙ СВЕТ + ЖИВАЯ ТЕНЬ', dynamicObject: 'ЖИВОЙ СВЕТ + ДВИЖУЩАЯСЯ ТЕНЬ',
+        staticShadow: 'ЖИВАЯ ТЕНЬ', dynamicShadow: 'ТЕНЬ ДВИЖЕТСЯ', runtime: 'GPU ОБНОВЛЯЕТ СВЕТ + ОБЕ ТЕНИ',
+        explain: 'Двигай сферу: свет и тень остаются привязаны к ней, потому что освещение пересчитывается каждый кадр.'
+      },
+      mixed: {
+        source: 'ПРЯМОЙ СВЕТ ЖИВОЙ · НЕПРЯМОЙ ЗАПЕЧЁН', staticObject: 'LIGHTMAP + ЖИВОЙ ПРЯМОЙ СВЕТ', dynamicObject: 'ЖИВОЙ ПРЯМОЙ СВЕТ + PROBES',
+        staticShadow: 'BAKED / SHADOWMASK', dynamicShadow: 'ТЕНЬ ДВИЖЕТСЯ', runtime: 'GPU ОБНОВЛЯЕТ ПРЯМОЙ СВЕТ + ДИНАМИЧЕСКУЮ ТЕНЬ',
+        explain: 'Непрямой свет статики остаётся в lightmap. Прямой свет и тень движущегося объекта продолжают реагировать во время игры.'
+      },
+      baked: {
+        source: 'СВЕТ СОХРАНЁН В LIGHTMAP', staticObject: 'LIGHTMAP + ЗАПЕЧЁННАЯ ТЕНЬ', dynamicObject: 'ТОЛЬКО LIGHT PROBES · НОВОЙ ТЕНИ НЕТ',
+        staticShadow: 'ЗАПЕЧЁННАЯ ТЕНЬ', dynamicShadow: 'ТЕНЬ НЕ ОБНОВЛЯЕТСЯ', runtime: 'GPU ЧИТАЕТ BAKED DATA · СВЕТ НЕ ОБНОВЛЯЕТСЯ',
+        explain: 'Двигай сферу: запечённая текстура не меняется. Свет и тень статики остаются на месте; движущемуся объекту нужны probes, и новую baked-тень он не добавит.'
+      },
+    }
+  },
   'modes.data': {
     en: {
       realtime: [['Moves?', 'Lights and objects can move freely.'], ['Runtime cost', 'Highest: direct light and shadows update every frame.'], ['Use when', 'Gameplay changes lighting or shadow casters continuously.']],

@@ -1,7 +1,7 @@
-import { $, $$, bootVhs, fitCanvas, press, clamp } from '../assets/vhs.js?v=202609161544';
-import { initI18n, t, onLang } from '../assets/i18n.js?v=202609161544';
-import { COMMON } from '../assets/i18n-common.js?v=202609161544';
-import { DICT } from './i18n.js?v=202609161544';
+import { $, $$, bootVhs, fitCanvas, press, clamp } from '../assets/vhs.js?v=202609161554';
+import { initI18n, t, onLang } from '../assets/i18n.js?v=202609161554';
+import { COMMON } from '../assets/i18n-common.js?v=202609161554';
+import { DICT } from './i18n.js?v=202609161554';
 import {
   RENDERERS,
   MSAA_PATTERNS,
@@ -12,7 +12,7 @@ import {
   probeRecommendation,
   shadowBudget,
   upscalingModel,
-} from './model.js?v=202609161544';
+} from './model.js?v=202609161554';
 
 initI18n({ ...COMMON, ...DICT });
 bootVhs();
@@ -296,16 +296,44 @@ function initShadowLab() {
 }
 
 function initLightModes() {
-  const buttons = $$('#lightModes .seg button');
+  const buttons = $$('#lightModes .seg button'), scene = $('#lightModes .light-mode-scene'), motion = $('#modeMotion');
+  const staticActor = $('.static-actor', scene), dynamicActor = $('.dynamic-actor', scene);
+  const staticBeam = $('.beam-static', scene), dynamicBeam = $('.beam-dynamic', scene);
+  const aimBeam = (beam, actor) => {
+    const sceneBox = scene.getBoundingClientRect(), actorBox = actor.getBoundingClientRect();
+    const sourceX = sceneBox.width * .5, sourceY = 112;
+    const targetX = actorBox.left - sceneBox.left + actorBox.width * .5;
+    const targetY = actorBox.top - sceneBox.top + actorBox.height * .42;
+    const dx = targetX - sourceX, dy = targetY - sourceY;
+    beam.style.left = `${sourceX}px`;
+    beam.style.top = `${sourceY}px`;
+    beam.style.width = `${Math.hypot(dx, dy)}px`;
+    beam.style.transform = `rotate(${Math.atan2(dy, dx) * 180 / Math.PI}deg)`;
+  };
+  const move = () => {
+    scene.style.setProperty('--dynamic-x', `${motion.value}%`);
+    $('#modeMotionOut').textContent = `${motion.value}%`;
+    aimBeam(staticBeam, staticActor);
+    aimBeam(dynamicBeam, dynamicActor);
+  };
   const render = button => {
     press(buttons, candidate => candidate === button);
     const mode = button.dataset.v;
+    const visual = t('modes.visual')[mode];
     $('#modeFacts').innerHTML = t('modes.data')[mode].map(([name, text]) => `<div><b>${name}</b><p>${text}</p></div>`).join('');
-    $('.light-mode-scene').dataset.mode = mode;
-    $('.dynamic-ball').style.filter = mode === 'baked' ? 'brightness(.65)' : 'none';
-    $('.mode-rays').style.opacity = mode === 'baked' ? '.25' : mode === 'mixed' ? '.65' : '1';
+    scene.dataset.mode = mode;
+    $('#modeSourceBadge').textContent = visual.source;
+    $('#staticLightBadge').textContent = visual.staticObject;
+    $('#dynamicLightBadge').textContent = visual.dynamicObject;
+    $('#staticShadowBadge').textContent = visual.staticShadow;
+    $('#dynamicShadowBadge').textContent = visual.dynamicShadow;
+    $('#modeRuntime').textContent = visual.runtime;
+    $('#modeSceneExplain').textContent = visual.explain;
+    move();
   };
   buttons.forEach(button => button.onclick = () => render(button));
+  motion.addEventListener('input', move);
+  addEventListener('resize', move);
   render(buttons[0]);
   return () => render(buttons.find(bool) || buttons[0]);
 }
