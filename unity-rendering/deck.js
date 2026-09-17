@@ -1,11 +1,11 @@
 /** Пульт кадра: переключаем техники и смотрим, во что превращается поток команд. */
-import { $, $$, fmt, fmtI, bytes, esc, press, onVisible, RM } from '../assets/vhs.js?v=202609161617';
-import { t, onLang } from '../assets/i18n.js?v=202609161617';
+import { $, $$, fmt, fmtI, bytes, esc, press, onVisible, RM } from '../assets/vhs.js?v=202609162304';
+import { t, onLang } from '../assets/i18n.js?v=202609162304';
 import {
   OBJECTS, DEFAULT_FLAGS, MATERIALS, MESHES, PATHS, TECHNIQUES,
   evaluate, compareTechniques, available, unavailableReason, shaderVariant, ALL_OFF
-} from './model.js?v=202609161617';
-import { createScene } from './scene.js?v=202609161617';
+} from './model.js?v=202609162304';
+import { createScene } from './scene.js?v=202609162304';
 
 const S = { pipe: 'urp', k: 10, stat: true, dyn: false, srp: true, inst: false, grd: false, wire: false, selRun: null, selObj: null, play: -1 };
 let ev, base, runOf = new Map(), hoverId = null, scene, tipEl = null;

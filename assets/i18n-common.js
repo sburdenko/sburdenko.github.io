@@ -18,5 +18,7 @@ export const COMMON = {
 
   'foot.backToShelf': { en: '◀ Back to the shelf', ru: '◀ Вернуться на полку' },
   'foot.tape1': { en: 'Tape 01: batching in Unity', ru: 'Кассета №1: батчинг в Unity' },
-  'foot.tape2': { en: 'Tape 02: BFS and DFS', ru: 'Кассета №2: BFS и DFS' }
+  'foot.tape2': { en: 'Tape 02: BFS and DFS', ru: 'Кассета №2: BFS и DFS' },
+  'foot.tape4': { en: 'Tape 04: URP field guide', ru: 'Кассета №4: путеводитель по URP' },
+  'foot.tape5': { en: 'Tape 05: design patterns', ru: 'Кассета №5: паттерны проектирования' }
 };

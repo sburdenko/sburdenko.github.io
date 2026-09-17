@@ -9,6 +9,8 @@ import { HUB } from '../assets/i18n-hub.js';
 import { DICT as BFS } from '../algorithms/bfs-dfs/i18n.js';
 import { DICT as UNITY } from '../unity-rendering/i18n.js';
 import { PATHS, TECHNIQUES, unavailableReason, available } from '../unity-rendering/model.js';
+import { DICT as URP } from '../unity-urp/i18n.js';
+import { DICT as PATTERNS } from '../unity-patterns/i18n.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = p => readFileSync(join(root, p), 'utf8');
@@ -17,11 +19,13 @@ const jsFiles = dir => readdirSync(join(root, dir)).filter(f => f.endsWith('.js'
 const PAGES = [
   { name: 'полка', dicts: [COMMON, HUB], html: ['index.html'], js: ['assets/hub.js', 'assets/i18n.js'] },
   { name: 'BFS/DFS', dicts: [COMMON, BFS], html: ['algorithms/bfs-dfs/index.html'], js: jsFiles('algorithms/bfs-dfs') },
-  { name: 'батчинг', dicts: [COMMON, UNITY], html: ['unity-rendering/index.html'], js: jsFiles('unity-rendering') }
+  { name: 'батчинг', dicts: [COMMON, UNITY], html: ['unity-rendering/index.html'], js: jsFiles('unity-rendering') },
+  { name: 'URP', dicts: [COMMON, URP], html: ['unity-urp/index.html'], js: jsFiles('unity-urp') },
+  { name: 'паттерны', dicts: [COMMON, PATTERNS], html: ['unity-patterns/index.html'], js: jsFiles('unity-patterns') }
 ];
 
 test('у каждой строки есть оба языка и один и тот же тип значения', () => {
-  for (const dict of [COMMON, HUB, BFS, UNITY]) {
+  for (const dict of [COMMON, HUB, BFS, UNITY, URP, PATTERNS]) {
     for (const [key, value] of Object.entries(dict)) {
       assert.ok(value.en !== undefined, `${key}: нет английского варианта`);
       assert.ok(value.ru !== undefined, `${key}: нет русского варианта`);
@@ -81,7 +85,7 @@ test('семейства ключей, которые код собирает н
 
 test('английский и русский словари не перепутаны местами', () => {
   const cyrillic = /[а-яё]/i;
-  for (const dict of [COMMON, HUB, BFS, UNITY]) {
+  for (const dict of [COMMON, HUB, BFS, UNITY, URP, PATTERNS]) {
     for (const [key, value] of Object.entries(dict)) {
       if (typeof value.en !== 'string') continue;
       assert.equal(cyrillic.test(value.en), false, `${key}: кириллица в английском варианте`);

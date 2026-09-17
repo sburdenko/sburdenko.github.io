@@ -4,15 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0b0715">
-<title data-i18n="page.title">URP Field Guide · Unity 6 · Tape 04</title>
-<meta name="description" content="A concise interactive guide to Unity 6 URP: renderer paths, lighting, probes, shaders, Render Graph, post-processing and performance.">
+<title data-i18n="page.title">URP field guide · Unity 6 · Tape 04</title>
+<meta name="description" content="Unity's advanced URP e-book rebuilt as working rigs: renderers, MSAA, GPU Resident Drawer, shadows, mixed lighting, APV, shaders, Render Graph, volumes, STP, PSO warm-up and profiling.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
-<link rel="stylesheet" href="../assets/vhs.css?v=202609161617">
-<link rel="stylesheet" href="./style.css?v=202609161617">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='10' y='10' width='80' height='80' rx='16' fill='%230b0715'/><path d='M25 68V32h13v24h24V32h13v36z' fill='%2326e3ea'/></svg>">
+<link rel="stylesheet" href="../assets/vhs.css?v=202609162304">
+<link rel="stylesheet" href="./style.css?v=202609162304">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
 <script>
+/* Страница живёт на модулях: если граф импортов не собрался, всё замирает молча.
+   Этот сторож показывает, что именно упало, и подсказывает жёсткую перезагрузку. */
 (function () {
   var shown = false;
   function report(what) {
@@ -22,17 +24,17 @@
     box.setAttribute('role', 'alert');
     box.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99;padding:12px 16px;' +
       'background:#ff5c6c;color:#1a0009;font:600 13px/1.5 ui-monospace,Menlo,Consolas,monospace';
-    box.textContent = 'Scripts failed to load — press Cmd/Ctrl + Shift + R. ' +
+    box.textContent = 'Scripts failed to load — press Cmd/Ctrl + Shift + R to hard-reload. ' +
       'Скрипты не загрузились — обнови страницу с Cmd/Ctrl + Shift + R. [' + what + ']';
     (document.body || document.documentElement).appendChild(box);
   }
-  addEventListener('error', function (event) {
-    var element = event.target;
-    if (element && (element.tagName === 'SCRIPT' || element.tagName === 'LINK')) report(element.src || element.href);
-    else report(event.message || 'script error');
+  addEventListener('error', function (e) {
+    var el = e.target;
+    if (el && (el.tagName === 'SCRIPT' || el.tagName === 'LINK')) report(el.src || el.href);
+    else report(e.message || 'script error');
   }, true);
-  addEventListener('unhandledrejection', function (event) {
-    report(String((event.reason && event.reason.message) || event.reason));
+  addEventListener('unhandledrejection', function (e) {
+    report(String((e.reason && e.reason.message) || e.reason));
   });
 })();
 </script>
@@ -46,64 +48,81 @@
 
 <header class="osd" data-i18n-aria="osd.bar">
   <div class="l"><a class="home" href="../" data-i18n="osd.shelf">◀ SHELF</a><span class="play">PLAY ►</span><span class="ch" id="osdCh">CH.00 MAP</span></div>
-  <div class="r"><nav id="osdNav" data-i18n-aria="osd.nav"></nav><div class="seg lang" id="langSeg" role="group" data-i18n-aria="osd.lang"><button data-l="en" aria-pressed="true">EN</button><button data-l="ru" aria-pressed="false">RU</button></div><span>SP</span><span class="ctr" id="osdCtr">0:00:00</span></div>
+  <div class="r">
+    <nav id="osdNav" data-i18n-aria="osd.nav"></nav>
+    <div class="seg lang" id="langSeg" role="group" data-i18n-aria="osd.lang"><button data-l="en" aria-pressed="true">EN</button><button data-l="ru" aria-pressed="false">RU</button></div>
+    <span>SP</span><span class="ctr" id="osdCtr">0:00:00</span>
+  </div>
 </header>
 
 <main>
-<section class="hero chapter" id="map" data-ch="CH.00 MAP" style="padding-top:56px">
-  <p class="eyebrow" data-i18n="hero.eyebrow">Tape 04 · Unity 6 · 189 pages compressed</p>
-  <h1 class="title">URP<span class="title-2" data-i18n="hero.subtitle">the frame, from asset to pixels</span></h1>
-  <p class="kicker" data-i18n="hero.lede">The book becomes useful when its settings form one mental model: a <b>URP Asset</b> sets the budget, a <b>Renderer</b> decides the path, passes produce buffers, shaders turn those buffers into pixels, and profiling tells you which choice actually hurts.</p>
-
-  <div class="frame-map" data-i18n-aria="map.aria">
-    <a href="#setup"><span>01</span><b>URP Asset</b><small data-i18n="map.asset">quality + renderer</small></a>
-    <i>→</i><a href="#lighting"><span>02</span><b data-i18n="map.lightTitle">Lighting</b><small data-i18n="map.light">shadows + modes</small></a>
-    <i>→</i><a href="#shaders"><span>04</span><b data-i18n="map.shaderTitle">Shaders</b><small data-i18n="map.shader">materials → passes</small></a>
-    <i>→</i><a href="#render-graph"><span>05</span><b>Render Graph</b><small data-i18n="map.graph">passes + resources</small></a>
-    <i>→</i><a href="#post"><span>06</span><b data-i18n="map.finalTitle">Final image</b><small data-i18n="map.final">volumes + cameras</small></a>
-  </div>
-
-  <div class="three takeaways">
-    <article><span class="n">1</span><h3 data-i18n="hero.take1h">Choose by constraints</h3><p data-i18n="hero.take1p">MSAA, light count, transparency, memory and target hardware decide the renderer. There is no universally best path.</p></article>
-    <article><span class="n">2</span><h3 data-i18n="hero.take2h">Pay only for what you use</h3><p data-i18n="hero.take2p">Shadow distance, depth texture, opaque texture, extra lights and full-screen passes are budget decisions.</p></article>
-    <article><span class="n">3</span><h3 data-i18n="hero.take3h">Measure the actual frame</h3><p data-i18n="hero.take3p">Frame Debugger explains the draw sequence. Profiler tells you where the time goes. Use both before cutting quality.</p></article>
-  </div>
-  <p class="source-line" data-i18n="hero.source">Source map · Unity 6 URP e-book · Introduction and contents · pages 7–188</p>
+<!-- ============ MAP ============ -->
+<section class="chapter hero" id="map" data-ch="CH.00 MAP">
+  <p class="eyebrow" data-i18n="hero.eyebrow">Tape 04 · Unity 6 · Universal Render Pipeline</p>
+  <h1 class="title">URP<span class="title-2" data-i18n="hero.subtitle">one frame, from asset to pixels</span></h1>
+  <p class="kicker hero-lede" data-i18n="hero.lede"></p>
+  <nav class="frame-map" id="frameMap" data-i18n-aria="map.aria"></nav>
+  <div class="prio" data-i18n="hero.take"></div>
 </section>
 
-<section class="chapter" id="setup" data-ch="CH.01 PATH">
+<!-- ============ SETUP ============ -->
+<section class="chapter" id="setup" data-ch="CH.01 SETUP">
   <div class="ch-head">
-    <p class="osdtag">CH.01 // SETUP &amp; RENDERER PATH</p>
-    <h2 data-i18n="setup.h2">Choose the path before tuning the pixels</h2>
-    <p class="kicker" data-i18n="setup.kicker">The URP Asset is the global quality contract. The Renderer Data asset defines how the frame is built. Quality levels can point at different URP Assets, so mobile and desktop do not need the same settings.</p>
+    <p class="osdtag">CH.01 // SETUP · QUALITY</p>
+    <h2 data-i18n="setup.h2"></h2>
+  </div>
+  <div class="two">
+    <div class="prose" data-i18n="setup.prose"></div>
+    <div class="facts" data-i18n="setup.facts"></div>
+  </div>
+  <div class="tbl-wrap"><table><thead><tr><th data-i18n="setup.thShader"></th><th data-i18n="setup.thModel"></th><th data-i18n="setup.thUse"></th></tr></thead><tbody id="shaderTable"></tbody></table></div>
+
+  <div class="panel lab" id="settingsLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="settings.labTag"></p><h3 data-i18n="settings.labH"></h3></div>
+      <div class="seg" id="settingsMode" role="group"><button data-v="quiz" aria-pressed="true" data-i18n="settings.quiz"></button><button data-v="browse" aria-pressed="false" data-i18n="settings.browse"></button></div></div>
+    <div class="settings-question" id="settingsQuestion" aria-live="polite"></div>
+    <div class="locations" id="settingsLocations" role="group"></div>
+    <p class="bigout" id="settingsResult"></p>
+  </div>
+  <div class="errata" data-i18n="setup.errata"></div>
+</section>
+
+<!-- ============ RENDERER ============ -->
+<section class="chapter" id="renderer" data-ch="CH.02 RENDERER">
+  <div class="ch-head">
+    <p class="osdtag">CH.02 // FORWARD · FORWARD+ · DEFERRED</p>
+    <h2 data-i18n="renderer.h2"></h2>
+  </div>
+  <div class="two">
+    <div class="prose" data-i18n="renderer.prose"></div>
+    <div class="tbl-wrap"><table class="compact-table"><thead><tr><th></th><th>Forward</th><th>Forward+</th><th>Deferred</th></tr></thead><tbody id="rendererTable"></tbody></table></div>
   </div>
 
   <div class="panel lab" id="rendererLab">
-    <div class="lab-head"><div><p class="lbl" data-i18n="setup.labTag">INTERACTIVE · RENDERER CHOOSER</p><h3 data-i18n="setup.labH">Describe one camera</h3></div><span class="page-tag" data-i18n="setup.pages">Book pp. 27–36</span></div>
-    <div class="control-grid">
-      <label><span data-i18n="setup.lights">Visible real-time lights</span> <output id="lightOut">18</output><input id="lightCount" type="range" min="1" max="80" value="18"></label>
-      <label><span data-i18n="setup.transparent">Transparent screen area</span> <output id="transparentOut">20%</output><input id="transparent" type="range" min="0" max="80" value="20"></label>
-      <div class="ctl-group"><span class="ctl-label" data-i18n="setup.target">TARGET</span><div class="seg" id="targetSeg"><button data-v="desktop" aria-pressed="true" data-i18n="setup.desktop">Desktop</button><button data-v="mobile" aria-pressed="false" data-i18n="setup.mobile">Mobile / XR</button></div></div>
-      <button class="tg" id="msaaToggle" aria-pressed="true" data-i18n="setup.msaa">MSAA required</button>
+    <div class="lab-head"><div><p class="lbl" data-i18n="renderer.labTag"></p><h3 data-i18n="renderer.labH"></h3></div></div>
+    <div class="renderer-grid">
+      <div class="controls-stack">
+        <div class="checks" id="rendererChecks"></div>
+        <label><span data-i18n="renderer.perObject"></span> <output id="rPerObjectOut"></output><input type="range" id="rPerObject" min="1" max="16" value="4"></label>
+        <label><span data-i18n="renderer.onScreen"></span> <output id="rOnScreenOut"></output><input type="range" id="rOnScreen" min="1" max="300" value="12"></label>
+        <label><span data-i18n="renderer.transparent"></span> <output id="rTransparentOut"></output><input type="range" id="rTransparent" min="0" max="80" value="15"></label>
+        <div class="ctl-group"><span class="ctl-label" data-i18n="renderer.platform"></span>
+          <div class="seg" id="rPlatform" role="group"><button data-v="desktop" aria-pressed="true">Desktop / console</button><button data-v="mobile" aria-pressed="false">Mobile</button><button data-v="mobileLow" aria-pressed="false" data-i18n="renderer.mobileLow"></button><button data-v="gles3" aria-pressed="false">GLES 3</button></div></div>
+      </div>
+      <div class="renderer-verdicts" id="rendererVerdicts" aria-live="polite"></div>
     </div>
-    <div class="renderer-result">
-      <div class="signal-screen"><span class="signal-label" data-i18n="setup.recommended">RECOMMENDED START</span><strong id="rendererName">Forward+</strong><p id="rendererIdea"></p></div>
-      <div><p id="rendererReason" class="reason"></p><div class="score-bars" id="rendererScores"></div></div>
-    </div>
-    <div class="renderer-cards" id="rendererCards"></div>
-    <p class="note" data-i18n="setup.note">This chooser encodes the trade-offs, not a hardware benchmark. Validate the result on the target device.</p>
   </div>
 
   <div class="panel lab" id="msaaLab">
-    <div class="lab-head"><div><p class="lbl" data-i18n="msaa.tag">INTERACTIVE · HOW MSAA WORKS</p><h3 data-i18n="msaa.h3">One pixel, several coverage tests</h3></div><span class="page-tag" data-i18n="msaa.pages">Book p. 36</span></div>
-    <p class="reason" data-i18n="msaa.intro">A pixel is still resolved to one final color. MSAA places several sample points inside it, asks which samples the triangle covers, stores coverage/depth per sample, then averages them at resolve.</p>
+    <div class="lab-head"><div><p class="lbl" data-i18n="msaa.tag"></p><h3 data-i18n="msaa.h3"></h3></div></div>
+    <p class="reason" data-i18n="msaa.intro"></p>
     <div class="msaa-controls">
-      <div class="ctl-group"><span class="ctl-label" data-i18n="msaa.samples">SAMPLES PER PIXEL</span><div class="seg" id="msaaSamples"><button data-samples="1" aria-pressed="false">1×</button><button data-samples="2" aria-pressed="false">2×</button><button data-samples="4" aria-pressed="true">4×</button><button data-samples="8" aria-pressed="false">8×</button></div></div>
-      <label><span data-i18n="msaa.move">Move the triangle edge</span> <output id="msaaEdgeOut">50%</output><input id="msaaEdge" type="range" min="0" max="100" value="50"></label>
-      <div class="ctl-group"><span class="ctl-label" data-i18n="msaa.problem">WHAT IS ALIASING?</span><div class="seg" id="msaaProblem"><button data-problem="geometry" aria-pressed="true" data-i18n="msaa.geometry">Geometry edge</button><button data-problem="alpha" aria-pressed="false" data-i18n="msaa.alpha">Cutout foliage</button><button data-problem="shader" aria-pressed="false" data-i18n="msaa.shader">Shader shimmer</button></div></div>
+      <div class="ctl-group"><span class="ctl-label" data-i18n="msaa.samples"></span><div class="seg" id="msaaSamples" role="group"><button data-v="1" aria-pressed="false">1×</button><button data-v="2" aria-pressed="false">2×</button><button data-v="4" aria-pressed="true">4×</button><button data-v="8" aria-pressed="false">8×</button></div></div>
+      <label><span data-i18n="msaa.move"></span> <output id="msaaEdgeOut">50%</output><input id="msaaEdge" type="range" min="0" max="100" value="50"></label>
+      <div class="ctl-group"><span class="ctl-label" data-i18n="msaa.problem"></span><div class="seg" id="msaaProblem" role="group"><button data-v="geometry" aria-pressed="true" data-i18n="msaa.geometry"></button><button data-v="alpha" aria-pressed="false" data-i18n="msaa.alpha"></button><button data-v="shader" aria-pressed="false" data-i18n="msaa.shader"></button></div></div>
     </div>
     <div class="msaa-layout">
-      <div class="crt msaa-stage"><canvas id="msaaCanvas" data-i18n-aria="msaa.canvas"></canvas><div class="crt-osd"><span data-i18n="msaa.raster">RASTERIZER · COVERAGE MASK</span><span class="rec" id="msaaMode">4× MSAA</span></div></div>
+      <div class="crt"><canvas id="msaaCanvas" data-i18n-aria="msaa.canvas"></canvas><div class="crt-osd"><span data-i18n="msaa.raster"></span><span class="rec" id="msaaMode">4× MSAA</span></div></div>
       <div class="msaa-readout">
         <span class="verdict" id="msaaVerdict"></span>
         <h4 id="msaaProblemTitle"></h4>
@@ -113,171 +132,274 @@
       </div>
     </div>
     <div class="stats c4" id="msaaStats"></div>
-    <div class="three compact msaa-flow">
-      <div><b data-i18n="msaa.step1h">1 · COVERAGE</b><p data-i18n="msaa.step1p">Rasterization tests every sample position against the triangle edge.</p></div>
-      <div><b data-i18n="msaa.step2h">2 · STORE</b><p data-i18n="msaa.step2p">Color, depth and stencil can carry multiple samples for edge pixels.</p></div>
-      <div><b data-i18n="msaa.step3h">3 · RESOLVE</b><p data-i18n="msaa.step3p">Covered and uncovered samples are averaged into one display pixel.</p></div>
-    </div>
-    <div class="two even msaa-tradeoffs">
-      <div class="facts"><div><span class="k save" data-i18n="msaa.prosH">Where MSAA wins</span><p data-i18n="msaa.prosP">Sharp geometric edges, stable VR images and little temporal ghosting. Forward and Forward+ support it in URP.</p></div></div>
-      <div class="facts"><div><span class="k cost" data-i18n="msaa.consH">What you pay</span><p data-i18n="msaa.consP">More multisampled color/depth memory, bandwidth and resolve work. Deferred does not support MSAA in URP.</p></div></div>
-    </div>
-    <p class="note" data-i18n="msaa.note">The memory number below estimates RGBA8 color + 32-bit depth at 1920×1080. Real cost depends on the GPU, formats, tile memory and enabled buffers. Fragment shading is not automatically multiplied by the sample count unless per-sample shading is used.</p>
+    <p class="note" data-i18n="msaa.note"></p>
   </div>
+  <div class="errata" data-i18n="renderer.errata"></div>
+</section>
 
-  <div class="two even">
-    <div class="facts">
-      <div><span class="k need" data-i18n="setup.migrationH">Migration order</span><p data-i18n="setup.migrationP">Commit or back up → install URP → create URP Asset and Renderer → assign it in Graphics/Quality → run Render Pipeline Converter → inspect custom shaders and every important scene.</p></div>
-      <div><span class="k cost" data-i18n="setup.sourceH">Why source control first</span><p data-i18n="setup.sourceP">Material and asset conversion changes files and has no single Undo button. A clean commit is the rollback plan.</p></div>
-    </div>
-    <div class="facts">
-      <div><span class="k save">Forward+</span><p data-i18n="setup.fp">Spatially clusters lights, keeps MSAA and camera stacking, and is the path required by the GPU Resident Drawer.</p></div>
-      <div><span class="k cost">Deferred</span><p data-i18n="setup.deferred">Handles many opaque lit pixels well, but spends memory on G-buffers, does not support MSAA, and still renders transparents forward.</p></div>
+<!-- ============ GRD ============ -->
+<section class="chapter" id="grd" data-ch="CH.03 RESIDENT DRAWER">
+  <div class="ch-head">
+    <p class="osdtag">CH.03 // GPU RESIDENT DRAWER · GPU OCCLUSION CULLING</p>
+    <h2 data-i18n="grd.h2"></h2>
+  </div>
+  <div class="two">
+    <div class="prose" data-i18n="grd.prose"></div>
+    <div class="facts" data-i18n="grd.facts"></div>
+  </div>
+  <div class="panel lab" id="grdLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="grd.labTag"></p><h3 data-i18n="grd.labH"></h3></div></div>
+    <div class="grd-layout">
+      <div class="controls-stack">
+        <div class="checks" id="grdChecks"></div>
+        <button class="tg" id="grdOcclusion" aria-pressed="true">GPU Occlusion Culling</button>
+      </div>
+      <div class="controls-stack">
+        <label><span>MeshRenderers</span> <output id="grdMeshOut"></output><input type="range" id="grdMesh" min="100" max="6000" step="50" value="3000"></label>
+        <label><span data-i18n="grd.pairs"></span> <output id="grdPairsOut"></output><input type="range" id="grdPairs" min="10" max="2000" step="10" value="440"></label>
+        <label><span>SkinnedMeshRenderers</span> <output id="grdSkinnedOut"></output><input type="range" id="grdSkinned" min="0" max="300" value="40"></label>
+        <label><span data-i18n="grd.particles"></span> <output id="grdParticlesOut"></output><input type="range" id="grdParticles" min="0" max="300" value="26"></label>
+        <label><span data-i18n="grd.occluded"></span> <output id="grdOccludedOut"></output><input type="range" id="grdOccluded" min="0" max="90" value="35"></label>
+      </div>
+      <div class="grd-result" aria-live="polite">
+        <span class="badge" id="grdBadge"></span>
+        <div class="membars" id="grdBars"></div>
+        <p class="hint" id="grdNote"></p>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="chapter" id="lighting" data-ch="CH.02 LIGHT">
+<!-- ============ SHADOWS ============ -->
+<section class="chapter" id="shadows" data-ch="CH.04 SHADOWS">
   <div class="ch-head">
-    <p class="osdtag">CH.02 // LIGHTING &amp; SHADOWS</p>
-    <h2 data-i18n="light.h2">A shadow map is a fixed sheet you keep stretching</h2>
-    <p class="kicker" data-i18n="light.kicker">Resolution alone does not make a shadow sharp. Distance spreads the same map over more world space; cascades redistribute it; every shadowed light renders more geometry.</p>
+    <p class="osdtag">CH.04 // SHADOWS</p>
+    <h2 data-i18n="shadow.h2"></h2>
   </div>
-
+  <div class="two">
+    <div class="prose" data-i18n="shadow.prose"></div>
+    <div class="facts" data-i18n="shadow.facts"></div>
+  </div>
   <div class="panel lab" id="shadowLab">
-    <div class="lab-head"><div><p class="lbl" data-i18n="light.labTag">INTERACTIVE · SHADOW BUDGET</p><h3 data-i18n="light.labH">Spend the atlas deliberately</h3></div><span class="page-tag" data-i18n="light.pages">Book pp. 42–47</span></div>
+    <div class="lab-head"><div><p class="lbl" data-i18n="shadow.labTag"></p><h3 data-i18n="shadow.labH"></h3></div></div>
     <div class="shadow-layout">
       <div class="controls-stack">
-        <label><span data-i18n="light.distance">Shadow distance</span> <output id="distanceOut">60 m</output><input id="shadowDistance" type="range" min="10" max="200" step="10" value="60"></label>
-        <label><span data-i18n="light.resolution">Map resolution</span> <output id="resolutionOut">2048</output><input id="shadowResolution" type="range" min="8" max="12" value="11"></label>
-        <label><span data-i18n="light.cascades">Cascades</span> <output id="cascadeOut">2</output><input id="cascades" type="range" min="1" max="4" value="2"></label>
-        <label><span data-i18n="light.spots">Shadowed Spot Lights</span> <output id="spotOut">1</output><input id="spotLights" type="range" min="0" max="6" value="1"></label>
-        <label><span data-i18n="light.points">Shadowed Point Lights</span> <output id="pointOut">0</output><input id="pointLights" type="range" min="0" max="3" value="0"></label>
-        <button class="tg" id="softToggle" aria-pressed="true" data-i18n="light.soft">Soft shadows</button>
+        <label><span data-i18n="shadow.distance"></span> <output id="distanceOut"></output><input id="shadowDistance" type="range" min="10" max="200" step="10" value="60"></label>
+        <label><span data-i18n="shadow.resolution"></span> <output id="resolutionOut"></output><input id="shadowResolution" type="range" min="8" max="12" value="11"></label>
+        <label><span data-i18n="shadow.cascades"></span> <output id="cascadeOut"></output><input id="cascades" type="range" min="1" max="4" value="2"></label>
+        <button class="tg" id="softToggle" aria-pressed="true" data-i18n="shadow.soft"></button>
       </div>
       <div class="shadow-visual">
-        <div class="crt shadow-stage"><canvas id="shadowCanvas" data-i18n-aria="light.canvas"></canvas><div class="crt-osd"><span data-i18n="light.frustum">SCENE VIEW · CAST SHADOWS</span><span class="rec" id="shadowQuality">BALANCED</span></div></div>
-        <div class="shadow-legend"><span><i class="caster"></i><b data-i18n="shadow.legend.object">Shadow caster</b></span><span><i class="cast"></i><b data-i18n="shadow.legend.cast">Rendered shadow</b></span><span><i class="cutoff"></i><b data-i18n="shadow.legend.cutoff">Shadow Distance cutoff</b></span></div>
-        <p class="shadow-caption" id="shadowSceneExplain">Two objects are inside Shadow Distance. The far object stays visible, but its shadow is not rendered.</p>
+        <div class="crt"><canvas id="shadowCanvas" data-i18n-aria="shadow.canvas"></canvas><div class="crt-osd"><span data-i18n="shadow.frustum"></span><span class="rec" id="shadowQuality"></span></div></div>
+        <p class="shadow-caption" id="shadowSceneExplain"></p>
       </div>
     </div>
     <div class="stats c4" id="shadowStats"></div>
     <p class="reason" id="shadowAdvice"></p>
   </div>
 
-  <div class="mode-switcher panel" id="lightModes">
-    <div class="lab-head"><div><p class="lbl" data-i18n="modes.labTag">INTERACTIVE · LIGHT MODES</p><h3 data-i18n="modes.labH">What changes at runtime?</h3></div><span class="page-tag" data-i18n="modes.pages">Book pp. 48–54</span></div>
-    <div class="mode-toolbar">
-      <div class="seg" role="group" data-i18n-aria="modes.aria"><button data-v="realtime" aria-pressed="true" data-i18n="modes.realtime">Realtime</button><button data-v="mixed" aria-pressed="false" data-i18n="modes.mixed">Mixed</button><button data-v="baked" aria-pressed="false" data-i18n="modes.baked">Baked</button></div>
-      <label><span data-i18n="modes.move">Move the dynamic object</span> <output id="modeMotionOut">68%</output><input id="modeMotion" type="range" min="56" max="82" value="68"></label>
-    </div>
-    <div class="light-mode-scene" data-mode="realtime" data-i18n-aria="modes.scene">
-      <div class="mode-source"><div class="mode-sun">☀</div><strong id="modeSourceBadge">LIVE LIGHT · EVERY FRAME</strong></div>
-      <div class="mode-beam beam-static"><span data-i18n="modes.direct">DIRECT LIGHT</span></div>
-      <div class="mode-beam beam-dynamic"><span data-i18n="modes.direct">DIRECT LIGHT</span></div>
-      <div class="lightmap-layer"><span data-i18n="modes.lightmap">LIGHTMAP · BAKED DATA</span></div>
-      <div class="static-actor">
-        <span class="actor-badge" id="staticLightBadge">LIVE LIGHT + SHADOW</span>
-        <div class="static-block" data-i18n="modes.static">STATIC</div>
-        <div class="actor-shadow static-shadow"><span id="staticShadowBadge">LIVE SHADOW</span></div>
+  <div class="panel lab" id="atlasLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="atlas.labTag"></p><h3 data-i18n="atlas.labH"></h3></div></div>
+    <div class="atlas-layout">
+      <div class="controls-stack">
+        <div class="ctl-group"><span class="ctl-label">SHADOW ATLAS RESOLUTION</span>
+          <div class="seg" id="atlasSize" role="group"><button data-v="512" aria-pressed="false">512</button><button data-v="1024" aria-pressed="true">1024</button><button data-v="2048" aria-pressed="false">2048</button><button data-v="4096" aria-pressed="false">4096</button></div></div>
+        <div class="ctl-group"><span class="ctl-label" data-i18n="atlas.add"></span>
+          <div class="ctl-row" id="atlasAdd"></div></div>
+        <div class="atlas-lights" id="atlasLights"></div>
+        <button class="btn" id="atlasBook" data-i18n="atlas.book"></button>
       </div>
-      <div class="dynamic-actor">
-        <span class="actor-badge" id="dynamicLightBadge">LIVE LIGHT + SHADOW</span>
-        <div class="dynamic-ball" data-i18n="modes.dynamic">DYNAMIC</div>
-        <div class="actor-shadow dynamic-shadow"><span id="dynamicShadowBadge">MOVING SHADOW</span></div>
+      <div class="atlas-visual">
+        <div class="crt"><canvas id="atlasCanvas" data-i18n-aria="atlas.canvas"></canvas></div>
+        <p class="bigout" id="atlasOut" aria-live="polite"></p>
       </div>
-      <div class="mode-runtime" id="modeRuntime">GPU updates light and shadows every frame.</div>
     </div>
-    <p class="mode-explain" id="modeSceneExplain"></p>
-    <div class="three compact" id="modeFacts"></div>
+    <div class="tbl-wrap"><table class="compact-table"><thead><tr><th data-i18n="atlas.thMaps"></th><th data-i18n="atlas.thTiling"></th><th data-i18n="atlas.thSize"></th></tr></thead><tbody data-i18n="atlas.table"></tbody></table></div>
   </div>
 </section>
 
-<section class="chapter" id="probes" data-ch="CH.03 PROBES">
+<!-- ============ LIGHT MODES ============ -->
+<section class="chapter" id="modes" data-ch="CH.05 LIGHT MODES">
   <div class="ch-head">
-    <p class="osdtag">CH.03 // PROBES, APV &amp; REFLECTIONS</p>
-    <h2 data-i18n="probes.h2">Baked worlds still need moving objects to belong</h2>
-    <p class="kicker" data-i18n="probes.kicker">Lightmaps illuminate static surfaces. Light Probes and APVs give dynamic objects sampled indirect light. Reflection Probes provide a local cubemap for shiny surfaces. These solve different missing data.</p>
+    <p class="osdtag">CH.05 // LIGHTMAPPING · MIXED LIGHTING · RENDERING LAYERS</p>
+    <h2 data-i18n="modes.h2"></h2>
+  </div>
+  <div class="two">
+    <div class="prose" data-i18n="modes.prose"></div>
+    <ol class="steps" data-i18n="modes.steps"></ol>
+  </div>
+  <div class="panel lab" id="modesLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="modes.labTag"></p><h3 data-i18n="modes.labH"></h3></div></div>
+    <div class="seg" id="modeSeg" role="group"></div>
+    <label><span data-i18n="modes.walk"></span> <output id="modeWalkOut"></output><input type="range" id="modeWalk" min="0" max="100" value="35"></label>
+    <div class="crt"><canvas id="modesCanvas" data-i18n-aria="modes.canvas"></canvas><div class="crt-osd"><span id="modesTitle"></span><span class="rec" id="modesCost"></span></div></div>
+    <div class="tbl-wrap"><table class="compact-table mode-matrix"><thead id="modesHead"></thead><tbody id="modesBody"></tbody></table></div>
+    <p class="reason" id="modesExplain"></p>
   </div>
 
-  <div class="panel lab" id="probeLab">
-    <div class="lab-head"><div><p class="lbl" data-i18n="probes.labTag">INTERACTIVE · PROBE INTERPOLATION</p><h3 data-i18n="probes.labH">Move the dynamic object through baked light</h3></div><span class="page-tag" data-i18n="probes.pages">Book pp. 58–81</span></div>
-    <div class="probe-layout">
-      <div class="probe-visual">
-        <div class="crt"><canvas id="probeCanvas" data-i18n-aria="probes.canvas"></canvas><div class="crt-osd"><span data-i18n="probes.baked">BAKED PROBES</span><span class="rec" id="probeReadout">RGB 0 · 0 · 0</span></div></div>
-        <div class="probe-process">
-          <div><span data-i18n="probes.baseMaterial">BASE MATERIAL</span><i class="probe-base-swatch"></i></div><b>+</b>
-          <div><span data-i18n="probes.sampledLight">INTERPOLATED LIGHT</span><i id="probeLightSwatch"></i><small id="probeMixLabel">P2 50% + P3 50%</small></div><b>=</b>
-          <div><span data-i18n="probes.litResult">LIT OBJECT</span><i id="probeObjectSwatch"></i></div>
-        </div>
-        <p class="probe-explain" data-i18n="probes.explain">This 2D slice blends two neighboring probes so the color change is easy to see. In a real 3D volume Unity blends the surrounding lighting samples.</p>
+  <div class="panel lab" id="layersLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="layers.labTag"></p><h3 data-i18n="layers.labH"></h3></div></div>
+    <div class="two even">
+      <div class="controls-stack">
+        <span class="ctl-label" data-i18n="layers.light"></span>
+        <div class="ctl-row" id="layersLight"></div>
+        <div class="layer-objects" id="layersObjects"></div>
       </div>
       <div class="controls-stack">
-        <label><span data-i18n="probes.position">Object position</span> <output id="objectOut">50%</output><input id="objectPosition" type="range" min="5" max="95" value="50"></label>
-        <label><span data-i18n="probes.scenario">Lighting scenario</span> <output id="timeOut">DAY</output><input id="timeBlend" type="range" min="0" max="100" value="15"></label>
-        <div class="checks">
-          <button class="check" data-probe="dynamic" aria-pressed="true"><span data-i18n="probes.dynamic">Dynamic objects</span><span class="sw">YES</span></button>
-          <button class="check" data-probe="large" aria-pressed="false"><span data-i18n="probes.large">Large / streamed world</span><span class="sw">NO</span></button>
-          <button class="check" data-probe="changing" aria-pressed="true"><span data-i18n="probes.changing">Day/night states</span><span class="sw">YES</span></button>
-        </div>
-        <div class="probe-answer"><span class="lbl" data-i18n="probes.start">START WITH</span><strong id="probeChoice">Adaptive Probe Volumes</strong><p id="probeWhy"></p><small id="probeWatch"></small></div>
+        <p class="hint" data-i18n="layers.steps"></p>
+        <pre class="code" id="layersCode"></pre>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="three concept-grid">
-    <article><h3>Lightmaps</h3><p data-i18n="probes.lightmaps">Best data for static surfaces. Cheap at runtime, but baked direct light loses real-time specular response.</p></article>
-    <article><h3>Light Probes / APV</h3><p data-i18n="probes.lightProbes">Spherical-harmonic lighting sampled in space and interpolated for moving renderers.</p></article>
-    <article><h3>Reflection Probes</h3><p data-i18n="probes.reflections">Local cubemaps for environment reflections. Use the smallest resolution that survives the closest camera view.</p></article>
+<!-- ============ PROBES ============ -->
+<section class="chapter" id="probes" data-ch="CH.06 PROBES · APV">
+  <div class="ch-head">
+    <p class="osdtag">CH.06 // LIGHT PROBES · ADAPTIVE PROBE VOLUMES · REFLECTIONS</p>
+    <h2 data-i18n="probes.h2"></h2>
+  </div>
+  <div class="two">
+    <div class="prose" data-i18n="probes.prose"></div>
+    <div class="tbl-wrap"><table class="compact-table"><thead><tr><th>Light Probe Group</th><th>Adaptive Probe Volume</th></tr></thead><tbody data-i18n="probes.table"></tbody></table></div>
+  </div>
+  <div class="panel lab" id="probeLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="probes.labTag"></p><h3 data-i18n="probes.labH"></h3></div>
+      <div class="seg" id="probeMode" role="group"><button data-v="group" aria-pressed="true">Light Probe Group</button><button data-v="apv" aria-pressed="false">APV</button></div></div>
+    <div class="ctl-row wide-controls">
+      <label><span data-i18n="probes.position"></span> <output id="probePosOut"></output><input type="range" id="probePos" min="0" max="80" value="28"></label>
+      <label><span data-i18n="probes.length"></span> <output id="probeLenOut"></output><input type="range" id="probeLen" min="4" max="60" value="40"></label>
+    </div>
+    <div class="crt"><canvas id="probeCanvas" data-i18n-aria="probes.canvas"></canvas><div class="crt-osd"><span data-i18n="probes.osd"></span><span class="rec" id="probeError"></span></div></div>
+    <p class="reason" id="probeExplain"></p>
+  </div>
+
+  <div class="panel lab" id="leakLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="leak.labTag"></p><h3 data-i18n="leak.labH"></h3></div></div>
+    <div class="leak-layout">
+      <div class="controls-stack">
+        <div class="ctl-group"><span class="ctl-label" data-i18n="leak.spacing"></span>
+          <div class="seg" id="leakSpacing" role="group"><button data-v="1" aria-pressed="false">1 m</button><button data-v="3" aria-pressed="true">3 m</button><button data-v="9" aria-pressed="false">9 m</button></div></div>
+        <label><span data-i18n="leak.thickness"></span> <output id="leakThickOut"></output><input type="range" id="leakThick" min="1" max="30" value="3"></label>
+        <label><span>NormalBias</span> <output id="leakNormalOut"></output><input type="range" id="leakNormal" min="0" max="20" value="0"></label>
+        <label><span>ViewBias</span> <output id="leakViewOut"></output><input type="range" id="leakView" min="0" max="20" value="0"></label>
+        <div class="checks" id="leakChecks"></div>
+      </div>
+      <div class="leak-visual">
+        <div class="crt"><canvas id="leakCanvas" data-i18n-aria="leak.canvas"></canvas></div>
+        <div class="stats c3" id="leakStats"></div>
+        <p class="reason" id="leakExplain"></p>
+      </div>
+    </div>
+  </div>
+  <div class="two">
+    <div class="prose" data-i18n="probes.more"></div>
+    <div class="facts" data-i18n="probes.reflections"></div>
   </div>
 </section>
 
-<section class="chapter" id="shaders" data-ch="CH.04 SHADERS">
+<!-- ============ EFFECTS ============ -->
+<section class="chapter" id="effects" data-ch="CH.07 EFFECTS">
   <div class="ch-head">
-    <p class="osdtag">CH.04 // SHADERS</p>
-    <h2 data-i18n="shader.h2">A shader is a contract with the pipeline</h2>
-    <p class="kicker" data-i18n="shader.kicker">URP shader code uses HLSL and URP includes. A useful shader is more than its visible color: passes and tags tell URP when it participates in depth, lighting and shadows.</p>
+    <p class="osdtag">CH.07 // LENS FLARES · SSAO · DECALS · HALOS</p>
+    <h2 data-i18n="effects.h2"></h2>
+    <p class="kicker" data-i18n="effects.kicker"></p>
   </div>
+  <div class="panel chooser" id="effectsLab">
+    <div class="problem-list" id="effectsList" role="group"></div>
+    <div class="prescription" aria-live="polite">
+      <span class="lbl" data-i18n="effects.use"></span>
+      <strong id="effectsTool"></strong>
+      <ol class="mini-steps" id="effectsSteps"></ol>
+      <span class="lbl" data-i18n="effects.cost"></span>
+      <p id="effectsCost"></p>
+    </div>
+  </div>
+  <dl class="gloss" data-i18n="effects.gloss"></dl>
+</section>
 
-  <div class="panel shader-lab" id="shaderLab">
-    <div class="lab-head"><div><p class="lbl" data-i18n="shader.labTag">INTERACTIVE · SHADER ANATOMY</p><h3 data-i18n="shader.labH">Select a pass to see what disappears without it</h3></div><span class="page-tag" data-i18n="shader.pages">Book pp. 93–104</span></div>
+<!-- ============ SHADERS ============ -->
+<section class="chapter" id="shaders" data-ch="CH.08 SHADERS">
+  <div class="ch-head">
+    <p class="osdtag">CH.08 // CUSTOM SHADERS · SHADER GRAPH</p>
+    <h2 data-i18n="shader.h2"></h2>
+  </div>
+  <div class="two">
+    <div class="prose" data-i18n="shader.prose"></div>
+    <div class="facts" data-i18n="shader.facts"></div>
+  </div>
+  <div class="panel lab" id="shaderLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="shader.labTag"></p><h3 data-i18n="shader.labH"></h3></div></div>
+    <div class="seg" id="shaderSteps" role="group"></div>
     <div class="shader-layout">
-      <div class="shader-object"><div class="orb"></div><div class="ground-shadow"></div><span id="shaderPreviewLabel">LIT · SHADOWS ON</span></div>
-      <div class="shader-passes" id="shaderPasses">
-        <button data-pass="forward" aria-pressed="true"><b>UniversalForward</b><span data-i18n="shader.forward">Draw the visible lit surface</span></button>
-        <button data-pass="shadow" aria-pressed="true"><b>ShadowCaster</b><span data-i18n="shader.shadow">Write depth from the light</span></button>
-        <button data-pass="depth" aria-pressed="true"><b>DepthOnly</b><span data-i18n="shader.depth">Participate in depth-based effects</span></button>
+      <div class="controls-stack">
+        <div class="crt"><canvas id="shaderCanvas" data-i18n-aria="shader.canvas"></canvas><div class="crt-osd"><span id="shaderName"></span><span class="rec" id="shaderBatcher"></span></div></div>
+        <div class="shader-controls" id="shaderControls">
+          <label data-need="color"><span>_BaseColor</span><input type="color" id="shaderColor" value="#26e3ea"></label>
+          <label data-need="lambert"><span data-i18n="shader.lightDir"></span> <output id="shaderLightOut"></output><input type="range" id="shaderLight" min="-80" max="80" value="-35"></label>
+          <label data-need="receives"><span>_ShadowStrength</span> <output id="shaderShadowOut"></output><input type="range" id="shaderShadow" min="0" max="100" value="50"></label>
+          <button class="chip" data-need="receives" id="shaderCaster" aria-pressed="true">UsePass ShadowCaster</button>
+        </div>
+        <p class="reason" id="shaderExplain"></p>
       </div>
-    </div>
-    <div class="shader-code" id="shaderCode"></div>
-    <div class="two even">
-      <p class="reason" data-i18n="shader.lit"><b>Lit</b> uses physically based lighting and supports more material features. <b>Simple Lit</b> trades some fidelity for a cheaper shading model.</p>
-      <p class="reason" data-i18n="shader.graph"><b>Shader Graph</b> is the artist-facing authoring tool. Handwritten HLSL remains useful when you need exact control, reusable includes, or a custom Renderer Feature.</p>
+      <pre class="code tall" id="shaderCode"></pre>
     </div>
   </div>
+
+  <div class="panel lab" id="haloLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="halo.labTag"></p><h3 data-i18n="halo.labH"></h3></div></div>
+    <div class="halo-layout">
+      <div class="crt"><canvas id="haloCanvas" data-i18n-aria="halo.canvas"></canvas></div>
+      <div class="controls-stack">
+        <div class="graph-nodes" data-i18n="halo.nodes"></div>
+        <label><span>Power</span> <output id="haloPowerOut"></output><input type="range" id="haloPower" min="5" max="120" value="40"></label>
+        <label><span>Strength</span> <output id="haloStrengthOut"></output><input type="range" id="haloStrength" min="0" max="100" value="100"></label>
+        <p class="hint" data-i18n="halo.hint"></p>
+      </div>
+    </div>
+  </div>
+  <div class="errata" data-i18n="shader.errata"></div>
 </section>
 
-<section class="chapter" id="render-graph" data-ch="CH.05 GRAPH">
+<!-- ============ RENDER GRAPH ============ -->
+<section class="chapter" id="graph" data-ch="CH.09 RENDER GRAPH">
   <div class="ch-head">
-    <p class="osdtag">CH.05 // RENDERER FEATURES &amp; RENDER GRAPH</p>
-    <h2 data-i18n="graph.h2">The frame is a dependency graph, not a pile of callbacks</h2>
-    <p class="kicker" data-i18n="graph.kicker">Each pass declares what it reads and writes. Render Graph can derive resource lifetimes, reuse transient memory and remove work whose result nobody consumes.</p>
+    <p class="osdtag">CH.09 // RENDERER FEATURES · RENDER GRAPH</p>
+    <h2 data-i18n="graph.h2"></h2>
+  </div>
+  <div class="two">
+    <div class="prose" data-i18n="graph.prose"></div>
+    <div class="facts" data-i18n="graph.facts"></div>
+  </div>
+
+  <div class="panel lab" id="silhouetteLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="sil.labTag"></p><h3 data-i18n="sil.labH"></h3></div>
+      <button class="btn" id="silBook" data-i18n="sil.book"></button></div>
+    <div class="sil-layout">
+      <div class="checks" id="silChecks"></div>
+      <div class="controls-stack">
+        <div class="ctl-group"><span class="ctl-label">SEE-BEHIND PASS · DEPTH TEST</span>
+          <div class="seg" id="silDepth" role="group"><button data-v="lessEqual" aria-pressed="false">LessEqual</button><button data-v="greater" aria-pressed="true">Greater</button><button data-v="always" aria-pressed="false">Always</button></div></div>
+        <div class="crt"><canvas id="silCanvas" data-i18n-aria="sil.canvas"></canvas></div>
+        <p class="reason" id="silOut"></p>
+      </div>
+    </div>
   </div>
 
   <div class="panel lab" id="graphLab">
-    <div class="lab-head"><div><p class="lbl" data-i18n="graph.labTag">INTERACTIVE · FRAME GRAPH</p><h3 data-i18n="graph.labH">Build, compile, then execute one frame</h3></div><span class="page-tag" data-i18n="graph.pages">Book pp. 105–121</span></div>
+    <div class="lab-head"><div><p class="lbl" data-i18n="graph.labTag"></p><h3 data-i18n="graph.labH"></h3></div></div>
     <div class="graph-toolbar">
-      <div class="ctl-group"><span class="ctl-label" data-i18n="graph.phase">PHASE</span><div class="seg" id="graphPhaseSeg"><button data-phase="setup" aria-pressed="true" data-i18n="graph.setup">1 · Setup</button><button data-phase="compile" aria-pressed="false" data-i18n="graph.compile">2 · Compile</button><button data-phase="execute" aria-pressed="false" data-i18n="graph.execute">3 · Execute</button></div></div>
-      <div class="ctl-group"><span class="ctl-label" data-i18n="graph.features">FEATURES DECLARED THIS FRAME</span><div class="ctl-row">
+      <div class="ctl-group"><span class="ctl-label" data-i18n="graph.phase"></span><div class="seg" id="graphPhaseSeg" role="group"><button data-v="setup" aria-pressed="true" data-i18n="graph.setup"></button><button data-v="compile" aria-pressed="false" data-i18n="graph.compile"></button><button data-v="execute" aria-pressed="false" data-i18n="graph.execute"></button></div></div>
+      <div class="ctl-group"><span class="ctl-label" data-i18n="graph.features"></span><div class="ctl-row">
         <button class="tg graph-toggle" data-feature="ssao" aria-pressed="true">SSAO</button>
         <button class="tg graph-toggle" data-feature="decals" aria-pressed="true">Decals</button>
         <button class="tg graph-toggle" data-feature="bloom" aria-pressed="true">Bloom</button>
-        <button class="tg graph-toggle" data-feature="debug" aria-pressed="false" data-i18n="graph.unused">Unused debug output</button>
+        <button class="tg graph-toggle" data-feature="debug" aria-pressed="false" data-i18n="graph.unused"></button>
       </div></div>
     </div>
     <div class="graph-phase-copy" id="graphPhaseCopy" aria-live="polite"></div>
     <div class="stats c4" id="graphStats"></div>
-    <div class="frame-graph" id="frameGraph" aria-live="polite"></div>
+    <div class="frame-graph" id="frameGraph"></div>
     <div class="graph-transport" id="graphTransport">
       <button class="btn" id="graphPrev" data-i18n-aria="graph.prev">◀</button>
       <input id="graphStep" type="range" min="0" max="0" value="0" data-i18n-aria="graph.stepAria">
@@ -286,115 +408,156 @@
     </div>
     <div class="graph-focus" id="graphFocus" aria-live="polite"></div>
     <div class="resource-table" id="resourceTable"></div>
-    <div class="graph-legend"><span><i class="life-cell born"></i><b data-i18n="graph.allocate">allocate</b></span><span><i class="life-cell alive"></i><b data-i18n="graph.live">live</b></span><span><i class="life-cell release"></i><b data-i18n="graph.release">last use / release</b></span><span><i class="life-cell access"></i><b data-i18n="graph.access">current pass access</b></span></div>
-    <p class="note" data-i18n="graph.note">Render Graph is a code API, not a node editor. Unity’s Render Graph Viewer is the inspection window: Window → Analysis → Render Graph Viewer.</p>
+    <div class="graph-legend"><span><i class="life-cell born"></i><b data-i18n="graph.allocate"></b></span><span><i class="life-cell alive"></i><b data-i18n="graph.live"></b></span><span><i class="life-cell release"></i><b data-i18n="graph.release"></b></span><span><i class="life-cell access"></i><b data-i18n="graph.access"></b></span></div>
+    <p class="note" data-i18n="graph.note"></p>
   </div>
 
-  <div class="two even">
-    <div class="facts"><div><span class="k need">Render Objects</span><p data-i18n="graph.renderObjects">A built-in Renderer Feature that filters objects by Layer Mask and can override material or render state at a chosen pipeline event.</p></div></div>
-    <div class="facts"><div><span class="k save" data-i18n="graph.customH">Custom Renderer Feature</span><p data-i18n="graph.customP">The right seam for a custom pass. Record it through Render Graph instead of hiding render lifecycle work in unrelated scripts.</p></div></div>
-  </div>
-
-  <div class="panel lab merge-lab" id="mergeLab">
-    <div class="lab-head"><div><p class="lbl" data-i18n="merge.tag">INTERACTIVE · MOBILE PASS MERGING</p><h3 data-i18n="merge.h3">Sample a texture, or fetch the current framebuffer?</h3></div><span class="page-tag" data-i18n="merge.pages">Book pp. 117–120</span></div>
-    <div class="merge-layout">
-      <button class="tg" id="fetchToggle" aria-pressed="false" data-i18n="merge.toggle">Use Framebuffer Fetch</button>
-      <div class="merge-track" id="mergeTrack"></div>
-      <div class="merge-result"><strong id="mergeResult"></strong><p id="mergeReason"></p></div>
+  <div class="panel lab" id="mergeLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="merge.labTag"></p><h3 data-i18n="merge.labH"></h3></div></div>
+    <div class="merge-controls">
+      <button class="tg" id="mergeDepth" aria-pressed="true">Depth Texture</button>
+      <div class="seg" id="mergeDepthMode" role="group"><button data-v="afterOpaques" aria-pressed="true">After Opaques</button><button data-v="afterTransparents" aria-pressed="false">After Transparents</button></div>
+      <button class="tg" id="mergeOpaque" aria-pressed="true">Opaque Texture</button>
+      <div class="seg" id="mergeDown" role="group"><button data-v="2x" aria-pressed="true">Downsampling 2× Bilinear</button><button data-v="none" aria-pressed="false">None</button></div>
+      <div class="seg" id="mergeTint" role="group"><button data-v="off" aria-pressed="false" data-i18n="merge.tintOff"></button><button data-v="texture" aria-pressed="true">Tint · UseTexture</button><button data-v="fetch" aria-pressed="false">Tint · SetInputAttachment</button></div>
+      <button class="tg" id="mergeFetch" aria-pressed="true" data-i18n="merge.fetchSupported"></button>
     </div>
-    <p class="note" data-i18n="merge.note">On supported Vulkan, Metal and DirectX 12 mobile targets, input attachments can keep data in tile memory. Unsupported platforms fall back to texture sampling.</p>
-  </div>
-</section>
-
-<section class="chapter" id="post" data-ch="CH.06 POST">
-  <div class="ch-head">
-    <p class="osdtag">CH.06 // POST-PROCESSING &amp; CAMERAS</p>
-    <h2 data-i18n="post.h2">Volumes describe intent; cameras decide where it applies</h2>
-    <p class="kicker" data-i18n="post.kicker">A Global Volume affects every eligible camera. A Local Volume blends by position. Camera stacking composes a Base camera with Overlay cameras, useful for UI or a cockpit layer.</p>
-  </div>
-
-  <div class="panel lab" id="postLab">
-    <div class="lab-head"><div><p class="lbl" data-i18n="post.labTag">INTERACTIVE · VOLUME BLEND</p><h3 data-i18n="post.labH">Move the camera into a local volume</h3></div><span class="page-tag" data-i18n="post.pages">Book pp. 122–137</span></div>
-    <div class="post-layout">
-      <div class="post-preview" id="postPreview"><div class="sky"></div><div class="sun-dot"></div><div class="mountains"></div><div class="local-zone" data-i18n="post.local">LOCAL VOLUME</div><div class="camera-marker" data-i18n="post.cam">CAM</div><div class="cockpit" id="cockpit" data-i18n="post.overlayLabel">OVERLAY CAMERA · HUD</div></div>
-      <div class="controls-stack">
-        <label><span data-i18n="post.position">Camera position</span> <output id="cameraOut">20%</output><input id="cameraPosition" type="range" min="0" max="100" value="20"></label>
-        <button class="tg post-toggle" data-effect="bloom" aria-pressed="true">Bloom</button>
-        <button class="tg post-toggle" data-effect="grade" aria-pressed="true" data-i18n="post.grade">Color grading</button>
-        <button class="tg post-toggle" data-effect="vignette" aria-pressed="false" data-i18n="post.vignette">Vignette</button>
-        <button class="tg" id="overlayToggle" aria-pressed="true" data-i18n="post.overlay">Overlay camera</button>
-        <p class="reason" id="postReadout"></p>
-      </div>
+    <div class="native-passes" id="mergePasses" aria-live="polite"></div>
+    <p class="reason" id="mergeOut"></p>
+    <div class="two even">
+      <pre class="code" id="mergeCode"></pre>
+      <pre class="code" id="mergeFetchCode"></pre>
     </div>
   </div>
 </section>
 
-<section class="chapter" id="unity6" data-ch="CH.07 UNITY 6">
+<!-- ============ POST ============ -->
+<section class="chapter" id="post" data-ch="CH.10 POST · CAMERAS">
   <div class="ch-head">
-    <p class="osdtag">CH.07 // UNITY 6 FEATURES</p>
-    <h2 data-i18n="u6.h2">Render fewer pixels; prevent first-use stalls</h2>
-    <p class="kicker" data-i18n="u6.kicker">Spatial-Temporal Post-Processing reconstructs a high-resolution image from a lower internal resolution. Pipeline State Object tracing and precooking move expensive driver work away from gameplay.</p>
+    <p class="osdtag">CH.10 // VOLUMES · CAMERA STACKING · RENDER REQUESTS</p>
+    <h2 data-i18n="post.h2"></h2>
   </div>
-
   <div class="two">
-    <div class="panel lab" id="stpLab">
-      <div class="lab-head"><div><p class="lbl" data-i18n="stp.tag">INTERACTIVE · STP</p><h3 data-i18n="stp.h3">Internal resolution → output</h3></div><span class="page-tag" data-i18n="stp.pages">pp. 156–158</span></div>
-      <label><span data-i18n="stp.scale">Render scale</span> <output id="scaleOut">70%</output><input id="renderScale" type="range" min="40" max="100" value="70"></label>
-      <button class="tg" id="stpToggle" aria-pressed="true" data-i18n="stp.toggle">STP reconstruction</button>
-      <div class="pixel-demo"><div class="internal-pixels" id="internalPixels"></div><span>→</span><div class="output-pixels">1920 × 1080</div></div>
-      <div class="stats" id="stpStats"></div>
-      <p class="reason" id="stpQuality"></p>
-    </div>
-    <div class="panel pso-lab" id="psoLab">
-      <div class="lab-head"><div><p class="lbl" data-i18n="pso.tag">INTERACTIVE · PSO WARMUP</p><h3 data-i18n="pso.h3">Where should compilation happen?</h3></div><span class="page-tag" data-i18n="pso.pages">pp. 159–162</span></div>
-      <div class="pso-track"><div class="pso-loading" data-i18n="pso.loading">LOADING</div><div class="pso-gameplay" data-i18n="pso.gameplay">GAMEPLAY</div><i id="psoSpike"></i></div>
-      <div class="seg" id="psoSeg"><button data-v="runtime" aria-pressed="true" data-i18n="pso.runtime">First use</button><button data-v="sync" aria-pressed="false" data-i18n="pso.sync">Precook on load</button><button data-v="async" aria-pressed="false" data-i18n="pso.async">Async warmup</button></div>
-      <p class="reason" id="psoExplanation"></p>
-      <ol class="mini-steps"><li data-i18n="pso.step1">Trace representative rendering.</li><li data-i18n="pso.step2">Save the GraphicsStateCollection.</li><li data-i18n="pso.step3">Warm synchronously, time-sliced, or asynchronously.</li></ol>
-    </div>
+    <div class="prose" data-i18n="post.prose"></div>
+    <div class="tbl-wrap"><table class="compact-table"><thead><tr><th data-i18n="post.thEffect"></th><th data-i18n="post.thWhat"></th></tr></thead><tbody data-i18n="post.effects"></tbody></table></div>
   </div>
-</section>
-
-<section class="chapter" id="performance" data-ch="CH.08 PROFILE">
-  <div class="ch-head">
-    <p class="osdtag">CH.08 // PERFORMANCE</p>
-    <h2 data-i18n="perf.h2">Start with the symptom, then choose the tool</h2>
-    <p class="kicker" data-i18n="perf.kicker">Optimization is a diagnosis loop: capture a representative frame, locate the limiting side, inspect the expensive work, change one cause, and measure again on target hardware.</p>
-  </div>
-
-  <div class="panel lab" id="diagnosticLab">
-    <div class="lab-head"><div><p class="lbl" data-i18n="perf.labTag">INTERACTIVE · DIAGNOSTIC ROUTER</p><h3 data-i18n="perf.labH">What does the frame look like?</h3></div><span class="page-tag" data-i18n="perf.pages">Book pp. 163–174</span></div>
-    <div class="diagnostic-grid">
-      <div class="checks" id="symptoms">
-        <button class="check" data-symptom="too-many-draws" aria-pressed="true"><span data-i18n="perf.draws">Unexpectedly many draw calls</span><span class="sw" data-i18n="perf.select">SELECT</span></button>
-        <button class="check" data-symptom="gpu-frame" aria-pressed="false"><span data-i18n="perf.gpu">GPU frame is too long</span><span class="sw" data-i18n="perf.select">SELECT</span></button>
-        <button class="check" data-symptom="stutter" aria-pressed="false"><span data-i18n="perf.stutter">First-use hitch / stutter</span><span class="sw" data-i18n="perf.select">SELECT</span></button>
-        <button class="check" data-symptom="overdraw" aria-pressed="false"><span data-i18n="perf.overdraw">Transparency / full-screen overdraw</span><span class="sw" data-i18n="perf.select">SELECT</span></button>
+  <div class="panel lab" id="volumeLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="volume.labTag"></p><h3 data-i18n="volume.labH"></h3></div></div>
+    <div class="volume-layout">
+      <div class="controls-stack">
+        <label><span data-i18n="volume.camera"></span> <output id="volCamOut"></output><input type="range" id="volCam" min="0" max="100" value="25"></label>
+        <span class="ctl-label">GLOBAL VOLUME · PRIORITY 0</span>
+        <label><span>Weight</span> <output id="volGWeightOut"></output><input type="range" id="volGWeight" min="0" max="100" value="100"></label>
+        <span class="ctl-label">LOCAL BOX VOLUME · 40–70 m</span>
+        <label><span>Weight</span> <output id="volLWeightOut"></output><input type="range" id="volLWeight" min="0" max="100" value="100"></label>
+        <label><span>Blend Distance</span> <output id="volBlendOut"></output><input type="range" id="volBlend" min="0" max="30" value="10"></label>
+        <label><span>Priority</span> <output id="volPriorityOut"></output><input type="range" id="volPriority" min="-1" max="2" value="1"></label>
+        <button class="chip" id="volOverride" aria-pressed="true" data-i18n="volume.override"></button>
       </div>
-      <div class="diagnosis"><span class="lbl" data-i18n="perf.open">OPEN FIRST</span><strong id="diagnosticTool">Frame Debugger</strong><p id="diagnosticFirst"></p><ol id="diagnosticActions"></ol></div>
+      <div class="volume-visual">
+        <div class="crt"><canvas id="volumeCanvas" data-i18n-aria="volume.canvas"></canvas><div class="crt-osd"><span>VIGNETTE · INTENSITY</span><span class="rec" id="volValue"></span></div></div>
+        <ol class="flow-steps" id="volTrace"></ol>
+      </div>
+    </div>
+    <div class="two even">
+      <pre class="code" id="volumeCode"></pre>
+      <pre class="code" id="stackCode"></pre>
     </div>
   </div>
-
-  <div class="priority-stack">
-    <div><b data-i18n="perf.p1h">1 · Remove invisible work</b><span data-i18n="perf.p1p">Occlusion, distance, unused textures and passes</span></div>
-    <div><b data-i18n="perf.p2h">2 · Reduce expensive work</b><span data-i18n="perf.p2p">Shadow maps, full-screen effects, real-time lights</span></div>
-    <div><b data-i18n="perf.p3h">3 · Improve submission</b><span data-i18n="perf.p3p">SRP Batcher, compatible materials, GPU Resident Drawer</span></div>
-    <div><b data-i18n="perf.p4h">4 · Reprofile</b><span data-i18n="perf.p4p">The bottleneck may move after every successful change</span></div>
+  <div class="two">
+    <div class="prose" data-i18n="post.stack"></div>
+    <div class="errata" data-i18n="post.errata"></div>
   </div>
 </section>
 
-<section class="chapter" id="cheat" data-ch="CH.09 CHEAT">
-  <div class="ch-head"><p class="osdtag">CH.09 // THE BOOK IN ONE TABLE</p><h2 data-i18n="cheat.h2">Decision sheet + interview drill</h2><p class="kicker" data-i18n="cheat.kicker">Use the table to choose a starting point. Use the questions below to practise explaining the reason, trade-off and verification tool.</p></div>
-  <div class="table-wrap"><table class="decision-table">
-    <thead><tr><th data-i18n="cheat.question">Question</th><th data-i18n="cheat.start">Start here</th><th data-i18n="cheat.verify">Verify with</th></tr></thead>
-    <tbody id="decisionBody"></tbody>
-  </table></div>
-  <div class="interview-toolbar"><span class="ctl-label" data-i18n="qa.filter">FILTER QUESTIONS</span><div class="seg" id="qaFilters"><button data-category="all" aria-pressed="true" data-i18n="qa.all">All</button><button data-category="renderer" aria-pressed="false" data-i18n="qa.renderer">Renderer</button><button data-category="lighting" aria-pressed="false" data-i18n="qa.lighting">Lighting</button><button data-category="graph" aria-pressed="false">Render Graph</button><button data-category="performance" aria-pressed="false" data-i18n="qa.performance">Performance</button></div><span class="lbl" id="qaCount"></span></div>
+<!-- ============ OUTPUT ============ -->
+<section class="chapter" id="output" data-ch="CH.11 STP · HDR · PSO">
+  <div class="ch-head">
+    <p class="osdtag">CH.11 // STP · HDR OUTPUT · PSO WARM-UP</p>
+    <h2 data-i18n="output.h2"></h2>
+  </div>
+  <div class="two">
+    <div class="prose" data-i18n="output.prose"></div>
+    <div class="facts" data-i18n="output.facts"></div>
+  </div>
+  <div class="panel lab" id="stpLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="stp.labTag"></p><h3 data-i18n="stp.labH"></h3></div></div>
+    <div class="stp-controls">
+      <div class="seg" id="stpOutput" role="group"><button data-v="1080p" aria-pressed="true">1920×1080</button><button data-v="1440p" aria-pressed="false">2560×1440</button><button data-v="phone" aria-pressed="false">Phone 2400×1080</button></div>
+      <label><span>Render Scale</span> <output id="stpScaleOut"></output><input type="range" id="stpScale" min="25" max="100" value="50"></label>
+      <label><span data-i18n="stp.dpi"></span> <output id="stpDpiOut"></output><input type="range" id="stpDpi" min="96" max="520" step="4" value="300"></label>
+      <button class="btn" id="stpUseDpi" data-i18n="stp.useDpi"></button>
+      <div class="seg" id="stpFilter" role="group"><button data-v="bilinear" aria-pressed="false">Bilinear</button><button data-v="stp" aria-pressed="true">STP</button></div>
+    </div>
+    <div class="stp-views">
+      <figure><div class="crt"><canvas id="stpInternal" data-i18n-aria="stp.internalAria"></canvas></div><figcaption data-i18n="stp.internal"></figcaption></figure>
+      <figure><div class="crt"><canvas id="stpOutputCanvas" data-i18n-aria="stp.outputAria"></canvas></div><figcaption id="stpCaption"></figcaption></figure>
+    </div>
+    <div class="stats c4" id="stpStats"></div>
+    <p class="note" data-i18n="stp.note"></p>
+  </div>
+
+  <div class="panel lab" id="psoLab">
+    <div class="lab-head"><div><p class="lbl" data-i18n="pso.labTag"></p><h3 data-i18n="pso.labH"></h3></div></div>
+    <div class="ctl-row">
+      <div class="seg" id="psoStrategy" role="group"><button data-v="none" aria-pressed="true" data-i18n="pso.none"></button><button data-v="warmup" aria-pressed="false">WarmUp()</button><button data-v="progressive" aria-pressed="false">WarmUpProgressively()</button><button data-v="async" aria-pressed="false" data-i18n="pso.async"></button></div>
+      <button class="chip" id="psoCached" aria-pressed="false" data-i18n="pso.cached"></button>
+    </div>
+    <div class="crt"><canvas id="psoCanvas" data-i18n-aria="pso.canvas"></canvas></div>
+    <div class="stats c3" id="psoStats"></div>
+    <p class="reason" id="psoOut"></p>
+    <pre class="code" id="psoCode"></pre>
+  </div>
+</section>
+
+<!-- ============ PERFORMANCE ============ -->
+<section class="chapter" id="perf" data-ch="CH.12 PERFORMANCE">
+  <div class="ch-head">
+    <p class="osdtag">CH.12 // PROFILING · OPTIMIZATION · URP 3D SAMPLE</p>
+    <h2 data-i18n="perf.h2"></h2>
+  </div>
+  <div class="two">
+    <div class="prose" data-i18n="perf.prose"></div>
+    <div class="facts" data-i18n="perf.facts"></div>
+  </div>
+  <div class="panel chooser" id="diagLab">
+    <div class="problem-list" id="diagList" role="group"></div>
+    <div class="prescription" aria-live="polite">
+      <span class="lbl" data-i18n="perf.open"></span>
+      <strong id="diagTool"></strong>
+      <p id="diagFirst"></p>
+      <ol class="mini-steps" id="diagSteps"></ol>
+    </div>
+  </div>
+  <div class="prio" data-i18n="perf.samples"></div>
+</section>
+
+<!-- ============ INTERVIEW ============ -->
+<section class="chapter" id="interview" data-ch="CH.13 INTERVIEW">
+  <div class="ch-head">
+    <p class="osdtag">CH.13 // CHEAT SHEET · INTERVIEW</p>
+    <h2 data-i18n="qa.h2"></h2>
+    <p class="kicker" data-i18n="qa.kicker"></p>
+  </div>
+  <div class="tbl-wrap"><table><thead><tr><th data-i18n="cheat.question"></th><th data-i18n="cheat.start"></th><th data-i18n="cheat.verify"></th></tr></thead><tbody id="cheatBody"></tbody></table></div>
+  <div class="interview-toolbar">
+    <div class="seg" id="qaFilters" role="group"></div>
+    <span class="lbl" id="qaCount"></span>
+  </div>
   <div class="qa" id="qa"></div>
 </section>
 </main>
 
-<footer><span class="stop" data-i18n="foot.end">■ END OF TAPE</span><p data-i18n="foot.copy">Condensed from Unity’s 2024 e-book <i>Introduction to the Universal Render Pipeline for advanced Unity creators — Unity 6 edition</i>. Teaching estimates on this page are not performance measurements.</p></footer>
-<script type="module" src="./page.js?v=202609161617"></script>
+<footer>
+  <span class="stop" data-i18n="foot.stop">■ STOP · END OF TAPE 04</span>
+  <p data-i18n="foot.source"></p>
+  <ul>
+    <li><a href="https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@17.0/manual/index.html">URP 17 manual</a> · <a href="https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@17.0/manual/rendering/forward-plus-rendering-path.html">Forward+</a> · <a href="https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@17.0/manual/gpu-resident-drawer.html">GPU Resident Drawer</a></li>
+    <li><a href="https://docs.unity3d.com/6000.0/Documentation/Manual/urp/probevolumes.html">Adaptive Probe Volumes</a> · <a href="https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@17.0/manual/render-graph.html">Render Graph</a> · <a href="https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Experimental.Rendering.GraphicsStateCollection.html">GraphicsStateCollection</a></li>
+    <li><a href="../" data-i18n="foot.backToShelf">◀ Back to the shelf</a> · <a href="../unity-rendering/" data-i18n="foot.tape1">Tape 01: batching in Unity</a> · <a href="../unity-patterns/" data-i18n="foot.tape5">Tape 05: design patterns</a></li>
+  </ul>
+</footer>
+
+<script type="module" src="./page.js?v=202609162304"></script>
 </body>
 </html>

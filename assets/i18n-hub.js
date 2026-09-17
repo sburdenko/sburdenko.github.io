@@ -36,10 +36,19 @@ export const HUB = {
     en: 'Opposite pointers and fast & slow / Floyd. Find a pair, detect a cycle and locate its entrance. Rewind every move and see why it works.',
     ru: 'Opposite pointers and fast & slow / Floyd. Find a pair, detect a cycle and locate its entrance. Rewind every move and see why it works.'
   },
-  'hub.tape5Title': { en: 'Unity Design Patterns', ru: 'Паттерны проектирования Unity' },
+  'hub.tape4Title': { en: 'URP field guide', ru: 'Путеводитель по URP' },
+  'hub.tape4Desc': {
+    en: 'Unity’s advanced URP e-book, chapter by chapter: settings finder, renderer chooser, MSAA, GPU Resident Drawer, shadow atlas, mixed lighting, APV leaks, the book’s five shaders, Render Graph merging, volumes, STP and PSO warm-up.',
+    ru: 'Продвинутая книга Unity по URP глава за главой: где живут настройки, выбор рендерера, MSAA, GPU Resident Drawer, атлас теней, смешанный свет, протечки APV, пять шейдеров из книги, слияние проходов Render Graph, volumes, STP и прогрев PSO.'
+  },
+  'hub.tape4Tags': {
+    en: '<span>URP</span><span>Lighting</span><span>Render Graph</span><span>Performance</span>',
+    ru: '<span>URP</span><span>Освещение</span><span>Render Graph</span><span>Производительность</span>'
+  },
+  'hub.tape5Title': { en: 'Design patterns and SOLID', ru: 'Паттерны проектирования и SOLID' },
   'hub.tape5Desc': {
-    en: 'SOLID and eleven patterns as working rigs: build objects, reuse a pool, undo commands, transition states, broadcast events and measure shared data.',
-    ru: 'SOLID и одиннадцать паттернов в живых стендах: создавай объекты, используй пул, отменяй команды, переключай состояния, рассылай события и измеряй общие данные.'
+    en: 'Unity’s patterns e-book as working rigs: SOLID change impact, factory, ObjectPool<T> semantics, singleton across scene loads, undo/redo, state machine, lapsed listeners, MVP vs MVVM, strategy, flyweight memory and dirty flags.',
+    ru: 'Книга Unity о паттернах в живых стендах: цена изменений по SOLID, factory, семантика ObjectPool<T>, singleton при загрузке сцен, undo/redo, машина состояний, забытые подписчики, MVP против MVVM, strategy, память flyweight и dirty flag.'
   },
   'hub.tape5Tags': {
     en: '<span>SOLID</span><span>Patterns</span><span>Architecture</span><span>Unity 6</span>',

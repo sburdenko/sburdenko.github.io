@@ -1,0 +1,146 @@
+/** Tape 04 strings: shaders, Shader Graph halo, Render Objects, Render Graph, pass merging. */
+import { facts } from './facts.js?v=202609162304';
+
+export const FRAME = {
+  'shader.h2': { en: 'Porting shaders: five steps from white to shadowed', ru: 'Перенос шейдеров: пять шагов от белого до теней' },
+  'shader.prose': {
+    en: '<p>URP shaders keep the ShaderLab structure — Properties, SubShader, Tags, Pass — but the code between <code>HLSLPROGRAM</code> and <code>ENDHLSL</code> is HLSL and uses URP includes instead of <code>UnityCG.cginc</code>. The SubShader tag <code>"RenderPipeline" = "UniversalPipeline"</code> tells Unity which pipeline may use it; Unity runs the first SubShader the GPU and pipeline support, and falls back to magenta if none fits. <i>Create › Shader › Unlit Shader</i> still produces a Built-In template that is not SRP Batcher compatible.</p><p>The book builds five shaders. <b>Unlit</b>: include <code>Core.hlsl</code>, <code>TransformObjectToHClip</code> in the vertex stage, return white. <b>Unlit Color</b>: a <code>[MainColor] _BaseColor</code> property declared inside <code>CBUFFER_START(UnityPerMaterial)</code> — that is what makes it SRP Batcher compatible (the shader Inspector says so). <b>Unlit Texture</b>: <code>TEXTURE2D</code> + <code>SAMPLER</code> macros, <code>_BaseMap_ST</code> for tiling with <code>TRANSFORM_TEX</code>, <code>SAMPLE_TEXTURE2D</code>. <b>Lit Simple</b>: include <code>Lighting.hlsl</code>, <code>GetMainLight()</code> and <code>LightingLambert</code> per vertex. <b>Shadows</b>: multi_compile the main-light shadow keywords, <code>GetShadowCoord</code> in the vertex stage and <code>MainLightRealtimeShadow</code> in the fragment.</p><p>For most custom work Shader Graph is faster, and it is the quickest way to port old Built-In shaders. Handwritten HLSL still matters for exact control and reusable includes; Cyanilux’s tutorial is the resource the book recommends.</p>',
+    ru: '<p>Шейдеры URP сохраняют структуру ShaderLab — Properties, SubShader, Tags, Pass, — но код между <code>HLSLPROGRAM</code> и <code>ENDHLSL</code> пишется на HLSL с include-файлами URP вместо <code>UnityCG.cginc</code>. Тег SubShader <code>"RenderPipeline" = "UniversalPipeline"</code> говорит, каким пайплайном его использовать; Unity берёт первый SubShader, который поддерживают GPU и пайплайн, иначе — пурпурный шейдер ошибки. <i>Create › Shader › Unlit Shader</i> до сих пор создаёт шаблон Built-In, несовместимый с SRP Batcher.</p><p>Книга строит пять шейдеров. <b>Unlit</b>: include <code>Core.hlsl</code>, <code>TransformObjectToHClip</code> в вершинном этапе, возвращаем белый. <b>Unlit Color</b>: свойство <code>[MainColor] _BaseColor</code> объявлено внутри <code>CBUFFER_START(UnityPerMaterial)</code> — именно это даёт совместимость с SRP Batcher (об этом пишет инспектор шейдера). <b>Unlit Texture</b>: макросы <code>TEXTURE2D</code> + <code>SAMPLER</code>, <code>_BaseMap_ST</code> для тайлинга через <code>TRANSFORM_TEX</code>, <code>SAMPLE_TEXTURE2D</code>. <b>Lit Simple</b>: include <code>Lighting.hlsl</code>, <code>GetMainLight()</code> и <code>LightingLambert</code> на вершину. <b>Shadows</b>: multi_compile ключевых слов теней основного света, <code>GetShadowCoord</code> в вершинном этапе и <code>MainLightRealtimeShadow</code> во фрагментном.</p><p>Для большинства задач Shader Graph быстрее, и это самый быстрый способ перенести старые шейдеры Built-In. Ручной HLSL нужен для точного контроля и переиспользуемых include; книга рекомендует туториал Cyanilux.</p>',
+  },
+  'shader.facts': {
+    en: facts('en', 'Full control over passes, keywords and cost; SRP Batcher compatibility when properties live in UnityPerMaterial.', 'You write every pass URP expects — ShadowCaster, DepthOnly, DepthNormals, Meta — or the object disappears from those features.', 'Core.hlsl / Lighting.hlsl includes, the UniversalPipeline tag, one CBUFFER layout for all passes.'),
+    ru: facts('ru', 'Полный контроль над проходами, ключевыми словами и ценой; совместимость с SRP Batcher, если свойства в UnityPerMaterial.', 'Каждый проход, который ждёт URP, — ShadowCaster, DepthOnly, DepthNormals, Meta — пишешь сам, иначе объект выпадает из этих функций.', 'Include Core.hlsl / Lighting.hlsl, тег UniversalPipeline, одинаковый CBUFFER во всех проходах.'),
+  },
+  'shader.labTag': { en: 'INTERACTIVE · THE BOOK’S FIVE SHADERS', ru: 'ИНТЕРАКТИВ · ПЯТЬ ШЕЙДЕРОВ ИЗ КНИГИ' },
+  'shader.labH': { en: 'Step through; green lines are what each step adds', ru: 'Иди по шагам; зелёные строки — что добавляет каждый шаг' },
+  'shader.canvas': { en: 'Capsule rendered by the selected shader', ru: 'Капсула, нарисованная выбранным шейдером' },
+  'shader.lightDir': { en: 'Main light direction', ru: 'Направление основного света' },
+  'shader.blocker': { en: 'shadow caster', ru: 'отбрасывает тень' },
+  'shader.steps': {
+    en: { unlit: '1 · Unlit', color: '2 · Color', texture: '3 · Texture', lit: '4 · Lambert', shadows: '5 · Shadows' },
+    ru: { unlit: '1 · Unlit', color: '2 · Цвет', texture: '3 · Текстура', lit: '4 · Ламберт', shadows: '5 · Тени' },
+  },
+  'shader.fileNames': {
+    en: { unlit: 'Unlit', color: 'UnlitColor', texture: 'UnlitTexture', lit: 'LitSimple', shadows: 'SimpleShadows' },
+    ru: { unlit: 'Unlit', color: 'UnlitColor', texture: 'UnlitTexture', lit: 'LitSimple', shadows: 'SimpleShadows' },
+  },
+  'shader.explain': {
+    en: {
+      unlit: 'Every visible pixel is white. Attributes carry POSITION in object space; Varyings carry SV_POSITION in clip space.',
+      color: 'One material property. Declared inside UnityPerMaterial, so the SRP Batcher can keep it on the GPU between frames.',
+      texture: 'UVs travel from vertex to fragment. <code>_BaseMap_ST</code> must exist for TRANSFORM_TEX, and it belongs in the CBUFFER; the texture itself does not.',
+      lit: 'Per-vertex Lambert from the main light. Move the light: brightness is computed at vertices and interpolated, so it is cheap and soft.',
+      shadows: 'The fragment asks the main light shadow map how lit it is and never goes darker than 1 − _ShadowStrength. Toggle the caster pass: without it this object receives shadows but casts none.',
+    },
+    ru: {
+      unlit: 'Каждый видимый пиксель белый. Attributes несут POSITION в пространстве объекта, Varyings — SV_POSITION в clip space.',
+      color: 'Одно свойство материала. Объявлено в UnityPerMaterial, поэтому SRP Batcher держит его на GPU между кадрами.',
+      texture: 'UV идут из вершинного этапа во фрагментный. <code>_BaseMap_ST</code> нужен для TRANSFORM_TEX и лежит в CBUFFER; сама текстура — нет.',
+      lit: 'Ламберт от основного света на вершину. Подвигай свет: яркость считается в вершинах и интерполируется — дёшево и мягко.',
+      shadows: 'Фрагмент спрашивает у shadow map основного света, насколько он освещён, и не темнеет сильнее 1 − _ShadowStrength. Переключи проход caster: без него объект получает тени, но не отбрасывает.',
+    },
+  },
+  'shader.errata': {
+    en: '<b>Checked against the book</b><p>The texture example samples <code>sampler_Base Map</code> with a space — a compile error; it is <code>sampler_BaseMap</code>. The Lit Simple example passes <code>positionOS</code> as the normal (“a proxy for a centred object”); it only works on a sphere-like mesh, so the code here uses a real <code>NORMAL</code> attribute. The Shadows example has no <code>ShadowCaster</code> pass, so the object receives shadows but casts none, and its tag says <code>RenderType = AlphaTest</code> for an opaque surface. <code>UsePass</code> of Lit’s ShadowCaster is the quick fix; for SRP Batcher compatibility write your own ShadowCaster with the same CBUFFER layout, because every pass of a shader must share it.</p>',
+    ru: '<b>Сверено с книгой</b><p>В примере с текстурой <code>sampler_Base Map</code> написан с пробелом — ошибка компиляции, правильно <code>sampler_BaseMap</code>. Пример Lit Simple передаёт <code>positionOS</code> вместо нормали («замена для объекта в центре») — это работает только на меше, похожем на сферу, поэтому здесь используется настоящий атрибут <code>NORMAL</code>. В примере Shadows нет прохода <code>ShadowCaster</code>: объект получает тени, но не отбрасывает, а тег говорит <code>RenderType = AlphaTest</code> для непрозрачной поверхности. <code>UsePass</code> ShadowCaster из Lit — быстрое решение; для совместимости с SRP Batcher пиши свой ShadowCaster с тем же CBUFFER, потому что он должен совпадать во всех проходах шейдера.</p>',
+  },
+  'halo.labTag': { en: 'INTERACTIVE · SHADER GRAPH HALO', ru: 'ИНТЕРАКТИВ · ОРЕОЛ В SHADER GRAPH' },
+  'halo.labH': { en: 'The book’s FresnelAlpha graph, evaluated per pixel', ru: 'Граф FresnelAlpha из книги, посчитанный на каждый пиксель' },
+  'halo.canvas': { en: 'Transparent sphere whose alpha fades toward the edge', ru: 'Прозрачная сфера, чья альфа гаснет к краю' },
+  'halo.nodes': {
+    en: '<span>Fresnel Effect</span><i>→</i><span>One Minus</span><i>→</i><span>Power(Power)</span><i>→</i><span>Multiply(Strength)</span><i>→</i><span>Alpha</span>',
+    ru: '<span>Fresnel Effect</span><i>→</i><span>One Minus</span><i>→</i><span>Power(Power)</span><i>→</i><span>Multiply(Strength)</span><i>→</i><span>Alpha</span>',
+  },
+  'halo.hint': {
+    en: 'Fresnel is 0 where the surface faces the camera and 1 at the silhouette; One Minus flips it, so the centre is opaque and the edge fades. Power tightens the glow, Strength scales it. Unlit Shader Graph, Surface Type Transparent, defaults Color white, Power 4, Strength 1.',
+    ru: 'Fresnel равен 0 там, где поверхность смотрит в камеру, и 1 на силуэте; One Minus переворачивает его — центр непрозрачный, край гаснет. Power сужает свечение, Strength масштабирует. Unlit Shader Graph, Surface Type Transparent, по умолчанию Color белый, Power 4, Strength 1.',
+  },
+
+  'graph.h2': { en: 'Inject passes; let Render Graph plan the frame', ru: 'Внедряй проходы; кадр планирует Render Graph' },
+  'graph.prose': {
+    en: '<p>SRPs let C# run at almost any stage: shadows, prepasses, G-buffer, deferred lights, opaques, skybox, transparents, post-processing. The seam is <b>Add Renderer Feature</b> on the Universal Renderer Data. Artists get <b>Render Objects</b>: filter by Layer Mask, pick an event, override material, depth and stencil — no code. Programmers write a <b>Scriptable Renderer Feature</b>.</p><p>In Unity 6 passes are recorded through the <b>render graph</b> API, which is not a node editor. You never touch resources directly — you get handles (<code>TextureHandle</code> for RTHandles, compute buffers, renderer lists) and each pass declares what it reads and writes. Actual resources exist only inside the pass’s execute function. Nothing persists between frames; history textures are created outside and imported, and the graph tracks them without owning their lifetime.</p><p>Every frame runs three phases. <b>Setup</b> declares passes and resources. <b>Compilation</b> culls passes whose outputs nobody uses and computes resource lifetimes and async compute sync points. <b>Execution</b> runs surviving passes in declaration order, allocating memory just before the first writer and releasing it after the last reader. Inspect it in <b>Window › Analysis › Render Graph Viewer</b>; URP RenderGraph Samples are in the Package Manager.</p>',
+    ru: '<p>SRP позволяет выполнить C# почти на любом этапе: тени, prepass, G-buffer, deferred-свет, непрозрачные, скайбокс, прозрачные, пост-обработка. Точка входа — <b>Add Renderer Feature</b> в Universal Renderer Data. Художникам — <b>Render Objects</b>: фильтр по Layer Mask, выбор события, переопределение материала, глубины и stencil без кода. Программистам — <b>Scriptable Renderer Feature</b>.</p><p>В Unity 6 проходы записываются через API <b>render graph</b> — это не node editor. К ресурсам напрямую не обращаются — используются handles (<code>TextureHandle</code> для RTHandle, compute buffers, renderer lists), и каждый проход объявляет, что читает и пишет. Сами ресурсы доступны только внутри функции выполнения прохода. Между кадрами ничего не сохраняется; текстуры истории создают снаружи и импортируют — граф отслеживает доступ, но не владеет временем жизни.</p><p>Каждый кадр — три фазы. <b>Setup</b> объявляет проходы и ресурсы. <b>Compilation</b> отбрасывает проходы, чьи результаты никому не нужны, и вычисляет время жизни ресурсов и точки синхронизации async compute. <b>Execution</b> выполняет оставшиеся проходы в порядке объявления, выделяя память перед первым писателем и освобождая после последнего читателя. Смотреть — <b>Window › Analysis › Render Graph Viewer</b>; URP RenderGraph Samples есть в Package Manager.</p>',
+  },
+  'graph.facts': {
+    en: facts('en', 'Unused work is culled automatically, transient memory is reused, and compatible passes merge into native render passes on mobile.', 'A new way to write passes: handles, PassData, explicit read/write declarations; old Execute/OnCameraSetup code must be rewritten.', 'Declare every read and write honestly; import persistent textures; check merging in Render Graph Viewer.'),
+    ru: facts('ru', 'Ненужная работа отсекается автоматически, временная память переиспользуется, совместимые проходы сливаются в native render pass на мобильных.', 'Новый способ писать проходы: handles, PassData, явное объявление чтения и записи; старый код Execute/OnCameraSetup надо переписать.', 'Честно объявлять каждое чтение и запись; импортировать постоянные текстуры; проверять слияние в Render Graph Viewer.'),
+  },
+  'sil.labTag': { en: 'INTERACTIVE · RENDER OBJECTS SILHOUETTE', ru: 'ИНТЕРАКТИВ · СИЛУЭТ ЧЕРЕЗ RENDER OBJECTS' },
+  'sil.labH': { en: 'Rebuild the book’s see-behind effect one setting at a time', ru: 'Собери эффект «видно сквозь стену» из книги по одной настройке' },
+  'sil.book': { en: 'Apply the book’s setup', ru: 'Настройка из книги' },
+  'sil.canvas': { en: 'A wall covering the left half of the hero, columns show what reaches the screen', ru: 'Стена закрывает левую половину героя, столбцы показывают, что попадает на экран' },
+  'sil.checks': {
+    en: { excludeFromOpaque: 'SeeBehind layer removed from Opaque Layer Mask', silhouettePass: 'Render Objects #1 · Override Material, no depth write', normalPass: 'Render Objects #2 · draw the hero normally' },
+    ru: { excludeFromOpaque: 'Слой SeeBehind убран из Opaque Layer Mask', silhouettePass: 'Render Objects #1 · Override Material, без записи глубины', normalPass: 'Render Objects #2 · обычная отрисовка героя' },
+  },
+  'sil.wall': { en: 'WALL', ru: 'СТЕНА' },
+  'sil.hero': { en: 'HERO', ru: 'ГЕРОЙ' },
+  'sil.ok': { en: '<b style="color:var(--ok)">Exactly the book’s result:</b> the silhouette appears only where the wall is closer (Greater), the visible half is drawn normally, and the regular opaque pass skips the hero — only the two features draw that layer.', ru: '<b style="color:var(--ok)">Ровно результат из книги:</b> силуэт только там, где стена ближе (Greater), видимая половина нарисована обычно, а стандартный opaque-проход героя не рисует вовсе — слой рисуют только две фичи.' },
+  'sil.double': { en: '<b style="color:var(--warn)">Drawn twice:</b> the hero is still in the Opaque Layer Mask and Render Objects #2 draws it again. Remove the layer from the mask.', ru: '<b style="color:var(--warn)">Рисуется дважды:</b> герой всё ещё в Opaque Layer Mask, и Render Objects #2 рисует его снова. Убери слой из маски.' },
+  'sil.issue': {
+    en: cells => cells.includes('missing') ? 'Part of the hero is missing: nothing draws the visible half. Add Render Objects #2 or keep the layer in the opaque mask.' : cells.slice(6).includes('silhouette') ? 'The silhouette covers the visible half too: with LessEqual or Always the override material wins where nothing is in front.' : 'Behind the wall you only see the wall: the silhouette pass needs Depth Test Greater.',
+    ru: cells => cells.includes('missing') ? 'Части героя нет: видимую половину никто не рисует. Добавь Render Objects #2 или оставь слой в opaque-маске.' : cells.slice(6).includes('silhouette') ? 'Силуэт закрывает и видимую половину: с LessEqual или Always материал-переопределение побеждает там, где впереди ничего нет.' : 'За стеной видна только стена: проходу силуэта нужен Depth Test Greater.',
+  },
+
+  'graph.labTag': { en: 'INTERACTIVE · FRAME GRAPH', ru: 'ИНТЕРАКТИВ · ГРАФ КАДРА' },
+  'graph.labH': { en: 'Declare, compile, then execute one frame', ru: 'Объяви, скомпилируй и выполни один кадр' },
+  'graph.phase': { en: 'PHASE', ru: 'ФАЗА' },
+  'graph.setup': { en: '1 · Setup', ru: '1 · Setup' },
+  'graph.compile': { en: '2 · Compile', ru: '2 · Compile' },
+  'graph.execute': { en: '3 · Execute', ru: '3 · Execute' },
+  'graph.features': { en: 'PASSES DECLARED THIS FRAME', ru: 'ОБЪЯВЛЕННЫЕ ПРОХОДЫ' },
+  'graph.unused': { en: 'Debug output nobody reads', ru: 'Debug-вывод, который никто не читает' },
+  'graph.prev': { en: 'Previous pass', ru: 'Предыдущий проход' },
+  'graph.next': { en: 'Next pass', ru: 'Следующий проход' },
+  'graph.stepAria': { en: 'Executed pass', ru: 'Выполняемый проход' },
+  'graph.allocate': { en: 'allocated', ru: 'выделен' },
+  'graph.live': { en: 'alive', ru: 'жив' },
+  'graph.release': { en: 'released after', ru: 'освобождён после' },
+  'graph.access': { en: 'current pass reads/writes', ru: 'текущий проход читает/пишет' },
+  'graph.note': { en: 'Teaching graph with round memory numbers. The real one is in Window › Analysis › Render Graph Viewer.', ru: 'Учебный граф с круглыми числами памяти. Настоящий — в Window › Analysis › Render Graph Viewer.' },
+  'graph.phase.setup.copy': { en: '<b>Setup:</b> passes are declared with handles. Nothing is allocated, nothing is known to be unused yet.', ru: '<b>Setup:</b> проходы объявлены через handles. Ничего не выделено, ещё неизвестно, что не нужно.' },
+  'graph.phase.compile.copy': { en: '<b>Compile:</b> walking back from the camera target, passes whose outputs nobody reads are culled; lifetimes decide which textures can share memory.', ru: '<b>Compile:</b> идя назад от цели камеры, отсекаются проходы, чьи результаты никто не читает; по времени жизни решается, какие текстуры делят память.' },
+  'graph.phase.execute.copy': { en: '<b>Execute:</b> surviving passes run in declaration order. Step through and watch memory appear before the first writer and disappear after the last reader.', ru: '<b>Execute:</b> оставшиеся проходы выполняются по порядку объявления. Иди по шагам: память появляется перед первым писателем и исчезает после последнего читателя.' },
+  'graph.declared': { en: 'Declared', ru: 'Объявлено' },
+  'graph.survived': { en: 'Executed', ru: 'Выполнено' },
+  'graph.culled': { en: 'Culled', ru: 'Отсечено' },
+  'graph.memory': { en: 'Transient memory', ru: 'Временная память' },
+  'graph.saved': { en: n => `${n} MB reused`, ru: n => `${n} МБ переиспользовано` },
+  'graph.read': { en: 'READS', ru: 'ЧИТАЕТ' },
+  'graph.write': { en: 'WRITES', ru: 'ПИШЕТ' },
+  'graph.culledBadge': { en: 'CULLED · output unused', ru: 'ОТСЕЧЁН · результат не нужен' },
+  'graph.resource': { en: 'RESOURCE', ru: 'РЕСУРС' },
+  'graph.step': { en: (i, n) => `PASS ${i} / ${n}`, ru: (i, n) => `ПРОХОД ${i} / ${n}` },
+  'graph.slot': { en: n => `slot ${n}`, ru: n => `слот ${n}` },
+  'graph.events': { en: (a, r) => `Allocate before: ${a || '—'} · Release after: ${r || '—'}`, ru: (a, r) => `Выделить до: ${a || '—'} · Освободить после: ${r || '—'}` },
+  'graph.pass': {
+    en: { shadows: ['Shadow maps', 'Depth from the lights.'], depth: ['Depth prepass', 'Camera depth for effects that need it.'], opaques: ['Opaques', 'Shade opaque geometry into colour and depth.'], ssao: ['SSAO', 'Ambient occlusion from depth.'], decals: ['Decals', 'Project detail using depth and colour.'], debug: ['Debug normals', 'Writes a texture the final image never reads.'], transparents: ['Transparents', 'Blend transparent surfaces.'], bloom: ['Bloom', 'Bright pixels into a blurred texture.'], composite: ['Final composite', 'Combine into the camera target.'] },
+    ru: { shadows: ['Shadow maps', 'Глубина со стороны источников.'], depth: ['Depth prepass', 'Глубина камеры для эффектов.'], opaques: ['Opaques', 'Непрозрачная геометрия в цвет и глубину.'], ssao: ['SSAO', 'Ambient occlusion по глубине.'], decals: ['Decals', 'Проекция деталей по глубине и цвету.'], debug: ['Debug normals', 'Текстура, которую итоговый кадр не читает.'], transparents: ['Transparents', 'Смешивание прозрачных поверхностей.'], bloom: ['Bloom', 'Яркие пиксели в размытую текстуру.'], composite: ['Final composite', 'Сборка в цель камеры.'] },
+  },
+  'graph.resourceNames': {
+    en: { shadow: 'shadow', depth: 'depth', color: 'color', ao: 'AO', debug: 'debug', bloom: 'bloom', camera: 'camera' },
+    ru: { shadow: 'тени', depth: 'depth', color: 'цвет', ao: 'AO', debug: 'debug', bloom: 'bloom', camera: 'камера' },
+  },
+
+  'merge.labTag': { en: 'INTERACTIVE · NATIVE RENDER PASS MERGING', ru: 'ИНТЕРАКТИВ · СЛИЯНИЕ NATIVE RENDER PASS' },
+  'merge.labH': { en: 'Get everything into one native pass, like the book’s tint feature', ru: 'Собери всё в один native pass, как tint-фича из книги' },
+  'merge.tintOff': { en: 'No tint feature', ru: 'Без tint-фичи' },
+  'merge.fetchSupported': { en: 'Vulkan / Metal / DX12 target', ru: 'Цель Vulkan / Metal / DX12' },
+  'merge.passes': {
+    en: { opaques: 'Draw Opaques', copyDepth: 'CopyDepth', skybox: 'Draw Skybox', copyColor: 'CopyColor (Opaque Texture)', transparents: 'Draw Transparents', copyDepthLate: 'CopyDepth', tintCopy: 'Tint_CopyPass', tintFullscreen: 'Tint_FullScreenPass' },
+    ru: { opaques: 'Draw Opaques', copyDepth: 'CopyDepth', skybox: 'Draw Skybox', copyColor: 'CopyColor (Opaque Texture)', transparents: 'Draw Transparents', copyDepthLate: 'CopyDepth', tintCopy: 'Tint_CopyPass', tintFullscreen: 'Tint_FullScreenPass' },
+  },
+  'merge.reasons': {
+    en: { copyDepth: 'CopyDepth between main passes', downsample: 'Opaque Downsampling changes resolution', textureRead: 'Failed to merge: reads the previous result as a texture', noFetch: 'no framebuffer fetch — falls back to texture sampling' },
+    ru: { copyDepth: 'CopyDepth между основными проходами', downsample: 'Opaque Downsampling меняет разрешение', textureRead: 'Failed to merge: читает предыдущий результат как текстуру', noFetch: 'нет framebuffer fetch — откат к чтению текстуры' },
+  },
+  'merge.native': { en: i => `NATIVE PASS ${i}`, ru: i => `NATIVE PASS ${i}` },
+  'merge.merged': {
+    en: '<b style="color:var(--ok)">One native render pass.</b> Attachments stay in tile memory — less bandwidth, less battery. This is what the Render Graph Viewer marks with an F for framebuffer fetch inputs.',
+    ru: '<b style="color:var(--ok)">Один native render pass.</b> Вложения остаются в tile memory — меньше пропускной способности, меньше расход батареи. В Render Graph Viewer входы через framebuffer fetch помечены буквой F.',
+  },
+  'merge.broken': {
+    en: n => `<b style="color:var(--warn)">${n} native passes.</b> Each boundary stores attachments and reloads them. Book tips: disable Depth and Opaque Texture if unused, set Opaque Downsampling to None, Depth Texture Mode to After Transparents, and read previous results with SetInputAttachment.`,
+    ru: n => `<b style="color:var(--warn)">${n} native pass.</b> На каждой границе вложения сохраняются и загружаются снова. Советы книги: выключи Depth и Opaque Texture, если не нужны, Opaque Downsampling = None, Depth Texture Mode = After Transparents, а предыдущий результат читай через SetInputAttachment.`,
+  },
+};

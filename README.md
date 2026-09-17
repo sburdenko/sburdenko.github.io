@@ -18,7 +18,8 @@
 | 02 | [Обход графа: BFS и DFS](./algorithms/bfs-dfs/) | Очередь против стека на двумерном массиве и на графе: генерация данных по seed, пошаговая перемотка, фронт, дерево обхода, кратчайший путь и гонка двух обходов в одном лабиринте. |
 
 | 03 | [Two Pointers](./algorithms/two-pointers/) | Opposite pointers, fast & slow / Floyd, and LeetCode 287. Rewindable array and linked-list examples, highlighted pseudocode, C# templates, and interview questions. This lesson is in English. |
-| 04 | [URP Field Guide](./unity-urp/) | Bilingual interactive edition of Unity’s advanced URP e-book: renderer choice, a sample-level MSAA lab, shadow budget, probes and APV, shader passes, step-by-step Render Graph, Volumes, camera stacking, STP, PSO warmup, profiling, and an interview drill. |
+| 04 | [URP Field Guide](./unity-urp/) | Глава за главой по книге Unity о URP (Unity 6): где живёт каждая настройка, выбор рендерера по жёстким ограничениям, MSAA, GPU Resident Drawer, тени и атлас теней, режимы смешанного света, Rendering Layers, probes против APV и протечки, эффекты, пять шейдеров из книги, Render Objects, Render Graph и слияние native passes, volumes, STP, прогрев PSO, диагностика, вопросы. Ошибки книги помечены «Сверено с книгой». |
+| 05 | [Паттерны и SOLID](./unity-patterns/) | Книга Unity «Level up your code with design patterns and SOLID»: цена изменений по SOLID, factory, семантика `ObjectPool<T>`, singleton при загрузке сцен, command с undo/redo, state machine, observer и забытые подписки, MVP против MVVM, strategy, память flyweight, dirty flag, выбор паттерна и вопросы. |
 
 ## Структура
 
@@ -30,6 +31,11 @@ assets/rand.js             детерминированный ГПСЧ
 assets/i18n.js             локализация: t(), data-i18n, переключатель языка
 assets/i18n-common.js      общие строки (строка состояния, перемотка)
 assets/i18n-hub.js         строки полки
+assets/lab.js  assets/code.js   общие помощники стендов и подсветка C#/HLSL
+unity-urp/  unity-patterns/
+  model-*.js               чистые модели стендов (без DOM), покрыты тестами
+  lab-*.js                 стенды по главам
+  i18n-*.js  snippets.js   тексты глав { en, ru } и код из книг
 unity-rendering/
   model.js                 модель батчинга: сцена, правила, стоимость кадра (без DOM)
   scene.js                 изометрический квартал на canvas
