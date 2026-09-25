@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0715">
+<title data-i18n="page.title">Algorithm patterns · Tape 06</title>
+<meta name="description" content="Twelve interview patterns: how to spot each one, a C# skeleton, a rewindable rig and three problems where the same idea works differently.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
+<link rel="stylesheet" href="../../assets/vhs.css?v=202609241230">
+<link rel="stylesheet" href="./style.css?v=202609241230">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
+<script>
+/* Страница живёт на модулях: если граф импортов не собрался, всё замирает молча.
+   Этот сторож показывает, что именно упало, и подсказывает жёсткую перезагрузку. */
+(function () {
+  var shown = false;
+  function report(what) {
+    if (shown) return;
+    shown = true;
+    var box = document.createElement('div');
+    box.setAttribute('role', 'alert');
+    box.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99;padding:12px 16px;' +
+      'background:#ff5c6c;color:#1a0009;font:600 13px/1.5 ui-monospace,Menlo,Consolas,monospace';
+    box.textContent = 'Scripts failed to load — press Cmd/Ctrl + Shift + R to hard-reload. ' +
+      'Скрипты не загрузились — обнови страницу с Cmd/Ctrl + Shift + R. [' + what + ']';
+    (document.body || document.documentElement).appendChild(box);
+  }
+  addEventListener('error', function (e) {
+    var el = e.target;
+    if (el && (el.tagName === 'SCRIPT' || el.tagName === 'LINK')) report(el.src || el.href);
+    else report(e.message || 'script error');
+  }, true);
+  addEventListener('unhandledrejection', function (e) {
+    report(String((e.reason && e.reason.message) || e.reason));
+  });
+})();
+</script>
+</head>
+<body>
+<div class="fx fx-scan" aria-hidden="true"></div>
+<div class="fx fx-grain" aria-hidden="true"></div>
+<div class="fx fx-vig" aria-hidden="true"></div>
+<div class="fx fx-track" aria-hidden="true"></div>
+<canvas id="noise" width="160" height="90" aria-hidden="true"></canvas>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="pat-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-edge" d="M0 0L10 5L0 10z"/></marker>
+    <marker id="pat-ah-amb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-amb" d="M0 0L10 5L0 10z"/></marker>
+    <marker id="pat-ah-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-ok" d="M0 0L10 5L0 10z"/></marker>
+  </defs>
+</svg>
+
+<header class="osd" data-i18n-aria="osd.bar">
+  <div class="l"><a class="home" href="../../" data-i18n="osd.shelf">◀ SHELF</a><span class="play">PLAY ►</span><span class="ch" id="osdCh">CH.00 MAP</span></div>
+  <div class="r">
+    <nav id="osdNav" data-i18n-aria="osd.nav"></nav>
+    <div class="seg lang" id="langSeg" role="group" data-i18n-aria="osd.lang"><button data-l="en" aria-pressed="true">EN</button><button data-l="ru" aria-pressed="false">RU</button></div>
+    <span>SP</span><span class="ctr" id="osdCtr">0:00:00</span>
+  </div>
+</header>
+
+<main>
+<!-- ============ MAP ============ -->
+<section class="chapter hero" id="map" data-ch="CH.00 MAP" style="padding-top:56px">
+  <p class="eyebrow" data-i18n="hero.eyebrow">Tape 06 · Algorithms · interview prep</p>
+  <h1 class="title"><span data-i18n="hero.title">Patterns</span><span class="title-2" data-i18n="hero.subtitle">twelve moves, three problems each</span></h1>
+  <p class="kicker hero-lede" data-i18n="hero.lede"></p>
+  <h3 data-i18n="hero.mapH">Pick the pattern by the statement</h3>
+  <nav class="pmap" id="patternMap" data-i18n-aria="osd.nav"></nav>
+  <p class="tapelink" data-i18n="hero.tapes"></p>
+</section>
+
+<!-- ============ HASHMAP · HASHSET ============ -->
+<section class="chapter" id="hash" data-ch="CH.01 HASHMAP">
+  <div class="ch-head">
+    <p class="osdtag">CH.01 // HASHMAP · HASHSET</p>
+    <h2 data-i18n="hash.h2"></h2>
+    <p class="kicker" data-i18n="hash.essence"></p>
+  </div>
+  <div class="two">
+    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="hash.signals"></ul><p class="reason" data-i18n="hash.pitfall"></p></div>
+    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="hash"></pre></div>
+  </div>
+  <div class="panel rig" data-rig="hash"></div>
+  <div class="probs" data-probs="hash"></div>
+</section>
+
+<!-- ============ TWO POINTERS ============ -->
+<section class="chapter" id="twoptr" data-ch="CH.02 TWO POINTERS">
+  <div class="ch-head">
+    <p class="osdtag">CH.02 // TWO POINTERS</p>
+    <h2 data-i18n="twoptr.h2"></h2>
+    <p class="kicker" data-i18n="twoptr.essence"></p>
+  </div>
+  <div class="two">
+    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="twoptr.signals"></ul><p class="reason" data-i18n="twoptr.pitfall"></p></div>
+    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="twoptr"></pre></div>
+  </div>
+  <p class="tapelink" data-i18n="twoptr.tape"></p>
+  <div class="panel rig" data-rig="twoptr"></div>
+  <div class="probs" data-probs="twoptr"></div>
+</section>
+
+<!-- ============ SLIDING WINDOW ============ -->
+<section class="chapter" id="window" data-ch="CH.03 WINDOW">
+  <div class="ch-head">
+    <p class="osdtag">CH.03 // SLIDING WINDOW</p>
+    <h2 data-i18n="window.h2"></h2>
+    <p class="kicker" data-i18n="window.essence"></p>
+  </div>
+  <div class="two">
+    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="window.signals"></ul><p class="reason" data-i18n="window.pitfall"></p></div>
+    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="window"></pre></div>
+  </div>
+  <div class="panel rig" data-rig="window"></div>
+  <div class="probs" data-probs="window"></div>
+</section>
+
+<!-- ============ BINARY SEARCH ============ -->
+<section class="chapter" id="binary" data-ch="CH.04 BINARY">
+  <div class="ch-head">
+    <p class="osdtag">CH.04 // BINARY SEARCH</p>
+    <h2 data-i18n="binary.h2"></h2>
+    <p class="kicker" data-i18n="binary.essence"></p>
+  </div>
+  <div class="two">
+    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="binary.signals"></ul><p class="reason" data-i18n="binary.pitfall"></p></div>
+    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="binary"></pre></div>
+  </div>
+  <div class="panel rig" data-rig="binary"></div>
+  <div class="probs" data-probs="binary"></div>
+</section>
+
+<!-- ============ STACK · MONOTONIC STACK ============ -->
+<section class="chapter" id="stack" data-ch="CH.05 STACK">
+  <div class="ch-head">
+    <p class="osdtag">CH.05 // STACK · MONOTONIC STACK</p>
+    <h2 data-i18n="stack.h2"></h2>
+    <p class="kicker" data-i18n="stack.essence"></p>
+  </div>
+  <div class="two">
+    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="stack.signals"></ul><p class="reason" data-i18n="stack.pitfall"></p></div>
+    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="stack"></pre></div>
+  </div>
+  <div class="panel rig" data-rig="stack"></div>
+  <div class="probs" data-probs="stack"></div>
+</section>
+
+<!-- ============ LINKED LIST · FAST &amp; SLOW ============ -->
+<section class="chapter" id="list" data-ch="CH.06 LIST">
+  <div class="ch-head">
+    <p class="osdtag">CH.06 // LINKED LIST · FAST &amp; SLOW</p>
+    <h2 data-i18n="list.h2"></h2>
+    <p class="kicker" data-i18n="list.essence"></p>
+  </div>
+  <div class="two">
+    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="list.signals"></ul><p class="reason" data-i18n="list.pitfall"></p></div>
+    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="list"></pre></div>
+  </div>
+  <p class="tapelink" data-i18n="list.tape"></p>
+  <div class="panel rig" data-rig="list"></div>
+  <div class="probs" data-probs="list"></div>
+</section>
+
+<!-- ============ DFS · BFS ============ -->
+<section class="chapter" id="graph" data-ch="CH.07 DFS·BFS">
+  <div class="ch-head">
+    <p class="osdtag">CH.07 // DFS · BFS</p>
+    <h2 data-i18n="graph.h2"></h2>
+    <p class="kicker" data-i18n="graph.essence"></p>
+  </div>
+  <div class="two">
+    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="graph.signals"></ul><p class="reason" data-i18n="graph.pitfall"></p></div>
+    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="graph"></pre></div>
+  </div>
+  <p class="tapelink" data-i18n="graph.tape"></p>
+  <div class="panel rig" data-rig="graph"></div>
+  <div class="probs" data-probs="graph"></div>
+</section>
+
+<!-- ============ TREES ============ -->
+<section class="chapter" id="tree" data-ch="CH.08 TREES">
+  <div class="ch-head">
+    <p class="osdtag">CH.08 // TREES</p>
+    <h2 data-i18n="tree.h2"></h2>
+    <p class="kicker" data-i18n="tree.essence"></p>
+  </div>
+  <div class="two">
+    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="tree.signals"></ul><p class="reason" data-i18n="tree.pitfall"></p></div>
+    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="tree"></pre></div>
+  </div>
+  <div class="panel rig" data-rig="tree"></div>
+  <div class="probs" data-probs="tree"></div>
+</section>
+
+<!-- ============ HEAP · PRIORITY QUEUE ============ -->
+<section class="chapter" id="heap" data-ch="CH.09 HEAP">
+  <div class="ch-head">
+    <p class="osdtag">CH.09 // HEAP · PRIORITY QUEUE</p>
+    <h2 data-i18n="heap.h2"></h2>
+    <p class="kicker" data-i18n="heap.essence"></p>
+  </div>
+  <div class="two">
+    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="heap.signals"></ul><p class="reason" data-i18n="heap.pitfall"></p></div>
+    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="heap"></pre></div>
+  </div>
+  <div class="panel rig" data-rig="heap"></div>
+  <div class="probs" data-probs="heap"></div>
+</section>
+
+<!-- ============ BACKTRACKING ============ -->
+<section class="chapter" id="back" data-ch="CH.10 BACKTRACK">
+  <div class="ch-head">
+    <p class="osdtag">CH.10 // BACKTRACKING</p>
+    <h2 data-i18n="back.h2"></h2>
+    <p class="kicker" data-i18n="back.essence"></p>
+  </div>
+  <div class="two">
+    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="back.signals"></ul><p class="reason" data-i18n="back.pitfall"></p></div>
+    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="back"></pre></div>
+  </div>
+  <div class="panel rig" data-rig="back"></div>
+  <div class="probs" data-probs="back"></div>
+</section>
+
+<!-- ============ GREEDY ============ -->
+<section class="chapter" id="greedy" data-ch="CH.11 GREEDY">
+  <div class="ch-head">
+    <p class="osdtag">CH.11 // GREEDY</p>
+    <h2 data-i18n="greedy.h2"></h2>
+    <p class="kicker" data-i18n="greedy.essence"></p>
+  </div>
+  <div class="two">
+    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="greedy.signals"></ul><p class="reason" data-i18n="greedy.pitfall"></p></div>
+    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="greedy"></pre></div>
+  </div>
+  <div class="panel rig" data-rig="greedy"></div>
+  <div class="probs" data-probs="greedy"></div>
+</section>
+
+<!-- ============ DYNAMIC PROGRAMMING ============ -->
+<section class="chapter" id="dp" data-ch="CH.12 DP">
+  <div class="ch-head">
+    <p class="osdtag">CH.12 // DYNAMIC PROGRAMMING</p>
+    <h2 data-i18n="dp.h2"></h2>
+    <p class="kicker" data-i18n="dp.essence"></p>
+  </div>
+  <div class="two">
+    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="dp.signals"></ul><p class="reason" data-i18n="dp.pitfall"></p></div>
+    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="dp"></pre></div>
+  </div>
+  <div class="panel rig" data-rig="dp"></div>
+  <div class="probs" data-probs="dp"></div>
+</section>
+
+</main>
+
+<footer>
+  <span class="stop" data-i18n="foot.stop">■ STOP · END OF TAPE 06</span>
+  <p data-i18n="foot.line"></p>
+  <ul>
+    <li><a href="../../" data-i18n="foot.backToShelf">◀ Back to the shelf</a></li>
+    <li><a href="../bfs-dfs/" data-i18n="foot.tape2">Tape 02: BFS and DFS</a> · <a href="../two-pointers/" data-i18n="foot.tape3">Tape 03: Two Pointers</a></li>
+  </ul>
+</footer>
+
+<script type="module" src="./page.js?v=202609241230"></script>
+</body>
+</html>

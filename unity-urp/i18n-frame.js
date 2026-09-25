@@ -1,5 +1,5 @@
 /** Tape 04 strings: shaders, Shader Graph halo, Render Objects, Render Graph, pass merging. */
-import { facts } from './facts.js?v=202609162304';
+import { facts } from './facts.js?v=202609241230';
 
 export const FRAME = {
   'shader.h2': { en: 'Porting shaders: five steps from white to shadowed', ru: 'Перенос шейдеров: пять шагов от белого до теней' },

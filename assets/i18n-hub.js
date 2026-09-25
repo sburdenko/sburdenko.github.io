@@ -54,6 +54,15 @@ export const HUB = {
     en: '<span>SOLID</span><span>Patterns</span><span>Architecture</span><span>Unity 6</span>',
     ru: '<span>SOLID</span><span>Паттерны</span><span>Архитектура</span><span>Unity 6</span>'
   },
+  'hub.tape6Title': { en: 'Algorithm patterns', ru: 'Паттерны алгоритмов' },
+  'hub.tape6Desc': {
+    en: 'Twelve interview patterns from hash maps to DP: how to spot each one, a C# skeleton, a rewindable rig and three problems where the same move works differently.',
+    ru: 'Двенадцать паттернов для собеседования, от хеш-таблиц до DP: как узнать каждый, каркас на C#, стенд с перемоткой и три задачи, где один приём работает по-разному.'
+  },
+  'hub.tape6Tags': {
+    en: '<span>Algorithms</span><span>LeetCode</span><span>C#</span><span>12 patterns</span>',
+    ru: '<span>Алгоритмы</span><span>LeetCode</span><span>C#</span><span>12 паттернов</span>'
+  },
   'hub.soonTag': { en: '<span>Soon</span>', ru: '<span>Скоро</span>' },
   'hub.soonGo': { en: '■ NOT RECORDED YET', ru: '■ ЗАПИСЬ НЕ НАЧАТА' },
   'how.h2': { en: 'How to use this', ru: 'Как этим пользоваться' },

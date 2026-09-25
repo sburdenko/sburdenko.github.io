@@ -1,5 +1,5 @@
 /** Minimal syntax highlighter for C#, HLSL and ShaderLab snippets shown on the tapes. */
-import { esc } from './vhs.js?v=202609162304';
+import { esc } from './vhs.js?v=202609241230';
 
 const KEYWORDS = new Set(('abstract as base bool break case catch class const continue default delegate do else enum event '
   + 'false finally float for foreach get if in int interface internal is new null object out override private '

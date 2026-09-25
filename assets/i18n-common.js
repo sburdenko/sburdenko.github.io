@@ -20,5 +20,6 @@ export const COMMON = {
   'foot.tape1': { en: 'Tape 01: batching in Unity', ru: 'Кассета №1: батчинг в Unity' },
   'foot.tape2': { en: 'Tape 02: BFS and DFS', ru: 'Кассета №2: BFS и DFS' },
   'foot.tape4': { en: 'Tape 04: URP field guide', ru: 'Кассета №4: путеводитель по URP' },
+  'foot.tape6': { en: 'Tape 06: algorithm patterns', ru: 'Кассета 06: паттерны алгоритмов' },
   'foot.tape5': { en: 'Tape 05: design patterns', ru: 'Кассета №5: паттерны проектирования' }
 };

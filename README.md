@@ -20,6 +20,7 @@
 | 03 | [Two Pointers](./algorithms/two-pointers/) | Opposite pointers, fast & slow / Floyd, and LeetCode 287. Rewindable array and linked-list examples, highlighted pseudocode, C# templates, and interview questions. This lesson is in English. |
 | 04 | [URP Field Guide](./unity-urp/) | Глава за главой по книге Unity о URP (Unity 6): где живёт каждая настройка, выбор рендерера по жёстким ограничениям, MSAA, GPU Resident Drawer, тени и атлас теней, режимы смешанного света, Rendering Layers, probes против APV и протечки, эффекты, пять шейдеров из книги, Render Objects, Render Graph и слияние native passes, volumes, STP, прогрев PSO, диагностика, вопросы. Ошибки книги помечены «Сверено с книгой». |
 | 05 | [Паттерны и SOLID](./unity-patterns/) | Книга Unity «Level up your code with design patterns and SOLID»: цена изменений по SOLID, factory, семантика `ObjectPool<T>`, singleton при загрузке сцен, command с undo/redo, state machine, observer и забытые подписки, MVP против MVVM, strategy, память flyweight, dirty flag, выбор паттерна и вопросы. |
+| 06 | [Паттерны алгоритмов](./algorithms/patterns/) | Двенадцать паттернов для собеседования: HashMap/HashSet, Two Pointers, Sliding Window, Binary Search, монотонный стек, fast & slow, DFS/BFS, деревья, куча, backtracking, greedy, DP. Для каждого — признаки в условии, каркас на C#, стенд с перемоткой и три задачи LeetCode с разными вариантами приёма. Two Pointers и BFS/DFS ссылаются на кассеты 02 и 03 и дополняют их. |
 
 ## Структура
 
@@ -48,6 +49,11 @@ algorithms/bfs-dfs/
   grid-view.js graph-view.js   отрисовка на canvas
   grid-deck.js graph-deck.js race.js   пульты и гонка
   i18n.js                  все тексты кассеты: { ключ: { en, ru } }
+algorithms/patterns/
+  model-linear.js model-structures.js   трассы 12 стендов (без DOM)
+  view-kit.js views-*.js   SVG-отрисовка стендов, чистые функции
+  rigs.js problems.js      входные данные стендов, задачи и решения на C#
+  i18n-*.js                тексты глав { en, ru }; плеер берётся из bfs-dfs/player.js
 tests/                     node --test, проверяют чистые модели
 ```
 

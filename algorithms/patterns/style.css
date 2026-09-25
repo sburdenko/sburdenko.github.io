@@ -1,0 +1,107 @@
+/* Tape 06 · algorithm patterns. Builds on assets/vhs.css tokens. */
+
+/* ---------- map ---------- */
+.hero-lede{font-size:clamp(17px,1.8vw,20px);color:#e3dcfb}
+.pmap{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:10px}
+.pmap a{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;text-decoration:none;color:var(--ink);padding:14px 16px;background:var(--bg2);border:1px solid var(--line2);border-radius:5px;transition:border-color .15s,transform .15s}
+.pmap a:hover{border-color:var(--osd);transform:translateY(-2px)}
+.pmap .n{grid-row:span 2;font-family:var(--f-osd);font-size:26px;line-height:1;color:var(--osd)}
+.pmap b{font-family:var(--f-mono);font-size:14px;letter-spacing:.02em}
+.pmap .s{font-size:14px;line-height:1.45;color:var(--ink2)}
+.tapelink{border-left:2px solid var(--gpu);background:rgba(38,227,234,.06);padding:10px 14px;font-size:15px;color:#e3dcfb;max-width:90ch}
+
+/* ---------- spotting + skeleton ---------- */
+.spot{display:grid;gap:12px;align-content:start}
+.spot .why{font-size:15.5px}
+.spot pre.code{max-height:none}
+
+/* ---------- rig ---------- */
+.rig{display:grid;gap:16px}
+.rig-head{display:grid;gap:4px}
+.rig-head h3{font-family:var(--f-mono);font-size:15px;font-weight:600;letter-spacing:.02em}
+.rig .crt{padding:22px 16px;min-height:150px;display:flex;justify-content:center;align-items:center;overflow-x:auto}
+.rig .stage{display:flex;justify-content:center;min-width:0;max-width:100%}
+.rig .stage svg{max-width:100%;height:auto;overflow:visible;font-family:var(--f-mono)}
+.explanation{min-height:3.4em;border-left:3px solid var(--osd);padding:12px 16px;background:rgba(255,210,63,.04);font-size:16.5px;color:#fff}
+.rig-vars{display:flex;flex-wrap:wrap;gap:10px 22px}
+.rv{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.rv-val{display:flex;flex-wrap:wrap;gap:5px}
+.vchip{font:600 12.5px/1 var(--f-mono);padding:5px 8px;border-radius:3px;background:var(--bg3);border:1px solid var(--line2);color:#fff;font-variant-numeric:tabular-nums}
+.vchip.new{border-color:var(--osd);color:var(--osd)}
+.vchip.hit{border-color:var(--ok);color:var(--ok)}
+.vchip.amb{border-color:var(--cpu);color:#ffc2e3}
+.vchip.empty{color:var(--ink3)}
+
+/* ---------- svg marks ---------- */
+.stage text{fill:var(--ink);text-anchor:middle;font-size:15px}
+.stage .idx{font-size:10.5px;fill:var(--ink3)}
+.stage .lbl{font-size:12px;fill:var(--ink3);text-anchor:start;letter-spacing:.08em}
+.stage .cell{fill:#171026;stroke:var(--line2);stroke-width:1.2}
+.stage .cell.cur{fill:rgba(255,210,63,.16);stroke:var(--osd);stroke-width:2.2}
+.stage .cell.win{fill:rgba(38,227,234,.12);stroke:rgba(38,227,234,.65)}
+.stage .cell.ok{fill:rgba(93,252,154,.14);stroke:var(--ok);stroke-width:2}
+.stage .cell.bad{fill:rgba(255,92,108,.16);stroke:var(--bad);stroke-width:2.2}
+.stage .cell.src{fill:rgba(255,62,165,.16);stroke:var(--cpu);stroke-width:2}
+.stage .cell.seen{fill:#120b20}
+.stage .cell.dim,.stage .cv.dim{opacity:.3}
+.stage .cv.seen{fill:var(--ink3)}
+.stage .ptr path{fill:var(--cpu)}
+.stage .ptr text{fill:var(--cpu);font-size:12px;font-weight:700}
+.stage .ptr.p2 path{fill:var(--gpu)}
+.stage .ptr.p2 text{fill:var(--gpu)}
+.stage .edge{stroke:#6d5f8c;stroke-width:1.8;fill:none}
+.stage .edge.on{stroke:var(--osd);stroke-width:2.4}
+.stage .edge.dim{opacity:.25}
+.stage .arc{stroke:var(--warn);stroke-width:1.8;fill:none}
+.stage .arc.pick{stroke:var(--ok);stroke-width:2.6}
+.stage .arc-t{font-size:11px;fill:var(--warn)}
+.stage .arc-t.pick{fill:var(--ok);font-weight:700}
+.stage .mk-edge{fill:#6d5f8c}
+.mk-edge{fill:#6d5f8c}.mk-amb{fill:var(--warn)}.mk-ok{fill:var(--ok)}
+.stage .node{fill:#171026;stroke:#827498;stroke-width:1.8}
+.stage .node.cur{fill:rgba(255,210,63,.18);stroke:var(--osd);stroke-width:2.6}
+.stage .node.path{stroke:var(--cpu);stroke-width:2.2}
+.stage .node.done,.stage .node.ok{fill:rgba(93,252,154,.14);stroke:var(--ok)}
+.stage .node.root{stroke:var(--gpu);stroke-width:2.4}
+.stage .node.new{fill:rgba(255,62,165,.18);stroke:var(--cpu);stroke-width:2.4}
+.stage .node.nil{fill:transparent;stroke-dasharray:3 4}
+.stage .node.dim,.stage .nt.dim{opacity:.3}
+.stage .nt.small{font-size:13px}
+.stage .badge-r{fill:var(--ok)}
+.stage .badge-t{fill:#0b0715;font-size:11px;font-weight:700}
+.stage .sf{font-size:12px;font-weight:700}
+.stage .sf.s{fill:var(--cpu)}
+.stage .sf.f{fill:var(--gpu)}
+.stage .gcell{stroke:#07040f;stroke-width:1}
+.stage .gcell.water{fill:#0f0a1d}
+.stage .gcell.land{fill:#4a3d6e}
+.stage .gcell.i0{fill:rgba(38,227,234,.55)}
+.stage .gcell.i1{fill:rgba(255,62,165,.55)}
+.stage .gcell.i2{fill:rgba(255,210,63,.55)}
+.stage .gcell.i3{fill:rgba(93,252,154,.5)}
+.stage .gcell.i4{fill:rgba(160,123,255,.6)}
+.stage .gcell.focus{stroke:#fff;stroke-width:3}
+.stage .gt{font-size:13px}
+.stage .gt.w{fill:var(--ink3);opacity:.5}
+
+/* ---------- problems ---------- */
+.probs{display:grid;gap:12px}
+.ptabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:640px){.ptabs{grid-template-columns:minmax(0,1fr)}}
+.ptab{display:grid;gap:5px;text-align:left;cursor:pointer;padding:12px 14px;background:var(--bg2);border:1px solid var(--line2);border-radius:5px;color:var(--ink);font-family:var(--f-body);transition:border-color .15s,background .15s}
+.ptab:hover{border-color:var(--ink3)}
+.ptab[aria-selected="true"]{border-color:var(--osd);background:rgba(255,210,63,.07);box-shadow:0 0 16px -6px rgba(255,210,63,.5)}
+.ptab .v{font:700 11px/1.3 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--osd)}
+.ptab .nm{font-weight:600;font-size:15.5px;line-height:1.3;color:#fff}
+.ptab .meta{font:12px var(--f-mono);color:var(--ink3)}
+.diff{font-style:normal;font-weight:700}
+.diff.Easy{color:var(--ok)}.diff.Medium{color:var(--warn)}.diff.Hard{color:var(--bad)}
+.ppanel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:24px;align-items:start}
+@media (max-width:900px){.ppanel{grid-template-columns:minmax(0,1fr)}}
+.pinfo{display:grid;gap:14px;align-content:start}
+.pinfo h3 .lc{font-family:var(--f-mono);font-size:14px;color:var(--ink3);font-weight:400}
+.pinfo dl{margin:0;display:grid;gap:12px}
+.pinfo dd{margin:4px 0 0;font-size:15.5px;line-height:1.55;color:#e3dcfb}
+.pinfo dd.cx{font-family:var(--f-mono);font-size:13.5px;color:#fff}
+.pinfo .leet{font-family:var(--f-mono);font-size:13px}
+.pcode{display:grid;gap:8px;min-width:0}

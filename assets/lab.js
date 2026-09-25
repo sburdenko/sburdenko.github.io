@@ -1,5 +1,5 @@
 /** Small helpers shared by the interactive rigs of the Unity tapes. */
-import { $$, onVisible, RM } from './vhs.js?v=202609162304';
+import { $$, onVisible, RM } from './vhs.js?v=202609241230';
 
 export const isPressed = button => button?.getAttribute('aria-pressed') === 'true';
 

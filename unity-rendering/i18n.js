@@ -1,5 +1,5 @@
 /** Словарь кассеты «Батчинг в Unity». Значение-функция получает аргументы из t(). */
-import { fmtI, plural } from '../assets/vhs.js?v=202609162304';
+import { fmtI, plural } from '../assets/vhs.js?v=202609241230';
 
 export const DICT = {
   'page.title': {
