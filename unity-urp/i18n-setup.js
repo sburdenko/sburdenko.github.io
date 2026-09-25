@@ -1,5 +1,5 @@
 /** Tape 04 strings: page, map, setup, settings finder, renderer, MSAA, GPU Resident Drawer. */
-import { facts } from './facts.js?v=202609241230';
+import { facts } from './facts.js?v=202609252015';
 
 export const SETUP = {
   'page.title': { en: 'URP field guide · Unity 6 · Tape 04', ru: 'Путеводитель по URP · Unity 6 · Кассета 04' },

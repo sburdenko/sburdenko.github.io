@@ -1,5 +1,5 @@
 /** Tape 04 strings: light probes, APV, leaks, reflection probes, effects. */
-import { facts } from './facts.js?v=202609241230';
+import { facts } from './facts.js?v=202609252015';
 
 export const GI = {
   'probes.h2': { en: 'Probes: how moving objects get baked light', ru: 'Probes: как движущиеся объекты получают запечённый свет' },

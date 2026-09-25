@@ -1,5 +1,5 @@
 /** Отрисовка графа: рёбра, дерево обхода, фронт, путь до цели. */
-import { COL, visitedColor, depthColor } from './panels.js?v=202609241230';
+import { COL, visitedColor, depthColor } from './panels.js?v=202609252015';
 
 export function graphLayout(graph, w, h) {
   const r = Math.max(11, Math.min(26, Math.round(Math.min(w, h) / (Math.sqrt(graph.nodes) * 2.6))));

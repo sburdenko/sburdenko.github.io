@@ -85,9 +85,10 @@
 .stage .gt.w{fill:var(--ink3);opacity:.5}
 
 /* ---------- problems ---------- */
-.probs{display:grid;gap:12px}
-.ptabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-@media (max-width:640px){.ptabs{grid-template-columns:minmax(0,1fr)}}
+.probs{display:grid;gap:14px}
+.ptabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:1000px){.ptabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.ptabs{grid-template-columns:minmax(0,1fr)}}
 .ptab{display:grid;gap:5px;text-align:left;cursor:pointer;padding:12px 14px;background:var(--bg2);border:1px solid var(--line2);border-radius:5px;color:var(--ink);font-family:var(--f-body);transition:border-color .15s,background .15s}
 .ptab:hover{border-color:var(--ink3)}
 .ptab[aria-selected="true"]{border-color:var(--osd);background:rgba(255,210,63,.07);box-shadow:0 0 16px -6px rgba(255,210,63,.5)}
@@ -105,3 +106,47 @@
 .pinfo dd.cx{font-family:var(--f-mono);font-size:13.5px;color:#fff}
 .pinfo .leet{font-family:var(--f-mono);font-size:13px}
 .pcode{display:grid;gap:8px;min-width:0}
+
+/* ---------- rigs added with the per-problem stands ---------- */
+.ptab.hard{border-color:rgba(255,92,108,.45)}
+.ptab.hard[aria-selected="true"]{border-color:var(--bad);background:rgba(255,92,108,.08);box-shadow:0 0 16px -6px rgba(255,92,108,.6)}
+.ptab .must{color:var(--bad);font-weight:700;letter-spacing:.06em}
+.stage .ptr.p3 path{fill:var(--ok)}
+.stage .ptr.p3 text{fill:var(--ok)}
+.stage .cell.g0,.vchip.g0{fill:rgba(38,227,234,.28);border-color:var(--gpu)}
+.stage .cell.g1,.vchip.g1{fill:rgba(255,62,165,.28);border-color:var(--cpu)}
+.stage .cell.g2,.vchip.g2{fill:rgba(255,210,63,.26);border-color:var(--osd)}
+.stage .cell.g3,.vchip.g3{fill:rgba(93,252,154,.24);border-color:var(--ok)}
+.stage .cell.g4,.vchip.g4{fill:rgba(160,123,255,.3);border-color:#a07bff}
+.vchip.done{color:var(--ink3);border-color:var(--line)}
+.stage .cv.small{font-size:12.5px}
+.stage .idx.need{fill:var(--osd);font-size:14px}
+.stage .lbl-c{font-size:11.5px;fill:var(--ink3);letter-spacing:.06em}
+.stage .hbar{fill:#4a3d6e}
+.stage .hbar.l{fill:var(--cpu)}
+.stage .hbar.r{fill:var(--gpu)}
+.stage .hbar.done{fill:#5b4d80}
+.stage .hbar.okb{fill:var(--ok)}
+.stage .hbar.dim{opacity:.3}
+.stage .water{fill:var(--gpu);opacity:.18}
+.stage .water-b{fill:rgba(38,227,234,.45)}
+.stage .best{fill:none;stroke:var(--ok);stroke-width:2;stroke-dasharray:5 4}
+.stage .axis{stroke:var(--line2);stroke-width:1.2}
+.stage .cutline{stroke:var(--osd);stroke-width:2;stroke-dasharray:4 3}
+.stage .tick{stroke:var(--line);stroke-width:1}
+.stage .span{fill:#2a2046;stroke:var(--line2);stroke-width:1.2}
+.stage .span.keep{fill:rgba(93,252,154,.22);stroke:var(--ok)}
+.stage .span.drop{fill:rgba(255,92,108,.18);stroke:var(--bad);stroke-dasharray:4 3}
+.stage .span.curi{stroke-width:2.6;stroke:var(--osd)}
+.stage .span-t{font-size:11px}
+.stage .gcell.v0{fill:#0f0a1d}
+.stage .gcell.v1{fill:#4a3d6e}
+.stage .gcell.v2{fill:rgba(255,62,165,.55)}
+.stage .gcell.fresh{fill:rgba(93,252,154,.35)}
+.stage .gcell.rotten{fill:rgba(255,62,165,.5)}
+.stage .gcell.sq-l{fill:#2a2046}
+.stage .gcell.sq-d{fill:#171026}
+.stage .gcell.bad-c{fill:rgba(255,92,108,.35);stroke:var(--bad);stroke-width:2.5}
+.stage .node.bad{fill:rgba(255,92,108,.2);stroke:var(--bad);stroke-width:2.6}
+.stage .node.cutn{fill:transparent;stroke:var(--bad);stroke-dasharray:3 3}
+.stage .gt.queen{font-size:26px;fill:var(--osd)}

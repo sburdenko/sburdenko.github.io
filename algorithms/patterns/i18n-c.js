@@ -29,17 +29,18 @@ foreach (var x in items) {
     if (heap.Count > k) heap.Dequeue();  // держим k лучших
 }`,
   },
-  'heap.viz': { en: 'k-th largest · k = 3, stream [4, 1, 7, 3, 8, 5, 9, 2]', ru: 'k-й по величине · k = 3, поток [4, 1, 7, 3, 8, 5, 9, 2]' },
   'heap.p': {
     en: [
       { variant: 'Min-heap of size k', task: 'Find the k-th largest element of an array.', idea: 'A min-heap of size k: push everything, pop the minimum on overflow. At the end the root is the k-th largest.', why: 'The heap as a filter of the best: O(n log k) instead of sorting in O(n log n). Same for Top K Frequent (#347), K Closest Points (#973).', cx: 'O(n log k) time · O(k) memory' },
       { variant: 'Max-heap as a simulation', task: 'Each turn smash the two heaviest stones; the difference stays. What does the last stone weigh?', idea: 'A max-heap. Take the two maxima, push the difference back while more than one stone remains.', why: 'The heap as “give me the maximum” of a set that keeps changing. In C# a max-heap is a negative priority.', cx: 'O(n log n) time · O(n) memory' },
       { variant: 'Merge k streams', task: 'Merge k sorted linked lists into one.', idea: 'The heap holds one head from every list. Take the smallest, append it to the answer and push its next node.', why: 'A heap of size k picks the minimum among k streams in O(log k).', cx: 'O(N log k) time · O(k) memory' },
+      { variant: "Two heaps", task: "Numbers arrive one by one; after each one, report the median.", idea: "A max-heap holds the smaller half, a min-heap the larger one. Keep the sizes equal or the low side one bigger; the median sits on the tops.", why: "Two heaps balance each other — the scheme behind every running median or percentile, e.g. Sliding Window Median (#480).", cx: "O(log n) per number · O(n) memory" }
     ],
     ru: [
       { variant: 'Min-heap размера k', task: 'Найди k-й по величине элемент массива.', idea: 'Min-heap размера k: кладём всё подряд, при переполнении выкидываем минимум. В конце на вершине — k-й по величине.', why: 'Куча как фильтр лучших: O(n log k) вместо сортировки за O(n log n). Так же — Top K Frequent (#347), K Closest Points (#973).', cx: 'O(n log k) время · O(k) память' },
       { variant: 'Max-heap как симуляция', task: 'Каждый ход сталкиваем два самых тяжёлых камня, остаётся разница. Сколько весит последний камень?', idea: 'Max-heap. Достаём два максимума, кладём разницу обратно, пока камней больше одного.', why: 'Куча как «дай максимум» из набора, который постоянно меняется. Max-heap в C# — через отрицательный приоритет.', cx: 'O(n log n) время · O(n) память' },
       { variant: 'Слияние k потоков', task: 'Слей k отсортированных связных списков в один.', idea: 'В куче — по одной «голове» от каждого списка. Достали минимальную — прицепили к ответу и положили в кучу её следующий узел.', why: 'Куча размера k выбирает минимум среди k потоков за O(log k).', cx: 'O(N log k) время · O(k) память' },
+      { variant: "Две кучи", task: "Числа приходят по одному; после каждого назови медиану.", idea: "Max-heap хранит меньшую половину, min-heap — большую. Размеры равны или нижняя на один больше; медиана лежит на вершинах.", why: "Две кучи уравновешивают друг друга — схема для любой скользящей медианы или перцентиля, например Sliding Window Median (#480).", cx: "O(log n) на число · O(n) память" }
     ],
   },
   'heap.ev.start': {
@@ -94,17 +95,18 @@ foreach (var x in items) {
     }
 }`,
   },
-  'back.viz': { en: 'Subsets [1, 2, 3] · the “take / skip” tree', ru: 'Subsets [1, 2, 3] · дерево «брать / не брать»' },
   'back.p': {
     en: [
       { variant: 'Take or skip', task: 'All subsets of an array of distinct numbers.', idea: 'Every number has two branches: take it or not. Depth n, 2ⁿ leaves.', why: 'The choice is binary and in order: index i says whose fate we decide.', cx: 'O(n · 2ⁿ) time · O(n) stack' },
       { variant: 'Any unused one', task: 'All permutations of an array of distinct numbers.', idea: 'On every level try any number not used yet. used[] marks the taken ones.', why: 'Order matters, so the loop starts at 0, not at i. n! leaves.', cx: 'O(n · n!) time · O(n) stack' },
       { variant: 'Sum with pruning', task: 'All combinations (numbers may repeat) that sum to target.', idea: 'Loop from start so that [2,3] and [3,2] are not both produced. Recurse with the same i — the number may be reused. Candidates are sorted: once one exceeds the remainder — break.', why: 'Pruning is the point here; without it the tree explodes. The grid version of the technique is Word Search (#79).', cx: 'exponential; pruning helps a lot' },
+      { variant: "Constraints per row", task: "Place n queens on an n×n board so that no two attack each other. Return every board.", idea: "One queen per row. Try each column; skip it if the column or a diagonal is taken (r + c and r − c identify diagonals), go deeper, undo.", why: "The canonical backtracking problem: choice, constraint, undo. O(1) conflict checks with three boolean arrays are what interviewers look for.", cx: "O(n!) time · O(n) memory" }
     ],
     ru: [
       { variant: 'Брать / не брать', task: 'Все подмножества массива уникальных чисел.', idea: 'У каждого числа две ветки: взять или не взять. Глубина n, листьев 2ⁿ.', why: 'Выбор бинарный и идёт по порядку: индекс i говорит, чью судьбу решаем.', cx: 'O(n · 2ⁿ) время · O(n) стек' },
       { variant: 'Любой неиспользованный', task: 'Все перестановки массива уникальных чисел.', idea: 'На каждом уровне пробуем любое ещё не использованное число. used[] отмечает занятые.', why: 'Порядок важен, поэтому цикл идёт с 0, а не с i. Листьев n!.', cx: 'O(n · n!) время · O(n) стек' },
       { variant: 'Сумма с отсечением', task: 'Все комбинации (числа можно повторять) с суммой target.', idea: 'Цикл от start, чтобы не получить и [2,3], и [3,2]. Рекурсия с тем же i — число можно взять ещё раз. Кандидаты отсортированы: как только число больше остатка — break.', why: 'Главное здесь — отсечение, без него дерево огромное. Та же техника на сетке — Word Search (#79).', cx: 'экспоненциально, отсечение сильно помогает' },
+      { variant: "Ограничения по строкам", task: "Расставь n ферзей на доске n×n так, чтобы никто никого не бил. Верни все доски.", idea: "По одному ферзю в строке. Пробуем каждый столбец; пропускаем, если занят столбец или диагональ (диагонали задают r + c и r − c), уходим глубже, откатываем.", why: "Каноническая задача на backtracking: выбор, ограничение, откат. Проверка конфликтов за O(1) через три булевых массива — то, чего ждёт интервьюер.", cx: "O(n!) время · O(n) память" }
     ],
   },
   'back.ev.start': {
@@ -149,17 +151,18 @@ foreach (var item in items) {
     if (/* совместим с текущим решением */) { /* берём */ }
 }`,
   },
-  'greedy.viz': { en: 'Jump Game · a = [2, 0, 2, 0, 1, 3]', ru: 'Jump Game · a = [2, 0, 2, 0, 1, 3]' },
   'greedy.p': {
     en: [
       { variant: 'Frontier of reach', task: 'nums[i] is the longest jump from i. Can you reach the last index?', idea: 'Keep reach — the farthest reachable index. If i > reach, you are stuck.', why: 'No paths are explored at all — a single number is enough.', cx: 'O(n) time · O(1) memory' },
       { variant: 'Best entry so far', task: 'Prices by day. One buy and one later sell — the maximum profit?', idea: 'Walk the days and remember the lowest price so far. Today’s profit = price − that minimum.', why: 'Greedily keep “the best entry point so far”. It can also be read as DP with one variable.', cx: 'O(n) time · O(1) memory' },
       { variant: 'Sort by the end', task: 'The fewest intervals to remove so that the rest do not overlap.', idea: 'Sort by the right end. Keep an interval if it starts no earlier than the last kept one ends; otherwise remove it.', why: 'The right sort key is everything: an interval that ends early leaves the most room for the rest.', cx: 'O(n log n) time · O(1) memory' },
+      { variant: "Two passes, two directions", task: "Children stand in a row with ratings. Everyone gets at least one candy; a higher rating than a neighbour means more candies than that neighbour. What is the minimum total?", idea: "Left to right: higher than the left neighbour → one more than it. Right to left: higher than the right neighbour → raise to at least one more than it.", why: "One pass sees only one neighbour. Two greedy passes in opposite directions, each fixing its side, satisfy both rules together.", cx: "O(n) time · O(n) memory" }
     ],
     ru: [
       { variant: 'Граница досягаемости', task: 'nums[i] — максимальный прыжок из i. Можно ли добраться до последнего индекса?', idea: 'Держим reach — самую дальнюю досягаемую позицию. Если i > reach, мы застряли.', why: 'Пути не перебираем вообще — хватает одного числа.', cx: 'O(n) время · O(1) память' },
       { variant: 'Лучший вход на сейчас', task: 'Цены по дням. Одна покупка и одна продажа позже — какая максимальная прибыль?', idea: 'Идём по дням и помним минимальную цену до сегодня. Прибыль сегодня = цена − этот минимум.', why: 'Жадно храним «лучшую точку входа на данный момент». Можно смотреть и как на DP с одной переменной.', cx: 'O(n) время · O(1) память' },
       { variant: 'Сортировка по концу', task: 'Сколько интервалов минимум удалить, чтобы оставшиеся не пересекались?', idea: 'Сортируем по правому концу. Берём интервал, если он начинается не раньше конца последнего взятого, иначе удаляем.', why: 'Вся сила — в правильной сортировке: рано закончившийся интервал оставляет больше места остальным.', cx: 'O(n log n) время · O(1) память' },
+      { variant: "Два прохода, два направления", task: "Дети стоят в ряд с рейтингами. Каждому минимум одна конфета; у кого рейтинг выше соседа, тот получает больше этого соседа. Каков минимум конфет?", idea: "Слева направо: выше левого соседа → на одну больше, чем у него. Справа налево: выше правого → поднимаем до «на одну больше правого».", why: "Один проход видит только одного соседа. Два жадных прохода в разные стороны, каждый чинит свою сторону, вместе выполняют оба правила.", cx: "O(n) время · O(n) память" }
     ],
   },
   'greedy.ev.start': {
@@ -210,17 +213,18 @@ for (int i = 1; i <= n; i++)
     dp[i] = /* из dp[меньших i] */;
 return dp[n];`,
   },
-  'dp.viz': { en: 'Coin Change · coins = [1, 3, 4], amount = 6', ru: 'Coin Change · coins = [1, 3, 4], amount = 6' },
   'dp.p': {
     en: [
       { variant: '1D: sum of the two before', task: 'A staircase of n steps, 1 or 2 at a time. How many ways to the top?', idea: 'Step n is reached from n − 1 or n − 2: ways(n) = ways(n − 1) + ways(n − 2). Two variables are enough.', why: 'The simplest transition — a sum. House Robber (#198) has the same shape with max instead of sum.', cx: 'O(n) time · O(1) memory' },
       { variant: '1D: minimum over choices', task: 'The fewest coins that make up amount (−1 if impossible).', idea: 'dp[x] = 1 + min(dp[x − c]) over all coins c. Fill from 0 to amount.', why: 'The transition picks the best of several options. Greedy breaks here — watch the rig.', cx: 'O(amount · coins) time · O(amount) memory' },
       { variant: '2D: two strings', task: 'Length of the longest common subsequence of two strings.', idea: 'dp[i, j] is the answer for prefixes a[..i] and b[..j]. Equal characters — diagonal + 1, otherwise the max of the cell above and the cell to the left.', why: 'Two inputs — a 2D table. Edit Distance (#72) and other two-string problems share this skeleton.', cx: 'O(m · n) time · O(m · n) memory' },
+      { variant: "2D: three operations", task: "The fewest insertions, deletions and replacements that turn word a into word b.", idea: "dp[i, j] = the distance between prefixes a[..i] and b[..j]. Equal characters — take the diagonal; otherwise 1 + min(replace ↖, delete ↑, insert ←).", why: "The most asked 2D DP. Once it clicks, LCS, Distinct Subsequences and wildcard matching are variations of the same table.", cx: "O(m · n) time · O(m · n) memory" }
     ],
     ru: [
       { variant: '1D: сумма двух предыдущих', task: 'Лестница из n ступеней, шаг 1 или 2. Сколькими способами можно подняться?', idea: 'На ступень n пришли с n − 1 или с n − 2: ways(n) = ways(n − 1) + ways(n − 2). Хватает двух переменных.', why: 'Самый простой переход — сумма. Та же форма у House Robber (#198), только там max вместо суммы.', cx: 'O(n) время · O(1) память' },
       { variant: '1D: минимум по выбору', task: 'Минимальное число монет для суммы amount (−1, если собрать нельзя).', idea: 'dp[x] = 1 + min(dp[x − c]) по всем монетам c. Заполняем от 0 до amount.', why: 'Переход — выбор лучшего из нескольких вариантов. Жадность здесь ломается — это видно на стенде.', cx: 'O(amount · coins) время · O(amount) память' },
       { variant: '2D: две строки', task: 'Длина наибольшей общей подпоследовательности двух строк.', idea: 'dp[i, j] — ответ для префиксов a[..i] и b[..j]. Символы равны — диагональ + 1, иначе максимум из верхней и левой клеток.', why: 'Два входа — двумерная таблица. Тот же каркас у Edit Distance (#72) и других задач «на две строки».', cx: 'O(m · n) время · O(m · n) память' },
+      { variant: "2D: три операции", task: "Минимум вставок, удалений и замен, чтобы превратить слово a в слово b.", idea: "dp[i, j] — расстояние между префиксами a[..i] и b[..j]. Символы равны — берём диагональ; иначе 1 + min(замена ↖, удаление ↑, вставка ←).", why: "Самая частая 2D DP на собеседованиях. Когда она понятна, LCS, Distinct Subsequences и wildcard matching — вариации той же таблицы.", cx: "O(m · n) время · O(m · n) память" }
     ],
   },
   'dp.ev.start': {

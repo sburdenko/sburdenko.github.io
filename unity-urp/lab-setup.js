@@ -1,9 +1,9 @@
 /** CH.00 map, CH.01 settings, CH.02 renderer + MSAA, CH.03 GPU Resident Drawer. */
-import { $, fitCanvas, clamp, fmt, fmtI } from '../assets/vhs.js?v=202609241230';
-import { t } from '../assets/i18n.js?v=202609241230';
-import { bindSeg, isPressed, togglePressed, tile } from '../assets/lab.js?v=202609241230';
-import { LOCATIONS, SETTINGS, settingsIn, quizOrder, chooseRenderer, RENDERER_KEYS, residentDrawer, GRD_REQUIREMENTS } from './model-setup.js?v=202609241230';
-import { MSAA_PATTERNS, msaaCoverage, msaaCost } from './model-output.js?v=202609241230';
+import { $, fitCanvas, clamp, fmt, fmtI } from '../assets/vhs.js?v=202609252015';
+import { t } from '../assets/i18n.js?v=202609252015';
+import { bindSeg, isPressed, togglePressed, tile } from '../assets/lab.js?v=202609252015';
+import { LOCATIONS, SETTINGS, settingsIn, quizOrder, chooseRenderer, RENDERER_KEYS, residentDrawer, GRD_REQUIREMENTS } from './model-setup.js?v=202609252015';
+import { MSAA_PATTERNS, msaaCoverage, msaaCost } from './model-output.js?v=202609252015';
 
 export function initMap() {
   function render() {

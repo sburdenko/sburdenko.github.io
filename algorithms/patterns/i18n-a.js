@@ -29,17 +29,18 @@ for (int i = 0; i < n; i++) {
     seen[/* что запоминаем */] = i;
 }`,
   },
-  'hash.viz': { en: 'Two Sum · nums = [3, 8, 2, 11, 7, 5], target = 9', ru: 'Two Sum · nums = [3, 8, 2, 11, 7, 5], target = 9' },
   'hash.p': {
     en: [
       { variant: 'Look up the complement', task: 'Given an array and a target, return the indices of two numbers that add up to the target.', idea: 'For each x ask the dictionary: have I seen target − x? If not, store x → index and move on. One pass.', why: 'The dictionary stores not “what was there” but “where it was”: key is the value, value is the index.', cx: 'O(n) time · O(n) memory' },
       { variant: '“Seen it” set', task: 'Does any value appear at least twice?', idea: 'HashSet.Add returns false when the element is already there — that is the answer.', why: 'No payload is needed, only presence, so a HashSet instead of a Dictionary. The counting cousin is Valid Anagram (#242).', cx: 'O(n) time · O(n) memory' },
       { variant: 'Group by a key', task: 'Group anagrams: ["eat","tea","tan","ate","nat","bat"] → [[eat,tea,ate],[tan,nat],[bat]].', idea: 'Invent a key shared by all anagrams: the sorted letters ("aet"). Dictionary: key → list of strings.', why: 'All the difficulty is inventing the key. The dictionary then just sorts strings into buckets.', cx: 'O(n · k log k), k = string length' },
+      { variant: "Prefix sums in a map", task: "Count contiguous subarrays whose sum equals k. Numbers can be negative.", idea: "Keep a running sum. A subarray ending here sums to k exactly when an earlier prefix equals sum − k, so count how many times each prefix appeared.", why: "Negative numbers break the sliding window; a dictionary of prefix sums replaces it. The most reused hash map trick of all.", cx: "O(n) time · O(n) memory" }
     ],
     ru: [
       { variant: 'Поиск дополнения', task: 'Дан массив и target. Верни индексы двух чисел, сумма которых равна target.', idea: 'Для каждого x спрашиваем словарь: встречалось ли target − x? Если нет — кладём x → индекс и идём дальше. Один проход.', why: 'Словарь хранит не «что было», а «где было»: ключ — число, значение — индекс.', cx: 'O(n) время · O(n) память' },
       { variant: 'Множество «уже видел»', task: 'Есть ли в массиве число, которое встречается хотя бы дважды?', idea: 'HashSet.Add возвращает false, если элемент уже есть. Это и есть ответ.', why: 'Значение не нужно, важен только факт присутствия — поэтому HashSet, а не Dictionary. Близкий вариант с подсчётом частот — Valid Anagram (#242).', cx: 'O(n) время · O(n) память' },
       { variant: 'Группировка по ключу', task: 'Сгруппируй анаграммы: ["eat","tea","tan","ate","nat","bat"] → [[eat,tea,ate],[tan,nat],[bat]].', idea: 'Придумываем ключ, одинаковый у всех анаграмм: отсортированные буквы ("aet"). Словарь: ключ → список строк.', why: 'Вся сложность — придумать ключ. Словарь дальше просто раскладывает строки по корзинам.', cx: 'O(n · k log k), k — длина строки' },
+      { variant: "Префиксные суммы в словаре", task: "Сколько непрерывных подмассивов с суммой k? Числа бывают отрицательными.", idea: "Ведём текущую сумму. Подмассив, кончающийся здесь, даёт k ровно тогда, когда раньше встречался префикс sum − k, — поэтому считаем, сколько раз встречался каждый префикс.", why: "Отрицательные числа ломают скользящее окно, словарь префиксных сумм его заменяет. Самый переиспользуемый приём с хеш-таблицей.", cx: "O(n) время · O(n) память" }
     ],
   },
   'hash.ev.start': {
@@ -72,8 +73,8 @@ for (int i = 0; i < n; i++) {
     ru: '<b>Ловушка.</b> Двигай тот указатель, чей сдвиг может улучшить ответ, и умей объяснить, почему второй двигать бессмысленно.',
   },
   'twoptr.tape': {
-    en: '<b>Already on the shelf:</b> opposite pointers on a sorted array and Floyd’s fast &amp; slow are taken apart on <a href="../two-pointers/#opposite">Tape 03 · Two Pointers</a>. The rig below adds the variant that tape does not have: both pointers moving the same way.',
-    ru: '<b>Уже на полке:</b> указатели навстречу на отсортированном массиве и fast &amp; slow по Floyd разобраны на <a href="../two-pointers/#opposite">кассете 03 · Two Pointers</a>. Стенд ниже добавляет вариант, которого там нет: оба указателя идут в одну сторону.',
+    en: '<b>Already on the shelf:</b> opposite pointers on a sorted array and Floyd’s fast &amp; slow are taken apart on <a href="../two-pointers/#opposite">Tape 03 · Two Pointers</a>. Here every problem has its own rig, including the variants that tape does not cover.',
+    ru: '<b>Уже на полке:</b> указатели навстречу на отсортированном массиве и fast &amp; slow по Floyd разобраны на <a href="../two-pointers/#opposite">кассете 03 · Two Pointers</a>. Здесь у каждой задачи свой стенд, включая варианты, которых там нет.',
   },
   'twoptr.tpl': {
     en: `int l = 0, r = n - 1;
@@ -89,17 +90,18 @@ while (l < r) {
     else r--;
 }`,
   },
-  'twoptr.viz': { en: 'Move Zeroes · [0, 1, 0, 3, 12, 0, 5] · read and write', ru: 'Move Zeroes · [0, 1, 0, 3, 12, 0, 5] · read и write' },
   'twoptr.p': {
     en: [
       { variant: 'Same way: reader and writer', task: 'Move all zeros to the end, keeping the order of the other elements. In place.', idea: 'read walks every element, write marks where the next non-zero goes. Swap and advance write.', why: 'Both pointers go forward, at different speeds. Twin: Remove Element (#27) — same code with != val.', cx: 'O(n) time · O(1) memory' },
       { variant: 'Towards each other: move the weak side', task: 'Pick two lines that, with the x-axis, hold the most water.', idea: 'Start with the outermost lines. The area is capped by the lower one, so move it: moving the higher one can never help.', why: 'The pointers converge, and every “which one moves” decision provably drops a whole batch of pairs.', cx: 'O(n) time · O(1) memory' },
       { variant: 'Sort + fix one', task: 'Find all unique triples that sum to 0.', idea: 'Sort. Fix nums[i] and look for the rest with pointers moving towards each other. Skip equal values to avoid duplicates.', why: 'Two pointers become the inner loop of an outer one. O(n³) turns into O(n²).', cx: 'O(n²) time · O(1) extra' },
+      { variant: "Two walls, running maximums", task: "Bars of height h[i]. How much rain water is trapped between them?", idea: "Water above a bar = min(max on the left, max on the right) − its height. Move the lower side inward: its maximum is the binding limit, so its water is already known.", why: "The same “move the weaker side” argument as Container, but each step adds water instead of measuring an area. Asked constantly.", cx: "O(n) time · O(1) memory" }
     ],
     ru: [
       { variant: 'В одну сторону: читатель и писатель', task: 'Сдвинь все нули в конец, сохранив порядок остальных. На месте.', idea: 'read идёт по всем элементам, write указывает, куда положить следующий ненулевой. Меняем местами и сдвигаем write.', why: 'Оба указателя идут вперёд, но с разной скоростью. Близнец — Remove Element (#27): тот же код с условием != val.', cx: 'O(n) время · O(1) память' },
       { variant: 'Навстречу: двигаем слабую сторону', task: 'Выбери две линии, которые вместе с осью X держат больше всего воды.', idea: 'Начинаем с крайних линий. Площадь ограничена меньшей высотой, поэтому двигаем её: сдвиг большей гарантированно не поможет.', why: 'Указатели сходятся, и каждое решение «кого двигать» доказуемо отсекает целую пачку пар.', cx: 'O(n) время · O(1) память' },
       { variant: 'Сортировка + фиксируем один', task: 'Найди все уникальные тройки с суммой 0.', idea: 'Сортируем. Фиксируем nums[i], остаток ищем указателями навстречу. Одинаковые значения пропускаем, чтобы не было дублей.', why: 'Два указателя становятся внутренним циклом внешнего. O(n³) превращается в O(n²).', cx: 'O(n²) время · O(1) доп. память' },
+      { variant: "Две стены и бегущие максимумы", task: "Столбики высотой h[i]. Сколько дождевой воды задержится между ними?", idea: "Вода над столбиком = min(максимум слева, максимум справа) − высота. Двигаем более низкую сторону: её максимум и есть ограничение, значит её воду уже можно посчитать.", why: "Тот же довод «двигай слабую сторону», что в Container, но каждый шаг добавляет воду, а не меряет площадь. Спрашивают постоянно.", cx: "O(n) время · O(1) память" }
     ],
   },
   'twoptr.ev.start': {
@@ -155,17 +157,18 @@ for (int r = 0; r < n; r++) {
     best = Math.Max(best, r - l + 1);
 }`,
   },
-  'window.viz': { en: 'Longest Substring Without Repeating · s = "abcbcad"', ru: 'Longest Substring Without Repeating · s = "abcbcad"' },
   'window.p': {
     en: [
       { variant: 'Fixed-size window', task: 'Find the contiguous subarray of length k with the largest average.', idea: 'Sum the first k. Then at every step add the new element on the right and subtract the one leaving on the left.', why: 'The size is given, so l moves in lockstep with r and no while loop is needed.', cx: 'O(n) time · O(1) memory' },
       { variant: 'Variable window: maximise', task: 'Length of the longest substring without repeating characters.', idea: 'Grow r. If the new character is already inside, shrink from the left until the duplicate is gone. Then the window is valid — update the best.', why: 'Shrink while the window is INVALID; take the answer after the while, once it is valid again.', cx: 'O(n) time · O(alphabet) memory' },
       { variant: 'Variable window: minimise', task: 'Minimal length of a subarray with sum ≥ target. All numbers are positive.', idea: 'Grow r and accumulate. While the sum is ≥ target the window qualifies: record its length and shrink from the left to make it shorter.', why: 'The mirror of #3: shrink while the window is VALID, and take the answer inside the while.', cx: 'O(n) time · O(1) memory' },
+      { variant: "Window with a counter of needs", task: "The shortest substring of s that contains every character of t, repeats included.", idea: "Grow r until the window covers t (formed == need.Count). Then shrink from the left while it still covers, recording the shortest.", why: "The general window template: two counters, a “formed” number and shrink-while-valid. Permutation in String (#567) and Find All Anagrams (#438) are the same code.", cx: "O(|s| + |t|) time · O(alphabet) memory" }
     ],
     ru: [
       { variant: 'Окно фиксированного размера', task: 'Найди непрерывный подмассив длины k с максимальным средним.', idea: 'Считаем сумму первых k. Дальше на каждом шаге прибавляем новый элемент справа и вычитаем ушедший слева.', why: 'Размер задан, поэтому l двигается строго вместе с r и while не нужен.', cx: 'O(n) время · O(1) память' },
       { variant: 'Переменное окно: максимум', task: 'Длина самой длинной подстроки без повторяющихся символов.', idea: 'Расширяем r. Если новый символ уже в окне — сжимаем слева, пока дубль не уйдёт. После этого окно валидно, обновляем максимум.', why: 'Сжимаем, пока окно НЕвалидно; ответ берём после while, когда окно снова валидно.', cx: 'O(n) время · O(алфавит) память' },
       { variant: 'Переменное окно: минимум', task: 'Минимальная длина подмассива с суммой ≥ target. Все числа положительные.', idea: 'Расширяем r и копим сумму. Пока сумма ≥ target, окно подходит: записываем длину и сжимаем слева, пытаясь сделать короче.', why: 'Зеркально задаче #3: сжимаем, пока окно ВАЛИДНО, и ответ берём внутри while.', cx: 'O(n) время · O(1) память' },
+      { variant: "Окно со счётчиком потребностей", task: "Самая короткая подстрока s, которая содержит все символы t с учётом повторов.", idea: "Расширяем r, пока окно не покроет t (formed == need.Count). Потом сжимаем слева, пока покрытие держится, и запоминаем самое короткое.", why: "Общий шаблон окна: два счётчика, число «закрытых» символов и сжатие, пока окно валидно. Permutation in String (#567) и Find All Anagrams (#438) — тот же код.", cx: "O(|s| + |t|) время · O(алфавит) память" }
     ],
   },
   'window.ev.start': {
@@ -220,17 +223,18 @@ while (lo <= hi) {
     else hi = mid - 1;
 }`,
   },
-  'binary.viz': { en: 'Looking for 23 in a sorted array', ru: 'Ищем 23 в отсортированном массиве' },
   'binary.p': {
     en: [
       { variant: 'Search for an index', task: 'Return the index of target in a sorted array, or −1.', idea: 'Look at the middle. Smaller than target — the answer is to the right, otherwise to the left. The range halves every time.', why: 'The reference version. All the difficulty is in the boundaries.', cx: 'O(log n) time · O(1) memory' },
       { variant: 'Which half is sorted?', task: 'A sorted array was rotated at an unknown point: [4,5,6,7,0,1,2]. Find target in O(log n).', idea: 'One of [lo..mid] and [mid..hi] is always sorted. If target lies in its range go there, otherwise go to the other half.', why: 'The array as a whole is not sorted, yet the “left or right” decision is still O(1).', cx: 'O(log n) time · O(1) memory' },
       { variant: 'Search on the answer', task: 'Piles of bananas and h hours. Find the minimal speed k to eat everything in time.', idea: 'Search the range of speeds [1..max], not an array. For mid count the hours: if it fits, try slower, otherwise faster.', why: 'There is no array to search at all — only a monotonic predicate “fits(k)”: false…false, true…true. Find the first true.', cx: 'O(n · log max) time · O(1) memory' },
+      { variant: "Binary search on a cut", task: "The median of two sorted arrays in O(log(min(m, n))).", idea: "Cut the smaller array at i and the larger at j = half − i so that the left parts hold half of all numbers. The cut is right when both left ends ≤ both right ends; otherwise move i.", why: "The search is over a partition, not a value. The hardest classic binary search and a favourite follow-up.", cx: "O(log min(m, n)) time · O(1) memory" }
     ],
     ru: [
       { variant: 'Поиск индекса', task: 'Найди индекс target в отсортированном массиве или верни −1.', idea: 'Смотрим середину. Меньше target — ответ правее, иначе левее. Отрезок каждый раз сужается вдвое.', why: 'Эталонный вариант. Вся сложность — в аккуратных границах.', cx: 'O(log n) время · O(1) память' },
       { variant: 'Какая половина отсортирована?', task: 'Отсортированный массив повернули в неизвестной точке: [4,5,6,7,0,1,2]. Найди target за O(log n).', idea: 'Одна из половин [lo..mid] и [mid..hi] всегда отсортирована. Если target в её диапазоне — идём туда, иначе в другую.', why: 'Целиком массив не отсортирован, но решение «влево или вправо» всё равно принимается за O(1).', cx: 'O(log n) время · O(1) память' },
       { variant: 'Бинпоиск по ответу', task: 'Кучи бананов и h часов. Найди минимальную скорость k, чтобы успеть съесть всё.', idea: 'Ищем не в массиве, а в диапазоне скоростей [1..max]. Для mid считаем часы: успеваем — пробуем медленнее, иначе быстрее.', why: 'Массива для поиска нет вообще. Есть монотонная функция «успеваю(k)»: false…false, true…true. Ищем первую true.', cx: 'O(n · log max) время · O(1) память' },
+      { variant: "Бинпоиск по разрезу", task: "Медиана двух отсортированных массивов за O(log(min(m, n))).", idea: "Режем меньший массив по i, больший — по j = half − i, чтобы слева оказалась половина всех чисел. Разрез верный, когда оба левых края ≤ обоих правых; иначе сдвигаем i.", why: "Ищем не значение, а разбиение. Самый трудный классический бинпоиск и любимый вопрос «а за логарифм?».", cx: "O(log min(m, n)) время · O(1) память" }
     ],
   },
   'binary.ev.start': {

@@ -1,5 +1,5 @@
 /** Tape 04 strings: post-processing, cameras, STP, HDR, PSO, performance. */
-import { facts } from './facts.js?v=202609241230';
+import { facts } from './facts.js?v=202609252015';
 
 export const OUTPUT = {
   'post.h2': { en: 'Volumes describe the look; cameras decide where it lands', ru: 'Volumes задают картинку; камеры решают, где она окажется' },

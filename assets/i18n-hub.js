@@ -56,8 +56,8 @@ export const HUB = {
   },
   'hub.tape6Title': { en: 'Algorithm patterns', ru: 'Паттерны алгоритмов' },
   'hub.tape6Desc': {
-    en: 'Twelve interview patterns from hash maps to DP: how to spot each one, a C# skeleton, a rewindable rig and three problems where the same move works differently.',
-    ru: 'Двенадцать паттернов для собеседования, от хеш-таблиц до DP: как узнать каждый, каркас на C#, стенд с перемоткой и три задачи, где один приём работает по-разному.'
+    en: 'Twelve interview patterns from hash maps to DP: how to spot each one, a C# skeleton and four problems each — every one played step by step on its own rig, the fourth a hard must-know.',
+    ru: 'Двенадцать паттернов для собеседования, от хеш-таблиц до DP: как узнать каждый, каркас на C# и по четыре задачи — каждая по шагам на своём стенде, четвёртая — сложная, которую надо знать.'
   },
   'hub.tape6Tags': {
     en: '<span>Algorithms</span><span>LeetCode</span><span>C#</span><span>12 patterns</span>',
