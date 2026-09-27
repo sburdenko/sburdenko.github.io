@@ -2,7 +2,7 @@
 import {
   CELL, STEP, svg, text, rowWidth, cells, pointers, arrow, node, chip, chips,
   barLayout, bars, gridCells, binaryTree,
-} from './view-kit.js?v=202609271511';
+} from './view-kit.js?v=202609271602';
 
 const TOP = 40, GAP_HALF = 3;
 const framed = (n, h, inner) => svg(rowWidth(n) + 20, h, `<g transform="translate(10,0)">${inner}</g>`);
@@ -262,5 +262,57 @@ export const maxPath = {
   },
   vars(run, e) {
     return [['var.best', chip(e.best ?? '—', 'hit')]];
+  },
+};
+
+/* ---------- must-know additions ---------- */
+export const lru = {
+  view(run, e) {
+    const labels = e.order.map(([k, v]) => `${k}:${v}`);
+    const cls = e.order.map(([k]) => (k === e.hit ? 'cur' : ''));
+    const x0 = 44, count = Math.max(run.capacity, 1);
+    let s = cells(labels, cls, { x: x0, y: TOP, index: false });
+    for (let j = labels.length; j < count; j++) s += `<rect class="cell dim" x="${x0 + j * STEP}" y="${TOP}" width="${CELL}" height="${CELL}" rx="6"/>`;
+    s += text(4, TOP + CELL / 2, 'MRU', 'lbl') + text(x0 + count * STEP + 4, TOP + CELL / 2, 'LRU', 'lbl');
+    if (e.evicted) {
+      const x = x0 + count * STEP + 44;
+      s += `<rect class="cell bad" x="${x}" y="${TOP}" width="${CELL}" height="${CELL}" rx="6"/>` + text(x + CELL / 2, TOP + CELL / 2, `${e.evicted[0]}:${e.evicted[1]}`, 'cv bad') + text(x + CELL / 2, TOP + CELL + 13, '✕', 'idx');
+    }
+    return svg(x0 + count * STEP + 110, TOP + CELL + 24, s);
+  },
+  vars(run, e) {
+    return [['var.ops', chips(run.ops.map(([op, k, v], i) => chip(op === 'put' ? `put ${k} ${v}` : `get ${k}`, i === e.op ? 'new' : i < (e.op ?? -1) ? 'done' : '')))]];
+  },
+};
+
+export const course = {
+  view(run, e) {
+    const n = run.n, cx = 170, cy = 130, r = n > 1 ? 96 : 0;
+    const pos = Array.from({ length: n }, (_, k) => [cx + r * Math.cos(-Math.PI / 2 + k * 2 * Math.PI / n), cy + r * Math.sin(-Math.PI / 2 + k * 2 * Math.PI / n)]);
+    const done = e.key === 'crs.ev.done';
+    let s = run.edges.map(([c, pre]) => arrow(pos[pre][0], pos[pre][1], pos[c][0], pos[c][1], 21)).join('');
+    pos.forEach(([x, y], k) => {
+      const cls = k === e.cur ? 'cur' : e.taken.includes(k) ? 'done' : e.queue.includes(k) ? 'new' : done ? 'bad' : '';
+      s += node(x, y, k, cls);
+      if (!e.taken.includes(k)) s += `<rect class="badge-r" x="${x + 12}" y="${y - 31}" width="20" height="18" rx="4"/>` + text(x + 22, y - 22, e.indegree[k], 'badge-t');
+    });
+    return svg(340, 260, s);
+  },
+  vars(run, e) {
+    return [['var.queue', chips(e.queue.map(c => chip(c, 'amb')))], ['var.order', chips(e.taken.map(c => chip(c, 'hit')))]];
+  },
+};
+
+export const lca = {
+  view(run, e) {
+    const answer = e.key === 'lca.ev.done' ? e.cur : null;
+    return binaryTree(run.nodes, {
+      clsOf: n => (n.id === answer ? 'ok' : n.id === e.cur ? 'cur' : n.v === run.p || n.v === run.q ? 'new' : e.stack.includes(n.id) ? 'path' : ''),
+      badgeOf: n => (e.ret[n.id] === undefined ? null : e.ret[n.id] >= 0 ? run.nodes[e.ret[n.id]].v : '∅'),
+      edgeOn: n => e.stack.includes(n.id),
+    });
+  },
+  vars(run) {
+    return [['var.pq', chip(`${run.p}, ${run.q}`, 'amb')]];
   },
 };

@@ -1,7 +1,7 @@
 /** Editable rigs for chapters 01–04. */
-import * as A from './model-a.js?v=202609271511';
-import * as V from './views-a.js?v=202609271511';
-import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202609271511';
+import * as A from './model-a.js?v=202609271602';
+import * as V from './views-a.js?v=202609271602';
+import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202609271602';
 
 const nums = (extra = {}) => ({ key: 'nums', type: 'ints', minLen: 1, maxLen: 12, min: -99, max: 99, ...extra });
 const target = (extra = {}) => ({ key: 'target', type: 'int', min: -999, max: 999, ...extra });
@@ -150,4 +150,24 @@ export const RIGS_A = {
     }),
     run: p => A.medianTwoTrace(p.A, p.B),
   }, V.median),
+
+  /* must-know additions */
+  longestConsec: defineRig({
+    fields: [nums({ minLen: 0, maxLen: 12, max: 999 })],
+    example: { nums: [100, 4, 200, 1, 3, 2] },
+    random: next => ({ nums: randInts(next, randInt(next, 6, 11), 0, 14) }),
+    run: p => ({ ...A.longestConsecutiveTrace(p.nums), nums: p.nums }),
+  }, V.longestConsec),
+  firstMissing: defineRig({
+    fields: [nums({ maxLen: 10, min: -9, max: 20 })],
+    example: { nums: [3, 4, -1, 1, 6, 2] },
+    random: next => ({ nums: randInts(next, randInt(next, 4, 9), -2, 9) }),
+    run: p => A.firstMissingTrace(p.nums),
+  }, V.firstMissing),
+  charReplace: defineRig({
+    fields: [{ key: 's', type: 'str', chars: 'A-Z', charsLabel: 'A–Z', minLen: 1, maxLen: 14 }, { key: 'k', type: 'int', min: 0, max: 6 }],
+    example: { s: 'AABABBA', k: 1 },
+    random: next => ({ s: Array.from({ length: randInt(next, 7, 12) }, () => pick(next, 'AABBC')).join(''), k: randInt(next, 0, 2) }),
+    run: p => ({ ...A.charReplacementTrace(p.s, p.k), s: p.s, k: p.k }),
+  }, V.charReplace),
 };

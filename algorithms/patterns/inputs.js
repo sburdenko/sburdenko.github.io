@@ -113,9 +113,38 @@ function parseOps(text, spec) {
   return checkLength(ops, spec) || { value: ops };
 }
 
+function parseBoard(text, spec) {
+  const rows = clean(text).replace(/[[\]"',;|]/g, ' ').split(/\s+/).filter(Boolean);
+  if (rows.length < 1 || rows.length > spec.maxRows) return fail('gridRows', 1, spec.maxRows);
+  if (rows.some(r => !/^[A-Za-z]+$/.test(r))) return fail('boardLetters');
+  if (rows.some(r => r.length !== rows[0].length)) return fail('gridRagged');
+  if (rows[0].length > spec.maxCols) return fail('gridCols', spec.maxCols);
+  return { value: rows.map(r => [...r.toUpperCase()]) };
+}
+
+function parseCache(text, spec) {
+  const parts = clean(text).split(/[,\n;]+/).map(p => p.trim()).filter(Boolean), ops = [];
+  for (const part of parts) {
+    const put = part.match(/^put\s*\(?\s*(\d+)\s*[, ]\s*(\d+)\s*\)?$/i);
+    if (put) { ops.push(['put', Number(put[1]), Number(put[2])]); continue; }
+    const get = part.match(/^get\s*\(?\s*(\d+)\s*\)?$/i);
+    if (get) { ops.push(['get', Number(get[1])]); continue; }
+    return fail('cacheOp', part);
+  }
+  return checkLength(ops, spec) || { value: ops };
+}
+
+function parseEdges(text, spec) {
+  const pattern = /\[?\s*(\d+)\s*[-,:>]\s*(\d+)\s*\]?/g;
+  const found = [...clean(text).matchAll(pattern)].map(m => [Number(m[1]), Number(m[2])]);
+  if (clean(text).replace(pattern, '').replace(/[\s,[\]]/g, '')) return fail('edges');
+  return checkLength(found, spec) || (found.some(([a, b]) => a === b) ? fail('selfEdge') : null) || { value: found };
+}
+
 export const PARSERS = {
   ints: parseInts, int: parseInt1, str: parseStr, words: parseWords, grid: parseGrid,
   tree: parseTree, lists: parseLists, intervals: parseIntervals, ops: parseOps,
+  board: parseBoard, cache: parseCache, edges: parseEdges,
 };
 
 export const FORMATTERS = {
@@ -128,6 +157,9 @@ export const FORMATTERS = {
   lists: v => v.map(l => l.join(' ')).join(' | '),
   intervals: v => v.map(([a, b]) => `${a}-${b}`).join(' '),
   ops: v => v.map(([op, x]) => (x == null ? op : `${op} ${x}`)).join(', '),
+  board: v => v.map(r => r.join('')).join(' '),
+  cache: v => v.map(([op, k, x]) => (op === 'put' ? `put ${k} ${x}` : `get ${k}`)).join(', '),
+  edges: v => v.map(([a, b]) => `${a}-${b}`).join(' '),
 };
 
 export const parseField = (text, spec) => PARSERS[spec.type](text, spec);

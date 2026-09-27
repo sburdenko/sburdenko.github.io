@@ -1,6 +1,6 @@
 /** Отрисовка двумерного массива клеток: стены, волна обхода, дерево родителей, путь. */
-import { WALL, gridXY } from './traversal.js?v=202609271511';
-import { COL, visitedColor, depthColor } from './panels.js?v=202609271511';
+import { WALL, gridXY } from './traversal.js?v=202609271602';
+import { COL, visitedColor, depthColor } from './panels.js?v=202609271602';
 
 export function gridLayout(grid, w, maxH) {
   const cell = Math.max(6, Math.floor(Math.min(w / grid.cols, maxH / grid.rows)));

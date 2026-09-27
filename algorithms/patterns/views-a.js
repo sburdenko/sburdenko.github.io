@@ -1,5 +1,5 @@
 /** Views for chapters 01–04. view(run, event) → SVG string, vars(run, event) → [[i18nKey, html]]. */
-import { CELL, STEP, svg, text, rowWidth, cells, pointers, chip, chips, barLayout, bars, pointerAt } from './view-kit.js?v=202609271511';
+import { CELL, STEP, svg, text, rowWidth, cells, pointers, chip, chips, barLayout, bars, pointerAt } from './view-kit.js?v=202609271602';
 
 const TOP = 40;
 const framed = (n, h, inner) => svg(rowWidth(n) + 20, h, `<g transform="translate(10,0)">${inner}</g>`);
@@ -229,5 +229,53 @@ export const median = {
   },
   vars(run, e) {
     return e.i == null ? [] : [['var.cut', chip(`i = ${e.i}, j = ${e.j}`)]];
+  },
+};
+
+/* ---------- must-know additions ---------- */
+export const longestConsec = {
+  view(run, e) {
+    const unique = [...new Set(run.nums)], sorted = [...unique].sort((a, b) => a - b), x0 = 60;
+    const inRun = (v, r) => r && v >= r[0] && v <= r[1];
+    const done = e.key === 'lcq.ev.done';
+    const clsSet = unique.map(v => (v === e.x ? (e.key === 'lcq.ev.skip' ? 'seen cur' : 'cur') : ''));
+    const clsSorted = sorted.map(v => (done && inRun(v, e.bestRun) ? 'ok' : inRun(v, e.run) ? 'win' : ''));
+    const y2 = TOP + CELL + 36;
+    return svg(x0 + rowWidth(Math.max(unique.length, 1)) + 12, y2 + CELL + 10,
+      text(4, TOP + CELL / 2, 'set', 'lbl') + cells(unique, clsSet, { x: x0, y: TOP, index: false })
+      + pointers([{ i: unique.indexOf(e.x), label: 'x' }], { x: x0, y: TOP, count: unique.length })
+      + text(4, y2 + CELL / 2, 'sorted', 'lbl') + cells(sorted, clsSorted, { x: x0, y: y2, index: false }));
+  },
+  vars(run, e) {
+    return [['var.best', chip(e.best, 'hit')]];
+  },
+};
+
+export const firstMissing = {
+  view(run, e) {
+    const cls = e.a.map((v, k) => (e.pair && e.pair.includes(k) ? 'cur' : v === k + 1 ? 'ok' : ''));
+    if (e.answerAt != null && e.answerAt >= 0) cls[e.answerAt] = 'bad';
+    let inner = cells(e.a, cls, { y: TOP, index: false });
+    e.a.forEach((_, k) => { inner += text(k * STEP + CELL / 2, TOP + CELL + 13, `#${k + 1}`, 'idx'); });
+    return framed(e.a.length, 104, inner + pointers([{ i: e.i, label: 'i' }], { y: TOP, count: e.a.length }));
+  },
+  vars(run, e) {
+    return [['var.home', chip(e.a.filter((v, k) => v === k + 1).length, 'hit')]];
+  },
+};
+
+export const charReplace = {
+  view(run, e) {
+    const s = [...run.s];
+    const cls = s.map((_, j) => (j < e.l ? 'dim' : ''));
+    if (e.r != null) range(cls, [e.l, e.r], e.key === 'lrc.ev.done' ? 'ok' : 'win');
+    if (e.r != null && e.key !== 'lrc.ev.done') cls[e.r] = 'cur';
+    return row(s, cls, [{ i: e.l, label: 'L' }, { i: e.r, label: 'R', cls: 'p2' }]);
+  },
+  vars(run, e) {
+    const top = Math.max(0, ...e.counts.map(([, n]) => n));
+    const len = e.r == null ? 0 : e.r - e.l + 1;
+    return [['var.counts', chips(e.counts.filter(([, n]) => n).map(([c, n]) => chip(`${c}:${n}`, n === top ? 'hit' : '')))],
+      ['var.replace', chip(`${Math.max(0, len - top)} / ${run.k}`, len - top > run.k ? 'amb' : '')], ['var.best', chip(e.best, 'hit')]];
   },
 };

@@ -393,3 +393,135 @@ export function editDistanceTrace(a, b) {
   }, { start: 'ed.ev.start', cell: 'ed.ev.cell', done: 'ed.ev.done' });
   return { events, distance: value };
 }
+
+/* ---------- must-know additions ---------- */
+export function topKFrequentTrace(nums, k) {
+  const freq = new Map();
+  nums.forEach(x => freq.set(x, (freq.get(x) || 0) + 1));
+  const less = (a, b) => a[1] < b[1] || (a[1] === b[1] && a[0] > b[0]);
+  let heap = [];
+  const events = [];
+  const push = (key, args, extra = {}) => events.push(event(key, args, { freq: [...freq], heap: heap.map(e => [...e]), mark: -1, cur: null, ...extra }));
+  push('topk.ev.count', [freq.size, k]);
+  for (const [x, f] of freq) {
+    const pushed = heapPush(heap, [x, f], less);
+    heap = pushed.heap;
+    push('topk.ev.push', [x, f, heap.length > k], { mark: pushed.at, cur: x });
+    if (heap.length > k) {
+      const [dropped, df] = heap[0];
+      heap = heapPop(heap, less);
+      push('topk.ev.pop', [dropped, df], { cur: x });
+    }
+  }
+  const top = heap.map(([x]) => x);
+  push('topk.ev.done', [top, k]);
+  return { events, top };
+}
+
+export function wordSearchTrace(board, word) {
+  const used = board.map(r => r.map(() => false)), path = [], events = [];
+  const push = (key, args, extra = {}) => events.push(event(key, args, { path: path.map(p => [...p]), cur: null, miss: false, ...extra }));
+  push('ws.ev.start', [word]);
+  const dfs = (r, c, i) => {
+    if (i === word.length) return true;
+    if (r < 0 || c < 0 || r >= board.length || c >= board[0].length || used[r][c]) return false;
+    if (board[r][c] !== word[i]) {
+      if (i > 0) push('ws.ev.miss', [r, c, board[r][c], word[i]], { cur: [r, c], miss: true });
+      return false;
+    }
+    used[r][c] = true;
+    path.push([r, c]);
+    push('ws.ev.match', [r, c, board[r][c], i + 1, word.length], { cur: [r, c] });
+    const found = dfs(r + 1, c, i + 1) || dfs(r - 1, c, i + 1) || dfs(r, c + 1, i + 1) || dfs(r, c - 1, i + 1);
+    if (!found) {
+      used[r][c] = false;
+      path.pop();
+      push('ws.ev.undo', [r, c, board[r][c]], { cur: [r, c] });
+    }
+    return found;
+  };
+  for (let r = 0; r < board.length; r++) {
+    for (let c = 0; c < board[0].length; c++) {
+      if (dfs(r, c, 0)) {
+        push('ws.ev.found', [word]);
+        return { events, found: true };
+      }
+    }
+  }
+  push('ws.ev.none', [word]);
+  return { events, found: false };
+}
+
+export function mergeIntervalsTrace(intervals) {
+  const sorted = intervals.map(iv => [...iv]).sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  let merged = [];
+  const events = [];
+  const push = (key, args, extra = {}) => events.push(event(key, args, { sorted, merged: merged.map(m => [...m]), i: null, ...extra }));
+  push('mrg.ev.start', [sorted.length]);
+  sorted.forEach(([a, b], i) => {
+    const last = merged.at(-1);
+    if (last && a <= last[1]) {
+      const grown = [last[0], Math.max(last[1], b)];
+      merged = [...merged.slice(0, -1), grown];
+      push('mrg.ev.merge', [a, b, last[1], grown[0], grown[1]], { i });
+    } else {
+      merged = [...merged, [a, b]];
+      push('mrg.ev.new', [a, b, last ? last[1] : null], { i });
+    }
+  });
+  push('mrg.ev.done', [merged]);
+  return { events, merged };
+}
+
+export function lisTrace(nums) {
+  const dp = nums.map(() => null), events = [];
+  let best = 0;
+  const push = (key, args, extra = {}) => events.push(event(key, args, { dp: [...dp], i: null, from: null, sources: [], best, ...extra }));
+  push('lis.ev.start', []);
+  nums.forEach((x, i) => {
+    const sources = [];
+    let value = 1, from = null;
+    for (let j = 0; j < i; j++) {
+      if (nums[j] >= x) continue;
+      sources.push(j);
+      if (dp[j] + 1 > value) { value = dp[j] + 1; from = j; }
+    }
+    dp[i] = value;
+    best = Math.max(best, value);
+    push('lis.ev.cell', [i, x, from === null ? null : nums[from], from === null ? null : dp[from], value], { i, from, sources });
+  });
+  push('lis.ev.done', [best]);
+  return { events, best };
+}
+
+/** '.' matches any character, 'x*' matches zero or more x. dp[i][j]: does s[..i] match p[..j]. */
+export function regexTrace(s, p) {
+  const dp = Array.from({ length: s.length + 1 }, () => Array(p.length + 1).fill(null));
+  const events = [];
+  const push = (key, args, extra = {}) => events.push(event(key, args, { dp: dp.map(r => [...r]), cur: null, src: [], ...extra }));
+  dp.forEach(row => { row[0] = false; });
+  dp[0][0] = true;
+  for (let j = 1; j <= p.length; j++) dp[0][j] = p[j - 1] === '*' && j >= 2 && dp[0][j - 2];
+  push('rx.ev.start', [s, p]);
+  const same = (c, pc) => pc === '.' || pc === c;
+  for (let i = 1; i <= s.length; i++) {
+    for (let j = 1; j <= p.length; j++) {
+      let value, src, op;
+      if (p[j - 1] === '*') {
+        const zero = j >= 2 && dp[i][j - 2], more = j >= 2 && same(s[i - 1], p[j - 2]) && dp[i - 1][j];
+        value = zero || more;
+        src = [[i, j - 2], [i - 1, j]];
+        op = zero ? 'zero' : more ? 'more' : 'star-fail';
+      } else {
+        value = same(s[i - 1], p[j - 1]) && dp[i - 1][j - 1];
+        src = [[i - 1, j - 1]];
+        op = same(s[i - 1], p[j - 1]) ? 'match' : 'mismatch';
+      }
+      dp[i][j] = value;
+      push('rx.ev.cell', [i, j, s[i - 1], p[j - 1], op, value, p[j - 2] ?? ''], { cur: [i, j], src });
+    }
+  }
+  const match = dp[s.length][p.length];
+  push('rx.ev.done', [match, s, p]);
+  return { events, match };
+}

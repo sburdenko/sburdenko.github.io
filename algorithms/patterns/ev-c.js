@@ -113,4 +113,52 @@ export const EV_C = {
       : `«${ca}» ≠ «${cb}» → 1 + min(замена ↖, удаление ↑, вставка ←) = <b>${v}</b> через ${{ replace: 'замену', delete: 'удаление', insert: 'вставку' }[op]}.`),
   },
   'ed.ev.done': { en: (v, a, b) => `“${a}” → “${b}” in <b>${v}</b> edits.`, ru: (v, a, b) => `«${a}» → «${b}» за <b>${v}</b> правки.` },
+
+  /* Top K Frequent Elements */
+  'topk.ev.count': { en: (n, k) => `Count frequencies (${n} distinct values). Then keep the ${k} most frequent in a min-heap by frequency.`, ru: (n, k) => `Считаем частоты (разных значений: ${n}). Потом держим ${k} самых частых в min-heap по частоте.` },
+  'topk.ev.push': { en: (x, f, over) => `Push ${x} (×${f}).${over ? ' Size > k — the least frequent must go.' : ''}`, ru: (x, f, over) => `Кладём ${x} (×${f}).${over ? ' Размер > k — самый редкий вылетает.' : ''}` },
+  'topk.ev.pop': { en: (x, f) => `Drop ${x} (×${f}): it is the least frequent of the current top.`, ru: (x, f) => `Выкидываем ${x} (×${f}): он самый редкий в текущей верхушке.` },
+  'topk.ev.done': { en: (top, k) => `Top ${k}: <b>${list(top)}</b>.`, ru: (top, k) => `Топ-${k}: <b>${list(top)}</b>.` },
+
+  /* Word Search */
+  'ws.ev.start': { en: w => `Find “${w}” along adjacent cells, each cell used once. DFS from every cell.`, ru: w => `Ищем «${w}» по соседним клеткам, каждую — один раз. DFS из каждой клетки.` },
+  'ws.ev.match': { en: (r, c, ch, got, total) => `(${r},${c}) = “${ch}” matches letter ${got} of ${total} — mark it used and go on.`, ru: (r, c, ch, got, total) => `(${r},${c}) = «${ch}» подходит как буква ${got} из ${total} — помечаем и идём дальше.` },
+  'ws.ev.miss': { en: (r, c, ch, want) => `(${r},${c}) is “${ch}”, we need “${want}”.`, ru: (r, c, ch, want) => `(${r},${c}) — «${ch}», а нужна «${want}».` },
+  'ws.ev.undo': { en: (r, c, ch) => `Dead end after (${r},${c}) — <b>unmark</b> “${ch}” so other paths may use it.`, ru: (r, c, ch) => `Тупик после (${r},${c}) — <b>снимаем пометку</b> с «${ch}», пусть её берут другие пути.` },
+  'ws.ev.found': { en: w => `“${w}” is on the board — <b>true</b>.`, ru: w => `«${w}» есть на доске — <b>true</b>.` },
+  'ws.ev.none': { en: w => `No path spells “${w}” — <b>false</b>.`, ru: w => `Ни один путь не складывается в «${w}» — <b>false</b>.` },
+
+  /* Merge Intervals */
+  'mrg.ev.start': { en: n => `Sort the ${n} intervals by start; the bottom row collects merged blocks.`, ru: n => `Сортируем ${n} интервалов по началу; нижняя строка собирает слитые блоки.` },
+  'mrg.ev.merge': { en: (a, b, end, s, e) => `[${a}, ${b}] starts at ${a} ≤ ${end} — overlap: extend the block to [${s}, ${e}].`, ru: (a, b, end, s, e) => `[${a}, ${b}] начинается в ${a} ≤ ${end} — пересечение: продлеваем блок до [${s}, ${e}].` },
+  'mrg.ev.new': { en: (a, b, end) => `[${a}, ${b}] ${end === null ? 'is the first' : `starts after ${end}`} — open a new block.`, ru: (a, b, end) => `[${a}, ${b}] ${end === null ? '— первый' : `начинается после ${end}`} — открываем новый блок.` },
+  'mrg.ev.done': { en: m => `Merged: <b>${m.map(list).join(' ')}</b>.`, ru: m => `После слияния: <b>${m.map(list).join(' ')}</b>.` },
+
+  /* Longest Increasing Subsequence */
+  'lis.ev.start': { en: () => 'dp[i] = the longest increasing subsequence that ends at i.', ru: () => 'dp[i] — самая длинная возрастающая подпоследовательность, заканчивающаяся в i.' },
+  'lis.ev.cell': {
+    en: (i, x, fromValue, fromDp, v) => (fromValue === null ? `${x}: nothing smaller before it → dp[${i}] = 1.` : `${x}: best smaller predecessor is ${fromValue} with dp ${fromDp} → dp[${i}] = <b>${v}</b>.`),
+    ru: (i, x, fromValue, fromDp, v) => (fromValue === null ? `${x}: раньше нет меньших → dp[${i}] = 1.` : `${x}: лучший меньший предшественник — ${fromValue} с dp ${fromDp} → dp[${i}] = <b>${v}</b>.`),
+  },
+  'lis.ev.done': { en: best => `The answer is the largest dp: <b>${best}</b>.`, ru: best => `Ответ — наибольшее dp: <b>${best}</b>.` },
+
+  /* Regular Expression Matching */
+  'rx.ev.start': { en: (s, p) => `dp[i][j] = does “${s}”[..i] match “${p}”[..j]? ✓ yes, · no. The first row lets “x*” match nothing.`, ru: (s, p) => `dp[i][j] — совпадает ли «${s}»[..i] с «${p}»[..j]? ✓ да, · нет. Первая строка позволяет «x*» не совпасть ни с чем.` },
+  'rx.ev.cell': {
+    en: (i, j, sc, pc, op, v, prev) => ({
+      match: `“${sc}” vs “${pc}”: they match → take the diagonal: ${v ? '✓' : '·'}.`,
+      mismatch: `“${sc}” vs “${pc}”: no match → ·.`,
+      zero: `“${prev}*” can match zero copies → two columns left is ✓.`,
+      more: `“${prev}*” eats “${sc}” → the cell above is ✓.`,
+      'star-fail': `“${prev}*”: neither zero copies nor one more works → ·.`,
+    })[op],
+    ru: (i, j, sc, pc, op, v, prev) => ({
+      match: `«${sc}» и «${pc}» совпадают → берём диагональ: ${v ? '✓' : '·'}.`,
+      mismatch: `«${sc}» и «${pc}» не совпадают → ·.`,
+      zero: `«${prev}*» может совпасть с нулём копий → на две колонки левее ✓.`,
+      more: `«${prev}*» съедает «${sc}» → клетка сверху ✓.`,
+      'star-fail': `«${prev}*»: ни ноль копий, ни ещё одна не подходят → ·.`,
+    })[op],
+  },
+  'rx.ev.done': { en: (m, s, p) => `“${s}” ${m ? '<b>matches</b>' : '<b>does not match</b>'} “${p}”.`, ru: (m, s, p) => `«${s}» ${m ? '<b>совпадает</b>' : '<b>не совпадает</b>'} с «${p}».` },
 };

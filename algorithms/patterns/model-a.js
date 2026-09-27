@@ -339,3 +339,64 @@ export function medianTwoTrace(first, second) {
   }
   throw new Error('medianTwoTrace: inputs must be sorted');
 }
+
+/* ---------- must-know additions ---------- */
+export function longestConsecutiveTrace(nums) {
+  const set = new Set(nums), events = [];
+  let best = 0, bestRun = null;
+  const push = (key, args, extra = {}) => events.push(event(key, args, { x: null, run: null, best, bestRun, ...extra }));
+  push('lcq.ev.start', [set.size]);
+  for (const x of set) {
+    if (set.has(x - 1)) { push('lcq.ev.skip', [x, x - 1], { x }); continue; }
+    let len = 1;
+    while (set.has(x + len)) len++;
+    const record = len > best;
+    if (record) { best = len; bestRun = [x, x + len - 1]; }
+    push('lcq.ev.run', [x, x + len - 1, len, record], { x, run: [x, x + len - 1] });
+  }
+  push('lcq.ev.done', [best]);
+  return { events, best };
+}
+
+/** Cyclic placement: value v belongs in slot v − 1; the first slot without its value is the answer. */
+export function firstMissingTrace(nums) {
+  let a = [...nums];
+  const n = a.length, events = [];
+  const push = (key, args, extra = {}) => events.push(event(key, args, { a: [...a], i: null, pair: null, answerAt: null, ...extra }));
+  push('fmp.ev.start', [n]);
+  for (let i = 0; i < n; i++) {
+    while (a[i] >= 1 && a[i] <= n && a[a[i] - 1] !== a[i]) {
+      const v = a[i], j = v - 1;
+      a = swap(a, i, j);
+      push('fmp.ev.swap', [v, i, j], { i, pair: [i, j] });
+    }
+    const v = a[i];
+    push('fmp.ev.stay', [i, v, v >= 1 && v <= n, v === i + 1], { i });
+  }
+  const at = a.findIndex((v, i) => v !== i + 1);
+  const answer = at < 0 ? n + 1 : at + 1;
+  push('fmp.ev.done', [answer, at < 0], { answerAt: at });
+  return { events, answer };
+}
+
+export function charReplacementTrace(str, k) {
+  const s = [...str], count = new Map(), events = [];
+  let l = 0, best = 0, bestLR = null;
+  const top = () => Math.max(0, ...count.values());
+  const push = (key, args, extra = {}) => events.push(event(key, args, { l, r: null, best, bestLR, counts: [...count].sort(), ...extra }));
+  push('lrc.ev.start', [k]);
+  for (let r = 0; r < s.length; r++) {
+    count.set(s[r], (count.get(s[r]) || 0) + 1);
+    push('lrc.ev.grow', [s[r], r - l + 1, top(), r - l + 1 - top(), k], { r });
+    while (r - l + 1 - top() > k) {
+      const out = s[l];
+      count.set(out, count.get(out) - 1);
+      l++;
+      push('lrc.ev.shrink', [out, r - l + 1, r - l + 1 - top()], { r });
+    }
+    const len = r - l + 1;
+    if (len > best) { best = len; bestLR = [l, r]; }
+  }
+  push('lrc.ev.done', [best], { l: bestLR ? bestLR[0] : 0, r: bestLR ? bestLR[1] : null });
+  return { events, best };
+}

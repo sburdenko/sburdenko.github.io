@@ -2,7 +2,7 @@
 import {
   CELL, STEP, svg, text, rowWidth, cells, pointers, arcBelow, node, chip, chips,
   barLayout, bars, gridCells, decisionTreeView, dpTable,
-} from './view-kit.js?v=202609271511';
+} from './view-kit.js?v=202609271602';
 
 const TOP = 40;
 const framed = (n, h, inner) => svg(rowWidth(n) + 20, h, `<g transform="translate(10,0)">${inner}</g>`);
@@ -220,3 +220,76 @@ const table = {
 };
 export const lcs = table;
 export const edit = table;
+
+/* ---------- must-know additions ---------- */
+export const topK = {
+  view(run, e) {
+    const width = 360;
+    const labels = e.heap.map(([x, f]) => `${x}×${f}`);
+    return svg(width + 20, 30 + heapHeight(run.k + 1) + 34, heapTree(labels, width, 30, j => (j === e.mark ? 'new' : j === 0 ? 'root' : '')));
+  },
+  vars(run, e) {
+    return [['var.freq', chips(e.freq.map(([x, f]) => chip(`${x}×${f}`, x === e.cur ? 'new' : '')))], ['var.size', chip(`${e.heap.length} / ${run.k}`)]];
+  },
+};
+
+export const wordSearch = {
+  view(run, e) {
+    const onPath = new Set(e.path.map(([r, c]) => `${r},${c}`));
+    return gridCells(run.board, (ch, r, c) => {
+      const here = e.cur && e.cur[0] === r && e.cur[1] === c;
+      const cls = `${onPath.has(`${r},${c}`) ? 'onpath' : 'sq-l'}${here ? (e.miss ? ' bad-c' : ' focus') : ''}`;
+      return { cls, label: ch, tcls: 'letter' };
+    }, { size: 46, step: 50 });
+  },
+  vars(run, e) {
+    const got = e.path.length;
+    return [['var.word', chip(`${run.word.slice(0, got)}·${run.word.slice(got)}`, got === run.word.length ? 'hit' : 'amb')]];
+  },
+};
+
+export const mergeIv = {
+  view(run, e) {
+    const unit = 30, x0 = 20, rowH = 24, maxEnd = Math.max(1, ...e.sorted.map(iv => iv[1]));
+    const yOut = 24 + e.sorted.length * rowH + 14;
+    let s = '';
+    for (let t = 0; t <= maxEnd; t++) s += `<line class="tick" x1="${x0 + t * unit}" y1="14" x2="${x0 + t * unit}" y2="${yOut + rowH}"/>` + text(x0 + t * unit, 8, t, 'idx');
+    e.sorted.forEach(([a, b], k) => {
+      const cls = k === e.i ? 'keep curi' : e.i != null && k < e.i ? 'keep' : '';
+      s += `<rect class="span ${cls}" x="${x0 + a * unit}" y="${20 + k * rowH}" width="${Math.max(4, (b - a) * unit)}" height="${rowH - 8}" rx="4"/>`;
+    });
+    e.merged.forEach(([a, b]) => {
+      s += `<rect class="span merged" x="${x0 + a * unit}" y="${yOut}" width="${Math.max(4, (b - a) * unit)}" height="${rowH - 4}" rx="4"/>` + text(x0 + (a + b) * unit / 2, yOut + (rowH - 4) / 2, `${a}–${b}`, 'span-t');
+    });
+    return svg(x0 * 2 + maxEnd * unit, yOut + rowH + 6, s);
+  },
+  vars(run, e) {
+    return [['var.merged', chips(e.merged.map(([a, b]) => chip(`[${a}, ${b}]`, 'hit')))]];
+  },
+};
+
+export const lis = {
+  view(run, e) {
+    const n = run.nums.length, x = 50, y2 = TOP + CELL + 40, arcY = y2 + CELL + 20;
+    const clsN = run.nums.map((_, j) => (j === e.i ? 'cur' : j === e.from ? 'ok' : e.sources.includes(j) ? 'src' : ''));
+    const clsD = e.dp.map((v, j) => (v === null ? 'dim' : j === e.i ? 'cur' : ''));
+    let s = text(4, TOP + CELL / 2, 'nums', 'lbl') + cells(run.nums, clsN, { x, y: TOP })
+      + pointers([{ i: e.i, label: 'i' }], { x, y: TOP, count: n })
+      + text(4, y2 + CELL / 2, 'dp', 'lbl') + cells(e.dp.map(v => (v === null ? '·' : v)), clsD, { x, y: y2, index: false });
+    if (e.i != null && e.from != null) s += arcBelow(e.from, e.i, arcY, 10 + (e.i - e.from) * 5, 'pick', '+1', x);
+    return svg(x + rowWidth(n) + 10, arcY + 60, s);
+  },
+  vars(run, e) {
+    return [['var.best', chip(e.best, 'hit')]];
+  },
+};
+
+export const regex = {
+  view(run, e) {
+    const marks = e.dp.map(r => r.map(v => (v === null ? null : v ? '✓' : '·')));
+    return dpTable(run.s, run.p, marks, e.cur, e.src);
+  },
+  vars() {
+    return [];
+  },
+};

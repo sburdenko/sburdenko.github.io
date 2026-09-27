@@ -293,6 +293,109 @@ test('dynamic programming traces agree with recursion', () => {
   assert.equal(C.editDistanceTrace('horse', 'ros').distance, 3);
 });
 
+/* ---------- must-know additions ---------- */
+test('added hash map, window and list problems agree with brute force', () => {
+  repeat(200, () => {
+    const nums = ints(len(0, 10), -3, 12);
+    const set = [...new Set(nums)].sort((a, b) => a - b);
+    let longest = 0, run = 0;
+    set.forEach((v, i) => { run = i && v === set[i - 1] + 1 ? run + 1 : 1; longest = Math.max(longest, run); });
+    assert.equal(A.longestConsecutiveTrace(nums).best, longest, `${nums}`);
+    let missing = 1;
+    while (nums.includes(missing)) missing++;
+    assert.equal(A.firstMissingTrace(nums).answer, missing, `${nums}`);
+    const s = Array.from({ length: len(1, 10) }, () => 'ABC'[len(0, 2)]).join(''), k = len(0, 3);
+    let best = 0;
+    for (let i = 0; i < s.length; i++) for (let j = i; j < s.length; j++) {
+      const w = s.slice(i, j + 1), top = Math.max(...[...'ABC'].map(c => [...w].filter(x => x === c).length));
+      if (w.length - top <= k) best = Math.max(best, w.length);
+    }
+    assert.equal(A.charReplacementTrace(s, k).best, best, `${s} k=${k}`);
+  });
+  repeat(200, () => {
+    const capacity = len(1, 3), ops = Array.from({ length: len(1, 10) }, () => (next() < 0.5 ? ['put', len(1, 4), len(1, 9)] : ['get', len(1, 4)]));
+    const cache = new Map(), expected = [];
+    for (const [op, key, value] of ops) {
+      if (op === 'get') {
+        if (!cache.has(key)) { expected.push(-1); continue; }
+        const v = cache.get(key); cache.delete(key); cache.set(key, v); expected.push(v);
+      } else {
+        cache.delete(key); cache.set(key, value);
+        if (cache.size > capacity) cache.delete(cache.keys().next().value);
+      }
+    }
+    assert.deepEqual(B.lruTrace(capacity, ops).gets, expected, JSON.stringify(ops));
+  });
+});
+
+test('added graph and tree problems agree with brute force', () => {
+  repeat(200, () => {
+    const n = len(2, 6), edges = Array.from({ length: len(0, 7) }, () => [len(0, n - 1), len(0, n - 1)]).filter(([a, b]) => a !== b);
+    const adj = Array.from({ length: n }, () => []);
+    edges.forEach(([a, b]) => adj[b].push(a));
+    const state = Array(n).fill(0);
+    const cyclic = u => { if (state[u] === 1) return true; if (state[u] === 2) return false; state[u] = 1; const c = adj[u].some(cyclic); state[u] = 2; return c; };
+    const hasCycle = [...Array(n).keys()].some(cyclic);
+    assert.equal(B.courseScheduleTrace(n, edges).ok, !hasCycle, `${n} ${JSON.stringify(edges)}`);
+  });
+  const distinctTree = depth => (depth > 3 || next() < 0.25 ? null : [0, distinctTree(depth + 1), distinctTree(depth + 1)]);
+  repeat(150, () => {
+    let label = 1;
+    const number = s => (s ? [label++, number(s[1]), number(s[2])] : null);
+    const spec = number(distinctTree(0) || [0]);
+    const nodes = B.layoutTree(spec), values = nodes.map(n => n.v);
+    const p = values[len(0, values.length - 1)], q = values[len(0, values.length - 1)];
+    const chain = v => { const out = []; for (let n = nodes.find(x => x.v === v); n; n = n.parent >= 0 ? nodes[n.parent] : null) out.push(n.v); return out; };
+    const expected = chain(p).find(v => chain(q).includes(v));
+    assert.equal(B.lcaTrace(spec, p, q).answer, expected, `${JSON.stringify(spec)} ${p} ${q}`);
+  });
+});
+
+test('added heap, backtracking, greedy and DP problems agree with brute force', () => {
+  repeat(150, () => {
+    const nums = ints(len(1, 12), 0, 5);
+    const freq = new Map();
+    nums.forEach(x => freq.set(x, (freq.get(x) || 0) + 1));
+    const k = len(1, freq.size);
+    const top = [...freq.values()].sort((a, b) => b - a).slice(0, k);
+    const got = C.topKFrequentTrace(nums, k).top;
+    assert.deepEqual(got.map(x => freq.get(x)).sort((a, b) => b - a), top);
+    const board = Array.from({ length: len(1, 3) }, () => Array.from({ length: 3 }, () => 'AB'[len(0, 1)]));
+    const word = Array.from({ length: len(1, 4) }, () => 'AB'[len(0, 1)]).join('');
+    const search = (r, c, i, used) => {
+      if (i === word.length) return true;
+      if (r < 0 || c < 0 || r >= board.length || c >= 3 || used.has(`${r},${c}`) || board[r][c] !== word[i]) return false;
+      const u = new Set(used).add(`${r},${c}`);
+      return [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dr, dc]) => search(r + dr, c + dc, i + 1, u));
+    };
+    const exists = board.some((row, r) => row.some((_, c) => search(r, c, 0, new Set())));
+    assert.equal(C.wordSearchTrace(board, word).found, exists, `${board.map(r => r.join('')).join('/')} ${word}`);
+    const iv = Array.from({ length: len(1, 6) }, () => { const a = len(0, 10); return [a, a + len(0, 4)]; });
+    const covered = new Set();
+    iv.forEach(([a, b]) => { for (let x = a * 2; x <= b * 2; x++) covered.add(x); });
+    const merged = C.mergeIntervalsTrace(iv).merged;
+    const mine = new Set();
+    merged.forEach(([a, b]) => { for (let x = a * 2; x <= b * 2; x++) mine.add(x); });
+    assert.deepEqual([...mine].sort((a, b) => a - b), [...covered].sort((a, b) => a - b));
+    assert.ok(merged.every((m, i) => !i || merged[i - 1][1] < m[0]), 'merged intervals must not touch');
+    const a = ints(len(1, 9), 0, 9);
+    let lis = 0;
+    for (let mask = 1; mask < 1 << a.length; mask++) {
+      const pickd = a.filter((_, i) => mask & (1 << i));
+      if (pickd.every((v, i) => !i || pickd[i - 1] < v)) lis = Math.max(lis, pickd.length);
+    }
+    assert.equal(C.lisTrace(a).best, lis, `${a}`);
+  });
+  repeat(300, () => {
+    const s = Array.from({ length: len(0, 5) }, () => 'ab'[len(0, 1)]).join('');
+    let p = '';
+    for (let i = 0; i < len(1, 5); i++) { p += 'ab.'[len(0, 2)]; if (next() < 0.4) p += '*'; }
+    assert.equal(C.regexTrace(s, p).match, new RegExp(`^(?:${p})$`).test(s), `${s} ~ ${p}`);
+  });
+  assert.equal(C.regexTrace('aab', 'c*a*b').match, true);
+  assert.equal(C.regexTrace('mississippi', 'mis*is*p*.').match, false);
+});
+
 /* ---------- wiring ---------- */
 const textsOf = (rig, params) => Object.fromEntries(rig.fields.map(f => [f.key, formatField(params[f.key], f)]));
 
@@ -337,7 +440,6 @@ test('every problem owns an editable rig: the example and random inputs parse, r
   assert.equal(PATTERN_IDS.length, 12);
   const random = rng(7);
   for (const id of PATTERN_IDS) {
-    assert.equal(PROBLEMS[id].length, 4, id);
     for (const problem of PROBLEMS[id]) {
       const rig = RIGS[problem.rig];
       assert.ok(rig && rig.fields.length, `${id}: no editable rig ${problem.rig}`);
@@ -395,18 +497,20 @@ test('bad input is reported with a message, never thrown', () => {
   }
 });
 
-test('every chapter has its texts and four problems with code', () => {
+test('every chapter has texts for each problem, at least one Hard, and code', () => {
   for (const id of PATTERN_IDS) {
     for (const part of ['h2', 'essence', 'signals', 'pitfall', 'tpl', 'short', 'p']) assert.ok(DICT[`${id}.${part}`], `${id}.${part}`);
     for (const lang of ['en', 'ru']) {
       const texts = DICT[`${id}.p`][lang];
-      assert.equal(texts.length, 4, `${id}.p ${lang}`);
+      assert.equal(texts.length, PROBLEMS[id].length, `${id}.p ${lang}`);
       for (const p of texts) for (const f of ['variant', 'task', 'idea', 'why', 'cx']) assert.ok(p[f], `${id} ${lang} ${f}`);
     }
     for (const p of PROBLEMS[id]) {
       assert.ok(p.name && p.num && p.slug && p.code.includes('('), `${id} ${p.name}`);
       assert.match(p.diff, /^(Easy|Medium|Hard)$/);
     }
-    assert.equal(new Set(PROBLEMS[id].map(p => p.rig)).size, 4, `${id}: rigs must differ`);
+    assert.equal(new Set(PROBLEMS[id].map(p => p.rig)).size, PROBLEMS[id].length, `${id}: rigs must differ`);
+    assert.ok(PROBLEMS[id].some(p => p.diff === 'Hard'), `${id}: no Hard problem`);
+    assert.ok(PROBLEMS[id].length >= 4 && PROBLEMS[id].length <= 6, `${id}: 4–6 problems`);
   }
 });

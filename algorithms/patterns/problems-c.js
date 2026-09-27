@@ -1,5 +1,5 @@
 /** Problems and C# solutions for chapters 09–12: heap, backtracking, greedy, dynamic programming. */
-import { problem as p } from './problem.js?v=202609271511';
+import { problem as p } from './problem.js?v=202609271602';
 
 export const PROBLEMS_C = {
   heap: [
@@ -20,6 +20,18 @@ export const PROBLEMS_C = {
     }
     return heap.Count == 0 ? 0 : heap.Peek();
 }`),
+    p('topK', 'Top K Frequent Elements', 347, 'top-k-frequent-elements', 'Medium', `public int[] TopKFrequent(int[] nums, int k) {
+    var count = new Dictionary<int, int>();
+    foreach (int x in nums) count[x] = count.GetValueOrDefault(x) + 1;
+    var heap = new PriorityQueue<int, int>(); // min-heap by frequency
+    foreach (var (x, f) in count) {
+        heap.Enqueue(x, f);
+        if (heap.Count > k) heap.Dequeue();
+    }
+    var res = new int[k];
+    for (int i = k - 1; i >= 0; i--) res[i] = heap.Dequeue();
+    return res;
+}`, true),
     p('mergeK', 'Merge k Sorted Lists', 23, 'merge-k-sorted-lists', 'Hard', `public ListNode MergeKLists(ListNode[] lists) {
     var heap = new PriorityQueue<ListNode, int>();
     foreach (var node in lists)
@@ -34,7 +46,7 @@ export const PROBLEMS_C = {
         if (node.next != null) heap.Enqueue(node.next, node.next.val);
     }
     return dummy.next;
-}`),
+}`, true),
     p('medianStream', 'Find Median from Data Stream', 295, 'find-median-from-data-stream', 'Hard', `public class MedianFinder {
     private readonly PriorityQueue<int, int> low = new();  // max-heap via -x
     private readonly PriorityQueue<int, int> high = new(); // min-heap
@@ -49,7 +61,7 @@ export const PROBLEMS_C = {
     public double FindMedian() => low.Count > high.Count
         ? low.Peek()
         : (low.Peek() + high.Peek()) / 2.0;
-}`)
+}`, true)
   ],
   back: [
     p('subsets', 'Subsets', 78, 'subsets', 'Medium', `public IList<IList<int>> Subsets(int[] nums) {
@@ -97,6 +109,23 @@ export const PROBLEMS_C = {
     Dfs(0, target);
     return res;
 }`),
+    p('wordSearch', 'Word Search', 79, 'word-search', 'Medium', `public bool Exist(char[][] board, string word) {
+    int rows = board.Length, cols = board[0].Length;
+    bool Dfs(int r, int c, int i) {
+        if (i == word.Length) return true;
+        if (r < 0 || c < 0 || r >= rows || c >= cols || board[r][c] != word[i]) return false;
+        char saved = board[r][c];
+        board[r][c] = '#'; // used on the current path
+        bool found = Dfs(r + 1, c, i + 1) || Dfs(r - 1, c, i + 1)
+                  || Dfs(r, c + 1, i + 1) || Dfs(r, c - 1, i + 1);
+        board[r][c] = saved; // undo
+        return found;
+    }
+    for (int r = 0; r < rows; r++)
+        for (int c = 0; c < cols; c++)
+            if (Dfs(r, c, 0)) return true;
+    return false;
+}`, true),
     p('queens', 'N-Queens', 51, 'n-queens', 'Hard', `public IList<IList<string>> SolveNQueens(int n) {
     var res = new List<IList<string>>();
     var cols = new bool[n];
@@ -118,7 +147,7 @@ export const PROBLEMS_C = {
     }
     Place(0);
     return res;
-}`)
+}`, true)
   ],
   greedy: [
     p('jump', 'Jump Game', 55, 'jump-game', 'Medium', `public bool CanJump(int[] nums) {
@@ -146,6 +175,17 @@ export const PROBLEMS_C = {
     }
     return removed;
 }`),
+    p('mergeIv', 'Merge Intervals', 56, 'merge-intervals', 'Medium', `public int[][] Merge(int[][] intervals) {
+    Array.Sort(intervals, (a, b) => a[0].CompareTo(b[0]));
+    var res = new List<int[]>();
+    foreach (var iv in intervals) {
+        if (res.Count > 0 && iv[0] <= res[^1][1])
+            res[^1][1] = Math.Max(res[^1][1], iv[1]); // overlaps: extend
+        else
+            res.Add(new[] { iv[0], iv[1] });           // gap: start a new block
+    }
+    return res.ToArray();
+}`, true),
     p('candy', 'Candy', 135, 'candy', 'Hard', `public int Candy(int[] ratings) {
     int n = ratings.Length;
     var candies = new int[n];
@@ -155,7 +195,7 @@ export const PROBLEMS_C = {
     for (int i = n - 2; i >= 0; i--)
         if (ratings[i] > ratings[i + 1]) candies[i] = Math.Max(candies[i], candies[i + 1] + 1);
     return candies.Sum();
-}`)
+}`, true)
   ],
   dp: [
     p('climb', 'Climbing Stairs', 70, 'climbing-stairs', 'Easy', `public int ClimbStairs(int n) {
@@ -182,6 +222,17 @@ export const PROBLEMS_C = {
                 : Math.Max(dp[i - 1, j], dp[i, j - 1]);
     return dp[a.Length, b.Length];
 }`),
+    p('lis', 'Longest Increasing Subsequence', 300, 'longest-increasing-subsequence', 'Medium', `public int LengthOfLIS(int[] nums) {
+    var dp = new int[nums.Length]; // dp[i]: longest increasing run ending at i
+    int best = 0;
+    for (int i = 0; i < nums.Length; i++) {
+        dp[i] = 1;
+        for (int j = 0; j < i; j++)
+            if (nums[j] < nums[i]) dp[i] = Math.Max(dp[i], dp[j] + 1);
+        best = Math.Max(best, dp[i]);
+    }
+    return best;
+}`, true),
     p('edit', 'Edit Distance', 72, 'edit-distance', 'Medium', `public int MinDistance(string a, string b) {
     var dp = new int[a.Length + 1, b.Length + 1];
     for (int i = 0; i <= a.Length; i++) dp[i, 0] = i;
@@ -192,6 +243,23 @@ export const PROBLEMS_C = {
                 ? dp[i - 1, j - 1]
                 : 1 + Math.Min(dp[i - 1, j - 1], Math.Min(dp[i - 1, j], dp[i, j - 1]));
     return dp[a.Length, b.Length];
-}`)
+}`, true),
+    p('regex', 'Regular Expression Matching', 10, 'regular-expression-matching', 'Hard', `public bool IsMatch(string s, string p) {
+    var dp = new bool[s.Length + 1, p.Length + 1]; // dp[i, j]: s[..i] matches p[..j]
+    dp[0, 0] = true;
+    for (int j = 2; j <= p.Length; j++)
+        dp[0, j] = p[j - 1] == '*' && dp[0, j - 2];
+    for (int i = 1; i <= s.Length; i++)
+        for (int j = 1; j <= p.Length; j++) {
+            if (p[j - 1] == '*') {
+                bool zero = dp[i, j - 2];
+                bool more = (p[j - 2] == '.' || p[j - 2] == s[i - 1]) && dp[i - 1, j];
+                dp[i, j] = zero || more;
+            } else {
+                dp[i, j] = (p[j - 1] == '.' || p[j - 1] == s[i - 1]) && dp[i - 1, j - 1];
+            }
+        }
+    return dp[s.Length, p.Length];
+}`, true)
   ],
 };

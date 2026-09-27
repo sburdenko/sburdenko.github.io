@@ -125,4 +125,37 @@ export const EV_B = {
     ru: (v, gl, gr, through, up, rec) => `${v}: выгода слева ${gl}, справа ${gr} (отрицательное → 0). Путь с поворотом здесь: ${gl} + ${v} + ${gr} = ${through}${rec ? ' — <b>рекорд</b>' : ''}. Наверх возвращаем ${up}.`,
   },
   'mps.ev.done': { en: best => `Maximum path sum: <b>${best}</b>. The returned value and the recorded one are different things.`, ru: best => `Максимальная сумма пути: <b>${best}</b>. Возвращаемое и записанное — разные величины.` },
+
+  /* LRU Cache */
+  'lru.ev.start': { en: c => `Capacity ${c}. Left is the most recently used, right is the next to go.`, ru: c => `Вместимость ${c}. Слева — самый свежий, справа — следующий на вылет.` },
+  'lru.ev.miss': { en: k => `get(${k}) → −1: the key is not cached.`, ru: k => `get(${k}) → −1: такого ключа нет.` },
+  'lru.ev.hit': { en: (k, v) => `get(${k}) → <b>${v}</b>. Move it to the front: it is now the most recent.`, ru: (k, v) => `get(${k}) → <b>${v}</b>. Переносим в начало: теперь он самый свежий.` },
+  'lru.ev.put': {
+    en: (k, v, existed, evicted) => `put(${k}, ${v}): ${existed ? 'update and move to the front' : 'insert at the front'}.${evicted === null ? '' : ` Over capacity — evict key ${evicted} from the tail.`}`,
+    ru: (k, v, existed, evicted) => `put(${k}, ${v}): ${existed ? 'обновляем и переносим в начало' : 'вставляем в начало'}.${evicted === null ? '' : ` Места нет — выкидываем ключ ${evicted} с хвоста.`}`,
+  },
+
+  /* Course Schedule */
+  'crs.ev.start': {
+    en: (n, ready) => `Badges show how many prerequisites each course still waits for. Ready now: ${ready.length ? list(ready) : 'none'}.`,
+    ru: (n, ready) => `Бейджи — сколько требований ещё ждёт каждый курс. Готовы сейчас: ${ready.length ? list(ready) : 'нет'}.`,
+  },
+  'crs.ev.take': {
+    en: (c, next, freed) => `Take course ${c}.${next.length ? ` It unlocks ${list(next)}` : ' Nothing depends on it'}${freed.length ? `; ready now: ${list(freed)}.` : '.'}`,
+    ru: (c, next, freed) => `Берём курс ${c}.${next.length ? ` Он открывает ${list(next)}` : ' От него ничего не зависит'}${freed.length ? `; готовы теперь: ${list(freed)}.` : '.'}`,
+  },
+  'crs.ev.done': {
+    en: (ok, order, stuck) => (ok ? `All courses taken in the order ${list(order)} — <b>possible</b>.` : `Courses ${list(stuck)} wait for each other in a cycle — <b>impossible</b>.`),
+    ru: (ok, order, stuck) => (ok ? `Все курсы пройдены в порядке ${list(order)} — <b>можно</b>.` : `Курсы ${list(stuck)} ждут друг друга по кругу — <b>нельзя</b>.`),
+  },
+
+  /* Lowest Common Ancestor */
+  'lca.ev.start': { en: (p, q) => `Find the lowest node above both ${p} and ${q}. Badges show what each subtree returns.`, ru: (p, q) => `Ищем самый нижний узел над ${p} и ${q}. Бейджи — что возвращает каждое поддерево.` },
+  'lca.ev.self': { en: v => `${v} is p or q — return it at once, without looking deeper.`, ru: v => `${v} — это p или q: сразу возвращаем его, глубже не смотрим.` },
+  'lca.ev.enter': { en: v => `Enter ${v}: ask the left and right subtrees.`, ru: v => `Вход в ${v}: спрашиваем левое и правое поддеревья.` },
+  'lca.ev.ret': {
+    en: (v, how, r) => (how === 'split' ? `${v}: both sides found something — <b>p and q split here</b>, return ${v}.` : how === 'pass' ? `${v}: only one side found ${r} — pass it up.` : `${v}: neither side found anything — return null.`),
+    ru: (v, how, r) => (how === 'split' ? `${v}: обе стороны что-то нашли — <b>здесь p и q расходятся</b>, возвращаем ${v}.` : how === 'pass' ? `${v}: нашла только одна сторона (${r}) — передаём наверх.` : `${v}: ни одна сторона ничего не нашла — возвращаем null.`),
+  },
+  'lca.ev.done': { en: (a, p, q) => `Lowest common ancestor of ${p} and ${q}: <b>${a}</b>.`, ru: (a, p, q) => `Наименьший общий предок ${p} и ${q}: <b>${a}</b>.` },
 };

@@ -1,5 +1,5 @@
 /** Problems and C# solutions for chapters 05–08: stack, linked list, DFS/BFS, trees. */
-import { problem as p } from './problem.js?v=202609271511';
+import { problem as p } from './problem.js?v=202609271602';
 
 export const PROBLEMS_B = {
   stack: [
@@ -48,7 +48,7 @@ export const PROBLEMS_B = {
         stack.Push(i);
     }
     return best;
-}`)
+}`, true)
   ],
   list: [
     p('cycle', 'Linked List Cycle', 141, 'linked-list-cycle', 'Easy', `public bool HasCycle(ListNode head) {
@@ -81,6 +81,29 @@ export const PROBLEMS_B = {
     }
     return prev;
 }`),
+    p('lru', 'LRU Cache', 146, 'lru-cache', 'Medium', `public class LRUCache {
+    private readonly int capacity;
+    private readonly Dictionary<int, LinkedListNode<(int key, int val)>> map = new();
+    private readonly LinkedList<(int key, int val)> order = new(); // front = most recent
+
+    public LRUCache(int capacity) => this.capacity = capacity;
+
+    public int Get(int key) {
+        if (!map.TryGetValue(key, out var node)) return -1;
+        order.Remove(node);
+        order.AddFirst(node);
+        return node.Value.val;
+    }
+
+    public void Put(int key, int value) {
+        if (map.TryGetValue(key, out var node)) order.Remove(node);
+        else if (map.Count == capacity) {
+            map.Remove(order.Last.Value.key);
+            order.RemoveLast();
+        }
+        map[key] = order.AddFirst((key, value));
+    }
+}`, true),
     p('reverseK', 'Reverse Nodes in k-Group', 25, 'reverse-nodes-in-k-group', 'Hard', `public ListNode ReverseKGroup(ListNode head, int k) {
     var dummy = new ListNode(0, head);
     var groupPrev = dummy;
@@ -101,7 +124,7 @@ export const PROBLEMS_B = {
         groupPrev = first;
     }
     return dummy.next;
-}`)
+}`, true)
   ],
   graph: [
     p('flood', 'Flood Fill', 733, 'flood-fill', 'Easy', `public int[][] FloodFill(int[][] image, int sr, int sc, int color) {
@@ -161,6 +184,22 @@ private void Sink(char[][] g, int r, int c) {
     }
     return fresh == 0 ? minutes : -1;
 }`),
+    p('course', 'Course Schedule', 207, 'course-schedule', 'Medium', `public bool CanFinish(int n, int[][] prerequisites) {
+    var next = new List<int>[n];
+    var indegree = new int[n];
+    for (int i = 0; i < n; i++) next[i] = new List<int>();
+    foreach (var p in prerequisites) { next[p[1]].Add(p[0]); indegree[p[0]]++; }
+    var queue = new Queue<int>();
+    for (int i = 0; i < n; i++) if (indegree[i] == 0) queue.Enqueue(i);
+    int taken = 0;
+    while (queue.Count > 0) {
+        int c = queue.Dequeue();
+        taken++;
+        foreach (int d in next[c])
+            if (--indegree[d] == 0) queue.Enqueue(d);
+    }
+    return taken == n; // leftovers are stuck in a cycle
+}`, true),
     p('ladder', 'Word Ladder', 127, 'word-ladder', 'Hard', `public int LadderLength(string begin, string end, IList<string> wordList) {
     var words = new HashSet<string>(wordList);
     if (!words.Contains(end)) return 0;
@@ -183,7 +222,7 @@ private void Sink(char[][] g, int r, int c) {
         }
     }
     return 0;
-}`)
+}`, true)
   ],
   tree: [
     p('maxDepth', 'Maximum Depth of Binary Tree', 104, 'maximum-depth-of-binary-tree', 'Easy', `public int MaxDepth(TreeNode root) =>
@@ -212,6 +251,13 @@ private bool Valid(TreeNode node, long lo, long hi) {
     if (node.val <= lo || node.val >= hi) return false;
     return Valid(node.left, lo, node.val) && Valid(node.right, node.val, hi);
 }`),
+    p('lca', 'Lowest Common Ancestor of a Binary Tree', 236, 'lowest-common-ancestor-of-a-binary-tree', 'Medium', `public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if (root == null || root == p || root == q) return root;
+    var left = LowestCommonAncestor(root.left, p, q);
+    var right = LowestCommonAncestor(root.right, p, q);
+    if (left != null && right != null) return root; // p and q split here
+    return left ?? right;
+}`, true),
     p('maxPath', 'Binary Tree Maximum Path Sum', 124, 'binary-tree-maximum-path-sum', 'Hard', `private int best;
 
 public int MaxPathSum(TreeNode root) {
@@ -226,6 +272,6 @@ private int Gain(TreeNode node) {
     int right = Math.Max(0, Gain(node.right));
     best = Math.Max(best, node.val + left + right); // path that turns here
     return node.val + Math.Max(left, right);        // path that continues up
-}`)
+}`, true)
   ],
 };

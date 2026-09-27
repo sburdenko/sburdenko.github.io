@@ -1,16 +1,15 @@
 /** Tape 06 assembly: language, map, skeletons and, per chapter, four problem tabs that each drive their own rig. */
-import { $, $$, esc, bootVhs } from '../../assets/vhs.js?v=202609271511';
-import { initI18n, t, onLang } from '../../assets/i18n.js?v=202609271511';
-import { COMMON } from '../../assets/i18n-common.js?v=202609271511';
-import { renderCode } from '../../assets/code.js?v=202609271511';
-import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202609271511';
-import { DICT } from './i18n.js?v=202609271511';
-import { RIGS, PATTERN_IDS, runWithInput } from './rigs.js?v=202609271511';
-import { formatField } from './inputs.js?v=202609271511';
-import { PROBLEMS, NAMES } from './problems.js?v=202609271511';
+import { $, $$, esc, bootVhs } from '../../assets/vhs.js?v=202609271602';
+import { initI18n, t, onLang } from '../../assets/i18n.js?v=202609271602';
+import { COMMON } from '../../assets/i18n-common.js?v=202609271602';
+import { renderCode } from '../../assets/code.js?v=202609271602';
+import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202609271602';
+import { DICT } from './i18n.js?v=202609271602';
+import { RIGS, PATTERN_IDS, runWithInput } from './rigs.js?v=202609271602';
+import { formatField } from './inputs.js?v=202609271602';
+import { PROBLEMS, NAMES } from './problems.js?v=202609271602';
 
 const pad = n => String(n).padStart(2, '0');
-const HARD_TAB = 3;
 
 /* Shells go in before initI18n so their data-i18n labels are translated with the rest of the page. */
 const shell = () => `<h4 data-i18n="ui.problems"></h4>
@@ -65,9 +64,9 @@ function mountChapter(root) {
 
   function renderTabs() {
     const texts = t(`${id}.p`);
-    tabs.innerHTML = PROBLEMS[id].map((p, j) => `<button type="button" class="ptab${j === HARD_TAB ? ' hard' : ''}" role="tab" id="${id}-tab-${j}" aria-selected="${j === selected}" tabindex="${j === selected ? 0 : -1}" data-j="${j}">
+    tabs.innerHTML = PROBLEMS[id].map((p, j) => `<button type="button" class="ptab${p.diff === 'Hard' ? ' hard' : ''}" role="tab" id="${id}-tab-${j}" aria-selected="${j === selected}" tabindex="${j === selected ? 0 : -1}" data-j="${j}">
       <span class="v">${texts[j].variant}</span><span class="nm">${esc(p.name)}</span>
-      <span class="meta">#${p.num} · <i class="diff ${p.diff}">${p.diff}</i>${j === HARD_TAB ? ` · <b class="must">${t('ui.hard')}</b>` : ''}</span></button>`).join('');
+      <span class="meta">#${p.num} · <i class="diff ${p.diff}">${p.diff}</i>${p.must ? ` · <b class="must">${t('ui.hard')}</b>` : ''}</span></button>`).join('');
   }
 
   function renderInfo() {

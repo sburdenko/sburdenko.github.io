@@ -1,7 +1,7 @@
 /** Editable rigs for chapters 09–12. */
-import * as C from './model-c.js?v=202609271511';
-import * as V from './views-c.js?v=202609271511';
-import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202609271511';
+import * as C from './model-c.js?v=202609271602';
+import * as V from './views-c.js?v=202609271602';
+import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202609271602';
 
 const nums = (extra = {}) => ({ key: 'nums', type: 'ints', minLen: 1, maxLen: 10, min: -99, max: 99, ...extra });
 const word = key => ({ key, type: 'str', chars: 'a-z', charsLabel: 'a–z', minLen: 0, maxLen: 7 });
@@ -115,4 +115,54 @@ export const RIGS_C = {
     },
     run: p => ({ ...C.editDistanceTrace(p.a, p.b), a: p.a, b: p.b }),
   }, V.edit),
+
+  /* must-know additions */
+  topK: defineRig({
+    fields: [{ key: 'k', type: 'int', min: 1, max: 4 }, { key: 'nums', type: 'ints', minLen: 1, maxLen: 14, min: -99, max: 99 }],
+    example: { k: 2, nums: [1, 1, 1, 2, 2, 3, 4, 4, 4, 4, 5] },
+    random: next => ({ k: randInt(next, 1, 3), nums: randInts(next, randInt(next, 8, 14), 1, 6) }),
+    check: p => (p.k > new Set(p.nums).size ? ['in.err.kDistinct', new Set(p.nums).size] : null),
+    run: p => ({ ...C.topKFrequentTrace(p.nums, p.k), k: p.k }),
+  }, V.topK),
+  wordSearch: defineRig({
+    fields: [{ key: 'board', type: 'board', maxRows: 4, maxCols: 5 }, { key: 'word', type: 'str', chars: 'A-Za-z', charsLabel: 'A–Z', minLen: 1, maxLen: 6 }],
+    example: { board: [[...'ABCE'], [...'SFCS'], [...'ADEE']], word: 'ABCCED' },
+    random: next => {
+      const board = Array.from({ length: 3 }, () => Array.from({ length: 4 }, () => pick(next, 'ABCDE')));
+      let r = randInt(next, 0, 2), c = randInt(next, 0, 3), word = board[r][c];
+      const seen = new Set([`${r},${c}`]);
+      for (let step = 0; step < randInt(next, 2, 4); step++) {
+        const moves = [[1, 0], [-1, 0], [0, 1], [0, -1]].map(([dr, dc]) => [r + dr, c + dc]).filter(([y, x]) => y >= 0 && x >= 0 && y < 3 && x < 4 && !seen.has(`${y},${x}`));
+        if (!moves.length) break;
+        [r, c] = pick(next, moves);
+        seen.add(`${r},${c}`);
+        word += board[r][c];
+      }
+      return { board, word: next() < 0.25 ? `${word}E` : word };
+    },
+    run: p => ({ ...C.wordSearchTrace(p.board, p.word.toUpperCase()), board: p.board, word: p.word.toUpperCase() }),
+  }, V.wordSearch),
+  mergeIv: defineRig({
+    fields: [{ key: 'intervals', type: 'intervals', minLen: 1, maxLen: 8, max: 18 }],
+    example: { intervals: [[1, 3], [2, 6], [8, 10], [10, 12], [15, 18]] },
+    random: next => ({ intervals: Array.from({ length: randInt(next, 4, 7) }, () => { const a = randInt(next, 0, 11); return [a, a + randInt(next, 1, 3)]; }) }),
+    run: p => C.mergeIntervalsTrace(p.intervals),
+  }, V.mergeIv),
+  lis: defineRig({
+    fields: [{ key: 'nums', type: 'ints', minLen: 1, maxLen: 10, min: -999, max: 999 }],
+    example: { nums: [10, 9, 2, 5, 3, 7, 101, 18] },
+    random: next => ({ nums: randInts(next, randInt(next, 6, 10), 0, 20) }),
+    run: p => ({ ...C.lisTrace(p.nums), nums: p.nums }),
+  }, V.lis),
+  regex: defineRig({
+    fields: [{ key: 's', type: 'str', chars: 'a-z', charsLabel: 'a–z', minLen: 0, maxLen: 6 }, { key: 'p', type: 'str', chars: 'a-z.*', charsLabel: 'a–z . *', minLen: 1, maxLen: 6 }],
+    example: { s: 'aab', p: 'c*a*b' },
+    random: next => {
+      let p = '';
+      while (p.length < randInt(next, 2, 5)) { p += pick(next, 'ab.'); if (next() < 0.45) p += '*'; }
+      return { s: Array.from({ length: randInt(next, 1, 5) }, () => pick(next, 'ab')).join(''), p: p.slice(0, 6).replace(/^\*/, 'a*') };
+    },
+    check: p => (/^\*|\*\*/.test(p.p) ? ['in.err.pattern'] : null),
+    run: p => ({ ...C.regexTrace(p.s, p.p), s: p.s, p: p.p }),
+  }, V.regex),
 };

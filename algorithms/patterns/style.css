@@ -86,9 +86,7 @@
 
 /* ---------- problems ---------- */
 .probs{display:grid;gap:14px}
-.ptabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-@media (max-width:1000px){.ptabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:520px){.ptabs{grid-template-columns:minmax(0,1fr)}}
+.ptabs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:10px}
 .ptab{display:grid;gap:5px;text-align:left;cursor:pointer;padding:12px 14px;background:var(--bg2);border:1px solid var(--line2);border-radius:5px;color:var(--ink);font-family:var(--f-body);transition:border-color .15s,background .15s}
 .ptab:hover{border-color:var(--ink3)}
 .ptab[aria-selected="true"]{border-color:var(--osd);background:rgba(255,210,63,.07);box-shadow:0 0 16px -6px rgba(255,210,63,.5)}
@@ -110,7 +108,7 @@
 /* ---------- rigs added with the per-problem stands ---------- */
 .ptab.hard{border-color:rgba(255,92,108,.45)}
 .ptab.hard[aria-selected="true"]{border-color:var(--bad);background:rgba(255,92,108,.08);box-shadow:0 0 16px -6px rgba(255,92,108,.6)}
-.ptab .must{color:var(--bad);font-weight:700;letter-spacing:.06em}
+.ptab .must{color:var(--osd);font-weight:700;letter-spacing:.06em}
 .stage .ptr.p3 path{fill:var(--ok)}
 .stage .ptr.p3 text{fill:var(--ok)}
 .stage .cell.g0,.vchip.g0{fill:rgba(38,227,234,.28);border-color:var(--gpu)}
@@ -165,3 +163,6 @@
 .editor .ed-msg{flex-basis:100%;font-size:13.5px;line-height:1.45;color:var(--ink3)}
 .editor .ed-msg.bad{color:#ffb3bc}
 @media (max-width:560px){.editor .fld{flex-wrap:wrap}.editor input{width:100%}}
+.stage .gcell.onpath{fill:rgba(93,252,154,.35)}
+.stage .gt.letter{font-size:18px;font-weight:700}
+.stage .span.merged{fill:rgba(93,252,154,.35);stroke:var(--ok)}

@@ -1,5 +1,5 @@
 /** Problems and C# solutions for chapters 01–04: hash map, two pointers, sliding window, binary search. */
-import { problem as p } from './problem.js?v=202609271511';
+import { problem as p } from './problem.js?v=202609271602';
 
 export const PROBLEMS_A = {
   hash: [
@@ -30,6 +30,17 @@ export const PROBLEMS_A = {
     }
     return new List<IList<string>>(groups.Values);
 }`),
+    p('longestConsec', 'Longest Consecutive Sequence', 128, 'longest-consecutive-sequence', 'Medium', `public int LongestConsecutive(int[] nums) {
+    var set = new HashSet<int>(nums);
+    int best = 0;
+    foreach (int x in set) {
+        if (set.Contains(x - 1)) continue; // not the start of a run
+        int len = 1;
+        while (set.Contains(x + len)) len++;
+        best = Math.Max(best, len);
+    }
+    return best;
+}`, true),
     p('psum', 'Subarray Sum Equals K', 560, 'subarray-sum-equals-k', 'Medium', `public int SubarraySum(int[] nums, int k) {
     var seen = new Dictionary<int, int> { [0] = 1 }; // prefix sum → how many times
     int sum = 0, count = 0;
@@ -39,7 +50,19 @@ export const PROBLEMS_A = {
         seen[sum] = seen.GetValueOrDefault(sum) + 1;
     }
     return count;
-}`)
+}`, true),
+    p('firstMissing', 'First Missing Positive', 41, 'first-missing-positive', 'Hard', `public int FirstMissingPositive(int[] a) {
+    int n = a.Length;
+    for (int i = 0; i < n; i++) {
+        while (a[i] >= 1 && a[i] <= n && a[a[i] - 1] != a[i]) {
+            int j = a[i] - 1;              // value v belongs in slot v - 1
+            (a[i], a[j]) = (a[j], a[i]);
+        }
+    }
+    for (int i = 0; i < n; i++)
+        if (a[i] != i + 1) return i + 1;
+    return n + 1;
+}`, true)
   ],
   twoptr: [
     p('moveZeroes', 'Move Zeroes', 283, 'move-zeroes', 'Easy', `public void MoveZeroes(int[] nums) {
@@ -90,7 +113,7 @@ export const PROBLEMS_A = {
         }
     }
     return total;
-}`)
+}`, true)
   ],
   window: [
     p('maxAvg', 'Maximum Average Subarray I', 643, 'maximum-average-subarray-i', 'Easy', `public double FindMaxAverage(int[] nums, int k) {
@@ -124,6 +147,17 @@ export const PROBLEMS_A = {
     }
     return best == int.MaxValue ? 0 : best;
 }`),
+    p('charReplace', 'Longest Repeating Character Replacement', 424, 'longest-repeating-character-replacement', 'Medium', `public int CharacterReplacement(string s, int k) {
+    var count = new int[26];
+    int l = 0, best = 0;
+    for (int r = 0; r < s.Length; r++) {
+        count[s[r] - 'A']++;
+        while (r - l + 1 - count.Max() > k)   // too many letters to replace
+            count[s[l++] - 'A']--;
+        best = Math.Max(best, r - l + 1);
+    }
+    return best;
+}`, true),
     p('minWindow', 'Minimum Window Substring', 76, 'minimum-window-substring', 'Hard', `public string MinWindow(string s, string t) {
     var need = new Dictionary<char, int>();
     foreach (char c in t) need[c] = need.GetValueOrDefault(c) + 1;
@@ -141,7 +175,7 @@ export const PROBLEMS_A = {
         }
     }
     return bestLen == int.MaxValue ? "" : s.Substring(bestL, bestLen);
-}`)
+}`, true)
   ],
   binary: [
     p('bsearch', 'Binary Search', 704, 'binary-search', 'Easy', `public int Search(int[] nums, int target) {
@@ -193,6 +227,6 @@ export const PROBLEMS_A = {
             : (Math.Max(al, bl) + Math.Min(ar, br)) / 2.0;
     }
     throw new ArgumentException("Inputs must be sorted");
-}`)
+}`, true)
   ],
 };

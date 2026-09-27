@@ -132,4 +132,34 @@ export const EV_A = {
     en: (median, odd) => `Median = <b>${median}</b> (${odd ? 'odd total: the larger left end' : 'even total: the average of the two ends around the cut'}).`,
     ru: (median, odd) => `Медиана = <b>${median}</b> (${odd ? 'всего нечётно: больший из левых краёв' : 'всего чётно: среднее двух краёв у разреза'}).`,
   },
+
+  /* Longest Consecutive Sequence */
+  'lcq.ev.start': { en: n => `Put all numbers into a set (${n} distinct). Count a run only from its first number.`, ru: n => `Кладём все числа в множество (разных: ${n}). Серию считаем только от её первого числа.` },
+  'lcq.ev.skip': { en: (x, prev) => `${x}: ${prev} is in the set, so ${x} is not a start — skip it.`, ru: (x, prev) => `${x}: ${prev} есть в множестве, значит ${x} не начало — пропускаем.` },
+  'lcq.ev.run': {
+    en: (from, to, len, rec) => `${from} starts a run: ${from}…${to}, length ${len}${rec ? ' — <b>new best</b>' : ''}.`,
+    ru: (from, to, len, rec) => `${from} начинает серию: ${from}…${to}, длина ${len}${rec ? ' — <b>рекорд</b>' : ''}.`,
+  },
+  'lcq.ev.done': { en: best => `Longest run: <b>${best}</b>. Each number was touched O(1) times → O(n).`, ru: best => `Самая длинная серия: <b>${best}</b>. Каждое число тронуто O(1) раз → O(n).` },
+
+  /* First Missing Positive */
+  'fmp.ev.start': { en: n => `Only 1…${n} can be the answer. Put every such value v into slot #v; ignore the rest.`, ru: n => `Ответ может быть только в 1…${n}. Кладём каждое такое значение v в ячейку #v, остальное игнорируем.` },
+  'fmp.ev.swap': { en: (v, i, j) => `${v} belongs in slot #${v}: swap positions ${i + 1} and ${j + 1}.`, ru: (v, i, j) => `${v} должно лежать в ячейке #${v}: меняем позиции ${i + 1} и ${j + 1}.` },
+  'fmp.ev.stay': {
+    en: (i, v, inRange, home) => `Slot #${i + 1}: ${v} ${home ? 'is home.' : inRange ? 'is a duplicate of a placed value — leave it.' : 'is outside 1…n — leave it.'}`,
+    ru: (i, v, inRange, home) => `Ячейка #${i + 1}: ${v} ${home ? 'на своём месте.' : inRange ? '— дубль уже поставленного значения, оставляем.' : 'вне 1…n — оставляем.'}`,
+  },
+  'fmp.ev.done': {
+    en: (answer, full) => (full ? `Every slot holds its number, so the answer is n + 1 = <b>${answer}</b>.` : `Slot #${answer} does not hold ${answer} — answer <b>${answer}</b>.`),
+    ru: (answer, full) => (full ? `Все ячейки на месте, значит ответ n + 1 = <b>${answer}</b>.` : `В ячейке #${answer} нет ${answer} — ответ <b>${answer}</b>.`),
+  },
+
+  /* Longest Repeating Character Replacement */
+  'lrc.ev.start': { en: k => `A window is fine while length − (its most frequent letter) ≤ ${k}: that many letters get replaced.`, ru: k => `Окно годится, пока длина − (самая частая буква) ≤ ${k}: столько букв придётся заменить.` },
+  'lrc.ev.grow': {
+    en: (c, len, top, need, k) => `Add “${c}”: length ${len}, most frequent ×${top} → replace ${need}${need > k ? ` > ${k}, too many.` : ` ≤ ${k}, fine.`}`,
+    ru: (c, len, top, need, k) => `Добавляем «${c}»: длина ${len}, самая частая ×${top} → заменить ${need}${need > k ? ` > ${k}, слишком много.` : ` ≤ ${k}, годится.`}`,
+  },
+  'lrc.ev.shrink': { en: (out, len, need) => `Drop “${out}” from the left: length ${len}, replace ${need}.`, ru: (out, len, need) => `Убираем «${out}» слева: длина ${len}, заменить ${need}.` },
+  'lrc.ev.done': { en: best => `Longest window: <b>${best}</b>.`, ru: best => `Самое длинное окно: <b>${best}</b>.` },
 };

@@ -1,8 +1,8 @@
 /** Editable rigs for chapters 05–08. */
-import * as B from './model-b.js?v=202609271511';
-import * as V from './views-b.js?v=202609271511';
-import { treeFromLevelOrder, levelOrderOf } from './inputs.js?v=202609271511';
-import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202609271511';
+import * as B from './model-b.js?v=202609271602';
+import * as V from './views-b.js?v=202609271602';
+import { treeFromLevelOrder, levelOrderOf } from './inputs.js?v=202609271602';
+import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202609271602';
 
 const values = (extra = {}) => ({ key: 'values', type: 'ints', minLen: 1, maxLen: 8, min: -99, max: 99, ...extra });
 const tree = { key: 'root', type: 'tree', maxNodes: 15, maxDepth: 4, min: -99, max: 99 };
@@ -178,4 +178,48 @@ export const RIGS_B = {
     random: next => ({ root: levelOrderOf(randomTree(next)) }),
     run: p => B.maxPathSumTrace(treeFromLevelOrder(p.root)),
   }, V.maxPath),
+
+  /* must-know additions */
+  lru: defineRig({
+    fields: [{ key: 'capacity', type: 'int', min: 1, max: 4 }, { key: 'ops', type: 'cache', minLen: 1, maxLen: 12 }],
+    example: { capacity: 2, ops: [['put', 1, 1], ['put', 2, 2], ['get', 1], ['put', 3, 3], ['get', 2], ['put', 4, 4], ['get', 1], ['get', 3], ['get', 4]] },
+    random: next => ({
+      capacity: randInt(next, 2, 3),
+      ops: Array.from({ length: randInt(next, 7, 11) }, () => (next() < 0.55 ? ['put', randInt(next, 1, 5), randInt(next, 1, 9)] : ['get', randInt(next, 1, 5)])),
+    }),
+    run: p => ({ ...B.lruTrace(p.capacity, p.ops), capacity: p.capacity, ops: p.ops }),
+  }, V.lru),
+  course: defineRig({
+    fields: [{ key: 'n', type: 'int', min: 1, max: 7 }, { key: 'prerequisites', type: 'edges', minLen: 0, maxLen: 12 }],
+    example: { n: 6, prerequisites: [[1, 0], [2, 0], [3, 1], [3, 2], [4, 3], [5, 4]] },
+    random: next => {
+      const n = randInt(next, 4, 7), order = shuffle(next, Array.from({ length: n }, (_, i) => i)), edges = [];
+      for (let t = 0; t < n + 1; t++) {
+        const [a, b] = shuffle(next, order).slice(0, 2);
+        const [early, late] = order.indexOf(a) < order.indexOf(b) ? [a, b] : [b, a];
+        if (!edges.some(([x, y]) => x === late && y === early)) edges.push([late, early]);
+      }
+      if (next() < 0.3 && edges.length) edges.push([edges[0][1], edges[0][0]]);
+      return { n, prerequisites: edges };
+    },
+    check: p => (p.prerequisites.flat().some(c => c >= p.n) ? ['in.err.course', p.n - 1] : null),
+    run: p => ({ ...B.courseScheduleTrace(p.n, p.prerequisites), n: p.n, edges: p.prerequisites }),
+  }, V.course),
+  lca: defineRig({
+    fields: [tree, { key: 'p', type: 'int', min: -99, max: 99 }, { key: 'q', type: 'int', min: -99, max: 99 }],
+    example: { root: [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], p: 7, q: 8 },
+    random: next => {
+      const spec = randomTree(next) || [1, null, null];
+      let label = 1;
+      const renumber = s => (s ? [label++, renumber(s[1]), renumber(s[2])] : null);
+      const root = levelOrderOf(renumber(spec)), values = root.filter(v => v !== null);
+      return { root, p: pick(next, values), q: pick(next, values) };
+    },
+    check: p => {
+      const values = p.root.filter(v => v !== null);
+      if (new Set(values).size !== values.length) return ['in.err.treeDistinct'];
+      return values.includes(p.p) && values.includes(p.q) ? null : ['in.err.inTree'];
+    },
+    run: p => B.lcaTrace(treeFromLevelOrder(p.root), p.p, p.q),
+  }, V.lca),
 };

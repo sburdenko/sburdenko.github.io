@@ -359,3 +359,85 @@ export function maxPathSumTrace(spec) {
   push('mps.ev.done', [best]);
   return { events, nodes, best };
 }
+
+/* ---------- must-know additions ---------- */
+/** ops: ['put', key, value] | ['get', key]. order lists entries from most to least recently used. */
+export function lruTrace(capacity, ops) {
+  let order = [];
+  const gets = [], events = [];
+  const push = (key, args, extra = {}) => events.push(event(key, args, { order: order.map(e => [...e]), op: null, hit: null, evicted: null, ...extra }));
+  push('lru.ev.start', [capacity]);
+  ops.forEach(([op, key, value], k) => {
+    const at = order.findIndex(([x]) => x === key);
+    if (op === 'get') {
+      if (at < 0) {
+        gets.push(-1);
+        push('lru.ev.miss', [key], { op: k });
+        return;
+      }
+      const entry = order[at];
+      order = [entry, ...order.filter((_, i) => i !== at)];
+      gets.push(entry[1]);
+      push('lru.ev.hit', [key, entry[1]], { op: k, hit: key });
+      return;
+    }
+    order = [[key, value], ...order.filter((_, i) => i !== at)];
+    let evicted = null;
+    if (order.length > capacity) {
+      evicted = order.at(-1);
+      order = order.slice(0, -1);
+    }
+    push('lru.ev.put', [key, value, at >= 0, evicted ? evicted[0] : null], { op: k, hit: key, evicted });
+  });
+  return { events, gets };
+}
+
+/** edges: [course, prerequisite] pairs, as in LeetCode. Kahn's algorithm: take courses whose prerequisites are done. */
+export function courseScheduleTrace(n, edges) {
+  const next = Array.from({ length: n }, () => []), indegree = Array(n).fill(0), taken = [], events = [];
+  edges.forEach(([course, pre]) => { next[pre].push(course); indegree[course]++; });
+  let queue = [...Array(n).keys()].filter(c => indegree[c] === 0);
+  const push = (key, args, extra = {}) => events.push(event(key, args, { indegree: [...indegree], queue: [...queue], taken: [...taken], cur: null, ...extra }));
+  push('crs.ev.start', [n, [...queue]]);
+  while (queue.length) {
+    const c = queue[0];
+    queue = queue.slice(1);
+    taken.push(c);
+    const freed = [];
+    for (const d of next[c]) if (--indegree[d] === 0) { freed.push(d); queue = [...queue, d]; }
+    push('crs.ev.take', [c, next[c], freed], { cur: c });
+  }
+  const ok = taken.length === n;
+  push('crs.ev.done', [ok, taken, [...Array(n).keys()].filter(c => !taken.includes(c))]);
+  return { events, ok, next };
+}
+
+/** Mirrors the classic recursion: a subtree returns p or q if it contains one, the split node if it contains both. */
+export function lcaTrace(spec, p, q) {
+  const nodes = layoutTree(spec), ret = nodes.map(() => undefined), stack = [], events = [];
+  const push = (key, args, extra = {}) => events.push(event(key, args, { cur: null, stack: [...stack], ret: [...ret], ...extra }));
+  push('lca.ev.start', [p, q]);
+  const go = id => {
+    if (id < 0) return -1;
+    const node = nodes[id];
+    stack.push(id);
+    if (node.v === p || node.v === q) {
+      ret[id] = id;
+      push('lca.ev.self', [node.v], { cur: id });
+      stack.pop();
+      return id;
+    }
+    push('lca.ev.enter', [node.v], { cur: id });
+    const left = go(node.l), right = go(node.r);
+    const result = left >= 0 && right >= 0 ? id : left >= 0 ? left : right;
+    ret[id] = result;
+    const how = left >= 0 && right >= 0 ? 'split' : result >= 0 ? 'pass' : 'none';
+    push('lca.ev.ret', [node.v, how, result >= 0 ? nodes[result].v : null], { cur: id });
+    stack.pop();
+    return result;
+  };
+  const found = go(nodes.length ? 0 : -1);
+  const answer = found >= 0 ? nodes[found].v : null;
+  push('lca.ev.done', [answer, p, q], { cur: found >= 0 ? found : null });
+  return { events, nodes, answer, p, q };
+}
