@@ -20,7 +20,7 @@
 | 03 | [Two Pointers](./algorithms/two-pointers/) | Opposite pointers, fast & slow / Floyd, and LeetCode 287. Rewindable array and linked-list examples, highlighted pseudocode, C# templates, and interview questions. This lesson is in English. |
 | 04 | [URP Field Guide](./unity-urp/) | Глава за главой по книге Unity о URP (Unity 6): где живёт каждая настройка, выбор рендерера по жёстким ограничениям, MSAA, GPU Resident Drawer, тени и атлас теней, режимы смешанного света, Rendering Layers, probes против APV и протечки, эффекты, пять шейдеров из книги, Render Objects, Render Graph и слияние native passes, volumes, STP, прогрев PSO, диагностика, вопросы. Ошибки книги помечены «Сверено с книгой». |
 | 05 | [Паттерны и SOLID](./unity-patterns/) | Книга Unity «Level up your code with design patterns and SOLID»: цена изменений по SOLID, factory, семантика `ObjectPool<T>`, singleton при загрузке сцен, command с undo/redo, state machine, observer и забытые подписки, MVP против MVVM, strategy, память flyweight, dirty flag, выбор паттерна и вопросы. |
-| 06 | [Паттерны алгоритмов](./algorithms/patterns/) | Двенадцать паттернов для собеседования: HashMap/HashSet, Two Pointers, Sliding Window, Binary Search, монотонный стек, fast & slow, DFS/BFS, деревья, куча, backtracking, greedy, DP. Для каждого — признаки в условии, каркас на C# и четыре задачи LeetCode с разными вариантами приёма; у каждой задачи свой стенд с перемоткой и решение, четвёртая — сложная, которую надо знать. Two Pointers и BFS/DFS ссылаются на кассеты 02 и 03 и дополняют их. |
+| 06 | [Паттерны алгоритмов](./algorithms/patterns/) | Двенадцать паттернов для собеседования: HashMap/HashSet, Two Pointers, Sliding Window, Binary Search, монотонный стек, fast & slow, DFS/BFS, деревья, куча, backtracking, greedy, DP. Для каждого — признаки в условии, каркас на C# и четыре задачи LeetCode с разными вариантами приёма; у каждой задачи свой стенд с перемоткой и решение, четвёртая — сложная, которую надо знать. Входные данные любого стенда редактируются прямо на странице, есть кнопки «Случайно» и «Пример». Two Pointers и BFS/DFS ссылаются на кассеты 02 и 03 и дополняют их. |
 
 ## Структура
 
@@ -52,7 +52,9 @@ algorithms/bfs-dfs/
 algorithms/patterns/
   model-a.js model-b.js model-c.js   трассы 48 стендов, по главам (без DOM)
   view-kit.js views-*.js   SVG-отрисовка стендов, чистые функции
-  rigs.js problems-*.js    входные данные стендов, задачи и решения на C#
+  rigs-*.js rigs.js       поля ввода, примеры и генераторы данных стендов
+  inputs.js                разбор и проверка того, что вводит человек (без DOM)
+  problems-*.js            задачи и решения на C#
   i18n-*.js ev-*.js        тексты глав и шагов { en, ru }; плеер берётся из bfs-dfs/player.js
 tests/                     node --test, проверяют чистые модели
 ```

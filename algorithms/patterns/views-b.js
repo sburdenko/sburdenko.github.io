@@ -2,7 +2,7 @@
 import {
   CELL, STEP, svg, text, rowWidth, cells, pointers, arrow, node, chip, chips,
   barLayout, bars, gridCells, binaryTree,
-} from './view-kit.js?v=202609252015';
+} from './view-kit.js?v=202609271511';
 
 const TOP = 40, GAP_HALF = 3;
 const framed = (n, h, inner) => svg(rowWidth(n) + 20, h, `<g transform="translate(10,0)">${inner}</g>`);
@@ -71,22 +71,24 @@ export const histogram = {
 /* ---------- 06 linked list ---------- */
 export const cycle = {
   view(run, e) {
-    const entry = run.next.at(-1), tail = entry < 0 ? run.next.length : entry;
-    const loop = run.next.length - tail, pos = [];
+    const n = run.next.length, entry = run.next.at(-1), tail = entry < 0 ? n : entry;
+    const loop = n - tail, pos = [];
     for (let k = 0; k < tail; k++) pos.push([44 + k * 88, 122]);
     const cx = 44 + tail * 88 + 80, r = 80;
     for (let k = 0; k < loop; k++) {
       const ang = Math.PI + k * 2 * Math.PI / loop;
       pos.push([cx + r * Math.cos(ang), 122 + r * Math.sin(ang)]);
     }
-    let s = run.next.map((b, a) => (b < 0 ? '' : arrow(pos[a][0], pos[a][1], pos[b][0], pos[b][1], 21))).join('');
+    const nil = [44 + n * 88, 122], at = k => (k < 0 ? nil : pos[k]);
+    let s = run.next.map((b, a) => arrow(pos[a][0], pos[a][1], at(b)[0], at(b)[1], 21)).join('');
     pos.forEach(([x, y], k) => { s += node(x, y, k, k === e.meet ? 'ok' : k === e.slow || k === e.fast ? 'cur' : ''); });
-    const [sx, sy] = pos[e.slow], [fx, fy] = pos[e.fast];
+    if (entry < 0) s += node(nil[0], nil[1], '∅', e.fast < 0 ? 'cur nil' : 'nil');
+    const [sx, sy] = at(e.slow), [fx, fy] = at(e.fast);
     s += text(sx, sy - 31, 'slow', 'sf s') + text(fx, fy + 32, 'fast', 'sf f');
-    return svg(cx + r + 40, 250, s);
+    return svg(entry < 0 ? nil[0] + 44 : cx + r + 40, 250, s);
   },
   vars(run, e) {
-    return [['var.slowFast', chip(`${e.slow} / ${e.fast}`)]];
+    return [['var.slowFast', chip(`${e.slow} / ${e.fast < 0 ? 'null' : e.fast}`)]];
   },
 };
 

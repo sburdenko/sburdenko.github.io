@@ -150,3 +150,18 @@
 .stage .node.bad{fill:rgba(255,92,108,.2);stroke:var(--bad);stroke-width:2.6}
 .stage .node.cutn{fill:transparent;stroke:var(--bad);stroke-dasharray:3 3}
 .stage .gt.queen{font-size:26px;fill:var(--osd)}
+
+/* ---------- input editor ---------- */
+.editor{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding:12px 14px;background:rgba(7,4,15,.55);border:1px solid var(--line);border-radius:5px}
+.editor .fields{display:flex;flex-wrap:wrap;gap:10px 16px;flex:1 1 auto;min-width:0}
+.editor .fld{display:flex;align-items:center;gap:8px;max-width:100%;min-width:0}
+.editor .fk{font:700 12.5px/1 var(--f-mono);color:var(--osd);letter-spacing:.04em}
+.editor input{font:14px/1.2 var(--f-mono);color:#fff;background:#07040f;border:1px solid var(--line2);border-radius:4px;padding:8px 10px;
+  width:calc(var(--w, 8) * 1ch + 24px);min-width:7ch;max-width:min(100%, 620px)}
+.editor input:hover{border-color:var(--ink3)}
+.editor input:focus{border-color:var(--osd);outline:none;box-shadow:0 0 0 1px var(--osd)}
+.editor input[aria-invalid="true"]{border-color:var(--bad);box-shadow:0 0 0 1px var(--bad)}
+.editor .ed-actions{display:flex;gap:8px;flex-wrap:wrap}
+.editor .ed-msg{flex-basis:100%;font-size:13.5px;line-height:1.45;color:var(--ink3)}
+.editor .ed-msg.bad{color:#ffb3bc}
+@media (max-width:560px){.editor .fld{flex-wrap:wrap}.editor input{width:100%}}

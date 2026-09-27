@@ -1,12 +1,13 @@
 /** Tape 06 assembly: language, map, skeletons and, per chapter, four problem tabs that each drive their own rig. */
-import { $, $$, esc, bootVhs } from '../../assets/vhs.js?v=202609252015';
-import { initI18n, t, onLang } from '../../assets/i18n.js?v=202609252015';
-import { COMMON } from '../../assets/i18n-common.js?v=202609252015';
-import { renderCode } from '../../assets/code.js?v=202609252015';
-import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202609252015';
-import { DICT } from './i18n.js?v=202609252015';
-import { RIGS, PATTERN_IDS } from './rigs.js?v=202609252015';
-import { PROBLEMS, NAMES } from './problems.js?v=202609252015';
+import { $, $$, esc, bootVhs } from '../../assets/vhs.js?v=202609271511';
+import { initI18n, t, onLang } from '../../assets/i18n.js?v=202609271511';
+import { COMMON } from '../../assets/i18n-common.js?v=202609271511';
+import { renderCode } from '../../assets/code.js?v=202609271511';
+import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202609271511';
+import { DICT } from './i18n.js?v=202609271511';
+import { RIGS, PATTERN_IDS, runWithInput } from './rigs.js?v=202609271511';
+import { formatField } from './inputs.js?v=202609271511';
+import { PROBLEMS, NAMES } from './problems.js?v=202609271511';
 
 const pad = n => String(n).padStart(2, '0');
 const HARD_TAB = 3;
@@ -16,6 +17,14 @@ const shell = () => `<h4 data-i18n="ui.problems"></h4>
   <div class="ptabs" role="tablist" data-i18n-aria="ui.problemsAria"></div>
   <div class="panel rig" role="tabpanel">
     <div class="rig-head"><p class="lbl" data-i18n="ui.rigTag">RIG · STEP BY STEP</p><h3 class="rig-title"></h3></div>
+    <div class="editor">
+      <div class="fields"></div>
+      <div class="ed-actions">
+        <button type="button" class="btn" data-ed="random" data-i18n="in.random">🎲 Random</button>
+        <button type="button" class="btn" data-ed="example" data-i18n="in.example">↺ Example</button>
+      </div>
+      <p class="ed-msg" aria-live="polite"></p>
+    </div>
     <div class="crt"><div class="stage"></div></div>
     <div class="explanation" aria-live="polite"></div>
     <div class="rig-vars"></div>
@@ -77,15 +86,60 @@ function mountChapter(root) {
     renderCode($('.pcode pre', info), p.code);
   }
 
+  /* Edited texts per problem survive switching tabs back and forth. */
+  const edits = new Map();
+  const fields = $('.fields', root), message = $('.ed-msg', root);
+  let error = null, timer = 0;
+  const textsOf = params => Object.fromEntries(rig.fields.map(f => [f.key, formatField(params[f.key], f)]));
+  const fieldId = key => `${id}-in-${key}`;
+  const fit = input => { input.style.setProperty('--w', Math.max(6, input.value.length + 2)); };
+
+  function renderFields(texts) {
+    fields.innerHTML = rig.fields.map(f => `<label class="fld" for="${fieldId(f.key)}"><span class="fk">${esc(f.key)}</span>
+      <input id="${fieldId(f.key)}" data-key="${esc(f.key)}" value="${esc(texts[f.key])}" spellcheck="false" autocomplete="off" autocapitalize="off"></label>`).join('');
+    $$('input', fields).forEach(fit);
+  }
+
+  function showMessage() {
+    $$('input', fields).forEach(input => input.setAttribute('aria-invalid', String(!!error && error.field === input.dataset.key)));
+    message.classList.toggle('bad', !!error);
+    message.textContent = error
+      ? `${error.field ? `${error.field}: ` : ''}${t(...error.error)} ${t('in.stale')}`
+      : t('in.hint');
+  }
+
+  function apply() {
+    clearTimeout(timer);
+    const texts = Object.fromEntries($$('input', fields).map(input => [input.dataset.key, input.value]));
+    edits.set(selected, texts);
+    const result = runWithInput(rig, texts);
+    error = result.error ? result : null;
+    showMessage();
+    if (!error) { run = result.run; player.load(run); }
+  }
+
+  function setTexts(texts) {
+    renderFields(texts);
+    apply();
+  }
+
+  fields.addEventListener('input', event => {
+    fit(event.target);
+    clearTimeout(timer);
+    timer = setTimeout(apply, 300);
+  });
+  fields.addEventListener('keydown', event => { if (event.key === 'Enter') apply(); });
+  root.querySelector('[data-ed="random"]').addEventListener('click', () => setTexts(textsOf(rig.random(Math.random))));
+  root.querySelector('[data-ed="example"]').addEventListener('click', () => setTexts(textsOf(rig.example)));
+
   function select(j, focus = false) {
     selected = j;
     const p = PROBLEMS[id][j];
     rig = RIGS[p.rig];
-    run = rig.run();
-    title.textContent = `${p.name} · ${rig.input}`;
+    title.textContent = p.name;
     renderTabs();
     renderInfo();
-    player.load(run);
+    setTexts(edits.get(j) || textsOf(rig.example));
     if (focus) $(`#${id}-tab-${j}`, root)?.focus();
   }
 
@@ -102,6 +156,7 @@ function mountChapter(root) {
   onLang(() => {
     renderTabs();
     renderInfo();
+    showMessage();
     if (frame) paint(frame);
   });
   select(0);

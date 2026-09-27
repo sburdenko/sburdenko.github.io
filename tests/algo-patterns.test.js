@@ -4,7 +4,8 @@ import { rng } from '../assets/rand.js';
 import * as A from '../algorithms/patterns/model-a.js';
 import * as B from '../algorithms/patterns/model-b.js';
 import * as C from '../algorithms/patterns/model-c.js';
-import { RIGS, PATTERN_IDS } from '../algorithms/patterns/rigs.js';
+import { RIGS, PATTERN_IDS, runWithInput, MAX_STEPS } from '../algorithms/patterns/rigs.js';
+import { parseField, formatField, treeFromLevelOrder, levelOrderOf } from '../algorithms/patterns/inputs.js';
 import { PROBLEMS } from '../algorithms/patterns/problems.js';
 import { DICT } from '../algorithms/patterns/i18n.js';
 
@@ -293,28 +294,104 @@ test('dynamic programming traces agree with recursion', () => {
 });
 
 /* ---------- wiring ---------- */
-test('every problem owns a rig whose events all render and read in both languages', () => {
+const textsOf = (rig, params) => Object.fromEntries(rig.fields.map(f => [f.key, formatField(params[f.key], f)]));
+
+function checkRun(label, rig, run) {
+  assert.ok(run.events.length >= 2, `${label}: too few steps`);
+  for (const event of run.events) {
+    const entry = DICT[event.key];
+    assert.ok(entry, `${label}: no text for ${event.key}`);
+    for (const lang of ['en', 'ru']) {
+      const text = entry[lang](...event.args);
+      assert.ok(typeof text === 'string' && text.trim() && !/undefined|NaN/.test(text), `${label} ${event.key} (${lang}): ${text}`);
+    }
+    assert.match(rig.view(run, event), /^<svg/, `${label}: ${event.key}`);
+    assert.doesNotMatch(rig.view(run, event), /NaN|undefined/, `${label}: ${event.key} draws NaN`);
+    for (const [key] of rig.vars(run, event)) assert.ok(DICT[key], `${label}: no label ${key}`);
+  }
+}
+
+test('input fields parse what people type and format back losslessly', () => {
+  assert.deepEqual(parseField('[1, 2,3]  −4', { type: 'ints' }).value, [1, 2, 3, -4]);
+  assert.deepEqual(parseField('1 x 3', { type: 'ints' }).error, ['in.err.notInt', 'x']);
+  assert.deepEqual(parseField('5 3 1', { type: 'ints', sorted: true }).value, [1, 3, 5]);
+  assert.equal(parseField('1 1', { type: 'ints', distinct: true }).error[0], 'in.err.distinct');
+  assert.equal(parseField('1 2 3', { type: 'ints', maxLen: 2 }).error[0], 'in.err.len');
+  assert.deepEqual(parseField('110 011', { type: 'grid', maxRows: 6, maxCols: 8, maxDigit: 1 }).value, [[1, 1, 0], [0, 1, 1]]);
+  assert.equal(parseField('110 01', { type: 'grid', maxRows: 6, maxCols: 8, maxDigit: 1 }).error[0], 'in.err.gridRagged');
+  assert.deepEqual(parseField('[[1,3],[2,4]]', { type: 'intervals', max: 12 }).value, [[1, 3], [2, 4]]);
+  assert.deepEqual(parseField('1-3 2-4', { type: 'intervals', max: 12 }).value, [[1, 3], [2, 4]]);
+  assert.deepEqual(parseField('push 5, getMin, pop', { type: 'ops' }).value, [['push', 5], ['getMin'], ['pop']]);
+  assert.equal(parseField('pop', { type: 'ops' }).error[0], 'in.err.opsEmpty');
+  assert.deepEqual(parseField('1 4 | 3 2', { type: 'lists', maxLists: 4, maxLen: 5 }).value, [[1, 4], [2, 3]]);
+  const order = [3, 9, 20, 4, null, 15, 7, null, null, null, null, null, 8];
+  assert.deepEqual(treeFromLevelOrder(order), [3, [9, [4, null, null], null], [20, [15, null, null], [7, null, [8, null, null]]]]);
+  assert.deepEqual(levelOrderOf(treeFromLevelOrder(order)), order);
+  assert.equal(parseField('null, 1', { type: 'tree', maxNodes: 15, maxDepth: 4 }).error[0], 'in.err.treeRoot');
+  for (const [key, entry] of Object.entries(DICT)) {
+    if (key.startsWith('in.err.')) assert.equal(typeof entry.en, 'function', key);
+  }
+});
+
+test('every problem owns an editable rig: the example and random inputs parse, run and render', () => {
   assert.equal(PATTERN_IDS.length, 12);
+  const random = rng(7);
   for (const id of PATTERN_IDS) {
     assert.equal(PROBLEMS[id].length, 4, id);
     for (const problem of PROBLEMS[id]) {
       const rig = RIGS[problem.rig];
-      assert.ok(rig, `${id}: no rig ${problem.rig}`);
-      assert.ok(rig.input, `${problem.rig}: no input caption`);
-      const run = rig.run();
-      assert.ok(run.events.length >= 3, `${problem.rig}: too few steps`);
-      assert.ok(run.events.length <= 90, `${problem.rig}: ${run.events.length} steps is too long to watch`);
-      for (const event of run.events) {
-        const entry = DICT[event.key];
-        assert.ok(entry, `${problem.rig}: no text for ${event.key}`);
-        for (const lang of ['en', 'ru']) {
-          const text = entry[lang](...event.args);
-          assert.ok(typeof text === 'string' && text.trim(), `${event.key} (${lang})`);
-        }
-        assert.match(rig.view(run, event), /^<svg/, `${problem.rig}: ${event.key}`);
-        for (const [label] of rig.vars(run, event)) assert.ok(DICT[label], `${problem.rig}: no label ${label}`);
+      assert.ok(rig && rig.fields.length, `${id}: no editable rig ${problem.rig}`);
+      const example = runWithInput(rig, textsOf(rig, rig.example));
+      assert.ok(!example.error, `${problem.rig} example: ${example.error}`);
+      assert.ok(example.run.events.length <= 90, `${problem.rig}: the example is too long to watch`);
+      checkRun(`${problem.rig} example`, rig, example.run);
+      for (let round = 0; round < 25; round++) {
+        const params = rig.random(random);
+        const texts = textsOf(rig, params);
+        const result = runWithInput(rig, texts);
+        assert.ok(!result.error, `${problem.rig} random ${JSON.stringify(texts)}: ${result.error}`);
+        assert.ok(result.run.events.length <= MAX_STEPS);
+        checkRun(`${problem.rig} random ${JSON.stringify(texts)}`, rig, result.run);
       }
     }
+  }
+});
+
+test('edge inputs within the limits never crash a rig', () => {
+  const extremes = spec => {
+    if (spec.type === 'int') return [spec.min, spec.max, 0, 1].filter(v => v >= spec.min && v <= spec.max).map(String);
+    if (spec.type !== 'ints') return [];
+    const lo = Math.max(spec.min ?? -9, -9), hi = Math.min(spec.max ?? 9, 9), minLen = Math.max(spec.minLen ?? 0, 0), maxLen = spec.maxLen ?? 8;
+    const make = (len, f) => Array.from({ length: len }, (_, i) => f(i)).join(' ');
+    return [make(minLen, () => lo), make(maxLen, () => hi), make(maxLen, i => lo + (i % (hi - lo + 1))), make(minLen, () => hi), make(Math.min(maxLen, minLen + 1), i => (i ? lo : hi))];
+  };
+  let tried = 0;
+  for (const [name, rig] of Object.entries(RIGS)) {
+    const base = textsOf(rig, rig.example);
+    for (const spec of rig.fields) {
+      for (const value of extremes(spec)) {
+        const result = runWithInput(rig, { ...base, [spec.key]: value });
+        if (result.error) continue;
+        tried++;
+        checkRun(`${name} ${spec.key}=${value}`, rig, result.run);
+      }
+    }
+  }
+  assert.ok(tried > 150, `only ${tried} edge inputs ran`);
+});
+
+test('bad input is reported with a message, never thrown', () => {
+  for (const texts of [{ n: '5', pos: '-1' }, { n: '1', pos: '-1' }, { n: '1', pos: '0' }, { n: '6', pos: '5' }]) {
+    const result = runWithInput(RIGS.cycle, texts);
+    checkRun(`cycle ${JSON.stringify(texts)}`, RIGS.cycle, result.run);
+  }
+  const cases = [['trap', { h: '1 2 x' }], ['rotated', { nums: '1 5 2 6', target: '2' }], ['koko', { piles: '3 6 7', h: '2' }],
+    ['cycle', { n: '4', pos: '7' }], ['ladder', { begin: 'hit', end: 'cogs', words: 'hot dot' }], ['maxDepth', { root: 'null' }],
+    ['combSum', { candidates: '1 2', target: '20' }], ['minStack', { ops: 'pop' }], ['flood', { image: '11 11', sr: '5', sc: '0', color: '2' }]];
+  for (const [name, texts] of cases) {
+    const result = runWithInput(RIGS[name], texts);
+    assert.ok(result.error, `${name}: expected an error`);
+    assert.ok(DICT[result.error[0]], `${name}: unknown message ${result.error[0]}`);
   }
 });
 

@@ -2,7 +2,7 @@
 import {
   CELL, STEP, svg, text, rowWidth, cells, pointers, arcBelow, node, chip, chips,
   barLayout, bars, gridCells, decisionTreeView, dpTable,
-} from './view-kit.js?v=202609252015';
+} from './view-kit.js?v=202609271511';
 
 const TOP = 40;
 const framed = (n, h, inner) => svg(rowWidth(n) + 20, h, `<g transform="translate(10,0)">${inner}</g>`);
