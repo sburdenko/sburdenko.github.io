@@ -65,6 +65,13 @@ export const HUB = {
   },
   'hub.soonTag': { en: '<span>Soon</span>', ru: '<span>Скоро</span>' },
   'hub.soonGo': { en: '■ NOT RECORDED YET', ru: '■ ЗАПИСЬ НЕ НАЧАТА' },
+  'hub.learnKick': { en: 'New · courses', ru: 'Новое · курсы' },
+  'hub.learnTitle': { en: 'Learn step by step', ru: 'Учись по урокам' },
+  'hub.learnDesc': {
+    en: 'Five-minute lessons in the spirit of Duolingo: tap, assemble code, run the rigs. The first course is .NET from the inside (in Russian for now).',
+    ru: 'Уроки по пять минут в духе Duolingo: тапаешь, собираешь код, запускаешь стенды. Первый курс — .NET изнутри.'
+  },
+  'hub.learnGo': { en: 'OPEN ►', ru: 'ОТКРЫТЬ ►' },
   'how.h2': { en: 'How to use this', ru: 'Как этим пользоваться' },
   'how.1': {
     en: '<span class="n">1</span><h3>Answer for yourself first</h3><p>Every tape ends with a block of questions. It pays to say your answer out loud before opening the card.</p>',
