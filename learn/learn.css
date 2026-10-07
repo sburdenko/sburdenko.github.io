@@ -68,6 +68,15 @@ body.in-lesson{overflow:hidden}
 .l-top{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;padding:14px var(--gut);max-width:880px;width:100%;margin-inline:auto}
 .x{width:40px;height:40px;border-radius:50%;border:1px solid var(--line2);background:var(--bg3);color:var(--ink2);font-size:18px;cursor:pointer;display:grid;place-items:center}
 .x:hover{color:#fff;border-color:var(--ink3)}
+.x:disabled{opacity:.35;cursor:default}
+.x:disabled:hover{color:var(--ink2);border-color:var(--line2)}
+#lback{font-size:24px;line-height:1;padding-bottom:3px}
+.l-nav{display:flex;gap:8px}
+.card .tag.past{color:var(--gpu)}
+.l-foot.review .nav-btns{display:flex;gap:10px}
+.l-foot.review .ghost-btn{padding:16px 18px}
+.l-foot.review .cta-btn{min-width:0}
+.past-n{font-family:var(--f-mono);font-size:13px;color:var(--ink3)}
 .l-top .pbar{height:12px}
 .l-count{font-family:var(--f-mono);font-size:13px;color:var(--ink3);font-variant-numeric:tabular-nums}
 .l-body{overflow-y:auto;padding:12px var(--gut) 28px;-webkit-overflow-scrolling:touch}
@@ -166,6 +175,8 @@ pre.code.blanks{white-space:pre-wrap;line-height:2.1}
 @media (max-width:560px){
   .l-foot .in{grid-template-columns:1fr}
   .cta-btn{width:100%}
+  .l-foot.review .nav-btns .ghost-btn{flex:none}
+  .l-foot.review .nav-btns .cta-btn{flex:1;width:auto}
   .match{gap:8px}.match .col{gap:8px}
 }
 
@@ -182,6 +193,8 @@ pre.code.blanks{white-space:pre-wrap;line-height:2.1}
 .result .row-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 .ghost-btn{padding:16px 22px;border-radius:14px;border:2px solid var(--line2);background:none;color:var(--ink2);cursor:pointer;font:700 14px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase}
 .ghost-btn:hover{color:#fff;border-color:var(--ink3)}
+.ghost-btn:disabled{opacity:.35;cursor:default}
+.ghost-btn:disabled:hover{color:var(--ink2);border-color:var(--line2)}
 
 /* свой диалог подтверждения */
 .ask{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:var(--gut);background:rgba(5,3,10,.72)}

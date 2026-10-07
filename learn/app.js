@@ -4,11 +4,11 @@
  *   #/dotnet      курс
  *   #/dotnet/<id> урок поверх курса
  */
-import { $, esc, startNoise } from '../assets/vhs.js?v=202610072259';
-import { COURSES, findCourse, lessonsOf } from './courses.js?v=202610072259';
-import * as P from './progress.js?v=202610072259';
-import * as E from './engine.js?v=202610072259';
-import { renderCard, feedback } from './cards.js?v=202610072259';
+import { $, esc, startNoise } from '../assets/vhs.js?v=202610072311';
+import { COURSES, findCourse, lessonsOf } from './courses.js?v=202610072311';
+import * as P from './progress.js?v=202610072311';
+import * as E from './engine.js?v=202610072311';
+import { renderCard, feedback } from './cards.js?v=202610072311';
 
 const loaded = P.load();
 let prog = loaded.state;
@@ -139,17 +139,22 @@ function openLesson(courseId, lessonId) {
   const lesson = course && lessonsOf(course).find(l => l.id === lessonId);
   if (!lesson) { location.hash = `#/${courseId}`; return; }
   if (run?.lesson === lesson && !run.state.done) return;
-  run = { lesson, courseId, state: E.start(lesson), seed: (Math.random() * 1e9) | 0, t0: Date.now(), step: 0 };
+  // history — снимки пройденных карточек для просмотра назад; view — какой из них открыт (null — живая карточка)
+  run = { lesson, courseId, state: E.start(lesson), seed: (Math.random() * 1e9) | 0, t0: Date.now(), step: 0, history: [], view: null, lastFb: null, liveHost: null };
   document.body.classList.add('in-lesson');
   lessonEl.hidden = false;
   lessonEl.innerHTML = `<div class="l-top">
-      <button class="x" id="lx" aria-label="Выйти из урока">✕</button>
+      <span class="l-nav"><button class="x" id="lx" aria-label="Выйти из урока">✕</button><button class="x" id="lback" aria-label="Предыдущая карточка" title="Перечитать прошлые карточки" disabled>‹</button></span>
       <div class="pbar" role="progressbar" aria-label="Прогресс урока"><i id="lp" style="width:0"></i></div>
       <span class="l-count" id="lc"></span>
     </div>
     <div class="l-body" id="lb"></div>
-    <div class="l-foot" id="lf"><div class="in"><div class="fb" id="lfb" aria-live="polite"></div><button class="cta-btn" id="lbtn"></button></div></div>`;
+    <div class="l-foot" id="lf"><div class="in"><div class="fb" id="lfb" aria-live="polite"></div><button class="cta-btn" id="lbtn"></button></div></div>
+    <div class="l-foot review" id="lr" hidden><div class="in"><div class="fb" id="lrfb" aria-live="polite"></div><div class="nav-btns"><button class="ghost-btn" id="rvPrev">‹ Назад</button><button class="cta-btn" id="rvNext"></button></div></div></div>`;
   $('#lx').onclick = () => leave();
+  $('#lback').onclick = () => (run.view === null ? review(run.history.length - 1) : review(run.view - 1));
+  $('#rvPrev').onclick = () => review(run.view - 1);
+  $('#rvNext').onclick = () => (run.view + 1 < run.history.length ? review(run.view + 1) : backToLive());
   showCard();
 }
 
@@ -184,6 +189,8 @@ function showCard() {
   else if (card.t === 'learn') host.innerHTML = '<span class="tag">Новое</span>';
   else if (card.t === 'rig') host.innerHTML = '<span class="tag">Попробуй сам</span>';
   body.replaceChildren(host);
+  run.liveHost = host;
+  $('#lback').disabled = run.history.length === 0;
 
   let phase = 'input';   // input → feedback
   let completed = false;
@@ -201,6 +208,7 @@ function showCard() {
 
   function showFeedback(ok, text, title) {
     phase = 'feedback';
+    run.lastFb = { ok, title, text };
     foot.className = 'l-foot ' + (ok ? 'ok' : 'bad');
     fb.innerHTML = `<b>${esc(title)}</b>${text ? `<p>${esc(text)}</p>` : ''}`;
     btn.disabled = false;
@@ -240,7 +248,45 @@ function showCard() {
   };
 }
 
+/* ---------- просмотр пройденных карточек: только чтение ---------- */
+function snapshot() {
+  const node = run.liveHost.cloneNode(true);
+  node.querySelectorAll('button').forEach(b => { b.disabled = true; b.tabIndex = -1; });
+  node.querySelector('.tag')?.remove();
+  node.insertAdjacentHTML('afterbegin', '<span class="tag past">↺ Пройдено — только для чтения</span>');
+  run.history.push({ node, fb: run.lastFb });
+  run.lastFb = null;
+}
+
+function review(i) {
+  if (i < 0 || i >= run.history.length) return;
+  const body = $('#lb'), entry = run.history[i];
+  run.view = i;
+  body.replaceChildren(entry.node);
+  body.scrollTop = 0;
+  $('#lf').hidden = true;
+  const foot = $('#lr');
+  foot.hidden = false;
+  foot.className = 'l-foot review' + (entry.fb ? (entry.fb.ok ? ' ok' : ' bad') : '');
+  $('#lrfb').innerHTML = entry.fb
+    ? `<b>${esc(entry.fb.title)}</b>${entry.fb.text ? `<p>${esc(entry.fb.text)}</p>` : ''}`
+    : `<span class="past-n">Карточка ${i + 1} из ${run.history.length} пройденных</span>`;
+  $('#rvPrev').disabled = i === 0;
+  $('#lback').disabled = i === 0;
+  $('#rvNext').textContent = i + 1 < run.history.length ? 'Вперёд ›' : run.state.done ? 'К итогам ►' : 'Вернуться к уроку ►';
+  $('#rvNext').focus({ preventScroll: true });
+}
+
+function backToLive() {
+  run.view = null;
+  $('#lb').replaceChildren(run.liveHost);
+  $('#lr').hidden = true;
+  $('#lf').hidden = run.state.done;
+  $('#lback').disabled = run.history.length === 0;
+}
+
 function advance() {
+  snapshot();
   E.next(run.state);
   if (run.state.done) finish();
   else showCard();
@@ -261,6 +307,8 @@ function finish() {
   $('#lp').style.width = '100%';
   $('#lc').textContent = `${state.total} / ${state.total}`;
   $('#lf').hidden = true;
+  $('#lback').disabled = false;
+  run.key = null;   // иначе Enter нажмёт скрытую «Дальше» и засчитает урок второй раз
   $('#lb').innerHTML = `<div class="result card">
     <div class="big-stars" aria-label="${res.stars} из 3 звёзд">${starsHtml(res.stars)}</div>
     <h2>${title}</h2>
@@ -273,6 +321,7 @@ function finish() {
     ${lesson.boss ? '<p class="lede">Ты разобрался, как код .NET проходит путь от текста на C# до команд процессора. Следующие разделы курса — скоро.</p>' : ''}
     <div class="row-btns">
       ${next ? '<button class="cta-btn" id="rNext">Следующий урок ►</button>' : '<button class="cta-btn" id="rMap">К курсу ►</button>'}
+      <button class="ghost-btn" id="rReview">Перечитать урок</button>
       <button class="ghost-btn" id="rAgain">Пройти ещё раз</button>
       ${next ? '<button class="ghost-btn" id="rMap">К курсу</button>' : ''}
     </div>
@@ -281,6 +330,8 @@ function finish() {
   if (next) $('#rNext').onclick = () => go(`#/${courseId}/${next.id}`);
   $('#rMap').onclick = () => go(`#/${courseId}`);
   $('#rAgain').onclick = () => { closeLesson(); openLesson(courseId, lesson.id); };
+  $('#rReview').onclick = () => review(0);
+  run.liveHost = $('#lb').firstElementChild;
   ($('#rNext') ?? $('#rMap')).focus();
 }
 
@@ -315,8 +366,19 @@ addEventListener('keydown', e => {
     if (e.key === 'Escape') { e.preventDefault(); askClose(false); }
     return;
   }
-  if (!run?.key) return;
+  if (!run) return;
+  if (run.view !== null) {
+    // в просмотре прошлого стрелки листают, Esc возвращает к уроку, а не закрывает его
+    if (e.key === 'ArrowLeft') review(run.view - 1);
+    else if (e.key === 'ArrowRight' || e.key === 'Enter') $('#rvNext').click();
+    else if (e.key === 'Escape') backToLive();
+    else return;
+    e.preventDefault();
+    return;
+  }
   if (e.key === 'Escape') { leave(); return; }
+  if (e.key === 'ArrowLeft' && run.history.length && !e.altKey) { review(run.history.length - 1); e.preventDefault(); return; }
+  if (!run.key) return;
   if (run.key(e)) e.preventDefault();
 });
 
