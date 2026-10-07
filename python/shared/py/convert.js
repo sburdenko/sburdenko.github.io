@@ -2,8 +2,8 @@
 import {
   PyInt, PyBool, PyFloat, PyStr, PyBytes, PyList, PyTuple, PyDict, PySet, PyRange, PyFunction, PyBuiltin, PyMethod, PyClass, PyInstance,
   PyGenerator, PyModule, PyProperty, PyIterator, PySlice, NONE, ELLIPSIS, TRUE, FALSE, reprStr, reprBytes, floatRepr, str, isInt, typeName, isIntLike, TYPES,
-} from './objects.js?v=202609271602';
-import { raise, excArgs, isExceptionClass } from './errors.js?v=202609271602';
+} from './objects.js?v=202610071637';
+import { raise, excArgs, isExceptionClass } from './errors.js?v=202610071637';
 
 export function* reprOf(interp, o, seen = new Set()) {
   if ((o instanceof PyList || o instanceof PyDict || o instanceof PyTuple) && o.cls && o.cls.dict.has('__repr__') && !o.cls.builtin) {

@@ -6,10 +6,10 @@ import {
   PyInt, PyBool, PyFloat, PyStr, PyBytes, PyList, PyTuple, PyDict, PySet, PyRange, PyFunction, PyBuiltin, PyMethod, PyClass, PyInstance,
   PyGenerator, PyModule, PyProperty, PyStaticMethod, PyClassMethod, PyIterator, PySlice, PyError, NONE, TRUE, FALSE, ELLIPSIS,
   int, float, bool, str, internStr, hashKey, UNHASHABLE, typeName, typeOf, isIntLike, isInstance, TYPES, isCallable,
-} from './objects.js?v=202609271602';
-import { EXC, makeExc, raise, pyError, isExceptionClass, excArgs } from './errors.js?v=202609271602';
-import { reprOf, strOf, formatValue } from './convert.js?v=202609271602';
-import { binop, unary, compare, truthy, iterate, toList, getitem, setitem, delitem, STOP, NOT_IMPLEMENTED, equals, hashReady } from './ops.js?v=202609271602';
+} from './objects.js?v=202610071637';
+import { EXC, makeExc, raise, pyError, isExceptionClass, excArgs } from './errors.js?v=202610071637';
+import { reprOf, strOf, formatValue } from './convert.js?v=202610071637';
+import { binop, unary, compare, truthy, iterate, toList, getitem, setitem, delitem, STOP, NOT_IMPLEMENTED, equals, hashReady } from './ops.js?v=202610071637';
 
 export class StepLimit extends Error { constructor(max) { super(`step limit ${max}`); this.max = max; } }
 
@@ -117,6 +117,7 @@ export class Interp {
     this.clock = 0;
     this.constTuples = new Map();
     this.quiet = 0;
+    this.captureError = null;
   }
 
   /** stdout and the console transcript differ only by the echo of what the user typed into input(). */
@@ -842,7 +843,11 @@ export class Interp {
       const ctl = yield* this.execBlock(fn.body, scope);
       return ctl && ctl.type === 'return' ? ctl.value : NONE;
     } catch (e) {
-      if (e instanceof PyError) { e.tb = e.tb || []; e.tb.unshift({ name: fn.name, line: frame.line }); }
+      if (e instanceof PyError) {
+        e.tb = e.tb || [];
+        e.tb.unshift({ name: fn.name, line: frame.line });
+        if (!e.mem && this.captureError) e.mem = this.captureError();
+      }
       throw e;
     } finally {
       this.frames.pop();

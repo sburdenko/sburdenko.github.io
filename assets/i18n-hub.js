@@ -79,5 +79,12 @@ export const HUB = {
     ru: '<span class="n">3</span><h3>Проверяй на практике</h3><p>Модели здесь учебные и упрощённые. Настоящие ответы дают Unity Profiler, Frame Debugger и замеры на целевом железе.</p>'
   },
   'foot.stop': { en: '■ END OF SHELF', ru: '■ КОНЕЦ ПОЛКИ' },
-  'foot.src': { en: 'Source code and models:', ru: 'Исходники и модели:' }
+  'foot.src': { en: 'Source code and models:', ru: 'Исходники и модели:' },
+  'hub.pyH2': { en: 'Stand B · Python', ru: 'Стенд B · Python' },
+  'hub.pyLede': {
+    en: 'An interactive Python textbook in six tapes: every snippet runs in the browser line by line with a live memory picture, thirty algorithm problems with their own rigs, quizzes and local progress.',
+    ru: 'Интерактивный учебник Python из шести кассет: каждый фрагмент выполняется в браузере строка за строкой с живой картинкой памяти, тридцать алгоритмических задач со своими стендами, квизы и локальный прогресс.'
+  },
+  'hub.pyGo': { en: 'Open the stand: map, progress and setup notes ►', ru: 'Открыть стенд: карта, прогресс и установка ►' },
+  'hub.pySoon': { en: 'RECORDING…', ru: 'ЗАПИСЫВАЕТСЯ…' }
 };

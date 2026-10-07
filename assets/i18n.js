@@ -3,7 +3,7 @@
  * Значение может быть строкой или функцией — тогда t('ключ', ...args) вызывает её.
  * Разметка помечается data-i18n / data-i18n-title / data-i18n-aria.
  */
-import { setLocale } from './vhs.js?v=202609271602';
+import { setLocale } from './vhs.js?v=202610071637';
 
 export const LANGS = ['en', 'ru'];
 const STORE_KEY = 'tape-lang';
@@ -68,6 +68,9 @@ function syncSwitch() {
   document.querySelectorAll('#langSeg button').forEach(b =>
     b.setAttribute('aria-pressed', b.dataset.l === lang ? 'true' : 'false'));
 }
+
+/** Переводит разметку внутри одного элемента — для стендов, которые строят DOM после загрузки страницы. */
+export const applyTo = root => applyDom(root);
 
 /** Регистрирует словарь, выбирает язык и раскладывает тексты по разметке. */
 export function initI18n(dict) {

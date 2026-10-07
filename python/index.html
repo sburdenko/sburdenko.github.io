@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0715">
+<title data-i18n="page.title">Python stand · six tapes</title>
+<meta name="description" content="Stand B: an interactive Python textbook in six tapes. Every example runs in the browser step by step with a live picture of memory; thirty algorithm problems with their own rigs; quizzes and progress.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
+<link rel="stylesheet" href="../assets/vhs.css?v=202610071637">
+<link rel="stylesheet" href="./shared/style.css?v=202610071637">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
+<script>
+(function () {
+  var shown = false;
+  function report(what) {
+    if (shown) return;
+    shown = true;
+    var box = document.createElement('div');
+    box.setAttribute('role', 'alert');
+    box.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99;padding:12px 16px;background:#ff5c6c;color:#1a0009;font:600 13px/1.5 ui-monospace,Menlo,Consolas,monospace';
+    box.textContent = 'Scripts failed to load — press Cmd/Ctrl + Shift + R to hard-reload. Скрипты не загрузились — обнови страницу с Cmd/Ctrl + Shift + R. [' + what + ']';
+    (document.body || document.documentElement).appendChild(box);
+  }
+  addEventListener('error', function (e) { var el = e.target; if (el && (el.tagName === 'SCRIPT' || el.tagName === 'LINK')) report(el.src || el.href); else report(e.message || 'script error'); }, true);
+  addEventListener('unhandledrejection', function (e) { report(String((e.reason && e.reason.message) || e.reason)); });
+})();
+</script>
+</head>
+<body>
+<div class="fx fx-scan" aria-hidden="true"></div>
+<div class="fx fx-grain" aria-hidden="true"></div>
+<div class="fx fx-vig" aria-hidden="true"></div>
+<div class="fx fx-track" aria-hidden="true"></div>
+<canvas id="noise" width="160" height="90" aria-hidden="true"></canvas>
+
+<header class="osd" data-i18n-aria="osd.bar">
+  <div class="l"><a class="home" href="../" data-i18n="osd.shelf">◀ SHELF</a><span class="play">PLAY ►</span><span class="ch" id="osdCh">STAND B</span></div>
+  <div class="r">
+    <nav id="osdNav" data-i18n-aria="osd.nav"></nav>
+    <div class="seg lang" id="langSeg" role="group" data-i18n-aria="osd.lang"><button data-l="en" aria-pressed="true">EN</button><button data-l="ru" aria-pressed="false">RU</button></div>
+    <span>SP</span><span class="ctr" id="osdCtr">0:00:00</span>
+  </div>
+</header>
+
+<main>
+<section class="chapter hero" id="stand" data-ch="STAND B · PYTHON" style="padding-top:56px">
+  <p class="eyebrow" data-i18n="stand.eyebrow">Stand B · Python · six tapes</p>
+  <h1 class="title"><span data-i18n="stand.title">Python</span><span class="title-2" data-i18n="stand.subtitle">a textbook you can step through</span></h1>
+  <p class="kicker hero-lede" data-i18n="stand.lede"></p>
+  <div class="lesson" data-i18n="stand.howto"></div>
+  <div class="shelf py" id="pyShelf"></div>
+</section>
+
+<section class="chapter" id="progress" data-ch="PROGRESS">
+  <div class="ch-head"><p class="osdtag py">// PROGRESS</p><h2 data-i18n="stand.progressH"></h2><p class="kicker" data-i18n="stand.progressLede"></p></div>
+  <div id="standProgress"></div>
+</section>
+
+<section class="chapter" id="setup" data-ch="SETUP">
+  <div class="ch-head"><p class="osdtag py">// SETUP</p><h2 data-i18n="stand.setupH"></h2></div>
+  <div class="lesson" data-i18n="stand.setup"></div>
+</section>
+</main>
+
+<footer>
+  <span class="stop" data-i18n="foot.stop">■ END OF STAND</span>
+  <p><span data-i18n="foot.src">Source code and models:</span> <a href="https://github.com/sburdenko/sburdenko.github.io">github.com/sburdenko/sburdenko.github.io</a></p>
+</footer>
+
+<script type="module" src="./page.js?v=202610071637"></script>
+</body>
+</html>

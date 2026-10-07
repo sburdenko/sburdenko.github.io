@@ -2,14 +2,14 @@
  * runProgram(source, options) → { events, out, error, lines }.
  * Each event is a frozen { kind, line, printed, mem, … } with the memory snapshot taken right after the step.
  */
-import { parse } from './parser.js?v=202609271602';
-import { PySyntaxError } from './lexer.js?v=202609271602';
-import { Interp, StepLimit } from './interp.js?v=202609271602';
-import { installBuiltins } from './builtins.js?v=202609271602';
-import { installModules } from './modules.js?v=202609271602';
-import { snapshot } from './snapshot.js?v=202609271602';
-import { PyError, resetIds } from './objects.js?v=202609271602';
-import { strOf } from './convert.js?v=202609271602';
+import { parse } from './parser.js?v=202610071637';
+import { PySyntaxError } from './lexer.js?v=202610071637';
+import { Interp, StepLimit } from './interp.js?v=202610071637';
+import { installBuiltins } from './builtins.js?v=202610071637';
+import { installModules } from './modules.js?v=202610071637';
+import { snapshot } from './snapshot.js?v=202610071637';
+import { PyError, resetIds } from './objects.js?v=202610071637';
+import { strOf } from './convert.js?v=202610071637';
 
 export const MAX_STEPS = 400;
 
@@ -32,8 +32,9 @@ export function runProgram(source, { inputs = [], maxSteps = MAX_STEPS, recursio
     throw e;
   }
   const interp = createInterp({ inputs, maxSteps, recursionLimit, files });
-  const push = ev => {
-    const mem = snapshots ? snapshot(interp) : null;
+  /* The picture of an uncaught error is taken while the failing frames are still on the stack. */
+  interp.captureError = () => (snapshots ? snapshot(interp) : null);
+  const push = (ev, mem = snapshots ? snapshot(interp) : null) => {
     events.push(Object.freeze({ ...ev, mem, out: interp.transcript }));
   };
   let error = null;
@@ -50,7 +51,7 @@ export function runProgram(source, { inputs = [], maxSteps = MAX_STEPS, recursio
       const message = messageOf(interp, exc);
       const tb = [{ name: '<module>', line: topLine(interp, e) }, ...(e.tb || [])];
       error = { type: exc.cls.name, message, line: tb.at(-1).line, traceback: tb, cause: causeOf(interp, exc) };
-      push({ kind: 'error', line: tb.at(-1).line, printed: interp.stepOut.join(''), touched: [], exc: exc.cls.name, msg: message, traceback: tb });
+      push({ kind: 'error', line: tb.at(-1).line, printed: interp.stepOut.join(''), touched: [], exc: exc.cls.name, msg: message, traceback: tb }, e.mem || (snapshots ? snapshot(interp) : null));
     } else if (e instanceof StepLimit) {
       error = { type: 'StepLimit', message: `more than ${maxSteps} steps`, line: interp.curLine, traceback: [] };
     } else {
