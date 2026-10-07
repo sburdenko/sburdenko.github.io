@@ -2,8 +2,8 @@
  * Structure views for algorithm rigs: bars, cells, grid, stack, queue, call stack… drawn from the memory snapshot.
  * A rig declares `view: { kind, of: 'nums', pointers: ['i', 'j'], … }`; the data is whatever those names hold right now.
  */
-import { svg, text, cells, pointers, barLayout, bars, gridCells, CELL, STEP, rowWidth } from '../../algorithms/patterns/view-kit.js?v=202610071658';
-import { esc } from '../../assets/vhs.js?v=202610071658';
+import { svg, text, cells, pointers, barLayout, bars, gridCells, CELL, STEP, rowWidth } from '../../algorithms/patterns/view-kit.js?v=202610071708';
+import { esc } from '../../assets/vhs.js?v=202610071708';
 
 function find(mem, name) {
   for (let i = mem.frames.length - 1; i >= 0; i--) {
@@ -197,12 +197,64 @@ export function tuplesOf(mem, name) {
   return obj.items.map(id => mem.objects[id]).filter(t => t && t.items).map(t => t.items.map(id => numberOf(mem.objects[id])));
 }
 
+/* ---------- heap tree: a list drawn as the binary tree it encodes ---------- */
+function heapTreeView(spec, mem, event) {
+  const { id, items } = listOf(mem, spec.of);
+  const values = items.map(valueText);
+  if (!values.length) return empty(spec.of);
+  const touched = touchedOn(event, id);
+  const depth = Math.floor(Math.log2(values.length));
+  const width = Math.max(120, 2 ** depth * 56), px = i => { const d = Math.floor(Math.log2(i + 1)); const pos = i - (2 ** d - 1); const slots = 2 ** d; return width / slots * (pos + 0.5); };
+  const py = i => 24 + Math.floor(Math.log2(i + 1)) * 56;
+  let s = '';
+  values.forEach((_, i) => { if (i > 0) { const parent = (i - 1) >> 1; s += `<line class="edge" x1="${px(parent)}" y1="${py(parent)}" x2="${px(i)}" y2="${py(i)}"/>`; } });
+  values.forEach((v, i) => { const cls = touched.get(i) === 'write' ? 'cur' : touched.get(i) === 'read' ? 'hit' : i === 0 ? 'root' : ''; s += `<circle class="node ${cls}" cx="${px(i)}" cy="${py(i)}" r="18"/>` + text(px(i), py(i), v, 'nt small') + text(px(i), py(i) + 28, i, 'idx'); });
+  return svg(width, 24 + (depth + 1) * 56 + 4, s);
+}
+
+/* ---------- hash table: how a dict places its keys (illustrative hashes) ---------- */
+export function illustrativeHash(key) {
+  if (/^-?\d+$/.test(key)) return Number(key);
+  let h = 7;
+  for (const ch of key) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return h;
+}
+function hashTableView(spec, mem, event) {
+  const { id, obj } = find(mem, spec.of);
+  if (!obj || !obj.entries) return empty(spec.of);
+  const keys = obj.keyTexts || [];
+  let size = 8;
+  while (keys.length * 3 >= size * 2) size *= 2;
+  const table = new Array(size).fill(null), probes = [];
+  keys.forEach((k, idx) => {
+    const key = unquote(k);
+    const h = illustrativeHash(key);
+    let i = h % size, hops = 0;
+    while (table[i] !== null) { i = (i + 1) % size; hops++; }
+    table[i] = { key, h, hops, idx };
+    probes.push(hops);
+  });
+  const touchedKeys = new Set((event.touched || []).filter(t => t.id === id).map(t => String(t.key)));
+  const cw = 64, rowH = 44;
+  let s = text(size * cw / 2, 12, `${keys.length} keys · ${size} slots · load ${Math.round(100 * keys.length / size)}%`, 'lbl-c');
+  table.forEach((slot, i) => {
+    const x = i * cw + 4;
+    const hot = slot && touchedKeys.has(slot.key.length === 1 || /^-?\d+$/.test(slot.key) ? (/^-?\d+$/.test(slot.key) ? 'i' + slot.key : 's' + slot.key) : 's' + slot.key);
+    s += `<rect class="cell${slot ? (hot ? ' cur' : slot.hops ? ' win' : ' ok') : ''}" x="${x}" y="24" width="${cw - 8}" height="${rowH}" rx="6"/>`;
+    s += text(x + (cw - 8) / 2, 20 + rowH + 16, i, 'idx');
+    if (slot) { s += text(x + (cw - 8) / 2, 24 + rowH / 2 - 7, slot.key.length > 7 ? slot.key.slice(0, 6) + '…' : slot.key, 'cv small'); s += text(x + (cw - 8) / 2, 24 + rowH / 2 + 10, slot.hops ? `h%${size}=${slot.h % size} +${slot.hops}` : `h%${size}=${slot.h % size}`, 'idx'); }
+  });
+  return svg(size * cw + 4, 24 + rowH + 30, s);
+}
+
 const empty = name => svg(160, 40, text(80, 20, `${name} = ?`, 'idx'));
 
 export function structView(spec, mem, event, run) {
   switch (spec.kind) {
     case 'bars': return barsView(spec, mem, event);
     case 'numbers': return numbersView(spec, mem);
+    case 'heaptree': return heapTreeView(spec, mem, event);
+    case 'hashtable': return hashTableView(spec, mem, event);
     case 'cells': case 'string': return cellsView(spec, mem, event);
     case 'grid': return gridView(spec, mem, event);
     case 'stack': return stackView(spec, mem);

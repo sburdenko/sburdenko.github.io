@@ -2,7 +2,7 @@
  * Memory diagram: frames with names on the left, objects on the right, arrows in between.
  * Pure function of a snapshot (see py/snapshot.js), so it can be tested without a DOM.
  */
-import { esc } from '../../assets/vhs.js?v=202610071658';
+import { esc } from '../../assets/vhs.js?v=202610071708';
 
 const ATOMS = new Set(['int', 'float', 'str', 'bool', 'NoneType', 'bytes', 'range']);
 const CH = 7.3, FONT = 12;
@@ -57,7 +57,8 @@ function childrenOf(o) {
 function boxOf(id, o, mem, boxed, flags) {
   const cls = `obj ${o.type} ${o.immutable ? 'imm' : 'mut'}${flags.changed.has(id) ? ' changed' : ''}${flags.error === id ? ' err' : ''}`;
   const head = `${o.type === 'instance' ? o.cls : o.type === 'class' ? 'class' : o.type}${o.length != null && !isAtom(o) ? ` · ${o.length}` : ''}`;
-  const inline = cid => { const c = mem.objects[cid]; return c && isAtom(c) && !boxed.has(cid) ? short(atomText(c), 10) : null; };
+  /* Atoms are always drawn inline inside containers; a named atom gets its own box as well. */
+  const inline = cid => { const c = mem.objects[cid]; return c && isAtom(c) ? short(atomText(c), 10) : null; };
   const cellW = ids => Math.max(CELL, Math.min(96, ...ids.map(cid => { const v = inline(cid); return v === null ? CELL : tw(v) + 12; })));
   const cellsRow = (ids, y0, x0, showIndex, touchedKeys, cw) => {
     let svg = '';

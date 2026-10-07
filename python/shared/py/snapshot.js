@@ -2,7 +2,7 @@
 import {
   PyInt, PyBool, PyFloat, PyStr, PyBytes, PyList, PyTuple, PyDict, PySet, PyRange, PyFunction, PyBuiltin, PyMethod, PyClass, PyInstance,
   PyGenerator, PyModule, PyProperty, PyStaticMethod, PyClassMethod, PyIterator, NONE, TRUE, FALSE, reprStr, floatRepr, reprBytes,
-} from './objects.js?v=202610071658';
+} from './objects.js?v=202610071708';
 
 const MAX_ITEMS = 80;
 const shortRepr = s => (s.length > 40 ? s.slice(0, 37) + '…' : s);

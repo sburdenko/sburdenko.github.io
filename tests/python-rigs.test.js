@@ -34,7 +34,7 @@ for (const tape of CATALOG.filter(t => t.ready)) {
       for (const params of inputs) {
         if (rig.check && rig.check(params)) continue;
         const src = sourceOf(rig, params), stdin = stdinOf(rig, params);
-        const ours = runProgram(src, { inputs: stdin, maxSteps: rig.maxSteps ?? 400, recursionLimit: rig.recursionLimit ?? 1000, files: rig.files || {}, snapshots: false });
+        const ours = runProgram(src, { inputs: stdin, maxSteps: rig.maxSteps ?? 400, recursionLimit: rig.recursionLimit ?? 1000, files: rig.files || {}, snapshots: params === inputs[0] });
         assert.ok(!ours.error || (ours.error.type !== 'StepLimit' && !ours.error.internal), `${rig.id}: ${ours.error && ours.error.message}`);
         assert.ok(ours.events.length > 0);
         for (const e of ours.events) assert.ok(e.line >= 0 && e.line <= src.split('\n').length, `${rig.id}: line ${e.line} out of range`);

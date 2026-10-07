@@ -2,7 +2,7 @@
  * Text for one step. A rig may narrate its own lines through dictionary keys `rig.<id>.l<line>` (or `…l<line>:<kind>`),
  * which receive the event; otherwise the generic explanation of the event kind is used.
  */
-import { t } from '../../assets/i18n.js?v=202610071658';
+import { t } from '../../assets/i18n.js?v=202610071708';
 
 const tryKey = (key, event) => { const text = t(key, event); return text === key ? null : text; };
 

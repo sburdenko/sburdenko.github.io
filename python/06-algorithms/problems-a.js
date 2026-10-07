@@ -1,7 +1,7 @@
 /** PY-06 problems 1–19: first steps, numbers, search, sorting. Each problem carries its rig. */
-import { lit } from '../shared/py-code.js?v=202610071658';
-import { randInt, pick, randInts, distinctInts, shuffle } from '../../algorithms/patterns/rig-kit.js?v=202610071658';
-import { tuplesOf } from '../shared/struct-views.js?v=202610071658';
+import { lit } from '../shared/py-code.js?v=202610071708';
+import { randInt, pick, randInts, distinctInts, shuffle } from '../../algorithms/patterns/rig-kit.js?v=202610071708';
+import { tuplesOf } from '../shared/struct-views.js?v=202610071708';
 
 const num = (key, extra = {}) => ({ key, type: 'int', min: 0, max: 999, ...extra });
 const ints = (key, extra = {}) => ({ key, type: 'ints', minLen: 1, maxLen: 10, min: 0, max: 99, ...extra });

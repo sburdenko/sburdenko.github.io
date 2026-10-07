@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0715">
+<title data-i18n="page.title">Collections, deeply · PY-03</title>
+<meta name="description" content="Lists and their growth, tuples, dict as a hash table, sets, stack and queue, heap, comprehensions, iterators and generators, stable sorting. Every example runs in the browser step by step.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
+<link rel="stylesheet" href="../../assets/vhs.css?v=202610071708">
+<link rel="stylesheet" href="../shared/style.css?v=202610071708">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
+<script>
+(function () {
+  var shown = false;
+  function report(what) {
+    if (shown) return;
+    shown = true;
+    var box = document.createElement('div');
+    box.setAttribute('role', 'alert');
+    box.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99;padding:12px 16px;background:#ff5c6c;color:#1a0009;font:600 13px/1.5 ui-monospace,Menlo,Consolas,monospace';
+    box.textContent = 'Scripts failed to load — press Cmd/Ctrl + Shift + R to hard-reload. Скрипты не загрузились — обнови страницу с Cmd/Ctrl + Shift + R. [' + what + ']';
+    (document.body || document.documentElement).appendChild(box);
+  }
+  addEventListener('error', function (e) { var el = e.target; if (el && (el.tagName === 'SCRIPT' || el.tagName === 'LINK')) report(el.src || el.href); else report(e.message || 'script error'); }, true);
+  addEventListener('unhandledrejection', function (e) { report(String((e.reason && e.reason.message) || e.reason)); });
+})();
+</script>
+</head>
+<body>
+<div class="fx fx-scan" aria-hidden="true"></div>
+<div class="fx fx-grain" aria-hidden="true"></div>
+<div class="fx fx-vig" aria-hidden="true"></div>
+<div class="fx fx-track" aria-hidden="true"></div>
+<canvas id="noise" width="160" height="90" aria-hidden="true"></canvas>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <marker id="pat-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-edge" d="M0 0L10 5L0 10z"/></marker>
+  <marker id="pat-ah-amb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-amb" d="M0 0L10 5L0 10z"/></marker>
+  <marker id="pat-ah-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-ok" d="M0 0L10 5L0 10z"/></marker>
+</defs></svg>
+
+<header class="osd" data-i18n-aria="osd.bar">
+  <div class="l"><a class="home" href="../../" data-i18n="osd.shelf">◀ SHELF</a><a class="home" href="../" data-i18n="py.osd.stand">PYTHON</a><span class="play">PLAY ►</span><span class="ch" id="osdCh">CH.00 MAP</span></div>
+  <div class="r">
+    <nav id="osdNav" data-i18n-aria="osd.nav"></nav>
+    <div class="seg lang" id="langSeg" role="group" data-i18n-aria="osd.lang"><button data-l="en" aria-pressed="true">EN</button><button data-l="ru" aria-pressed="false">RU</button></div>
+    <span>SP</span><span class="ctr" id="osdCtr">0:00:00</span>
+  </div>
+</header>
+
+<main>
+<section class="chapter hero" id="map" data-ch="CH.00 MAP" style="padding-top:56px">
+  <p class="eyebrow" data-i18n="hero.eyebrow">PY-03 · Python · stand B</p>
+  <h1 class="title"><span data-i18n="hero.title">Collections</span><span class="title-2" data-i18n="hero.subtitle">list, tuple, dict, set — and what they cost</span></h1>
+  <p class="kicker hero-lede" data-i18n="hero.lede"></p>
+  <h3 data-i18n="hero.mapH">Chapters</h3>
+  <nav class="pmap" id="chapterMap" data-i18n-aria="osd.nav"></nav>
+  <div id="tapeProgress"></div>
+</section>
+
+<section class="chapter" id="list" data-ch="CH.01 LIST">
+  <div class="ch-head"><p class="osdtag py">CH.01 // LIST</p><h2 data-i18n="ch.list.h2"></h2><p class="kicker" data-i18n="ch.list.lede"></p></div>
+  <div class="lesson" data-i18n="ch.list.body"></div>
+  <div data-rig="listops"></div>
+  <div class="lesson" data-i18n="ch.list.body2"></div>
+  <div data-rig="listcopy"></div>
+  <div data-quiz="q-listalias"></div>
+  <div data-quiz="q-shallow"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.list.hood"></div><div data-rig="listgrow"></div><div data-rig="listcost"></div></details>
+  <div class="chapter-done" data-chapter="01"></div>
+</section>
+
+<section class="chapter" id="tuple" data-ch="CH.02 TUPLE">
+  <div class="ch-head"><p class="osdtag py">CH.02 // TUPLE</p><h2 data-i18n="ch.tuple.h2"></h2><p class="kicker" data-i18n="ch.tuple.lede"></p></div>
+  <div class="lesson" data-i18n="ch.tuple.body"></div>
+  <div data-rig="tuples"></div>
+  <div data-quiz="q-tuple"></div>
+  <div class="lesson" data-i18n="ch.tuple.body2"></div>
+  <div data-rig="tuplekey"></div>
+  <div data-quiz="q-dictkey"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.tuple.hood"></div></details>
+  <div class="chapter-done" data-chapter="02"></div>
+</section>
+
+<section class="chapter" id="dict" data-ch="CH.03 DICT">
+  <div class="ch-head"><p class="osdtag py">CH.03 // DICT</p><h2 data-i18n="ch.dict.h2"></h2><p class="kicker" data-i18n="ch.dict.lede"></p></div>
+  <div class="lesson" data-i18n="ch.dict.body"></div>
+  <div data-rig="dictbasic"></div>
+  <div data-quiz="q-dictget"></div>
+  <div class="lesson" data-i18n="ch.dict.body2"></div>
+  <div data-rig="defaultdict"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.dict.hood"></div><div data-rig="hashtable"></div><div class="hb" data-i18n="ch.dict.hood2"></div></details>
+  <div class="chapter-done" data-chapter="03"></div>
+</section>
+
+<section class="chapter" id="set" data-ch="CH.04 SET">
+  <div class="ch-head"><p class="osdtag py">CH.04 // SET</p><h2 data-i18n="ch.set.h2"></h2><p class="kicker" data-i18n="ch.set.lede"></p></div>
+  <div class="lesson" data-i18n="ch.set.body"></div>
+  <div data-rig="setops"></div>
+  <div data-quiz="q-set"></div>
+  <div class="lesson" data-i18n="ch.set.body2"></div>
+  <div data-rig="setvslist"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.set.hood"></div></details>
+  <div class="chapter-done" data-chapter="04"></div>
+</section>
+
+<section class="chapter" id="stackq" data-ch="CH.05 STACK · QUEUE">
+  <div class="ch-head"><p class="osdtag py">CH.05 // STACK · QUEUE</p><h2 data-i18n="ch.stackq.h2"></h2><p class="kicker" data-i18n="ch.stackq.lede"></p></div>
+  <div class="lesson" data-i18n="ch.stackq.body"></div>
+  <div data-rig="stackq"></div>
+  <div data-quiz="q-popzero"></div>
+  <div class="lesson" data-i18n="ch.stackq.body2"></div>
+  <div data-rig="popzero"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.stackq.hood"></div></details>
+  <div class="chapter-done" data-chapter="05"></div>
+</section>
+
+<section class="chapter" id="heap" data-ch="CH.06 HEAP">
+  <div class="ch-head"><p class="osdtag py">CH.06 // HEAP</p><h2 data-i18n="ch.heap.h2"></h2><p class="kicker" data-i18n="ch.heap.lede"></p></div>
+  <div class="lesson" data-i18n="ch.heap.body"></div>
+  <div data-rig="heap"></div>
+  <div data-quiz="q-heap"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.heap.hood"></div></details>
+  <div class="chapter-done" data-chapter="06"></div>
+</section>
+
+<section class="chapter" id="comp" data-ch="CH.07 COMPREHENSIONS">
+  <div class="ch-head"><p class="osdtag py">CH.07 // COMPREHENSIONS</p><h2 data-i18n="ch.comp.h2"></h2><p class="kicker" data-i18n="ch.comp.lede"></p></div>
+  <div class="lesson" data-i18n="ch.comp.body"></div>
+  <div data-rig="listcomp"></div>
+  <div data-quiz="q-comp"></div>
+  <div data-quiz="q-fill-comp"></div>
+  <div data-rig="dictcomp"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.comp.hood"></div></details>
+  <div class="chapter-done" data-chapter="07"></div>
+</section>
+
+<section class="chapter" id="iter" data-ch="CH.08 ITERATORS">
+  <div class="ch-head"><p class="osdtag py">CH.08 // ITERATORS · GENERATORS</p><h2 data-i18n="ch.iter.h2"></h2><p class="kicker" data-i18n="ch.iter.lede"></p></div>
+  <div class="lesson" data-i18n="ch.iter.body"></div>
+  <div data-rig="iterproto"></div>
+  <div class="lesson" data-i18n="ch.iter.body2"></div>
+  <div data-rig="generator"></div>
+  <div data-quiz="q-gen"></div>
+  <div data-quiz="q-order-gen"></div>
+  <div class="lesson" data-i18n="ch.iter.body3"></div>
+  <div data-rig="lazy"></div>
+  <div data-rig="itertools"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.iter.hood"></div></details>
+  <div class="chapter-done" data-chapter="08"></div>
+</section>
+
+<section class="chapter" id="sorting" data-ch="CH.09 SORTED">
+  <div class="ch-head"><p class="osdtag py">CH.09 // SORTED · KEY · STABLE</p><h2 data-i18n="ch.sorting.h2"></h2><p class="kicker" data-i18n="ch.sorting.lede"></p></div>
+  <div class="lesson" data-i18n="ch.sorting.body"></div>
+  <div data-rig="sortkey"></div>
+  <div class="lesson" data-i18n="ch.sorting.body2"></div>
+  <div data-rig="stable"></div>
+  <div data-quiz="q-stable"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.sorting.hood"></div></details>
+  <div class="chapter-done" data-chapter="09"></div>
+</section>
+
+<section class="chapter cheat" id="cheat" data-ch="CH.10 CHEAT SHEET">
+  <div class="ch-head"><p class="osdtag py">CH.10 // CHEAT SHEET · COSTS</p><h2 data-i18n="ch.cheat.h2"></h2><p class="kicker" data-i18n="ch.cheat.lede"></p></div>
+  <div class="tbl-wrap" data-i18n="ch.cheat.table"></div>
+  <div class="chapter-done" data-chapter="10"></div>
+</section>
+</main>
+
+<footer>
+  <span class="stop" data-i18n="foot.stop">■ END OF TAPE</span>
+  <p><a href="../02-flow/" data-i18n="py.foot.prev02">◀ PY-02 · Flow</a> · <a href="../" data-i18n="py.foot.stand">Python stand</a> · <a href="../04-strings-errors/" data-i18n="py.foot.next04">Next: PY-04 · Strings, files, errors ►</a></p>
+  <p><span data-i18n="foot.src">Source code and models:</span> <a href="https://github.com/sburdenko/sburdenko.github.io">github.com/sburdenko/sburdenko.github.io</a></p>
+</footer>
+
+<script type="module" src="./page.js?v=202610071708"></script>
+</body>
+</html>
