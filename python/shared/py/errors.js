@@ -1,5 +1,5 @@
 /** Builtin exception hierarchy and the helpers that raise Python errors from JS. */
-import { PyClass, PyInstance, PyTuple, PyError, TYPES, str, NONE } from './objects.js?v=202610071646';
+import { PyClass, PyInstance, PyTuple, PyError, TYPES, str, NONE } from './objects.js?v=202610071658';
 
 export const EXC = {};
 const exc = (name, base) => { const c = new PyClass(name, base ? [EXC[base]] : [TYPES.object]); c.isException = true; EXC[name] = c; return c; };

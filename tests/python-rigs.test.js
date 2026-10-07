@@ -11,8 +11,9 @@ const stdinOf = (rig, params) => (rig.stdin ? (typeof rig.stdin === 'function' ?
 
 /** Every rig of every ready tape: the example (and a few random inputs) run under the stand and under CPython with the same output. */
 for (const tape of CATALOG.filter(t => t.ready)) {
-  const { RIGS } = await import(`../python/${tape.dir}/rigs.js`);
-  const { QUIZZES } = await import(`../python/${tape.dir}/quizzes.js`);
+  const rigsModule = await import(`../python/${tape.dir}/${tape.id === '06' ? 'problems.js' : 'rigs.js'}`);
+  const RIGS = rigsModule.RIGS;
+  const QUIZZES = tape.id === '06' ? [] : (await import(`../python/${tape.dir}/quizzes.js`)).QUIZZES;
   const { DICT } = await import(`../python/${tape.dir}/i18n.js`);
   const ids = new Set(RIGS.map(r => r.id));
 
@@ -33,7 +34,7 @@ for (const tape of CATALOG.filter(t => t.ready)) {
       for (const params of inputs) {
         if (rig.check && rig.check(params)) continue;
         const src = sourceOf(rig, params), stdin = stdinOf(rig, params);
-        const ours = runProgram(src, { inputs: stdin, maxSteps: rig.maxSteps ?? 400, recursionLimit: rig.recursionLimit ?? 1000, files: rig.files || {} });
+        const ours = runProgram(src, { inputs: stdin, maxSteps: rig.maxSteps ?? 400, recursionLimit: rig.recursionLimit ?? 1000, files: rig.files || {}, snapshots: false });
         assert.ok(!ours.error || (ours.error.type !== 'StepLimit' && !ours.error.internal), `${rig.id}: ${ours.error && ours.error.message}`);
         assert.ok(ours.events.length > 0);
         for (const e of ours.events) assert.ok(e.line >= 0 && e.line <= src.split('\n').length, `${rig.id}: line ${e.line} out of range`);

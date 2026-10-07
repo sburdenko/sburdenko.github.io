@@ -130,7 +130,7 @@ pre.code.py .c{color:var(--ink3);font-style:italic}pre.code.py .d{color:#d7a8ff}
 .stage .cell.seen{fill:#120b20}
 .stage .cell.dim,.stage .cv.dim{opacity:.3}
 .stage .cv.seen{fill:var(--ink3)}
-.stage .cv.small{font-size:12px}
+.stage .cv.small{font-size:11px}
 .stage .ptr path{fill:var(--cpu)}
 .stage .ptr text{fill:var(--cpu);font-size:12px;font-weight:700}
 .stage .ptr.p2 path{fill:var(--gpu)}

@@ -1,5 +1,5 @@
 /** Editable rig inputs: the parsers of tape 06 plus free text, floats and stdin lines. Pure. */
-import { PARSERS, FORMATTERS } from '../../algorithms/patterns/inputs.js?v=202610071646';
+import { PARSERS, FORMATTERS } from '../../algorithms/patterns/inputs.js?v=202610071658';
 
 const fail = (key, ...args) => ({ error: [`in.err.${key}`, ...args] });
 
@@ -33,8 +33,18 @@ function parseWordsAny(text, spec) {
   return { value: words };
 }
 
+function parseMaze(text, spec) {
+  const rows = String(text).replace(/[[\]"',;|]/g, ' ').split(/\s+/).filter(Boolean);
+  if (rows.length < 1 || rows.length > spec.maxRows) return fail('gridRows', 1, spec.maxRows);
+  if (rows.some(r => !/^[.#SE]+$/.test(r))) return fail('mazeChars');
+  if (rows.some(r => r.length !== rows[0].length)) return fail('gridRagged');
+  if (rows[0].length > spec.maxCols) return fail('gridCols', spec.maxCols);
+  return { value: rows.map(r => [...r]) };
+}
+
 const ALL = {
   ...PARSERS,
+  maze: parseMaze,
   text: parseText,
   float: parseFloat1,
   lines: parseLines,
@@ -42,6 +52,7 @@ const ALL = {
 };
 const FMT = {
   ...FORMATTERS,
+  maze: v => v.map(r => r.join('')).join(' '),
   text: v => v,
   float: v => String(v),
   lines: v => v.join(' | '),
@@ -53,4 +64,5 @@ export const formatField = (value, spec) => FMT[spec.type](value);
 
 export const FIELD_ERRORS = {
   'in.err.notNum': { en: t => `“${t}” is not a number.`, ru: t => `«${t}» — не число.` },
+  'in.err.mazeChars': { en: () => 'Rows use only . # S E, e.g. S.#. ..#E', ru: () => 'Строки только из символов . # S E, например S.#. ..#E' },
 };

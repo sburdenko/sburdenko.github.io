@@ -2,7 +2,7 @@
  * Memory diagram: frames with names on the left, objects on the right, arrows in between.
  * Pure function of a snapshot (see py/snapshot.js), so it can be tested without a DOM.
  */
-import { esc } from '../../assets/vhs.js?v=202610071646';
+import { esc } from '../../assets/vhs.js?v=202610071658';
 
 const ATOMS = new Set(['int', 'float', 'str', 'bool', 'NoneType', 'bytes', 'range']);
 const CH = 7.3, FONT = 12;

@@ -2,8 +2,8 @@
  * Structure views for algorithm rigs: bars, cells, grid, stack, queue, call stack… drawn from the memory snapshot.
  * A rig declares `view: { kind, of: 'nums', pointers: ['i', 'j'], … }`; the data is whatever those names hold right now.
  */
-import { svg, text, cells, pointers, barLayout, bars, gridCells, CELL, STEP, rowWidth } from '../../algorithms/patterns/view-kit.js?v=202610071646';
-import { esc } from '../../assets/vhs.js?v=202610071646';
+import { svg, text, cells, pointers, barLayout, bars, gridCells, CELL, STEP, rowWidth } from '../../algorithms/patterns/view-kit.js?v=202610071658';
+import { esc } from '../../assets/vhs.js?v=202610071658';
 
 function find(mem, name) {
   for (let i = mem.frames.length - 1; i >= 0; i--) {
@@ -19,6 +19,16 @@ const unquote = s => (s.length >= 2 && (s[0] === "'" || s[0] === '"') ? s.slice(
 const itemsOf = (mem, o) => (o && o.items ? o.items.map(id => mem.objects[id]) : []);
 const listOf = (mem, name) => { const { id, obj } = find(mem, name); return { id, obj, items: itemsOf(mem, obj) }; };
 const valueText = o => (!o ? '' : o.value !== undefined ? unquote(String(o.value)) : o.type === 'list' ? `[${o.length}]` : o.type);
+/** Like valueText, but tuples and short lists are spelled out from the snapshot: ((1, 2), 3) → "(1,2),3". */
+const deepText = (mem, o, depth = 0) => {
+  if (!o) return '';
+  if (o.value !== undefined) return unquote(String(o.value));
+  if ((o.type === 'tuple' || o.type === 'list') && depth < 2 && o.items.length <= 4) {
+    const inner = o.items.map(id => deepText(mem, mem.objects[id], depth + 1)).join(',');
+    return o.type === 'tuple' ? `(${inner})` : `[${inner}]`;
+  }
+  return valueText(o);
+};
 const numberOf = o => { const v = atom(o); return v !== null && /^-?\d+(\.\d+)?$/.test(v) ? Number(v) : null; };
 
 function pointerList(spec, mem, count) {
@@ -65,11 +75,12 @@ function cellsView(spec, mem, event) {
   else { const l = listOf(mem, spec.of); values = l.items.map(valueText); id = l.id; if (!l.obj) return empty(spec.of); }
   const touched = touchedOn(event, id);
   const marks = spec.marks ? spec.marks(mem, event, values) : {};
-  const cls = values.map((_, i) => marks[i] || (touched.get(i) === 'write' ? 'ok' : touched.get(i) === 'read' ? 'cur' : ''));
+  const tc = { read: 'cur', write: 'ok', ...(spec.touchedCls || {}) };
+  const cls = values.map((_, i) => (touched.get(i) === 'write' ? tc.write : touched.get(i) === 'read' ? tc.read : marks[i] || ''));
   const ranges = (spec.ranges || []).map(r => ({ lo: intOf(mem, r.from), hi: intOf(mem, r.to), cls: r.cls || 'win' })).filter(r => r.lo !== null && r.hi !== null);
   for (const r of ranges) for (let i = Math.max(0, r.lo); i <= Math.min(values.length - 1, r.hi); i++) if (!cls[i]) cls[i] = r.cls;
   const top = 40;
-  let s = cells(values.map(v => (String(v).length > 5 ? String(v).slice(0, 4) + '…' : v)), cls, { y: top }) + pointers(pointerList(spec, mem, values.length), { y: top, count: values.length });
+  let s = cells(values.map(v => (String(v).length > 5 ? String(v).slice(0, 4) + '…' : v)), cls, { y: top, index: spec.index !== false }) + pointers(pointerList(spec, mem, values.length), { y: top, count: values.length });
   if (spec.negIndex) values.forEach((_, i) => { s += text(i * STEP + CELL / 2, top + CELL + 28, i - values.length, 'idx neg'); });
   if (!values.length) s += text(30, top + CELL / 2, '∅', 'idx');
   const extra = (spec.counters || []).map(c => `${c} = ${find(mem, c).obj ? valueText(find(mem, c).obj) : '?'}`).join('   ');
@@ -83,7 +94,7 @@ function gridView(spec, mem, event) {
   if (!obj) return empty(spec.of);
   const rows = itemsOf(mem, obj).map(r => (r.type === 'str' ? [...unquote(r.value)] : itemsOf(mem, r).map(valueText)));
   if (!rows.length || !rows[0].length) return empty(spec.of);
-  const cursor = spec.cursor ? spec.cursor.map(n => intOf(mem, n)) : [null, null];
+  const cursor = typeof spec.cursor === 'function' ? spec.cursor(mem, event) : spec.cursor ? spec.cursor.map(n => intOf(mem, n)) : [null, null];
   const touchedRows = new Set((event.touched || []).filter(t => rows.some((_, i) => itemsOf(mem, obj)[i] && t.id === obj.items[i])).map(t => t.key));
   void touchedRows;
   const cellOf = (v, r, c) => {
@@ -98,7 +109,7 @@ function gridView(spec, mem, event) {
 /* ---------- stack / queue ---------- */
 function stackView(spec, mem) {
   const { items } = listOf(mem, spec.of);
-  const values = items.map(valueText);
+  const values = items.map(o => deepText(mem, o));
   const w = 120, h = Math.max(1, values.length) * 30 + 44;
   let s = `<rect class="span" x="20" y="10" width="${w - 40}" height="${h - 30}" rx="6"/>`;
   values.forEach((v, i) => { const y = h - 30 - (i + 1) * 30 + 4; s += `<rect class="cell${i === values.length - 1 ? ' cur' : ''}" x="28" y="${y}" width="${w - 56}" height="26" rx="5"/>${text(w / 2, y + 13, String(v).length > 8 ? String(v).slice(0, 7) + '…' : v, 'cv')}`; });
@@ -109,9 +120,9 @@ function stackView(spec, mem) {
 }
 function queueView(spec, mem) {
   const { items } = listOf(mem, spec.of);
-  const values = items.map(valueText);
+  const values = items.map(o => deepText(mem, o));
   const w = Math.max(80, values.length * STEP + 20);
-  let s = cells(values.map(v => (String(v).length > 5 ? String(v).slice(0, 4) + '…' : v)), values.map((_, i) => (i === 0 ? 'cur' : '')), { y: 30, index: false });
+  let s = cells(values.map(v => (String(v).length > 9 ? String(v).slice(0, 8) + '…' : v)), values.map((_, i) => (i === 0 ? 'cur' : '')), { y: 30, index: false });
   s += text(0, 16, 'front →', 'lbl') + text(Math.max(0, rowWidth(values.length) - 44), 16, '← back', 'lbl');
   if (!values.length) s += text(30, 52, 'empty', 'idx');
   return framed(w, 90, s);
@@ -168,11 +179,30 @@ function boardView(spec, mem) {
   return gridCells(rows, (v, r, c) => ({ cls: (r + c) % 2 ? 'sq-d' : 'sq-l', label: v ? '♛' : '', tcls: v ? 'queen' : '' }), { size: 34, step: 36 });
 }
 
+/* ---------- numbers: one bar per int variable ---------- */
+function numbersView(spec, mem) {
+  const names = spec.of;
+  const values = names.map(n => intOf(mem, n));
+  const known = values.map(v => (v === null ? 0 : v));
+  const lay = barLayout(known.map(v => Math.max(0, v)), { bw: 40, gap: 18, unit: Math.max(3, Math.min(14, 160 / Math.max(1, ...known))) });
+  let s = bars(known.map(v => Math.max(0, v)), lay, names.map((n, i) => (spec.cls && spec.cls[n]) || ['l', 'r', 'win', 'done'][i % 4]));
+  names.forEach((n, i) => { s += text(lay.mid(i), lay.base + 30, `${n}${values[i] === null ? ' = ?' : ''}`, 'lbl-c'); });
+  return svg(lay.width, lay.height + 22, s);
+}
+
+/** Decodes a set/list of int tuples (like {(r, c), …}) into [[r, c], …]. */
+export function tuplesOf(mem, name) {
+  const { obj } = find(mem, name);
+  if (!obj || !obj.items) return [];
+  return obj.items.map(id => mem.objects[id]).filter(t => t && t.items).map(t => t.items.map(id => numberOf(mem.objects[id])));
+}
+
 const empty = name => svg(160, 40, text(80, 20, `${name} = ?`, 'idx'));
 
 export function structView(spec, mem, event, run) {
   switch (spec.kind) {
     case 'bars': return barsView(spec, mem, event);
+    case 'numbers': return numbersView(spec, mem);
     case 'cells': case 'string': return cellsView(spec, mem, event);
     case 'grid': return gridView(spec, mem, event);
     case 'stack': return stackView(spec, mem);

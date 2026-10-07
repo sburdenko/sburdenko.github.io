@@ -1,5 +1,5 @@
 /** Views for chapters 01–04. view(run, event) → SVG string, vars(run, event) → [[i18nKey, html]]. */
-import { CELL, STEP, svg, text, rowWidth, cells, pointers, chip, chips, barLayout, bars, pointerAt } from './view-kit.js?v=202610071646';
+import { CELL, STEP, svg, text, rowWidth, cells, pointers, chip, chips, barLayout, bars, pointerAt } from './view-kit.js?v=202610071658';
 
 const TOP = 40;
 const framed = (n, h, inner) => svg(rowWidth(n) + 20, h, `<g transform="translate(10,0)">${inner}</g>`);

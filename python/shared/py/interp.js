@@ -6,10 +6,10 @@ import {
   PyInt, PyBool, PyFloat, PyStr, PyBytes, PyList, PyTuple, PyDict, PySet, PyRange, PyFunction, PyBuiltin, PyMethod, PyClass, PyInstance,
   PyGenerator, PyModule, PyProperty, PyStaticMethod, PyClassMethod, PyIterator, PySlice, PyError, NONE, TRUE, FALSE, ELLIPSIS,
   int, float, bool, str, internStr, hashKey, UNHASHABLE, typeName, typeOf, isIntLike, isInstance, TYPES, isCallable,
-} from './objects.js?v=202610071646';
-import { EXC, makeExc, raise, pyError, isExceptionClass, excArgs } from './errors.js?v=202610071646';
-import { reprOf, strOf, formatValue } from './convert.js?v=202610071646';
-import { binop, unary, compare, truthy, iterate, toList, getitem, setitem, delitem, STOP, NOT_IMPLEMENTED, equals, hashReady } from './ops.js?v=202610071646';
+} from './objects.js?v=202610071658';
+import { EXC, makeExc, raise, pyError, isExceptionClass, excArgs } from './errors.js?v=202610071658';
+import { reprOf, strOf, formatValue } from './convert.js?v=202610071658';
+import { binop, unary, compare, truthy, iterate, toList, getitem, setitem, delitem, STOP, NOT_IMPLEMENTED, equals, hashReady } from './ops.js?v=202610071658';
 
 export class StepLimit extends Error { constructor(max) { super(`step limit ${max}`); this.max = max; } }
 
@@ -653,7 +653,9 @@ export class Interp {
           yield* self.comprehend(e.gens, 0, sc, function* (interp, s2) { yield { pyYield: yield* interp.eval(e.elt, s2) }; }, first);
           return NONE;
         })();
-        return new PyGenerator('<genexpr>', body);
+        const gen = new PyGenerator('<genexpr>', body);
+        gen.scope = sc;
+        return gen;
       }
       case 'BinOp': { const a = yield* this.eval(e.left, scope); const b = yield* this.eval(e.right, scope); return yield* this.binop(e.op, a, b); }
       case 'UnaryOp': return yield* unary(this, e.op, yield* this.eval(e.operand, scope));
@@ -877,15 +879,18 @@ export class Interp {
     gen.running = true;
     const wasStarted = gen.started;
     gen.started = true;
+    /* Generator expressions are silent, like comprehensions: no step per item. */
+    const silent = gen.name === '<genexpr>';
     try {
-      if (!wasStarted) yield* this.step('gen-start', frame.line, { fn: gen.name, id: gen.id });
+      if (silent) { /* no event */ }
+      else if (!wasStarted) yield* this.step('gen-start', frame.line, { fn: gen.name, id: gen.id });
       else yield* this.step('gen-resume', frame.line, { fn: gen.name, id: gen.id, sent: send === NONE ? null : yield* this.safeRepr(send) });
       let r = gen.body.next(send);
       for (;;) {
         if (r.done) {
           gen.done = true;
           gen.returnValue = r.value;
-          yield* this.step('gen-done', frame.line, { fn: gen.name, id: gen.id });
+          if (!silent) yield* this.step('gen-done', frame.line, { fn: gen.name, id: gen.id });
           if (asIter) return STOP;
           throw new PyError(makeExc(EXC.StopIteration, r.value === NONE || r.value === undefined ? [] : [r.value]));
         }
