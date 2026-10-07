@@ -6,10 +6,10 @@ import {
   PyInt, PyBool, PyFloat, PyStr, PyBytes, PyList, PyTuple, PyDict, PySet, PyRange, PyFunction, PyBuiltin, PyMethod, PyClass, PyInstance,
   PyGenerator, PyModule, PyProperty, PyStaticMethod, PyClassMethod, PyIterator, PySlice, PyError, NONE, TRUE, FALSE, ELLIPSIS,
   int, float, bool, str, internStr, hashKey, UNHASHABLE, typeName, typeOf, isIntLike, isInstance, TYPES, isCallable,
-} from './objects.js?v=202610071637';
-import { EXC, makeExc, raise, pyError, isExceptionClass, excArgs } from './errors.js?v=202610071637';
-import { reprOf, strOf, formatValue } from './convert.js?v=202610071637';
-import { binop, unary, compare, truthy, iterate, toList, getitem, setitem, delitem, STOP, NOT_IMPLEMENTED, equals, hashReady } from './ops.js?v=202610071637';
+} from './objects.js?v=202610071646';
+import { EXC, makeExc, raise, pyError, isExceptionClass, excArgs } from './errors.js?v=202610071646';
+import { reprOf, strOf, formatValue } from './convert.js?v=202610071646';
+import { binop, unary, compare, truthy, iterate, toList, getitem, setitem, delitem, STOP, NOT_IMPLEMENTED, equals, hashReady } from './ops.js?v=202610071646';
 
 export class StepLimit extends Error { constructor(max) { super(`step limit ${max}`); this.max = max; } }
 
@@ -115,7 +115,9 @@ export class Interp {
     this.lastEvent = null;
     this.random = null;
     this.clock = 0;
+    /* Like CPython, identical literals in one program share one constant object. */
     this.constTuples = new Map();
+    this.constants = new Map();
     this.quiet = 0;
     this.captureError = null;
   }
@@ -586,8 +588,17 @@ export class Interp {
     switch (e.t) {
       case 'Constant':
         switch (e.kind) {
-          case 'int': return int(e.value);
-          case 'float': return float(e.value);
+          case 'int': {
+            if (e.value >= -5n && e.value <= 256n) return int(e.value);
+            const key = 'i' + e.value;
+            if (!this.constants.has(key)) this.constants.set(key, int(e.value));
+            return this.constants.get(key);
+          }
+          case 'float': {
+            const key = 'f' + e.value;
+            if (!this.constants.has(key)) this.constants.set(key, float(e.value));
+            return this.constants.get(key);
+          }
           case 'str': return internStr(e.value);
           case 'bytes': return new PyBytes(Uint8Array.from(e.value, c => c.charCodeAt(0) & 0xff));
           case 'bool': return e.value ? TRUE : FALSE;
@@ -833,7 +844,7 @@ export class Interp {
       })();
       return gen;
     }
-    if (this.frames.length >= this.recursionLimit) raise('RecursionError', 'maximum recursion depth exceeded');
+    if (this.frames.length + 1 >= this.recursionLimit) raise('RecursionError', 'maximum recursion depth exceeded');
     const frame = { name: fn.name, scope, line: fn.line, fn, callLine: line };
     this.frames.push(frame);
     const argReprs = [];

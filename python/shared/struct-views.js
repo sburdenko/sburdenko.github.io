@@ -2,8 +2,8 @@
  * Structure views for algorithm rigs: bars, cells, grid, stack, queue, call stack… drawn from the memory snapshot.
  * A rig declares `view: { kind, of: 'nums', pointers: ['i', 'j'], … }`; the data is whatever those names hold right now.
  */
-import { svg, text, cells, pointers, barLayout, bars, gridCells, CELL, STEP, rowWidth } from '../../algorithms/patterns/view-kit.js?v=202610071637';
-import { esc } from '../../assets/vhs.js?v=202610071637';
+import { svg, text, cells, pointers, barLayout, bars, gridCells, CELL, STEP, rowWidth } from '../../algorithms/patterns/view-kit.js?v=202610071646';
+import { esc } from '../../assets/vhs.js?v=202610071646';
 
 function find(mem, name) {
   for (let i = mem.frames.length - 1; i >= 0; i--) {

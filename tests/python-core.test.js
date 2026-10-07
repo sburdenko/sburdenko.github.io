@@ -64,9 +64,9 @@ test('input() lines are consumed in order and echoed only to the transcript', ()
   assert.deepEqual(r.inputsUsed, ['Varvara']);
 });
 
-test('small ints are shared objects, large ones are not, like CPython', () => {
-  const r = runProgram('a = 5\nb = 5\nc = 1000\nd = 1000\nprint(a is b, c is d)\n');
-  assert.equal(r.out, 'True False\n');
+test('small ints are shared, identical literals are shared, computed big ints are not — like CPython', () => {
+  const r = runProgram('a = 5\nb = 5\nc = 1000\nd = 1000\ne = int("1000")\nprint(a is b, c is d, c is e, c == e)\n');
+  assert.equal(r.out, 'True True False True\n');
 });
 
 test('the memory picture follows a rebinding', () => {

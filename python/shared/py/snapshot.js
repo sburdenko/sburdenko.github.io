@@ -2,7 +2,7 @@
 import {
   PyInt, PyBool, PyFloat, PyStr, PyBytes, PyList, PyTuple, PyDict, PySet, PyRange, PyFunction, PyBuiltin, PyMethod, PyClass, PyInstance,
   PyGenerator, PyModule, PyProperty, PyStaticMethod, PyClassMethod, PyIterator, NONE, TRUE, FALSE, reprStr, floatRepr, reprBytes,
-} from './objects.js?v=202610071637';
+} from './objects.js?v=202610071646';
 
 const MAX_ITEMS = 80;
 const shortRepr = s => (s.length > 40 ? s.slice(0, 37) + '…' : s);
@@ -50,7 +50,8 @@ function encode(o, ref) {
   if (o instanceof PyRange) return freeze({ ...base, type: 'range', value: o.step === 1n ? `range(${o.start}, ${o.stop})` : `range(${o.start}, ${o.stop}, ${o.step})`, immutable: true, length: Number(o.length) });
   if (o instanceof PyFunction) {
     const closure = o.freeVars.map(n => { for (const s of [o.scope, ...o.scope.enclosingFunctions()]) if (s.vars.has(n)) return [n, ref(s.vars.get(n))]; return null; }).filter(Boolean);
-    return freeze({ ...base, type: 'function', name: o.isLambda ? 'lambda' : o.name, params: o.params.args.map(a => a.name), closure, immutable: true, line: o.line, generator: o.isGen, attrs: [...o.dict].map(([k, v]) => [k, ref(v)]) });
+    const defaults = o.defaults.length ? o.params.args.slice(-o.defaults.length).map((a, i) => [a.name, ref(o.defaults[i])]) : [];
+    return freeze({ ...base, type: 'function', name: o.isLambda ? 'lambda' : o.name, params: o.params.args.map(a => a.name), closure, defaults, immutable: true, line: o.line, generator: o.isGen, attrs: [...o.dict].map(([k, v]) => [k, ref(v)]) });
   }
   if (o instanceof PyBuiltin) return freeze({ ...base, type: 'builtin', name: o.name, value: o.self ? `${o.name}()` : `${o.name}()`, immutable: true, wrapped: o.wrapped ? ref(o.wrapped) : null, cacheSize: o.cache ? o.cache.size : null });
   if (o instanceof PyMethod) return freeze({ ...base, type: 'method', name: o.fn.name, self: ref(o.self), fn: ref(o.fn), immutable: true });

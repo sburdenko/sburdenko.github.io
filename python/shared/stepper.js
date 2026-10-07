@@ -2,16 +2,16 @@
  * Mounts one rig: editable inputs → Python source → trace → code panel, picture, console, explanation and transport.
  * rig = { id, code: params => string | string, fields, example, random, check, stdin, files, view, notes, hide, maxSteps, problem }
  */
-import { $, $$, esc } from '../../assets/vhs.js?v=202610071637';
-import { t, onLang, applyTo } from '../../assets/i18n.js?v=202610071637';
-import { createPlayer, bindTransport } from '../../algorithms/bfs-dfs/player.js?v=202610071637';
-import { runProgram, formatTraceback, MAX_STEPS } from './py/run.js?v=202610071637';
-import { renderPyCode } from './py-code.js?v=202610071637';
-import { memoryView, currentNames } from './memory-view.js?v=202610071637';
-import { structView } from './struct-views.js?v=202610071637';
-import { explain } from './explain.js?v=202610071637';
-import { parseField, formatField } from './fields.js?v=202610071637';
-import { markProblem } from './progress.js?v=202610071637';
+import { $, $$, esc } from '../../assets/vhs.js?v=202610071646';
+import { t, onLang, applyTo } from '../../assets/i18n.js?v=202610071646';
+import { createPlayer, bindTransport } from '../../algorithms/bfs-dfs/player.js?v=202610071646';
+import { runProgram, formatTraceback, MAX_STEPS } from './py/run.js?v=202610071646';
+import { renderPyCode } from './py-code.js?v=202610071646';
+import { memoryView, currentNames } from './memory-view.js?v=202610071646';
+import { structView } from './struct-views.js?v=202610071646';
+import { explain } from './explain.js?v=202610071646';
+import { parseField, formatField } from './fields.js?v=202610071646';
+import { markProblem } from './progress.js?v=202610071646';
 
 const shell = rig => `
   <div class="rig-head"><p class="lbl" data-i18n="py.ui.rigTag">RIG · STEP BY STEP</p><h3 class="rig-title"></h3></div>

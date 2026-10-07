@@ -1,6 +1,6 @@
 /** PY-01 rigs: every rig is real Python that the stand executes; editable fields are spliced in as literals. */
-import { lit } from '../shared/py-code.js?v=202610071637';
-import { randInt, pick } from '../../algorithms/patterns/rig-kit.js?v=202610071637';
+import { lit } from '../shared/py-code.js?v=202610071646';
+import { randInt, pick } from '../../algorithms/patterns/rig-kit.js?v=202610071646';
 
 const text = (key, extra = {}) => ({ key, type: 'text', maxLen: 24, ...extra });
 const num = (key, extra = {}) => ({ key, type: 'int', min: -999999, max: 999999, ...extra });
@@ -38,7 +38,7 @@ print(a is b, a == b)
     code: `small = 7
 also_small = 7
 big = 1000
-also_big = 1000
+also_big = int("1000")
 print(small is also_small)
 print(big is also_big)
 print(big == also_big)

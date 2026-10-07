@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0715">
+<title data-i18n="page.title">Flow: conditions, loops, functions · PY-02</title>
+<meta name="description" content="if/elif/else, while and for, range, functions and their frames, arguments, scope, recursion with a visible call stack, closures and lambda. Every example runs in the browser step by step.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
+<link rel="stylesheet" href="../../assets/vhs.css?v=202610071646">
+<link rel="stylesheet" href="../shared/style.css?v=202610071646">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
+<script>
+(function () {
+  var shown = false;
+  function report(what) {
+    if (shown) return;
+    shown = true;
+    var box = document.createElement('div');
+    box.setAttribute('role', 'alert');
+    box.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99;padding:12px 16px;background:#ff5c6c;color:#1a0009;font:600 13px/1.5 ui-monospace,Menlo,Consolas,monospace';
+    box.textContent = 'Scripts failed to load — press Cmd/Ctrl + Shift + R to hard-reload. Скрипты не загрузились — обнови страницу с Cmd/Ctrl + Shift + R. [' + what + ']';
+    (document.body || document.documentElement).appendChild(box);
+  }
+  addEventListener('error', function (e) { var el = e.target; if (el && (el.tagName === 'SCRIPT' || el.tagName === 'LINK')) report(el.src || el.href); else report(e.message || 'script error'); }, true);
+  addEventListener('unhandledrejection', function (e) { report(String((e.reason && e.reason.message) || e.reason)); });
+})();
+</script>
+</head>
+<body>
+<div class="fx fx-scan" aria-hidden="true"></div>
+<div class="fx fx-grain" aria-hidden="true"></div>
+<div class="fx fx-vig" aria-hidden="true"></div>
+<div class="fx fx-track" aria-hidden="true"></div>
+<canvas id="noise" width="160" height="90" aria-hidden="true"></canvas>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <marker id="pat-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-edge" d="M0 0L10 5L0 10z"/></marker>
+  <marker id="pat-ah-amb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-amb" d="M0 0L10 5L0 10z"/></marker>
+  <marker id="pat-ah-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-ok" d="M0 0L10 5L0 10z"/></marker>
+</defs></svg>
+
+<header class="osd" data-i18n-aria="osd.bar">
+  <div class="l"><a class="home" href="../../" data-i18n="osd.shelf">◀ SHELF</a><a class="home" href="../" data-i18n="py.osd.stand">PYTHON</a><span class="play">PLAY ►</span><span class="ch" id="osdCh">CH.00 MAP</span></div>
+  <div class="r">
+    <nav id="osdNav" data-i18n-aria="osd.nav"></nav>
+    <div class="seg lang" id="langSeg" role="group" data-i18n-aria="osd.lang"><button data-l="en" aria-pressed="true">EN</button><button data-l="ru" aria-pressed="false">RU</button></div>
+    <span>SP</span><span class="ctr" id="osdCtr">0:00:00</span>
+  </div>
+</header>
+
+<main>
+<section class="chapter hero" id="map" data-ch="CH.00 MAP" style="padding-top:56px">
+  <p class="eyebrow" data-i18n="hero.eyebrow">PY-02 · Python · stand B</p>
+  <h1 class="title"><span data-i18n="hero.title">Flow</span><span class="title-2" data-i18n="hero.subtitle">conditions, loops, functions, recursion</span></h1>
+  <p class="kicker hero-lede" data-i18n="hero.lede"></p>
+  <h3 data-i18n="hero.mapH">Chapters</h3>
+  <nav class="pmap" id="chapterMap" data-i18n-aria="osd.nav"></nav>
+  <div id="tapeProgress"></div>
+</section>
+
+<section class="chapter" id="cond" data-ch="CH.01 IF">
+  <div class="ch-head"><p class="osdtag py">CH.01 // IF · ELIF · ELSE</p><h2 data-i18n="ch.cond.h2"></h2><p class="kicker" data-i18n="ch.cond.lede"></p></div>
+  <div class="lesson" data-i18n="ch.cond.body"></div>
+  <div data-rig="ifelse"></div>
+  <div data-quiz="q-elif"></div>
+  <div class="lesson" data-i18n="ch.cond.body2"></div>
+  <div data-rig="indent"></div>
+  <div data-quiz="q-indent"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.cond.hood"></div></details>
+  <div class="chapter-done" data-chapter="01"></div>
+</section>
+
+<section class="chapter" id="while" data-ch="CH.02 WHILE">
+  <div class="ch-head"><p class="osdtag py">CH.02 // WHILE</p><h2 data-i18n="ch.while.h2"></h2><p class="kicker" data-i18n="ch.while.lede"></p></div>
+  <div class="lesson" data-i18n="ch.while.body"></div>
+  <div data-rig="whileloop"></div>
+  <div data-quiz="q-while"></div>
+  <div class="lesson" data-i18n="ch.while.body2"></div>
+  <div data-rig="guess"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.while.hood"></div></details>
+  <div class="chapter-done" data-chapter="02"></div>
+</section>
+
+<section class="chapter" id="forloop" data-ch="CH.03 FOR">
+  <div class="ch-head"><p class="osdtag py">CH.03 // FOR · RANGE</p><h2 data-i18n="ch.forloop.h2"></h2><p class="kicker" data-i18n="ch.forloop.lede"></p></div>
+  <div class="lesson" data-i18n="ch.forloop.body"></div>
+  <div data-rig="rangelab"></div>
+  <div data-quiz="q-range"></div>
+  <div data-quiz="q-fill-range"></div>
+  <div class="lesson" data-i18n="ch.forloop.body2"></div>
+  <div data-rig="forlist"></div>
+  <div data-rig="enumzip"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.forloop.hood"></div></details>
+  <div class="chapter-done" data-chapter="03"></div>
+</section>
+
+<section class="chapter" id="loopextra" data-ch="CH.04 LOOP TRICKS">
+  <div class="ch-head"><p class="osdtag py">CH.04 // NESTED · ELSE · CONTINUE</p><h2 data-i18n="ch.loopextra.h2"></h2><p class="kicker" data-i18n="ch.loopextra.lede"></p></div>
+  <div class="lesson" data-i18n="ch.loopextra.body"></div>
+  <div data-rig="nested"></div>
+  <div class="lesson" data-i18n="ch.loopextra.body2"></div>
+  <div data-rig="forelse"></div>
+  <div data-quiz="q-forelse"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.loopextra.hood"></div></details>
+  <div class="chapter-done" data-chapter="04"></div>
+</section>
+
+<section class="chapter" id="functions" data-ch="CH.05 DEF">
+  <div class="ch-head"><p class="osdtag py">CH.05 // FUNCTIONS</p><h2 data-i18n="ch.functions.h2"></h2><p class="kicker" data-i18n="ch.functions.lede"></p></div>
+  <div class="lesson" data-i18n="ch.functions.body"></div>
+  <div data-rig="funcframe"></div>
+  <div data-quiz="q-return"></div>
+  <div data-quiz="q-noreturn"></div>
+  <div class="lesson" data-i18n="ch.functions.body2"></div>
+  <div data-rig="stackdepth"></div>
+  <div data-quiz="q-order-func"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.functions.hood"></div></details>
+  <div class="chapter-done" data-chapter="05"></div>
+</section>
+
+<section class="chapter" id="arguments" data-ch="CH.06 ARGS">
+  <div class="ch-head"><p class="osdtag py">CH.06 // ARGUMENTS</p><h2 data-i18n="ch.arguments.h2"></h2><p class="kicker" data-i18n="ch.arguments.lede"></p></div>
+  <div class="lesson" data-i18n="ch.arguments.body"></div>
+  <div data-rig="args"></div>
+  <div data-quiz="q-kwargs"></div>
+  <div class="lesson" data-i18n="ch.arguments.body2"></div>
+  <div data-rig="mutdefault"></div>
+  <div data-quiz="q-mutdefault"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.arguments.hood"></div></details>
+  <div class="chapter-done" data-chapter="06"></div>
+</section>
+
+<section class="chapter" id="scope" data-ch="CH.07 SCOPE">
+  <div class="ch-head"><p class="osdtag py">CH.07 // SCOPE · LEGB</p><h2 data-i18n="ch.scope.h2"></h2><p class="kicker" data-i18n="ch.scope.lede"></p></div>
+  <div class="lesson" data-i18n="ch.scope.body"></div>
+  <div data-rig="legb"></div>
+  <div class="lesson" data-i18n="ch.scope.body2"></div>
+  <div data-rig="globalkw"></div>
+  <div data-quiz="q-closure"></div>
+  <div data-rig="unbound"></div>
+  <div data-quiz="q-scope"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.scope.hood"></div></details>
+  <div class="chapter-done" data-chapter="07"></div>
+</section>
+
+<section class="chapter" id="recursion" data-ch="CH.08 RECURSION">
+  <div class="ch-head"><p class="osdtag py">CH.08 // RECURSION</p><h2 data-i18n="ch.recursion.h2"></h2><p class="kicker" data-i18n="ch.recursion.lede"></p></div>
+  <div class="lesson" data-i18n="ch.recursion.body"></div>
+  <div data-rig="factorial"></div>
+  <div data-quiz="q-recursion"></div>
+  <div class="lesson" data-i18n="ch.recursion.body2"></div>
+  <div data-rig="fibtree"></div>
+  <div data-rig="norecbase"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.recursion.hood"></div></details>
+  <div class="chapter-done" data-chapter="08"></div>
+</section>
+
+<section class="chapter" id="closures" data-ch="CH.09 CLOSURES">
+  <div class="ch-head"><p class="osdtag py">CH.09 // CLOSURES · LAMBDA</p><h2 data-i18n="ch.closures.h2"></h2><p class="kicker" data-i18n="ch.closures.lede"></p></div>
+  <div class="lesson" data-i18n="ch.closures.body"></div>
+  <div data-rig="closure"></div>
+  <div class="lesson" data-i18n="ch.closures.body2"></div>
+  <div data-rig="lambdasort"></div>
+  <div data-rig="lambdaloop"></div>
+  <div data-quiz="q-lambda"></div>
+  <details class="hood"><summary data-i18n="py.ui.hood"></summary><div class="hb" data-i18n="ch.closures.hood"></div></details>
+  <div class="chapter-done" data-chapter="09"></div>
+</section>
+
+<section class="chapter cheat" id="cheat" data-ch="CH.10 CHEAT SHEET">
+  <div class="ch-head"><p class="osdtag py">CH.10 // CHEAT SHEET</p><h2 data-i18n="ch.cheat.h2"></h2><p class="kicker" data-i18n="ch.cheat.lede"></p></div>
+  <div class="tbl-wrap" data-i18n="ch.cheat.table"></div>
+  <div class="chapter-done" data-chapter="10"></div>
+</section>
+</main>
+
+<footer>
+  <span class="stop" data-i18n="foot.stop">■ END OF TAPE</span>
+  <p><a href="../01-basics/" data-i18n="py.foot.prev01">◀ PY-01 · How Python thinks</a> · <a href="../" data-i18n="py.foot.stand">Python stand</a> · <a href="../06-algorithms/" data-i18n="py.foot.next06">Next: PY-06 · Problems ►</a></p>
+  <p><span data-i18n="foot.src">Source code and models:</span> <a href="https://github.com/sburdenko/sburdenko.github.io">github.com/sburdenko/sburdenko.github.io</a></p>
+</footer>
+
+<script type="module" src="./page.js?v=202610071646"></script>
+</body>
+</html>

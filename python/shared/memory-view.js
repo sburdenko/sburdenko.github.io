@@ -2,7 +2,7 @@
  * Memory diagram: frames with names on the left, objects on the right, arrows in between.
  * Pure function of a snapshot (see py/snapshot.js), so it can be tested without a DOM.
  */
-import { esc } from '../../assets/vhs.js?v=202610071637';
+import { esc } from '../../assets/vhs.js?v=202610071646';
 
 const ATOMS = new Set(['int', 'float', 'str', 'bool', 'NoneType', 'bytes', 'range']);
 const CH = 7.3, FONT = 12;
@@ -41,6 +41,7 @@ function childrenOf(o) {
   if (o.entries) for (const [k, v] of o.entries) ids.push(k, v);
   if (o.attrs) for (const [, v] of o.attrs) ids.push(v);
   if (o.closure) for (const [, v] of o.closure) ids.push(v);
+  if (o.defaults) for (const [, v] of o.defaults) ids.push(v);
   if (o.vars) for (const [, v] of o.vars) ids.push(v);
   if (o.bases) ids.push(...o.bases);
   if (o.clsId) ids.push(o.clsId);
@@ -121,14 +122,14 @@ function boxOf(id, o, mem, boxed, flags) {
   }
   if (o.type === 'function' || o.type === 'builtin' || o.type === 'method' || o.type === 'generator' || o.type === 'module' || o.type === 'property' || o.type === 'staticmethod' || o.type === 'classmethod') {
     const label = o.type === 'function' ? `${o.name}(${(o.params || []).join(', ')})` : o.type === 'generator' ? `${o.name}() ${o.done ? '· done' : o.started ? '· paused' : '· not started'}` : o.type === 'method' ? `${o.name}()` : o.type === 'module' ? o.name : o.value || o.type;
-    const rows = o.closure || [];
-    const w = Math.max(tw(label) + 2 * PAD + 6, 90, ...rows.map(([k]) => tw(k) + 60));
+    const rows = [...(o.closure || []).map(([k, v]) => [`${k} →`, v]), ...(o.defaults || []).map(([k, v]) => [`${k} =`, v])];
+    const w = Math.max(tw(label) + 2 * PAD + 6, 90, ...rows.map(([k, v]) => tw(k) + 24 + (inline(v) !== null ? tw(inline(v)) : 16)));
     const h = HEAD + ROW + 4 + rows.length * ROW + (rows.length ? 4 : 0);
     const headLabel = o.type === 'function' && o.generator ? 'generator function' : o.type;
     return { w, h, draw: (x, y) => {
       const anchors = {};
       let svg = `<g class="${cls}" data-id="${id}"><rect class="box" x="${x}" y="${y}" width="${w}" height="${h}" rx="7"/>${text(x + PAD, y + HEAD / 2 + 2, headLabel, 'ty')}${text(x + PAD, y + HEAD + ROW / 2 + 2, label, 'val fn')}`;
-      rows.forEach(([k, v], i) => { const ry = y + HEAD + ROW + 6 + i * ROW; svg += text(x + PAD, ry + ROW / 2, `${k} →`, 'key'); const vv = inline(v); if (vv !== null) svg += text(x + PAD + tw(k) + 22, ry + ROW / 2, vv, 'cv'); else { svg += `<circle class="dot" cx="${x + w - 12}" cy="${ry + ROW / 2}" r="3"/>`; anchors[v] = [x + w - 12, ry + ROW / 2]; } });
+      rows.forEach(([k, v], i) => { const ry = y + HEAD + ROW + 6 + i * ROW; svg += text(x + PAD, ry + ROW / 2, k, 'key'); const vv = inline(v); if (vv !== null) svg += text(x + PAD + tw(k) + 8, ry + ROW / 2, vv, 'cv'); else { svg += `<circle class="dot" cx="${x + w - 12}" cy="${ry + ROW / 2}" r="3"/>`; anchors[v] = [x + w - 12, ry + ROW / 2]; } });
       if (o.type === 'method' && o.self != null) anchors[o.self] = [x + w, y + HEAD + ROW / 2 + 2];
       if (o.type === 'builtin' && o.wrapped != null) anchors[o.wrapped] = [x + w, y + HEAD + ROW / 2 + 2];
       if (o.type === 'property' && o.fget != null) anchors[o.fget] = [x + w, y + HEAD + ROW / 2 + 2];

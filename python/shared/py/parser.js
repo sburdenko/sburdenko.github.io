@@ -1,5 +1,5 @@
 /** Recursive-descent parser: tokens → AST. Node shapes are plain objects with a `t` tag and a `line`. */
-import { tokenize, PySyntaxError } from './lexer.js?v=202610071637';
+import { tokenize, PySyntaxError } from './lexer.js?v=202610071646';
 
 const AUG = new Set(['+=', '-=', '*=', '/=', '//=', '%=', '**=', '&=', '|=', '^=', '<<=', '>>=']);
 const COMPARE = new Set(['<', '>', '==', '!=', '<=', '>=']);
@@ -211,6 +211,7 @@ class Parser {
     if (this.isKw('elif')) {
       this.cur.value = 'if';
       orelse = [this.ifStmt()];
+      orelse[0].isElif = true;
     } else if (this.accept('KW', 'else')) orelse = this.block();
     return { t: 'If', test, body, orelse, line };
   }
