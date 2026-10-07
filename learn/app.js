@@ -4,11 +4,11 @@
  *   #/dotnet      курс
  *   #/dotnet/<id> урок поверх курса
  */
-import { $, esc, startNoise } from '../assets/vhs.js?v=202610072257';
-import { COURSES, findCourse, lessonsOf } from './courses.js?v=202610072257';
-import * as P from './progress.js?v=202610072257';
-import * as E from './engine.js?v=202610072257';
-import { renderCard, feedback } from './cards.js?v=202610072257';
+import { $, esc, startNoise } from '../assets/vhs.js?v=202610072259';
+import { COURSES, findCourse, lessonsOf } from './courses.js?v=202610072259';
+import * as P from './progress.js?v=202610072259';
+import * as E from './engine.js?v=202610072259';
+import { renderCard, feedback } from './cards.js?v=202610072259';
 
 const loaded = P.load();
 let prog = loaded.state;
@@ -24,6 +24,29 @@ function drawStats() {
   $('#stStreak').classList.toggle('off', streak === 0);
   $('#stStreak').title = streak ? `Серия: ${streak} дн. подряд` : 'Пройди урок сегодня, чтобы начать серию';
   $('#stXp').textContent = `⚡ ${prog.xp} XP`;
+}
+
+/* ---------- свой диалог вместо confirm(): системный не везде показывается ---------- */
+let askClose = null;
+const LEAVE = 'Выйти из урока? Прогресс этого урока пропадёт.';
+
+function ask(text, yes = 'Да', no = 'Отмена') {
+  return new Promise(resolve => {
+    const wrap = document.createElement('div');
+    wrap.className = 'ask';
+    wrap.innerHTML = `<div class="ask-box" role="alertdialog" aria-modal="true" aria-label="${esc(text)}">
+      <p>${esc(text)}</p>
+      <div class="row-btns"><button class="ghost-btn" data-v="0">${esc(no)}</button><button class="cta-btn" data-v="1">${esc(yes)}</button></div></div>`;
+    const done = v => { wrap.remove(); askClose = null; resolve(v); };
+    askClose = done;
+    wrap.onclick = e => {
+      const b = e.target.closest('button');
+      if (b) done(b.dataset.v === '1');
+      else if (e.target === wrap) done(false);
+    };
+    document.body.append(wrap);
+    wrap.querySelector('.cta-btn').focus();
+  });
 }
 
 const starsHtml = (n, total = 3) => '★'.repeat(n) + `<span class="off">${'★'.repeat(total - n)}</span>`;
@@ -96,12 +119,12 @@ function coursePage(id) {
     ${units}
     <button class="reset" id="reset">Сбросить прогресс</button>
   </section>`;
-  view.querySelectorAll('.step').forEach(b => b.onclick = () => {
-    if (b.dataset.later === '1' && !confirm('Этот урок дальше по курсу — лучше идти по порядку. Всё равно открыть?')) return;
+  view.querySelectorAll('.step').forEach(b => b.onclick = async () => {
+    if (b.dataset.later === '1' && !(await ask('Этот урок дальше по курсу — лучше идти по порядку. Всё равно открыть?', 'Открыть'))) return;
     location.hash = `#/${id}/${b.dataset.id}`;
   });
-  $('#reset').onclick = () => {
-    if (!confirm('Стереть весь прогресс, очки и серию?')) return;
+  $('#reset').onclick = async () => {
+    if (!(await ask('Стереть весь прогресс, очки и серию?', 'Стереть'))) return;
     prog = P.reset();
     drawStats();
     coursePage(id);
@@ -130,8 +153,8 @@ function openLesson(courseId, lessonId) {
   showCard();
 }
 
-function leave(force = false) {
-  if (!force && run && !run.state.done && run.state.cleared.size > 0 && !confirm('Выйти из урока? Прогресс этого урока пропадёт.')) return;
+async function leave(force = false) {
+  if (!force && run && !run.state.done && run.state.cleared.size > 0 && !(await ask(LEAVE, 'Выйти', 'Остаться'))) return;
   const id = run?.courseId ?? 'dotnet';
   closeLesson();
   location.hash = `#/${id}`;
@@ -276,18 +299,22 @@ function route() {
   scrollTo(0, 0);
 }
 
-addEventListener('hashchange', () => {
-  // «Назад» в браузере посреди урока: спросить, а если человек передумал — вернуть адрес урока.
+addEventListener('hashchange', async () => {
+  // «Назад» в браузере посреди урока: вернуть адрес урока и спросить, точно ли выходить.
   const inLesson = location.hash.split('/').length > 2;
   if (run && !inLesson && !run.state.done && run.state.cleared.size > 0) {
-    if (!confirm('Выйти из урока? Прогресс этого урока пропадёт.')) {
-      history.pushState(null, '', `#/${run.courseId}/${run.lesson.id}`);
-      return;
-    }
+    const target = location.hash || '#/';
+    history.pushState(null, '', `#/${run.courseId}/${run.lesson.id}`);
+    if (await ask(LEAVE, 'Выйти', 'Остаться')) { closeLesson(); location.hash = target; }
+    return;
   }
   route();
 });
 addEventListener('keydown', e => {
+  if (askClose) {
+    if (e.key === 'Escape') { e.preventDefault(); askClose(false); }
+    return;
+  }
   if (!run?.key) return;
   if (e.key === 'Escape') { leave(); return; }
   if (run.key(e)) e.preventDefault();

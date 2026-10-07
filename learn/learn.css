@@ -183,6 +183,13 @@ pre.code.blanks{white-space:pre-wrap;line-height:2.1}
 .ghost-btn{padding:16px 22px;border-radius:14px;border:2px solid var(--line2);background:none;color:var(--ink2);cursor:pointer;font:700 14px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase}
 .ghost-btn:hover{color:#fff;border-color:var(--ink3)}
 
+/* свой диалог подтверждения */
+.ask{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:var(--gut);background:rgba(5,3,10,.72)}
+.ask-box{max-width:420px;width:100%;display:grid;gap:20px;padding:24px;border-radius:var(--r);background:var(--card2);border:1px solid var(--line2);box-shadow:0 30px 80px -30px rgba(0,0,0,.8)}
+.ask-box p{font-size:18px;line-height:1.5;color:#fff}
+.ask-box .row-btns{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.ask-box .cta-btn,.ask-box .ghost-btn{min-width:0;width:auto;flex:1}
+
 /* ---------- стенды ---------- */
 .rig{display:grid;gap:14px;padding:16px;border-radius:var(--r);background:#0a0614;border:1px solid var(--line2)}
 .rig .task{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start;font-size:16px;color:#fff}

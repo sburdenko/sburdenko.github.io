@@ -1,5 +1,5 @@
 /** Реестр курсов. Новый курс — одна запись здесь и папка с уроками. */
-import dotnet from './dotnet/course.js?v=202610072257';
+import dotnet from './dotnet/course.js?v=202610072259';
 
 export const COURSES = [
   { id: 'dotnet', badge: '.NET', color: 'var(--gpu)', title: '.NET изнутри', blurb: 'Как код на C# превращается в работающую программу. Для тех, кто только начинает, и для тех, кто пришёл из другого языка.', course: dotnet },

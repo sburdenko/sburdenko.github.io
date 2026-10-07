@@ -1,13 +1,13 @@
 /** Курс .NET: разделы и уроки. Открыт только первый раздел, остальные — план. */
-import l1 from './l1-basics.js?v=202610072257';
-import l2 from './l2-languages.js?v=202610072257';
-import l3 from './l3-cil.js?v=202610072257';
-import l4 from './l4-metadata.js?v=202610072257';
-import l5 from './l5-jit.js?v=202610072257';
-import l6 from './l6-aot.js?v=202610072257';
-import l7 from './l7-safety.js?v=202610072257';
-import l8 from './l8-run.js?v=202610072257';
-import boss from './boss.js?v=202610072257';
+import l1 from './l1-basics.js?v=202610072259';
+import l2 from './l2-languages.js?v=202610072259';
+import l3 from './l3-cil.js?v=202610072259';
+import l4 from './l4-metadata.js?v=202610072259';
+import l5 from './l5-jit.js?v=202610072259';
+import l6 from './l6-aot.js?v=202610072259';
+import l7 from './l7-safety.js?v=202610072259';
+import l8 from './l8-run.js?v=202610072259';
+import boss from './boss.js?v=202610072259';
 
 export default {
   id: 'dotnet',

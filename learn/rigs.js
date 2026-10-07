@@ -1,6 +1,6 @@
 /** Виды стендов. Вся логика — в models.js; здесь только отрисовка и кнопки. */
-import { esc, RM } from '../assets/vhs.js?v=202610072257';
-import { runIL, jitInit, jitCall, compiledCount, RACE, raceTotal, raceWinner } from './models.js?v=202610072257';
+import { esc, RM } from '../assets/vhs.js?v=202610072259';
+import { runIL, jitInit, jitCall, compiledCount, RACE, raceTotal, raceWinner } from './models.js?v=202610072259';
 
 const h = (tag, cls, html) => {
   const el = document.createElement(tag);
