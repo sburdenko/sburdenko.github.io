@@ -485,3 +485,17 @@ canvas.cyl,canvas.cloud{width:100%;display:block;border-radius:10px;background:#
 .segbar i.cur{background:var(--osd);border-color:var(--osd);box-shadow:0 0 10px -1px rgba(255,210,63,.8);animation:seg-blink 1.6s steps(1) infinite}
 @keyframes seg-blink{50%{background:#5a4a12;box-shadow:none}}
 @media (prefers-reduced-motion:reduce){.segbar i.cur{animation:none}}
+
+/* ---------- стенды курса async/await ---------- */
+.tl{display:grid;gap:6px;padding:10px;border-radius:10px;background:#07040f;border:1px solid var(--line)}
+.tl-h{display:flex;justify-content:space-between}
+.tl .lane-t{grid-template-columns:110px 1fr}
+.tl .lane-t.lq .tn{color:var(--ink3)}
+.qline{display:flex;flex-wrap:wrap;gap:4px}
+.qi.net{border-color:rgba(38,227,234,.6);color:var(--gpu)}
+.sm-panes{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:10px}
+.sm-panes>div{display:grid;gap:6px;align-content:start;min-width:0}
+pre.code.sm{max-height:none}
+pre.code.sm .ln.cur{background:rgba(255,210,63,.14);box-shadow:inset 3px 0 0 var(--osd)}
+@media (max-width:640px){.sm-panes{grid-template-columns:1fr}.tl .lane-t{grid-template-columns:84px 1fr}}
+.lane .rbar i.gap{background:transparent}

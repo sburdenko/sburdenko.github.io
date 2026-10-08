@@ -48,6 +48,20 @@
 > await using, Channel); 6) платформы (ASP.NET Core, WPF, Unity: Awaitable, UniTask,
 > destroyCancellationToken). Главный стенд курса — таймлайн потоков с продолжениями после await.
 >
+> **v0.5 — курс «Async/await до дна».** Отдельный курс из 6 разделов (26 уроков + 6 финалов):
+> зачем асинхронность; async и await в деле (возвращаемые типы, исключения, WhenAll/WhenAny,
+> отмена); под капотом (машина состояний, awaiter, быстрый путь и ValueTask, ExecutionContext);
+> контекст и deadlock (SynchronizationContext, .Result, ConfigureAwait(false), async до верха,
+> голод пула); ловушки (fire-and-forget, SemaphoreSlim, TaskCompletionSource, IAsyncEnumerable,
+> Channel); платформы (ASP.NET Core, WPF/WinForms, Unity: Awaitable, корутины, UniTask,
+> destroyCancellationToken). Три новых стенда: `timeline` — тики главного потока, его очереди,
+> пула и сети; меняешь платформу (WPF, консоль/ASP.NET Core, Unity), способ ожидания (sync,
+> .Result, await) и ConfigureAwait(false) и сам видишь deadlock, ошибку «не тот поток» или
+> вовремя обработанный клик. `statemachine` — шаги MoveNext рядом с исходником, с готовыми
+> и неготовыми ответами. `combinators` — три запроса по очереди, через WhenAll и WhenAny, с
+> исключениями. Голод пула показан стендом `pool` из курса .NET. Исходы таймлайна (где
+> deadlock, где ошибка, когда обработан клик) проверяются тестами.
+>
 > **v0.4 — курс «3D-форматы».** Отдельный курс из 5 разделов (21 урок + 5 финалов):
 > основы меша; меш-форматы (OBJ, STL, PLY, glTF/GLB, FBX, DAE, USD/USDZ); CAD (B-rep, NURBS,
 > тесселяция, STEP, IGES, DWG, DXF, DWF, 3DM); BIM (IFC, RVT, PLN, NWD/NWC, BCF); облака точек

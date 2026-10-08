@@ -338,7 +338,8 @@ test('пул: блокирующие запросы раздувают пул, a
 // импорты всплывают, поэтому модели 3D-курса, импортированные ниже, здесь уже доступны
 const RIG_MODELS = {
   memory: memRig, gc: gcRig, files: fileRig, datarace: raceRig, deadlock: lockRig, pool: poolRig,
-  meshbuild: meshRig, tess: tessRig, units: unitsRig, usd: usdRig, convert: convertRig, nurbs: nurbsRig, bim: bimRig, clash: clashRig, points: pcRig
+  meshbuild: meshRig, tess: tessRig, units: unitsRig, usd: usdRig, convert: convertRig, nurbs: nurbsRig, bim: bimRig, clash: clashRig, points: pcRig,
+  timeline: timelineRig, statemachine: smRig, combinators: combineRig
 };
 
 /** Можно ли нажать кнопку действия в текущем состоянии — как её покажет стенд. */
@@ -349,6 +350,11 @@ function enabled(card, s, a) {
   if (card.rig === 'gc' && a.startsWith('root:')) return Boolean(s.roots.find(r => r.name === a.slice(5))?.to);
   if (card.rig === 'clash' && a === 'bcf') return s.pick != null;
   if (card.rig === 'clash' && a.startsWith('pick:')) return s.ran;
+  const locked = new Set(card.lock ?? []);
+  if (card.rig === 'timeline' && (a === 'tick' || a === 'end')) return s.f < s.frames.length - 1;
+  if (card.rig === 'timeline' && a === 'cfa') return !locked.has('cfa') && s.o.call !== 'sync';
+  if (card.rig === 'timeline' && /^(ctx|call):/.test(a)) return !locked.has(a.split(':')[0]);
+  if (card.rig === 'statemachine' && a === 'step') return s.f < s.frames.length - 1;
   return true;
 }
 
@@ -371,6 +377,49 @@ test('каждый новый стенд решается своими кноп�
       }
     }
   });
+});
+
+/* ---------- курс «Async/await до дна» ---------- */
+import { simulate, timelineRig, smFrames, smRig, combine, combineRig } from '../learn/models-async.js';
+
+const lastFrame = o => { const f = simulate(o); return f[f.length - 1]; };
+
+test('таймлайн: deadlock только при .Result в контексте без ConfigureAwait(false)', () => {
+  assert.equal(lastFrame({ ctx: 'ui', call: 'result', cfa: false }).status, 'deadlock');
+  assert.equal(lastFrame({ ctx: 'unity', call: 'result', cfa: false }).status, 'deadlock');
+  assert.equal(lastFrame({ ctx: 'ui', call: 'result', cfa: true }).status, 'done');
+  assert.equal(lastFrame({ ctx: 'console', call: 'result', cfa: false }).status, 'done');
+  for (const ctx of ['ui', 'console', 'unity']) assert.equal(lastFrame({ ctx, call: 'await', cfa: false }).status, 'done');
+});
+
+test('таймлайн: await отвечает на клик раньше, чем синхронный вызов', () => {
+  const a = lastFrame({ ctx: 'ui', call: 'await', cfa: false }), b = lastFrame({ ctx: 'ui', call: 'sync', cfa: false });
+  assert.ok(a.clickAt < b.clickAt, `await ${a.clickAt}, sync ${b.clickAt}`);
+});
+
+test('таймлайн: API главного потока после ConfigureAwait(false) падает', () => {
+  assert.equal(lastFrame({ ctx: 'unity', call: 'await', cfa: true, api: true }).status, 'error');
+  assert.equal(lastFrame({ ctx: 'ui', call: 'await', cfa: true, api: true }).status, 'error');
+  assert.equal(lastFrame({ ctx: 'unity', call: 'await', cfa: false, api: true }).status, 'done');
+});
+
+test('машина состояний: без готовых ответов две паузы, с готовыми ни одной', () => {
+  const a = smFrames(false), c = smFrames(true);
+  assert.equal(a[a.length - 1].pauses, 2);
+  assert.equal(c[c.length - 1].pauses, 0);
+  assert.ok(a[a.length - 1].calls > c[c.length - 1].calls, 'MoveNext вызывается чаще, когда метод приостанавливается');
+  let s = smRig.init({ goal: 'both' });
+  while (s.f < s.frames.length - 1) s = smRig.act({}, s, 'step');
+  s = smRig.act({}, s, 'cached');
+  while (s.f < s.frames.length - 1) s = smRig.act({}, s, 'step');
+  assert.ok(smRig.goal({ goal: 'both' }, s));
+});
+
+test('комбинаторы: по очереди — сумма, WhenAll — максимум, WhenAny — минимум', () => {
+  assert.equal(combine('seq', []).total, 1000);
+  assert.equal(combine('all', []).total, 500);
+  assert.equal(combine('any', []).total, 200);
+  assert.ok(combine('all', ['A', 'B']).inner.length === 2, 'WhenAll собирает все исключения');
 });
 
 /* ---------- курс «3D-форматы» ---------- */

@@ -2,7 +2,7 @@
  * Модели раздела про потоки: гонка данных в count++, взаимная блокировка двух lock, пул потоков.
  * Без DOM — покрыты тестами. Вход тот же, что у models-mem.js: init(card), act(card, s, a), goal(card, s).
  */
-import { rng } from '../assets/rand.js?v=202610081105';
+import { rng } from '../assets/rand.js?v=202610081317';
 
 const clone = x => structuredClone(x);
 
