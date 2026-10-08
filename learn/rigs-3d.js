@@ -1,6 +1,6 @@
 /** Стенды курса «3D-форматы». Логика — в models-3d.js, здесь отрисовка и кнопки. */
-import { esc, RM } from '../assets/vhs.js?v=202610081317';
-import { drive, act } from './rig-kit.js?v=202610081317';
+import { esc, RM } from '../assets/vhs.js?v=202610081319';
+import { drive, act } from './rig-kit.js?v=202610081319';
 import {
   HOUSE, signedArea, meshObj, meshStl, stlBinarySize, meshRig,
   tessInfo, cylinderTris, tessRig,
@@ -11,7 +11,7 @@ import {
   BIM, BIM_TRIS, bimFilter, bimRig,
   CLASH_ITEMS, findClashes, clashRig,
   PC_FORMATS, PC_COUNTS, pcSize, pcCloud, pcRig
-} from './models-3d.js?v=202610081317';
+} from './models-3d.js?v=202610081319';
 
 const fmtBytes = b => b < 1024 ? `${b} Б` : b < 1048576 ? `${(b / 1024).toFixed(1)} КБ` : b < 1073741824 ? `${(b / 1048576).toFixed(1)} МБ` : `${(b / 1073741824).toFixed(2)} ГБ`;
 const num = (v, d = 2) => v.toLocaleString('ru-RU', { maximumFractionDigits: d });

@@ -1,10 +1,10 @@
 /** Виды стендов. Вся логика — в models.js; здесь только отрисовка и кнопки. */
-import { esc, RM } from '../assets/vhs.js?v=202610081317';
-import { MEM_RIGS } from './rigs-mem.js?v=202610081317';
-import { RIGS_ASYNC } from './rigs-async.js?v=202610081317';
-import { RIGS_3D } from './rigs-3d.js?v=202610081317';
-import { THREAD_RIGS } from './rigs-threads.js?v=202610081317';
-import { runIL, jitInit, jitCall, compiledCount, RACE, raceTotal, raceWinner } from './models.js?v=202610081317';
+import { esc, RM } from '../assets/vhs.js?v=202610081319';
+import { MEM_RIGS } from './rigs-mem.js?v=202610081319';
+import { RIGS_ASYNC } from './rigs-async.js?v=202610081319';
+import { RIGS_3D } from './rigs-3d.js?v=202610081319';
+import { THREAD_RIGS } from './rigs-threads.js?v=202610081319';
+import { runIL, jitInit, jitCall, compiledCount, RACE, raceTotal, raceWinner } from './models.js?v=202610081319';
 
 const h = (tag, cls, html) => {
   const el = document.createElement(tag);

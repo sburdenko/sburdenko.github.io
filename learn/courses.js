@@ -1,7 +1,7 @@
 /** Реестр курсов. Новый курс — одна запись здесь и папка с уроками. */
-import dotnet from './dotnet/course.js?v=202610081317';
-import asyncCourse from './async/course.js?v=202610081317';
-import formats3d from './formats/course.js?v=202610081317';
+import dotnet from './dotnet/course.js?v=202610081319';
+import asyncCourse from './async/course.js?v=202610081319';
+import formats3d from './formats/course.js?v=202610081319';
 
 export const COURSES = [
   { id: 'dotnet', badge: '.NET', color: 'var(--gpu)', title: '.NET изнутри', blurb: 'Как код на C# превращается в работающую программу. Для тех, кто только начинает, и для тех, кто пришёл из другого языка.', course: dotnet },
