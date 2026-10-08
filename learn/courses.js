@@ -1,8 +1,9 @@
 /** Реестр курсов. Новый курс — одна запись здесь и папка с уроками. */
-import dotnet from './dotnet/course.js?v=202610072311';
+import dotnet from './dotnet/course.js?v=202610080846';
 
 export const COURSES = [
   { id: 'dotnet', badge: '.NET', color: 'var(--gpu)', title: '.NET изнутри', blurb: 'Как код на C# превращается в работающую программу. Для тех, кто только начинает, и для тех, кто пришёл из другого языка.', course: dotnet },
+  { id: 'async', badge: 'async', color: '#b28dff', title: 'Async/await до дна', blurb: 'От «зачем вообще асинхронность» до машины состояний, SynchronizationContext, deadlock с .Result, ValueTask и async в Unity. Опирается на раздел «Потоки и пул потоков».', soon: true },
   { id: 'csharp', badge: 'C#', color: 'var(--cpu)', title: 'C# с нуля', blurb: 'Переменные, условия, циклы и классы — по шагу за урок.', soon: true },
   { id: 'unity', badge: 'Unity', color: 'var(--ok)', title: 'Unity для программиста', blurb: 'Жизненный цикл MonoBehaviour, корутины, физика и рендер.', soon: true },
   { id: 'algo', badge: 'Algo', color: 'var(--osd)', title: 'Алгоритмы', blurb: 'Паттерны задач с собеседований — короткими уроками.', soon: true }

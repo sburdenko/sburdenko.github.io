@@ -226,3 +226,143 @@ test('задание каждого стенда выполнимо', () => {
     }
   });
 });
+
+/* ---------- модели разделов 2–4 ---------- */
+import { memRun, memReachable, memRig, gcRig, gcInit, gcCollect, gcFinalize, fileRig } from '../learn/models-mem.js';
+import { raceInit, raceStep, raceCan, raceDone, raceRandom, raceRig, lockInit, lockStep, lockCan, lockStatus, lockRig, poolInit, poolAdd, poolTick, poolAvgWait, poolRig } from '../learn/models-threads.js';
+
+test('стек и куча: структура копируется, класс — нет, ref меняет чужую переменную', () => {
+  const run = kind => memRun([
+    { line: 0, ops: [{ op: 'new', name: 'a', type: 'P', kind, fields: { X: 1 } }] },
+    { line: 1, ops: [{ op: 'copy', to: 'b', from: 'a' }] },
+    { line: 2, ops: [{ op: 'set', target: 'b', field: 'X', value: 9 }] }
+  ]).at(-1).s;
+  const sv = run('val'), sr = run('ref');
+  assert.equal(sv.frames[0].vars[0].value.X, 1);
+  assert.equal(sr.heap[0].fields.X, 9);
+  assert.equal(sr.frames[0].vars[0].value, sr.frames[0].vars[1].value);
+  const byRef = memRun([
+    { line: 0, ops: [{ op: 'new', name: 'p', type: 'P', kind: 'val', fields: { X: 1 } }] },
+    { line: 1, ops: [{ op: 'call', fn: 'M', params: [{ name: 'q', from: 'p', ref: true }] }] },
+    { line: 2, ops: [{ op: 'set', target: 'q', field: 'X', value: 99 }] },
+    { line: 3, ops: [{ op: 'ret' }] }
+  ]).at(-1).s;
+  assert.equal(byRef.frames.length, 1);
+  assert.equal(byRef.frames[0].vars[0].value.X, 99);
+});
+
+test('стек и куча: упаковка копирует, строки неизменяемы, брошенный объект — мусор', () => {
+  const s = memRun([
+    { line: 0, ops: [{ op: 'int', name: 'n', value: 42 }, { op: 'box', name: 'o', from: 'n' }, { op: 'set', target: 'n', value: 7 }, { op: 'unbox', name: 'm', from: 'o' }] },
+    { line: 1, ops: [{ op: 'str', name: 'a', text: 'кот' }, { op: 'copy', to: 'b', from: 'a' }, { op: 'concat', name: 'b', from: 'b', text: 'ик' }] },
+    { line: 2, ops: [{ op: 'new', name: 'x', type: 'P', kind: 'ref', fields: {} }, { op: 'null', name: 'x' }] }
+  ]).at(-1).s;
+  const v = n => s.frames[0].vars.find(x => x.name === n);
+  assert.equal(v('m').value, 42);
+  assert.equal(s.heap.find(o => o.id === v('a').value).text, 'кот');
+  assert.equal(s.heap.find(o => o.id === v('b').value).text, 'котик');
+  const live = memReachable(s);
+  assert.equal(s.heap.length - live.size, 1);
+});
+
+test('GC: цикл удаляется, LOH ждёт полной сборки, финализатору нужны две сборки', () => {
+  let s = gcInit({ objects: [{ id: 'A', refs: ['B'] }, { id: 'B', refs: ['A'] }, { id: 'L', big: true }, { id: 'F', fin: true }], roots: [{ name: 'a', to: 'A' }] });
+  s = gcRig.act({}, s, 'root:a');
+  s = gcCollect(s, 0);
+  assert.ok(!s.objs.A.alive && !s.objs.B.alive);
+  assert.ok(s.objs.L.alive, 'LOH не собирается сборкой Gen 0');
+  assert.ok(s.objs.F.alive && s.objs.F.queued && s.objs.F.gen === 1);
+  s = gcCollect(gcFinalize(s), 0);
+  assert.ok(s.objs.F.alive, 'после финализатора F уже в Gen 1');
+  s = gcCollect(s, 2);
+  assert.ok(!s.objs.F.alive && !s.objs.L.alive);
+});
+
+test('дескрипторы: второй раз файл не открыть, пока дескриптор не закрыт', () => {
+  const card = {};
+  let s = fileRig.init();
+  s = fileRig.act(card, s, 'open');
+  s = fileRig.act(card, s, 'open');
+  assert.match(s.error, /being used/);
+  s = fileRig.act(card, s, 'forget:fs1');
+  s = fileRig.act(card, s, 'gc');
+  s = fileRig.act(card, s, 'open');
+  assert.ok(s.error, 'GC без финализатора дескриптор не закрывает');
+  s = fileRig.act(card, s, 'fin');
+  s = fileRig.act(card, s, 'open');
+  assert.equal(s.opened, 2);
+  assert.equal(s.error, null);
+});
+
+/** Все порядки шагов двух потоков (обход в глубину). */
+function allEnds(init, can, step, done) {
+  const out = [];
+  const walk = s => {
+    const next = ['A', 'B'].filter(t => can(s, t));
+    if (!next.length) { out.push(s); return; }
+    next.forEach(t => walk(step(s, t)));
+  };
+  walk(init);
+  return out.filter(done ?? (() => true));
+}
+
+test('гонка: без синхронизации count бывает 1, с lock и Interlocked — всегда 2', () => {
+  const plain = allEnds(raceInit('plain'), raceCan, raceStep).map(s => s.count);
+  assert.ok(plain.includes(1) && plain.includes(2));
+  for (const mode of ['lock', 'atomic']) {
+    const ends = allEnds(raceInit(mode), raceCan, raceStep);
+    assert.ok(ends.every(s => raceDone(s) && s.count === 2), mode);
+  }
+  assert.ok(raceRandom('plain', 1000, 13) < 2000);
+  assert.equal(raceRandom('lock', 1000, 13), 2000);
+  assert.equal(raceRandom('atomic', 1000, 13), 2000);
+});
+
+test('замки: разный порядок может зависнуть, одинаковый — никогда', () => {
+  const bad = allEnds(lockInit(false), lockCan, lockStep).map(lockStatus);
+  assert.ok(bad.includes('deadlock') && bad.includes('done'));
+  const good = allEnds(lockInit(true), lockCan, lockStep).map(lockStatus);
+  assert.ok(good.every(x => x === 'done'));
+});
+
+test('пул: блокирующие запросы раздувают пул, await обходится исходными потоками', () => {
+  let b = poolAdd(poolInit(), 'block', 16), a = poolAdd(poolInit(), 'async', 16);
+  for (let i = 0; i < 40; i++) { b = poolTick(b); a = poolTick(a); }
+  assert.equal(b.done.length, 16);
+  assert.equal(a.done.length, 16);
+  assert.ok(b.threads.length > 4, 'пул добавил потоки под блокировки');
+  assert.equal(a.threads.length, 4, 'с await новых потоков не нужно');
+  assert.ok(poolAvgWait(a) < poolAvgWait(b));
+});
+
+const RIG_MODELS = { memory: memRig, gc: gcRig, files: fileRig, datarace: raceRig, deadlock: lockRig, pool: poolRig };
+
+/** Можно ли нажать кнопку действия в текущем состоянии — как её покажет стенд. */
+function enabled(card, s, a) {
+  if (card.rig === 'memory') return a !== 'step' || s.f < s.frames.length - 1;
+  if (card.rig === 'datarace' && a.startsWith('step:')) return raceCan(s, a.slice(5));
+  if (card.rig === 'deadlock' && a.startsWith('step:')) return lockCan(s, a.slice(5));
+  if (card.rig === 'gc' && a.startsWith('root:')) return Boolean(s.roots.find(r => r.name === a.slice(5))?.to);
+  return true;
+}
+
+test('каждый стенд разделов 2–4 решается своими кнопками, и цель не выполнена с самого начала', () => {
+  for (const l of allLessons) l.cards.filter(c => c.t === 'rig' && RIG_MODELS[c.rig]).forEach(c => {
+    const at = `${l.id}: стенд ${c.rig} «${c.task.slice(0, 40)}…»`;
+    const M = RIG_MODELS[c.rig];
+    assert.ok(Array.isArray(c.solve) && c.solve.length, `${at}: нет решения solve`);
+    let s = M.init(c);
+    assert.ok(!M.goal(c, s), `${at}: цель выполнена ещё до начала`);
+    for (const a of c.solve) {
+      assert.ok(enabled(c, s, a), `${at}: действие ${a} недоступно в этот момент`);
+      s = M.act(c, s, a);
+    }
+    assert.ok(M.goal(c, s), `${at}: решение не достигает цели`);
+    if (c.rig === 'memory') {
+      for (const [, prog] of Object.entries(c.variants ?? { main: { code: c.code, steps: c.steps } })) {
+        const lines = prog.code.split('\n').length;
+        assert.ok(prog.steps.every(st => st.line < lines && st.note), `${at}: шаг указывает за пределы кода или без пояснения`);
+      }
+    }
+  });
+});

@@ -1,6 +1,6 @@
 /** Общие панели для обеих визуализаций: псевдокод, фронт, плитки, подписи к событиям. */
-import { esc } from '../../assets/vhs.js?v=202610072311';
-import { t } from '../../assets/i18n.js?v=202610072311';
+import { esc } from '../../assets/vhs.js?v=202610080846';
+import { t } from '../../assets/i18n.js?v=202610080846';
 
 export const COL = {
   bfs: '#26e3ea',

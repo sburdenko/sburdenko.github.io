@@ -8,10 +8,10 @@
  *   reveal(ok) — подсветить верное и неверное после проверки;
  *   key(e) — горячие клавиши (цифры выбирают вариант).
  */
-import { esc } from '../assets/vhs.js?v=202610072311';
-import { highlight } from '../assets/code.js?v=202610072311';
-import { shuffle, scramble, check, blankCount } from './engine.js?v=202610072311';
-import { mountRig } from './rigs.js?v=202610072311';
+import { esc } from '../assets/vhs.js?v=202610080846';
+import { codeHtml } from './code-view.js?v=202610080846';
+import { shuffle, scramble, check, blankCount } from './engine.js?v=202610080846';
+import { mountRig } from './rigs.js?v=202610080846';
 
 const h = (tag, cls, html) => {
   const el = document.createElement(tag);
@@ -19,23 +19,6 @@ const h = (tag, cls, html) => {
   if (html !== undefined) el.innerHTML = html;
   return el;
 };
-
-/** Подсветка кода: C# — общим подсветчиком сайта, CIL и таблицы — простым своим. */
-export function codeHtml(src, lang) {
-  if (!lang || lang === 'cs') return highlight(src);
-  return src.split('\n').map(line => {
-    const [, code, comment = ''] = /^(.*?)(\/\/.*)?$/.exec(line);
-    let html;
-    if (lang === 'il') {
-      html = esc(code).replace(/^(\s*)([a-z][\w.]*)/, '$1<span class="k">$2</span>')
-        .replace(/\b(\d+)\b/g, '<span class="n">$1</span>');
-    } else {
-      html = esc(code).replace(/^(\s*)(\w+)/, '$1<span class="t">$2</span>');
-    }
-    if (comment) html += `<span class="c">${esc(comment)}</span>`;
-    return `<span class="ln">${html || ' '}</span>`;
-  }).join('');
-}
 
 const codeBlock = (src, lang) => h('pre', 'code', codeHtml(src, lang));
 

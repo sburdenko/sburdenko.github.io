@@ -4,11 +4,11 @@
  *   #/dotnet      курс
  *   #/dotnet/<id> урок поверх курса
  */
-import { $, esc, startNoise } from '../assets/vhs.js?v=202610072311';
-import { COURSES, findCourse, lessonsOf } from './courses.js?v=202610072311';
-import * as P from './progress.js?v=202610072311';
-import * as E from './engine.js?v=202610072311';
-import { renderCard, feedback } from './cards.js?v=202610072311';
+import { $, esc, startNoise } from '../assets/vhs.js?v=202610080846';
+import { COURSES, findCourse, lessonsOf } from './courses.js?v=202610080846';
+import * as P from './progress.js?v=202610080846';
+import * as E from './engine.js?v=202610080846';
+import { renderCard, feedback } from './cards.js?v=202610080846';
 
 const loaded = P.load();
 let prog = loaded.state;
@@ -209,6 +209,8 @@ function showCard() {
   function showFeedback(ok, text, title) {
     phase = 'feedback';
     run.lastFb = { ok, title, text };
+    // «Глубже» у вопроса открывается после ответа, чтобы не подсказывать
+    if (card.deep && card.t !== 'learn') host.insertAdjacentHTML('beforeend', `<details class="deep"><summary>Глубже — для тех, кто уже программирует</summary><div>${card.deep}</div></details>`);
     foot.className = 'l-foot ' + (ok ? 'ok' : 'bad');
     fb.innerHTML = `<b>${esc(title)}</b>${text ? `<p>${esc(text)}</p>` : ''}`;
     btn.disabled = false;

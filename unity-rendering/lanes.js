@@ -1,6 +1,6 @@
 /** Заставка: две дорожки кадра — что делает CPU и что в это время делает GPU. */
-import { $, fitCanvas, fmt, press, RM, onVisible } from '../assets/vhs.js?v=202610072311';
-import { t, onLang } from '../assets/i18n.js?v=202610072311';
+import { $, fitCanvas, fmt, press, RM, onVisible } from '../assets/vhs.js?v=202610080846';
+import { t, onLang } from '../assets/i18n.js?v=202610080846';
 
 const CULL = 0.004, CPU_DRAW = 0.055, GPU_DRAW = 0.018, BATCHES = 5, CPU_BATCH = 0.09;
 
