@@ -1,10 +1,11 @@
 /** Виды стендов. Вся логика — в models.js; здесь только отрисовка и кнопки. */
-import { esc, RM } from '../assets/vhs.js?v=202610081319';
-import { MEM_RIGS } from './rigs-mem.js?v=202610081319';
-import { RIGS_ASYNC } from './rigs-async.js?v=202610081319';
-import { RIGS_3D } from './rigs-3d.js?v=202610081319';
-import { THREAD_RIGS } from './rigs-threads.js?v=202610081319';
-import { runIL, jitInit, jitCall, compiledCount, RACE, raceTotal, raceWinner } from './models.js?v=202610081319';
+import { esc, RM } from '../assets/vhs.js?v=202610081343';
+import { MEM_RIGS } from './rigs-mem.js?v=202610081343';
+import { RIGS_ASYNC } from './rigs-async.js?v=202610081343';
+import { RIGS_HISTORY } from './rigs-history.js?v=202610081343';
+import { RIGS_3D } from './rigs-3d.js?v=202610081343';
+import { THREAD_RIGS } from './rigs-threads.js?v=202610081343';
+import { runIL, jitInit, jitCall, compiledCount, RACE, raceTotal, raceWinner } from './models.js?v=202610081343';
 
 const h = (tag, cls, html) => {
   const el = document.createElement(tag);
@@ -154,7 +155,7 @@ function race(card, host, done) {
   }
 }
 
-const RIGS = { stack, jit, race, ...MEM_RIGS, ...THREAD_RIGS, ...RIGS_3D, ...RIGS_ASYNC };
+const RIGS = { stack, jit, race, ...MEM_RIGS, ...THREAD_RIGS, ...RIGS_3D, ...RIGS_ASYNC, ...RIGS_HISTORY };
 
 export function mountRig(card, host, done) {
   RIGS[card.rig](card, host, done);

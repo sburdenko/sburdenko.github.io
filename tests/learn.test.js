@@ -339,7 +339,7 @@ test('пул: блокирующие запросы раздувают пул, a
 const RIG_MODELS = {
   memory: memRig, gc: gcRig, files: fileRig, datarace: raceRig, deadlock: lockRig, pool: poolRig,
   meshbuild: meshRig, tess: tessRig, units: unitsRig, usd: usdRig, convert: convertRig, nurbs: nurbsRig, bim: bimRig, clash: clashRig, points: pcRig,
-  timeline: timelineRig, statemachine: smRig, combinators: combineRig
+  timeline: timelineRig, statemachine: smRig, combinators: combineRig, years: yearsRig, tfm: tfmRig
 };
 
 /** Можно ли нажать кнопку действия в текущем состоянии — как её покажет стенд. */
@@ -420,6 +420,39 @@ test('комбинаторы: по очереди — сумма, WhenAll — м
   assert.equal(combine('all', []).total, 500);
   assert.equal(combine('any', []).total, 200);
   assert.ok(combine('all', ['A', 'B']).inner.length === 2, 'WhenAll собирает все исключения');
+});
+
+/* ---------- курс «История .NET» ---------- */
+import { stateAt, yearsRig, resolveHost, csprojLine, tfmRig, HOSTS, TFMS } from '../learn/models-history.js';
+
+test('лента лет: срезы экосистемы по ключевым годам', () => {
+  assert.equal(stateAt(2002).framework, '1.0');
+  assert.equal(stateAt(2002).modern, null);
+  assert.deepEqual(stateAt(2003).platforms, ['Windows']);
+  assert.equal(stateAt(2012).csharp, '5.0');
+  assert.equal(stateAt(2016).modern, '.NET Core 1.0');
+  assert.equal(stateAt(2019).framework, '4.8');
+  assert.equal(stateAt(2019).standard, '2.1');
+  assert.equal(stateAt(2025).modern, '.NET 10 (LTS)');
+  assert.equal(stateAt(2025).csharp, '14');
+  for (let y = 2002; y <= 2026; y++) assert.ok(stateAt(y).csharp, `в ${y} году должен быть C#`);
+});
+
+test('совместимость: .NET Framework не грузит netstandard2.1, NuGet берёт самую близкую сборку', () => {
+  assert.equal(resolveHost('revit24', ['ns21']).status, 'no');
+  assert.equal(resolveHost('revit24', ['ns20']).status, 'ok');
+  assert.equal(resolveHost('unity', ['ns21']).status, 'ok');
+  assert.equal(resolveHost('unity', ['net8']).status, 'no');
+  assert.equal(resolveHost('app10', ['net8', 'ns20']).tfm, 'net8');
+  assert.equal(resolveHost('revit24', ['net48', 'ns20']).tfm, 'net48');
+  assert.equal(resolveHost('revit25', ['net48']).status, 'warn');
+  assert.equal(resolveHost('revit25', ['net10']).status, 'no', '.NET 8 не загрузит сборку для .NET 10');
+  const all = Object.keys(HOSTS);
+  assert.ok(all.every(h => resolveHost(h, ['ns20']).status === 'ok'), 'netstandard2.0 — максимальный охват');
+  const single = Object.keys(TFMS).filter(t => all.every(h => resolveHost(h, [t]).status === 'ok'));
+  assert.deepEqual(single, ['ns20'], 'единственная цель для всех хостов');
+  assert.equal(csprojLine(['ns20']), '<TargetFramework>netstandard2.0</TargetFramework>');
+  assert.equal(csprojLine(['ns20', 'net8']), '<TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>');
 });
 
 /* ---------- курс «3D-форматы» ---------- */

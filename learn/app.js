@@ -4,11 +4,11 @@
  *   #/dotnet      курс
  *   #/dotnet/<id> урок поверх курса
  */
-import { $, esc, startNoise } from '../assets/vhs.js?v=202610081319';
-import { COURSES, findCourse, lessonsOf } from './courses.js?v=202610081319';
-import * as P from './progress.js?v=202610081319';
-import * as E from './engine.js?v=202610081319';
-import { renderCard, feedback } from './cards.js?v=202610081319';
+import { $, esc, startNoise } from '../assets/vhs.js?v=202610081343';
+import { GROUPS, COURSES, findCourse, lessonsOf } from './courses.js?v=202610081343';
+import * as P from './progress.js?v=202610081343';
+import * as E from './engine.js?v=202610081343';
+import { renderCard, feedback } from './cards.js?v=202610081343';
 
 const loaded = P.load();
 let prog = loaded.state;
@@ -66,7 +66,7 @@ const starsHtml = (n, total = 3) => '★'.repeat(n) + `<span class="off">${'★'
 /* ---------- каталог ---------- */
 function catalog() {
   document.title = 'Курсы — учись по урокам';
-  const cards = COURSES.map((c, i) => {
+  const card = (c, i) => {
     if (c.soon) {
       return `<div class="course soon" aria-disabled="true">
         <div class="top">${badgeHtml(c, i)}<h2>${esc(c.title)}</h2></div>
@@ -79,13 +79,22 @@ function catalog() {
       <p>${esc(c.blurb)}</p>
       ${segBar(ls)}
       <div class="cta"><span>${done} из ${ls.length} уроков</span><b>${done ? 'ПРОДОЛЖИТЬ ►' : 'НАЧАТЬ ►'}</b></div></a>`;
+  };
+  // в группе сначала готовые курсы, потом «скоро»; номер i сдвигает глитч логотипов
+  let i = 0;
+  const groups = GROUPS.map(g => {
+    const cs = COURSES.filter(c => c.group === g.id);
+    if (!cs.length) return '';
+    const sorted = [...cs.filter(c => !c.soon), ...cs.filter(c => c.soon)];
+    return `<section class="cgroup"><div class="cgroup-h"><h2>${esc(g.title)}</h2><p>${esc(g.blurb)}</p></div>
+      <div class="courses">${sorted.map(c => card(c, i++)).join('')}</div></section>`;
   }).join('');
   view.innerHTML = `<section class="view">
     <a class="back" href="../">← Полка кассет</a>
     <h1>Курсы</h1>
     <p class="lede">Короткие уроки по 5 минут. Ничего не нужно знать заранее: каждое слово объясняем, на каждом экране что-то делаешь сам. Опытным — раскрывающиеся блоки «Глубже».</p>
     ${canSave ? '' : '<p class="warn-store">Браузер не даёт сохранять данные — прогресс пропадёт после перезагрузки.</p>'}
-    <div class="courses">${cards}</div>
+    ${groups}
   </section>`;
 }
 

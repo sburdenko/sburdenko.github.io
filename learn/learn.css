@@ -499,3 +499,18 @@ pre.code.sm{max-height:none}
 pre.code.sm .ln.cur{background:rgba(255,210,63,.14);box-shadow:inset 3px 0 0 var(--osd)}
 @media (max-width:640px){.sm-panes{grid-template-columns:1fr}.tl .lane-t{grid-template-columns:84px 1fr}}
 .lane .rbar i.gap{background:transparent}
+
+/* ---------- история .NET: лента лет ---------- */
+.yr-strip{display:flex;flex-wrap:wrap;gap:4px}
+.yr-strip .yr{min-width:34px;padding:7px 0;border-radius:6px;border:1px solid var(--line2);background:var(--bg2);color:var(--ink2);font:600 12.5px/1 var(--f-mono);cursor:pointer}
+.yr-strip .yr.seen{color:#fff;border-color:var(--line2)}
+.yr-strip .yr.on{background:var(--osd);border-color:var(--osd);color:#1a1200}
+.yr-big{font:400 44px/1 var(--f-osd);color:var(--osd);letter-spacing:.04em}
+.cv-m.wrap{white-space:normal;text-align:right}
+
+/* ---------- группы на полке курсов ---------- */
+.cgroup{display:grid;gap:14px;margin-top:28px}
+.cgroup-h{display:grid;gap:4px;border-top:1px solid var(--line);padding-top:16px}
+.cgroup-h h2{font:400 26px/1 var(--f-osd);letter-spacing:.06em;color:var(--osd);text-transform:uppercase}
+.cgroup-h p{color:var(--ink3);font-size:14.5px}
+pre.code.wrapln{white-space:pre-wrap;overflow-wrap:anywhere}

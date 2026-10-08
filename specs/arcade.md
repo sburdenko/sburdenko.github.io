@@ -48,6 +48,15 @@
 > await using, Channel); 6) платформы (ASP.NET Core, WPF, Unity: Awaitable, UniTask,
 > destroyCancellationToken). Главный стенд курса — таймлайн потоков с продолжениями после await.
 >
+> **v0.6 — группы на полке и курс «История .NET».** Курсы на полке разложены по группам
+> (`GROUPS` в `courses.js`, поле `group` у курса): «.NET и C#», «3D и графика», «Ещё». Внутри
+> группы сначала готовые курсы, потом «скоро». Курс «История .NET» — 4 раздела (14 уроков +
+> 4 финала): эпоха Framework, Mono/Unity/Xamarin, open source + .NET Core + .NET Standard,
+> один .NET и где он сейчас. Два стенда: `years` — лента 2002–2026, по тапу показывает срез
+> (Framework, Core/.NET, Standard, C#, Mono, Unity, платформы, события года); `tfm` — выбор
+> TargetFrameworks и какую сборку возьмёт каждый хост (Revit 2024, Revit 2025–2026, Unity 6,
+> .NET 10) по правилу «самая близкая совместимая». В планах: «C# глубже» и «Avalonia: основы».
+>
 > **v0.5 — курс «Async/await до дна».** Отдельный курс из 6 разделов (26 уроков + 6 финалов):
 > зачем асинхронность; async и await в деле (возвращаемые типы, исключения, WhenAll/WhenAny,
 > отмена); под капотом (машина состояний, awaiter, быстрый путь и ValueTask, ExecutionContext);
