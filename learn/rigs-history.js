@@ -1,8 +1,8 @@
 /** Стенды курса «История .NET»: лента лет и совместимость целевых платформ. */
-import { esc } from '../assets/vhs.js?v=202610081343';
-import { drive, act } from './rig-kit.js?v=202610081343';
-import { codeHtml } from './code-view.js?v=202610081343';
-import { FIRST_YEAR, LAST_YEAR, stateAt, yearsRig, TFMS, HOSTS, resolveHost, csprojLine, tfmRig } from './models-history.js?v=202610081343';
+import { esc } from '../assets/vhs.js?v=202610081359';
+import { drive, act } from './rig-kit.js?v=202610081359';
+import { codeHtml } from './code-view.js?v=202610081359';
+import { FIRST_YEAR, LAST_YEAR, stateAt, yearsRig, TFMS, HOSTS, resolveHost, csprojLine, tfmRig } from './models-history.js?v=202610081359';
 
 /* ---------- лента лет ---------- */
 
@@ -43,7 +43,7 @@ function tfm(card, host, done) {
     }).join('');
     const chips = Object.entries(TFMS).map(([k, t]) => act(`tfm:${k}`, `${s.targets.includes(k) ? '✓ ' : ''}${esc(t.name)}`, '').replace('class=""', `aria-pressed="${s.targets.includes(k)}"`)).join('');
     const warn = hosts.some(h => resolveHost(h, s.targets).status === 'warn');
-    return `<div class="ctl-group"><span class="ctl-label">Для каких платформ собрать библиотеку</span><div class="seg wrap">${chips}</div></div>
+    return `<div class="ctl-group"><span class="ctl-label">Для каких платформ собрать библиотеку</span><div class="seg wrap literal">${chips}</div></div>
       <pre class="code small wrapln">${codeHtml(csprojLine(s.targets), 'xml')}</pre>
       <div class="roots"><div class="colh">Кто сможет загрузить библиотеку</div>${rows}</div>
       ${warn ? '<div class="vm-note">≈ — сборка для .NET Framework грузится через слой совместимости: заработает, только если не трогает API, которых нет на этой платформе. NuGet предупредит (NU1701).</div>' : ''}

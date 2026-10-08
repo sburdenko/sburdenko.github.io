@@ -339,7 +339,8 @@ test('пул: блокирующие запросы раздувают пул, a
 const RIG_MODELS = {
   memory: memRig, gc: gcRig, files: fileRig, datarace: raceRig, deadlock: lockRig, pool: poolRig,
   meshbuild: meshRig, tess: tessRig, units: unitsRig, usd: usdRig, convert: convertRig, nurbs: nurbsRig, bim: bimRig, clash: clashRig, points: pcRig,
-  timeline: timelineRig, statemachine: smRig, combinators: combineRig, years: yearsRig, tfm: tfmRig
+  timeline: timelineRig, statemachine: smRig, combinators: combineRig, years: yearsRig, tfm: tfmRig,
+  grid: gridRig, panels: panelRig, bind: bindRig, selectors: selRig
 };
 
 /** Можно ли нажать кнопку действия в текущем состоянии — как её покажет стенд. */
@@ -453,6 +454,52 @@ test('совместимость: .NET Framework не грузит netstandard2.
   assert.deepEqual(single, ['ns20'], 'единственная цель для всех хостов');
   assert.equal(csprojLine(['ns20']), '<TargetFramework>netstandard2.0</TargetFramework>');
   assert.equal(csprojLine(['ns20', 'net8']), '<TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>');
+});
+
+/* ---------- курс «Avalonia: основы» ---------- */
+import { gridWidths, gridRig, arrange, panelRig, bindRig, select, selRig } from '../learn/models-avalonia.js';
+
+test('Grid: пиксели как есть, Auto по содержимому, звёзды делят остаток', () => {
+  assert.deepEqual(gridWidths(['200', '*'], 800, [0, 0]), [200, 600]);
+  assert.deepEqual(gridWidths(['*', '2*', '*'], 800, [0, 0, 0]), [200, 400, 200]);
+  assert.deepEqual(gridWidths(['Auto', '*'], 500, [120, 0]), [120, 380]);
+  assert.deepEqual(gridWidths(['200', '200', '*'], 300, [0, 0, 0]), [200, 200, 0], 'звёздам не остаётся места — ноль, а не минус');
+});
+
+test('DockPanel: раздаёт края по порядку детей, последний заполняет остаток', () => {
+  const [top, left, bottom, fill] = arrange('dock', 320, 200);
+  assert.deepEqual(top, { x: 0, y: 0, w: 320, h: 36 });
+  assert.equal(left.h, 200 - 36, 'меню прижато раньше статуса и дотягивается до низа');
+  assert.equal(bottom.x, left.w, 'статус стоит справа от меню');
+  assert.equal(fill.x + fill.w, 320);
+  assert.equal(fill.y + fill.h, bottom.y);
+  const wrap = arrange('wrap', 220, 200);
+  assert.ok(wrap[2].y > 0, 'WrapPanel переносит то, что не влезло');
+  const sh = arrange('stack-h', 220, 200);
+  assert.ok(sh[3].x + sh[3].w > 220, 'горизонтальный StackPanel не переносит, а уводит за край');
+});
+
+test('привязки: без PropertyChanged экран не узнаёт об изменениях, OneWay не пишет в модель', () => {
+  const run = (start, acts) => acts.reduce((s, a) => bindRig.act({}, s, a), bindRig.init({ start }));
+  let s = run({ mode: 'TwoWay', notify: false }, ['type']);
+  assert.equal(s.vm, s.box, 'TwoWay записал ввод в модель');
+  assert.notEqual(s.label, s.vm, 'но приветствие не обновилось без уведомления');
+  s = run({ mode: 'OneWay', notify: true }, ['type']);
+  assert.equal(s.vm, 'Мир', 'OneWay не переносит ввод в модель');
+  s = run({ mode: 'OneTime', notify: true }, ['code']);
+  assert.notEqual(s.box, s.vm, 'OneTime не обновляет TextBox из модели');
+  s = run({ mode: 'TwoWay', notify: true }, ['type', 'code']);
+  assert.deepEqual(s.ok, ['type', 'code']);
+});
+
+test('селекторы: тип, класс, имя, потомок и прямой ребёнок', () => {
+  assert.deepEqual(select('Button'), [2, 3, 5, 8]);
+  assert.deepEqual(select('.primary'), [2, 8]);
+  assert.deepEqual(select('#Help'), [5]);
+  assert.deepEqual(select('StackPanel Button'), [2, 3, 5]);
+  assert.deepEqual(select('StackPanel > Button'), [2, 3]);
+  assert.deepEqual(select('Window > Button'), [8]);
+  assert.deepEqual(select('Button.primary.danger'), [8]);
 });
 
 /* ---------- курс «3D-форматы» ---------- */

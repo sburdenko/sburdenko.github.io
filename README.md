@@ -49,6 +49,10 @@ Duolingo и Busuu. На каждом экране что-то делаешь с�
 | | Контекст и deadlock | 5 уроков и финал: SynchronizationContext, сам доводишь WPF до deadlock через .Result и чинишь двумя способами, ConfigureAwait(false) и когда он ломает UI, async до самого верха, голод пула. |
 | | Ловушки и продвинутое | 5 уроков и финал: fire-and-forget и async void, SemaphoreSlim вместо lock, TaskCompletionSource и RunContinuationsAsynchronously, IAsyncEnumerable и await using, Channel и Parallel.ForEachAsync. |
 | | Платформы | 4 урока и финал курса: ASP.NET Core без контекста, WPF/WinForms и Dispatcher, Unity (UnityException из пула, Awaitable, deadlock), корутины, UniTask и destroyCancellationToken. |
+| Avalonia: основы | [Знакомство](./learn/#/avalonia) | 3 урока и финал: что такое Avalonia и чем она отличается от WPF и MAUI (своя отрисовка через Skia), первый проект из шаблона, разметка AXAML. |
+| | Раскладка | 3 урока и финал: Measure и Arrange, Margin и Padding, панели (стенд: одни и те же дети в StackPanel, WrapPanel и DockPanel, подбираешь панель под образец) и Grid (стенд: Auto, пиксели и звёздочки, проверка на двух ширинах окна). |
+| | Привязки и MVVM | 4 урока и финал: DataContext и {Binding}, INotifyPropertyChanged и режимы (стенд: вводишь имя, меняешь его из кода и чинишь привязку, пока окно и модель не совпадут), CommunityToolkit.Mvvm, compiled bindings, команды. |
+| | Стили, списки и UI-поток | 4 урока и финал курса: селекторы стилей (стенд с деревом окна), темы и ресурсы, списки и виртуализация, Dispatcher.UIThread. |
 | 3D-форматы | Из чего сделана 3D-модель | 4 урока и финал: вершины и треугольники, нормали и лицевая сторона, UV и PBR-материалы, иерархия сцены, единицы и оси. Стенд «собери меш»: тапаешь вершины домика, видишь лицевую сторону и как тот же меш записывают OBJ и STL; стенд единиц: кружка «высотой 100 м» или лёжа. |
 | | Меши: форматы для показа и обмена | 6 уроков и финал: OBJ и STL, PLY, glTF/GLB, FBX и Collada, USD/USDZ (стенд слоёв и вариантов), выбор формата. Конвертер показывает, что переживёт сохранение в каждый формат. |
 | | CAD: точная геометрия | 4 урока и финал: B-rep и NURBS (подбираешь вес, при котором кривая Безье становится точной окружностью), тесселяция цилиндра с допуском и размером файла, STEP и IGES, DWG/DXF/DWF/3DM. |
@@ -99,10 +103,11 @@ learn/
   progress.js              XP, серия дней, звёзды; localStorage (без DOM)
   models*.js               стенды: CIL, JIT, память, GC, дескрипторы, потоки, пул, меши, тесселяция, NURBS,
                            USD, конвертер форматов, IFC, коллизии, облака точек, таймлайн async, MoveNext,
-                           WhenAll/WhenAny, лента лет .NET, совместимость TFM (без DOM);
+                           WhenAll/WhenAny, лента лет .NET, совместимость TFM,
+                           Grid, панели, привязки и селекторы Avalonia (без DOM);
                            у каждого init / act / goal — тесты проходят задание теми же действиями, что кнопки
   cards.js  rigs*.js       отрисовка карточек и стендов
-  courses.js               реестр курсов; history/u1…u4, dotnet/w1…w4, async/u1…u6 и formats/u1…u5 — уроки курсов по разделам, как данные
+  courses.js               реестр курсов; history/u1…u4, dotnet/w1…w4, async/u1…u6, avalonia/u1…u4 и formats/u1…u5 — уроки курсов по разделам, как данные
 tests/                     node --test, проверяют чистые модели
 ```
 

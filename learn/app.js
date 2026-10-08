@@ -4,11 +4,11 @@
  *   #/dotnet      курс
  *   #/dotnet/<id> урок поверх курса
  */
-import { $, esc, startNoise } from '../assets/vhs.js?v=202610081343';
-import { GROUPS, COURSES, findCourse, lessonsOf } from './courses.js?v=202610081343';
-import * as P from './progress.js?v=202610081343';
-import * as E from './engine.js?v=202610081343';
-import { renderCard, feedback } from './cards.js?v=202610081343';
+import { $, esc, startNoise } from '../assets/vhs.js?v=202610081359';
+import { GROUPS, COURSES, findCourse, lessonsOf } from './courses.js?v=202610081359';
+import * as P from './progress.js?v=202610081359';
+import * as E from './engine.js?v=202610081359';
+import { renderCard, feedback } from './cards.js?v=202610081359';
 
 const loaded = P.load();
 let prog = loaded.state;
