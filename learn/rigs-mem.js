@@ -1,8 +1,8 @@
 /** Стенды раздела про память: стек и куча, сборщик мусора, дескрипторы файлов. */
-import { esc } from '../assets/vhs.js?v=202610080846';
-import { codeHtml } from './code-view.js?v=202610080846';
-import { drive, act, refColor } from './rig-kit.js?v=202610080846';
-import { memRig, memVariants, memProgram, memReachable, gcRig, gcReach, fileRig } from './models-mem.js?v=202610080846';
+import { esc } from '../assets/vhs.js?v=202610081024';
+import { codeHtml } from './code-view.js?v=202610081024';
+import { drive, act, refColor } from './rig-kit.js?v=202610081024';
+import { memRig, memVariants, memProgram, memReachable, gcRig, gcReach, fileRig } from './models-mem.js?v=202610081024';
 
 const VARIANT = { struct: 'struct Point', class: 'class Point', main: '' };
 

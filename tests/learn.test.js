@@ -335,7 +335,11 @@ test('пул: блокирующие запросы раздувают пул, a
   assert.ok(poolAvgWait(a) < poolAvgWait(b));
 });
 
-const RIG_MODELS = { memory: memRig, gc: gcRig, files: fileRig, datarace: raceRig, deadlock: lockRig, pool: poolRig };
+// импорты всплывают, поэтому модели 3D-курса, импортированные ниже, здесь уже доступны
+const RIG_MODELS = {
+  memory: memRig, gc: gcRig, files: fileRig, datarace: raceRig, deadlock: lockRig, pool: poolRig,
+  meshbuild: meshRig, tess: tessRig, units: unitsRig, usd: usdRig, convert: convertRig, nurbs: nurbsRig, bim: bimRig, clash: clashRig, points: pcRig
+};
 
 /** Можно ли нажать кнопку действия в текущем состоянии — как её покажет стенд. */
 function enabled(card, s, a) {
@@ -343,10 +347,12 @@ function enabled(card, s, a) {
   if (card.rig === 'datarace' && a.startsWith('step:')) return raceCan(s, a.slice(5));
   if (card.rig === 'deadlock' && a.startsWith('step:')) return lockCan(s, a.slice(5));
   if (card.rig === 'gc' && a.startsWith('root:')) return Boolean(s.roots.find(r => r.name === a.slice(5))?.to);
+  if (card.rig === 'clash' && a === 'bcf') return s.pick != null;
+  if (card.rig === 'clash' && a.startsWith('pick:')) return s.ran;
   return true;
 }
 
-test('каждый стенд разделов 2–4 решается своими кнопками, и цель не выполнена с самого начала', () => {
+test('каждый новый стенд решается своими кнопками, и цель не выполнена с самого начала', () => {
   for (const l of allLessons) l.cards.filter(c => c.t === 'rig' && RIG_MODELS[c.rig]).forEach(c => {
     const at = `${l.id}: стенд ${c.rig} «${c.task.slice(0, 40)}…»`;
     const M = RIG_MODELS[c.rig];
@@ -365,4 +371,63 @@ test('каждый стенд разделов 2–4 решается своим
       }
     }
   });
+});
+
+/* ---------- курс «3D-форматы» ---------- */
+import { HOUSE, signedArea, overlap, meshRig, sagitta, tessInfo, tessRig, unitsRig, unitsView, usdRig, usdResolve, convertRig, FORMATS, FEATURES, nurbsError, nurbsRig, bimRig, bimFilter, clashRig, findClashes, pcRig, pcSize, PC_COUNTS } from '../learn/models-3d.js';
+
+test('сборка меша: перекрытия отклоняются, порядок обхода задаёт сторону', () => {
+  assert.ok(signedArea(HOUSE, [0, 1, 2]) > 0);
+  assert.ok(signedArea(HOUSE, [0, 2, 1]) < 0);
+  assert.ok(!overlap(HOUSE, [0, 1, 2], [0, 2, 4]), 'общее ребро — не пересечение');
+  assert.ok(overlap(HOUSE, [0, 1, 2], [0, 1, 3]), 'треугольники ABC и ABD налезают');
+  let s = meshRig.init();
+  for (const a of ['v:0', 'v:1', 'v:2', 'v:0', 'v:1', 'v:3']) s = meshRig.act({}, s, a);
+  assert.equal(s.tris.length, 1, 'налезающий треугольник не добавлен');
+  for (const a of ['v:0', 'v:2', 'v:4', 'v:4', 'v:3', 'v:2']) s = meshRig.act({}, s, a);
+  assert.ok(meshRig.goal({}, s), 'домик закрыт');
+  assert.ok(!meshRig.goal({ goal: { ccw: true } }, s), 'но один треугольник смотрит изнанкой');
+  s = meshRig.act({}, s, 'flip');
+  assert.ok(meshRig.goal({ goal: { ccw: true } }, s));
+});
+
+test('тесселяция: ошибка падает как квадрат сегментов, STEP не растёт', () => {
+  assert.ok(Math.abs(sagitta(32) / sagitta(64) - 4) < 0.05);
+  assert.ok(sagitta(50) < 0.1 && sagitta(49) > 0.1);
+  assert.equal(tessInfo(64).tris, 252);
+  assert.equal(tessInfo(8).step, tessInfo(128).step);
+  assert.ok(tessInfo(12, true).gpu > tessInfo(12, false).gpu);
+});
+
+test('единицы, USD, NURBS: правильный ответ ровно один', () => {
+  const ok = Object.keys({ mm: 1, cm: 1, m: 1, in: 1 }).flatMap(u => ['Y', 'Z'].map(up => ({ unit: u, up }))).filter(s => unitsView(s).ok);
+  assert.deepEqual(ok, [{ unit: 'm', up: 'Y' }]);
+  let s = usdRig.init();
+  assert.equal(usdResolve(s).color.value, 'walnut');
+  s = usdRig.act({}, s, 'layer:shot');
+  assert.equal(usdResolve(s).color.value, 'red');
+  s = usdRig.act({}, s, 'swap');
+  assert.equal(usdResolve(s).color.value, 'walnut', 'после перестановки сильнее set.usda');
+  assert.equal(usdResolve(usdRig.act({}, usdRig.init(), 'var:bar')).legs.value, 3);
+  assert.ok(nurbsError(Math.SQRT1_2) < 1e-6);
+  assert.ok(nurbsError(1) > 0.05);
+});
+
+test('конвертер: таблица полная, glTF и USD хранят всё, STL — только форму', () => {
+  for (const [k, f] of Object.entries(FORMATS)) {
+    assert.deepEqual(Object.keys(f.caps).sort(), Object.keys(FEATURES).sort(), k);
+    for (const n of Object.keys(f.notes ?? {})) assert.ok(n in FEATURES, `${k}: заметка к неизвестному свойству ${n}`);
+  }
+  assert.ok(Object.values(FORMATS.gltf.caps).every(v => v === 'yes'));
+  assert.ok(Object.values(FORMATS.usd.caps).every(v => v === 'yes'));
+  assert.equal(Object.entries(FORMATS.stl.caps).filter(([, v]) => v === 'yes').map(([k]) => k).join(), 'geometry');
+});
+
+test('BIM, коллизии и облака: числа, на которые опираются вопросы', () => {
+  assert.equal(bimFilter({ type: 'IfcDoor', storey: 2 }).length, 3);
+  assert.equal(bimFilter({ type: 'IfcWindow', storey: 2 }).length, 2);
+  assert.deepEqual([0, 50, 150].map(t => findClashes(t).length), [2, 3, 4]);
+  assert.deepEqual([findClashes(0)[0].a, findClashes(0)[0].b].sort(), ['B-12', 'D-7']);
+  const fits = Object.keys({ xyz: 1, pts: 1, las: 1, laz: 1, e57: 1 }).filter(f => pcSize(f, PC_COUNTS['100M']) <= 1e9);
+  assert.deepEqual(fits, ['laz']);
 });

@@ -1,8 +1,9 @@
 /** Виды стендов. Вся логика — в models.js; здесь только отрисовка и кнопки. */
-import { esc, RM } from '../assets/vhs.js?v=202610080846';
-import { MEM_RIGS } from './rigs-mem.js?v=202610080846';
-import { THREAD_RIGS } from './rigs-threads.js?v=202610080846';
-import { runIL, jitInit, jitCall, compiledCount, RACE, raceTotal, raceWinner } from './models.js?v=202610080846';
+import { esc, RM } from '../assets/vhs.js?v=202610081024';
+import { MEM_RIGS } from './rigs-mem.js?v=202610081024';
+import { RIGS_3D } from './rigs-3d.js?v=202610081024';
+import { THREAD_RIGS } from './rigs-threads.js?v=202610081024';
+import { runIL, jitInit, jitCall, compiledCount, RACE, raceTotal, raceWinner } from './models.js?v=202610081024';
 
 const h = (tag, cls, html) => {
   const el = document.createElement(tag);
@@ -152,7 +153,7 @@ function race(card, host, done) {
   }
 }
 
-const RIGS = { stack, jit, race, ...MEM_RIGS, ...THREAD_RIGS };
+const RIGS = { stack, jit, race, ...MEM_RIGS, ...THREAD_RIGS, ...RIGS_3D };
 
 export function mountRig(card, host, done) {
   RIGS[card.rig](card, host, done);

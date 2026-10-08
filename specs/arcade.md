@@ -48,6 +48,15 @@
 > await using, Channel); 6) платформы (ASP.NET Core, WPF, Unity: Awaitable, UniTask,
 > destroyCancellationToken). Главный стенд курса — таймлайн потоков с продолжениями после await.
 >
+> **v0.4 — курс «3D-форматы».** Отдельный курс из 5 разделов (21 урок + 5 финалов):
+> основы меша; меш-форматы (OBJ, STL, PLY, glTF/GLB, FBX, DAE, USD/USDZ); CAD (B-rep, NURBS,
+> тесселяция, STEP, IGES, DWG, DXF, DWF, 3DM); BIM (IFC, RVT, PLN, NWD/NWC, BCF); облака точек
+> (LAS/LAZ, E57, RCP/RCS, PTS/XYZ). Сначала основы (вершины, нормали, UV, единицы и оси) — без
+> них различия форматов не объяснить. Девять новых стендов: `meshbuild`, `tess`, `units`, `usd`,
+> `convert`, `nurbs`, `bim`, `clash`, `points`. Числа в вопросах (сколько дверей на этаже,
+> сколько коллизий при допуске, какой формат влезает в 1 ГБ) проверяются тестами по тем же
+> моделям, что рисуют стенды. В планах: «Доставка 3D в веб» и «Новые представления».
+>
 > Всё ниже — исходный черновик; где он расходится с этим блоком, прав этот блок.
 Первый трек: **.NET** · первый раздел: **Managed execution** (по статье
 [Managed Execution Process](https://learn.microsoft.com/en-us/dotnet/standard/managed-execution-process))
