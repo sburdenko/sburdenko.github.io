@@ -1,6 +1,6 @@
 /** Стенды курса «3D-форматы». Логика — в models-3d.js, здесь отрисовка и кнопки. */
-import { esc, RM } from '../assets/vhs.js?v=202610081024';
-import { drive, act } from './rig-kit.js?v=202610081024';
+import { esc, RM } from '../assets/vhs.js?v=202610081028';
+import { drive, act } from './rig-kit.js?v=202610081028';
 import {
   HOUSE, signedArea, meshObj, meshStl, stlBinarySize, meshRig,
   tessInfo, cylinderTris, tessRig,
@@ -11,7 +11,7 @@ import {
   BIM, BIM_TRIS, bimFilter, bimRig,
   CLASH_ITEMS, findClashes, clashRig,
   PC_FORMATS, PC_COUNTS, pcSize, pcCloud, pcRig
-} from './models-3d.js?v=202610081024';
+} from './models-3d.js?v=202610081028';
 
 const fmtBytes = b => b < 1024 ? `${b} Б` : b < 1048576 ? `${(b / 1024).toFixed(1)} КБ` : b < 1073741824 ? `${(b / 1048576).toFixed(1)} МБ` : `${(b / 1073741824).toFixed(2)} ГБ`;
 const num = (v, d = 2) => v.toLocaleString('ru-RU', { maximumFractionDigits: d });
@@ -187,7 +187,7 @@ function nurbsPic(card, w) {
         ${[[1, 0], [1, 1], [0, 1]].map(([x, y], i) => `<circle cx="${O + x * S}" cy="${O + S - y * S}" r="${i === 1 ? 4 + w * 3 : 4}" class="cp${i === 1 ? ' w' : ''}"/>`).join('')}
       </svg>`,
     stats: `<div class="counter${err <= card.goal.max ? ' good' : ''}"><b>${num(err * 50, 3)}</b><span>мм максимальная ошибка при радиусе 50 мм</span></div>
-        <div class="counter"><b>${w === 1 ? 'парабола' : err < 0.002 ? 'окружность' : w < 1 ? 'эллипс' : 'гипербола'}</b><span>что это за кривая</span></div>`
+        <div class="counter"><b class="word">${w === 1 ? 'парабола' : err < 0.002 ? 'окружность' : w < 1 ? 'эллипс' : 'гипербола'}</b><span>что это за кривая</span></div>`
   };
 }
 

@@ -1,8 +1,8 @@
 /** CH.06 probes vs APV and light leaks, CH.07 effect chooser. */
-import { $, fitCanvas, fmt } from '../assets/vhs.js?v=202610081024';
-import { t } from '../assets/i18n.js?v=202610081024';
-import { bindSeg, tile } from '../assets/lab.js?v=202610081024';
-import { corridorLight, objectLighting, leakSample, INSIDE, OUTSIDE } from './model-gi.js?v=202610081024';
+import { $, fitCanvas, fmt } from '../assets/vhs.js?v=202610081028';
+import { t } from '../assets/i18n.js?v=202610081028';
+import { bindSeg, tile } from '../assets/lab.js?v=202610081028';
+import { corridorLight, objectLighting, leakSample, INSIDE, OUTSIDE } from './model-gi.js?v=202610081028';
 
 const shadeOf = v => {
   const k = Math.max(0, Math.min(1, v));

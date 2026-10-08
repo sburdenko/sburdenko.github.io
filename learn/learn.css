@@ -437,3 +437,4 @@ canvas.cyl,canvas.cloud{width:100%;display:block;border-radius:10px;background:#
 .clash-svg .cb{stroke-width:1.5;fill-opacity:.35}
 .clash-svg .cb.kr{fill:#b28dff;stroke:#b28dff}.clash-svg .cb.ov{fill:var(--gpu);stroke:var(--gpu)}.clash-svg .cb.vk{fill:var(--warn);stroke:var(--warn)}
 .clash-svg .cb.hot{fill-opacity:.8;stroke:#fff;stroke-width:2.5}
+.pool-stats .counter b.word{font-size:17px;line-height:1.2}
