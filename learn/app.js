@@ -4,11 +4,11 @@
  *   #/dotnet      курс
  *   #/dotnet/<id> урок поверх курса
  */
-import { $, esc, startNoise } from '../assets/vhs.js?v=202610081028';
-import { COURSES, findCourse, lessonsOf } from './courses.js?v=202610081028';
-import * as P from './progress.js?v=202610081028';
-import * as E from './engine.js?v=202610081028';
-import { renderCard, feedback } from './cards.js?v=202610081028';
+import { $, esc, startNoise } from '../assets/vhs.js?v=202610081105';
+import { COURSES, findCourse, lessonsOf } from './courses.js?v=202610081105';
+import * as P from './progress.js?v=202610081105';
+import * as E from './engine.js?v=202610081105';
+import { renderCard, feedback } from './cards.js?v=202610081105';
 
 const loaded = P.load();
 let prog = loaded.state;
@@ -49,23 +49,35 @@ function ask(text, yes = 'Да', no = 'Отмена') {
   });
 }
 
+/** Логотип курса: маленький CRT-экран. Копии текста в data-text нужны для глитча на псевдоэлементах. */
+const badgeHtml = (c, i = 0, big = false) =>
+  `<span class="badge${big ? ' big' : ''}" style="--c:${c.color};--d:${(i * 2.3) % 7}s" data-text="${esc(c.badge)}" data-len="${Math.min(5, c.badge.length)}" aria-hidden="true">${esc(c.badge)}</span>`;
+
+/** Прогресс сегментами, как счётчик на кассете: по сегменту на урок, следующий мигает. */
+function segBar(lessons) {
+  const next = lessons.find(l => !P.isDone(prog, l.id));
+  const done = lessons.filter(l => P.isDone(prog, l.id)).length;
+  return `<div class="segbar" role="progressbar" aria-valuemin="0" aria-valuemax="${lessons.length}" aria-valuenow="${done}" aria-label="Пройдено уроков">${lessons.map(l =>
+    `<i class="${P.isDone(prog, l.id) ? 'on' : l === next ? 'cur' : ''}${l.boss ? ' boss' : ''}"></i>`).join('')}</div>`;
+}
+
 const starsHtml = (n, total = 3) => '★'.repeat(n) + `<span class="off">${'★'.repeat(total - n)}</span>`;
 
 /* ---------- каталог ---------- */
 function catalog() {
   document.title = 'Курсы — учись по урокам';
-  const cards = COURSES.map(c => {
+  const cards = COURSES.map((c, i) => {
     if (c.soon) {
       return `<div class="course soon" aria-disabled="true">
-        <div class="top"><span class="badge" style="--c:${c.color}">${esc(c.badge)}</span><h2>${esc(c.title)}</h2></div>
+        <div class="top">${badgeHtml(c, i)}<h2>${esc(c.title)}</h2></div>
         <p>${esc(c.blurb)}</p><span class="soon-tag">Скоро</span></div>`;
     }
     const ls = lessonsOf(c.course);
     const done = ls.filter(l => P.isDone(prog, l.id)).length;
     return `<a class="course" href="#/${c.id}">
-      <div class="top"><span class="badge" style="--c:${c.color}">${esc(c.badge)}</span><h2>${esc(c.title)}</h2></div>
+      <div class="top">${badgeHtml(c, i)}<h2>${esc(c.title)}</h2></div>
       <p>${esc(c.blurb)}</p>
-      <div class="pbar"><i style="width:${done / ls.length * 100}%"></i></div>
+      ${segBar(ls)}
       <div class="cta"><span>${done} из ${ls.length} уроков</span><b>${done ? 'ПРОДОЛЖИТЬ ►' : 'НАЧАТЬ ►'}</b></div></a>`;
   }).join('');
   view.innerHTML = `<section class="view">
@@ -106,7 +118,7 @@ function coursePage(id) {
       <span class="kick">Раздел ${ui + 1}</span>
       <h2>${esc(u.title)}</h2>
       <p class="lede" style="font-size:16px">${esc(u.blurb)}</p>
-      <div class="pbar"><i style="width:${done / u.lessons.length * 100}%"></i></div>
+      ${segBar(u.lessons)}
       <div class="meta"><span>${done} из ${u.lessons.length} уроков</span><span>~${u.lessons.reduce((s, l) => s + l.minutes, 0)} мин</span></div>
       <ol class="path">${steps}</ol>
       ${u.source ? `<p class="src">По материалу <a href="${u.source.url}" target="_blank" rel="noopener">${esc(u.source.title)}</a>. Где современный .NET работает иначе, урок говорит об этом отдельно.</p>` : ''}
@@ -114,7 +126,7 @@ function coursePage(id) {
   }).join('');
   view.innerHTML = `<section class="view">
     <a class="back" href="#/">← Все курсы</a>
-    <h1>${esc(course.title)}</h1>
+    <div class="course-head">${badgeHtml(COURSES.find(c => c.id === id), 0, true)}<h1>${esc(course.title)}</h1></div>
     ${canSave ? '' : '<p class="warn-store">Браузер не даёт сохранять данные — прогресс пропадёт после перезагрузки.</p>'}
     ${units}
     <button class="reset" id="reset">Сбросить прогресс</button>
