@@ -340,7 +340,8 @@ const RIG_MODELS = {
   memory: memRig, gc: gcRig, files: fileRig, datarace: raceRig, deadlock: lockRig, pool: poolRig,
   meshbuild: meshRig, tess: tessRig, units: unitsRig, usd: usdRig, convert: convertRig, nurbs: nurbsRig, bim: bimRig, clash: clashRig, points: pcRig,
   timeline: timelineRig, statemachine: smRig, combinators: combineRig, years: yearsRig, tfm: tfmRig,
-  grid: gridRig, panels: panelRig, bind: bindRig, selectors: selRig
+  grid: gridRig, panels: panelRig, bind: bindRig, selectors: selRig,
+  generics: genRig, closures: closureRig, linq: linqRig, allocs: allocRig, copies: copyRig, patterns: switchRig
 };
 
 /** Можно ли нажать кнопку действия в текущем состоянии — как её покажет стенд. */
@@ -356,6 +357,13 @@ function enabled(card, s, a) {
   if (card.rig === 'timeline' && a === 'cfa') return !locked.has('cfa') && s.o.call !== 'sync';
   if (card.rig === 'timeline' && /^(ctx|call):/.test(a)) return !locked.has(a.split(':')[0]);
   if (card.rig === 'statemachine' && a === 'step') return s.f < s.frames.length - 1;
+  if (card.rig === 'closures' && (a === 'step' || a === 'end')) return s.f < s.frames.length - 1;
+  if (card.rig === 'linq' && (a === 'step' || a === 'end')) return s.f < s.ev.length;
+  if (card.rig === 'linq' && ['orderBy', 'toList', 'twice'].includes(a)) return !locked.has(a);
+  if (card.rig === 'copies' && a === 'ro') return !locked.has('ro');
+  if (card.rig === 'patterns' && a.startsWith('up:')) return s.order.indexOf(a.slice(3)) > 0;
+  if (card.rig === 'closures' && a.startsWith('variant:')) return (card.variants ?? ['for', 'copy', 'foreach']).includes(a.slice(8));
+  if (card.rig === 'bind' && (a === 'notify' || a.startsWith('mode:'))) return !locked.has(a.split(':')[0]);
   return true;
 }
 
@@ -500,6 +508,59 @@ test('селекторы: тип, класс, имя, потомок и прям
   assert.deepEqual(select('StackPanel > Button'), [2, 3]);
   assert.deepEqual(select('Window > Button'), [8]);
   assert.deepEqual(select('Button.primary.danger'), [8]);
+});
+
+/* ---------- курс «C# глубже» ---------- */
+import { genConflicts, genFits, genRig, closureFrames, closureRig, linqRun, linqRig, PARSE, allocRig, copies, copyRig, switchHits, unreachable, switchRig, SHAPES } from '../learn/models-csharp.js';
+
+test('ограничения: конфликты, подходящие типы', () => {
+  assert.equal(genConflicts(['class', 'struct']).length, 1);
+  assert.equal(genConflicts(['struct', 'new']).length, 1);
+  assert.equal(genConflicts(['class', 'new', 'cmp']).length, 0);
+  assert.ok(genFits('int', ['struct', 'cmp']));
+  assert.ok(!genFits('string', ['new']), 'у string нет конструктора без параметров');
+  assert.ok(genFits('point', ['unmanaged']));
+  assert.ok(!genFits('list', ['unmanaged']));
+  assert.ok(!genFits('stream', ['new']), 'абстрактный класс не создать');
+});
+
+test('замыкания: for печатает 3 3 3, копия и foreach — 0 1 2', () => {
+  const out = v => closureFrames(v).at(-1).out.join(' ');
+  assert.equal(out('for'), '3 3 3');
+  assert.equal(out('copy'), '0 1 2');
+  assert.equal(out('foreach'), '0 1 2');
+  assert.equal(closureFrames('for').at(-1).boxes.length, 1, 'у for один объект замыкания на весь цикл');
+  assert.equal(closureFrames('copy').at(-1).boxes.length, 3);
+});
+
+test('LINQ: Take останавливает чтение, ToList и OrderBy читают всё, двойной перебор удваивает работу', () => {
+  assert.deepEqual(linqRun({}).c, { read: 4, where: 4, select: 2 });
+  assert.equal(linqRun({ toList: true }).c.where, 6);
+  assert.equal(linqRun({ orderBy: true }).c.read, 6);
+  assert.equal(linqRun({ twice: true }).c.read, 8);
+  assert.equal(linqRun({ twice: true, toList: true }).c.read, 6, 'материализованный результат перебирают без чтения источника');
+});
+
+test('Span: Split и Substring выделяют память, срезы — нет', () => {
+  assert.equal(PARSE.split.allocs(3), 4);
+  assert.equal(PARSE.substring.allocs(3), 3);
+  assert.equal(PARSE.span.allocs(3), 0);
+});
+
+test('защитные копии: in без readonly struct копирует, ref опасен', () => {
+  assert.equal(copies('value', false).n, 1);
+  assert.equal(copies('in', false).n, 2);
+  assert.equal(copies('in', true).n, 0);
+  assert.ok(copies('ref', false).mutable);
+  assert.ok(!copies('in', true).mutable);
+});
+
+test('switch: побеждает первая ветка, _ ловит null, общие ветки над частными недостижимы', () => {
+  const good = ['point', 'circle', 'square', 'rect', 'nul', 'any'];
+  assert.deepEqual(switchHits(good), SHAPES.map(s => s.want));
+  assert.deepEqual(unreachable(good), []);
+  assert.deepEqual(unreachable(['circle', 'point', 'rect', 'square', 'any', 'nul']), ['point', 'square', 'nul']);
+  assert.equal(switchHits(['any', 'nul'])[SHAPES.findIndex(s => s.v === null)], 'any', '_ ловит и null');
 });
 
 /* ---------- курс «3D-форматы» ---------- */

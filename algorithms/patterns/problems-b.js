@@ -1,5 +1,5 @@
 /** Problems and C# solutions for chapters 05–08: stack, linked list, DFS/BFS, trees. */
-import { problem as p } from './problem.js?v=202610081359';
+import { problem as p } from './problem.js?v=202610081418';
 
 export const PROBLEMS_B = {
   stack: [

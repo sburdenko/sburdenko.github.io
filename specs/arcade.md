@@ -48,6 +48,15 @@
 > await using, Channel); 6) платформы (ASP.NET Core, WPF, Unity: Awaitable, UniTask,
 > destroyCancellationToken). Главный стенд курса — таймлайн потоков с продолжениями после await.
 >
+> **v0.8 — курс «C# глубже».** Для тех, кто уже пишет на C#. 5 разделов (16 уроков + 5 финалов):
+> дженерики, делегаты/события/замыкания, LINQ и его цена, производительность (Span, ref struct,
+> readonly struct и in), современный C# (pattern matching, records, nullable, C# 12–14). Шесть
+> стендов: `generics` (ограничения where → что компилируется и какие T подходят, конфликты
+> ограничений), `closures` (лямбды в for/foreach, скрытые объекты замыканий), `linq` (запрос по
+> шагам: Take, ToList, OrderBy, двойной перебор, счётчики), `allocs` (Split / Substring / Span),
+> `copies` (по значению, ref, in, readonly struct), `patterns` (порядок веток switch, CS8510).
+> Типы, упаковка и ref/out — в «.NET изнутри», раздел 2; здесь не повторяются.
+>
 > **v0.7 — курс «Avalonia: основы».** 4 раздела (14 уроков + 4 финала): знакомство, раскладка,
 > привязки и MVVM, стили/списки/UI-поток. Четыре стенда: `grid` — ColumnDefinitions из Auto,
 > пикселей и звёздочек, цель проверяется на двух ширинах окна; `panels` — одни и те же дети в
