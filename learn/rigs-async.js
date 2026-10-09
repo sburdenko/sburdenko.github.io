@@ -1,8 +1,8 @@
 /** Стенды курса «Async/await до дна»: таймлайн потоков, машина состояний, комбинаторы задач. */
-import { esc } from '../assets/vhs.js?v=202610081418';
-import { codeHtml } from './code-view.js?v=202610081418';
-import { drive, act } from './rig-kit.js?v=202610081418';
-import { CTX, IO_TICKS, timelineRig, SM_SOURCE, SM_MOVENEXT, smRig, TASKS, combine, combineRig } from './models-async.js?v=202610081418';
+import { esc } from '../assets/vhs.js?v=202610092124';
+import { codeHtml } from './code-view.js?v=202610092124';
+import { drive, act } from './rig-kit.js?v=202610092124';
+import { CTX, IO_TICKS, timelineRig, SM_SOURCE, SM_MOVENEXT, smRig, TASKS, combine, combineRig } from './models-async.js?v=202610092124';
 
 const seg = (items, cur, prefix) => `<div class="seg wrap">${items.map(([v, label]) => act(`${prefix}:${v}`, esc(label), '').replace('class=""', `aria-pressed="${String(v) === String(cur)}"`)).join('')}</div>`;
 

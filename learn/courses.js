@@ -1,15 +1,16 @@
 /** Реестр курсов. Новый курс — одна запись здесь и папка с уроками. */
-import history from './history/course.js?v=202610081418';
-import dotnet from './dotnet/course.js?v=202610081418';
-import asyncCourse from './async/course.js?v=202610081418';
-import csharp from './csharp/course.js?v=202610081418';
-import avalonia from './avalonia/course.js?v=202610081418';
-import formats3d from './formats/course.js?v=202610081418';
+import history from './history/course.js?v=202610092124';
+import dotnet from './dotnet/course.js?v=202610092124';
+import asyncCourse from './async/course.js?v=202610092124';
+import csharp from './csharp/course.js?v=202610092124';
+import avalonia from './avalonia/course.js?v=202610092124';
+import three1 from './three1/course.js?v=202610092124';
+import formats3d from './formats/course.js?v=202610092124';
 
 /** Группы на полке курсов — по порядку показа. */
 export const GROUPS = [
   { id: 'net', title: '.NET и C#', blurb: 'Откуда взялся .NET, как он работает внутри, язык C#, асинхронность и интерфейсы.' },
-  { id: 'gfx', title: '3D и графика', blurb: 'Форматы 3D-моделей: от меша до BIM и облаков точек.' },
+  { id: 'gfx', title: '3D и графика', blurb: 'Форматы 3D-моделей от меша до BIM и Three.js — 3D прямо в браузере, от первого кубика до шейдеров.' },
   { id: 'more', title: 'Ещё', blurb: 'Скоро на полке.' }
 ];
 
@@ -20,6 +21,9 @@ export const COURSES = [
   { id: 'async', group: 'net', badge: 'async', color: '#b28dff', title: 'Async/await до дна', blurb: 'От «зачем вообще асинхронность» до машины состояний, SynchronizationContext, deadlock с .Result и async в Unity. Двигаешь время, ловишь deadlock и шагаешь по MoveNext.', course: asyncCourse },
   { id: 'avalonia', group: 'net', badge: 'AXAML', color: '#8b5cf6', title: 'Avalonia: основы', blurb: 'Кросс-платформенный UI на C# и XAML для Windows, macOS, Linux и не только. Двигаешь колонки Grid, выбираешь панели, чинишь привязки, которые не обновляют экран, и подбираешь селекторы стилей.', course: avalonia },
   { id: 'formats3d', group: 'gfx', badge: '3D', color: '#7fd4ff', title: '3D-форматы', blurb: 'Меши, CAD, BIM и облака точек: чем glTF отличается от FBX, STEP от STL, а IFC от GLB. Собираешь меш руками, тесселируешь цилиндр, ищешь коллизии и считаешь размер скана.', course: formats3d },
+  { id: 'three1', group: 'gfx', badge: 'TJS 1', color: '#9ef0ff', title: 'Three.js: начальный уровень', blurb: 'Первая сцена, камера, объекты и иерархия, свет и тени, текстуры и загрузка glTF. На каждом стенде — настоящий Three.js: включаешь строки кода, крутишь fov и far, переносишь Луну к Земле и зажигаешь тени.', course: three1 },
+  { id: 'three2', group: 'gfx', badge: 'TJS 2', color: '#ffd166', title: 'Three.js: средний уровень', blurb: 'Карты окружения и HDR, PBR всерьёз, анимации glTF и AnimationMixer, клики по объектам через Raycaster, InstancedMesh и счёт draw calls, постобработка.', soon: true },
+  { id: 'three3', group: 'gfx', badge: 'TJS 3', color: '#ff6b9a', title: 'Three.js: продвинутый уровень', blurb: 'Свои шейдеры (ShaderMaterial, GLSL), WebGPURenderer и язык TSL, рендер в текстуру, частицы на GPU, физика и React Three Fiber.', soon: true },
   { id: 'unity', group: 'more', badge: 'Unity', color: 'var(--ok)', title: 'Unity для программиста', blurb: 'Жизненный цикл MonoBehaviour, корутины, физика и рендер.', soon: true },
   { id: 'algo', group: 'more', badge: 'Algo', color: 'var(--osd)', title: 'Алгоритмы', blurb: 'Паттерны задач с собеседований — короткими уроками.', soon: true }
 ];

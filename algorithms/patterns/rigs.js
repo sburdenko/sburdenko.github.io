@@ -1,8 +1,8 @@
 /** Every problem's rig: editable fields, an example, a random generator and the trace to play. */
-import { RIGS_A } from './rigs-a.js?v=202610081418';
-import { RIGS_B } from './rigs-b.js?v=202610081418';
-import { RIGS_C } from './rigs-c.js?v=202610081418';
-import { parseField } from './inputs.js?v=202610081418';
+import { RIGS_A } from './rigs-a.js?v=202610092124';
+import { RIGS_B } from './rigs-b.js?v=202610092124';
+import { RIGS_C } from './rigs-c.js?v=202610092124';
+import { parseField } from './inputs.js?v=202610092124';
 
 export const PATTERN_IDS = ['hash', 'twoptr', 'window', 'binary', 'stack', 'list', 'graph', 'tree', 'heap', 'back', 'greedy', 'dp'];
 export const RIGS = { ...RIGS_A, ...RIGS_B, ...RIGS_C };

@@ -341,7 +341,8 @@ const RIG_MODELS = {
   meshbuild: meshRig, tess: tessRig, units: unitsRig, usd: usdRig, convert: convertRig, nurbs: nurbsRig, bim: bimRig, clash: clashRig, points: pcRig,
   timeline: timelineRig, statemachine: smRig, combinators: combineRig, years: yearsRig, tfm: tfmRig,
   grid: gridRig, panels: panelRig, bind: bindRig, selectors: selRig,
-  generics: genRig, closures: closureRig, linq: linqRig, allocs: allocRig, copies: copyRig, patterns: switchRig
+  generics: genRig, closures: closureRig, linq: linqRig, allocs: allocRig, copies: copyRig, patterns: switchRig,
+  tjfirst: firstRig, tjcam: camRig, tjgraph: graphRig, tjlight: lightRig, tjtex: texRig
 };
 
 /** Можно ли нажать кнопку действия в текущем состоянии — как её покажет стенд. */
@@ -363,6 +364,11 @@ function enabled(card, s, a) {
   if (card.rig === 'copies' && a === 'ro') return !locked.has('ro');
   if (card.rig === 'patterns' && a.startsWith('up:')) return s.order.indexOf(a.slice(3)) > 0;
   if (card.rig === 'closures' && a.startsWith('variant:')) return (card.variants ?? ['for', 'copy', 'foreach']).includes(a.slice(8));
+  if (card.rig?.startsWith('tj')) {
+    const key = { add: 'add', render: 'render', loop: 'loop', camz: 'camz', parent: 'parent', scale: 'scale', mat: 'mat', rep: 'rep', wrap: 'wrap', cs: 'cs', fov: 'fov', z: 'z', near: 'near', far: 'far', amb: 'amb', dir: 'dir', pt: 'pt' }[a.split(':')[0]];
+    if (key && locked.has(key)) return false;
+    if (['sm', 'lc', 'cc', 'fr'].includes(a) && locked.has('shadows')) return false;
+  }
   if (card.rig === 'bind' && (a === 'notify' || a.startsWith('mode:'))) return !locked.has(a.split(':')[0]);
   return true;
 }
@@ -561,6 +567,50 @@ test('switch: побеждает первая ветка, _ ловит null, о�
   assert.deepEqual(unreachable(good), []);
   assert.deepEqual(unreachable(['circle', 'point', 'rect', 'square', 'any', 'nul']), ['point', 'square', 'nul']);
   assert.equal(switchHits(['any', 'nul'])[SHAPES.findIndex(s => s.v === null)], 'any', '_ ловит и null');
+});
+
+/* ---------- курс «Three.js: начальный уровень» ---------- */
+import { firstView, firstRig, camSees, camRig, orbitWorld, graphRig, lightView, lightRig, texView, texRig } from '../learn/models-three.js';
+
+test('Three.js: кубик виден, только если он в сцене, кадр нарисован и камера не внутри', () => {
+  const base = { added: true, camZ: 5, render: true, loop: false };
+  assert.ok(firstView(base).visible);
+  assert.ok(!firstView({ ...base, added: false }).visible);
+  assert.ok(!firstView({ ...base, camZ: 0 }).visible);
+  assert.ok(!firstView({ ...base, render: false }).visible);
+  assert.ok(firstView({ ...base, render: false, loop: true }).spin, 'цикл сам вызывает render');
+});
+
+test('Three.js: камера отрезает по near, far и углу обзора', () => {
+  const see = s => Object.fromEntries(camSees({ fov: 50, z: 6, near: 0.1, far: 50, ...s }).map(x => [x.id, x.ok]));
+  assert.deepEqual(see({}), { a: true, b: true, c: true });
+  assert.equal(see({ fov: 35, z: 3 }).b, false, 'узкий угол не захватывает зелёный сбоку');
+  assert.equal(see({ far: 10 }).c, false);
+  assert.equal(see({ near: 5, z: 3 }).a, false);
+  assert.ok(see({ fov: 35, z: 10 }).b, 'отъехав назад, камера захватывает больше');
+});
+
+test('Three.js: дети наследуют поворот и масштаб родителя', () => {
+  assert.ok(Math.abs(orbitWorld({ parent: 'earth', angle: 90, scale: 1 }).dist - 1.2) < 1e-9);
+  assert.ok(Math.abs(orbitWorld({ parent: 'earth', angle: 45, scale: 2 }).dist - 2.4) < 1e-9);
+  assert.ok(orbitWorld({ parent: 'scene', angle: 90, scale: 1 }).dist > 4, 'Луна в сцене не летит за Землёй');
+});
+
+test('Three.js: свет, материалы и четыре флага теней', () => {
+  const v = s => lightView({ mat: 'standard', amb: false, dir: false, pt: false, sm: false, lc: false, cc: false, fr: false, ...s });
+  assert.equal(v({}).look, 'black');
+  assert.equal(v({ amb: true }).look, 'dull');
+  assert.equal(v({ pt: true }).look, 'shaded');
+  assert.equal(v({ mat: 'basic' }).look, 'flat');
+  assert.ok(!v({ dir: true, sm: true, lc: true, cc: true }).shadow, 'без receiveShadow тени нет');
+  assert.ok(v({ dir: true, sm: true, lc: true, cc: true, fr: true }).shadow);
+  assert.ok(!v({ amb: true, sm: true, lc: true, cc: true, fr: true }).shadow, 'Ambient теней не даёт');
+});
+
+test('Three.js: повтор текстуры требует RepeatWrapping, цвета — sRGB', () => {
+  assert.equal(texView({ repeat: 4, wrap: 'clamp', cs: 'srgb' }).tiles, 'smeared');
+  assert.equal(texView({ repeat: 4, wrap: 'repeat', cs: 'srgb' }).tiles, 'tiled');
+  assert.ok(!texView({ repeat: 1, wrap: 'clamp', cs: 'none' }).colors);
 });
 
 /* ---------- курс «3D-форматы» ---------- */
