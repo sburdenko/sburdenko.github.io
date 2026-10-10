@@ -58,6 +58,10 @@
 | | LINQ и его цена | 3 урока и финал: ленивость и Take, ToList и повторный перебор, буферизующий OrderBy, IQueryable (стенд: запрос по шагам со счётчиками чтений, Where и Select). |
 | | Производительность | 3 урока и финал: Span<T> (стенд: разбор строки через Split, Substring и срезы — сколько объектов в куче), ref struct и Memory<T>, readonly struct и in (стенд защитных копий). |
 | | Современный C# | 4 урока и финал курса: pattern matching (стенд: переставляешь ветки switch, компилятор отмечает недостижимые), records, nullable-ссылки и required, C# 12–14. |
+| Ревью кода: найди баг | [Задача 1: ModelManager](./learn/#/review) | 4 урока и финал: изменяемая структура и её копии, синглтон и FileStream без Dispose, HttpClient и .Result, Dictionary&lt;object,…&gt;, поиск, события и пустой catch. Финал — стенд «найди баг»: кликаешь строки с багами в полном листинге, проверка показывает найденные, пропущенные и ложные. |
+| | Задача 2: ClashService | 4 урока и финал: замыкание в цикле, async void, Equals и GetHashCode, коллекции и рекурсия, исключения и «ненастоящий null» Unity. |
+| | Задача 3: TileLoader | 3 урока и финал: блокировки в async и дедлок на главном потоке, гонки и GetOrAdd, таймер, который собирает GC, и отмена, которая ничего не отменяет. |
+| | Задача 4: ClashMarkers | 4 урока и финал курса: аллокации в Update, .material и батчинг, OnEnable без OnDisable, HasFlag, контракт компаратора и кэш LRU. |
 | Async/await до дна | [Зачем асинхронность](./learn/#/async) | 3 урока и финал: ожидание против работы, Task как обещание, «потока нет» — пока идёт ввод-вывод, поток свободен. Стенд-таймлайн: тикаешь время и видишь, когда окно обрабатывает клик при синхронном вызове, .Result и await. |
 | | async и await в деле | 5 уроков и финал: первый async-метод, Task / Task&lt;T&gt; / ValueTask / async void, исключения и AggregateException, WhenAll и WhenAny (стенд с тремя запросами и сбоями), отмена через CancellationToken. |
 | | Под капотом | 4 урока и финал: машина состояний (шагаешь по MoveNext рядом со своим кодом и считаешь приостановки), awaiter, быстрый путь и ValueTask, ExecutionContext и AsyncLocal. |
@@ -130,11 +134,12 @@ learn/
                            WhenAll/WhenAny, лента лет .NET, совместимость TFM,
                            Grid, панели, привязки и селекторы Avalonia,
                            ограничения дженериков, замыкания, LINQ, Span, копии структур, switch,
+                           «найди баг» — листинг с отметкой строк (models-hunt.js),
                            первая сцена, камера, иерархия, свет и текстуры Three.js (без DOM);
   three-view.js            живая WebGL-картинка: Three.js r170 с CDN, освобождает контекст, когда карточка ушла
                            у каждого init / act / goal — тесты проходят задание теми же действиями, что кнопки
   cards.js  rigs*.js       отрисовка карточек и стендов
-  courses.js               реестр курсов; history/u1…u4, dotnet/w1…w4, csharp/u1…u5, async/u1…u6, avalonia/u1…u4, formats/u1…u5 и three1/u1…u5 — уроки курсов по разделам, как данные
+  courses.js               реестр курсов; history/u1…u4, dotnet/w1…w4, csharp/u1…u5, review/u0…u3, async/u1…u6, avalonia/u1…u4, formats/u1…u5 и three1/u1…u5 — уроки курсов по разделам, как данные
 tests/                     node --test, проверяют чистые модели
 ```
 
