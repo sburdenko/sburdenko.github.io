@@ -28,8 +28,8 @@ export default {
     {
       t: 'learn',
       title: 'The deadlock through the Unity context',
-      body: '<p>The Unity main thread has its own <code>SynchronizationContext</code>. When an <code>await</code> runs there, it remembers that context. The continuation after the <code>await</code> is later posted through it <b>back to the main thread</b> and runs there during the frame processing.</p><p>Now the picture: four loads hold the spots, and their continuations (where <code>Release</code> lives) wait for the main thread. The main thread is stuck in <code>Wait()</code>, waiting for a spot to free up. Each waits for the other. That is a <b>deadlock</b>.</p>',
-      deep: 'The context is captured only if <code>SynchronizationContext.Current</code> is not null where the <code>await</code> runs. In Unity that is the main thread. From a thread-pool thread the load would resume in the pool and there would be no deadlock (just wasted threads). That is why this bug is "sometimes there, sometimes not": it depends on who called.'
+      body: '<p>The Unity main thread has its own <code>SynchronizationContext</code>. An <code>await</code> that starts on the main thread captures that context, and the continuation is queued <b>back to the main thread</b>. Unity drains that queue once per frame, in its player loop.</p><p>Now the picture: four loads hold the spots, and their continuations (where <code>Release</code> lives) wait for the main thread. The main thread is stuck in <code>Wait()</code>, waiting for a spot to free up. Each waits for the other. That is a <b>deadlock</b>.</p>',
+      deep: 'The context is captured only if <code>SynchronizationContext.Current</code> is not null where the <code>await</code> runs. In Unity that is the main thread. If the four loads holding the spots started on a pool thread, their continuations run in the pool, <code>Release</code> happens, and the main thread only stalls until a spot frees up. That is why the bug comes and goes: it depends on which thread started the loads that hold the spots.'
     },
     {
       t: 'order',
@@ -50,7 +50,7 @@ export default {
       code: 'private async Task<Tile> LoadAsync(int id, CancellationToken ct)\n{\n    _throttle.Wait();\n    Interlocked.Increment(ref _pending);\n\n    var bytes = await Http.GetByteArrayAsync($"https://cdn.example.com/tiles/{id}");\n    Thread.Sleep(50); // do not hammer the CDN\n    var tile = Tile.Parse(bytes);\n\n    lock (_sync)\n    {\n        _loaded[id] = tile;\n    }\n\n    _throttle.Release();\n\n    if (--_pending == 0)\n        _allLoaded.SetResult(true);\n\n    return tile;\n}',
       bugs: [
         { lines: [2], title: 'Synchronous Wait() in an async method', why: 'It blocks the calling thread. On the Unity main thread that freezes the game and deadlocks: the continuations that call Release are waiting for this very thread.' },
-        { lines: [6], title: 'Thread.Sleep in an async method', why: 'It blocks the whole thread (and in the continuation that is the Unity main thread again). Use await Task.Delay(50, ct), which holds no thread.' },
+        { lines: [6], title: 'Thread.Sleep in an async method', why: 'It blocks the whole thread. The continuation after await came back to the Unity main thread, so the frame stalls for 50 ms per tile. Use await Task.Delay(50, ct): it holds no thread.' },
         { lines: [14], title: 'Release outside try/finally', why: 'If the network or Parse throws, the code never reaches Release. After four such errors all spots are lost for good and every load hangs.' }
       ],
       goal: { min: 3, maxFalse: 2 },
@@ -82,22 +82,22 @@ export default {
       t: 'multi',
       q: 'What is true about ConfigureAwait(false) in this loader?',
       options: [
-        'The continuation after await goes to the thread pool, not the Unity main thread',
+        'The continuation after await usually runs on the thread pool, not the Unity main thread',
         'The heavy Tile.Parse then no longer slows down frames',
         'Right after it you can safely touch Unity scene objects',
         'By itself it removes the blocking Wait()'
       ],
       answer: [0, 1],
-      explain: 'ConfigureAwait(false) means "do not return to the captured context". Parsing leaves the main thread. But you must not call Unity API after it, and it does not cure Wait(), which runs before the first await.'
+      explain: 'ConfigureAwait(false) means "do not return to the captured context", so parsing leaves the main thread. You must not touch Unity API after it. It does not remove Wait(), which runs before the first await. It does break the deadlock loop, though: Release runs on the pool and wakes the main thread, although the game still freezes until then.'
     },
     {
       t: 'match',
       q: 'Match the symptom to its cause.',
       pairs: [
-        ['The game stutters for a second while the map loads', 'Thread.Sleep or Wait on the main thread'],
+        ['A frame hitches after every downloaded tile', 'Thread.Sleep in a continuation on the main thread'],
         ['After a few network errors no tiles load at all', 'Release is not in finally'],
-        ['Loading hangs while the CPU sits idle', 'Deadlock: the continuation waits for the blocked main thread'],
-        ['Thread-pool load grows with sleeps in a loop', 'A blocking pause instead of Task.Delay']
+        ['The game hangs forever while the CPU sits idle', 'Deadlock: the continuation with Release waits for the blocked main thread'],
+        ['The deadlock is gone after ConfigureAwait(false), but the game still stalls at times', 'Wait() before the first await still blocks the main thread']
       ]
     }
   ]

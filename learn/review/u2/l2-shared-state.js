@@ -36,7 +36,7 @@ export default {
       body: '<p>Кладём в словарь не готовую задачу, а <b>рецепт</b> — <code>Lazy&lt;Task&lt;Tile&gt;&gt;</code>. Рецепты можно создавать сколько угодно: они ничего не запускают. Запуск происходит при первом обращении к <code>.Value</code>, и <code>Lazy</code> по умолчанию гарантирует, что рецепт сработает один раз.</p>',
       code: 'private readonly ConcurrentDictionary<int, Lazy<Task<Tile>>> _loading =\n    new ConcurrentDictionary<int, Lazy<Task<Tile>>>();\n\npublic Task<Tile> GetTileAsync(int id, CancellationToken ct)\n{\n    return _loading.GetOrAdd(\n        id,\n        _ => new Lazy<Task<Tile>>(() => LoadAsync(id, ct))).Value;\n}',
       lang: 'csharp',
-      deep: 'Режим по умолчанию у <code>Lazy&lt;T&gt;</code> — <code>ExecutionAndPublication</code>: фабрика выполняется один раз под замком. Но <code>.Value</code> сразу запускает <code>LoadAsync</code> на потоке вызывающего (пока не встретится первый await), поэтому блокирующий <code>Wait()</code> из урока 1 всё равно нужно убрать. Ещё нюанс: если фабрика Lazy бросит исключение синхронно, в этом режиме оно кэшируется и перебрасывается при каждом обращении.'
+      deep: 'Режим по умолчанию у <code>Lazy&lt;T&gt;</code> — <code>ExecutionAndPublication</code>: фабрика выполняется один раз под замком. Но <code>.Value</code> сразу запускает <code>LoadAsync</code> на потоке вызывающего (пока не встретится первый await), поэтому блокирующий <code>Wait()</code> из урока 1 всё равно нужно убрать. И Lazy не лечит кэширование отказа: async-метод не бросает исключение наружу, ошибка уходит внутрь Task, и Lazy навсегда хранит упавшую задачу (об этом ниже).'
     },
     {
       t: 'blanks',
@@ -49,13 +49,13 @@ export default {
     {
       t: 'rig',
       rig: 'hunt',
-      task: 'Найди четыре гонки на общем состоянии. Нажимай на строки, потом «Проверить».',
+      task: 'Найди четыре проблемы с общим состоянием между потоками. Нажимай на строки, потом «Проверить».',
       code: 'private readonly ConcurrentDictionary<int, Task<Tile>> _loading = new ConcurrentDictionary<int, Task<Tile>>();\nprivate readonly Dictionary<int, Tile> _loaded = new Dictionary<int, Tile>();\nprivate bool _stopRequested;\nprivate int _pending;\n\npublic Task<Tile> GetTileAsync(int id, CancellationToken ct)\n{\n    return _loading.GetOrAdd(id, _ => LoadAsync(id, ct));\n}\n\n// в конце LoadAsync, после Release():\nif (--_pending == 0)\n    _allLoaded.SetResult(true);\n\npublic Tile TryGetLoaded(int id) =>\n    _loaded.TryGetValue(id, out var tile) ? tile : null;\n\nwhile (!_stopRequested) // фоновый цикл сжатия кэша\n{\n    Compact();\n    await Task.Delay(1000);\n}',
       bugs: [
         { lines: [11, 12], title: 'Неатомарный счётчик и SetResult', why: '--_pending теряет обновления при гонке, а ноль может случиться между двумя тайлами: ожидающие решат, что всё загружено. Второй SetResult бросит InvalidOperationException.' },
         { lines: [7], title: 'GetOrAdd с побочным эффектом в фабрике', why: 'Фабрика может сработать в двух потоках одновременно: тайл загрузится дважды, _pending и семафор будут задеты дважды. Нужен Lazy<Task<Tile>>.' },
         { lines: [14, 15, 1], title: 'Чтение Dictionary без lock', why: 'Остальные потоки пишут в _loaded под lock, а читают здесь без него. Чтение во время записи даёт мусор или исключение.' },
-        { lines: [2, 17], title: 'Флажок остановки без синхронизации', why: 'Обычный bool между потоками не даёт гарантий видимости. Остановку нужно делать через CancellationToken (или хотя бы volatile).' }
+        { lines: [2, 17], title: 'Флажок остановки без синхронизации', why: 'По модели памяти обычный bool между потоками не гарантирует, что цикл увидит запись: JIT вправе прочитать его один раз. Здесь от этого случайно спасают lock в Compact и await, но надёжно — CancellationToken (минимум — volatile).' }
       ],
       goal: { min: 3, maxFalse: 2 },
       solve: ['flag:11', 'flag:7', 'flag:14', 'flag:2', 'check']
@@ -63,17 +63,17 @@ export default {
     {
       t: 'learn',
       title: 'Счётчик, который обнулился не вовремя',
-      body: '<p>Сценарий. Тайл A занял место, увеличил <code>_pending</code> до 1, скачался, уменьшил до 0 и объявил: «всё загружено!». Но тайл B ещё стоял в очереди к семафору и увеличить счётчик не успел. Объявление прозвучало <b>раньше времени</b>.</p><p>Когда B закончит, счётчик снова станет 0, и второй <code>SetResult</code> бросит <code>InvalidOperationException</code>. Причём это случится уже после <code>Release</code>, и тайл, который загрузился, вернёт ошибку. Лечение: считать в точке, где работа <b>появляется</b> (в <code>GetTileAsync</code>), использовать <code>Interlocked</code>, а завершать через <code>TrySetResult</code>.</p>',
-      deep: 'Ещё одна тонкость: <code>TaskCompletionSource</code> без <code>TaskCreationOptions.RunContinuationsAsynchronously</code> выполняет продолжения ждущих <b>синхронно внутри SetResult</b>. То есть чужой код после <code>await WhenAllLoaded()</code> начнёт работать прямо в потоке загрузки, внутри нашего <code>LoadAsync</code> и, возможно, внутри чужих блокировок. Поэтому TCS почти всегда создают с этим флагом.'
+      body: '<p>Сценарий. Тайлы A–D держат все четыре места, <code>_pending</code> = 4, тайл E ждёт у семафора. A вызывает <code>Release</code>, E просыпается, но до <code>Increment</code> ещё не дошёл. Тем временем A–D уменьшают счётчик до 0 и объявляют: «всё загружено!». Объявление прозвучало <b>раньше времени</b>. Ещё проще: игра запрашивает тайлы волнами, и ноль наступает между волнами.</p><p>Когда E закончит, счётчик снова станет 0, и второй <code>SetResult</code> бросит <code>InvalidOperationException</code>. Причём это случится уже после <code>Release</code>: тайл, который успешно загрузился, вернёт ошибку, и упавшая задача останется в кэше. Лечение: считать в точке, где работа <b>появляется</b> (в <code>GetTileAsync</code>), использовать <code>Interlocked</code>, а завершать через <code>TrySetResult</code>.</p>',
+      deep: 'Ещё одна тонкость: <code>TaskCompletionSource</code> без <code>TaskCreationOptions.RunContinuationsAsynchronously</code> выполняет продолжения ждущих <b>синхронно внутри SetResult</b>. То есть чужой код после <code>await WhenAllLoaded()</code> начнёт работать прямо в потоке загрузки, внутри нашего <code>LoadAsync</code>, а в общем случае — и под замками того, кто вызвал <code>SetResult</code>. Поэтому TCS почти всегда создают с этим флагом.'
     },
     {
       t: 'order',
       q: 'Расставь события, при которых счётчик обнуляется слишком рано.',
       items: [
-        'Тайл A получил место в семафоре, _pending стал 1',
-        'Тайл B уже запрошен, но стоит в очереди к семафору и счётчик не трогал',
-        'Тайл A загрузился, _pending стал 0, SetResult(true): «всё готово»',
-        'Тайл B получил место, _pending стал 1, затем снова 0 и повторный SetResult бросает исключение'
+        'Тайлы A–D держат все 4 места, _pending = 4, тайл E ждёт у семафора',
+        'A вызывает Release, E просыпается, но Increment ещё не выполнил',
+        'A–D уменьшают счётчик до 0, SetResult(true): «всё готово»',
+        'E увеличивает счётчик, загружается, снова доводит его до 0, и повторный SetResult бросает исключение'
       ],
       explain: 'Счётчик считает только тех, кто прошёл семафор, а не тех, кто уже запросил загрузку. Поэтому ноль возможен, пока работа ещё есть.'
     },
@@ -96,11 +96,11 @@ export default {
       body: '<p>Пока в <code>_loading</code> лежит Task, любой следующий <code>GetTileAsync(id)</code> получит <b>ту же самую</b> Task. Если она завершилась ошибкой (или отменой), так она и лежит. Сеть пропала на секунду, а тайл теперь «сломан» до перезапуска: повторной попытки никто не делает.</p><p>Нужно убирать неудачные записи. Кэшировать стоит успех, а не отказ.</p>',
       code: 'try\n{\n    return await DownloadAndParse(id, ct);\n}\ncatch\n{\n    _loading.TryRemove(id, out _); // дать шанс повторной попытке\n    throw;\n}',
       lang: 'csharp',
-      deep: 'Есть тонкость: если ошибка случится синхронно, до того как <code>GetOrAdd</code> вернулся и запись попала в словарь, <code>TryRemove</code> отработает вхолостую, а потом запись всё равно добавится. Надёжнее удалять в продолжении снаружи, после того как задача уже в словаре. И осторожно с отменой: отменённая из-за чужого токена задача тоже не должна навсегда оставаться в кэше.'
+      deep: 'Есть тонкость: если ошибка случится синхронно, до того как <code>GetOrAdd</code> вернулся и запись попала в словарь, <code>TryRemove</code> отработает вхолостую, а потом запись всё равно добавится. Надёжнее удалять в продолжении снаружи, после того как задача уже в словаре. Удаляй именно эту задачу, а не «что лежит по ключу»: иначе можно выкинуть уже новую, удачную попытку (в .NET 5+ — <code>TryRemove(KeyValuePair)</code>, раньше — через <code>ICollection&lt;KeyValuePair&gt;.Remove</code>). И осторожно с отменой: задача, отменённая чужим токеном, тоже не должна навсегда оставаться в кэше.'
     },
     {
       t: 'choice',
-      q: 'Сервер тайлов ответил 503 на запрос тайла 42, потом пришёл в себя. Игрок снова запросил тайл 42. Что вернёт загрузчик из этого урока?',
+      q: 'Сервер тайлов ответил 503 на запрос тайла 42, потом пришёл в себя. Игрок снова запросил тайл 42. Что вернёт исходный загрузчик?',
       options: [
         'Ту же упавшую Task: ошибка закэшировалась',
         'Новую удачную загрузку',
