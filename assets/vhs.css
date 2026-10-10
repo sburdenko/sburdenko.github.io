@@ -316,6 +316,18 @@ td .pathpill{font-size:11.5px}
 .cassette.soon{opacity:.55;cursor:default}
 .cassette.soon:hover{transform:none;border-color:var(--line2)}
 
+/* ---------- вход в курсы (hub) ---------- */
+.door{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;padding:20px 22px;border-radius:12px;text-decoration:none;color:var(--ink);
+  background:linear-gradient(90deg,rgba(38,227,234,.12),rgba(255,62,165,.1));border:1px solid rgba(38,227,234,.45);box-shadow:0 20px 60px -34px rgba(38,227,234,.7);transition:transform .18s,border-color .18s}
+.door:hover{transform:translateY(-3px);border-color:var(--osd)}
+.door-badge{font-size:38px;line-height:1}
+.door-txt{display:grid;gap:4px}
+.door-kick{font:600 12px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gpu)}
+.door-title{font-family:var(--f-disp);font-weight:700;font-size:22px;color:#fff}
+.door-desc{font-size:15px;color:#e3dcfb}
+.door-go{font:600 12.5px/1 var(--f-mono);letter-spacing:.08em;color:var(--osd);white-space:nowrap}
+@media (max-width:560px){.door{grid-template-columns:auto 1fr}.door-go{grid-column:2}}
+
 /* ---------- interview ---------- */
 .qa{display:grid;gap:8px}
 .qa details{border:1px solid var(--line2);border-radius:5px;background:var(--bg2)}

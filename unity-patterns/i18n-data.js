@@ -1,5 +1,5 @@
 /** Tape 05 strings: MVP / MVVM, Flyweight, Dirty Flag. */
-import { facts } from './facts.js?v=202609271602';
+import { facts } from './facts.js?v=202610101018';
 
 export const DATA = {
   'ui.h2': { en: 'MVP and MVVM: keep data, logic and UI apart', ru: 'MVP и MVVM: данные, логика и UI отдельно' },

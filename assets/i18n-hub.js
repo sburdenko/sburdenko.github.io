@@ -65,6 +65,14 @@ export const HUB = {
   },
   'hub.soonTag': { en: '<span>Soon</span>', ru: '<span>Скоро</span>' },
   'hub.soonGo': { en: '■ NOT RECORDED YET', ru: '■ ЗАПИСЬ НЕ НАЧАТА' },
+  'osd.bathys': { en: '◀ BATHYS', ru: '◀ BATHYS' },
+  'hub.learnKick': { en: 'Bathys · courses', ru: 'Bathys · курсы' },
+  'hub.learnTitle': { en: 'Bathys — learn in depth', ru: 'Bathys — учись на глубину' },
+  'hub.learnDesc': {
+    en: 'Five-minute interactive lessons: .NET from the inside, async/await, C#, Avalonia, 3D formats and Three.js. Tap, assemble code, run the rigs.',
+    ru: 'Интерактивные уроки по пять минут: .NET изнутри, async/await, C#, Avalonia, 3D-форматы и Three.js. Тапаешь, собираешь код, запускаешь стенды.'
+  },
+  'hub.learnGo': { en: 'OPEN ►', ru: 'ОТКРЫТЬ ►' },
   'how.h2': { en: 'How to use this', ru: 'Как этим пользоваться' },
   'how.1': {
     en: '<span class="n">1</span><h3>Answer for yourself first</h3><p>Every tape ends with a block of questions. It pays to say your answer out loud before opening the card.</p>',

@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0715">
-<title data-i18n="page.title">Tape shelf — interactive notes</title>
-<meta name="description" content="Interactive notes for Unity 6 rendering and interview algorithms. Everything can be clicked, tweaked and played step by step.">
+<title>Bathys</title>
+<meta name="description" content="Bathys — interactive five-minute lessons: .NET from the inside, async/await, C#, Avalonia, 3D formats and Three.js. Bathys — интерактивные уроки по пять минут.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
-<link rel="stylesheet" href="./assets/vhs.css?v=202609271602">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;600;700;900&family=VT323&family=Pliant:wght@300;500&display=swap">
+<link rel="stylesheet" href="./assets/vhs.css?v=202610101018">
+<link rel="stylesheet" href="./learn/learn.css?v=202610101018">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='44' fill='%230b0715' stroke='%237fd4ff' stroke-width='6'/><path d='M22 58 Q50 30 78 58' fill='none' stroke='%23ffd23f' stroke-width='7' stroke-linecap='round'/><circle cx='50' cy='66' r='7' fill='%237fd4ff'/></svg>">
 <script>
 /* Страница живёт на модулях: если граф импортов не собрался, всё замирает молча.
    Этот сторож показывает, что именно упало, и подсказывает жёсткую перезагрузку. */
@@ -19,12 +20,13 @@
   function report(what) {
     if (shown) return;
     shown = true;
+    var ru = false;
+    try { ru = localStorage.getItem('tape-lang') === 'ru'; } catch (e) {}
     var box = document.createElement('div');
     box.setAttribute('role', 'alert');
     box.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99;padding:12px 16px;' +
       'background:#ff5c6c;color:#1a0009;font:600 13px/1.5 ui-monospace,Menlo,Consolas,monospace';
-    box.textContent = 'Scripts failed to load — press Cmd/Ctrl + Shift + R to hard-reload. ' +
-      'Скрипты не загрузились — обнови страницу с Cmd/Ctrl + Shift + R. [' + what + ']';
+    box.textContent = (ru ? 'Скрипты не загрузились — обнови страницу с Cmd/Ctrl + Shift + R. [' : 'Scripts failed to load — reload with Cmd/Ctrl + Shift + R. [') + what + ']';
     (document.body || document.documentElement).appendChild(box);
   }
   addEventListener('error', function (e) {
@@ -39,102 +41,26 @@
 </script>
 </head>
 <body>
-<div class="fx fx-scan" aria-hidden="true"></div>
 <div class="fx fx-grain" aria-hidden="true"></div>
 <div class="fx fx-vig" aria-hidden="true"></div>
-<div class="fx fx-track" aria-hidden="true"></div>
 <canvas id="noise" width="160" height="90" aria-hidden="true"></canvas>
 
-<header class="osd" data-i18n-aria="osd.bar">
-  <div class="l"><span class="play">PLAY ►</span><span class="ch" id="osdCh">CH.00 SHELF</span></div>
+<header class="osd bx-head">
+  <div class="l">
+    <a class="bx-logo" href="#/" aria-label="Bathys"><span class="bx-mark" aria-hidden="true"></span><span class="bx-name" data-text="BATHYS">BATHYS</span></a>
+    <span class="bx-tag" id="brandTag"></span>
+  </div>
   <div class="r">
-    <nav id="osdNav" data-i18n-aria="osd.nav"></nav>
-    <div class="seg lang" id="langSeg" role="group" data-i18n-aria="osd.lang"><button data-l="en" aria-pressed="true">EN</button><button data-l="ru" aria-pressed="false">RU</button></div>
-    <span>SP</span><span class="ctr" id="osdCtr">0:00:00</span>
+    <a class="bx-nav" id="navShelf" href="./shelf/"></a>
+    <span class="stat fire" id="stStreak">🔥 0</span><span class="stat xp" id="stXp">⚡ 0 XP</span>
+    <a class="prof-btn" id="profBtn" href="#/profile"></a>
   </div>
 </header>
 
-<main>
-<section class="chapter" id="shelf" data-ch="CH.00 SHELF" style="padding-top:56px">
-  <p class="eyebrow" data-i18n="hub.eyebrow">Interactive notes · taken apart step by step</p>
-  <h1 class="title"><span data-i18n="hub.title">The shelf</span><span class="title-2" data-i18n="hub.subtitle">tapes you can click</span></h1>
-  <p class="kicker" style="font-size:clamp(17px,1.8vw,20px);color:#e3dcfb" data-i18n="hub.lede">Every tape is one topic taken all the way through: short paragraphs of theory, live rigs instead of pictures, and the block of questions you usually get asked at an interview. Nothing to install — everything is computed right in the browser.</p>
+<main class="learn" id="view"></main>
 
-  <div class="shelf">
-    <a class="cassette" href="./unity-rendering/">
-      <div class="spine"><span>TAPE 01</span><span>UNITY 6</span></div>
-      <div class="reels"><div class="reel"><i></i></div><div class="win"></div><div class="reel"><i></i></div></div>
-      <h3 data-i18n="hub.tape1Title">Batching in Unity</h3>
-      <p data-i18n="hub.tape1Desc">Static and dynamic batching, the SRP Batcher, GPU instancing and the GPU Resident Drawer. A frame deck with a live scene, the CPU → GPU command tape and a “one scene, every technique” table.</p>
-      <div class="tags" data-i18n="hub.tape1Tags"><span>Rendering</span><span>Draw calls</span><span>SetPass</span><span>URP · HDRP</span></div>
-      <span class="go" data-i18n="hub.go">INSERT TAPE ►</span>
-    </a>
+<div class="lesson" id="lesson" hidden role="dialog" aria-modal="true" aria-label="Lesson"></div>
 
-    <a class="cassette" href="./algorithms/bfs-dfs/">
-      <div class="spine"><span>TAPE 02</span><span>ALGORITHMS</span></div>
-      <div class="reels"><div class="reel"><i></i></div><div class="win"></div><div class="reel"><i></i></div></div>
-      <h3 data-i18n="hub.tape2Title">Graph traversal: BFS and DFS</h3>
-      <p data-i18n="hub.tape2Desc">Queue versus stack on a 2D array and on a graph: generate the data, scrub step by step, watch the frontier, the traversal tree and the shortest path. Plus a race of the two traversals through one maze.</p>
-      <div class="tags" data-i18n="hub.tape2Tags"><span>Algorithms</span><span>Queue · Stack</span><span>O(V + E)</span><span>Shortest path</span></div>
-      <span class="go" data-i18n="hub.go">INSERT TAPE ►</span>
-    </a>
-
-    <a class="cassette" href="./algorithms/two-pointers/">
-      <div class="spine"><span>TAPE 03</span><span>ALGORITHMS</span></div>
-      <div class="reels"><div class="reel"><i></i></div><div class="win"></div><div class="reel"><i></i></div></div>
-      <h3 data-i18n="hub.tape3Title">Two Pointers</h3>
-      <p data-i18n="hub.tape3Desc">Opposite pointers and fast &amp; slow / Floyd. Find a pair, detect a cycle and locate its entrance. Rewind every move and see why it works.</p>
-      <div class="tags"><span>Opposite pointers</span><span>Floyd</span><span>O(n)</span></div>
-      <span class="go" data-i18n="hub.go">INSERT TAPE ►</span>
-    </a>
-
-    <a class="cassette" href="./unity-urp/">
-      <div class="spine"><span>TAPE 04</span><span>UNITY 6</span></div>
-      <div class="reels"><div class="reel"><i></i></div><div class="win"></div><div class="reel"><i></i></div></div>
-      <h3 data-i18n="hub.tape4Title">URP field guide</h3>
-      <p data-i18n="hub.tape4Desc">Unity’s advanced URP e-book, chapter by chapter: settings finder, renderer chooser, MSAA, GPU Resident Drawer, shadow atlas, mixed lighting, APV leaks, the book’s five shaders, Render Graph merging, volumes, STP and PSO warm-up.</p>
-      <div class="tags" data-i18n="hub.tape4Tags"><span>URP</span><span>Lighting</span><span>Render Graph</span><span>Performance</span></div>
-      <span class="go" data-i18n="hub.go">INSERT TAPE ►</span>
-    </a>
-
-    <a class="cassette" href="./unity-patterns/">
-      <div class="spine"><span>TAPE 05</span><span>UNITY 6</span></div>
-      <div class="reels"><div class="reel"><i></i></div><div class="win"></div><div class="reel"><i></i></div></div>
-      <h3 data-i18n="hub.tape5Title">Unity Design Patterns</h3>
-      <p data-i18n="hub.tape5Desc">SOLID and eleven patterns as working rigs: build objects, reuse a pool, undo commands, transition states, broadcast events and measure shared data.</p>
-      <div class="tags" data-i18n="hub.tape5Tags"><span>SOLID</span><span>Patterns</span><span>Architecture</span><span>Unity 6</span></div>
-      <span class="go" data-i18n="hub.go">INSERT TAPE ►</span>
-    </a>
-
-    <a class="cassette" href="./algorithms/patterns/">
-      <div class="spine"><span>TAPE 06</span><span>ALGORITHMS</span></div>
-      <div class="reels"><div class="reel"><i></i></div><div class="win"></div><div class="reel"><i></i></div></div>
-      <h3 data-i18n="hub.tape6Title">Algorithm patterns</h3>
-      <p data-i18n="hub.tape6Desc">Twelve interview patterns from hash maps to DP: how to spot each one, a C# skeleton and 59 problems — each played step by step on its own editable rig, with a Hard one in every chapter.</p>
-      <div class="tags" data-i18n="hub.tape6Tags"><span>Algorithms</span><span>LeetCode</span><span>C#</span><span>12 patterns</span></div>
-      <span class="go" data-i18n="hub.go">INSERT TAPE ►</span>
-    </a>
-  </div>
-</section>
-
-<section class="chapter" id="how" data-ch="CH.01 HOW">
-  <div class="ch-head">
-    <p class="osdtag">CH.01 // HOW IT WORKS</p>
-    <h2 data-i18n="how.h2">How to use this</h2>
-  </div>
-  <div class="prio">
-    <div data-i18n="how.1"><span class="n">1</span><h3>Answer for yourself first</h3><p>Every tape ends with a block of questions. It pays to say your answer out loud before opening the card.</p></div>
-    <div data-i18n="how.2"><span class="n">2</span><h3>Turn the knobs</h3><p>Sliders, switches and clicks on the scene change the model, not a picture: the numbers are recomputed live.</p></div>
-    <div data-i18n="how.3"><span class="n">3</span><h3>Check it in practice</h3><p>The models here are simplified teaching models. The real answers come from the Unity Profiler, the Frame Debugger and measurements on the target hardware.</p></div>
-  </div>
-</section>
-</main>
-
-<footer>
-  <span class="stop" data-i18n="foot.stop">■ END OF SHELF</span>
-  <p><span data-i18n="foot.src">Source code and models:</span> <a href="https://github.com/sburdenko/sburdenko.github.io">github.com/sburdenko/sburdenko.github.io</a></p>
-</footer>
-
-<script type="module" src="./assets/hub.js?v=202609271602"></script>
+<script type="module" src="./learn/app.js?v=202610101018"></script>
 </body>
 </html>

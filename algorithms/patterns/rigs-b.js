@@ -1,8 +1,8 @@
 /** Editable rigs for chapters 05–08. */
-import * as B from './model-b.js?v=202609271602';
-import * as V from './views-b.js?v=202609271602';
-import { treeFromLevelOrder, levelOrderOf } from './inputs.js?v=202609271602';
-import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202609271602';
+import * as B from './model-b.js?v=202610101018';
+import * as V from './views-b.js?v=202610101018';
+import { treeFromLevelOrder, levelOrderOf } from './inputs.js?v=202610101018';
+import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202610101018';
 
 const values = (extra = {}) => ({ key: 'values', type: 'ints', minLen: 1, maxLen: 8, min: -99, max: 99, ...extra });
 const tree = { key: 'root', type: 'tree', maxNodes: 15, maxDepth: 4, min: -99, max: 99 };
