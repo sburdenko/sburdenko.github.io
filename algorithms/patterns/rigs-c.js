@@ -1,7 +1,7 @@
 /** Editable rigs for chapters 09–12. */
-import * as C from './model-c.js?v=202610101413';
-import * as V from './views-c.js?v=202610101413';
-import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202610101413';
+import * as C from './model-c.js?v=202610101649';
+import * as V from './views-c.js?v=202610101649';
+import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202610101649';
 
 const nums = (extra = {}) => ({ key: 'nums', type: 'ints', minLen: 1, maxLen: 10, min: -99, max: 99, ...extra });
 const word = key => ({ key, type: 'str', chars: 'a-z', charsLabel: 'a–z', minLen: 0, maxLen: 7 });
