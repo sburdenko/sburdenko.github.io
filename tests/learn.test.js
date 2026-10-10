@@ -346,7 +346,8 @@ const RIG_MODELS = {
   timeline: timelineRig, statemachine: smRig, combinators: combineRig, years: yearsRig, tfm: tfmRig,
   grid: gridRig, panels: panelRig, bind: bindRig, selectors: selRig,
   generics: genRig, closures: closureRig, linq: linqRig, allocs: allocRig, copies: copyRig, patterns: switchRig,
-  tjfirst: firstRig, tjcam: camRig, tjgraph: graphRig, tjlight: lightRig, tjtex: texRig
+  tjfirst: firstRig, tjcam: camRig, tjgraph: graphRig, tjlight: lightRig, tjtex: texRig,
+  hunt: huntRig
 };
 
 /** Можно ли нажать кнопку действия в текущем состоянии — как её покажет стенд. */
@@ -362,6 +363,7 @@ function enabled(card, s, a) {
   if (card.rig === 'timeline' && a === 'cfa') return !locked.has('cfa') && s.o.call !== 'sync';
   if (card.rig === 'timeline' && /^(ctx|call):/.test(a)) return !locked.has(a.split(':')[0]);
   if (card.rig === 'statemachine' && a === 'step') return s.f < s.frames.length - 1;
+  if (card.rig === 'hunt' && a === 'check') return s.flag.length > 0 && !s.revealed;
   if (card.rig === 'closures' && (a === 'step' || a === 'end')) return s.f < s.frames.length - 1;
   if (card.rig === 'linq' && (a === 'step' || a === 'end')) return s.f < s.ev.length;
   if (card.rig === 'linq' && ['orderBy', 'toList', 'twice'].includes(a)) return !locked.has(a);
@@ -615,6 +617,37 @@ test('Three.js: повтор текстуры требует RepeatWrapping, ц�
   assert.equal(texView({ repeat: 4, wrap: 'clamp', cs: 'srgb' }).tiles, 'smeared');
   assert.equal(texView({ repeat: 4, wrap: 'repeat', cs: 'srgb' }).tiles, 'tiled');
   assert.ok(!texView({ repeat: 1, wrap: 'clamp', cs: 'none' }).colors);
+});
+
+/* ---------- стенд «найди баг» ---------- */
+import { huntRig, huntAnalyze, huntNeed } from '../learn/models-hunt.js';
+
+test('найди баг: найденные, пропущенные и ложные строки; цель зависит от порога', () => {
+  const card = { code: 'a\nb\nc\nd\ne', bugs: [{ lines: [0, 1], title: 't', why: 'w' }, { lines: [3], title: 't', why: 'w' }], goal: { min: 2, maxFalse: 1 } };
+  const run = acts => acts.reduce((s, a) => huntRig.act(card, s, a), huntRig.init(card));
+  assert.deepEqual(huntAnalyze(card, [1, 4]), { found: [0], missed: [1], falseLines: [4] });
+  assert.ok(!huntRig.goal(card, run(['flag:0', 'check'])), 'найден один баг из двух');
+  assert.ok(huntRig.goal(card, run(['flag:1', 'flag:3', 'check'])), 'любая строка бага засчитывает его');
+  assert.ok(!huntRig.goal(card, run(['flag:0', 'flag:3', 'flag:2', 'flag:4', 'check'])), 'две ложные отметки при допуске в одну');
+  assert.ok(!huntRig.goal(card, run(['flag:0', 'flag:3'])), 'пока не нажали «Проверить», цели нет');
+  assert.ok(!huntRig.goal(card, run(['flag:0', 'flag:3', 'check', 'flag:0'])), 'изменили отметки — проверку надо повторить');
+  assert.ok(huntRig.goal(card, run(['reveal'])), 'посмотрел разбор — урок засчитывается');
+  assert.throws(() => huntRig.act(card, huntRig.init(card), 'flag:9'));
+  assert.equal(huntNeed({ bugs: [1, 2, 3] }).min, 3);
+});
+
+test('карточки «найди баг»: строки в пределах кода, баги не пересекаются, есть разбор', () => {
+  for (const l of allLessons) l.cards.filter(c => c.rig === 'hunt').forEach((c, i) => {
+    const at = `${l.id}: hunt ${i + 1}`, n = c.code.split('\n').length;
+    assert.ok(c.bugs.length >= 2, `${at}: багов меньше двух`);
+    const seen = new Set();
+    for (const b of c.bugs) {
+      assert.ok(b.title && b.why, `${at}: у бага нет названия или разбора`);
+      assert.ok(b.lines.length && b.lines.every(x => Number.isInteger(x) && x >= 0 && x < n), `${at}: строка бага за пределами кода`);
+      for (const x of b.lines) { assert.ok(!seen.has(x), `${at}: строка ${x} принадлежит двум багам`); seen.add(x); }
+    }
+    assert.ok((c.goal?.min ?? c.bugs.length) <= c.bugs.length, `${at}: порог больше числа багов`);
+  });
 });
 
 /* ---------- курс «3D-форматы» ---------- */

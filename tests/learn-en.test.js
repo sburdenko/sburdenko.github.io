@@ -63,6 +63,7 @@ for (const c of COURSES.filter(c => c.load && (!only || c.id === only))) {
         }
         if (rc.code) assert.equal(card.code.split('\n').length, rc.code.split('\n').length, `${at}: в коде другое число строк`);
         if (rc.t === 'rig' && rc.options) assert.deepEqual(card.options, rc.options, `${at}: options стенда — это код, их не переводят`);
+        if (rc.bugs) assert.deepEqual(card.bugs.map(b => b.lines), rc.bugs.map(b => b.lines), `${at}: строки багов должны совпадать с русскими`);
         if (rc.steps) assert.equal(card.steps.length, rc.steps.length, `${at}: шаги стенда`);
         if (Array.isArray(rc.variants)) assert.deepEqual(card.variants, rc.variants, `${at}: variants`);
         else if (rc.variants && typeof rc.variants === 'object') assert.deepEqual(Object.keys(card.variants), Object.keys(rc.variants), `${at}: варианты`);

@@ -660,3 +660,19 @@ pre.code.full{max-height:none}
 .tp-t.cam{fill:var(--osd)}.tp-t.top{fill:var(--ink3);font-size:8px;letter-spacing:.08em;text-transform:uppercase}
 .tp-t.warn{fill:var(--bad);font-size:10px}
 .tp-ax line{stroke:var(--ink3);stroke-width:1.2}.tp-ax text{font:600 8px var(--f-mono);fill:var(--ink3)}
+
+/* ---------- найди баг ---------- */
+.hunt-code{display:grid;border-radius:10px;border:1px solid var(--line);background:#07040f;overflow-x:auto;padding:6px 0}
+.hl{display:grid;grid-template-columns:34px max-content;gap:8px;align-items:start;width:100%;min-width:max-content;padding:2px 12px 2px 0;border:0;border-left:3px solid transparent;background:none;color:#e3dcfb;font:12.5px/1.55 var(--f-mono);text-align:left;cursor:pointer;white-space:pre}
+.hl:hover:not(:disabled){background:rgba(255,255,255,.05)}
+.hl .hn{text-align:right;color:var(--ink3);user-select:none}
+.hl.on{background:rgba(255,210,63,.12);border-left-color:var(--osd)}
+.hl.hit{background:rgba(93,252,154,.14);border-left-color:var(--ok)}
+.hl.miss{background:rgba(255,92,108,.14);border-left-color:var(--bad)}
+.hl.pending{background:rgba(255,176,61,.12);border-left-color:#ffb13d}
+.hl:disabled{cursor:default}
+.bug{padding:10px 12px;border-radius:8px;border:1px solid var(--line2);background:var(--card)}
+.bug b{display:block;font-size:15px;color:#fff;margin-bottom:4px}
+.bug p{margin:0;font-size:14.5px;line-height:1.5;color:var(--ink2)}
+.bug.ok{border-color:rgba(93,252,154,.5)}.bug.ok b{color:var(--ok)}
+.bug.no{border-color:rgba(255,176,61,.5)}.bug.no b{color:#ffb13d}
