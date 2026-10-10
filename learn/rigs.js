@@ -1,15 +1,15 @@
 /** Виды стендов. Вся логика — в models.js; здесь только отрисовка и кнопки. */
-import { esc, RM } from '../assets/vhs.js?v=202610100802';
-import { MEM_RIGS } from './rigs-mem.js?v=202610100802';
-import { RIGS_ASYNC } from './rigs-async.js?v=202610100802';
-import { RIGS_HISTORY } from './rigs-history.js?v=202610100802';
-import { RIGS_AVALONIA } from './rigs-avalonia.js?v=202610100802';
-import { RIGS_CSHARP } from './rigs-csharp.js?v=202610100802';
-import { RIGS_THREE } from './rigs-three.js?v=202610100802';
-import { RIGS_3D } from './rigs-3d.js?v=202610100802';
-import { THREAD_RIGS } from './rigs-threads.js?v=202610100802';
-import { runIL, jitInit, jitCall, compiledCount, RACE, raceTotal, raceWinner } from './models.js?v=202610100802';
-import { tr } from './i18n.js?v=202610100802';
+import { esc, RM } from '../assets/vhs.js?v=202610100807';
+import { MEM_RIGS } from './rigs-mem.js?v=202610100807';
+import { RIGS_ASYNC } from './rigs-async.js?v=202610100807';
+import { RIGS_HISTORY } from './rigs-history.js?v=202610100807';
+import { RIGS_AVALONIA } from './rigs-avalonia.js?v=202610100807';
+import { RIGS_CSHARP } from './rigs-csharp.js?v=202610100807';
+import { RIGS_THREE } from './rigs-three.js?v=202610100807';
+import { RIGS_3D } from './rigs-3d.js?v=202610100807';
+import { THREAD_RIGS } from './rigs-threads.js?v=202610100807';
+import { runIL, jitInit, jitCall, compiledCount, RACE, raceTotal, raceWinner } from './models.js?v=202610100807';
+import { tr } from './i18n.js?v=202610100807';
 
 const h = (tag, cls, html) => {
   const el = document.createElement(tag);

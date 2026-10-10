@@ -1,22 +1,22 @@
 /** Курс «Avalonia: основы»: кросс-платформенный UI на C# и XAML. */
-import u1l1 from './u1/l1-what.js?v=202610100802';
-import u1l2 from './u1/l2-project.js?v=202610100802';
-import u1l3 from './u1/l3-axaml.js?v=202610100802';
-import u1boss from './u1/boss.js?v=202610100802';
-import u2l1 from './u2/l1-layout.js?v=202610100802';
-import u2l2 from './u2/l2-panels.js?v=202610100802';
-import u2l3 from './u2/l3-grid.js?v=202610100802';
-import u2boss from './u2/boss.js?v=202610100802';
-import u3l1 from './u3/l1-binding.js?v=202610100802';
-import u3l2 from './u3/l2-notify.js?v=202610100802';
-import u3l3 from './u3/l3-mvvm.js?v=202610100802';
-import u3l4 from './u3/l4-commands.js?v=202610100802';
-import u3boss from './u3/boss.js?v=202610100802';
-import u4l1 from './u4/l1-styles.js?v=202610100802';
-import u4l2 from './u4/l2-themes.js?v=202610100802';
-import u4l3 from './u4/l3-lists.js?v=202610100802';
-import u4l4 from './u4/l4-threads.js?v=202610100802';
-import u4boss from './u4/boss.js?v=202610100802';
+import u1l1 from './u1/l1-what.js?v=202610100807';
+import u1l2 from './u1/l2-project.js?v=202610100807';
+import u1l3 from './u1/l3-axaml.js?v=202610100807';
+import u1boss from './u1/boss.js?v=202610100807';
+import u2l1 from './u2/l1-layout.js?v=202610100807';
+import u2l2 from './u2/l2-panels.js?v=202610100807';
+import u2l3 from './u2/l3-grid.js?v=202610100807';
+import u2boss from './u2/boss.js?v=202610100807';
+import u3l1 from './u3/l1-binding.js?v=202610100807';
+import u3l2 from './u3/l2-notify.js?v=202610100807';
+import u3l3 from './u3/l3-mvvm.js?v=202610100807';
+import u3l4 from './u3/l4-commands.js?v=202610100807';
+import u3boss from './u3/boss.js?v=202610100807';
+import u4l1 from './u4/l1-styles.js?v=202610100807';
+import u4l2 from './u4/l2-themes.js?v=202610100807';
+import u4l3 from './u4/l3-lists.js?v=202610100807';
+import u4l4 from './u4/l4-threads.js?v=202610100807';
+import u4boss from './u4/boss.js?v=202610100807';
 
 export default {
   id: 'avalonia',

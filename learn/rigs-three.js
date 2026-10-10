@@ -1,31 +1,78 @@
 /** Стенды курса «Three.js: начальный уровень». Логика — в models-three.js, картинка — настоящий Three.js. */
-import { esc } from '../assets/vhs.js?v=202610100802';
-import { drive, act } from './rig-kit.js?v=202610100802';
-import { codeHtml } from './code-view.js?v=202610100802';
-import { makeView, VIEW_ASPECT } from './three-view.js?v=202610100802';
-import { tr } from './i18n.js?v=202610100802';
+import { esc } from '../assets/vhs.js?v=202610100807';
+import { drive, act } from './rig-kit.js?v=202610100807';
+import { codeHtml } from './code-view.js?v=202610100807';
+import { makeView, VIEW_ASPECT } from './three-view.js?v=202610100807';
+import { tr } from './i18n.js?v=202610100807';
 import {
   firstRig, firstView, firstCode,
   CAM_OBJECTS, CAM_OPTIONS, camSees, camRig,
   EARTH_R, MOON_R, orbitWorld, graphRig,
   MATERIALS, LIGHTS, SHADOW_FLAGS, lightView, lightRig,
   texView, texRig
-} from './models-three.js?v=202610100802';
+} from './models-three.js?v=202610100807';
 
 const seg = (items, cur, prefix) => `<div class="seg wrap literal">${items.map(([v, label]) => act(`${prefix}:${v}`, esc(tr(label)), '').replace('class=""', `aria-pressed="${String(v) === String(cur)}"`)).join('')}</div>`;
 const tog = (a, on, text) => act(a, `${on ? '✓ ' : ''}${esc(text)}`, '').replace('class=""', `aria-pressed="${on}"`);
 const BG = 0x0b0715;
 const lock = card => new Set(card.lock ?? []);
 
+
+/* ---------- схема «вид сверху»: где камера и что в её пирамиде ---------- */
+
+/**
+ * SVG вида сверху (ось X вправо, ось Z вниз — к зрителю; камера смотрит вверх, вдоль −Z).
+ * cam: { z, fov, near, far }; items: [{ x, z, color, label, hide, size }]; k — пикселей на единицу.
+ */
+function topSvg({ cam, items, k, oy, hint }) {
+  const ox = 100, W = 200, H = 200;
+  const X = x => ox + x * k, Z = z => oy + z * k;
+  const half = d => d * Math.tan((cam.fov / 2) * Math.PI / 180) * VIEW_ASPECT;
+  const n = Math.max(cam.near, 0), f = cam.far;
+  const poly = [[-half(n), cam.z - n], [half(n), cam.z - n], [half(f), cam.z - f], [-half(f), cam.z - f]].map(([x, z]) => `${X(x).toFixed(1)},${Z(z).toFixed(1)}`).join(' ');
+  const grid = [];
+  for (let i = -6; i <= 6; i++) { grid.push(`<line x1="${X(i)}" y1="0" x2="${X(i)}" y2="${H}" class="tp-g"/>`); }
+  for (let z = Math.ceil(-oy / k); z <= (H - oy) / k; z++) grid.push(`<line x1="0" y1="${Z(z)}" x2="${W}" y2="${Z(z)}" class="tp-g"/>`);
+  const objs = items.map(it => {
+    const sz = (it.size ?? 1) * k;
+    return `<g class="${it.hide ? 'tp-hide' : ''}"><rect x="${X(it.x) - sz / 2}" y="${Z(it.z) - sz / 2}" width="${sz}" height="${sz}" rx="2" style="--c:${it.color}" class="tp-o"/>${it.label ? `<text x="${X(it.x)}" y="${Z(it.z) - sz / 2 - 3}" class="tp-t" text-anchor="middle">${esc(it.label)}</text>` : ''}</g>`;
+  }).join('');
+  const cx = X(0), cy = Z(cam.z);
+  const icon = `<g transform="translate(${cx} ${cy})" class="tp-cam"><rect x="-8" y="-3" width="16" height="11" rx="2"/><polygon points="-5,-3 5,-3 8,-10 -8,-10"/><circle cx="-4" cy="-13" r="3.2"/><circle cx="4" cy="-13" r="3.2"/></g>`;
+  return `<svg class="tp" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(tr({ ru: 'Вид сверху: камера и объекты', en: 'Top view: the camera and the objects' }))}">
+    ${grid.join('')}
+    <polygon points="${poly}" class="tp-f"/>
+    ${objs}
+    ${icon}
+    <text x="${Math.min(Math.max(cx, 34), 166)}" y="${Math.min(cy + 24, H - 4)}" class="tp-t cam" text-anchor="middle">${esc(tr({ ru: 'камера', en: 'camera' }))} z = ${cam.z}</text>
+    <g class="tp-ax"><line x1="12" y1="${H - 26}" x2="34" y2="${H - 26}"/><line x1="12" y1="${H - 26}" x2="12" y2="${H - 6}"/><text x="38" y="${H - 23}">+X</text><text x="16" y="${H - 6}">+Z</text></g>
+    <text x="${W - 6}" y="12" class="tp-t top" text-anchor="end">${esc(tr({ ru: 'вид сверху', en: 'top view' }))}</text>
+    ${hint ? `<text x="${W / 2}" y="${H / 2 - 36}" class="tp-t warn" text-anchor="middle">${esc(hint)}</text>` : ''}
+  </svg>`;
+}
+
 /* ---------- первая сцена ---------- */
 
 function tjfirst(card, host, done) {
   const L = lock(card);
-  const view = makeView(host, (THREE, renderer, { RM }) => {
+  const pair = document.createElement('div');
+  pair.className = 'tj-pair';
+  host.append(pair);
+  const top = document.createElement('div');
+  top.className = 'tj-top';
+  const view = makeView(pair, (THREE, renderer, { RM }) => {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, VIEW_ASPECT, 0.1, 100);
     const cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshNormalMaterial());
+    cube.add(new THREE.LineSegments(new THREE.EdgesGeometry(cube.geometry), new THREE.LineBasicMaterial({ color: 0xffffff })));
     cube.rotation.set(0.4, 0.6, 0);
+    // пол с сеткой и оси: так видно, где «вперёд» и где вверх (X красная, Y зелёная, Z синяя)
+    const grid = new THREE.GridHelper(20, 20, 0x4a3d78, 0x2a2147);
+    grid.position.y = -0.8;
+    const axes = new THREE.AxesHelper(1.4);
+    axes.position.set(-1.6, -0.8, 0);
+    const stars = new THREE.Points(new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(Array.from({ length: 120 }, (_, i) => [(Math.sin(i * 12.9) * 9), 0.3 + Math.abs(Math.sin(i * 7.7)) * 5, -2 - Math.abs(Math.cos(i * 3.1)) * 14]).flat(), 3)), new THREE.PointsMaterial({ color: 0x7fd4ff, size: 0.06 }));
+    scene.add(grid, axes, stars);
     renderer.setClearColor(BG);
     let s = null;
     return {
@@ -37,20 +84,33 @@ function tjfirst(card, host, done) {
       }
     };
   });
+  pair.append(top);
   drive(card, host, firstRig, s => {
     const v = firstView(s);
     return `<div class="vm-note${v.visible ? ' ret' : ' err'}">${esc(v.why)}</div>
       <pre class="code small full">${codeHtml(firstCode(s))}</pre>
       <div class="btns seg wrap literal">${L.has('add') ? '' : tog('add', s.added, 'scene.add(cube)')}${L.has('render') ? '' : tog('render', s.render, 'renderer.render(…)')}${L.has('loop') ? '' : tog('loop', s.loop, 'setAnimationLoop(…)')}</div>
       ${L.has('camz') ? '' : `<div class="ctl-group"><span class="ctl-label">camera.position.z</span>${seg([[0, '0'], [5, '5']], s.camZ, 'camz')}</div>`}`;
-  }, done, (box, s) => view.update(s));
+  }, done, (box, s) => {
+    view.update(s);
+    top.innerHTML = topSvg({
+      cam: { z: s.camZ, fov: 50, near: 0.1, far: 100 }, k: 18, oy: 56,
+      items: [{ x: 0, z: 0, color: s.added ? '#c47bff' : '#8f86b5', label: s.added ? 'cube' : tr({ ru: 'куб (не в сцене)', en: 'cube (not in scene)' }), hide: !s.added }],
+      hint: s.camZ === 0 ? tr({ ru: 'камера внутри куба', en: 'the camera is inside the cube' }) : ''
+    });
+  });
 }
 
 /* ---------- камера ---------- */
 
 function tjcam(card, host, done) {
   const L = lock(card);
-  const view = makeView(host, (THREE, renderer) => {
+  const pair = document.createElement('div');
+  pair.className = 'tj-pair';
+  host.append(pair);
+  const top = document.createElement('div');
+  top.className = 'tj-top';
+  const view = makeView(pair, (THREE, renderer) => {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(BG);
     const camera = new THREE.PerspectiveCamera(50, VIEW_ASPECT, 0.1, 50);
@@ -76,13 +136,21 @@ function tjcam(card, host, done) {
       frame() { renderer.render(scene, camera); }
     };
   });
+  pair.append(top);
   drive(card, host, camRig, s => {
     const seen = camSees(s);
     const rows = CAM_OBJECTS.map((o, i) => `<div class="cv-row ${seen[i].ok ? 'yes' : 'no'}"><span><b style="color:${o.color}">■</b> ${esc(tr(o.name))} (x ${o.x}, z ${o.z})<small>${esc(seen[i].why)}</small></span><span class="cv-m">${seen[i].ok ? tr({ ru: '✓ видно', en: '✓ visible' }) : tr({ ru: '✗ не видно', en: '✗ not visible' })}</span></div>`).join('');
     const ctl = Object.entries(CAM_OPTIONS).filter(([k]) => !L.has(k)).map(([k, vals]) => `<div class="ctl-group"><span class="ctl-label">${{ fov: tr({ ru: 'fov (вертикальный угол, °)', en: 'fov (vertical angle, °)' }), z: 'camera.position.z', near: 'near', far: 'far' }[k]}</span>${seg(vals.map(v => [v, String(v)]), s[k], k)}</div>`).join('');
     return `<pre class="code small">${codeHtml(`const camera = new THREE.PerspectiveCamera(${s.fov}, w / h, ${s.near}, ${s.far});\ncamera.position.z = ${s.z};`)}</pre>
       <div class="roots"><div class="colh">${tr({ ru: 'Что попадёт в кадр (по центру кубика)', en: 'What gets into the frame (by cube center)' })}</div>${rows}</div>${ctl}`;
-  }, done, (box, s) => view.update(s));
+  }, done, (box, s) => {
+    view.update(s);
+    const seen = camSees(s);
+    top.innerHTML = topSvg({
+      cam: { z: s.z, fov: s.fov, near: s.near, far: s.far }, k: 7, oy: 112,
+      items: CAM_OBJECTS.map((o, i) => ({ x: o.x, z: o.z, color: o.color, label: tr(o.name), hide: !seen[i].ok }))
+    });
+  });
 }
 
 /* ---------- иерархия ---------- */

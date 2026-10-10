@@ -1,25 +1,25 @@
 /** The "Deeper C#" course: generics, delegates, LINQ, Span and modern C#. */
-import u1l1 from './u1/l1-why.en.js?v=202610100802';
-import u1l2 from './u1/l2-constraints.en.js?v=202610100802';
-import u1l3 from './u1/l3-variance.en.js?v=202610100802';
-import u1boss from './u1/boss.en.js?v=202610100802';
-import u2l1 from './u2/l1-delegates.en.js?v=202610100802';
-import u2l2 from './u2/l2-events.en.js?v=202610100802';
-import u2l3 from './u2/l3-closures.en.js?v=202610100802';
-import u2boss from './u2/boss.en.js?v=202610100802';
-import u3l1 from './u3/l1-lazy.en.js?v=202610100802';
-import u3l2 from './u3/l2-materialize.en.js?v=202610100802';
-import u3l3 from './u3/l3-cost.en.js?v=202610100802';
-import u3boss from './u3/boss.en.js?v=202610100802';
-import u4l1 from './u4/l1-span.en.js?v=202610100802';
-import u4l2 from './u4/l2-refstruct.en.js?v=202610100802';
-import u4l3 from './u4/l3-copies.en.js?v=202610100802';
-import u4boss from './u4/boss.en.js?v=202610100802';
-import u5l1 from './u5/l1-patterns.en.js?v=202610100802';
-import u5l2 from './u5/l2-records.en.js?v=202610100802';
-import u5l3 from './u5/l3-nullable.en.js?v=202610100802';
-import u5l4 from './u5/l4-modern.en.js?v=202610100802';
-import u5boss from './u5/boss.en.js?v=202610100802';
+import u1l1 from './u1/l1-why.en.js?v=202610100807';
+import u1l2 from './u1/l2-constraints.en.js?v=202610100807';
+import u1l3 from './u1/l3-variance.en.js?v=202610100807';
+import u1boss from './u1/boss.en.js?v=202610100807';
+import u2l1 from './u2/l1-delegates.en.js?v=202610100807';
+import u2l2 from './u2/l2-events.en.js?v=202610100807';
+import u2l3 from './u2/l3-closures.en.js?v=202610100807';
+import u2boss from './u2/boss.en.js?v=202610100807';
+import u3l1 from './u3/l1-lazy.en.js?v=202610100807';
+import u3l2 from './u3/l2-materialize.en.js?v=202610100807';
+import u3l3 from './u3/l3-cost.en.js?v=202610100807';
+import u3boss from './u3/boss.en.js?v=202610100807';
+import u4l1 from './u4/l1-span.en.js?v=202610100807';
+import u4l2 from './u4/l2-refstruct.en.js?v=202610100807';
+import u4l3 from './u4/l3-copies.en.js?v=202610100807';
+import u4boss from './u4/boss.en.js?v=202610100807';
+import u5l1 from './u5/l1-patterns.en.js?v=202610100807';
+import u5l2 from './u5/l2-records.en.js?v=202610100807';
+import u5l3 from './u5/l3-nullable.en.js?v=202610100807';
+import u5l4 from './u5/l4-modern.en.js?v=202610100807';
+import u5boss from './u5/boss.en.js?v=202610100807';
 
 export default {
   id: 'csharp',

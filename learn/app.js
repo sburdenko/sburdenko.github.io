@@ -5,22 +5,33 @@
  *   #/dotnet      курс
  *   #/dotnet/<id> урок поверх курса
  */
-import { $, esc, startNoise, setLocale } from '../assets/vhs.js?v=202610100802';
-import { GROUPS, COURSES, findCourse, lessonsOf, loadCourses, courseTitle, courseBlurb } from './courses.js?v=202610100802';
-import { getLang, switchLang, tr, LANGS, LANG_NAMES } from './i18n.js?v=202610100802';
-import { t } from './ui.js?v=202610100802';
-import { auth } from './auth/auth.js?v=202610100802';
-import { CATEGORIES, MAX_TEXT, buildReport } from './reports/report.js?v=202610100802';
-import { submit, flushQueue, reportsEnabled } from './reports/reports.js?v=202610100802';
-import * as P from './progress.js?v=202610100802';
-import * as E from './engine.js?v=202610100802';
-import { renderCard, feedback } from './cards.js?v=202610100802';
+import { $, esc, startNoise, setLocale } from '../assets/vhs.js?v=202610100807';
+import { GROUPS, COURSES, findCourse, lessonsOf, loadCourses, courseTitle, courseBlurb } from './courses.js?v=202610100807';
+import { getLang, switchLang, tr, LANGS, LANG_NAMES } from './i18n.js?v=202610100807';
+import { t } from './ui.js?v=202610100807';
+import { auth } from './auth/auth.js?v=202610100807';
+import { CATEGORIES, MAX_TEXT, buildReport } from './reports/report.js?v=202610100807';
+import { submit, flushQueue, reportsEnabled } from './reports/reports.js?v=202610100807';
+import * as P from './progress.js?v=202610100807';
+import * as E from './engine.js?v=202610100807';
+import { renderCard, feedback } from './cards.js?v=202610100807';
 
 /** Полка кассет — отдельный модуль сайта. */
 const SHELF_URL = new URL('../shelf/', import.meta.url).href;
 
 /** Версия сборки из метки ?v= у этого модуля — чтобы знать, какую версию страницы видел человек. */
 const APP_VER = new URL(import.meta.url).searchParams.get('v') ?? '';
+
+/** Режим разработчика: ?dev=1 включает, ?dev=0 выключает, переключатель — в профиле. */
+const DEV_KEY = 'bathys-dev';
+const DEV = (() => {
+  try {
+    const q = new URLSearchParams(location.search).get('dev');
+    if (q === '1') localStorage.setItem(DEV_KEY, '1');
+    if (q === '0') localStorage.removeItem(DEV_KEY);
+    return localStorage.getItem(DEV_KEY) === '1';
+  } catch { return false; }
+})();
 
 const loaded = P.load();
 let prog = loaded.state;
@@ -150,6 +161,11 @@ function profilePage() {
         `<button role="radio" aria-checked="${l === getLang()}" data-lang="${l}"><b>${l.toUpperCase()}</b><span>${esc(LANG_NAMES[l])}</span></button>`).join('')}</div>
     </div>
     <div class="pf-card">
+      <h2>${esc(t('p.dev'))}</h2>
+      <p class="pf-note">${esc(t('p.devHint'))}</p>
+      <button class="ghost-btn" id="pfDev" aria-pressed="${DEV}">${esc(t(DEV ? 'p.devOn' : 'p.devOff'))}</button>
+    </div>
+    <div class="pf-card">
       <h2>${esc(t('p.stats'))}</h2>
       <div class="tiles">
         <div class="tile-s xp"><span class="v">${prog.xp}</span><span class="l">${esc(t('p.xp'))}</span></div>
@@ -160,6 +176,7 @@ function profilePage() {
     </div>
   </section>`;
   view.querySelectorAll('[data-lang]').forEach(b => b.onclick = () => switchLang(b.dataset.lang));
+  $('#pfDev').onclick = () => { try { DEV ? localStorage.removeItem(DEV_KEY) : localStorage.setItem(DEV_KEY, '1'); } catch { /* не запомним */ } location.reload(); };
   const err = $('#pfErr');
   const fail = e => { err.hidden = false; err.textContent = t('p.authFail', { msg: e?.code || e?.message || e }); };
   $('#pfIn')?.addEventListener('click', () => auth.signIn('google').catch(fail));
@@ -235,14 +252,19 @@ function openLesson(courseId, lessonId) {
   lessonEl.innerHTML = `<div class="l-top">
       <span class="l-nav"><button class="x" id="lx" aria-label="${esc(t('l.exit'))}">✕</button><button class="x" id="lback" aria-label="${esc(t('l.prev'))}" title="${esc(t('l.prevTitle'))}" disabled>‹</button></span>
       <div class="pbar" role="progressbar" aria-label="${esc(t('l.progress'))}"><i id="lp" style="width:0"></i></div>
-      <span class="l-count" id="lc"></span>
-      <button class="x flag" id="lflag" aria-label="${esc(t('rp.btn'))}" title="${esc(t('rp.btn'))}">⚑</button>
+      <span class="l-right"><span class="l-count" id="lc"></span>
+        <button class="x tool" id="lreset" aria-label="${esc(t('l.reset'))}" title="${esc(t('l.reset'))}">↺</button>
+        <button class="x tool" id="lflag" aria-label="${esc(t('rp.btn'))}" title="${esc(t('rp.btn'))}">⚑</button>
+        ${DEV ? `<button class="x tool dev" id="lskip" aria-label="${esc(t('l.skip'))}" title="${esc(t('l.skip'))}">⏭</button>` : ''}
+      </span>
     </div>
     <div class="l-body" id="lb"></div>
     <div class="l-foot" id="lf"><div class="in"><div class="fb" id="lfb" aria-live="polite"></div><button class="cta-btn" id="lbtn"></button></div></div>
     <div class="l-foot review" id="lr" hidden><div class="in"><div class="fb" id="lrfb" aria-live="polite"></div><div class="nav-btns"><button class="ghost-btn" id="rvPrev">${esc(t('l.back'))}</button><button class="cta-btn" id="rvNext"></button></div></div></div>`;
   $('#lx').onclick = () => leave();
   $('#lflag').onclick = () => openReport();
+  $('#lreset').onclick = () => { if (run.view === null && run.phase === 'input') showCard(); };
+  if (DEV) $('#lskip').onclick = () => skipCard();
   $('#lback').onclick = () => (run.view === null ? review(run.history.length - 1) : review(run.view - 1));
   $('#rvPrev').onclick = () => review(run.view - 1);
   $('#rvNext').onclick = () => (run.view + 1 < run.history.length ? review(run.view + 1) : backToLive());
@@ -285,6 +307,8 @@ function showCard() {
   $('#lback').disabled = run.history.length === 0;
 
   let phase = 'input';   // input → feedback
+  run.phase = 'input';
+  $('#lreset').disabled = false;
   let completed = false;
   const api = {
     ready(ok) { if (phase === 'input') btn.disabled = !ok; },
@@ -300,6 +324,8 @@ function showCard() {
 
   function showFeedback(ok, text, title) {
     phase = 'feedback';
+    run.phase = 'feedback';
+    $('#lreset').disabled = true;
     run.lastFb = { ok, title, text };
     // «Глубже» у вопроса открывается после ответа, чтобы не подсказывать
     if (card.deep && card.t !== 'learn') host.insertAdjacentHTML('beforeend', `<details class="deep"><summary>${esc(t('l.deep'))}</summary><div>${card.deep}</div></details>`);
@@ -342,6 +368,13 @@ function showCard() {
   };
 }
 
+
+/** Только в режиме разработчика: засчитать карточку верной и перейти к следующей. */
+function skipCard() {
+  if (!run || run.state.done || run.view !== null) return;
+  if (run.phase === 'input') E.answer(run.state, run.lesson, true);
+  advance();
+}
 
 /* ---------- жалоба на карточку ---------- */
 /** Какая карточка сейчас на экране: просматриваемая из истории или живая. */

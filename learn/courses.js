@@ -3,7 +3,7 @@
  * Уроки каждого курса лежат в двух вариантах: course.js (русский) и course.en.js (английский);
  * loadCourses(lang) подгружает нужный. Названия и описания — { ru, en }, читаются через tr().
  */
-import { tr } from './i18n.js?v=202610100802';
+import { tr } from './i18n.js?v=202610100807';
 
 /** Группы на полке курсов — по порядку показа. */
 export const GROUPS = [
@@ -19,43 +19,43 @@ export const COURSES = [
     id: 'history', group: 'net', badge: '1→10', color: '#ffb86b',
     title: { ru: 'История .NET', en: 'The history of .NET' },
     blurb: { ru: 'От .NET Framework 1.0 до .NET 10: Mono и Unity, .NET Core, почему .NET Standard 2.1 есть в Unity, но не во Framework, и на чём сейчас Revit. Листаешь годы и подбираешь TargetFrameworks под Revit, Unity и .NET 10.', en: 'From .NET Framework 1.0 to .NET 10: Mono and Unity, .NET Core, why .NET Standard 2.1 works in Unity but not in the Framework, and what Revit runs on today. Flip through the years and pick TargetFrameworks for Revit, Unity and .NET 10.' },
-    load: loader(() => import('./history/course.js?v=202610100802'), () => import('./history/course.en.js?v=202610100802'))
+    load: loader(() => import('./history/course.js?v=202610100807'), () => import('./history/course.en.js?v=202610100807'))
   },
   {
     id: 'dotnet', group: 'net', badge: '.NET', color: 'var(--gpu)',
     title: { ru: '.NET изнутри', en: '.NET under the hood' },
     blurb: { ru: 'Как код на C# превращается в работающую программу. Для тех, кто только начинает, и для тех, кто пришёл из другого языка.', en: 'How C# code turns into a running program. For complete beginners and for people coming from another language.' },
-    load: loader(() => import('./dotnet/course.js?v=202610100802'), () => import('./dotnet/course.en.js?v=202610100802'))
+    load: loader(() => import('./dotnet/course.js?v=202610100807'), () => import('./dotnet/course.en.js?v=202610100807'))
   },
   {
     id: 'csharp', group: 'net', badge: 'C#', color: 'var(--cpu)',
     title: { ru: 'C# глубже', en: 'Deeper C#' },
     blurb: { ru: 'Для тех, кто уже пишет на C#: дженерики и ограничения, делегаты и замыкания, LINQ и его цена, Span и защитные копии, pattern matching и новое в C# 12–14. Подбираешь where, ловишь замыкание в for, считаешь вызовы Where и переставляешь ветки switch.', en: 'For people who already write C#: generics and constraints, delegates and closures, LINQ and its cost, Span and defensive copies, pattern matching and what is new in C# 12–14. Pick where clauses, catch the closure in a for loop, count Where calls and reorder switch arms.' },
-    load: loader(() => import('./csharp/course.js?v=202610100802'), () => import('./csharp/course.en.js?v=202610100802'))
+    load: loader(() => import('./csharp/course.js?v=202610100807'), () => import('./csharp/course.en.js?v=202610100807'))
   },
   {
     id: 'async', group: 'net', badge: 'async', color: '#b28dff',
     title: { ru: 'Async/await до дна', en: 'Async/await in depth' },
     blurb: { ru: 'От «зачем вообще асинхронность» до машины состояний, SynchronizationContext, deadlock с .Result и async в Unity. Двигаешь время, ловишь deadlock и шагаешь по MoveNext.', en: 'From “why async at all” to the state machine, SynchronizationContext, the .Result deadlock and async in Unity. Move time forward, catch a deadlock and step through MoveNext.' },
-    load: loader(() => import('./async/course.js?v=202610100802'), () => import('./async/course.en.js?v=202610100802'))
+    load: loader(() => import('./async/course.js?v=202610100807'), () => import('./async/course.en.js?v=202610100807'))
   },
   {
     id: 'avalonia', group: 'net', badge: 'AXAML', color: '#8b5cf6',
     title: { ru: 'Avalonia: основы', en: 'Avalonia basics' },
     blurb: { ru: 'Кросс-платформенный UI на C# и XAML для Windows, macOS, Linux и не только. Двигаешь колонки Grid, выбираешь панели, чинишь привязки, которые не обновляют экран, и подбираешь селекторы стилей.', en: 'Cross-platform UI in C# and XAML for Windows, macOS, Linux and more. Resize Grid columns, pick panels, fix bindings that do not update the screen and choose style selectors.' },
-    load: loader(() => import('./avalonia/course.js?v=202610100802'), () => import('./avalonia/course.en.js?v=202610100802'))
+    load: loader(() => import('./avalonia/course.js?v=202610100807'), () => import('./avalonia/course.en.js?v=202610100807'))
   },
   {
     id: 'formats3d', group: 'gfx', badge: '3D', color: '#7fd4ff',
     title: { ru: '3D-форматы', en: '3D formats' },
     blurb: { ru: 'Меши, CAD, BIM и облака точек: чем glTF отличается от FBX, STEP от STL, а IFC от GLB. Собираешь меш руками, тесселируешь цилиндр, ищешь коллизии и считаешь размер скана.', en: 'Meshes, CAD, BIM and point clouds: how glTF differs from FBX, STEP from STL and IFC from GLB. Build a mesh by hand, tessellate a cylinder, find clashes and estimate the size of a scan.' },
-    load: loader(() => import('./formats/course.js?v=202610100802'), () => import('./formats/course.en.js?v=202610100802'))
+    load: loader(() => import('./formats/course.js?v=202610100807'), () => import('./formats/course.en.js?v=202610100807'))
   },
   {
     id: 'three1', group: 'gfx', badge: 'TJS 1', color: '#9ef0ff',
     title: { ru: 'Three.js: начальный уровень', en: 'Three.js: beginner' },
     blurb: { ru: 'Первая сцена, камера, объекты и иерархия, свет и тени, текстуры и загрузка glTF. На каждом стенде — настоящий Three.js: включаешь строки кода, крутишь fov и far, переносишь Луну к Земле и зажигаешь тени.', en: 'The first scene, the camera, objects and hierarchy, lights and shadows, textures and loading glTF. Every rig runs real Three.js: switch lines of code on, turn fov and far, move the Moon to the Earth and light up shadows.' },
-    load: loader(() => import('./three1/course.js?v=202610100802'), () => import('./three1/course.en.js?v=202610100802'))
+    load: loader(() => import('./three1/course.js?v=202610100807'), () => import('./three1/course.en.js?v=202610100807'))
   },
   { id: 'three2', group: 'gfx', badge: 'TJS 2', color: '#ffd166', soon: true, title: { ru: 'Three.js: средний уровень', en: 'Three.js: intermediate' }, blurb: { ru: 'Карты окружения и HDR, PBR всерьёз, анимации glTF и AnimationMixer, клики по объектам через Raycaster, InstancedMesh и счёт draw calls, постобработка.', en: 'Environment maps and HDR, PBR for real, glTF animations and AnimationMixer, clicking objects with Raycaster, InstancedMesh and counting draw calls, post-processing.' } },
   { id: 'three3', group: 'gfx', badge: 'TJS 3', color: '#ff6b9a', soon: true, title: { ru: 'Three.js: продвинутый уровень', en: 'Three.js: advanced' }, blurb: { ru: 'Свои шейдеры (ShaderMaterial, GLSL), WebGPURenderer и язык TSL, рендер в текстуру, частицы на GPU, физика и React Three Fiber.', en: 'Your own shaders (ShaderMaterial, GLSL), WebGPURenderer and the TSL language, render targets, GPU particles, physics and React Three Fiber.' } },

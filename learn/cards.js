@@ -8,11 +8,11 @@
  *   reveal(ok) — подсветить верное и неверное после проверки;
  *   key(e) — горячие клавиши (цифры выбирают вариант).
  */
-import { esc } from '../assets/vhs.js?v=202610100802';
-import { codeHtml } from './code-view.js?v=202610100802';
-import { shuffle, scramble, check, blankCount } from './engine.js?v=202610100802';
-import { mountRig } from './rigs.js?v=202610100802';
-import { t } from './ui.js?v=202610100802';
+import { esc } from '../assets/vhs.js?v=202610100807';
+import { codeHtml } from './code-view.js?v=202610100807';
+import { shuffle, scramble, check, blankCount } from './engine.js?v=202610100807';
+import { mountRig } from './rigs.js?v=202610100807';
+import { t } from './ui.js?v=202610100807';
 
 const h = (tag, cls, html) => {
   const el = document.createElement(tag);
@@ -251,7 +251,11 @@ function match(card, host, api, seed) {
       if (--left === 0) api.complete(!slip, t(slip ? 'c.pairsSlip' : 'c.pairsClean'));
     } else {
       slip = true;
-      [a, b].forEach(x => { x.classList.remove('bad'); void x.offsetWidth; x.classList.add('bad'); });
+      [a, b].forEach(x => {
+        x.classList.remove('bad'); void x.offsetWidth; x.classList.add('bad');
+        // красная рамка — только вспышка: иначе после нескольких промахов весь экран красный
+        clearTimeout(x._bad); x._bad = setTimeout(() => x.classList.remove('bad'), 650);
+      });
     }
   }
   return { mode: 'auto' };

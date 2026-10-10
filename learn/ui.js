@@ -1,5 +1,5 @@
 /** Строки интерфейса Bathys на двух языках. t('key', { n: 3 }) подставляет {n}. */
-import { getLang } from './i18n.js?v=202610100802';
+import { getLang } from './i18n.js?v=202610100807';
 
 const S = {
   'brand.tag': { ru: 'Интерактивные курсы', en: 'Interactive courses' },
@@ -96,6 +96,12 @@ const S = {
   'c.rightOrder': { ru: 'Правильный порядок: {a}', en: 'Correct order: {a}' },
   'c.rightBlanks': { ru: 'Нужно: {a}.', en: 'Needed: {a}.' },
 
+  'l.reset': { ru: 'Сбросить карточку', en: 'Reset this card' },
+  'l.skip': { ru: 'Пропустить карточку (режим разработчика)', en: 'Skip this card (developer mode)' },
+  'p.dev': { ru: 'Режим разработчика', en: 'Developer mode' },
+  'p.devHint': { ru: 'Показывает в уроке кнопку ⏭, которая засчитывает карточку и идёт дальше. Только для проверки уроков: очки и звёзды при этом не настоящие.', en: 'Shows a ⏭ button in lessons that marks the card done and moves on. For testing lessons only: points and stars are not real.' },
+  'p.devOn': { ru: 'Включено', en: 'On' },
+  'p.devOff': { ru: 'Выключено', en: 'Off' },
   'rp.btn': { ru: 'Сообщить о проблеме', en: 'Report a problem' },
   'rp.title': { ru: 'Что не так с этой карточкой?', en: 'What is wrong with this card?' },
   'rp.cats': { ru: 'Выбери подходящее (можно несколько)', en: 'Pick what fits (several are fine)' },
