@@ -36,9 +36,9 @@ public void Put(int id, Texture2D texture)
     _order.AddLast(id);
 }`,
       bugs: [
-        { lines: [2], title: 'The comparer never returns 0', why: 'The contract is broken: Compare(x, x) gives 1. List.Sort may throw InvalidOperationException or quietly produce a wrong order.' },
-        { lines: [7], title: 'Get does not update the usage order', why: 'A picture you just read does not become "fresh", so the cache turns into a plain queue (FIFO), not an LRU. Pictures that are still needed get thrown out.' },
-        { lines: [14, 20], title: 'The element just added is the one evicted', why: 'AddLast puts the new element at the end, and the eviction takes Last too. The fresh picture is thrown out immediately and the old one stays forever.' },
+        { lines: [2], title: 'The comparer never returns 0', why: 'The contract is broken: Compare(x, x) gives 1. The order rests on Sort implementation details, NaN in the data breaks it, and BinarySearch or SortedSet with this comparer will never find an equal element.' },
+        { lines: [7], title: 'Get does not update the usage order', why: 'A picture you just read does not become "fresh". Even with correct eviction this would be a plain queue (FIFO), not an LRU: frequently used pictures get thrown out for nothing.' },
+        { lines: [14, 20], title: 'The newest element is evicted, not the oldest', why: 'AddLast puts the new element at the end, and the eviction takes Last too. The fresh picture goes on the very next Put, and the oldest ones stay forever.' },
         { lines: [12, 19], title: 'Put with an id that is already cached', why: 'The id lands in _order a second time and the old entry is not removed, so the order drifts out of sync with _map. Later an eviction removes a live entry. The Count >= capacity check also fires on a simple update.' },
         { lines: [15, 16], title: 'The evicted texture is never destroyed', why: 'Texture2D wraps native memory. The garbage collector will not free it: native memory leaks until someone destroys the texture by hand.' }
       ],
@@ -48,23 +48,23 @@ public void Put(int id, Texture2D texture)
     {
       t: 'learn',
       title: 'What Sort really guarantees',
-      body: '<p>When the contract is broken, <code>List.Sort</code> can behave in different ways: throw <code>InvalidOperationException</code> ("IComparer.Compare() method returns inconsistent results") or quietly return a wrong order. It depends on the data, so the bug is "flaky".</p><p>The right descending comparer is <code>b.Severity.CompareTo(a.Severity)</code>. It honestly returns 0 for equal values and handles NaN (NaN counts as smaller than any number).</p>',
-      deep: '<p><code>List.Sort</code> and <code>Array.Sort</code> use introsort, which is <b>unstable</b>: equal elements may swap places. If you need stability, use <code>OrderByDescending</code> (LINQ sorting is stable but allocates) or add a second key such as the original index. Another trap: a comparer like <code>(int)(b.Severity - a.Severity)</code> breaks the contract too, because the fractional part is cut off and different values become "equal" inconsistently.</p>'
+      body: '<p>When the contract is broken, <code>List.Sort</code> promises nothing: what happens depends on the implementation and on the data. That is why such a bug is "flaky".</p><p>• A comparer that answers <b>−1</b> for equal values can drive the partition loop past the end of the array in .NET Framework and Unity\'s Mono, and Sort throws <code>ArgumentException</code> "Unable to sort because the IComparer.Compare() method returns inconsistent results".<br>• Ours answers <b>+1</b> for equal values, and on ordinary numbers List.Sort happens to sort correctly. But <code>a &gt; NaN</code> is always false, so with NaN in the data the order turns to garbage, with no exception at all.</p><p>The right descending comparer is <code>b.Severity.CompareTo(a.Severity)</code>. It honestly returns 0 for equal values and handles NaN (NaN counts as smaller than any number).</p>',
+      deep: '<p>Why our comparer "works": the .NET introsort (both in Unity\'s Mono and in modern .NET) only compares the result with zero, and "+1 on ties" merely makes it swap equal elements now and then, which an unstable sort never promised to avoid anyway. That is an implementation detail, not a guarantee. In modern .NET the partition loops also check bounds, so the exception is rare there and only the silently wrong order remains. Code that needs an actual 0 (<code>BinarySearch</code>, <code>SortedSet</code>, <code>SortedList</code>) breaks at once with such a comparer: an equal element is never found.</p><p><code>List.Sort</code> and <code>Array.Sort</code> use introsort, which is <b>unstable</b>: equal elements may swap places. If you need stability, use <code>OrderByDescending</code> (LINQ sorting is stable but allocates) or add a second key such as the original index. Another trap: a comparer like <code>(int)(b.Severity - a.Severity)</code> breaks the contract too, because the fractional part is cut off and different values become "equal" inconsistently.</p>'
     },
     {
       t: 'choice',
-      q: 'What does scores.Sort do with a comparer "greater gives minus one, otherwise plus one" on a list with equal Severity values?',
+      q: 'The tests for a comparer "greater gives minus one, otherwise plus one" are green: the list sorts correctly. What do you tell the author in review?',
       options: [
-        'Always sorts correctly',
-        'May throw InvalidOperationException or return a wrong order: the result depends on the data',
-        'Always throws an exception',
-        'Sorts, but then loops forever'
+        'All good: the tests pass, so the comparer is correct',
+        'The contract is broken: the correct order rests on Sort implementation details, NaN in the data breaks it, and BinarySearch and SortedSet with this comparer will not find an equal element',
+        'List.Sort always throws on equal values; the tests just do not contain any',
+        'A sort with this comparer can loop forever'
       ],
       answer: 1,
-      explain: 'When the contract is broken, Sort behavior is undefined: it works on some data and throws or returns a garbage order on other data.',
+      explain: 'With a broken contract nothing is guaranteed. Today the .NET introsort survives +1 on ties: it merely swaps equal elements now and then. But once a NaN shows up, the implementation changes, or the comparer ends up in code that needs a 0, everything breaks.',
       wrong: {
-        0: 'Correctness is guaranteed only for a comparer that follows the contract.',
-        2: 'An exception is not guaranteed. Sometimes the sort is simply wrong, with no message.',
+        0: 'The tests show it works on this data and this implementation. Correctness is guaranteed only for a comparer that follows the contract.',
+        2: 'Not always. This particular comparer (+1 on ties) usually does not throw on ordinary numbers. The exception is typical of a comparer that returns −1 on ties.',
         3: 'There is no infinite loop here. The trouble is that the result is not guaranteed.'
       }
     },

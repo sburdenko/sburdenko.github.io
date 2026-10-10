@@ -8,8 +8,8 @@ export default {
     {
       t: 'learn',
       title: 'A private paint can for every marker',
-      body: '<p>A workshop has one shared palette: red paint and gray paint. Any marker walks up and takes what it needs. That is <code>sharedMaterial</code>.</p><p>Now imagine that the first time a marker asks to be painted, it is handed its own <b>private can</b>, poured from the shared one. There are a hundred cans, and nobody knows who will throw them away. That is <code>renderer.material</code>: the first access <b>clones</b> the material for that renderer (the name gets an "(Instance)" suffix).</p><p>Two troubles at once: the copies are <b>not destroyed automatically</b>, and every marker now has its own material, so the GPU has a harder time merging them into one draw call.</p>',
-      deep: '<p>The Unity docs say it plainly: you are responsible for destroying materials created through <code>.material</code> (<code>Destroy</code> in <code>OnDestroy</code>). They are only cleaned up automatically when unused assets are unloaded: <code>Resources.UnloadUnusedAssets</code>, or a normal (Single mode) scene load. In a long-lived scene the copies pile up.</p>'
+      body: '<p>A workshop has one shared palette: red paint and gray paint. Any marker walks up and takes what it needs. That is <code>sharedMaterial</code>.</p><p>Now imagine that the first time a marker asks to be painted, it is handed its own <b>private can</b>, poured from the shared one. There are a hundred cans, and nobody knows who will throw them away. That is <code>renderer.material</code>: the first access <b>clones</b> the material for that renderer (the name gets an "(Instance)" suffix).</p><p>Two troubles at once: the copies are <b>not destroyed automatically</b>, and every marker now has its own material, so the engine has a harder time merging them into one draw call.</p>',
+      deep: '<p>The Unity docs say it plainly: you are responsible for destroying materials created through <code>.material</code> (<code>Destroy</code> in <code>OnDestroy</code>). Destroying the GameObject does not destroy the copy. Only an unload of unused assets picks it up: <code>Resources.UnloadUnusedAssets</code>, or a Single-mode scene load (which runs the same unload), and only if nothing references the copy any more. In a long-lived scene where markers are created and destroyed, the copies pile up.</p><p>To be precise about batching: a copy breaks static and dynamic batching and GPU Instancing (they need the very same material). The SRP Batcher does merge different materials of one shader variant, but every copy needs its own property buffer in GPU memory. So in URP the main harm of <code>.material</code> is memory and the leak, not the batch count.</p>'
     },
     {
       t: 'rig', rig: 'hunt',
@@ -33,7 +33,7 @@ private void Glow(Renderer r)
     r.material.SetFloat("_Glow", 1f);
 }`,
       bugs: [
-        { lines: [5, 16], title: 'Touching .material creates a copy', why: 'Every renderer gets a private material. The copies pile up in memory until someone destroys them, and batching falls apart.' },
+        { lines: [5, 16], title: 'Touching .material creates a copy', why: 'Every renderer gets a private material. The copies stay in memory until someone destroys them explicitly, and static batching, dynamic batching and instancing can no longer merge them.' },
         { lines: [11], title: 'sharedMaterial.color paints the shared material', why: 'You change the material itself: the color changes for everything that uses it. In the editor the change is even saved into the asset file.' }
       ],
       goal: { min: 2, maxFalse: 2 },
@@ -57,7 +57,7 @@ private void Glow(Renderer r)
     {
       t: 'learn',
       title: 'What batching is',
-      body: '<p>Every "draw this" command costs the CPU time. <b>Batching</b> merges commands so there are fewer of them.</p><p><b>Static</b> works for objects that never move and have the Static flag. <b>Dynamic</b>: the CPU merges small meshes that share a material (small means roughly 300 vertices; it is off by default in URP). <b>SRP Batcher</b>, in URP and HDRP: objects with the same <b>shader</b> are drawn back to back without reconfiguring, and the material data lives in GPU memory. <b>GPU Instancing</b>: one mesh and one material are drawn as a pack, and the values that differ go in an array.</p><p>The general idea: the more things are identical, the better they merge.</p>'
+      body: '<p>Every "draw this" command costs the CPU time. <b>Batching</b> merges commands so there are fewer of them.</p><p><b>Static</b> works for objects that never move and have the Static flag. <b>Dynamic</b>: the CPU merges small meshes that share a material (small means roughly 300 vertices; it is off by default in URP). <b>SRP Batcher</b>, in URP and HDRP: objects with the same <b>shader variant</b> are drawn back to back without reconfiguring, and the material data already lives in GPU memory. It does not reduce the number of draw calls, but it makes each one much cheaper. <b>GPU Instancing</b>: one mesh and one material are drawn as a pack, and the values that differ go in an array.</p><p>The general idea: the more things are identical, the better they merge.</p>'
     },
     {
       t: 'learn',
@@ -102,9 +102,8 @@ private void Paint(Renderer r, int index)
       t: 'order',
       q: 'If you still need a MaterialPropertyBlock (Built-in RP or instancing), put the steps in order.',
       items: [
-        'Create the MaterialPropertyBlock once, in a class field',
-        'Get the property ID once with Shader.PropertyToID',
-        'Read the renderer current values: r.GetPropertyBlock(block)',
+        'Once (in Awake), create the MaterialPropertyBlock in a field and get the property ID with Shader.PropertyToID',
+        'Read the renderer\'s current values: r.GetPropertyBlock(block)',
         'Write the color: block.SetColor(id, color)',
         'Apply it to the renderer: r.SetPropertyBlock(block)'
       ],

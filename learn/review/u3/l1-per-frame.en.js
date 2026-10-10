@@ -7,7 +7,7 @@ export default {
   cards: [
     {
       t: 'learn',
-      title: 'A trash can emptied every frame',
+      title: 'A pile of trash every frame',
       body: '<p>Picture a kitchen where the cook drops a wrapper on the floor after <b>every</b> dish. A few dishes, nobody notices. But every so often a cleaner walks in and stops the whole kitchen for a moment. That cleaner is the <b>garbage collector (GC)</b>.</p><p>A game draws 60 frames a second, so a frame has only about 16 ms. If <code>Update</code> creates new objects every frame (lists, strings, delegates), garbage piles up and the cleaner arrives in the middle of a frame. The game stutters.</p><p>In this lesson you hunt through <code>ClashMarkers.Update</code> for anything that makes garbage or does expensive work <b>every frame</b>.</p>',
       deep: '<p>Unity uses the Boehm collector: it is non-generational and does not compact the heap. The incremental GC (an option since Unity 2019.1) spreads the pause over several frames, but it does not remove the cost of the allocations or of heap scanning. So when you review a hot path (Update, physics, short-step coroutines) the goal is zero allocations in steady state.</p>'
     },
@@ -29,11 +29,11 @@ export default {
     }
 }`,
       bugs: [
-        { lines: [2, 3, 5], title: 'LINQ chain in Update', why: 'Where, OrderBy and ToList create iterators, delegates, buffers and a new list, every frame. That is steady garbage and GC spikes.' },
+        { lines: [2, 3, 5], title: 'LINQ chain in Update', why: 'Every frame, Where, OrderBy and ToList create iterator objects, sort buffers and a new list with its array. That is steady garbage and regular GC pauses.' },
         { lines: [4], title: 'Camera.main and Distance (with a square root) inside the sort key', why: 'The key is computed for every marker every frame, and each time it reads Camera.main (a tag lookup in old Unity versions). Distance also does a square root. Read the camera position once and compare squared distances.' },
         { lines: [9], title: 'GetComponent for every marker every frame', why: 'A component lookup is not free. With hundreds of markers it eats a visible share of the frame. Cache the reference when the marker is created.' },
         { lines: [10], title: 'renderer.material makes a copy of the material', why: 'The first access clones the material for this renderer: leaked copies and broken batching. The materials lesson covers it in detail.' },
-        { lines: [11], title: 'String and TextMesh work every frame', why: 'Concatenation creates a new string per marker per frame, and assigning text makes the TextMesh rebuild even when the text is the same. Add one more expensive GetComponentInChildren.' }
+        { lines: [11], title: 'String and TextMesh work every frame', why: 'Concatenation creates a new string per marker per frame, and assigning text every frame pushes the string into the native TextMesh, which may rebuild its mesh even though the text is the same. Plus one more expensive GetComponentInChildren.' }
       ],
       goal: { min: 4, maxFalse: 2 },
       solve: ['flag:2', 'flag:4', 'flag:9', 'flag:11', 'check']
@@ -42,7 +42,7 @@ export default {
       t: 'learn',
       title: 'What LINQ really does',
       body: '<p>LINQ looks like one line, but a whole workshop runs underneath:</p><p><b>Where</b> creates an iterator object and holds a delegate. <b>OrderBy</b> copies all elements into a buffer, computes a key for each one and keeps an array of keys. <b>ToList</b> allocates a new list and its backing array.</p><p>Once, while loading a level, that is fine. <b>Every frame</b> it means dozens of small objects for the GC to clean up.</p><p>The replacement: a reusable <code>List</code> field (<code>Clear()</code> and refill in a plain loop) and an in-place sort.</p>',
-      deep: '<p>The compiler caches a lambda that captures nothing in a static field, but a lambda that captures something (say, the camera position) allocates a closure object on every call. So "sort in place with a captured local" allocates too. In the hottest code, put the camera position in a field and compare through it, or precompute squared distances into a parallel array.</p><p>One more detail: <code>OrderBy</code> computes the key <b>once per element</b>, not once per comparison, so Camera.main is read n times here, not n log n. Still n times too many.</p>'
+      deep: '<p>The compiler (Roslyn) caches a lambda that captures nothing in a static field. Neither lambda in this Update captures anything (Camera.main is a static property), so the garbage here comes from the iterators, the OrderBy buffer and the list, not from delegates. A lambda that does capture something (say, a local camera position) allocates a closure object and a new delegate on every call of the method. So <code>list.Sort((a, b) => …)</code> with a captured local allocates too. In the hottest code, keep the camera position in a field and precompute squared distances into a parallel array.</p><p>One more detail: <code>OrderBy</code> computes the key <b>once per element</b>, not once per comparison, so Camera.main is read n times here, not n log n. Still n times too many.</p>'
     },
     {
       t: 'choice',

@@ -43,7 +43,7 @@ private void OnSelected(int clashId, ClashFilter type)
         return;
 }`,
       bugs: [
-        { lines: [5, 6, 11], title: 'Subscribed in OnEnable, unsubscribed only in OnDestroy', why: 'After the object is switched off and on, the handler subscribes a second time and runs twice, and the coroutine starts again. A disabled object also keeps receiving events.' },
+        { lines: [5, 6, 11], title: 'Subscribed in OnEnable, unsubscribed only in OnDestroy', why: 'After the object is switched off and on, the handler subscribes a second time and runs twice, and after enabled = false/true two copies of the coroutine are running. A disabled object also keeps receiving events.' },
         { lines: [0, 18, 19], title: 'GameObject list is never cleaned', why: 'A destroyed object stays in the list as a "fake null". Touching its transform throws MissingReferenceException and kills the coroutine.' },
         { lines: [20], title: 'new WaitForSeconds in a loop', why: 'A new object on every iteration, 20 times a second. One shared instance is enough.' },
         { lines: [26], title: 'HasFlag used for an "any of the flags" test', why: 'HasFlag needs all the bits you pass, and for None it always returns true. A filter on "overlaps" comes out wrong.' }
@@ -55,7 +55,7 @@ private void OnSelected(int clashId, ClashFilter type)
       t: 'learn',
       title: 'What breaks on switch off and on',
       body: '<p>Call <code>SetActive(false)</code> and then <code>SetActive(true)</code>. What happened: <code>OnDisable</code> ran, with no unsubscribe, then <code>OnEnable</code> added the delegate <b>one more time</b>. The event chain now holds two identical handlers. <code>OnDestroy</code> never ran at all.</p><p>The fix is symmetry: whatever you do in <code>OnEnable</code>, undo in <code>OnDisable</code>. Store the coroutine in a field and stop it.</p>',
-      deep: '<p>A subtlety with coroutines: <code>SetActive(false)</code> stops all coroutines on the object, but <code>enabled = false</code> on the component does <b>not</b>. The coroutine keeps running, and after <code>enabled = true</code>, OnEnable starts a second copy. So calling <code>StopCoroutine</code> explicitly in OnDisable is safer.</p><p>A static event also keeps its subscriber alive: until the subscriber unsubscribes, the reference stays, and a destroyed component keeps getting calls. Any access to its fields throws <code>MissingReferenceException</code>.</p>'
+      deep: '<p>A subtlety with coroutines: <code>SetActive(false)</code> stops all coroutines on the object, but <code>enabled = false</code> on the component does <b>not</b>. The coroutine keeps running, and after <code>enabled = true</code>, OnEnable starts a second copy. So calling <code>StopCoroutine</code> explicitly in OnDisable is safer.</p><p>A static event also keeps its subscriber alive: until the subscriber unsubscribes, the reference stays (the GC cannot collect the C# object), and a destroyed component keeps getting calls. Its plain C# fields still read fine, but touching <code>transform</code>, <code>gameObject</code> or any other engine API throws <code>MissingReferenceException</code>.</p>'
     },
     {
       t: 'choice',
@@ -111,7 +111,7 @@ private void ___()
       t: 'learn',
       title: 'Flags: [Flags] and HasFlag',
       body: '<p>An enum with <code>[Flags]</code> is a set of switches: <code>Hard = 1, Soft = 2, Clearance = 4</code>. The filter "Hard and Soft" equals 3 (011 in binary).</p><p><code>x.HasFlag(f)</code> means <code>(x &amp; f) == f</code>: <b>all</b> bits of f must be on. For a single flag that is the same as "is it set". But:</p><p>• <code>HasFlag(None)</code> is always <b>true</b>, because 0 is contained in everything.<br>• For the combination <code>Hard | Clearance</code> both bits are required.</p><p>If the question is "does at least one match", write <code>(x &amp; f) != 0</code>.</p>',
-      deep: '<p>In older runtimes (notably Unity with Mono and IL2CPP) HasFlag converts the value to object, so it boxes, which is an allocation. In modern .NET (since .NET Core 2.1 / .NET 5) the JIT optimizes it and there is no boxing. The bitwise form is equally fast everywhere, so prefer it in hot Unity code.</p>'
+      deep: '<p><code>Enum.HasFlag(Enum flag)</code> takes its argument as an object and is called on a value type, so in Unity\'s Mono (and in IL2CPP, at least in older versions) every call boxes both the argument and the enum itself. That is allocation on every call. In .NET Core 2.1 and later the JIT recognizes HasFlag and turns it into a bitwise test with no boxing. The bitwise form is fast everywhere, so prefer it in hot Unity code.</p>'
     },
     {
       t: 'choice',
@@ -154,7 +154,7 @@ bool r = filter.HasFlag(ClashFilter.Hard | ClashFilter.Clearance);`,
         ['The handler fires twice after switching off and on', 'Subscribed in OnEnable, unsubscribed in OnDestroy'],
         ['MissingReferenceException while iterating the marker list', 'Destroyed objects stayed in the list'],
         ['HasFlag(None) is always true', 'Zero is contained in every value'],
-        ['The pulse runs twice as fast after enabled = false/true', 'The coroutine was not stopped and was started again']
+        ['After enabled = false/true the profiler shows Pulse twice per step', 'The coroutine was not stopped and was started again']
       ]
     },
     {
