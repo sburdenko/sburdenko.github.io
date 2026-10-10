@@ -1,22 +1,22 @@
 /** Курс «Three.js: начальный уровень»: первая сцена, камера, объекты, свет, текстуры и модели. */
-import u1l1 from './u1/l1-what.js?v=202610100756';
-import u1l2 from './u1/l2-scene.js?v=202610100756';
-import u1l3 from './u1/l3-loop.js?v=202610100756';
-import u1boss from './u1/boss.js?v=202610100756';
-import u2l1 from './u2/l1-perspective.js?v=202610100756';
-import u2l2 from './u2/l2-near.js?v=202610100756';
-import u2l3 from './u2/l3-ortho.js?v=202610100756';
-import u2boss from './u2/boss.js?v=202610100756';
-import u3l1 from './u3/l1-transform.js?v=202610100756';
-import u3l2 from './u3/l2-hierarchy.js?v=202610100756';
-import u3boss from './u3/boss.js?v=202610100756';
-import u4l1 from './u4/l1-materials.js?v=202610100756';
-import u4l2 from './u4/l2-lights.js?v=202610100756';
-import u4l3 from './u4/l3-shadows.js?v=202610100756';
-import u4boss from './u4/boss.js?v=202610100756';
-import u5l1 from './u5/l1-textures.js?v=202610100756';
-import u5l2 from './u5/l2-gltf.js?v=202610100756';
-import u5boss from './u5/boss.js?v=202610100756';
+import u1l1 from './u1/l1-what.js?v=202610100800';
+import u1l2 from './u1/l2-scene.js?v=202610100800';
+import u1l3 from './u1/l3-loop.js?v=202610100800';
+import u1boss from './u1/boss.js?v=202610100800';
+import u2l1 from './u2/l1-perspective.js?v=202610100800';
+import u2l2 from './u2/l2-near.js?v=202610100800';
+import u2l3 from './u2/l3-ortho.js?v=202610100800';
+import u2boss from './u2/boss.js?v=202610100800';
+import u3l1 from './u3/l1-transform.js?v=202610100800';
+import u3l2 from './u3/l2-hierarchy.js?v=202610100800';
+import u3boss from './u3/boss.js?v=202610100800';
+import u4l1 from './u4/l1-materials.js?v=202610100800';
+import u4l2 from './u4/l2-lights.js?v=202610100800';
+import u4l3 from './u4/l3-shadows.js?v=202610100800';
+import u4boss from './u4/boss.js?v=202610100800';
+import u5l1 from './u5/l1-textures.js?v=202610100800';
+import u5l2 from './u5/l2-gltf.js?v=202610100800';
+import u5boss from './u5/boss.js?v=202610100800';
 
 export default {
   id: 'three1',

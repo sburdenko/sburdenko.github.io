@@ -5,10 +5,10 @@
  *
  * Адаптер — модуль с createSink(settings) → { add(report) }, как у входа (learn/auth).
  */
-import { AUTH_CONFIG } from '../auth/config.js?v=202610100756';
-import { isValidReport, loadQueue, saveQueue } from './report.js?v=202610100756';
+import { AUTH_CONFIG } from '../auth/config.js?v=202610100800';
+import { isValidReport, loadQueue, saveQueue } from './report.js?v=202610100800';
 
-const SINKS = { firebase: () => import('./firestore.js?v=202610100756') };
+const SINKS = { firebase: () => import('./firestore.js?v=202610100800') };
 const PROVIDER = AUTH_CONFIG.provider;   // тот же проект, что и вход
 
 let sinkPromise = null;

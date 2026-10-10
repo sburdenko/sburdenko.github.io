@@ -586,7 +586,6 @@ pre.code.full{max-height:none}
 @media (max-width:640px){.bx-tag,.bx-nav{display:none}.bx-name{font-size:22px;letter-spacing:.12em}.bx-head .r{gap:10px}}
 
 /* ---------- каталог: подпись и вход на полку ---------- */
-.kick-top{font:400 20px/1 var(--f-osd);letter-spacing:.08em;color:var(--gpu);text-transform:uppercase;margin-bottom:-14px}
 .shelf-door{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;margin-top:12px;padding:18px 20px;border-radius:var(--r);border:1px dashed var(--line2);background:var(--card);text-decoration:none;color:var(--ink2);transition:border-color .2s}
 .shelf-door:hover{border-color:var(--osd)}
 .sd-icon{font-size:30px}

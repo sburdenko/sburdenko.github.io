@@ -1,5 +1,5 @@
 /** Строки интерфейса Bathys на двух языках. t('key', { n: 3 }) подставляет {n}. */
-import { getLang } from './i18n.js?v=202610100756';
+import { getLang } from './i18n.js?v=202610100800';
 
 const S = {
   'brand.tag': { ru: 'Интерактивные курсы', en: 'Interactive courses' },
@@ -11,7 +11,6 @@ const S = {
   'page.course': { ru: '{title} — Bathys', en: '{title} — Bathys' },
   'page.profile': { ru: 'Профиль — Bathys', en: 'Profile — Bathys' },
 
-  'cat.kick': { ru: 'Bathys · от греческого «глубокий»', en: 'Bathys · Greek for “deep”' },
   'cat.title': { ru: 'Учись на глубину', en: 'Learn in depth' },
   'cat.lede': { ru: 'Короткие уроки по 5 минут. Ничего не нужно знать заранее: каждое слово объясняем, на каждом экране что-то делаешь сам. Опытным — раскрывающиеся блоки «Глубже».', en: 'Five-minute lessons. No prior knowledge needed: every term is explained, and on every screen you do something yourself. For experienced readers there are expandable “Go deeper” blocks.' },
   'cat.shelfTitle': { ru: 'Полка кассет', en: 'The tape shelf' },

@@ -1,5 +1,5 @@
 /** Tape 05 strings: Command, State, Observer, Strategy. */
-import { facts } from './facts.js?v=202610100756';
+import { facts } from './facts.js?v=202610100800';
 
 export const BEHAVIOR = {
   'command.h2': { en: 'Command: turn a call into an object', ru: 'Command: преврати вызов в объект' },
