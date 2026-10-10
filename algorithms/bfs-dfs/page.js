@@ -1,13 +1,13 @@
 /** Сборка кассеты «BFS и DFS»: язык, заставка, пульты, гонка, шпаргалка, вопросы. */
-import { $, bootVhs, fitCanvas, RM, onVisible } from '../../assets/vhs.js?v=202610100807';
-import { initI18n, t, onLang } from '../../assets/i18n.js?v=202610100807';
-import { COMMON } from '../../assets/i18n-common.js?v=202610100807';
-import { DICT } from './i18n.js?v=202610100807';
-import { gridNeighbors, traverse, stateAt } from './traversal.js?v=202610100807';
-import { drawGrid, gridLayout } from './grid-view.js?v=202610100807';
-import { initGridDeck } from './grid-deck.js?v=202610100807';
-import { initGraphDeck } from './graph-deck.js?v=202610100807';
-import { initRace } from './race.js?v=202610100807';
+import { $, bootVhs, fitCanvas, RM, onVisible } from '../../assets/vhs.js?v=202610101018';
+import { initI18n, t, onLang } from '../../assets/i18n.js?v=202610101018';
+import { COMMON } from '../../assets/i18n-common.js?v=202610101018';
+import { DICT } from './i18n.js?v=202610101018';
+import { gridNeighbors, traverse, stateAt } from './traversal.js?v=202610101018';
+import { drawGrid, gridLayout } from './grid-view.js?v=202610101018';
+import { initGridDeck } from './grid-deck.js?v=202610101018';
+import { initGraphDeck } from './graph-deck.js?v=202610101018';
+import { initRace } from './race.js?v=202610101018';
 
 initI18n({ ...COMMON, ...DICT });
 bootVhs();

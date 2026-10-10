@@ -71,7 +71,7 @@ public List<Clash> GetClashesFor(ElementKey key)
     HashCode.___(ModelId, ElementId);`,
       tiles: ['GetHashCode', 'Combine', 'ToString', 'Equals'],
       answer: ['GetHashCode', 'Combine'],
-      explain: '<code>HashCode.Combine</code> смешивает значения полей в один хэш. Главное, чтобы в нём участвовали те же поля, что и в <code>Equals</code>. В Unity тип <code>System.HashCode</code> есть с версии 2021.2 (профиль .NET Standard 2.1). В более старых версиях хэш комбинируют вручную: <code>unchecked((ModelId?.GetHashCode() ?? 0) * 397 ^ ElementId)</code>.'
+      explain: 'HashCode.Combine смешивает значения полей в один хэш. Главное, чтобы в нём участвовали те же поля, что и в Equals. В Unity тип System.HashCode есть с версии 2021.2 (профиль .NET Standard 2.1). В более старых версиях хэш комбинируют вручную: unchecked((ModelId?.GetHashCode() ?? 0) * 397 ^ ElementId).'
     },
     {
       t: 'choice',
@@ -99,7 +99,7 @@ return _cache[key];`,
 int chunk = id % 8;`,
       options: ['-3', '5', '3'],
       answer: 0,
-      explain: 'Остаток в C# берёт знак делимого. Поэтому <code>Id % 8</code> для отрицательных Id даёт от -7 до 0, и такие элементы не попадут в корзины 0…7. Лечится так: <code>((id % 8) + 8) % 8</code>. Не используй <code>Math.Abs</code>: <code>Math.Abs(int.MinValue)</code> бросает OverflowException.',
+      explain: 'Остаток в C# берёт знак делимого. Поэтому Id % 8 для отрицательных Id даёт от -7 до 0, и такие элементы не попадут в корзины 0…7. Лечится так: ((id % 8) + 8) % 8. Не используй Math.Abs: Math.Abs(int.MinValue) бросает OverflowException.',
       wrong: { 1: 'Так считали бы математики (остаток всегда неотрицателен). В C# оператор % работает иначе.', 2: 'Знак пропасть не может: делимое отрицательное, остаток тоже.' }
     },
     {

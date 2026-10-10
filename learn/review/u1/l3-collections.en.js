@@ -38,7 +38,7 @@ export default {
 }`,
       tiles: ['RemoveAll', 'Remove', 'Clear', 'Where'],
       answer: ['RemoveAll'],
-      explain: "<code>RemoveAll</code> walks the list once, shifts the survivors itself and takes the condition directly. That is O(n) instead of O(n²). Do not forget to reset the cache afterwards, because it still holds stale queries."
+      explain: "RemoveAll walks the list once, shifts the survivors itself and takes the condition directly. That is O(n) instead of O(n²). Do not forget to reset the cache afterwards, because it still holds stale queries."
     },
     {
       t: 'multi',
@@ -124,7 +124,7 @@ while (stack.Count > 0)
 }`,
       tiles: ['Push', 'Pop', 'Add', 'Peek', 'Contains'],
       answer: ['Push', 'Pop', 'Add'],
-      explain: "<code>HashSet.Add</code> returns <code>false</code> if the item was already there. One call both checks and remembers. With <code>Contains</code>, the node would never get into the set."
+      explain: "HashSet.Add returns false if the item was already there. One call both checks and remembers. With Contains, the node would never get into the set."
     },
     {
       t: 'choice',

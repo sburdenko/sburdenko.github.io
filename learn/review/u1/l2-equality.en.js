@@ -71,7 +71,7 @@ public List<Clash> GetClashesFor(ElementKey key)
     HashCode.___(ModelId, ElementId);`,
       tiles: ['GetHashCode', 'Combine', 'ToString', 'Equals'],
       answer: ['GetHashCode', 'Combine'],
-      explain: "<code>HashCode.Combine</code> mixes the field values into one hash. What matters is that the same fields take part as in <code>Equals</code>. In Unity, <code>System.HashCode</code> is available from 2021.2 (the .NET Standard 2.1 profile). On older versions, combine by hand: <code>unchecked((ModelId?.GetHashCode() ?? 0) * 397 ^ ElementId)</code>."
+      explain: "HashCode.Combine mixes the field values into one hash. What matters is that the same fields take part as in Equals. In Unity, System.HashCode is available from 2021.2 (the .NET Standard 2.1 profile). On older versions, combine by hand: unchecked((ModelId?.GetHashCode() ?? 0) * 397 ^ ElementId)."
     },
     {
       t: 'choice',
@@ -99,7 +99,7 @@ return _cache[key];`,
 int chunk = id % 8;`,
       options: ['-3', '5', '3'],
       answer: 0,
-      explain: "In C# the remainder takes the sign of the dividend. So <code>Id % 8</code> for negative Ids gives a value from -7 to 0, and such elements never land in buckets 0...7. The fix: <code>((id % 8) + 8) % 8</code>. Do not use <code>Math.Abs</code>: <code>Math.Abs(int.MinValue)</code> throws OverflowException.",
+      explain: "In C# the remainder takes the sign of the dividend. So Id % 8 for negative Ids gives a value from -7 to 0, and such elements never land in buckets 0...7. The fix: ((id % 8) + 8) % 8. Do not use Math.Abs: Math.Abs(int.MinValue) throws OverflowException.",
       wrong: { 1: "That is how mathematicians do it (the remainder is never negative). In C#, the % operator works differently.", 2: "The sign cannot vanish: the dividend is negative, so the remainder is too." }
     },
     {

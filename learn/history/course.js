@@ -1,22 +1,22 @@
 /** Курс «История .NET»: от Framework 1.0 до .NET 10 — и где .NET сейчас. */
-import u1l1 from './u1/l1-why.js?v=202610100807';
-import u1l2 from './u1/l2-growth.js?v=202610100807';
-import u1l3 from './u1/l3-end.js?v=202610100807';
-import u1boss from './u1/boss.js?v=202610100807';
-import u2l1 from './u2/l1-mono.js?v=202610100807';
-import u2l2 from './u2/l2-unity.js?v=202610100807';
-import u2l3 from './u2/l3-xamarin.js?v=202610100807';
-import u2boss from './u2/boss.js?v=202610100807';
-import u3l1 from './u3/l1-open.js?v=202610100807';
-import u3l2 from './u3/l2-core.js?v=202610100807';
-import u3l3 from './u3/l3-standard.js?v=202610100807';
-import u3l4 from './u3/l4-multitarget.js?v=202610100807';
-import u3boss from './u3/boss.js?v=202610100807';
-import u4l1 from './u4/l1-one.js?v=202610100807';
-import u4l2 from './u4/l2-net10.js?v=202610100807';
-import u4l3 from './u4/l3-now.js?v=202610100807';
-import u4l4 from './u4/l4-diff.js?v=202610100807';
-import u4boss from './u4/boss.js?v=202610100807';
+import u1l1 from './u1/l1-why.js?v=202610101018';
+import u1l2 from './u1/l2-growth.js?v=202610101018';
+import u1l3 from './u1/l3-end.js?v=202610101018';
+import u1boss from './u1/boss.js?v=202610101018';
+import u2l1 from './u2/l1-mono.js?v=202610101018';
+import u2l2 from './u2/l2-unity.js?v=202610101018';
+import u2l3 from './u2/l3-xamarin.js?v=202610101018';
+import u2boss from './u2/boss.js?v=202610101018';
+import u3l1 from './u3/l1-open.js?v=202610101018';
+import u3l2 from './u3/l2-core.js?v=202610101018';
+import u3l3 from './u3/l3-standard.js?v=202610101018';
+import u3l4 from './u3/l4-multitarget.js?v=202610101018';
+import u3boss from './u3/boss.js?v=202610101018';
+import u4l1 from './u4/l1-one.js?v=202610101018';
+import u4l2 from './u4/l2-net10.js?v=202610101018';
+import u4l3 from './u4/l3-now.js?v=202610101018';
+import u4l4 from './u4/l4-diff.js?v=202610101018';
+import u4boss from './u4/boss.js?v=202610101018';
 
 export default {
   id: 'history',

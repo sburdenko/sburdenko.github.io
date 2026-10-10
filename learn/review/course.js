@@ -1,23 +1,34 @@
 /** Курс «Ревью кода: найди баг»: ревью реального кода — русская версия. */
-import u1l1 from './u1/l1-closure-async.js?v=202610100807';
-import u1l2 from './u1/l2-equality.js?v=202610100807';
-import u1l3 from './u1/l3-collections.js?v=202610100807';
-import u1l4 from './u1/l4-failures.js?v=202610100807';
-import u1boss from './u1/boss.js?v=202610100807';
-import u2l1 from './u2/l1-blocking.js?v=202610100807';
-import u2l2 from './u2/l2-shared-state.js?v=202610100807';
-import u2l3 from './u2/l3-background.js?v=202610100807';
-import u2boss from './u2/boss.js?v=202610100807';
-import u3l1 from './u3/l1-per-frame.js?v=202610100807';
-import u3l2 from './u3/l2-materials.js?v=202610100807';
-import u3l3 from './u3/l3-lifecycle.js?v=202610100807';
-import u3l4 from './u3/l4-cache-sort.js?v=202610100807';
-import u3boss from './u3/boss.js?v=202610100807';
+import u0l1 from './u0/l1-mutable-struct.js?v=202610101018';
+import u0l2 from './u0/l2-singleton.js?v=202610101018';
+import u0l3 from './u0/l3-loading.js?v=202610101018';
+import u0l4 from './u0/l4-search-events.js?v=202610101018';
+import u0boss from './u0/boss.js?v=202610101018';
+import u1l1 from './u1/l1-closure-async.js?v=202610101018';
+import u1l2 from './u1/l2-equality.js?v=202610101018';
+import u1l3 from './u1/l3-collections.js?v=202610101018';
+import u1l4 from './u1/l4-failures.js?v=202610101018';
+import u1boss from './u1/boss.js?v=202610101018';
+import u2l1 from './u2/l1-blocking.js?v=202610101018';
+import u2l2 from './u2/l2-shared-state.js?v=202610101018';
+import u2l3 from './u2/l3-background.js?v=202610101018';
+import u2boss from './u2/boss.js?v=202610101018';
+import u3l1 from './u3/l1-per-frame.js?v=202610101018';
+import u3l2 from './u3/l2-materials.js?v=202610101018';
+import u3l3 from './u3/l3-lifecycle.js?v=202610101018';
+import u3l4 from './u3/l4-cache-sort.js?v=202610101018';
+import u3boss from './u3/boss.js?v=202610101018';
 
 export default {
   id: 'review',
   title: 'Ревью кода: найди баг',
   units: [
+    {
+      id: 'u0',
+      title: 'Задача 1: ModelManager',
+      blurb: 'Изменяемая структура и её копии, синглтон с побочными эффектами, незакрытый FileStream, HttpClient с .Result, Dictionary<object,…>, пустой catch и God-класс — всё, что прячется в «простом» менеджере модели.',
+      lessons: [u0l1, u0l2, u0l3, u0l4, u0boss]
+    },
     {
       id: 'u1',
       title: 'Задача 2: ClashService',

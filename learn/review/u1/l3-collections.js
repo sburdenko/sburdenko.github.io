@@ -38,7 +38,7 @@ export default {
 }`,
       tiles: ['RemoveAll', 'Remove', 'Clear', 'Where'],
       answer: ['RemoveAll'],
-      explain: '<code>RemoveAll</code> проходит список один раз, сам сдвигает оставшиеся и сразу принимает условие. Это O(n) вместо O(n²). Не забудь после него сбросить кэш, который ещё хранит устаревшие выборки.'
+      explain: 'RemoveAll проходит список один раз, сам сдвигает оставшиеся и сразу принимает условие. Это O(n) вместо O(n²). Не забудь после него сбросить кэш, который ещё хранит устаревшие выборки.'
     },
     {
       t: 'multi',
@@ -124,7 +124,7 @@ while (stack.Count > 0)
 }`,
       tiles: ['Push', 'Pop', 'Add', 'Peek', 'Contains'],
       answer: ['Push', 'Pop', 'Add'],
-      explain: '<code>Add</code> у <code>HashSet</code> возвращает <code>false</code>, если элемент уже был. Одним вызовом и проверяем, и запоминаем. С <code>Contains</code> узел так и не попал бы в множество.'
+      explain: 'Add у HashSet возвращает false, если элемент уже был. Одним вызовом и проверяем, и запоминаем. С Contains узел так и не попал бы в множество.'
     },
     {
       t: 'choice',

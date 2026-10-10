@@ -8,7 +8,7 @@
 
 /* ---------- стековая машина CIL ---------- */
 
-import { tr } from './i18n.js?v=202610100807';
+import { tr } from './i18n.js?v=202610101018';
 
 const BIN = {
   add: [(a, b) => a + b, '+'],

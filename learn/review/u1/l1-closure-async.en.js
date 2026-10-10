@@ -28,7 +28,7 @@ export default {
     tasks.Add(Task.Run(() => ProcessChunk(elements, i)));`,
       options: ["8 for every task", "0, 1, 2, ... 7 in order", "Each gets its own number, but in random order"],
       answer: 0,
-      explain: "By the time the tasks start, the loop has usually finished, and the shared variable is 8. The filter <code>e.Id % 8 == 8</code> is never true, so no pairs are found at all.",
+      explain: "By the time the tasks start, the loop has usually finished, and the shared variable is 8. The filter e.Id % 8 == 8 is never true, so no pairs are found at all.",
       wrong: { 1: "That would happen if every lambda saw its own value. But there is one box for all.", 2: "Random order would need copies. Here the variable is shared, so almost every task sees the final value." }
     },
     {
@@ -81,7 +81,7 @@ private void ProcessChunk(IEnumerable<Element> elements, int chunk)
 }`,
       tiles: ['i', 'chunk', '8', 'elements'],
       answer: ['i', 'chunk'],
-      explain: "The copy is declared inside the loop body, so each iteration gets a new box. The lambda must use the copy, not <code>i</code>."
+      explain: "The copy is declared inside the loop body, so each iteration gets a new box. The lambda must use the copy, not i."
     },
     {
       t: 'learn',

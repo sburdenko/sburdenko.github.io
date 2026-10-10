@@ -34,7 +34,7 @@ export default {
 }`,
       tiles: ['throw', 'throw ex', 'throw null', 'return'],
       answer: ['throw'],
-      explain: 'Голый <code>throw;</code> внутри catch пересылает то же исключение с исходным стеком. Вариант <code>throw ex</code> обнулил бы стек.'
+      explain: 'Голый throw; внутри catch пересылает то же исключение с исходным стеком. Вариант throw ex обнулил бы стек.'
     },
     {
       t: 'learn',
@@ -50,7 +50,7 @@ if (data ___ null)
 _clashes.AddRange(data);`,
       tiles: ['==', '!=', '?.', '??'],
       answer: ['=='],
-      explain: 'Если данных нет, лучше сразу понятная ошибка, чем <code>ArgumentNullException</code> с непонятным параметром. Для обычных (не Unity) объектов <code>== null</code> работает как ожидается.'
+      explain: 'Если данных нет, лучше сразу понятная ошибка, чем ArgumentNullException с непонятным параметром. Для обычных (не Unity) объектов == null работает как ожидается.'
     },
     {
       t: 'learn',
@@ -129,7 +129,7 @@ public void Highlight()
 }`,
       tiles: ['!=', '?.', 'is not', '??'],
       answer: ['!='],
-      explain: 'Оператор <code>!=</code> вызывает перегрузку Unity и вернёт <code>false</code> для уничтоженного объекта. Вариант <code>is not null</code> выглядит похоже, но перегрузку обходит. Не забудь ещё присвоить поле маркера где-то в конструкторе или через [SerializeField] в MonoBehaviour.'
+      explain: 'Оператор != вызывает перегрузку Unity и вернёт false для уничтоженного объекта. Вариант is not null выглядит похоже, но перегрузку обходит. Не забудь ещё присвоить поле маркера где-то в конструкторе или через [SerializeField] в MonoBehaviour.'
     },
     {
       t: 'choice',

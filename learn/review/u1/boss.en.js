@@ -330,7 +330,7 @@ public class ClashService
         "float compared with =="
       ],
       "answer": 0,
-      "explain": "All tasks see i == 8, and the filter <code>Id % 8 == 8</code> lets no element through. The other bugs break the result less often or loudly, while this one empties it without a single error.",
+      "explain": "All tasks see i == 8, and the filter Id % 8 == 8 lets no element through. The other bugs break the result less often or loudly, while this one empties it without a single error.",
       "wrong": {
         "1": "async void hides exceptions, but it does not blank the result.",
         "2": "float == breaks the level check, not the clash search."
@@ -400,7 +400,7 @@ public class ClashService
         "Task",
         "ToList"
       ],
-      "explain": "Instead of <code>async void</code> you need <code>async Task</code>, so callers can await and catch errors. <code>ToList()</code> pins the data once, and tasks do not recompute a lazy query. <code>Where</code> materializes nothing by itself."
+      "explain": "Instead of async void you need async Task, so callers can await and catch errors. ToList() pins the data once, and tasks do not recompute a lazy query. Where materializes nothing by itself."
     },
     {
       "t": "tapline",
@@ -411,7 +411,7 @@ public class ClashService
     throw ex;
 }`,
       "answer": 3,
-      "explain": "The <code>throw ex;</code> line restarts the trace at the current place. The correct form is <code>throw;</code>. The logging above does not erase the stack, but it makes the error \"noisy\"."
+      "explain": "The throw ex; line restarts the trace at the current place. The correct form is throw;. The logging above does not erase the stack, but it makes the error \"noisy\"."
     },
     {
       "t": "match",

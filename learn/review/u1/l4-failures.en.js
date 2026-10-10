@@ -34,7 +34,7 @@ export default {
 }`,
       tiles: ['throw', 'throw ex', 'throw null', 'return'],
       answer: ['throw'],
-      explain: "A bare <code>throw;</code> inside catch forwards the same exception with its original stack. <code>throw ex</code> would wipe the stack."
+      explain: "A bare throw; inside catch forwards the same exception with its original stack. throw ex would wipe the stack."
     },
     {
       t: 'learn',
@@ -50,7 +50,7 @@ if (data ___ null)
 _clashes.AddRange(data);`,
       tiles: ['==', '!=', '?.', '??'],
       answer: ['=='],
-      explain: "If there is no data, a clear error right away beats an <code>ArgumentNullException</code> with a confusing parameter. For ordinary (non-Unity) objects, <code>== null</code> works as expected."
+      explain: "If there is no data, a clear error right away beats an ArgumentNullException with a confusing parameter. For ordinary (non-Unity) objects, == null works as expected."
     },
     {
       t: 'learn',
@@ -129,7 +129,7 @@ public void Highlight()
 }`,
       tiles: ['!=', '?.', 'is not', '??'],
       answer: ['!='],
-      explain: "The <code>!=</code> operator calls Unity's overload and returns <code>false</code> for a destroyed object. <code>is not null</code> looks similar but bypasses the overload. Also remember to assign the marker field somewhere, in a constructor or via [SerializeField] in a MonoBehaviour."
+      explain: "The != operator calls Unity's overload and returns false for a destroyed object. is not null looks similar but bypasses the overload. Also remember to assign the marker field somewhere, in a constructor or via [SerializeField] in a MonoBehaviour."
     },
     {
       t: 'choice',

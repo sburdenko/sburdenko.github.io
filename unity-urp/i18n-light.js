@@ -1,5 +1,5 @@
 /** Tape 04 strings: shadows, shadow atlas, light modes, rendering layers. */
-import { facts } from './facts.js?v=202610100807';
+import { facts } from './facts.js?v=202610101018';
 
 const LEVEL = { en: ['low', 'medium', 'high'], ru: ['низкая', 'средняя', 'высокая'] };
 

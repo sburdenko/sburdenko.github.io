@@ -2,8 +2,8 @@
  * Живая 3D-картинка для стендов курса Three.js: настоящий Three.js с CDN.
  * Логика заданий — в models-three.js; если Three.js не загрузился, стенд работает без картинки.
  */
-import { RM } from '../assets/vhs.js?v=202610100807';
-import { tr } from './i18n.js?v=202610100807';
+import { RM } from '../assets/vhs.js?v=202610101018';
+import { tr } from './i18n.js?v=202610101018';
 
 export const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js';
 export const VIEW_ASPECT = 1.6;
