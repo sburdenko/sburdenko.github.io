@@ -6,11 +6,12 @@
  */
 export const AUTH_CONFIG = {
   provider: 'firebase',
-  firebase: null
-  // firebase: {
-  //   apiKey: '…',
-  //   authDomain: '<project>.firebaseapp.com',
-  //   projectId: '<project>',
-  //   appId: '…'
-  // }
+  firebase: {
+    apiKey: 'AIzaSyDEVhWUOb2u_Dt-p5TVITU5oeW9ggtcapQ',
+    authDomain: 'bathys-d6656.firebaseapp.com',
+    projectId: 'bathys-d6656',
+    storageBucket: 'bathys-d6656.firebasestorage.app',
+    messagingSenderId: '374160906820',
+    appId: '1:374160906820:web:80fcc421a8afff391d3a11'
+  }
 };
