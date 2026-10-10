@@ -1,8 +1,8 @@
 /** Стенды курса «C# глубже»: дженерики, замыкания, LINQ, выделения, копии структур, switch. */
-import { esc } from '../assets/vhs.js?v=202610101018';
-import { drive, act, refColor } from './rig-kit.js?v=202610101018';
-import { codeHtml } from './code-view.js?v=202610101018';
-import { tr, getLang } from './i18n.js?v=202610101018';
+import { esc } from '../assets/vhs.js?v=202610101341';
+import { drive, act, refColor } from './rig-kit.js?v=202610101341';
+import { codeHtml } from './code-view.js?v=202610101341';
+import { tr, getLang } from './i18n.js?v=202610101341';
 import {
   GEN_TYPES, GEN_CONSTRAINTS, GEN_OPS, genConflicts, genFits, genWhere, genRig,
   CLOSURE_CODE, closureRig,
@@ -10,7 +10,7 @@ import {
   PARSE, allocRig,
   PASS, copies, copyRig,
   ARMS, SHAPES, switchHits, unreachable, switchRig
-} from './models-csharp.js?v=202610101018';
+} from './models-csharp.js?v=202610101341';
 
 const seg = (items, cur, prefix) => `<div class="seg wrap literal">${items.map(([v, label]) => act(`${prefix}:${v}`, esc(tr(label)), '').replace('class=""', `aria-pressed="${String(v) === String(cur)}"`)).join('')}</div>`;
 const row = (ok, text, sub = '') => `<div class="cv-row ${ok ? 'yes' : 'no'}"><span>${text}${sub ? `<small>${esc(sub)}</small>` : ''}</span><span class="cv-m">${ok ? '✓' : '✗'}</span></div>`;

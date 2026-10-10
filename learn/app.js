@@ -5,16 +5,16 @@
  *   #/dotnet      курс
  *   #/dotnet/<id> урок поверх курса
  */
-import { $, esc, startNoise, setLocale } from '../assets/vhs.js?v=202610101018';
-import { GROUPS, COURSES, findCourse, lessonsOf, loadCourses, courseTitle, courseBlurb } from './courses.js?v=202610101018';
-import { getLang, switchLang, tr, LANGS, LANG_NAMES } from './i18n.js?v=202610101018';
-import { t } from './ui.js?v=202610101018';
-import { auth } from './auth/auth.js?v=202610101018';
-import { CATEGORIES, MAX_TEXT, buildReport } from './reports/report.js?v=202610101018';
-import { submit, flushQueue, reportsEnabled } from './reports/reports.js?v=202610101018';
-import * as P from './progress.js?v=202610101018';
-import * as E from './engine.js?v=202610101018';
-import { renderCard, feedback } from './cards.js?v=202610101018';
+import { $, esc, startNoise, setLocale } from '../assets/vhs.js?v=202610101341';
+import { GROUPS, COURSES, findCourse, lessonsOf, loadCourses, courseTitle, courseBlurb } from './courses.js?v=202610101341';
+import { getLang, switchLang, tr, LANGS, LANG_NAMES } from './i18n.js?v=202610101341';
+import { t } from './ui.js?v=202610101341';
+import { auth } from './auth/auth.js?v=202610101341';
+import { CATEGORIES, MAX_TEXT, buildReport } from './reports/report.js?v=202610101341';
+import { submit, flushQueue, reportsEnabled } from './reports/reports.js?v=202610101341';
+import * as P from './progress.js?v=202610101341';
+import * as E from './engine.js?v=202610101341';
+import { renderCard, feedback } from './cards.js?v=202610101341';
 
 /** Полка кассет — отдельный модуль сайта. */
 const SHELF_URL = new URL('../shelf/', import.meta.url).href;
@@ -391,40 +391,62 @@ function openReport() {
   wrap.className = 'ask report';
   wrap.innerHTML = `<form class="ask-box rp-box" role="dialog" aria-modal="true" aria-label="${esc(t('rp.title'))}">
       <h3>${esc(t('rp.title'))}</h3>
-      <p class="rp-sub">${esc(t('rp.cats'))}</p>
-      <div class="rp-cats">${CATEGORIES.map(c => `<button type="button" class="rp-cat" data-id="${c.id}" aria-pressed="false">${esc(tr(c))}</button>`).join('')}</div>
-      <label class="rp-sub" for="rpText">${esc(t('rp.text'))}</label>
-      <textarea id="rpText" rows="4" maxlength="${MAX_TEXT}" placeholder="${esc(t('rp.ph'))}"></textarea>
-      <p class="rp-msg" id="rpMsg" role="status" aria-live="polite"></p>
-      <div class="row-btns"><button type="button" class="ghost-btn" id="rpNo">${esc(t('rp.cancel'))}</button><button type="submit" class="cta-btn" id="rpYes">${esc(t('rp.send'))}</button></div>
+      <div class="rp-body">
+        <p class="rp-sub">${esc(t('rp.cats'))}</p>
+        <div class="rp-cats">${CATEGORIES.map(c => `<button type="button" class="rp-cat" data-id="${c.id}" aria-pressed="false">${esc(tr(c))}</button>`).join('')}</div>
+        <label class="rp-sub" for="rpText">${esc(t('rp.text'))}</label>
+        <textarea id="rpText" rows="3" maxlength="${MAX_TEXT}" placeholder="${esc(t('rp.ph'))}"></textarea>
+      </div>
+      <div class="rp-foot">
+        <p class="rp-msg" id="rpMsg" role="status" aria-live="polite"></p>
+        <div class="row-btns"><button type="button" class="ghost-btn" id="rpNo">${esc(t('rp.cancel'))}</button><button type="submit" class="cta-btn" id="rpYes">${esc(t('rp.send'))}</button></div>
+      </div>
     </form>`;
-  const close = () => { wrap.remove(); askClose = null; };
+  // На телефоне клавиатура сужает видимую область: держим окно ровно в ней, чтобы кнопки не уезжали под клавиатуру и панель браузера
+  const vv = window.visualViewport;
+  const fit = () => { if (!vv) return; wrap.style.top = `${vv.offsetTop}px`; wrap.style.height = `${vv.height}px`; wrap.style.bottom = 'auto'; };
+  vv?.addEventListener('resize', fit); vv?.addEventListener('scroll', fit);
+  const close = () => { vv?.removeEventListener('resize', fit); vv?.removeEventListener('scroll', fit); wrap.remove(); askClose = null; };
   askClose = close;
   document.body.append(wrap);
+  fit();
   const msg = wrap.querySelector('#rpMsg'), text = wrap.querySelector('#rpText'), yes = wrap.querySelector('#rpYes');
+  const say = (key, kind) => { msg.textContent = t(key); msg.dataset.kind = kind ?? ''; };
   wrap.addEventListener('click', e => {
     const b = e.target.closest('.rp-cat');
     if (b) {
       const on = !picked.has(b.dataset.id);
       on ? picked.add(b.dataset.id) : picked.delete(b.dataset.id);
       b.setAttribute('aria-pressed', on);
+      if (msg.dataset.kind === 'warn') say('', '');
     } else if (e.target === wrap || e.target.id === 'rpNo') close();
   });
   wrap.querySelector('form').onsubmit = async e => {
     e.preventDefault();
-    if (!reportsEnabled) { msg.textContent = t('rp.off'); return; }
+    if (yes.disabled) return;
+    if (!reportsEnabled) { say('rp.off', 'warn'); return; }
     let report;
     try {
       report = buildReport({ lang: getLang(), courseId: run.courseId, lessonId: run.lesson.id, cardIndex: idx, card, uid: auth.user?.id, ver: APP_VER, answered: run.view !== null ? undefined : !run.state.missed.has(idx) }, { categories: [...picked], text: text.value });
-    } catch { msg.textContent = t('rp.empty'); return; }
+    } catch { say('rp.empty', 'warn'); return; }
     yes.disabled = true;
+    yes.textContent = t('rp.sending');
+    say('', '');
     const res = await submit(report);
-    msg.textContent = t(res === 'sent' ? 'rp.sent' : 'rp.queued');
-    wrap.querySelector('.row-btns').innerHTML = `<button type="button" class="cta-btn" id="rpDone">${esc(t('rp.close'))}</button>`;
+    // Итог — крупно, на месте формы: видно сразу, даже если клавиатура была открыта
+    text.blur();
+    const ok = res === 'sent';
+    wrap.querySelector('form').innerHTML = `<div class="rp-done ${ok ? 'ok' : 'later'}" role="status">
+        <span class="rp-ico" aria-hidden="true">${ok ? '✓' : '⏳'}</span>
+        <h3>${esc(t(ok ? 'rp.sentTitle' : 'rp.queuedTitle'))}</h3>
+        <p>${esc(t(ok ? 'rp.sent' : 'rp.queued'))}</p>
+      </div>
+      <div class="rp-foot"><div class="row-btns"><button type="button" class="cta-btn" id="rpDone">${esc(t('rp.close'))}</button></div></div>`;
+    fit();
     wrap.querySelector('#rpDone').onclick = close;
     wrap.querySelector('#rpDone').focus();
   };
-  text.focus();
+  if (matchMedia('(pointer:fine)').matches) text.focus();   // на телефоне не открываем клавиатуру сразу: сначала видны категории
 }
 
 /* ---------- просмотр пройденных карточек: только чтение ---------- */
