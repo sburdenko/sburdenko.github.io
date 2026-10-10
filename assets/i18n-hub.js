@@ -65,11 +65,12 @@ export const HUB = {
   },
   'hub.soonTag': { en: '<span>Soon</span>', ru: '<span>Скоро</span>' },
   'hub.soonGo': { en: '■ NOT RECORDED YET', ru: '■ ЗАПИСЬ НЕ НАЧАТА' },
-  'hub.learnKick': { en: 'New · courses', ru: 'Новое · курсы' },
-  'hub.learnTitle': { en: 'Learn step by step', ru: 'Учись по урокам' },
+  'osd.bathys': { en: '◀ BATHYS', ru: '◀ BATHYS' },
+  'hub.learnKick': { en: 'Bathys · courses', ru: 'Bathys · курсы' },
+  'hub.learnTitle': { en: 'Bathys — learn in depth', ru: 'Bathys — учись на глубину' },
   'hub.learnDesc': {
-    en: 'Five-minute lessons in the spirit of Duolingo: tap, assemble code, run the rigs. The first course is .NET from the inside (in Russian for now).',
-    ru: 'Уроки по пять минут в духе Duolingo: тапаешь, собираешь код, запускаешь стенды. Первый курс — .NET изнутри.'
+    en: 'Five-minute interactive lessons: .NET from the inside, async/await, C#, Avalonia, 3D formats and Three.js. Tap, assemble code, run the rigs.',
+    ru: 'Интерактивные уроки по пять минут: .NET изнутри, async/await, C#, Avalonia, 3D-форматы и Three.js. Тапаешь, собираешь код, запускаешь стенды.'
   },
   'hub.learnGo': { en: 'OPEN ►', ru: 'ОТКРЫТЬ ►' },
   'how.h2': { en: 'How to use this', ru: 'Как этим пользоваться' },

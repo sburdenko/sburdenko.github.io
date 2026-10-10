@@ -9,6 +9,7 @@ import { RIGS_THREE } from './rigs-three.js?v=202610092124';
 import { RIGS_3D } from './rigs-3d.js?v=202610092124';
 import { THREAD_RIGS } from './rigs-threads.js?v=202610092124';
 import { runIL, jitInit, jitCall, compiledCount, RACE, raceTotal, raceWinner } from './models.js?v=202610092124';
+import { tr } from './i18n.js?v=202610092124';
 
 const h = (tag, cls, html) => {
   const el = document.createElement(tag);
@@ -35,11 +36,11 @@ function stack(card, host, done) {
   left.append(prog);
   const right = h('div', '');
   const st = h('div', 'stack');
-  right.append(h('div', 'stack-h', 'Стек ↑ вершина'), st);
+  right.append(h('div', 'stack-h', tr({ ru: 'Стек ↑ вершина', en: 'Stack ↑ top' })), st);
   vm.append(left, right);
   const note = h('div', 'vm-note');
-  const step = button('Шаг ►', 'btn primary', () => { if (f < run.frames.length - 1) { f++; draw(); } });
-  const reset = button('Сначала ↺', 'btn', () => { f = 0; draw(); });
+  const step = button(tr({ ru: 'Шаг ►', en: 'Step ►' }), 'btn primary', () => { if (f < run.frames.length - 1) { f++; draw(); } });
+  const reset = button(tr({ ru: 'Сначала ↺', en: 'Restart ↺' }), 'btn', () => { f = 0; draw(); });
   const btns = h('div', 'btns');
   btns.append(step, reset);
   host.append(args, vm, note, btns);
@@ -50,7 +51,7 @@ function stack(card, host, done) {
       const cls = i === fr.pc ? (fr.error ? 'err' : 'cur') : i < fr.pc ? 'done' : '';
       return `<div class="${cls}"><span class="pc">${i}</span><span>${esc(line)}</span></div>`;
     }).join('');
-    st.innerHTML = fr.stack.length ? fr.stack.map(v => `<div class="cell">${v}</div>`).join('') : '<div class="empty">пусто</div>';
+    st.innerHTML = fr.stack.length ? fr.stack.map(v => `<div class="cell">${v}</div>`).join('') : `<div class="empty">${tr({ ru: 'пусто', en: 'empty' })}</div>`;
     note.className = 'vm-note' + (fr.error ? ' err' : fr.ret !== undefined ? ' ret' : '');
     note.textContent = fr.note;
     const last = f === run.frames.length - 1;
@@ -64,7 +65,7 @@ function stack(card, host, done) {
 }
 
 /* ---------- JIT ---------- */
-const STATE = { stub: 'заглушка', native: 'машинный код', tier0: 'Tier 0', tier1: 'Tier 1' };
+const STATE = { stub: { ru: 'заглушка', en: 'stub' }, native: { ru: 'машинный код', en: 'machine code' }, tier0: 'Tier 0', tier1: 'Tier 1' };
 
 function jit(card, host, done) {
   let s = jitInit(card.methods, { tiered: card.tiered });
@@ -81,25 +82,25 @@ function jit(card, host, done) {
     draw(before);
   }
   function draw(before = {}) {
-    counters.innerHTML = `<div class="counter"><b>${s.jits}</b><span>раз сработал JIT</span></div>`
-      + `<div class="counter"><b>${compiledCount(s)} из ${s.order.length}</b><span>методов скомпилировано</span></div>`;
+    counters.innerHTML = `<div class="counter"><b>${s.jits}</b><span>${tr({ ru: 'раз сработал JIT', en: s.jits === 1 ? 'JIT run' : 'JIT runs' })}</span></div>`
+      + `<div class="counter"><b>${compiledCount(s)} ${tr({ ru: 'из', en: 'of' })} ${s.order.length}</b><span>${tr({ ru: 'методов скомпилировано', en: 'methods compiled' })}</span></div>`;
     list.replaceChildren(...s.order.map(n => {
       const m = s.m[n];
       const row = h('div', 'm');
       const info = h('div', '');
       const changed = before[n] && before[n] !== m.state;
       info.innerHTML = `<div class="nm">${esc(n)}()</div>`
-        + (m.deps.length ? `<div class="deps">вызывает ${m.deps.map(esc).join(', ')}</div>` : '')
-        + `<div class="row"><span class="chip-s ${m.state}${changed ? ' flash' : ''}">${STATE[m.state]}</span><span class="calls">вызовов: ${m.calls}</span></div>`;
+        + (m.deps.length ? `<div class="deps">${tr({ ru: 'вызывает', en: 'calls' })} ${m.deps.map(esc).join(', ')}</div>` : '')
+        + `<div class="row"><span class="chip-s ${m.state}${changed ? ' flash' : ''}">${tr(STATE[m.state])}</span><span class="calls">${tr({ ru: 'вызовов', en: 'calls' })}: ${m.calls}</span></div>`;
       const btns = h('div', 'btns');
-      btns.append(button('Вызвать', 'btn', () => call(n, 1)));
+      btns.append(button(tr({ ru: 'Вызвать', en: 'Call' }), 'btn', () => call(n, 1)));
       if (s.tiered) btns.append(button('×10', 'btn', () => call(n, 10)));
       row.append(info, btns);
       return row;
     }));
     log.innerHTML = s.log.length
       ? s.log.map(e => `<li class="${e.kind}">${esc(e.text)}</li>`).join('')
-      : '<li>Пока ничего не вызывали. У всех методов — заглушки.</li>';
+      : `<li>${tr({ ru: 'Пока ничего не вызывали. У всех методов — заглушки.', en: 'Nothing has been called yet. Every method is still a stub.' })}</li>`;
     if (!reached && goal(card.goal, s)) { reached = true; done(); }
   }
   draw();
@@ -117,18 +118,18 @@ function race(card, host, done) {
   const UNIT = RM ? 0 : 28;   // мс на условную единицу
   const box = h('div', 'race');
   host.append(box);
-  const legend = h('div', 'legend-s', '<span>Время в условных единицах: это модель, а не замер.</span><span><i style="background:#6c5ba8"></i>запуск хоста и CLR</span><span><i style="background:var(--cpu)"></i>работа JIT</span><span><i style="background:var(--ok)"></i>программа печатает 42</span>');
+  const legend = h('div', 'legend-s', `<span>${tr({ ru: 'Время в условных единицах: это модель, а не замер.', en: 'Time in arbitrary units: this is a model, not a measurement.' })}</span><span><i style="background:#6c5ba8"></i>${tr({ ru: 'запуск хоста и CLR', en: 'host and CLR startup' })}</span><span><i style="background:var(--cpu)"></i>${tr({ ru: 'работа JIT', en: 'JIT work' })}</span><span><i style="background:var(--ok)"></i>${tr({ ru: 'программа печатает 42', en: 'the program prints 42' })}</span>`);
   const max = Math.max(...RACE.map(raceTotal));
   const lanes = RACE.map(l => {
     const lane = h('div', 'lane');
-    lane.innerHTML = `<div class="hd"><span>${esc(l.name)}</span><span class="t">—</span></div>`;
+    lane.innerHTML = `<div class="hd"><span>${esc(tr(l.name))}</span><span class="t">—</span></div>`;
     const bar = h('div', 'rbar');
     const segs = l.phases.map(([kind]) => { const i = h('i', kind); bar.append(i); return i; });
-    lane.append(bar, h('ul', '', l.traits.map(t => `<li>${esc(t)}</li>`).join('')));
+    lane.append(bar, h('ul', '', l.traits.map(t => `<li>${esc(tr(t))}</li>`).join('')));
     box.append(lane);
     return { l, segs, t: lane.querySelector('.t') };
   });
-  const startBtn = button('Старт ►', 'btn primary', go);
+  const startBtn = button(tr({ ru: 'Старт ►', en: 'Start ►' }), 'btn primary', go);
   const btns = h('div', 'btns');
   btns.append(startBtn);
   host.append(legend, btns);
@@ -150,11 +151,11 @@ function race(card, host, done) {
         at += len;
       });
       timers.push(setTimeout(() => {
-        t.textContent = `${raceTotal(l)} ед.`;
+        t.textContent = `${raceTotal(l)} ${tr({ ru: 'ед.', en: 'u.' })}`;
         if (l.id === win) t.classList.add('win');
       }, at * UNIT));
     });
-    timers.push(setTimeout(() => { startBtn.disabled = false; startBtn.textContent = 'Ещё раз ↺'; done(); }, max * UNIT + 50));
+    timers.push(setTimeout(() => { startBtn.disabled = false; startBtn.textContent = tr({ ru: 'Ещё раз ↺', en: 'Again ↺' }); done(); }, max * UNIT + 50));
   }
 }
 

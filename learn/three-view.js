@@ -3,6 +3,7 @@
  * Логика заданий — в models-three.js; если Three.js не загрузился, стенд работает без картинки.
  */
 import { RM } from '../assets/vhs.js?v=202610092124';
+import { tr } from './i18n.js?v=202610092124';
 
 export const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js';
 export const VIEW_ASPECT = 1.6;
@@ -16,7 +17,7 @@ export const loadThree = () => (loading ??= import(THREE_URL));
 export function makeView(host, setup) {
   const el = document.createElement('div');
   el.className = 'tj-view';
-  el.innerHTML = '<div class="tj-msg">Загружаю Three.js…</div>';
+  el.innerHTML = `<div class="tj-msg">${tr({ ru: 'Загружаю Three.js…', en: 'Loading Three.js…' })}</div>`;
   host.append(el);
   let api = null, last = null;
   loadThree().then(THREE => {
@@ -39,7 +40,7 @@ export function makeView(host, setup) {
       api.frame(t);
     });
   }).catch(() => {
-    el.innerHTML = '<div class="tj-msg">Three.js не загрузился (нужен интернет). Задание можно пройти и без картинки.</div>';
+    el.innerHTML = `<div class="tj-msg">${tr({ ru: 'Three.js не загрузился (нужен интернет). Задание можно пройти и без картинки.', en: 'Three.js failed to load (an internet connection is needed). You can still complete the task without the picture.' })}</div>`;
   });
   return { update(s) { last = s; api?.update(s); } };
 }

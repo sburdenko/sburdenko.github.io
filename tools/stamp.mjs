@@ -22,6 +22,7 @@ const walk = dir => readdirSync(dir).flatMap(name => {
 
 const HTML_LINK = /\b(src|href)="((?:\.{0,2}\/)[^"?]+\.(?:js|css))(?:\?v=[^"]*)?"/g;
 const JS_IMPORT = /\bfrom '(\.{1,2}\/[^']+\.js)(?:\?v=[^']*)?'/g;
+const JS_DYNAMIC = /\bimport\('(\.{1,2}\/[^']+\.js)(?:\?v=[^']*)?'\)/g;
 
 let touched = 0;
 for (const file of walk(root)) {
@@ -30,7 +31,8 @@ for (const file of walk(root)) {
   const src = readFileSync(file, 'utf8');
   const out = isHtml
     ? src.replace(HTML_LINK, (_, attr, path) => `${attr}="${path}?v=${stamp}"`)
-    : src.replace(JS_IMPORT, (_, path) => `from '${path}?v=${stamp}'`);
+    : src.replace(JS_IMPORT, (_, path) => `from '${path}?v=${stamp}'`)
+      .replace(JS_DYNAMIC, (_, path) => `import('${path}?v=${stamp}')`);
   if (out !== src) { writeFileSync(file, out); touched++; }
 }
 console.log(`stamp ${stamp}: обновлено файлов — ${touched}`);

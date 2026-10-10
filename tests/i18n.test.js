@@ -18,7 +18,7 @@ const read = p => readFileSync(join(root, p), 'utf8');
 const jsFiles = dir => readdirSync(join(root, dir)).filter(f => f.endsWith('.js')).map(f => join(dir, f));
 
 const PAGES = [
-  { name: 'полка', dicts: [COMMON, HUB], html: ['index.html'], js: ['assets/hub.js', 'assets/i18n.js'] },
+  { name: 'полка', dicts: [COMMON, HUB], html: ['shelf/index.html'], js: ['assets/hub.js', 'assets/i18n.js'] },
   { name: 'BFS/DFS', dicts: [COMMON, BFS], html: ['algorithms/bfs-dfs/index.html'], js: jsFiles('algorithms/bfs-dfs') },
   { name: 'батчинг', dicts: [COMMON, UNITY], html: ['unity-rendering/index.html'], js: jsFiles('unity-rendering') },
   { name: 'URP', dicts: [COMMON, URP], html: ['unity-urp/index.html'], js: jsFiles('unity-urp') },

@@ -5,6 +5,8 @@
  * состояние, goal(card.goal, состояние) → выполнено ли задание. Те же действия шлют кнопки стенда
  * и тесты, поэтому тест может пройти задание «руками» и проверить, что оно выполнимо.
  */
+import { tr } from './i18n.js?v=202610092124';
+
 const clone = x => structuredClone(x);
 
 /* =====================================================================
@@ -19,7 +21,7 @@ function top(s) { return s.frames.at(-1); }
 
 function findVar(s, name, frameIdx = s.frames.length - 1) {
   const v = s.frames[frameIdx].vars.find(x => x.name === name);
-  if (!v) throw new Error(`нет переменной ${name}`);
+  if (!v) throw new Error(tr({ ru: `нет переменной ${name}`, en: `no variable ${name}` }));
   if (v.kind === 'alias') return findVar(s, v.value.name, v.value.frame);
   return v;
 }
@@ -115,7 +117,7 @@ function apply(s, op, changed) {
       break;
     }
     case 'ret': s.frames.pop(); break;
-    default: throw new Error(`неизвестная операция ${op.op}`);
+    default: throw new Error(tr({ ru: `неизвестная операция ${op.op}`, en: `unknown operation ${op.op}` }));
   }
 }
 
@@ -141,7 +143,7 @@ export function memReachable(s) {
 /** Исполняет программу: кадр 0 — до начала, дальше по кадру на шаг. */
 export function memRun(steps) {
   const s = { frames: [{ fn: 'Main', vars: [] }], heap: [], next: 1 };
-  const out = [{ s: clone(s), line: -1, note: 'Программа ещё не начала работу: стек и куча пусты.', changed: [] }];
+  const out = [{ s: clone(s), line: -1, note: tr({ ru: 'Программа ещё не начала работу: стек и куча пусты.', en: 'The program hasn\'t started yet: the stack and the heap are empty.' }), changed: [] }];
   for (const st of steps) {
     const changed = [];
     for (const op of st.ops) apply(s, op, changed);
@@ -215,12 +217,15 @@ export function gcCollect(s0, gen) {
   const survived = s.order.filter(id => inGen(id));
   survived.forEach(id => { if (!s.objs[id].big) s.objs[id].gen = Math.min(2, s.objs[id].gen + 1); });
   s.gcs++;
-  const parts = [gen === 2 ? 'Полная сборка (поколения 0, 1, 2).' : `Сборка поколения ${gen}${gen ? ' (и младших)' : ''}.`];
-  if (dead.length) parts.push(`Удалены: ${list(dead)}.`);
-  if (toQueue.length) parts.push(`${list(toQueue)} — недостижимы, но с финализатором: встали в очередь финализации и пережили сборку.`);
+  const parts = [gen === 2
+    ? tr({ ru: 'Полная сборка (поколения 0, 1, 2).', en: 'Full collection (generations 0, 1, 2).' })
+    : tr({ ru: `Сборка поколения ${gen}${gen ? ' (и младших)' : ''}.`, en: `Generation ${gen} collection${gen ? ' (and younger)' : ''}.` })];
+  if (dead.length) parts.push(tr({ ru: `Удалены: ${list(dead)}.`, en: `Removed: ${list(dead)}.` }));
+  if (toQueue.length) parts.push(tr({ ru: `${list(toQueue)} — недостижимы, но с финализатором: встали в очередь финализации и пережили сборку.`, en: `${list(toQueue)}: unreachable but with a finalizer: moved to the finalization queue and survived the collection.` }));
   const promoted = survived.filter(id => !s.objs[id].big);
-  if (promoted.length) parts.push(`Выжили и повзрослели: ${promoted.map(id => `${id} → Gen ${s.objs[id].gen}`).join(', ')}.`);
-  if (!dead.length && !toQueue.length && !promoted.length) parts.push('В этих поколениях нечего собирать.');
+  const moves = promoted.map(id => `${id} → Gen ${s.objs[id].gen}`).join(', ');
+  if (promoted.length) parts.push(tr({ ru: `Выжили и повзрослели: ${moves}.`, en: `Survived and got promoted: ${moves}.` }));
+  if (!dead.length && !toQueue.length && !promoted.length) parts.push(tr({ ru: 'В этих поколениях нечего собирать.', en: 'Nothing to collect in these generations.' }));
   s.log = [...s.log, parts.join(' ')].slice(-5);
   return s;
 }
@@ -230,8 +235,8 @@ export function gcFinalize(s0) {
   const q = s.order.filter(id => s.objs[id].queued);
   q.forEach(id => { s.objs[id].queued = false; s.objs[id].finalized = true; });
   s.log = [...s.log, q.length
-    ? `Поток финализации вызвал финализатор у ${list(q)}. Теперь их можно удалить — но только на следующей сборке их поколения.`
-    : 'Очередь финализации пуста.'].slice(-5);
+    ? tr({ ru: `Поток финализации вызвал финализатор у ${list(q)}. Теперь их можно удалить — но только на следующей сборке их поколения.`, en: `The finalizer thread ran the finalizer of ${list(q)}. Now they can be removed, but only at the next collection of their generation.` })
+    : tr({ ru: 'Очередь финализации пуста.', en: 'The finalization queue is empty.' })].slice(-5);
   return s;
 }
 
@@ -245,7 +250,8 @@ export const gcRig = {
     if (cmd === 'root') {
       const n = clone(s);
       const r = n.roots.find(x => x.name === arg);
-      n.log = [...n.log, `${r.cut ?? `${arg} = null`}: корень больше не держит ${r.to}.`].slice(-5);
+      const what = r.cut ?? `${arg} = null`;
+      n.log = [...n.log, tr({ ru: `${what}: корень больше не держит ${r.to}.`, en: `${what}: the root no longer holds ${r.to}.` })].slice(-5);
       r.to = null;
       return n;
     }
@@ -253,10 +259,10 @@ export const gcRig = {
       const [from, to] = arg.split('>');
       const n = clone(s);
       n.objs[from].refs = n.objs[from].refs.filter(x => x !== to);
-      n.log = [...n.log, `${from} больше не ссылается на ${to}.`].slice(-5);
+      n.log = [...n.log, tr({ ru: `${from} больше не ссылается на ${to}.`, en: `${from} no longer references ${to}.` })].slice(-5);
       return n;
     }
-    throw new Error(`неизвестное действие ${a}`);
+    throw new Error(tr({ ru: `неизвестное действие ${a}`, en: `unknown action ${a}` }));
   },
   goal(card, s) {
     const g = card.goal, o = id => s.objs[id];
@@ -290,7 +296,7 @@ export const fileRig = {
       const busy = openHandle();
       if (busy) {
         s.error = 'IOException: The process cannot access the file \'log.txt\' because it is being used by another process.';
-        say(`Открыть не вышло: дескриптор ${busy.handle} от ${busy.name} всё ещё открыт.`);
+        say(tr({ ru: `Открыть не вышло: дескриптор ${busy.handle} от ${busy.name} всё ещё открыт.`, en: `Couldn't open: handle ${busy.handle} from ${busy.name} is still open.` }));
         return s;
       }
       const name = `fs${s.next}`, id = s.next++;
@@ -298,24 +304,26 @@ export const fileRig = {
       s.opened++;
       if (cmd === 'using') {
         s.objs[id].handleOpen = false; s.objs[id].disposed = true; s.objs[id].alive = false; s.disposed++;
-        say(`using: открыли log.txt (${H(id)}), поработали, на выходе из блока Dispose() закрыл дескриптор.`);
+        say(tr({ ru: `using: открыли log.txt (${H(id)}), поработали, на выходе из блока Dispose() закрыл дескриптор.`, en: `using: opened log.txt (${H(id)}), did the work, and on leaving the block Dispose() closed the handle.` }));
       } else {
         s.vars.push({ name, id });
-        say(`${name} = new FileStream("log.txt") — ОС выдала дескриптор ${H(id)}.`);
+        say(tr({ ru: `${name} = new FileStream("log.txt") — ОС выдала дескриптор ${H(id)}.`, en: `${name} = new FileStream("log.txt"): the OS handed out handle ${H(id)}.` }));
       }
       return s;
     }
     const ref = s.vars.find(x => x.name === v);
     const o = ref && s.objs[ref.id];
     if (cmd === 'dispose' && o) {
-      if (o.disposed) { say(`${v} уже закрыт — повторный Dispose() ничего не делает.`); return s; }
+      if (o.disposed) { say(tr({ ru: `${v} уже закрыт — повторный Dispose() ничего не делает.`, en: `${v} is already closed: calling Dispose() again does nothing.` })); return s; }
       o.disposed = true; o.handleOpen = false; s.disposed++;
-      say(`${v}.Dispose() — дескриптор ${o.handle} закрыт сразу.`);
+      say(tr({ ru: `${v}.Dispose() — дескриптор ${o.handle} закрыт сразу.`, en: `${v}.Dispose(): handle ${o.handle} is closed right away.` }));
       return s;
     }
     if (cmd === 'forget' && o) {
       s.vars = s.vars.filter(x => x !== ref);
-      say(`${v} = null — объект стал мусором, но дескриптор ${o.handle} ${o.handleOpen ? 'всё ещё открыт!' : 'уже закрыт.'}`);
+      say(o.handleOpen
+        ? tr({ ru: `${v} = null — объект стал мусором, но дескриптор ${o.handle} всё ещё открыт!`, en: `${v} = null: the object is now garbage, but handle ${o.handle} is still open!` })
+        : tr({ ru: `${v} = null — объект стал мусором, но дескриптор ${o.handle} уже закрыт.`, en: `${v} = null: the object is now garbage, and handle ${o.handle} is already closed.` }));
       return s;
     }
     if (cmd === 'gc') {
@@ -326,14 +334,16 @@ export const fileRig = {
       fin.forEach(x => { x.queued = true; });
       gone.forEach(x => { x.alive = false; });
       say(fin.length
-        ? `GC: ${fin.map(x => x.name).join(', ')} — мусор с открытым дескриптором, ждёт финализатора. Дескриптор пока открыт.`
-        : gone.length ? `GC: удалены ${gone.map(x => x.name).join(', ')}.` : 'GC: мусора нет.');
+        ? tr({ ru: `GC: ${fin.map(x => x.name).join(', ')} — мусор с открытым дескриптором, ждёт финализатора. Дескриптор пока открыт.`, en: `GC: ${fin.map(x => x.name).join(', ')}: garbage with an open handle, waiting for the finalizer. The handle is still open.` })
+        : gone.length ? tr({ ru: `GC: удалены ${gone.map(x => x.name).join(', ')}.`, en: `GC: removed ${gone.map(x => x.name).join(', ')}.` }) : tr({ ru: 'GC: мусора нет.', en: 'GC: no garbage.' }));
       return s;
     }
     if (cmd === 'fin') {
       const q = Object.values(s.objs).filter(x => x.queued);
       q.forEach(x => { x.queued = false; x.handleOpen = false; x.alive = false; });
-      say(q.length ? `Финализатор закрыл ${q.map(x => x.handle).join(', ')} — когда-нибудь потом, а не когда было нужно.` : 'Очередь финализации пуста.');
+      say(q.length
+        ? tr({ ru: `Финализатор закрыл ${q.map(x => x.handle).join(', ')} — когда-нибудь потом, а не когда было нужно.`, en: `The finalizer closed ${q.map(x => x.handle).join(', ')}: eventually, not when it was needed.` })
+        : tr({ ru: 'Очередь финализации пуста.', en: 'The finalization queue is empty.' }));
       return s;
     }
     return s;

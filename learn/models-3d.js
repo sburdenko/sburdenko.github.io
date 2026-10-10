@@ -2,6 +2,8 @@
  * Модели стендов курса «3D-форматы». Без DOM — покрыты тестами.
  * У каждого стенда вход init(card), act(card, s, 'действие'), goal(card, s) — как в models-mem.js.
  */
+import { tr } from './i18n.js?v=202610092124';
+
 const clone = x => structuredClone(x);
 
 /* =====================================================================
@@ -56,29 +58,31 @@ export function meshStl(P, tris) {
 export const stlBinarySize = tris => 84 + 50 * tris;
 
 export const meshRig = {
-  init: () => ({ sel: [], tris: [], msg: 'Нажимай на вершины по три — получится треугольник.' }),
+  init: () => ({ sel: [], tris: [], msg: tr({ ru: 'Нажимай на вершины по три — получится треугольник.', en: 'Tap vertices three at a time to make a triangle.' }) }),
   act(card, s0, a) {
     const s = clone(s0), P = HOUSE;
     if (a === 'reset') return meshRig.init();
-    if (a === 'undo') { s.tris.pop(); s.sel = []; s.msg = 'Последний треугольник убран.'; return s; }
+    if (a === 'undo') { s.tris.pop(); s.sel = []; s.msg = tr({ ru: 'Последний треугольник убран.', en: 'Last triangle removed.' }); return s; }
     if (a === 'flip') {
       const t = s.tris.at(-1);
-      if (t) { [t[1], t[2]] = [t[2], t[1]]; s.msg = 'Порядок обхода последнего треугольника развёрнут — нормаль смотрит в другую сторону.'; }
+      if (t) { [t[1], t[2]] = [t[2], t[1]]; s.msg = tr({ ru: 'Порядок обхода последнего треугольника развёрнут — нормаль смотрит в другую сторону.', en: 'Winding order of the last triangle reversed — its normal now points the other way.' }); }
       return s;
     }
     if (a.startsWith('v:')) {
       const i = +a.slice(2);
       if (s.sel.includes(i)) { s.sel = s.sel.filter(x => x !== i); return s; }
       s.sel.push(i);
-      if (s.sel.length < 3) { s.msg = `Выбрано: ${s.sel.map(j => P[j].n).join(', ')}.`; return s; }
+      if (s.sel.length < 3) { { const picked = s.sel.map(j => P[j].n).join(', '); s.msg = tr({ ru: `Выбрано: ${picked}.`, en: `Selected: ${picked}.` }); } return s; }
       const t = s.sel; s.sel = [];
       const name = t.map(j => P[j].n).join('');
-      if (Math.abs(signedArea(P, t)) < 1e-9) s.msg = `${name} — все три точки на одной прямой, треугольника нет.`;
-      else if (s.tris.some(x => sameTri(x, t))) s.msg = `${name} уже есть.`;
-      else if (s.tris.some(x => overlap(P, x, t))) s.msg = `${name} налезает на другой треугольник. В меше они не должны пересекаться.`;
+      if (Math.abs(signedArea(P, t)) < 1e-9) s.msg = tr({ ru: `${name} — все три точки на одной прямой, треугольника нет.`, en: `${name}: all three points lie on one line, so there is no triangle.` });
+      else if (s.tris.some(x => sameTri(x, t))) s.msg = tr({ ru: `${name} уже есть.`, en: `${name} is already there.` });
+      else if (s.tris.some(x => overlap(P, x, t))) s.msg = tr({ ru: `${name} налезает на другой треугольник. В меше они не должны пересекаться.`, en: `${name} overlaps another triangle. Triangles in a mesh must not overlap.` });
       else {
         s.tris.push(t);
-        s.msg = `${name}: ${signedArea(P, t) > 0 ? 'обход против часовой — лицевой стороной к тебе' : 'обход по часовой — к тебе изнанкой, с отсечением задних граней его не будет видно'}.`;
+        s.msg = signedArea(P, t) > 0
+          ? tr({ ru: `${name}: обход против часовой — лицевой стороной к тебе.`, en: `${name}: counter-clockwise winding — front face toward you.` })
+          : tr({ ru: `${name}: обход по часовой — к тебе изнанкой, с отсечением задних граней его не будет видно.`, en: `${name}: clockwise winding — back face toward you; with back-face culling it will be invisible.` });
       }
       return s;
     }
@@ -179,11 +183,11 @@ export const unitsRig = {
    ===================================================================== */
 
 export const USD_LAYERS = [
-  { id: 'shot', file: 'shot.usda', role: 'правки для конкретного кадра', opinions: { color: 'red' } },
-  { id: 'set', file: 'set.usda', role: 'расстановка мебели в сцене', opinions: { color: 'walnut', scale: 1.2 } },
-  { id: 'base', file: 'chair.usda', role: 'сам ассет стула', opinions: { color: 'oak', scale: 1 }, locked: true }
+  { id: 'shot', file: 'shot.usda', role: { ru: 'правки для конкретного кадра', en: 'tweaks for one specific shot' }, opinions: { color: 'red' } },
+  { id: 'set', file: 'set.usda', role: { ru: 'расстановка мебели в сцене', en: 'furniture layout in the scene' }, opinions: { color: 'walnut', scale: 1.2 } },
+  { id: 'base', file: 'chair.usda', role: { ru: 'сам ассет стула', en: 'the chair asset itself' }, opinions: { color: 'oak', scale: 1 }, locked: true }
 ];
-export const USD_VARIANTS = { classic: { legs: 4, height: 'обычный' }, bar: { legs: 3, height: 'барный' } };
+export const USD_VARIANTS = { classic: { legs: 4, height: { ru: 'обычный', en: 'regular' } }, bar: { legs: 3, height: { ru: 'барный', en: 'bar' } } };
 
 /** Итоговое значение каждого атрибута и откуда оно взялось. Варианты слабее локальных мнений слоёв. */
 export function usdResolve(s) {
@@ -192,7 +196,7 @@ export function usdResolve(s) {
   for (const attr of ['color', 'scale', 'legs', 'height']) {
     const layer = order.find(l => attr in l.opinions);
     if (layer) out[attr] = { value: layer.opinions[attr], from: layer.file };
-    else out[attr] = { value: USD_VARIANTS[s.variant][attr], from: `вариант «${s.variant}» в chair.usda` };
+    else out[attr] = { value: tr(USD_VARIANTS[s.variant][attr]), from: tr({ ru: `вариант «${s.variant}» в chair.usda`, en: `variant “${s.variant}” in chair.usda` }) };
   }
   return out;
 }
@@ -219,33 +223,33 @@ export const usdRig = {
    ===================================================================== */
 
 export const FEATURES = {
-  geometry: 'Геометрия (вершины и грани)',
-  normals: 'Нормали',
-  uv: 'UV-развёртка',
-  vcolor: 'Цвет вершин',
-  pbr: 'PBR-материалы',
-  hierarchy: 'Иерархия объектов',
-  skin: 'Скелетная анимация',
-  morph: 'Морф-таргеты (blend shapes)',
-  cameras: 'Камеры',
-  units: 'Явные единицы измерения'
+  geometry: { ru: 'Геометрия (вершины и грани)', en: 'Geometry (vertices and faces)' },
+  normals: { ru: 'Нормали', en: 'Normals' },
+  uv: { ru: 'UV-развёртка', en: 'UV mapping' },
+  vcolor: { ru: 'Цвет вершин', en: 'Vertex colors' },
+  pbr: { ru: 'PBR-материалы', en: 'PBR materials' },
+  hierarchy: { ru: 'Иерархия объектов', en: 'Object hierarchy' },
+  skin: { ru: 'Скелетная анимация', en: 'Skeletal animation' },
+  morph: { ru: 'Морф-таргеты (blend shapes)', en: 'Morph targets (blend shapes)' },
+  cameras: { ru: 'Камеры', en: 'Cameras' },
+  units: { ru: 'Явные единицы измерения', en: 'Explicit units' }
 };
 
 export const FORMATS = {
   obj: { name: 'OBJ', caps: { geometry: 'yes', normals: 'yes', uv: 'yes', vcolor: 'part', pbr: 'part', hierarchy: 'no', skin: 'no', morph: 'no', cameras: 'no', units: 'no' },
-    notes: { vcolor: 'только неофициальным расширением строки v', pbr: 'файл .mtl — старые материалы в духе Phong; PBR лишь неофициально', hierarchy: 'есть группы o и g, но без трансформаций и вложенности' } },
+    notes: { vcolor: { ru: 'только неофициальным расширением строки v', en: 'only via an unofficial extension of the v line' }, pbr: { ru: 'файл .mtl — старые материалы в духе Phong; PBR лишь неофициально', en: 'the .mtl file holds old Phong-style materials; PBR only unofficially' }, hierarchy: { ru: 'есть группы o и g, но без трансформаций и вложенности', en: 'has o and g groups, but no transforms or nesting' } } },
   stl: { name: 'STL', caps: { geometry: 'yes', normals: 'part', uv: 'no', vcolor: 'no', pbr: 'no', hierarchy: 'no', skin: 'no', morph: 'no', cameras: 'no', units: 'no' },
-    notes: { geometry: 'только треугольники, вершины не общие', normals: 'одна нормаль на треугольник', vcolor: 'в бинарном STL бывают нестандартные хаки с цветом' } },
+    notes: { geometry: { ru: 'только треугольники, вершины не общие', en: 'triangles only, vertices are not shared' }, normals: { ru: 'одна нормаль на треугольник', en: 'one normal per triangle' }, vcolor: { ru: 'в бинарном STL бывают нестандартные хаки с цветом', en: 'binary STL sometimes has non-standard color hacks' } } },
   ply: { name: 'PLY', caps: { geometry: 'yes', normals: 'yes', uv: 'part', vcolor: 'yes', pbr: 'no', hierarchy: 'no', skin: 'no', morph: 'no', cameras: 'no', units: 'no' },
-    notes: { uv: 'свойства s, t или u, v — имена не стандартизованы', geometry: 'можно хранить и точки без граней' } },
+    notes: { uv: { ru: 'свойства s, t или u, v — имена не стандартизованы', en: 'properties s, t or u, v — the names are not standardized' }, geometry: { ru: 'можно хранить и точки без граней', en: 'can also store points without faces' } } },
   gltf: { name: 'glTF / GLB', caps: { geometry: 'yes', normals: 'yes', uv: 'yes', vcolor: 'yes', pbr: 'yes', hierarchy: 'yes', skin: 'yes', morph: 'yes', cameras: 'yes', units: 'yes' },
-    notes: { units: 'по спецификации всегда метры и ось Y вверх', pbr: 'metallic-roughness в ядре формата' } },
+    notes: { units: { ru: 'по спецификации всегда метры и ось Y вверх', en: 'by spec always meters with Y up' }, pbr: { ru: 'metallic-roughness в ядре формата', en: 'metallic-roughness is in the core spec' } } },
   fbx: { name: 'FBX', caps: { geometry: 'yes', normals: 'yes', uv: 'yes', vcolor: 'yes', pbr: 'part', hierarchy: 'yes', skin: 'yes', morph: 'yes', cameras: 'yes', units: 'yes' },
-    notes: { pbr: 'классические Lambert/Phong; PBR каждая программа пишет по-своему', units: 'UnitScaleFactor в настройках файла' } },
+    notes: { pbr: { ru: 'классические Lambert/Phong; PBR каждая программа пишет по-своему', en: 'classic Lambert/Phong; every tool writes PBR its own way' }, units: { ru: 'UnitScaleFactor в настройках файла', en: 'UnitScaleFactor in the file settings' } } },
   usd: { name: 'USD / USDZ', caps: { geometry: 'yes', normals: 'yes', uv: 'yes', vcolor: 'yes', pbr: 'yes', hierarchy: 'yes', skin: 'yes', morph: 'yes', cameras: 'yes', units: 'yes' },
-    notes: { pbr: 'UsdPreviewSurface или MaterialX', units: 'metersPerUnit в метаданных сцены' } },
+    notes: { pbr: { ru: 'UsdPreviewSurface или MaterialX', en: 'UsdPreviewSurface or MaterialX' }, units: { ru: 'metersPerUnit в метаданных сцены', en: 'metersPerUnit in the scene metadata' } } },
   dae: { name: 'DAE (Collada)', caps: { geometry: 'yes', normals: 'yes', uv: 'yes', vcolor: 'yes', pbr: 'part', hierarchy: 'yes', skin: 'yes', morph: 'yes', cameras: 'yes', units: 'yes' },
-    notes: { pbr: 'Phong, Blinn, Lambert — PBR в формате нет' } }
+    notes: { pbr: { ru: 'Phong, Blinn, Lambert — PBR в формате нет', en: 'Phong, Blinn, Lambert — the format has no PBR' } } }
 };
 
 export const convertRig = {
@@ -302,20 +306,20 @@ export const nurbsRig = {
    ===================================================================== */
 
 export const BIM = [
-  { id: '2O2Fr$t4X7Zf8NOew3FLOH', type: 'IfcWall', name: 'Наружная стена 300', storey: 1, props: { IsExternal: true, FireRating: 'REI 90', LoadBearing: true } },
-  { id: '0K7w7JpZz5QxMe1oNsEhM1', type: 'IfcWall', name: 'Наружная стена 300', storey: 1, props: { IsExternal: true, FireRating: 'REI 90', LoadBearing: true } },
-  { id: '3hJzF1xb54Pg7Ce$8WqYk2', type: 'IfcWall', name: 'Перегородка 100', storey: 1, props: { IsExternal: false, FireRating: 'EI 30', LoadBearing: false } },
-  { id: '1Vt0dM9qL8_9xG2sKpQwA3', type: 'IfcDoor', name: 'Дверь входная 1000×2100', storey: 1, props: { IsExternal: true, FireRating: 'EI 60' } },
-  { id: '2bQ7nW$3P1kHf5Zr0yTsB4', type: 'IfcDoor', name: 'Дверь межкомнатная 800×2000', storey: 1, props: { IsExternal: false } },
-  { id: '0cR8mX4rT6lJg2Yq9vUoC5', type: 'IfcWindow', name: 'Окно 1500×1500', storey: 1, props: { IsExternal: true } },
-  { id: '3dS9nY5sU7mKh3Zp8wVnD6', type: 'IfcSlab', name: 'Плита перекрытия 220', storey: 1, props: { LoadBearing: true, FireRating: 'REI 60' } },
-  { id: '1eT0oZ6tV8nLi4_o7xWmE7', type: 'IfcWall', name: 'Наружная стена 300', storey: 2, props: { IsExternal: true, FireRating: 'REI 90', LoadBearing: true } },
-  { id: '2fU1pA7uW9oMj5$n6yXlF8', type: 'IfcWall', name: 'Перегородка 100', storey: 2, props: { IsExternal: false, FireRating: 'EI 30', LoadBearing: false } },
-  { id: '0gV2qB8vX0pNk6Am5zYkG9', type: 'IfcDoor', name: 'Дверь межкомнатная 800×2000', storey: 2, props: { IsExternal: false } },
-  { id: '3hW3rC9wY1qOl7Bl4AZjHa', type: 'IfcDoor', name: 'Дверь межкомнатная 800×2000', storey: 2, props: { IsExternal: false } },
-  { id: '1iX4sD0xZ2rPm8Ck3BaiIb', type: 'IfcDoor', name: 'Дверь на балкон 900×2200', storey: 2, props: { IsExternal: true, FireRating: 'EI 30' } },
-  { id: '2jY5tE1y03sQn9Dj2CbhJc', type: 'IfcWindow', name: 'Окно 1500×1500', storey: 2, props: { IsExternal: true } },
-  { id: '0kZ6uF2z14tRo0Ei1DcgKd', type: 'IfcWindow', name: 'Окно 900×1500', storey: 2, props: { IsExternal: true } }
+  { id: '2O2Fr$t4X7Zf8NOew3FLOH', type: 'IfcWall', name: { ru: 'Наружная стена 300', en: 'Exterior wall 300' }, storey: 1, props: { IsExternal: true, FireRating: 'REI 90', LoadBearing: true } },
+  { id: '0K7w7JpZz5QxMe1oNsEhM1', type: 'IfcWall', name: { ru: 'Наружная стена 300', en: 'Exterior wall 300' }, storey: 1, props: { IsExternal: true, FireRating: 'REI 90', LoadBearing: true } },
+  { id: '3hJzF1xb54Pg7Ce$8WqYk2', type: 'IfcWall', name: { ru: 'Перегородка 100', en: 'Partition wall 100' }, storey: 1, props: { IsExternal: false, FireRating: 'EI 30', LoadBearing: false } },
+  { id: '1Vt0dM9qL8_9xG2sKpQwA3', type: 'IfcDoor', name: { ru: 'Дверь входная 1000×2100', en: 'Entrance door 1000×2100' }, storey: 1, props: { IsExternal: true, FireRating: 'EI 60' } },
+  { id: '2bQ7nW$3P1kHf5Zr0yTsB4', type: 'IfcDoor', name: { ru: 'Дверь межкомнатная 800×2000', en: 'Interior door 800×2000' }, storey: 1, props: { IsExternal: false } },
+  { id: '0cR8mX4rT6lJg2Yq9vUoC5', type: 'IfcWindow', name: { ru: 'Окно 1500×1500', en: 'Window 1500×1500' }, storey: 1, props: { IsExternal: true } },
+  { id: '3dS9nY5sU7mKh3Zp8wVnD6', type: 'IfcSlab', name: { ru: 'Плита перекрытия 220', en: 'Floor slab 220' }, storey: 1, props: { LoadBearing: true, FireRating: 'REI 60' } },
+  { id: '1eT0oZ6tV8nLi4_o7xWmE7', type: 'IfcWall', name: { ru: 'Наружная стена 300', en: 'Exterior wall 300' }, storey: 2, props: { IsExternal: true, FireRating: 'REI 90', LoadBearing: true } },
+  { id: '2fU1pA7uW9oMj5$n6yXlF8', type: 'IfcWall', name: { ru: 'Перегородка 100', en: 'Partition wall 100' }, storey: 2, props: { IsExternal: false, FireRating: 'EI 30', LoadBearing: false } },
+  { id: '0gV2qB8vX0pNk6Am5zYkG9', type: 'IfcDoor', name: { ru: 'Дверь межкомнатная 800×2000', en: 'Interior door 800×2000' }, storey: 2, props: { IsExternal: false } },
+  { id: '3hW3rC9wY1qOl7Bl4AZjHa', type: 'IfcDoor', name: { ru: 'Дверь межкомнатная 800×2000', en: 'Interior door 800×2000' }, storey: 2, props: { IsExternal: false } },
+  { id: '1iX4sD0xZ2rPm8Ck3BaiIb', type: 'IfcDoor', name: { ru: 'Дверь на балкон 900×2200', en: 'Balcony door 900×2200' }, storey: 2, props: { IsExternal: true, FireRating: 'EI 30' } },
+  { id: '2jY5tE1y03sQn9Dj2CbhJc', type: 'IfcWindow', name: { ru: 'Окно 1500×1500', en: 'Window 1500×1500' }, storey: 2, props: { IsExternal: true } },
+  { id: '0kZ6uF2z14tRo0Ei1DcgKd', type: 'IfcWindow', name: { ru: 'Окно 900×1500', en: 'Window 900×1500' }, storey: 2, props: { IsExternal: true } }
 ];
 export const BIM_TRIS = { IfcWall: 12, IfcDoor: 148, IfcWindow: 96, IfcSlab: 12 };
 
@@ -350,12 +354,16 @@ export const bimRig = {
    Боксы в плоскости разреза: x — вдоль здания, y — высота (мм).
    ===================================================================== */
 
+// Разделы и виды элементов — общие объекты: findClashes сравнивает model по ссылке
+const KR = { ru: 'КР (конструкции)', en: 'Structural' }, OV = { ru: 'ОВ (вентиляция)', en: 'HVAC (ventilation)' }, VK = { ru: 'ВК (водопровод)', en: 'Plumbing (water supply)' };
+const BEAM = { ru: 'Балка', en: 'Beam' }, DUCT = { ru: 'Воздуховод', en: 'Duct' }, PIPE = { ru: 'Труба', en: 'Pipe' };
+
 export const CLASH_ITEMS = [
-  { id: 'B-12', model: 'КР (конструкции)', kind: 'Балка', guid: '3Kd9$wQ1n5Rf0Ue7Ty2Gh1', box: [0, 2700, 6000, 3000] },
-  { id: 'B-13', model: 'КР (конструкции)', kind: 'Балка', guid: '1Lm2_xR3o6Sg1Vf8Uz3Hi2', box: [6000, 2700, 12000, 3000] },
-  { id: 'D-7', model: 'ОВ (вентиляция)', kind: 'Воздуховод', guid: '0Np4AyS5p7Th2Wg9Va4Ij3', box: [1500, 2800, 9000, 3100] },
-  { id: 'P-3', model: 'ВК (водопровод)', kind: 'Труба', guid: '2Oq5BzT6q8Ui3Xh0Wb5Jk4', box: [7200, 2400, 11500, 2520] },
-  { id: 'P-4', model: 'ВК (водопровод)', kind: 'Труба', guid: '3Pr6C0U7r9Vj4Yi1Xc6Kl5', box: [2000, 2550, 5000, 2690] }
+  { id: 'B-12', model: KR, disc: 'kr', kind: BEAM, guid: '3Kd9$wQ1n5Rf0Ue7Ty2Gh1', box: [0, 2700, 6000, 3000] },
+  { id: 'B-13', model: KR, disc: 'kr', kind: BEAM, guid: '1Lm2_xR3o6Sg1Vf8Uz3Hi2', box: [6000, 2700, 12000, 3000] },
+  { id: 'D-7', model: OV, disc: 'ov', kind: DUCT, guid: '0Np4AyS5p7Th2Wg9Va4Ij3', box: [1500, 2800, 9000, 3100] },
+  { id: 'P-3', model: VK, disc: 'vk', kind: PIPE, guid: '2Oq5BzT6q8Ui3Xh0Wb5Jk4', box: [7200, 2400, 11500, 2520] },
+  { id: 'P-4', model: VK, disc: 'vk', kind: PIPE, guid: '3Pr6C0U7r9Vj4Yi1Xc6Kl5', box: [2000, 2550, 5000, 2690] }
 ];
 
 /** Пересечения элементов разных моделей с допуском tol мм (зазор меньше допуска тоже считается). */
@@ -396,11 +404,11 @@ export const clashRig = {
    ===================================================================== */
 
 export const PC_FORMATS = {
-  xyz: { name: 'XYZ (текст)', bytes: 42, note: 'строка «x y z r g b»: около 42 символов на точку' },
-  pts: { name: 'PTS (текст)', bytes: 46, note: 'строка «x y z интенсивность r g b»' },
-  las: { name: 'LAS 1.4', bytes: 36, header: 375, note: 'формат записи 7: координаты, интенсивность, класс, время, RGB — 36 байт' },
-  laz: { name: 'LAZ', bytes: 36 * 0.14, header: 375, note: 'тот же LAS, сжатый без потерь, — обычно 7–20 % размера' },
-  e57: { name: 'E57', bytes: 30, header: 4096, note: 'оценка: зависит от точности и набора полей' }
+  xyz: { name: { ru: 'XYZ (текст)', en: 'XYZ (text)' }, bytes: 42, note: { ru: 'строка «x y z r g b»: около 42 символов на точку', en: 'a line “x y z r g b”: about 42 characters per point' } },
+  pts: { name: { ru: 'PTS (текст)', en: 'PTS (text)' }, bytes: 46, note: { ru: 'строка «x y z интенсивность r g b»', en: 'a line “x y z intensity r g b”' } },
+  las: { name: 'LAS 1.4', bytes: 36, header: 375, note: { ru: 'формат записи 7: координаты, интенсивность, класс, время, RGB — 36 байт', en: 'point record format 7: coordinates, intensity, class, time, RGB — 36 bytes' } },
+  laz: { name: 'LAZ', bytes: 36 * 0.14, header: 375, note: { ru: 'тот же LAS, сжатый без потерь, — обычно 7–20 % размера', en: 'the same LAS, losslessly compressed — usually 7–20% of the size' } },
+  e57: { name: 'E57', bytes: 30, header: 4096, note: { ru: 'оценка: зависит от точности и набора полей', en: 'an estimate: depends on precision and the set of fields' } }
 };
 export const PC_COUNTS = { '1M': 1e6, '10M': 1e7, '100M': 1e8, '1B': 1e9 };
 

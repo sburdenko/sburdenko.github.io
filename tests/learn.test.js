@@ -4,7 +4,11 @@ import assert from 'node:assert/strict';
 import * as E from '../learn/engine.js';
 import * as P from '../learn/progress.js';
 import { runIL, jitInit, jitCall, compiledCount, RACE, raceWinner } from '../learn/models.js';
-import { COURSES, findCourse, lessonsOf } from '../learn/courses.js';
+import { COURSES, findCourse, lessonsOf, loadCourses } from '../learn/courses.js';
+import { useLang } from '../learn/i18n.js';
+// в node navigator.language обычно en-US — тесты моделей проверяют русские строки
+useLang('ru');
+await loadCourses('ru');
 
 const lesson = cards => ({ id: 't', cards });
 const choice = { t: 'choice', q: '?', options: ['a', 'b', 'c'], answer: 1, explain: '.' };
@@ -670,4 +674,24 @@ test('BIM, коллизии и облака: числа, на которые о�
   assert.deepEqual([findClashes(0)[0].a, findClashes(0)[0].b].sort(), ['B-12', 'D-7']);
   const fits = Object.keys({ xyz: 1, pts: 1, las: 1, laz: 1, e57: 1 }).filter(f => pcSize(f, PC_COUNTS['100M']) <= 1e9);
   assert.deepEqual(fits, ['laz']);
+});
+
+/* ---------- английская версия стендов ---------- */
+test('стенды на английских уроках не выдают кириллицу', async () => {
+  const CYR = /[А-Яа-яЁё]/;
+  useLang('en');
+  try {
+    for (const c of COURSES.filter(c => c.load)) {
+      let en;
+      try { en = (await c.load.en()).default; } catch { continue; }   // перевод курса ещё не готов — его ловит learn-en.test.js
+      for (const l of lessonsOf(en)) l.cards.filter(card => card.t === 'rig' && RIG_MODELS[card.rig]).forEach(card => {
+        const M = RIG_MODELS[card.rig];
+        let s = M.init(card);
+        const states = [s];
+        for (const a of card.solve) { s = M.act(card, s, a); states.push(s); }
+        const bad = states.map(x => JSON.stringify(x)).find(j => CYR.test(j));
+        assert.ok(!bad, `${l.id}: стенд ${card.rig} выдаёт кириллицу: ${bad?.match(/.{0,40}[А-Яа-яЁё].{0,40}/)?.[0]}`);
+      });
+    }
+  } finally { useLang('ru'); }
 });

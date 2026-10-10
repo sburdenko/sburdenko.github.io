@@ -2,6 +2,7 @@
  * Модели курса «Three.js: начальный уровень»: первая сцена, камера, иерархия, свет, текстуры.
  * Без DOM и без Three.js — логика заданий проверяется тестами, а картинку рисует настоящий Three.js.
  */
+import { tr } from './i18n.js';
 
 /* =====================================================================
    Первая сцена: что нужно, чтобы куб появился.
@@ -27,10 +28,10 @@ export const firstRig = {
 /** Что будет на экране и почему. */
 export function firstView(s) {
   const drawn = s.render || s.loop;
-  if (!drawn) return { visible: false, spin: false, why: 'Никто не вызвал renderer.render — холст пустой.' };
-  if (!s.added) return { visible: false, spin: false, why: 'Куб создан, но не добавлен в сцену. Рендерер рисует только то, что лежит в scene.' };
-  if (s.camZ === 0) return { visible: false, spin: false, why: 'Камера стоит в центре куба. Изнутри грани повёрнуты от нас, и Three.js их не рисует.' };
-  return { visible: true, spin: s.loop, why: s.loop ? 'Куб на месте и крутится: setAnimationLoop рисует кадр за кадром.' : 'Куб на месте. Кадр нарисован один раз — дальше картинка не меняется.' };
+  if (!drawn) return { visible: false, spin: false, why: tr({ ru: 'Никто не вызвал renderer.render — холст пустой.', en: 'Nobody called renderer.render — the canvas is empty.' }) };
+  if (!s.added) return { visible: false, spin: false, why: tr({ ru: 'Куб создан, но не добавлен в сцену. Рендерер рисует только то, что лежит в scene.', en: 'The cube exists but is not added to the scene. The renderer draws only what is in scene.' }) };
+  if (s.camZ === 0) return { visible: false, spin: false, why: tr({ ru: 'Камера стоит в центре куба. Изнутри грани повёрнуты от нас, и Three.js их не рисует.', en: 'The camera sits at the center of the cube. From inside, the faces point away from us, and Three.js does not draw them.' }) };
+  return { visible: true, spin: s.loop, why: tr(s.loop ? { ru: 'Куб на месте и крутится: setAnimationLoop рисует кадр за кадром.', en: 'The cube is there and spinning: setAnimationLoop draws frame after frame.' } : { ru: 'Куб на месте. Кадр нарисован один раз — дальше картинка не меняется.', en: 'The cube is there. The frame was drawn once — the picture won\'t change after that.' }) };
 }
 
 export function firstCode(s) {
@@ -58,9 +59,9 @@ export function firstCode(s) {
 
 export const ASPECT = 1.6;
 export const CAM_OBJECTS = [
-  { id: 'a', name: 'Красный', x: 0, z: 0, color: '#ff5d73' },
-  { id: 'b', name: 'Зелёный', x: 4, z: -4, color: '#5dfc9a' },
-  { id: 'c', name: 'Синий', x: -5, z: -14, color: '#4f9dff' }
+  { id: 'a', name: { ru: 'Красный', en: 'Red' }, x: 0, z: 0, color: '#ff5d73' },
+  { id: 'b', name: { ru: 'Зелёный', en: 'Green' }, x: 4, z: -4, color: '#5dfc9a' },
+  { id: 'c', name: { ru: 'Синий', en: 'Blue' }, x: -5, z: -14, color: '#4f9dff' }
 ];
 export const CAM_OPTIONS = { fov: [35, 50, 75, 100], z: [3, 6, 10], near: [0.1, 2, 5], far: [5, 10, 50] };
 
@@ -69,10 +70,10 @@ export function camSees(s) {
   return CAM_OBJECTS.map(o => {
     const d = s.z - o.z;
     const half = d * Math.tan((s.fov / 2) * Math.PI / 180) * ASPECT;
-    if (d < s.near) return { id: o.id, ok: false, d, why: `ближе near (${d} < ${s.near})` };
-    if (d > s.far) return { id: o.id, ok: false, d, why: `дальше far (${d} > ${s.far})` };
-    if (Math.abs(o.x) > half) return { id: o.id, ok: false, d, why: 'вне угла обзора' };
-    return { id: o.id, ok: true, d, why: `в кадре, до камеры ${d}` };
+    if (d < s.near) return { id: o.id, ok: false, d, why: tr({ ru: `ближе near (${d} < ${s.near})`, en: `closer than near (${d} < ${s.near})` }) };
+    if (d > s.far) return { id: o.id, ok: false, d, why: tr({ ru: `дальше far (${d} > ${s.far})`, en: `beyond far (${d} > ${s.far})` }) };
+    if (Math.abs(o.x) > half) return { id: o.id, ok: false, d, why: tr({ ru: 'вне угла обзора', en: 'outside the field of view' }) };
+    return { id: o.id, ok: true, d, why: tr({ ru: `в кадре, до камеры ${d}`, en: `in frame, ${d} from the camera` }) };
   });
 }
 
@@ -144,12 +145,12 @@ export function lightView(s) {
   const look = s.mat === 'basic' ? 'flat' : !any ? 'black' : (s.dir || s.pt) ? 'shaded' : 'dull';
   const missing = Object.keys(SHADOW_FLAGS).filter(k => !s[k]);
   const shadow = s.dir && !missing.length;
-  const why = {
-    flat: 'MeshBasicMaterial не реагирует на свет: одна заливка, объёма не видно.',
-    black: 'Материал реагирует на свет, а источников нет — всё чёрное.',
-    dull: 'Только AmbientLight: светит одинаково со всех сторон, поэтому форма плоская.',
-    shaded: 'Есть направленный свет — у формы появились светлые и тёмные стороны.'
-  }[look];
+  const why = tr({
+    flat: { ru: 'MeshBasicMaterial не реагирует на свет: одна заливка, объёма не видно.', en: 'MeshBasicMaterial ignores light: one flat fill, no sense of volume.' },
+    black: { ru: 'Материал реагирует на свет, а источников нет — всё чёрное.', en: 'The material reacts to light, but there are no lights — everything is black.' },
+    dull: { ru: 'Только AmbientLight: светит одинаково со всех сторон, поэтому форма плоская.', en: 'Only AmbientLight: it shines equally from all sides, so the shape looks flat.' },
+    shaded: { ru: 'Есть направленный свет — у формы появились светлые и тёмные стороны.', en: 'There is directional light — the shape now has lit and dark sides.' }
+  }[look]);
   return { look, shadow, missing, why };
 }
 
@@ -177,11 +178,11 @@ export function texView(s) {
   return {
     tiles,
     colors: s.cs === 'srgb',
-    why: {
-      one: 'Картинка натянута на плоскость один раз.',
-      tiled: 'repeat 4×4 и RepeatWrapping: картинка повторяется плиткой.',
-      smeared: 'repeat 4×4, но края в режиме ClampToEdge: одна копия в углу, остальное — растянутые крайние пиксели.'
-    }[tiles] + (s.cs === 'srgb' ? ' Цвета верные.' : ' Цвета бледные: текстура не помечена как sRGB.')
+    why: tr({
+      one: { ru: 'Картинка натянута на плоскость один раз.', en: 'The image is stretched over the plane once.' },
+      tiled: { ru: 'repeat 4×4 и RepeatWrapping: картинка повторяется плиткой.', en: 'repeat 4×4 and RepeatWrapping: the image repeats as tiles.' },
+      smeared: { ru: 'repeat 4×4, но края в режиме ClampToEdge: одна копия в углу, остальное — растянутые крайние пиксели.', en: 'repeat 4×4, but the edges use ClampToEdge: one copy in the corner, the rest is stretched edge pixels.' }
+    }[tiles]) + tr(s.cs === 'srgb' ? { ru: ' Цвета верные.', en: ' Colors are correct.' } : { ru: ' Цвета бледные: текстура не помечена как sRGB.', en: ' Colors look washed out: the texture is not marked as sRGB.' })
   };
 }
 

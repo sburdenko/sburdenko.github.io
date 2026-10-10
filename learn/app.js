@@ -1,14 +1,21 @@
 /**
- * Курсы: каталог → курс → урок. Одна страница, адрес в hash:
+ * Bathys: каталог → курс → урок, плюс профиль. Одна страница, адрес в hash:
  *   #/            каталог
+ *   #/profile     профиль: вход, язык, статистика
  *   #/dotnet      курс
  *   #/dotnet/<id> урок поверх курса
  */
-import { $, esc, startNoise } from '../assets/vhs.js?v=202610092124';
-import { GROUPS, COURSES, findCourse, lessonsOf } from './courses.js?v=202610092124';
+import { $, esc, startNoise, setLocale } from '../assets/vhs.js?v=202610092124';
+import { GROUPS, COURSES, findCourse, lessonsOf, loadCourses, courseTitle, courseBlurb } from './courses.js?v=202610092124';
+import { getLang, switchLang, tr, LANGS, LANG_NAMES } from './i18n.js?v=202610092124';
+import { t } from './ui.js?v=202610092124';
+import { auth } from './auth/auth.js?v=202610092124';
 import * as P from './progress.js?v=202610092124';
 import * as E from './engine.js?v=202610092124';
 import { renderCard, feedback } from './cards.js?v=202610092124';
+
+/** Полка кассет — отдельный модуль сайта. */
+const SHELF_URL = new URL('../shelf/', import.meta.url).href;
 
 const loaded = P.load();
 let prog = loaded.state;
@@ -22,15 +29,24 @@ function drawStats() {
   const streak = P.liveStreak(prog.streak, P.today());
   $('#stStreak').textContent = `🔥 ${streak}`;
   $('#stStreak').classList.toggle('off', streak === 0);
-  $('#stStreak').title = streak ? `Серия: ${streak} дн. подряд` : 'Пройди урок сегодня, чтобы начать серию';
+  $('#stStreak').title = streak ? t('stat.streakOn', { n: streak }) : t('stat.streakOff');
   $('#stXp').textContent = `⚡ ${prog.xp} XP`;
+}
+
+/** Кнопка профиля в шапке: аватар, первая буква имени или «Войти». */
+function drawProfileBtn() {
+  const b = $('#profBtn');
+  const u = auth.user;
+  b.title = t('nav.profile');
+  b.setAttribute('aria-label', t('nav.profile'));
+  b.innerHTML = u?.photo ? `<img src="${esc(u.photo)}" alt="" referrerpolicy="no-referrer">`
+    : u ? `<span class="ini">${esc((u.name || '?')[0].toUpperCase())}</span>`
+    : `<span class="ini guest">${esc(t('nav.signIn'))}</span>`;
 }
 
 /* ---------- свой диалог вместо confirm(): системный не везде показывается ---------- */
 let askClose = null;
-const LEAVE = 'Выйти из урока? Прогресс этого урока пропадёт.';
-
-function ask(text, yes = 'Да', no = 'Отмена') {
+function ask(text, yes = t('ask.yes'), no = t('ask.cancel')) {
   return new Promise(resolve => {
     const wrap = document.createElement('div');
     wrap.className = 'ask';
@@ -57,28 +73,31 @@ const badgeHtml = (c, i = 0, big = false) =>
 function segBar(lessons) {
   const next = lessons.find(l => !P.isDone(prog, l.id));
   const done = lessons.filter(l => P.isDone(prog, l.id)).length;
-  return `<div class="segbar" role="progressbar" aria-valuemin="0" aria-valuemax="${lessons.length}" aria-valuenow="${done}" aria-label="Пройдено уроков">${lessons.map(l =>
+  return `<div class="segbar" role="progressbar" aria-valuemin="0" aria-valuemax="${lessons.length}" aria-valuenow="${done}" aria-label="${esc(t('seg.aria'))}">${lessons.map(l =>
     `<i class="${P.isDone(prog, l.id) ? 'on' : l === next ? 'cur' : ''}${l.boss ? ' boss' : ''}"></i>`).join('')}</div>`;
 }
 
 const starsHtml = (n, total = 3) => '★'.repeat(n) + `<span class="off">${'★'.repeat(total - n)}</span>`;
 
 /* ---------- каталог ---------- */
+const storeWarn = () => (canSave ? '' : `<p class="warn-store">${esc(t('warn.noStore'))}</p>`);
+
 function catalog() {
-  document.title = 'Курсы — учись по урокам';
+  document.title = t('page.catalog');
   const card = (c, i) => {
     if (c.soon) {
       return `<div class="course soon" aria-disabled="true">
-        <div class="top">${badgeHtml(c, i)}<h2>${esc(c.title)}</h2></div>
-        <p>${esc(c.blurb)}</p><span class="soon-tag">Скоро</span></div>`;
+        <div class="top">${badgeHtml(c, i)}<h2>${esc(courseTitle(c))}</h2></div>
+        <p>${esc(courseBlurb(c))}</p><span class="soon-tag">${esc(t('cat.soon'))}</span></div>`;
     }
     const ls = lessonsOf(c.course);
     const done = ls.filter(l => P.isDone(prog, l.id)).length;
     return `<a class="course" href="#/${c.id}">
-      <div class="top">${badgeHtml(c, i)}<h2>${esc(c.title)}</h2></div>
-      <p>${esc(c.blurb)}</p>
+      <div class="top">${badgeHtml(c, i)}<h2>${esc(courseTitle(c))}</h2></div>
+      <p>${esc(courseBlurb(c))}</p>
+      ${c.fallback ? `<span class="soon-tag">${esc(t('cat.fallback'))}</span>` : ''}
       ${segBar(ls)}
-      <div class="cta"><span>${done} из ${ls.length} уроков</span><b>${done ? 'ПРОДОЛЖИТЬ ►' : 'НАЧАТЬ ►'}</b></div></a>`;
+      <div class="cta"><span>${esc(t('cat.ofLessons', { done, total: ls.length }))}</span><b>${esc(t(done ? 'cat.continue' : 'cat.start'))}</b></div></a>`;
   };
   // в группе сначала готовые курсы, потом «скоро»; номер i сдвигает глитч логотипов
   let i = 0;
@@ -86,28 +105,73 @@ function catalog() {
     const cs = COURSES.filter(c => c.group === g.id);
     if (!cs.length) return '';
     const sorted = [...cs.filter(c => !c.soon), ...cs.filter(c => c.soon)];
-    return `<section class="cgroup"><div class="cgroup-h"><h2>${esc(g.title)}</h2><p>${esc(g.blurb)}</p></div>
+    return `<section class="cgroup"><div class="cgroup-h"><h2>${esc(tr(g.title))}</h2><p>${esc(tr(g.blurb))}</p></div>
       <div class="courses">${sorted.map(c => card(c, i++)).join('')}</div></section>`;
   }).join('');
   view.innerHTML = `<section class="view">
-    <a class="back" href="../">← Полка кассет</a>
-    <h1>Курсы</h1>
-    <p class="lede">Короткие уроки по 5 минут. Ничего не нужно знать заранее: каждое слово объясняем, на каждом экране что-то делаешь сам. Опытным — раскрывающиеся блоки «Глубже».</p>
-    ${canSave ? '' : '<p class="warn-store">Браузер не даёт сохранять данные — прогресс пропадёт после перезагрузки.</p>'}
+    <p class="kick-top">${esc(t('cat.kick'))}</p>
+    <h1>${esc(t('cat.title'))}</h1>
+    <p class="lede">${esc(t('cat.lede'))}</p>
+    ${storeWarn()}
     ${groups}
+    <a class="shelf-door" href="${SHELF_URL}">
+      <span class="sd-icon" aria-hidden="true">📼</span>
+      <span class="sd-txt"><b>${esc(t('cat.shelfTitle'))}</b><span>${esc(t('cat.shelfDesc'))}</span></span>
+      <span class="sd-go">${esc(t('cat.shelfGo'))}</span>
+    </a>
   </section>`;
+}
+
+/* ---------- профиль ---------- */
+function profilePage() {
+  document.title = t('page.profile');
+  const u = auth.user;
+  const done = Object.keys(prog.lessons).length;
+  const stars = Object.values(prog.lessons).reduce((sum, r) => sum + (r.stars || 0), 0);
+  const streak = P.liveStreak(prog.streak, P.today());
+  const who = u
+    ? `<div class="pf-who">${u.photo ? `<img class="pf-ava" src="${esc(u.photo)}" alt="" referrerpolicy="no-referrer">` : `<span class="pf-ava ini">${esc((u.name || '?')[0].toUpperCase())}</span>`}
+        <div><b>${esc(u.name)}</b><span>${esc(u.email)}</span><small>${esc(t('p.signedHint', { provider: u.provider }))}</small></div></div>
+       <button class="ghost-btn" id="pfOut">${esc(t('p.signOut'))}</button>`
+    : `<div class="pf-who"><span class="pf-ava ini guest">?</span><div><b>${esc(t('p.guest'))}</b><small>${esc(t('p.guestHint'))}</small></div></div>
+       ${auth.enabled ? `<button class="google-btn" id="pfIn"><span class="g" aria-hidden="true">G</span>${esc(t('p.google'))}</button>` : `<p class="pf-note">${esc(t('p.authOff'))}</p>`}`;
+  view.innerHTML = `<section class="view profile">
+    <a class="back" href="#/">${esc(t('course.back'))}</a>
+    <h1>${esc(t('p.title'))}</h1>
+    <div class="pf-card">${who}<p class="pf-err" id="pfErr" hidden></p></div>
+    <div class="pf-card">
+      <h2>${esc(t('p.lang'))}</h2>
+      <p class="pf-note">${esc(t('p.langHint'))}</p>
+      <div class="lang-pick" role="radiogroup" aria-label="${esc(t('p.lang'))}">${LANGS.map(l =>
+        `<button role="radio" aria-checked="${l === getLang()}" data-lang="${l}"><b>${l.toUpperCase()}</b><span>${esc(LANG_NAMES[l])}</span></button>`).join('')}</div>
+    </div>
+    <div class="pf-card">
+      <h2>${esc(t('p.stats'))}</h2>
+      <div class="tiles">
+        <div class="tile-s xp"><span class="v">${prog.xp}</span><span class="l">${esc(t('p.xp'))}</span></div>
+        <div class="tile-s"><span class="v">${streak}</span><span class="l">${esc(t('p.streak'))}</span></div>
+        <div class="tile-s"><span class="v">${done}</span><span class="l">${esc(t('p.lessons'))}</span></div>
+        <div class="tile-s"><span class="v">${stars}</span><span class="l">${esc(t('p.stars'))}</span></div>
+      </div>
+    </div>
+  </section>`;
+  view.querySelectorAll('[data-lang]').forEach(b => b.onclick = () => switchLang(b.dataset.lang));
+  const err = $('#pfErr');
+  const fail = e => { err.hidden = false; err.textContent = t('p.authFail', { msg: e?.code || e?.message || e }); };
+  $('#pfIn')?.addEventListener('click', () => auth.signIn('google').catch(fail));
+  $('#pfOut')?.addEventListener('click', () => auth.signOut().catch(fail));
 }
 
 /* ---------- курс ---------- */
 function coursePage(id) {
   const course = findCourse(id);
   if (!course) return catalog();
-  document.title = `${course.title} — курсы`;
+  document.title = t('page.course', { title: course.title });
   const all = lessonsOf(course);
   const nextIdx = all.findIndex(l => !P.isDone(prog, l.id));
   const units = course.units.map((u, ui) => {
     if (u.soon) {
-      return `<section class="unit soon"><span class="kick">Раздел ${ui + 1} · скоро</span><h2>${esc(u.title)}</h2><p class="src">${esc(u.blurb)}</p></section>`;
+      return `<section class="unit soon"><span class="kick">${esc(t('course.unitSoon', { n: ui + 1 }))}</span><h2>${esc(u.title)}</h2><p class="src">${esc(u.blurb)}</p></section>`;
     }
     const done = u.lessons.filter(l => P.isDone(prog, l.id)).length;
     const steps = u.lessons.map(l => {
@@ -116,36 +180,36 @@ function coursePage(id) {
       const cls = ['step', rec ? 'done' : '', gi === nextIdx ? 'next' : '', nextIdx >= 0 && gi > nextIdx ? 'later' : '', l.boss ? 'boss' : ''].join(' ');
       const node = rec ? '✓' : l.boss ? '★' : gi + 1;
       const side = rec
-        ? `<span class="stars">${starsHtml(rec.stars)}</span><span>повторить</span>`
-        : gi === nextIdx ? `<span class="go">${gi === 0 ? 'НАЧАТЬ' : 'ДАЛЬШЕ'}</span>` : `<span>${l.minutes} мин</span>`;
+        ? `<span class="stars">${starsHtml(rec.stars)}</span><span>${esc(t('course.redo'))}</span>`
+        : gi === nextIdx ? `<span class="go">${esc(t(gi === 0 ? 'course.go0' : 'course.go'))}</span>` : `<span>${esc(t('course.min', { n: l.minutes }))}</span>`;
       return `<li><button class="${cls}" data-id="${l.id}" data-later="${nextIdx >= 0 && gi > nextIdx ? 1 : 0}">
         <span class="node">${node}</span>
         <span class="txt"><span class="h3">${esc(l.title)}</span><span class="sub">${esc(l.sub)}</span></span>
         <span class="st-side">${side}</span></button></li>`;
     }).join('');
     return `<section class="unit">
-      <span class="kick">Раздел ${ui + 1}</span>
+      <span class="kick">${esc(t('course.unit', { n: ui + 1 }))}</span>
       <h2>${esc(u.title)}</h2>
       <p class="lede" style="font-size:16px">${esc(u.blurb)}</p>
       ${segBar(u.lessons)}
-      <div class="meta"><span>${done} из ${u.lessons.length} уроков</span><span>~${u.lessons.reduce((s, l) => s + l.minutes, 0)} мин</span></div>
+      <div class="meta"><span>${esc(t('cat.ofLessons', { done, total: u.lessons.length }))}</span><span>~${esc(t('course.min', { n: u.lessons.reduce((s, l) => s + l.minutes, 0) }))}</span></div>
       <ol class="path">${steps}</ol>
-      ${u.source ? `<p class="src">По материалу <a href="${u.source.url}" target="_blank" rel="noopener">${esc(u.source.title)}</a>. Где современный .NET работает иначе, урок говорит об этом отдельно.</p>` : ''}
+      ${u.source ? `<p class="src">${t('course.source', { link: `<a href="${esc(u.source.url)}" target="_blank" rel="noopener">${esc(u.source.title)}</a>` })}</p>` : ''}
     </section>`;
   }).join('');
   view.innerHTML = `<section class="view">
-    <a class="back" href="#/">← Все курсы</a>
+    <a class="back" href="#/">${esc(t('course.back'))}</a>
     <div class="course-head">${badgeHtml(COURSES.find(c => c.id === id), 0, true)}<h1>${esc(course.title)}</h1></div>
-    ${canSave ? '' : '<p class="warn-store">Браузер не даёт сохранять данные — прогресс пропадёт после перезагрузки.</p>'}
+    ${storeWarn()}
     ${units}
-    <button class="reset" id="reset">Сбросить прогресс</button>
+    <button class="reset" id="reset">${esc(t('course.reset'))}</button>
   </section>`;
   view.querySelectorAll('.step').forEach(b => b.onclick = async () => {
-    if (b.dataset.later === '1' && !(await ask('Этот урок дальше по курсу — лучше идти по порядку. Всё равно открыть?', 'Открыть'))) return;
+    if (b.dataset.later === '1' && !(await ask(t('course.later'), t('course.open')))) return;
     location.hash = `#/${id}/${b.dataset.id}`;
   });
   $('#reset').onclick = async () => {
-    if (!(await ask('Стереть весь прогресс, очки и серию?', 'Стереть'))) return;
+    if (!(await ask(t('course.resetAsk'), t('course.erase')))) return;
     prog = P.reset();
     drawStats();
     coursePage(id);
@@ -165,13 +229,13 @@ function openLesson(courseId, lessonId) {
   document.body.classList.add('in-lesson');
   lessonEl.hidden = false;
   lessonEl.innerHTML = `<div class="l-top">
-      <span class="l-nav"><button class="x" id="lx" aria-label="Выйти из урока">✕</button><button class="x" id="lback" aria-label="Предыдущая карточка" title="Перечитать прошлые карточки" disabled>‹</button></span>
-      <div class="pbar" role="progressbar" aria-label="Прогресс урока"><i id="lp" style="width:0"></i></div>
+      <span class="l-nav"><button class="x" id="lx" aria-label="${esc(t('l.exit'))}">✕</button><button class="x" id="lback" aria-label="${esc(t('l.prev'))}" title="${esc(t('l.prevTitle'))}" disabled>‹</button></span>
+      <div class="pbar" role="progressbar" aria-label="${esc(t('l.progress'))}"><i id="lp" style="width:0"></i></div>
       <span class="l-count" id="lc"></span>
     </div>
     <div class="l-body" id="lb"></div>
     <div class="l-foot" id="lf"><div class="in"><div class="fb" id="lfb" aria-live="polite"></div><button class="cta-btn" id="lbtn"></button></div></div>
-    <div class="l-foot review" id="lr" hidden><div class="in"><div class="fb" id="lrfb" aria-live="polite"></div><div class="nav-btns"><button class="ghost-btn" id="rvPrev">‹ Назад</button><button class="cta-btn" id="rvNext"></button></div></div></div>`;
+    <div class="l-foot review" id="lr" hidden><div class="in"><div class="fb" id="lrfb" aria-live="polite"></div><div class="nav-btns"><button class="ghost-btn" id="rvPrev">${esc(t('l.back'))}</button><button class="cta-btn" id="rvNext"></button></div></div></div>`;
   $('#lx').onclick = () => leave();
   $('#lback').onclick = () => (run.view === null ? review(run.history.length - 1) : review(run.view - 1));
   $('#rvPrev').onclick = () => review(run.view - 1);
@@ -180,7 +244,7 @@ function openLesson(courseId, lessonId) {
 }
 
 async function leave(force = false) {
-  if (!force && run && !run.state.done && run.state.cleared.size > 0 && !(await ask(LEAVE, 'Выйти', 'Остаться'))) return;
+  if (!force && run && !run.state.done && run.state.cleared.size > 0 && !(await ask(t('leave.ask'), t('leave.yes'), t('leave.stay')))) return;
   const id = run?.courseId ?? 'dotnet';
   closeLesson();
   location.hash = `#/${id}`;
@@ -206,9 +270,9 @@ function showCard() {
   const host = document.createElement('div');
   host.className = 'card';
   const again = state.seen.has(idx);
-  if (again) host.innerHTML = '<span class="tag again">↻ Ещё раз — исправь ошибку</span>';
-  else if (card.t === 'learn') host.innerHTML = '<span class="tag">Новое</span>';
-  else if (card.t === 'rig') host.innerHTML = '<span class="tag">Попробуй сам</span>';
+  if (again) host.innerHTML = `<span class="tag again">${esc(t('l.again'))}</span>`;
+  else if (card.t === 'learn') host.innerHTML = `<span class="tag">${esc(t('l.new'))}</span>`;
+  else if (card.t === 'rig') host.innerHTML = `<span class="tag">${esc(t('l.try'))}</span>`;
   body.replaceChildren(host);
   run.liveHost = host;
   $('#lback').disabled = run.history.length === 0;
@@ -221,7 +285,7 @@ function showCard() {
       if (completed) return;
       completed = true;
       E.answer(state, lesson, ok);
-      showFeedback(ok, text, ok ? 'Готово!' : 'Почти');
+      showFeedback(ok, text, t(ok ? 'l.done' : 'l.almost'));
     }
   };
   const r = renderCard(card, host, api, run.seed + run.step * 31);
@@ -231,22 +295,22 @@ function showCard() {
     phase = 'feedback';
     run.lastFb = { ok, title, text };
     // «Глубже» у вопроса открывается после ответа, чтобы не подсказывать
-    if (card.deep && card.t !== 'learn') host.insertAdjacentHTML('beforeend', `<details class="deep"><summary>Глубже — для тех, кто уже программирует</summary><div>${card.deep}</div></details>`);
+    if (card.deep && card.t !== 'learn') host.insertAdjacentHTML('beforeend', `<details class="deep"><summary>${esc(t('l.deep'))}</summary><div>${card.deep}</div></details>`);
     foot.className = 'l-foot ' + (ok ? 'ok' : 'bad');
     fb.innerHTML = `<b>${esc(title)}</b>${text ? `<p>${esc(text)}</p>` : ''}`;
     btn.disabled = false;
-    btn.textContent = 'Дальше ►';
+    btn.textContent = t('l.next');
     btn.focus({ preventScroll: true });
   }
 
   if (r.mode === 'learn') {
-    btn.textContent = 'Понятно ►';
+    btn.textContent = t('l.gotIt');
     btn.disabled = false;
   } else if (r.mode === 'check') {
-    btn.textContent = 'Проверить';
+    btn.textContent = t('l.check');
     btn.disabled = true;
   } else {
-    btn.textContent = card.t === 'rig' ? 'Выполни задание' : 'Найди все пары';
+    btn.textContent = t(card.t === 'rig' ? 'l.doTask' : 'l.findPairs');
     btn.disabled = true;
   }
 
@@ -260,8 +324,8 @@ function showCard() {
       const ok = E.check(card, input);
       E.answer(state, lesson, ok);
       r.reveal(ok);
-      const praise = ['Верно!', 'Отлично!', 'Точно!', 'Так и есть!'][run.step % 4];
-      return showFeedback(ok, feedback(card, input, ok), ok ? praise : 'Не совсем');
+      const praise = t('l.praise').split('|')[run.step % 4];
+      return showFeedback(ok, feedback(card, input, ok), ok ? praise : t('l.notQuite'));
     }
     if (phase === 'feedback') advance();
   };
@@ -276,7 +340,7 @@ function snapshot() {
   const node = run.liveHost.cloneNode(true);
   node.querySelectorAll('button').forEach(b => { b.disabled = true; b.tabIndex = -1; });
   node.querySelector('.tag')?.remove();
-  node.insertAdjacentHTML('afterbegin', '<span class="tag past">↺ Пройдено — только для чтения</span>');
+  node.insertAdjacentHTML('afterbegin', `<span class="tag past">${esc(t('l.past'))}</span>`);
   run.history.push({ node, fb: run.lastFb });
   run.lastFb = null;
 }
@@ -293,10 +357,10 @@ function review(i) {
   foot.className = 'l-foot review' + (entry.fb ? (entry.fb.ok ? ' ok' : ' bad') : '');
   $('#lrfb').innerHTML = entry.fb
     ? `<b>${esc(entry.fb.title)}</b>${entry.fb.text ? `<p>${esc(entry.fb.text)}</p>` : ''}`
-    : `<span class="past-n">Карточка ${i + 1} из ${run.history.length} пройденных</span>`;
+    : `<span class="past-n">${esc(t('l.pastN', { i: i + 1, n: run.history.length }))}</span>`;
   $('#rvPrev').disabled = i === 0;
   $('#lback').disabled = i === 0;
-  $('#rvNext').textContent = i + 1 < run.history.length ? 'Вперёд ›' : run.state.done ? 'К итогам ►' : 'Вернуться к уроку ►';
+  $('#rvNext').textContent = t(i + 1 < run.history.length ? 'l.fwd' : run.state.done ? 'l.toResult' : 'l.toLive');
   $('#rvNext').focus({ preventScroll: true });
 }
 
@@ -325,28 +389,27 @@ function finish() {
   const all = lessonsOf(findCourse(courseId));
   const next = all[all.indexOf(lesson) + 1];
   const min = Math.floor(res.ms / 60000), sec = String(Math.floor(res.ms / 1000) % 60).padStart(2, '0');
-  const title = lesson.boss ? 'Раздел пройден!' : res.mistakes === 0 ? 'Без единой ошибки!' : 'Урок пройден!';
-  const best = before && before.stars >= res.stars ? '' : before ? '<p class="lede">Новый рекорд по звёздам.</p>' : '';
+  const title = t(lesson.boss ? 'r.unit' : res.mistakes === 0 ? 'r.perfect' : 'r.lesson');
+  const best = before && before.stars >= res.stars ? '' : before ? `<p class="lede">${esc(t('r.record'))}</p>` : '';
   $('#lp').style.width = '100%';
   $('#lc').textContent = `${state.total} / ${state.total}`;
   $('#lf').hidden = true;
   $('#lback').disabled = false;
   run.key = null;   // иначе Enter нажмёт скрытую «Дальше» и засчитает урок второй раз
   $('#lb').innerHTML = `<div class="result card">
-    <div class="big-stars" aria-label="${res.stars} из 3 звёзд">${starsHtml(res.stars)}</div>
+    <div class="big-stars" aria-label="${esc(t('r.stars', { n: res.stars }))}">${starsHtml(res.stars)}</div>
     <h2>${title}</h2>
     ${best}
     <div class="tiles">
       <div class="tile-s xp"><span class="v">+${res.xp}</span><span class="l">XP</span></div>
-      <div class="tile-s"><span class="v">${res.accuracy}%</span><span class="l">точность</span></div>
-      <div class="tile-s"><span class="v">${min}:${sec}</span><span class="l">время</span></div>
+      <div class="tile-s"><span class="v">${res.accuracy}%</span><span class="l">${esc(t('r.accuracy'))}</span></div>
+      <div class="tile-s"><span class="v">${min}:${sec}</span><span class="l">${esc(t('r.time'))}</span></div>
     </div>
-    ${lesson.boss ? '<p class="lede">Ты разобрался, как код .NET проходит путь от текста на C# до команд процессора. Следующие разделы курса — скоро.</p>' : ''}
     <div class="row-btns">
-      ${next ? '<button class="cta-btn" id="rNext">Следующий урок ►</button>' : '<button class="cta-btn" id="rMap">К курсу ►</button>'}
-      <button class="ghost-btn" id="rReview">Перечитать урок</button>
-      <button class="ghost-btn" id="rAgain">Пройти ещё раз</button>
-      ${next ? '<button class="ghost-btn" id="rMap">К курсу</button>' : ''}
+      ${next ? `<button class="cta-btn" id="rNext">${esc(t('r.nextLesson'))}</button>` : `<button class="cta-btn" id="rMap">${esc(t('r.toCourse'))}</button>`}
+      <button class="ghost-btn" id="rReview">${esc(t('r.reread'))}</button>
+      <button class="ghost-btn" id="rAgain">${esc(t('r.again'))}</button>
+      ${next ? `<button class="ghost-btn" id="rMap">${esc(t('r.toCourse2'))}</button>` : ''}
     </div>
   </div>`;
   const go = hash => { closeLesson(); location.hash = hash; route(); };
@@ -368,7 +431,8 @@ function route() {
   }
   if (run) closeLesson();
   view.dataset.course = courseId || '';
-  if (courseId) coursePage(courseId);
+  if (courseId === 'profile') profilePage();
+  else if (courseId) coursePage(courseId);
   else catalog();
   scrollTo(0, 0);
 }
@@ -379,7 +443,7 @@ addEventListener('hashchange', async () => {
   if (run && !inLesson && !run.state.done && run.state.cleared.size > 0) {
     const target = location.hash || '#/';
     history.pushState(null, '', `#/${run.courseId}/${run.lesson.id}`);
-    if (await ask(LEAVE, 'Выйти', 'Остаться')) { closeLesson(); location.hash = target; }
+    if (await ask(t('leave.ask'), t('leave.yes'), t('leave.stay'))) { closeLesson(); location.hash = target; }
     return;
   }
   route();
@@ -405,6 +469,17 @@ addEventListener('keydown', e => {
   if (run.key(e)) e.preventDefault();
 });
 
+/* ---------- запуск ---------- */
+document.documentElement.lang = getLang();
+setLocale(getLang() === 'ru' ? 'ru-RU' : 'en-US');   // числа в стендах: 2 000 или 2,000
+$('#navShelf').textContent = t('nav.shelf');
+$('#navShelf').href = SHELF_URL;
+$('#brandTag').textContent = t('brand.tag');
 drawStats();
-route();
+drawProfileBtn();
 startNoise($('#noise'));
+await loadCourses(getLang());
+route();
+// вход приходит асинхронно: перерисовать шапку и, если открыт профиль, его тоже
+auth.onChange(() => { drawProfileBtn(); if (location.hash === '#/profile') profilePage(); });
+auth.ready.then(() => { drawProfileBtn(); if (location.hash === '#/profile') profilePage(); });

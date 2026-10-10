@@ -2,6 +2,7 @@
  * Модели курса «Avalonia: основы»: Grid, панели, привязки и селекторы стилей.
  * Без DOM — тесты проходят задания теми же действиями, что кнопки.
  */
+import { tr } from './i18n.js';
 
 /* =====================================================================
    Grid: ширины колонок из ColumnDefinitions="Auto,200,*,2*".
@@ -44,7 +45,7 @@ export const gridRig = {
    ===================================================================== */
 
 export const PANELS = {
-  'stack-v': 'StackPanel (вертикально)',
+  'stack-v': { ru: 'StackPanel (вертикально)', en: 'StackPanel (vertical)' },
   'stack-h': 'StackPanel Orientation="Horizontal"',
   wrap: 'WrapPanel',
   dock: 'DockPanel'
@@ -52,10 +53,10 @@ export const PANELS = {
 
 /** Дети окна: размеры «по содержимому» и сторона для DockPanel. Последний заполняет остаток. */
 export const KIDS = [
-  { name: 'Шапка', w: 120, h: 36, dock: 'Top' },
-  { name: 'Меню', w: 90, h: 80, dock: 'Left' },
-  { name: 'Статус', w: 110, h: 26, dock: 'Bottom' },
-  { name: 'Контент', w: 140, h: 70, dock: null }
+  { name: { ru: 'Шапка', en: 'Header' }, w: 120, h: 36, dock: 'Top' },
+  { name: { ru: 'Меню', en: 'Menu' }, w: 90, h: 80, dock: 'Left' },
+  { name: { ru: 'Статус', en: 'Status' }, w: 110, h: 26, dock: 'Bottom' },
+  { name: { ru: 'Контент', en: 'Content' }, w: 140, h: 70, dock: null }
 ];
 
 /** Прямоугольники детей в окне W×H. */
@@ -107,7 +108,7 @@ export const panelRig = {
    ===================================================================== */
 
 export const MODES = ['OneWay', 'TwoWay', 'OneTime', 'OneWayToSource'];
-const TYPED = ['Аня', 'Борис', 'Вера', 'Гоша'];
+const TYPED = [{ ru: 'Аня', en: 'Anna' }, { ru: 'Борис', en: 'Boris' }, { ru: 'Вера', en: 'Vera' }, { ru: 'Гоша', en: 'George' }];
 
 /**
  * vm — значение в модели; box — что в TextBox (привязка с режимом mode);
@@ -116,7 +117,7 @@ const TYPED = ['Аня', 'Борис', 'Вера', 'Гоша'];
 export const bindRig = {
   init(card) {
     const o = { mode: 'TwoWay', notify: false, ...(card.start ?? {}) };
-    const init = 'Мир';
+    const init = tr({ ru: 'Мир', en: 'World' });
     return { ...o, vm: init, box: o.mode === 'OneWayToSource' ? '' : init, label: init, typed: 0, coded: 0, ok: [], log: [] };
   },
   act(card, s0, a) {
@@ -127,24 +128,26 @@ export const bindRig = {
     const s = { ...s0, ok: [...s0.ok], log: [...s0.log] };
     if (k === 'type') {
       // пользователь ввёл имя в TextBox
-      s.box = TYPED[s.typed++ % TYPED.length];
+      s.box = tr(TYPED[s.typed++ % TYPED.length]);
       const toSource = s.mode === 'TwoWay' || s.mode === 'OneWayToSource';
       if (toSource) {
         s.vm = s.box;
         if (s.notify) s.label = s.vm;
       }
-      s.log.push(toSource ? (s.notify ? 'Ввод записан в модель, модель сообщила об изменении — приветствие обновилось.' : 'Ввод записан в модель, но модель промолчала — приветствие не знает об изменении.')
-        : `Режим ${s.mode}: ввод из TextBox в модель не идёт.`);
+      s.log.push(tr(toSource ? (s.notify ? { ru: 'Ввод записан в модель, модель сообщила об изменении — приветствие обновилось.', en: 'The input went into the model, and the model reported the change — the greeting updated.' }
+        : { ru: 'Ввод записан в модель, но модель промолчала — приветствие не знает об изменении.', en: 'The input went into the model, but the model stayed silent — the greeting knows nothing about the change.' })
+        : { ru: `Режим ${s.mode}: ввод из TextBox в модель не идёт.`, en: `${s.mode} mode: input from the TextBox does not reach the model.` }));
     } else if (k === 'code') {
       // код меняет свойство модели
-      s.vm = `Код ${++s.coded}`;
+      ++s.coded;
+      s.vm = tr({ ru: `Код ${s.coded}`, en: `Code ${s.coded}` });
       if (s.notify) {
         s.label = s.vm;
         if (s.mode === 'OneWay' || s.mode === 'TwoWay') s.box = s.vm;
       }
-      s.log.push(!s.notify ? 'Модель изменилась, но не вызвала PropertyChanged — экран ничего не знает.'
-        : s.mode === 'OneWay' || s.mode === 'TwoWay' ? 'Модель сообщила об изменении — TextBox и приветствие обновились.'
-        : `Приветствие обновилось, а TextBox — нет: режим ${s.mode} не переносит изменения из модели.`);
+      s.log.push(tr(!s.notify ? { ru: 'Модель изменилась, но не вызвала PropertyChanged — экран ничего не знает.', en: 'The model changed but did not raise PropertyChanged — the screen knows nothing.' }
+        : s.mode === 'OneWay' || s.mode === 'TwoWay' ? { ru: 'Модель сообщила об изменении — TextBox и приветствие обновились.', en: 'The model reported the change — the TextBox and the greeting updated.' }
+        : { ru: `Приветствие обновилось, а TextBox — нет: режим ${s.mode} не переносит изменения из модели.`, en: `The greeting updated, but the TextBox did not: ${s.mode} mode does not carry changes from the model.` }));
     } else throw new Error(`неизвестное действие ${a}`);
     if (s.vm === s.box && s.vm === s.label && !s.ok.includes(k)) s.ok.push(k);
     return s;

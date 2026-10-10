@@ -12,6 +12,7 @@ import { esc } from '../assets/vhs.js?v=202610092124';
 import { codeHtml } from './code-view.js?v=202610092124';
 import { shuffle, scramble, check, blankCount } from './engine.js?v=202610092124';
 import { mountRig } from './rigs.js?v=202610092124';
+import { t } from './ui.js?v=202610092124';
 
 const h = (tag, cls, html) => {
   const el = document.createElement(tag);
@@ -42,7 +43,7 @@ function learn(card, host) {
   }
   if (card.code) body.append(codeBlock(card.code, card.lang));
   if (card.deep) {
-    const d = h('details', 'deep', `<summary>Глубже — для тех, кто уже программирует</summary><div>${card.deep}</div>`);
+    const d = h('details', 'deep', `<summary>${esc(t('l.deep'))}</summary><div>${card.deep}</div>`);
     host.append(d);
   }
   return { mode: 'learn' };
@@ -51,7 +52,7 @@ function learn(card, host) {
 /* ---------- choice / multi ---------- */
 function options(card, host, api, seed, multi) {
   head(card, host);
-  if (multi) host.append(h('p', 'hint', 'Отметь все верные варианты.'));
+  if (multi) host.append(h('p', 'hint', t('c.multi')));
   const order = shuffle(card.options.map((_, i) => i), seed);
   const box = h('div', multi ? 'opts multi' : 'opts');
   const picked = new Set();
@@ -94,7 +95,7 @@ function options(card, host, api, seed, multi) {
 /* ---------- tapline ---------- */
 function tapline(card, host, api) {
   head(card, host);
-  host.append(h('p', 'hint', 'Нажми на строку.'));
+  host.append(h('p', 'hint', t('c.tap')));
   const box = h('div', 'lines');
   let picked = null;
   const btns = card.code.split('\n').map((line, i) => {
@@ -127,7 +128,7 @@ function tapline(card, host, api) {
 function order(card, host, api, seed) {
   head(card, host);
   const zone = h('div', 'answer-zone');
-  zone.dataset.empty = 'Нажимай на шаги снизу по порядку';
+  zone.dataset.empty = t('c.order');
   const bank = h('div', 'bank');
   const chosen = [];
   const tiles = scramble(card.items.length, seed).map(i => {
@@ -184,7 +185,7 @@ function blanks(card, host, api, seed) {
     bank.append(b);
     return { ti, b };
   });
-  host.append(pre, h('p', 'hint', 'Нажимай на плитки, чтобы заполнить пропуски. Нажми на пропуск, чтобы очистить его.'), bank);
+  host.append(pre, h('p', 'hint', t('c.blanks')), bank);
   const slots = [];
   function draw() {
     pre.replaceChildren();
@@ -219,7 +220,7 @@ function blanks(card, host, api, seed) {
 /* ---------- match ---------- */
 function match(card, host, api, seed) {
   head(card, host);
-  host.append(h('p', 'hint', 'Нажми слово слева, потом его пару справа.'));
+  host.append(h('p', 'hint', t('c.match')));
   const box = h('div', 'match');
   const L = h('div', 'col'), R = h('div', 'col');
   box.append(L, R);
@@ -247,7 +248,7 @@ function match(card, host, api, seed) {
     a.setAttribute('aria-pressed', 'false');
     if (a.dataset.i === b.dataset.i) {
       [a, b].forEach(x => { x.classList.add('ok'); x.disabled = true; });
-      if (--left === 0) api.complete(!slip, slip ? 'Все пары найдены, но с ошибками.' : 'Все пары найдены с первого раза.');
+      if (--left === 0) api.complete(!slip, t(slip ? 'c.pairsSlip' : 'c.pairsClean'));
     } else {
       slip = true;
       [a, b].forEach(x => { x.classList.remove('bad'); void x.offsetWidth; x.classList.add('bad'); });
@@ -264,7 +265,7 @@ function rig(card, host, api) {
   host.append(box);
   mountRig(card, box, () => {
     task.classList.add('ok');
-    api.complete(true, 'Задание выполнено.');
+    api.complete(true, t('c.taskDone'));
   });
   return { mode: 'auto' };
 }
@@ -280,9 +281,9 @@ export function feedback(card, input, ok) {
   if (ok) return card.explain ?? '';
   const parts = [];
   if (card.t === 'choice' && card.wrong?.[input]) parts.push(card.wrong[input]);
-  if (card.t === 'choice') parts.push(`Верный ответ: «${card.options[card.answer]}».`);
-  if (card.t === 'order') parts.push('Правильный порядок: ' + card.items.map((s, i) => `${i + 1}) ${s}`).join(' '));
-  if (card.t === 'blanks') parts.push('Нужно: ' + card.answer.join(', ') + '.');
+  if (card.t === 'choice') parts.push(t('c.right', { a: card.options[card.answer] }));
+  if (card.t === 'order') parts.push(t('c.rightOrder', { a: card.items.map((s, i) => `${i + 1}) ${s}`).join(' ') }));
+  if (card.t === 'blanks') parts.push(t('c.rightBlanks', { a: card.answer.join(', ') }));
   if (card.explain) parts.push(card.explain);
   return parts.join(' ');
 }

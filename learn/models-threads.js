@@ -3,6 +3,7 @@
  * Без DOM — покрыты тестами. Вход тот же, что у models-mem.js: init(card), act(card, s, a), goal(card, s).
  */
 import { rng } from '../assets/rand.js?v=202610092124';
+import { tr } from './i18n.js?v=202610092124';
 
 const clone = x => structuredClone(x);
 
@@ -35,16 +36,17 @@ export function raceStep(s0, t) {
   if (!raceCan(s0, t)) return s0;
   const s = clone(s0), th = s.th[t], op = steps(s)[th.pc];
   let text;
-  if (op === 'read') { th.tmp = s.count; text = `${t} прочитал count = ${s.count} к себе в регистр.`; }
-  if (op === 'inc') { th.tmp++; text = `${t} прибавил 1 у себя в регистре: ${th.tmp}. В памяти count всё ещё ${s.count}.`; }
+  if (op === 'read') { th.tmp = s.count; text = tr({ ru: `${t} прочитал count = ${s.count} к себе в регистр.`, en: `${t} read count = ${s.count} into its register.` }); }
+  if (op === 'inc') { th.tmp++; text = tr({ ru: `${t} прибавил 1 у себя в регистре: ${th.tmp}. В памяти count всё ещё ${s.count}.`, en: `${t} added 1 in its register: ${th.tmp}. In memory, count is still ${s.count}.` }); }
   if (op === 'write') {
     const lost = s.count >= th.tmp;
     s.count = th.tmp;
-    text = `${t} записал count = ${th.tmp}.` + (lost ? ' Это значение уже было — чужое увеличение затёрто!' : '');
+    text = tr({ ru: `${t} записал count = ${th.tmp}.`, en: `${t} wrote count = ${th.tmp}.` })
+      + (lost ? tr({ ru: ' Это значение уже было — чужое увеличение затёрто!', en: ' That value was already there: the other thread\'s increment is overwritten!' }) : '');
   }
-  if (op === 'lock') { s.owner = t; text = `${t} вошёл в lock. Второй поток теперь будет ждать у входа.`; }
-  if (op === 'unlock') { s.owner = null; text = `${t} вышел из lock.`; }
-  if (op === 'atomic') { s.count++; th.tmp = s.count; text = `${t}: Interlocked.Increment — прочитать, прибавить и записать одной неделимой операцией. count = ${s.count}.`; }
+  if (op === 'lock') { s.owner = t; text = tr({ ru: `${t} вошёл в lock. Второй поток теперь будет ждать у входа.`, en: `${t} entered the lock. The other thread will now wait at the door.` }); }
+  if (op === 'unlock') { s.owner = null; text = tr({ ru: `${t} вышел из lock.`, en: `${t} left the lock.` }); }
+  if (op === 'atomic') { s.count++; th.tmp = s.count; text = tr({ ru: `${t}: Interlocked.Increment — прочитать, прибавить и записать одной неделимой операцией. count = ${s.count}.`, en: `${t}: Interlocked.Increment reads, adds and writes in one indivisible operation. count = ${s.count}.` }); }
   th.pc++;
   s.log = [...s.log, text].slice(-4);
   return s;
@@ -88,7 +90,7 @@ export const raceRig = {
       const result = raceRandom(card.mode, 1000, seed);
       return { ...s, runs: [...(s.runs ?? []), result].slice(-5) };
     }
-    throw new Error(`неизвестное действие ${a}`);
+    throw new Error(tr({ ru: `неизвестное действие ${a}`, en: `unknown action ${a}` }));
   },
   goal(card, s) {
     const g = card.goal;
@@ -132,12 +134,12 @@ export function lockStep(s0, t) {
   const s = clone(s0);
   const [cmd, l] = lockOp(s, t).split(' ');
   let text;
-  if (cmd === 'lock') { s.owner[l] = t; text = `${t} захватил ${l}.`; }
-  if (cmd === 'unlock') { s.owner[l] = null; text = `${t} отпустил ${l}.`; }
-  if (cmd === 'work') text = `${t} держит оба замка и делает работу.`;
+  if (cmd === 'lock') { s.owner[l] = t; text = tr({ ru: `${t} захватил ${l}.`, en: `${t} acquired ${l}.` }); }
+  if (cmd === 'unlock') { s.owner[l] = null; text = tr({ ru: `${t} отпустил ${l}.`, en: `${t} released ${l}.` }); }
+  if (cmd === 'work') text = tr({ ru: `${t} держит оба замка и делает работу.`, en: `${t} holds both locks and does the work.` });
   s.pc[t]++;
   const st = lockStatus(s);
-  if (st === 'deadlock') text += ' Оба потока ждут замок, который держит другой. Это deadlock: сами они не выйдут никогда.';
+  if (st === 'deadlock') text += tr({ ru: ' Оба потока ждут замок, который держит другой. Это deadlock: сами они не выйдут никогда.', en: ' Each thread waits for the lock the other one holds. This is a deadlock: they will never get out on their own.' });
   s.log = [...s.log, text].slice(-4);
   return s;
 }
@@ -148,7 +150,7 @@ export const lockRig = {
     if (a === 'reset') return lockInit(s.fixed);
     if (a === 'fix') return lockInit(!s.fixed);
     if (a.startsWith('step:')) return lockStep(s, a.slice(5));
-    throw new Error(`неизвестное действие ${a}`);
+    throw new Error(tr({ ru: `неизвестное действие ${a}`, en: `unknown action ${a}` }));
   },
   goal(card, s) {
     if (card.goal === 'deadlock') return lockStatus(s) === 'deadlock';
@@ -207,7 +209,7 @@ export function poolTick(s0) {
     s.starve++;
     if (s.starve >= 2 && s.threads.length < s.max) {
       s.threads.push(null); s.added++; s.starve = 0;
-      s.log = [...s.log, `Тик ${s.tick + 1}: очередь стоит, все потоки заняты — пул добавил поток №${s.threads.length}.`].slice(-4);
+      s.log = [...s.log, tr({ ru: `Тик ${s.tick + 1}: очередь стоит, все потоки заняты — пул добавил поток №${s.threads.length}.`, en: `Tick ${s.tick + 1}: the queue is stuck and all threads are busy, so the pool added thread #${s.threads.length}.` })].slice(-4);
     }
   } else s.starve = 0;
   s.tick++;
@@ -227,7 +229,7 @@ export const poolRig = {
     if (cmd === 'reset') return poolInit(card.pool);
     if (cmd === 'add') return poolAdd(s, arg, +(n ?? 8));
     if (cmd === 'tick') { let x = s; for (let i = 0; i < +(arg ?? 1); i++) x = poolTick(x); return x; }
-    throw new Error(`неизвестное действие ${a}`);
+    throw new Error(tr({ ru: `неизвестное действие ${a}`, en: `unknown action ${a}` }));
   },
   goal(card, s) {
     const g = card.goal;
