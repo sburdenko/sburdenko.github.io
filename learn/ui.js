@@ -1,5 +1,5 @@
 /** Строки интерфейса Bathys на двух языках. t('key', { n: 3 }) подставляет {n}. */
-import { getLang } from './i18n.js?v=202610100752';
+import { getLang } from './i18n.js?v=202610100756';
 
 const S = {
   'brand.tag': { ru: 'Интерактивные курсы', en: 'Interactive courses' },
@@ -96,6 +96,20 @@ const S = {
   'c.right': { ru: 'Верный ответ: «{a}».', en: 'Correct answer: “{a}”.' },
   'c.rightOrder': { ru: 'Правильный порядок: {a}', en: 'Correct order: {a}' },
   'c.rightBlanks': { ru: 'Нужно: {a}.', en: 'Needed: {a}.' },
+
+  'rp.btn': { ru: 'Сообщить о проблеме', en: 'Report a problem' },
+  'rp.title': { ru: 'Что не так с этой карточкой?', en: 'What is wrong with this card?' },
+  'rp.cats': { ru: 'Выбери подходящее (можно несколько)', en: 'Pick what fits (several are fine)' },
+  'rp.text': { ru: 'Расскажи подробнее (необязательно)', en: 'Tell us more (optional)' },
+  'rp.ph': { ru: 'Что ты ожидал, что увидел, на каком шаге…', en: 'What you expected, what you saw, at which step…' },
+  'rp.send': { ru: 'Отправить', en: 'Send' },
+  'rp.cancel': { ru: 'Отмена', en: 'Cancel' },
+  'rp.empty': { ru: 'Выбери категорию или напиши пару слов.', en: 'Pick a category or write a few words.' },
+  'rp.sent': { ru: 'Спасибо! Сообщение отправлено — мы его прочитаем.', en: 'Thank you! Your report was sent — we will read it.' },
+  'rp.queued': { ru: 'Сейчас не получилось отправить. Сообщение сохранено и уйдёт позже.', en: 'Could not send it right now. It is saved and will go out later.' },
+  'rp.off': { ru: 'Отправка жалоб пока не подключена.', en: 'Reporting is not connected yet.' },
+  'rp.close': { ru: 'Закрыть', en: 'Close' },
+  'rp.count': { ru: '{n} / {max}', en: '{n} / {max}' },
 
   'p.title': { ru: 'Профиль', en: 'Profile' },
   'p.guest': { ru: 'Гость', en: 'Guest' },

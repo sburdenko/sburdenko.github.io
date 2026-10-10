@@ -1,13 +1,13 @@
 /** Tape 06 assembly: language, map, skeletons and, per chapter, four problem tabs that each drive their own rig. */
-import { $, $$, esc, bootVhs } from '../../assets/vhs.js?v=202610100752';
-import { initI18n, t, onLang } from '../../assets/i18n.js?v=202610100752';
-import { COMMON } from '../../assets/i18n-common.js?v=202610100752';
-import { renderCode } from '../../assets/code.js?v=202610100752';
-import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202610100752';
-import { DICT } from './i18n.js?v=202610100752';
-import { RIGS, PATTERN_IDS, runWithInput } from './rigs.js?v=202610100752';
-import { formatField } from './inputs.js?v=202610100752';
-import { PROBLEMS, NAMES } from './problems.js?v=202610100752';
+import { $, $$, esc, bootVhs } from '../../assets/vhs.js?v=202610100756';
+import { initI18n, t, onLang } from '../../assets/i18n.js?v=202610100756';
+import { COMMON } from '../../assets/i18n-common.js?v=202610100756';
+import { renderCode } from '../../assets/code.js?v=202610100756';
+import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202610100756';
+import { DICT } from './i18n.js?v=202610100756';
+import { RIGS, PATTERN_IDS, runWithInput } from './rigs.js?v=202610100756';
+import { formatField } from './inputs.js?v=202610100756';
+import { PROBLEMS, NAMES } from './problems.js?v=202610100756';
 
 const pad = n => String(n).padStart(2, '0');
 

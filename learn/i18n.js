@@ -18,8 +18,7 @@ function detect() {
     const saved = globalThis.localStorage?.getItem(STORE_KEY);
     if (LANGS.includes(saved)) return saved;
   } catch { /* приватный режим или node */ }
-  const nav = globalThis.navigator?.language ?? 'ru';
-  return /^ru|^uk|^be|^kk/i.test(nav) ? 'ru' : 'en';
+  return 'en';   // по умолчанию английский; русский — выбором в профиле или ссылкой ?lang=ru
 }
 
 // Язык живёт в globalThis: модуль может загрузиться дважды (с ?v= в адресе и без),

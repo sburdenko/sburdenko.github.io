@@ -5,17 +5,22 @@
  *   #/dotnet      курс
  *   #/dotnet/<id> урок поверх курса
  */
-import { $, esc, startNoise, setLocale } from '../assets/vhs.js?v=202610100752';
-import { GROUPS, COURSES, findCourse, lessonsOf, loadCourses, courseTitle, courseBlurb } from './courses.js?v=202610100752';
-import { getLang, switchLang, tr, LANGS, LANG_NAMES } from './i18n.js?v=202610100752';
-import { t } from './ui.js?v=202610100752';
-import { auth } from './auth/auth.js?v=202610100752';
-import * as P from './progress.js?v=202610100752';
-import * as E from './engine.js?v=202610100752';
-import { renderCard, feedback } from './cards.js?v=202610100752';
+import { $, esc, startNoise, setLocale } from '../assets/vhs.js?v=202610100756';
+import { GROUPS, COURSES, findCourse, lessonsOf, loadCourses, courseTitle, courseBlurb } from './courses.js?v=202610100756';
+import { getLang, switchLang, tr, LANGS, LANG_NAMES } from './i18n.js?v=202610100756';
+import { t } from './ui.js?v=202610100756';
+import { auth } from './auth/auth.js?v=202610100756';
+import { CATEGORIES, MAX_TEXT, buildReport } from './reports/report.js?v=202610100756';
+import { submit, flushQueue, reportsEnabled } from './reports/reports.js?v=202610100756';
+import * as P from './progress.js?v=202610100756';
+import * as E from './engine.js?v=202610100756';
+import { renderCard, feedback } from './cards.js?v=202610100756';
 
 /** Полка кассет — отдельный модуль сайта. */
 const SHELF_URL = new URL('../shelf/', import.meta.url).href;
+
+/** Версия сборки из метки ?v= у этого модуля — чтобы знать, какую версию страницы видел человек. */
+const APP_VER = new URL(import.meta.url).searchParams.get('v') ?? '';
 
 const loaded = P.load();
 let prog = loaded.state;
@@ -232,11 +237,13 @@ function openLesson(courseId, lessonId) {
       <span class="l-nav"><button class="x" id="lx" aria-label="${esc(t('l.exit'))}">✕</button><button class="x" id="lback" aria-label="${esc(t('l.prev'))}" title="${esc(t('l.prevTitle'))}" disabled>‹</button></span>
       <div class="pbar" role="progressbar" aria-label="${esc(t('l.progress'))}"><i id="lp" style="width:0"></i></div>
       <span class="l-count" id="lc"></span>
+      <button class="x flag" id="lflag" aria-label="${esc(t('rp.btn'))}" title="${esc(t('rp.btn'))}">⚑</button>
     </div>
     <div class="l-body" id="lb"></div>
     <div class="l-foot" id="lf"><div class="in"><div class="fb" id="lfb" aria-live="polite"></div><button class="cta-btn" id="lbtn"></button></div></div>
     <div class="l-foot review" id="lr" hidden><div class="in"><div class="fb" id="lrfb" aria-live="polite"></div><div class="nav-btns"><button class="ghost-btn" id="rvPrev">${esc(t('l.back'))}</button><button class="cta-btn" id="rvNext"></button></div></div></div>`;
   $('#lx').onclick = () => leave();
+  $('#lflag').onclick = () => openReport();
   $('#lback').onclick = () => (run.view === null ? review(run.history.length - 1) : review(run.view - 1));
   $('#rvPrev').onclick = () => review(run.view - 1);
   $('#rvNext').onclick = () => (run.view + 1 < run.history.length ? review(run.view + 1) : backToLive());
@@ -261,6 +268,7 @@ function showCard() {
   const { lesson, state } = run;
   const card = E.current(state, lesson);
   const idx = E.currentIndex(state);
+  run.curIdx = idx;
   const body = $('#lb'), foot = $('#lf'), fb = $('#lfb'), btn = $('#lbtn');
   $('#lp').style.width = `${E.progress(state) * 100}%`;
   $('#lc').textContent = `${state.cleared.size} / ${state.total}`;
@@ -335,13 +343,65 @@ function showCard() {
   };
 }
 
+
+/* ---------- жалоба на карточку ---------- */
+/** Какая карточка сейчас на экране: просматриваемая из истории или живая. */
+function visibleCardIndex() {
+  return run.view !== null ? run.history[run.view].idx : run.curIdx;
+}
+
+function openReport() {
+  if (!run || document.querySelector('.ask.report')) return;
+  const idx = visibleCardIndex();
+  const card = run.lesson.cards[idx];
+  const picked = new Set();
+  const wrap = document.createElement('div');
+  wrap.className = 'ask report';
+  wrap.innerHTML = `<form class="ask-box rp-box" role="dialog" aria-modal="true" aria-label="${esc(t('rp.title'))}">
+      <h3>${esc(t('rp.title'))}</h3>
+      <p class="rp-sub">${esc(t('rp.cats'))}</p>
+      <div class="rp-cats">${CATEGORIES.map(c => `<button type="button" class="rp-cat" data-id="${c.id}" aria-pressed="false">${esc(tr(c))}</button>`).join('')}</div>
+      <label class="rp-sub" for="rpText">${esc(t('rp.text'))}</label>
+      <textarea id="rpText" rows="4" maxlength="${MAX_TEXT}" placeholder="${esc(t('rp.ph'))}"></textarea>
+      <p class="rp-msg" id="rpMsg" role="status" aria-live="polite"></p>
+      <div class="row-btns"><button type="button" class="ghost-btn" id="rpNo">${esc(t('rp.cancel'))}</button><button type="submit" class="cta-btn" id="rpYes">${esc(t('rp.send'))}</button></div>
+    </form>`;
+  const close = () => { wrap.remove(); askClose = null; };
+  askClose = close;
+  document.body.append(wrap);
+  const msg = wrap.querySelector('#rpMsg'), text = wrap.querySelector('#rpText'), yes = wrap.querySelector('#rpYes');
+  wrap.addEventListener('click', e => {
+    const b = e.target.closest('.rp-cat');
+    if (b) {
+      const on = !picked.has(b.dataset.id);
+      on ? picked.add(b.dataset.id) : picked.delete(b.dataset.id);
+      b.setAttribute('aria-pressed', on);
+    } else if (e.target === wrap || e.target.id === 'rpNo') close();
+  });
+  wrap.querySelector('form').onsubmit = async e => {
+    e.preventDefault();
+    if (!reportsEnabled) { msg.textContent = t('rp.off'); return; }
+    let report;
+    try {
+      report = buildReport({ lang: getLang(), courseId: run.courseId, lessonId: run.lesson.id, cardIndex: idx, card, uid: auth.user?.id, ver: APP_VER, answered: run.view !== null ? undefined : !run.state.missed.has(idx) }, { categories: [...picked], text: text.value });
+    } catch { msg.textContent = t('rp.empty'); return; }
+    yes.disabled = true;
+    const res = await submit(report);
+    msg.textContent = t(res === 'sent' ? 'rp.sent' : 'rp.queued');
+    wrap.querySelector('.row-btns').innerHTML = `<button type="button" class="cta-btn" id="rpDone">${esc(t('rp.close'))}</button>`;
+    wrap.querySelector('#rpDone').onclick = close;
+    wrap.querySelector('#rpDone').focus();
+  };
+  text.focus();
+}
+
 /* ---------- просмотр пройденных карточек: только чтение ---------- */
 function snapshot() {
   const node = run.liveHost.cloneNode(true);
   node.querySelectorAll('button').forEach(b => { b.disabled = true; b.tabIndex = -1; });
   node.querySelector('.tag')?.remove();
   node.insertAdjacentHTML('afterbegin', `<span class="tag past">${esc(t('l.past'))}</span>`);
-  run.history.push({ node, fb: run.lastFb });
+  run.history.push({ node, fb: run.lastFb, idx: run.curIdx });
   run.lastFb = null;
 }
 
@@ -480,6 +540,7 @@ drawProfileBtn();
 startNoise($('#noise'));
 await loadCourses(getLang());
 route();
+flushQueue();   // дослать жалобы, которые не ушли в прошлый раз
 // вход приходит асинхронно: перерисовать шапку и, если открыт профиль, его тоже
 auth.onChange(() => { drawProfileBtn(); if (location.hash === '#/profile') profilePage(); });
 auth.ready.then(() => { drawProfileBtn(); if (location.hash === '#/profile') profilePage(); });

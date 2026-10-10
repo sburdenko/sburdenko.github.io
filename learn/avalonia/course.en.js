@@ -1,22 +1,22 @@
 /** The "Avalonia basics" course: cross-platform UI in C# and XAML. */
-import u1l1 from './u1/l1-what.en.js?v=202610100752';
-import u1l2 from './u1/l2-project.en.js?v=202610100752';
-import u1l3 from './u1/l3-axaml.en.js?v=202610100752';
-import u1boss from './u1/boss.en.js?v=202610100752';
-import u2l1 from './u2/l1-layout.en.js?v=202610100752';
-import u2l2 from './u2/l2-panels.en.js?v=202610100752';
-import u2l3 from './u2/l3-grid.en.js?v=202610100752';
-import u2boss from './u2/boss.en.js?v=202610100752';
-import u3l1 from './u3/l1-binding.en.js?v=202610100752';
-import u3l2 from './u3/l2-notify.en.js?v=202610100752';
-import u3l3 from './u3/l3-mvvm.en.js?v=202610100752';
-import u3l4 from './u3/l4-commands.en.js?v=202610100752';
-import u3boss from './u3/boss.en.js?v=202610100752';
-import u4l1 from './u4/l1-styles.en.js?v=202610100752';
-import u4l2 from './u4/l2-themes.en.js?v=202610100752';
-import u4l3 from './u4/l3-lists.en.js?v=202610100752';
-import u4l4 from './u4/l4-threads.en.js?v=202610100752';
-import u4boss from './u4/boss.en.js?v=202610100752';
+import u1l1 from './u1/l1-what.en.js?v=202610100756';
+import u1l2 from './u1/l2-project.en.js?v=202610100756';
+import u1l3 from './u1/l3-axaml.en.js?v=202610100756';
+import u1boss from './u1/boss.en.js?v=202610100756';
+import u2l1 from './u2/l1-layout.en.js?v=202610100756';
+import u2l2 from './u2/l2-panels.en.js?v=202610100756';
+import u2l3 from './u2/l3-grid.en.js?v=202610100756';
+import u2boss from './u2/boss.en.js?v=202610100756';
+import u3l1 from './u3/l1-binding.en.js?v=202610100756';
+import u3l2 from './u3/l2-notify.en.js?v=202610100756';
+import u3l3 from './u3/l3-mvvm.en.js?v=202610100756';
+import u3l4 from './u3/l4-commands.en.js?v=202610100756';
+import u3boss from './u3/boss.en.js?v=202610100756';
+import u4l1 from './u4/l1-styles.en.js?v=202610100756';
+import u4l2 from './u4/l2-themes.en.js?v=202610100756';
+import u4l3 from './u4/l3-lists.en.js?v=202610100756';
+import u4l4 from './u4/l4-threads.en.js?v=202610100756';
+import u4boss from './u4/boss.en.js?v=202610100756';
 
 export default {
   id: 'avalonia',

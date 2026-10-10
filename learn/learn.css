@@ -622,3 +622,19 @@ pre.code.full{max-height:none}
 .profile .tile-s .l{font:600 11px/1.2 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
 .profile .tile-s.xp{border-color:rgba(38,227,234,.5)}.profile .tile-s.xp .v{color:var(--gpu)}
 @media (max-width:560px){.profile .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ---------- жалоба на карточку ---------- */
+.l-top{grid-template-columns:auto 1fr auto auto}
+.l-top .flag{font-size:15px;color:var(--ink3)}
+.l-top .flag:hover{color:var(--osd)}
+.ask.report{align-items:end}
+@media (min-width:640px){.ask.report{align-items:center}}
+.rp-box{max-width:520px;max-height:calc(100dvh - 2*var(--gut));overflow:auto;gap:14px}
+.rp-box h3{font-family:var(--f-disp);font-size:19px;color:#fff}
+.rp-sub{font:13px/1.4 var(--f-mono)!important;color:var(--ink3)!important}
+.rp-cats{display:flex;flex-wrap:wrap;gap:8px}
+.rp-cat{padding:9px 12px;border-radius:20px;border:1px solid var(--line2);background:var(--card);color:var(--ink2);font:500 14px/1.2 var(--f-body);cursor:pointer;text-align:left}
+.rp-cat[aria-pressed="true"]{border-color:var(--gpu);background:rgba(38,227,234,.14);color:#fff}
+.rp-box textarea{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid var(--line2);background:var(--card);color:#fff;font:16px/1.5 var(--f-body);resize:vertical}
+.rp-box textarea:focus{outline:none;border-color:var(--gpu)}
+.rp-msg{min-height:1.2em;font:14px/1.4 var(--f-mono)!important;color:var(--osd)!important}

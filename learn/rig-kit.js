@@ -1,5 +1,5 @@
 /** Общий каркас стендов на моделях вида { init, act, goal }: состояние, кнопки с data-act, проверка цели. */
-import { esc } from '../assets/vhs.js?v=202610100752';
+import { esc } from '../assets/vhs.js?v=202610100756';
 
 export const h = (tag, cls, html) => {
   const el = document.createElement(tag);
