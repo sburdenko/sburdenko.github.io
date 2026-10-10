@@ -1,9 +1,9 @@
 /** Every string of tape 04, merged from the chapter dictionaries. */
-import { SETUP } from './i18n-setup.js?v=202610101018';
-import { LIGHT } from './i18n-light.js?v=202610101018';
-import { GI } from './i18n-gi.js?v=202610101018';
-import { FRAME } from './i18n-frame.js?v=202610101018';
-import { OUTPUT } from './i18n-output.js?v=202610101018';
-import { QA } from './i18n-qa.js?v=202610101018';
+import { SETUP } from './i18n-setup.js?v=202610101341';
+import { LIGHT } from './i18n-light.js?v=202610101341';
+import { GI } from './i18n-gi.js?v=202610101341';
+import { FRAME } from './i18n-frame.js?v=202610101341';
+import { OUTPUT } from './i18n-output.js?v=202610101341';
+import { QA } from './i18n-qa.js?v=202610101341';
 
 export const DICT = { ...SETUP, ...LIGHT, ...GI, ...FRAME, ...OUTPUT, ...QA };

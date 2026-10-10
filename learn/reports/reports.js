@@ -5,11 +5,15 @@
  *
  * Адаптер — модуль с createSink(settings) → { add(report) }, как у входа (learn/auth).
  */
-import { AUTH_CONFIG } from '../auth/config.js?v=202610101018';
-import { isValidReport, loadQueue, saveQueue } from './report.js?v=202610101018';
+import { AUTH_CONFIG } from '../auth/config.js?v=202610101341';
+import { isValidReport, loadQueue, saveQueue } from './report.js?v=202610101341';
 
-const SINKS = { firebase: () => import('./firestore.js?v=202610101018') };
+const SINKS = { firebase: () => import('./firestore.js?v=202610101341') };
 const PROVIDER = AUTH_CONFIG.provider;   // тот же проект, что и вход
+/** Сколько ждать ответа сервера. Firestore без базы или без сети не падает, а ждёт бесконечно. */
+export const SEND_TIMEOUT_MS = 8000;
+
+const withTimeout = (p, ms) => Promise.race([p, new Promise((_, no) => setTimeout(() => no(new Error('timeout')), ms))]);
 
 let sinkPromise = null;
 const sink = () => (sinkPromise ??= (async () => {
@@ -24,7 +28,7 @@ export const reportsEnabled = Boolean(AUTH_CONFIG[PROVIDER] && SINKS[PROVIDER]);
 export async function submit(report) {
   if (!isValidReport(report)) throw new Error('invalid');
   try {
-    await (await sink()).add(report);
+    await withTimeout((async () => (await sink()).add(report))(), SEND_TIMEOUT_MS);
     return 'sent';
   } catch (e) {
     saveQueue([...loadQueue(), report]);
@@ -39,8 +43,8 @@ export async function flushQueue() {
   const left = [];
   let sent = 0;
   try {
-    const s = await sink();
-    for (const r of q) { try { await s.add(r); sent++; } catch { left.push(r); } }
+    const s = await withTimeout(sink(), SEND_TIMEOUT_MS);
+    for (const r of q) { try { await withTimeout(s.add(r), SEND_TIMEOUT_MS); sent++; } catch { left.push(r); } }
   } catch { return 0; }
   saveQueue(left);
   return sent;

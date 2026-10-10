@@ -1,5 +1,5 @@
 /** Строки интерфейса Bathys на двух языках. t('key', { n: 3 }) подставляет {n}. */
-import { getLang } from './i18n.js?v=202610101018';
+import { getLang } from './i18n.js?v=202610101341';
 
 const S = {
   'brand.tag': { ru: 'Интерактивные курсы', en: 'Interactive courses' },
@@ -110,8 +110,11 @@ const S = {
   'rp.send': { ru: 'Отправить', en: 'Send' },
   'rp.cancel': { ru: 'Отмена', en: 'Cancel' },
   'rp.empty': { ru: 'Выбери категорию или напиши пару слов.', en: 'Pick a category or write a few words.' },
-  'rp.sent': { ru: 'Спасибо! Сообщение отправлено — мы его прочитаем.', en: 'Thank you! Your report was sent — we will read it.' },
-  'rp.queued': { ru: 'Сейчас не получилось отправить. Сообщение сохранено и уйдёт позже.', en: 'Could not send it right now. It is saved and will go out later.' },
+  'rp.sending': { ru: 'Отправляю…', en: 'Sending…' },
+  'rp.sentTitle': { ru: 'Отправлено', en: 'Sent' },
+  'rp.queuedTitle': { ru: 'Сохранено, отправим позже', en: 'Saved, will send later' },
+  'rp.sent': { ru: 'Спасибо! Мы прочитаем сообщение и поправим карточку.', en: 'Thank you! We will read your report and fix the card.' },
+  'rp.queued': { ru: 'Сейчас не получилось достучаться до сервера. Сообщение сохранено на этом устройстве и уйдёт само при следующем открытии сайта.', en: 'Could not reach the server right now. The report is saved on this device and will go out by itself next time you open the site.' },
   'rp.off': { ru: 'Отправка жалоб пока не подключена.', en: 'Reporting is not connected yet.' },
   'rp.close': { ru: 'Закрыть', en: 'Close' },
   'rp.count': { ru: '{n} / {max}', en: '{n} / {max}' },
