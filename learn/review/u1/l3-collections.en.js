@@ -14,7 +14,7 @@ export default {
     if (c.IsResolved)
         _clashes.Remove(c);   // crashes on the next iteration
 }`,
-      deep: "<p><code>List&lt;T&gt;</code> has a version counter. Every <code>Add</code>/<code>Remove</code> bumps it, and at the start of each step the enumerator compares its own copy of the version with the current one. A mismatch means an exception. For dictionaries in modern .NET (Core 3.0+), <code>Remove</code> and <code>Clear</code> during enumeration are allowed, but in Unity (Mono) you should not count on that.</p>"
+      deep: "<p><code>List&lt;T&gt;</code> has a version counter. Every <code>Add</code>/<code>Remove</code> bumps it, and at the start of each step the enumerator compares its own copy of the version with the current one. A mismatch means an exception. For <code>Dictionary</code> in .NET Core 3.0+, <code>Remove</code> and <code>Clear</code> during enumeration do not bump the version and are therefore allowed. But in .NET Framework and in Unity (the Mono class library, under both Mono and IL2CPP) the dictionary works the old way, and such a loop throws too. Code that \"worked\" in tests on .NET 8 will crash in Unity.</p>"
     },
     {
       t: 'choice',
@@ -50,7 +50,7 @@ export default {
     {
       t: 'learn',
       title: "A bottomless nesting doll",
-      body: "<p><code>CollectFloor</code> calls itself for every child. Each call puts a new plate on a \"stack of plates\" (the call stack). If the data contains a ring (an element is its own descendant), the plates never run out until the stack collapses.</p><p>This crash is called <code>StackOverflowException</code>, and it has a harsh trait: <b>you cannot catch it</b> with <code>try/catch</code>. The whole process terminates.</p>",
+      body: "<p><code>CollectFloor</code> calls itself for every child. Each call puts a new plate on a \"stack of plates\" (the call stack). If the data contains a ring (an element is its own descendant), the plates never run out until the stack collapses.</p><p>This crash is called <code>StackOverflowException</code>, and it has a harsh trait: in .NET <b>you cannot catch it</b> with <code>try/catch</code>. The whole process terminates.</p>",
       code: `public void CollectFloor(Element node, string floor, List<Element> result)
 {
     if (node.Floor == floor)
@@ -58,15 +58,15 @@ export default {
     foreach (var child in node.Children)
         CollectFloor(child, floor, result);   // what if child is an ancestor?
 }`,
-      deep: "<p>A thread's stack is limited (around 1 MB in a typical setup; other platforms and thread pool threads can differ). A depth of tens of thousands of frames can kill the process even without any ring: a very deep tree from an imported model is enough. The C# compiler does not do tail-call optimization, and you cannot rely on the JIT for it either.</p>"
+      deep: "<p>A thread's stack is limited (around 1 MB in a typical setup; other platforms and thread pool threads can differ). A depth of tens of thousands of frames can kill the process even without any ring: a very deep tree from an imported model is enough. The C# compiler does not do tail-call optimization, and you cannot rely on the JIT for it either. A Unity caveat: Mono in the Editor sometimes turns the overflow into a regular exception in the console, and the Editor survives. That is no protection: in an IL2CPP build on a device the same error usually means an app crash.</p>"
     },
     {
       t: 'choice',
       q: "Can you wrap the CollectFloor call in try/catch (Exception) and carry on calmly?",
-      options: ["No: StackOverflowException cannot be caught, the process dies", "Yes, catch (Exception) catches any exception", "Yes, but only with catch (StackOverflowException)"],
+      options: ["No: in .NET StackOverflowException cannot be caught, the process dies", "Yes, catch (Exception) catches any exception", "Yes, but only with catch (StackOverflowException)"],
       answer: 0,
-      explain: "The runtime terminates the process immediately, because the stack state is already damaged. You have to defend in advance: limit the depth or walk the tree without recursion.",
-      wrong: { 1: "For a stack overflow, no catch block is ever invoked.", 2: "That exception type exists, but no catch clause can catch it." }
+      explain: "Since .NET 2.0, the CLR terminates the process immediately on a stack overflow: carrying on with an exhausted stack is not safe. You have to defend in advance: limit the depth or walk the tree without recursion.",
+      wrong: { 1: "For a stack overflow, no catch block is ever invoked.", 2: "That exception type exists, but in .NET no catch clause ever receives it." }
     },
     {
       t: 'rig', rig: 'hunt',
@@ -92,7 +92,7 @@ public bool IsOnLevel(Element e, float levelHeight) =>
     e.Bounds.min.y == levelHeight;`,
       bugs: [
         { lines: [2, 5], title: "Remove inside foreach", why: "The list changes during enumeration, and the next step throws InvalidOperationException. Also, each removal shifts the tail, so the work is quadratic." },
-        { lines: [14], title: "Recursion with no guard against cycles or depth", why: "If Parent and Children form a ring, the stack overflows. StackOverflowException cannot be caught, and the whole application terminates." },
+        { lines: [13, 14], title: "Recursion with no guard against cycles or depth", why: "If Parent and Children form a ring (or the tree is just very deep), the stack overflows. In .NET StackOverflowException cannot be caught: the whole app goes down instead of reporting an error." },
         { lines: [18], title: "float compared with ==", why: "After calculations a height can differ in the last digit. An element that stands on the level is not recognized as such, and the floor looks \"empty\"." }
       ],
       goal: { min: 3, maxFalse: 2 },
@@ -112,7 +112,7 @@ public bool IsOnLevel(Element e, float levelHeight) =>
     },
     {
       t: 'blanks',
-      q: "Fill in the walk: \"put in\", \"take out\" and \"remember the visited node\".",
+      q: "Fill in the walk: \"push onto the stack\", \"pop from the stack\" and \"remember the visited node\".",
       code: `var stack = new Stack<Element>();
 var seen = new HashSet<Element>();
 stack.___(root);
@@ -131,8 +131,8 @@ while (stack.Count > 0)
       q: "Which level check is the most sensible for heights in meters?",
       options: ["Math.Abs(e.Bounds.min.y - levelHeight) < 0.01f", "e.Bounds.min.y.Equals(levelHeight)", "(int)e.Bounds.min.y == (int)levelHeight", "e.Bounds.min.y <= levelHeight"],
       answer: 0,
-      explain: "Pick the tolerance by meaning: 1 cm for a building. Equals on a float is exactly as strict as ==. Casting to int drops the fraction: 2.9999 becomes 2 while 3.0 becomes 3. And <= lets everything below the level through.",
-      wrong: { 1: "Equals compares the same bits, so it is the same as ==.", 2: "Dropping fractions produces errors of a whole meter.", 3: "That checks \"not above\", not \"on the level\"." }
+      explain: "Pick the tolerance by meaning: 1 cm for a building. Equals on a float is the same exact comparison as ==. Casting to int drops the fraction: 2.9999 becomes 2 while 3.0 becomes 3. And <= lets everything below the level through.",
+      wrong: { 1: "It is the same exact comparison as ==. The only difference is NaN: NaN.Equals(NaN) is true, while NaN == NaN is false.", 2: "Dropping fractions produces errors of a whole meter.", 3: "That checks \"not above\", not \"on the level\"." }
     },
     {
       t: 'match',
@@ -148,7 +148,7 @@ while (stack.Count > 0)
       t: 'learn',
       title: "For seniors: what else was forgotten",
       body: "<p>After <code>RemoveResolved</code> (and after <code>Import</code>) the queries in <code>_cache</code> stay old: the clash is already gone from the list, but the cache still returns it. Any change to <code>_clashes</code> must reset the cache, or the cache must store a data version number.</p>",
-      deep: "<p>If the tree can be huge and order does not matter, an iterative walk also saves stack space. If you only need protection from rings, \"visited\" flags on the nodes themselves are enough. For a collection that grows in parallel, walk an immutable snapshot taken at the start.</p>"
+      deep: "<p>An iterative walk moves the \"stack of plates\" from the thread stack (around a megabyte) to the heap, where there is far more room. \"Visited\" marks can also live on the nodes themselves (say, a pass number): no HashSet and no allocations, but two concurrent walks will then get in each other's way. If the tree is edited from another thread, walk an immutable snapshot.</p>"
     }
   ]
 };

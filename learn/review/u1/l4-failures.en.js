@@ -21,7 +21,7 @@ export default {
       q: "What changes in the stack trace if you replace throw ex; with throw;?",
       options: ["The frames of the real failure point (inside File.ReadAllText or the parser) show up again", "The exception stops being thrown", "The stack gets shorter"],
       answer: 0,
-      explain: "With throw ex, the trace shows only the Import method. With throw; you see the whole chain down to where things really broke. In production debugging that is the difference between minutes and hours.",
+      explain: "With throw ex, the trace starts in Import, and everything deeper is gone. With throw; you see the whole chain down to where things really broke. When you debug from a production log, that is the difference between minutes and hours.",
       wrong: { 1: "The exception is still thrown, only its trace changes.", 2: "The opposite: the stack becomes complete, not shorter." }
     },
     {
@@ -59,7 +59,7 @@ _clashes.AddRange(data);`,
       code: `_marker?.SetActive(true);      // fails for a destroyed GameObject
 if (_marker != null)           // the honest Unity check
     _marker.SetActive(true);`,
-      deep: "<p>Unity analyzers warn about this (UNT0007, UNT0008 and related ones). The rule: for subclasses of <code>UnityEngine.Object</code>, use explicit <code>== null</code> / <code>!= null</code> or the implicit conversion to bool. An extra problem in <code>ClashService</code>: the <code>_marker</code> field is private, assigned nowhere, and the class is not a <code>MonoBehaviour</code>, so the Inspector cannot fill it. The method always silently does nothing (the compiler warns that the field is never assigned).</p>"
+      deep: "<p>Microsoft.Unity.Analyzers warn about this: UNT0007 for <code>??</code>, UNT0008 for <code>?.</code>, and related rules cover <code>??=</code> and <code>is null</code>. The rule: for subclasses of <code>UnityEngine.Object</code>, use explicit <code>== null</code> / <code>!= null</code> or the implicit conversion to bool. An extra problem in <code>ClashService</code>: the <code>_marker</code> field is private, assigned nowhere, and the class is not a <code>MonoBehaviour</code>, so the Inspector cannot fill it. The method always silently does nothing (the compiler warns with CS0649: the field is never assigned).</p>"
     },
     {
       t: 'choice',
@@ -100,12 +100,12 @@ public void Highlight()
     _marker?.SetActive(true);
 }`,
       bugs: [
-        { lines: [3, 4], title: "Public mutable Parent and Children", why: "The parent-child link can be broken from either side, and a ring can appear. A ring also breaks Newtonsoft serialization (\"Self referencing loop detected\")." },
+        { lines: [3, 4], title: "Public mutable Parent and Children", why: "The parent-child link can be broken from either side, even into a ring. And two-way references are a loop for serialization by themselves: Newtonsoft throws \"Self referencing loop detected\" unless you set ReferenceLoopHandling or serialize separate DTOs." },
         { lines: [7], title: "The _marker field is never assigned", why: "The class is not a MonoBehaviour, so the Inspector will not fill the field. It is always null, and Highlight silently does nothing." },
         { lines: [13], title: "Synchronous file read", why: "File.ReadAllText blocks the thread. If Import is called on Unity's main thread, the game freezes while a large file is read." },
         { lines: [14], title: "Deserialization result is not checked", why: "DeserializeObject returns null for an empty file, and AddRange(null) throws ArgumentNullException. The cache is also not reset after the import." },
         { lines: [16], title: "Too broad catch (Exception)", why: "It catches everything, including what cannot be fixed here. I/O errors and JSON parse errors need specific types." },
-        { lines: [18], title: "Logging and then rethrowing", why: "One error gets logged at every level of the stack, and the journal fills up with duplicates. Log where the error is handled." },
+        { lines: [18], title: "Logging and then rethrowing", why: "One error gets logged at every level, and the log fills up with duplicates. Also, LogError(ex.Message) writes only the text, with no stack trace (Debug.LogException(ex) would keep it). Log where the error is handled." },
         { lines: [19], title: "throw ex; wipes the stack", why: "The real place of failure vanishes from the trace: only Import is visible. You need throw;." },
         { lines: [25], title: "?. on a UnityEngine.Object", why: "For a destroyed GameObject, ?. does not see fake null and calls SetActive, which gives MissingReferenceException." }
       ],

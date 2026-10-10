@@ -13,7 +13,7 @@ export default {
     {
       t: 'learn',
       title: "A lambda holds the box, not the value",
-      body: "<p>A lambda does not copy a variable. It <b>remembers the box</b> the variable lives in. In a <code>for</code> loop there is one box <code>i</code> for all iterations. The task from <code>Task.Run</code> starts later, when the loop is already over, and peeks into the box. Usually it holds <code>8</code> by then.</p><p>In <code>foreach</code> every iteration gets a fresh box (since C# 5), so that trap does not exist there.</p>",
+      body: "<p>A lambda does not copy a variable. It <b>remembers the box</b> the variable lives in. In a <code>for</code> loop there is one box <code>i</code> for all iterations. The task from <code>Task.Run</code> peeks into the box only when the thread pool gets to it, and by then the eight-iteration loop has usually finished. The box holds <code>8</code>.</p><p>In <code>foreach</code> every iteration gets a fresh box (since C# 5), so that trap does not exist there.</p>",
       code: `for (int i = 0; i < 8; i++)
 {
     tasks.Add(Task.Run(() => ProcessChunk(elements, i)));
@@ -61,14 +61,14 @@ private void ProcessChunk(IEnumerable<Element> elements, int chunk)
     }
 }`,
       bugs: [
-        { lines: [0], title: "async void", why: "An exception from async void cannot be caught by the caller, and the caller cannot await completion. It goes to the synchronization context (in plain .NET without a context it can bring the process down)." },
+        { lines: [0], title: "async void", why: "The caller cannot wait for completion or catch the exception. If ProcessChunk throws, Completed never fires, and the error goes to the SynchronizationContext: in Unity it is just a line in the console, in .NET without a context the process crashes." },
         { lines: [5], title: "Closure over the loop variable i", why: "Tasks see the shared i, usually already 8. The chunk filter selects nothing, and the service silently finds zero clashes." },
         { lines: [13], title: "Id % 8 buckets split the pairs", why: "Elements from different buckets are never compared with each other, so some clashes can never be found. For negative Ids the remainder is negative too." },
         { lines: [14, 16], title: "Lazy sequence enumerated many times", why: "mine is a Where recipe, not a list. The inner loop re-runs the filter for every outer element: n² predicate calls, and if the source is lazy too, repeated computation." },
         { lines: [20], title: "Race on List.Add", why: "List<T> is not thread-safe. Eight threads corrupt its internal array at the same time: items get lost, exceptions happen." },
         { lines: [21], title: "Non-atomic counter", why: "The ++ operation is read, add, write. Threads overwrite each other's values, so the count ends up too low. Also, the name _processed promises one thing but counts another." }
       ],
-      goal: { min: 5, maxFalse: 2 },
+      goal: { min: 4, maxFalse: 2 },
       solve: ['flag:0', 'flag:5', 'flag:13', 'flag:14', 'flag:20', 'flag:21', 'check']
     },
     {
@@ -86,13 +86,13 @@ private void ProcessChunk(IEnumerable<Element> elements, int chunk)
     {
       t: 'learn',
       title: "async void: a call with no callback number",
-      body: "<p><code>async Task</code> returns a \"receipt\": you can wait for completion and learn how it ended. <code>async void</code> gives no receipt. The caller cannot <code>await</code>, and a failure has nobody to catch it.</p><p>The only legitimate use is event handlers. Everything else should be <code>async Task</code>.</p>",
+      body: "<p><code>async Task</code> returns a \"receipt\": you can wait for completion and learn how it ended. <code>async void</code> gives no receipt. The caller cannot <code>await</code>, and a failure has nobody to catch it.</p><p>There is one legitimate use: event handlers (in Unity that includes message methods like <code>async void Start()</code>). Everything else should be <code>async Task</code>.</p>",
       code: `// bad
 public async void RunAsync(...)
 
 // good
 public async Task RunAsync(...)`,
-      deep: "<p>An exception from <code>async void</code> is posted to the <code>SynchronizationContext</code> that was current at the call. In Unity, the Unity context catches it and logs an error. In a console app or on a thread pool thread without a context, it can terminate the process. Another pain: tests cannot await such a method, and a <code>Completed</code> subscriber gets called at an unknown moment.</p>"
+      deep: "<p>An exception from <code>async void</code> has no Task to live in, so it is rethrown through the <code>SynchronizationContext</code> captured when the method started. In Unity that is <code>UnitySynchronizationContext</code>: the exception runs in its queue on the main thread, Unity logs it to the console, and the game keeps going as if nothing happened. Without a context (a console app, a pool thread) it is thrown on the thread pool as unhandled, and the .NET process terminates. Either way, the code after the failed <code>await</code> never runs: <code>Completed</code> never fires, and whoever waits for it waits forever. Also, a test or the caller cannot await such a method.</p>"
     },
     {
       t: 'choice',
@@ -144,7 +144,7 @@ var local = new List<Clash>();          // one per task`
       t: 'learn',
       title: "For seniors: what else is wrong with the split",
       body: "<p>Even after the fixes, the algorithm has a hole. Since pairs are compared only inside a bucket, elements from <b>different buckets</b> never meet. It is better to split the <b>outer</b> loop between tasks (who gets which <code>a</code>) and let the inner loop run over all <code>b</code>. Even better, avoid n² entirely: build a spatial index (a grid, a BVH) and test only neighbors.</p>",
-      deep: "<p>Note that splitting by <code>Id % 8</code> is also uneven (neighboring Ids may land in one bucket), and for negative Ids the remainder in C# is negative, so they fall outside 0...7 altogether. For balanced load, prefer <code>Parallel.For</code> with ranges or a <code>Partitioner</code>.</p>"
+      deep: "<p>Note that splitting by <code>Id % 8</code> can also be uneven (if Ids are issued in steps of 8, say, every element lands in one bucket), and for negative Ids the remainder in C# is negative, so they fall outside 0...7 altogether. For balanced load, prefer <code>Parallel.For</code> with ranges or a <code>Partitioner</code>.</p>"
     }
   ]
 };

@@ -135,21 +135,21 @@ public class ClashService
             3
           ],
           "title": "Mutable fields in a key",
-          "why": "A field is changed after insertion into the dictionary, and the entry is lost: it can be neither found nor removed."
+          "why": "Once GetHashCode is fixed and depends on the fields, changing a field after insertion \"loses\" the entry: it can be neither found nor removed."
         },
         {
           "lines": [
             17
           ],
           "title": "Id ignores ModelId (and Key may be null)",
-          "why": "Elements from different models with the same number are treated as one element. A missing Key gives a NullReferenceException."
+          "why": "Elements from different models with the same number are indistinguishable: buckets and comparisons mix them up. A missing Key gives a NullReferenceException."
         },
         {
           "lines": [
             36
           ],
           "title": "async void",
-          "why": "The exception cannot be caught from outside, and completion cannot be awaited. In plain .NET without a context it can terminate the process."
+          "why": "The caller cannot wait for completion or catch the error. If a task throws, Completed never fires; in Unity the exception only shows up in the console, in .NET without a synchronization context the process crashes."
         },
         {
           "lines": [
@@ -223,7 +223,7 @@ public class ClashService
             84
           ],
           "title": "Recursion with no guard against rings or depth",
-          "why": "A ring in Parent/Children or a very deep tree causes StackOverflowException. It cannot be caught, and the process ends."
+          "why": "A ring in Parent/Children or a very deep tree causes StackOverflowException. In .NET it cannot be caught and the process ends; in an IL2CPP build the app crashes."
         },
         {
           "lines": [
@@ -244,7 +244,7 @@ public class ClashService
             99
           ],
           "title": "Logging and then rethrowing",
-          "why": "The same error gets logged at every level of the stack, and the journal fills up with duplicates."
+          "why": "The same error gets logged at every level, and the log fills up with duplicates. And LogError(ex.Message) drops the stack trace: use Debug.LogException(ex) where the error is handled."
         },
         {
           "lines": [
@@ -258,7 +258,7 @@ public class ClashService
             95
           ],
           "title": "DeserializeObject can return null",
-          "why": "For an empty file, AddRange(null) throws ArgumentNullException. The cache is also not reset after the import."
+          "why": "For an empty file or the content \"null\", AddRange(null) throws ArgumentNullException. The cache is not reset after the import, and every clash from the JSON gets its own copies of Element, unrelated to the model's elements."
         },
         {
           "lines": [
@@ -287,7 +287,7 @@ public class ClashService
             16
           ],
           "title": "Public mutable Parent and Children",
-          "why": "The link can be broken from either side and a ring appears (which also breaks Newtonsoft serialization)."
+          "why": "The link can be broken from either side, even into a ring. And two-way references are a loop for serialization: Newtonsoft throws \"Self referencing loop detected\"."
         }
       ],
       "goal": {
@@ -362,7 +362,7 @@ public class ClashService
         "MissingReferenceException from Highlight"
       ],
       "answer": 0,
-      "explain": "A stack overflow ends the process immediately. The other three are ordinary exceptions and can be caught. So the guard against rings must be in the code up front."
+      "explain": "In .NET a stack overflow ends the process immediately, and no catch runs. The other three are ordinary exceptions and can be caught. So the guard against rings must be in the code up front."
     },
     {
       "t": "order",
@@ -371,10 +371,10 @@ public class ClashService
         "Call GetHashCode on the key",
         "Pick a drawer (bucket) by the hash",
         "Walk the entries of that drawer",
-        "Compare keys with Equals",
+        "For entries with the same hash, compare keys with Equals",
         "Return the found value"
       ],
-      "explain": "If equal keys have different GetHashCode values, step 2 leads to another drawer, and Equals is never reached."
+      "explain": "If equal keys have different GetHashCode values, step 2 leads to another drawer, and even if the drawer matches, the stored hash does not. Equals is never reached."
     },
     {
       "t": "blanks",
@@ -435,7 +435,7 @@ public class ClashService
         ],
         [
           "Recursion over a ring",
-          "The process dies with no exception"
+          "The process dies, catch does not help"
         ],
         [
           "Id without ModelId",
@@ -447,12 +447,12 @@ public class ClashService
       "t": "choice",
       "q": "What is the best way to redo ElementKey?",
       "options": [
-        "A readonly record struct with ModelId and ElementId",
+        "An immutable struct: readonly struct with IEquatable, GetHashCode and == (or a readonly record struct)",
         "Keep the class and write GetHashCode over the mutable fields",
         "Use a string of ModelId + ElementId concatenated on every call"
       ],
       "answer": 0,
-      "explain": "The compiler generates immutability, Equals, GetHashCode and IEquatable<T> itself, and a struct creates no garbage. A caveat: it needs C# 10; in older Unity versions write a readonly struct by hand.",
+      "explain": "A key must be immutable, with Equals and GetHashCode consistent; a struct with IEquatable<T> creates no garbage and is not boxed. In .NET with C# 10, a readonly record struct generates all of this, while in Unity (C# 9) you write such a struct by hand.",
       "wrong": {
         "1": "A hash over mutable fields loses entries after an edit.",
         "2": "Concatenating a string on every call creates garbage, and the key stays flimsy."

@@ -13,26 +13,26 @@ export default {
     {
       t: 'learn',
       title: "Equal, but not found",
-      body: "<p>The <code>ElementKey</code> class overrides <code>Equals</code> but forgot <code>GetHashCode</code>. By default a class hash depends on the <b>object's address</b>. Two different objects with the same content get different drawer numbers.</p>",
+      body: "<p>The <code>ElementKey</code> class overrides <code>Equals</code> but forgot <code>GetHashCode</code>. By default a class hash is tied to the <b>specific object</b>, not to its contents. Two different objects with identical fields get different numbers.</p>",
       code: `var a = new ElementKey { ModelId = "M1", ElementId = 7 };
 var b = new ElementKey { ModelId = "M1", ElementId = 7 };
 
 a.Equals(b);               // true
 _cache[a] = list;
 _cache.ContainsKey(b);     // false (almost always)`,
-      deep: "<p>The contract: if <code>a.Equals(b)</code>, the hashes must match. The reverse is not required (hash collisions are allowed). The compiler warns about this (CS0659), and that warning should not be silenced. For classes the default hash is built from object identity (<code>RuntimeHelpers.GetHashCode</code>), so it is \"almost always\" because two different drawers occasionally match by chance.</p>"
+      deep: "<p>The contract: if <code>a.Equals(b)</code>, the hashes must match. The reverse is not required (hash collisions are allowed). The compiler warns about this (CS0659), and that warning should not be silenced. For classes the default hash is built from object identity (<code>RuntimeHelpers.GetHashCode</code>), and it stays the same even when the garbage collector moves the object. \"Almost always\" because two such hashes occasionally match by chance. A matching bucket is not enough: <code>Dictionary</code> first compares the stored full hash and only then calls <code>Equals</code>.</p>"
     },
     {
       t: 'choice',
       q: "What does this do to GetClashesFor in the service?",
       options: ["The cache never hits: every call recomputes everything, and the cache grows", "An exception is thrown on first access", "The cache returns someone else's clashes"],
       answer: 0,
-      explain: "ContainsKey does not find the \"same\" key, so the query is recomputed and one more entry is added to the dictionary. Memory grows, speed is as if there were no cache.",
+      explain: "The caller creates a new key object every time, and ContainsKey does not find the \"same\" one. The query is recomputed and one more entry is added to the dictionary. Memory grows, speed is as if there were no cache.",
       wrong: { 1: "There is no exception: the dictionary just honestly says \"not here\".", 2: "No foreign data appears, you only lose the cache hit." }
     },
     {
       t: 'rig', rig: 'hunt',
-      task: "Find the problems with the key, the element identifier, the cache and the number comparison.",
+      task: "Find the problems with the dictionary key, the element identifier and the cache.",
       code: `public class ElementKey
 {
     public string ModelId;
@@ -53,20 +53,16 @@ public List<Clash> GetClashesFor(ElementKey key)
     if (!_cache.ContainsKey(key))
         _cache[key] = _clashes.Where(c => c.A.Key.Equals(key) || c.B.Key.Equals(key)).ToList();
     return _cache[key];
-}
-
-public bool IsOnLevel(Element e, float levelHeight) =>
-    e.Bounds.min.y == levelHeight;`,
+}`,
       bugs: [
         { lines: [0, 5, 6], title: "Equals without GetHashCode", why: "Equal keys land in different dictionary drawers. ContainsKey cannot find them, the cache keeps growing, and every call recomputes everything." },
-        { lines: [2, 3], title: "Mutable fields in a key", why: "If ElementId changes after insertion, the entry stays in its old drawer and gets \"lost\": it can be neither found nor removed." },
-        { lines: [12], title: "Id ignores ModelId", why: "Elements from different models with the same number are treated as one element. And if Key is null, you get a NullReferenceException." },
+        { lines: [2, 3], title: "Mutable fields in a key", why: "Once the hash depends on the fields (and it must), changing ElementId after insertion leaves the entry in its old drawer: it can be neither found nor removed. Public fields in a key invite exactly that." },
+        { lines: [12], title: "Id ignores ModelId", why: "Elements from different models with the same number are indistinguishable: the a.Id < b.Id check skips their pair, so a clash between them is never found. And if Key is null, you get a NullReferenceException." },
         { lines: [17, 19], title: "Double dictionary lookup", why: "ContainsKey, then the indexer: two lookups instead of one. On a hot path that is wasted work, fixed with TryGetValue." },
-        { lines: [18], title: "Cache that is never reset", why: "After clashes are added, removed or imported, the cached lists go stale, and the cache's internal mutable list is handed out to callers." },
-        { lines: [23], title: "float compared with ==", why: "Floating-point numbers are almost never exactly equal: 3.0f and 2.9999998f differ. An element that is \"on the level\" will be treated as off the level." }
+        { lines: [18], title: "Cache that is never reset", why: "After clashes are added, removed or imported, the cached lists go stale, and the cache's internal mutable list is handed out to callers." }
       ],
-      goal: { min: 5, maxFalse: 2 },
-      solve: ['flag:0', 'flag:2', 'flag:12', 'flag:17', 'flag:18', 'flag:23', 'check']
+      goal: { min: 4, maxFalse: 2 },
+      solve: ['flag:0', 'flag:2', 'flag:12', 'flag:17', 'flag:18', 'check']
     },
     {
       t: 'blanks',
@@ -75,7 +71,7 @@ public bool IsOnLevel(Element e, float levelHeight) =>
     HashCode.___(ModelId, ElementId);`,
       tiles: ['GetHashCode', 'Combine', 'ToString', 'Equals'],
       answer: ['GetHashCode', 'Combine'],
-      explain: "<code>HashCode.Combine</code> mixes the field values into one hash. What matters is that the same fields take part as in <code>Equals</code>."
+      explain: "<code>HashCode.Combine</code> mixes the field values into one hash. What matters is that the same fields take part as in <code>Equals</code>. In Unity, <code>System.HashCode</code> is available from 2021.2 (the .NET Standard 2.1 profile). On older versions, combine by hand: <code>unchecked((ModelId?.GetHashCode() ?? 0) * 397 ^ ElementId)</code>."
     },
     {
       t: 'choice',
@@ -109,12 +105,13 @@ int chunk = id % 8;`,
     {
       t: 'learn',
       title: "Fractions are inexact",
-      body: "<p>A computer stores <code>float</code> in binary, and many numbers (even a simple 0.1) cannot be written there exactly. After a few calculations, \"3\" turns into <code>2.9999998</code>. A <code>==</code> comparison will honestly say \"not equal\".</p><p>You need a tolerance: close enough means equal.</p>",
-      code: `float h = 0.1f * 30;
-h == 3.0f;                       // may be false
+      body: "<p>A computer stores <code>float</code> in binary, and many numbers (even a simple 0.1) cannot be written there exactly. Add 0.1 thirty times and you get <code>2.9999993</code>, not 3. A <code>==</code> comparison will honestly say \"not equal\".</p><p>You need a tolerance: close enough means equal.</p>",
+      code: `float h = 0f;
+for (int i = 0; i < 30; i++) h += 0.1f;   // 2.9999993
+h == 3.0f;                       // false
 Mathf.Approximately(h, 3.0f);    // true
 Math.Abs(h - 3.0f) < 0.001f;     // tolerance in meters`,
-      deep: "<p>Choose the tolerance for the problem at hand. <code>Mathf.Approximately</code> uses a relative error of about 1e-6, which is a poor fit for values near zero or at a large scale. For heights in meters, an explicit tolerance is more common (for example, 1 mm). Also, <code>NaN == NaN</code> is false, so check for NaN separately.</p>"
+      deep: "<p>Choose the tolerance for the problem at hand. <code>Mathf.Approximately</code> accepts a difference below 1e-6 of the larger magnitude (plus a tiny absolute floor of <code>Mathf.Epsilon * 8</code>). That is only a few steps of float precision: after a long chain of calculations the error can be larger, and near zero the check becomes almost exact. For heights in meters, an explicit tolerance is safer (for example, 1 mm). Also, <code>NaN == NaN</code> is false, so check for NaN separately.</p>"
     },
     {
       t: 'multi',
@@ -137,8 +134,8 @@ Math.Abs(h - 3.0f) < 0.001f;     // tolerance in meters`,
     {
       t: 'learn',
       title: "For seniors: a better key",
-      body: "<p>The simplest cure is <code>readonly record struct ElementKey(string ModelId, int ElementId)</code>. The compiler generates <code>Equals</code>, <code>GetHashCode</code>, <code>IEquatable&lt;T&gt;</code> and the operators, the fields become immutable, and a struct creates no garbage.</p>",
-      deep: "<p>A caveat for Unity: <code>record</code> needs C# 9, and <code>readonly record struct</code> needs C# 10. On Unity versions with an older language level, write the struct by hand: <code>readonly struct</code> + <code>IEquatable&lt;ElementKey&gt;</code> + <code>GetHashCode</code> + <code>==</code>/<code>!=</code> operators. If a struct implements neither <code>IEquatable&lt;T&gt;</code> nor an <code>Equals</code> override, the dictionary falls back to <code>ValueType.Equals</code>, which is slower and boxes.</p>"
+      body: "<p>In modern .NET the shortest cure is <code>readonly record struct ElementKey(string ModelId, int ElementId)</code>. The compiler generates <code>Equals</code>, <code>GetHashCode</code>, <code>IEquatable&lt;T&gt;</code> and the <code>==</code>/<code>!=</code> operators, the properties become immutable, and the struct creates no garbage as a key.</p>",
+      deep: "<p>A caveat for Unity: <code>record</code> needs C# 9, and <code>record struct</code> needs C# 10. Unity from 2021.2 through Unity 6 officially supports C# 9 (check your project's language version), so <code>record struct</code> is not available there, and a <code>record</code> class usually needs an <code>IsExternalInit</code> stub. The safe Unity option is by hand: <code>readonly struct</code> + <code>IEquatable&lt;ElementKey&gt;</code> + <code>GetHashCode</code> + <code>==</code>/<code>!=</code> operators. If a struct implements neither <code>IEquatable&lt;T&gt;</code> nor an <code>Equals</code> override, the dictionary uses <code>ValueType.Equals</code>: boxing, plus reflection when there are reference fields. And <code>ValueType.GetHashCode</code> may then rely on the first field only, so every key of one model gets the same hash.</p>"
     }
   ]
 };
