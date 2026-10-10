@@ -1,5 +1,5 @@
 /** Строки интерфейса Bathys на двух языках. t('key', { n: 3 }) подставляет {n}. */
-import { getLang } from './i18n.js?v=202610100731';
+import { getLang } from './i18n.js?v=202610100741';
 
 const S = {
   'brand.tag': { ru: 'Интерактивные курсы', en: 'Interactive courses' },

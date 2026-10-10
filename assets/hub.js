@@ -1,8 +1,8 @@
 /** Полка: язык и VHS-эффекты. */
-import { bootVhs } from './vhs.js?v=202610100731';
-import { initI18n } from './i18n.js?v=202610100731';
-import { COMMON } from './i18n-common.js?v=202610100731';
-import { HUB } from './i18n-hub.js?v=202610100731';
+import { bootVhs } from './vhs.js?v=202610100741';
+import { initI18n } from './i18n.js?v=202610100741';
+import { COMMON } from './i18n-common.js?v=202610100741';
+import { HUB } from './i18n-hub.js?v=202610100741';
 
 initI18n({ ...COMMON, ...HUB });
 bootVhs();
