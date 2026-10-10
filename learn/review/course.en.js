@@ -20,7 +20,7 @@ export default {
   units: [
     {
       id: 'u1',
-      title: 'Task 1: ClashService',
+      title: 'Task 2: ClashService',
       blurb: 'A closure in a loop, async void, dictionary keys, collections, recursion, exceptions and Unity’s “fake null” — a dozen bugs in one clash-detection service.',
       lessons: [u1l1, u1l2, u1l3, u1l4, u1boss]
     },

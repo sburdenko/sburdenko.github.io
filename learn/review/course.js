@@ -20,7 +20,7 @@ export default {
   units: [
     {
       id: 'u1',
-      title: 'Задача 1: ClashService',
+      title: 'Задача 2: ClashService',
       blurb: 'Замыкание в цикле, async void, ключи словаря, коллекции, рекурсия, исключения и «ненастоящий null» Unity — десяток багов в одном сервисе поиска коллизий.',
       lessons: [u1l1, u1l2, u1l3, u1l4, u1boss]
     },
