@@ -41,7 +41,7 @@ export default {
       q: 'A window subscribed to the static event App.ThemeChanged and closed without unsubscribing. What happens?',
       options: ['The window stays in memory: the event holds a reference to it', 'The garbage collector collects the window', 'The event unsubscribes the closed window by itself'],
       answer: 0,
-      explain: 'More on this in ".NET from the inside", in the "Garbage collection and resources" unit.'
+      explain: 'More on this in ".NET under the hood", in the "Garbage collection and resources" unit.'
     },
     {
       t: 'blanks',

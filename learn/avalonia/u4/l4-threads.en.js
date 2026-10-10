@@ -66,7 +66,7 @@ export default {
       q: 'What is true? Select all that apply.',
       options: ['After await in a command, the code continues on the UI thread', 'Task.Run moves heavy work off the UI thread', '.Result on the UI thread can hang the app', 'Controls can be touched from any thread'],
       answer: [0, 1, 2],
-      explain: 'The .Result deadlock is covered in detail in the "Async/await all the way down" course.'
+      explain: 'The .Result deadlock is covered in detail in the "Async/await in depth" course.'
     }
   ]
 };

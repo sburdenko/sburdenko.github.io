@@ -1,13 +1,13 @@
 /** CH.02 Factory, CH.03 Object Pool, CH.04 Singleton. */
-import { $, fitCanvas, fmt, fmtI } from '../assets/vhs.js?v=202610092124';
-import { t } from '../assets/i18n.js?v=202610092124';
-import { bindSeg, isPressed, setPressed, togglePressed, tile, visibleLoop } from '../assets/lab.js?v=202610092124';
-import { renderCode } from '../assets/code.js?v=202610092124';
-import { SNIPPETS } from './snippets.js?v=202610092124';
+import { $, fitCanvas, fmt, fmtI } from '../assets/vhs.js?v=202610100731';
+import { t } from '../assets/i18n.js?v=202610100731';
+import { bindSeg, isPressed, setPressed, togglePressed, tile, visibleLoop } from '../assets/lab.js?v=202610100731';
+import { renderCode } from '../assets/code.js?v=202610100731';
+import { SNIPPETS } from './snippets.js?v=202610100731';
 import {
   factoryDesignCost, spawnTrace, createPoolState, poolStep, releaseTwice,
   bootSingleton, loadScene, addScore, currentScore,
-} from './model-creation.js?v=202610092124';
+} from './model-creation.js?v=202610100731';
 
 const COLORS = { A: '#ff3ea5', B: '#26e3ea', C: '#ffd23f' };
 
