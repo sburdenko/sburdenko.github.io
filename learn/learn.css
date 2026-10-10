@@ -56,7 +56,8 @@ a.course:hover .badge::before,a.course:hover .badge::after,a.course:focus-visibl
   92%{transform:translate(1px,0) skewX(-3deg);filter:hue-rotate(-30deg) saturate(1.6)}
   94%{transform:none;filter:brightness(1.4)}}
 .course-head{display:flex;gap:16px;align-items:center;min-width:0}
-.course-head h1{min-width:0;overflow-wrap:anywhere}
+.course-head h1{min-width:0;overflow-wrap:break-word}
+@media (max-width:480px){.course-head h1{font-size:clamp(26px,8.5vw,40px)}}
 @media (max-width:560px){.badge{--s:56px;font-size:34px}.badge[data-len="3"]{font-size:29px}.badge[data-len="4"]{font-size:24px}.badge[data-len="5"]{font-size:20px}
   .badge.big{--s:64px;font-size:34px}.badge.big[data-len="4"]{font-size:25px}.badge.big[data-len="5"]{font-size:21px}}
 .course h2{font-family:var(--f-disp);font-weight:700;font-size:21px;line-height:1.2;text-shadow:none}
@@ -692,3 +693,7 @@ pre.code.full{max-height:none}
 .lesson pre{max-width:100%;overflow-x:auto}
 .lesson .rig{grid-template-columns:minmax(0,1fr)}
 .lesson .btn{white-space:normal;max-width:100%;text-align:center}
+/* то же для каталога и страниц курса: заголовки с длинными именами не раздвигают страницу */
+:where(h1,h2,h3,h4){overflow-wrap:break-word}
+:where(p,li,dd,dt,label,summary,a,b,span){overflow-wrap:anywhere}
+:where(.view,.course-head,.unit,.step,.course,.cgroup) *{min-width:0}

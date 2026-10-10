@@ -1,23 +1,23 @@
 /** Курс «Code review: find the bugs»: ревью реального кода — английская версия. */
-import u0l1 from './u0/l1-mutable-struct.en.js?v=202610101413';
-import u0l2 from './u0/l2-singleton.en.js?v=202610101413';
-import u0l3 from './u0/l3-loading.en.js?v=202610101413';
-import u0l4 from './u0/l4-search-events.en.js?v=202610101413';
-import u0boss from './u0/boss.en.js?v=202610101413';
-import u1l1 from './u1/l1-closure-async.en.js?v=202610101413';
-import u1l2 from './u1/l2-equality.en.js?v=202610101413';
-import u1l3 from './u1/l3-collections.en.js?v=202610101413';
-import u1l4 from './u1/l4-failures.en.js?v=202610101413';
-import u1boss from './u1/boss.en.js?v=202610101413';
-import u2l1 from './u2/l1-blocking.en.js?v=202610101413';
-import u2l2 from './u2/l2-shared-state.en.js?v=202610101413';
-import u2l3 from './u2/l3-background.en.js?v=202610101413';
-import u2boss from './u2/boss.en.js?v=202610101413';
-import u3l1 from './u3/l1-per-frame.en.js?v=202610101413';
-import u3l2 from './u3/l2-materials.en.js?v=202610101413';
-import u3l3 from './u3/l3-lifecycle.en.js?v=202610101413';
-import u3l4 from './u3/l4-cache-sort.en.js?v=202610101413';
-import u3boss from './u3/boss.en.js?v=202610101413';
+import u0l1 from './u0/l1-mutable-struct.en.js?v=202610101649';
+import u0l2 from './u0/l2-singleton.en.js?v=202610101649';
+import u0l3 from './u0/l3-loading.en.js?v=202610101649';
+import u0l4 from './u0/l4-search-events.en.js?v=202610101649';
+import u0boss from './u0/boss.en.js?v=202610101649';
+import u1l1 from './u1/l1-closure-async.en.js?v=202610101649';
+import u1l2 from './u1/l2-equality.en.js?v=202610101649';
+import u1l3 from './u1/l3-collections.en.js?v=202610101649';
+import u1l4 from './u1/l4-failures.en.js?v=202610101649';
+import u1boss from './u1/boss.en.js?v=202610101649';
+import u2l1 from './u2/l1-blocking.en.js?v=202610101649';
+import u2l2 from './u2/l2-shared-state.en.js?v=202610101649';
+import u2l3 from './u2/l3-background.en.js?v=202610101649';
+import u2boss from './u2/boss.en.js?v=202610101649';
+import u3l1 from './u3/l1-per-frame.en.js?v=202610101649';
+import u3l2 from './u3/l2-materials.en.js?v=202610101649';
+import u3l3 from './u3/l3-lifecycle.en.js?v=202610101649';
+import u3l4 from './u3/l4-cache-sort.en.js?v=202610101649';
+import u3boss from './u3/boss.en.js?v=202610101649';
 
 export default {
   id: 'review',
