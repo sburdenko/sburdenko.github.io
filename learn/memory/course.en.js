@@ -1,8 +1,12 @@
 /** Course "Memory in .NET": units and lessons (English version). Finished units have lessons; the rest are planned and marked "soon". */
-import u1l1 from './u1/l1-virtual.en.js?v=202610121129';
-import u1l2 from './u1/l2-reserve-commit.en.js?v=202610121129';
-import u1l3 from './u1/l3-stack-cache.en.js?v=202610121129';
-import u1boss from './u1/boss.en.js?v=202610121129';
+import u1l1 from './u1/l1-virtual.en.js?v=202610121133';
+import u1l2 from './u1/l2-reserve-commit.en.js?v=202610121133';
+import u1l3 from './u1/l3-stack-cache.en.js?v=202610121133';
+import u1boss from './u1/boss.en.js?v=202610121133';
+import u2l1 from './u2/l1-numbers.en.js?v=202610121133';
+import u2l2 from './u2/l2-tools.en.js?v=202610121133';
+import u2l3 from './u2/l3-leak.en.js?v=202610121133';
+import u2boss from './u2/boss.en.js?v=202610121133';
 
 export default {
   id: 'memory',
@@ -15,7 +19,13 @@ export default {
       source: { title: 'Microsoft Learn: Virtual address spaces', url: 'https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/virtual-address-spaces' },
       lessons: [u1l1, u1l2, u1l3, u1boss]
     },
-    { id: 'u2', title: 'How to measure', soon: true, blurb: 'Working set, private bytes and the managed heap are different numbers. dotnet-counters, dotnet-gcdump, dotnet-trace and PerfView; how to read a dump and hunt down a leak.' },
+    {
+      id: 'u2',
+      title: 'How to measure',
+      blurb: 'Working set, private bytes, commit and the managed heap are different numbers. What Task Manager, top and the GC APIs show; dotnet-counters, dotnet-gcdump, dotnet-trace, dotnet-dump and PerfView; how to find a leak with two snapshots and the path to a root.',
+      source: { title: 'Microsoft Learn: Debug a memory leak in .NET', url: 'https://learn.microsoft.com/en-us/dotnet/core/diagnostics/debug-memory-leak' },
+      lessons: [u2l1, u2l2, u2l3, u2boss]
+    },
     { id: 'u3', title: 'Inside the heap', soon: true, blurb: 'The object header and the type pointer, field layout and alignment, the SOH, LOH and POH, regions in .NET 7+ and frozen segments.' },
     { id: 'u4', title: 'Allocation', soon: true, blurb: 'Pointer bumping and the allocation context, the slow path and the LOH, hidden allocations in closures, boxing, LINQ and strings, ArrayPool and stackalloc.' },
     { id: 'u5', title: 'How a collection works', soon: true, blurb: 'When the GC kicks in, suspending threads and safepoints, marking from roots and the card table, planning, sweep and compact.' },

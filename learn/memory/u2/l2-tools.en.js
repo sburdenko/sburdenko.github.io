@@ -1,0 +1,115 @@
+/** Memory in .NET, unit 2, lesson 2: dotnet-counters, dotnet-gcdump, dotnet-trace, dotnet-dump and PerfView. */
+export default {
+  id: 'mem.u2.l2',
+  title: 'The tools',
+  sub: 'Counters, heap snapshots, traces and dumps',
+  minutes: 9,
+  cards: [
+    {
+      t: 'learn',
+      title: 'Five tools, five questions',
+      body: '<ul><li><b>dotnet-counters</b> — what is happening right now: heap size, collections, pauses, allocation rate;</li><li><b>dotnet-gcdump</b> — which types occupy the heap and who holds them;</li><li><b>dotnet-trace</b> — what happened over a span of time: every collection, who allocates;</li><li><b>dotnet-dump</b> — the full memory of the process: field values, threads, everything at once;</li><li><b>PerfView</b> — an analyzer for Windows: opens traces and snapshots, compares them.</li></ul><p>The first four are cross-platform .NET utilities. They install as global tools: <code>dotnet tool install --global dotnet-counters</code>. With the .NET 10 SDK you can also run them without installing: <code>dnx dotnet-counters</code>.</p>',
+      code: 'dotnet tool install --global dotnet-counters\ndotnet-counters ps        # which .NET processes are visible',
+      deep: 'All four talk to the runtime through the diagnostic port: a named pipe on Windows, a Unix socket in the temp folder on Linux and macOS. Hence the common problems: the tool must run as the same user as the process (or as root), with the same TMPDIR, and for a container you either install the tool inside or expose the socket and pass --diagnostic-port. Back in .NET Framework none of this existed: there were Windows performance counters, ETW and WinDbg with SOS.'
+    },
+    {
+      t: 'learn',
+      title: 'dotnet-counters: the heap’s pulse',
+      body: '<p><code>dotnet-counters monitor</code> attaches to a process and refreshes a table every second. <code>collect</code> writes the same to CSV or JSON.</p><p>Since .NET 9 the runtime publishes the <code>System.Runtime</code> meter with new names. For memory, watch:</p><ul><li><code>dotnet.gc.last_collection.heap.size</code> — the heap by generation after the last collection;</li><li><code>dotnet.gc.last_collection.heap.fragmentation.size</code> — the gaps;</li><li><code>dotnet.gc.last_collection.memory.committed_size</code> — the GC commit;</li><li><code>dotnet.gc.heap.total_allocated</code> — total allocated; its growth gives the allocation rate;</li><li><code>dotnet.gc.collections</code> and <code>dotnet.gc.pause.time</code> — collections and pauses;</li><li><code>dotnet.process.memory.working_set</code>.</li></ul>',
+      code: 'dotnet-counters monitor -n Shop --counters System.Runtime[dotnet.gc.last_collection.heap.size,dotnet.gc.heap.total_allocated]',
+      deep: 'If the app runs on .NET 8 or older, there is no System.Runtime meter, and the tool shows the old EventCounters: gc-heap-size, gen-0-size, gen-2-size, loh-size, poh-size, alloc-rate, time-in-gc, gc-fragmentation, gc-committed (since .NET 6), working-set. Without --counters it shows all of System.Runtime by default. The same metrics can be exported to OpenTelemetry and viewed on a dashboard — counters is for a quick look without any setup.'
+    },
+    {
+      t: 'match',
+      q: 'Match the question with the System.Runtime counter in .NET 9+',
+      pairs: [
+        ['How many bytes per second the code allocates', 'dotnet.gc.heap.total_allocated'],
+        ['Whether generation 2 is growing', 'dotnet.gc.last_collection.heap.size'],
+        ['How long threads stood still in collections', 'dotnet.gc.pause.time'],
+        ['Whether the heap has many gaps', 'dotnet.gc.last_collection.heap.fragmentation.size'],
+        ['How much of the process is in RAM now', 'dotnet.process.memory.working_set']
+      ]
+    },
+    {
+      t: 'blanks',
+      q: 'Save the counters of process 1902 to a table so you can plot them later',
+      code: 'dotnet-counters ___ -p 1902 --refresh-interval 5 --format ___ -o gc.csv',
+      tiles: ['collect', 'monitor', 'csv', 'nettrace', 'speedscope'],
+      answer: ['collect', 'csv'],
+      explain: 'monitor only draws a table in the terminal; collect writes to a file. The formats of collect are csv and json; nettrace and speedscope are dotnet-trace formats.'
+    },
+    {
+      t: 'learn',
+      title: 'dotnet-gcdump: the heap graph without values',
+      body: '<p><code>dotnet-gcdump collect -p 1902</code> asks the runtime to perform a <b>full generation 2 collection</b> and, during it, to emit events about every object and the references between them. The tool builds a graph from them and writes a <code>.gcdump</code> file.</p><p>The file holds types, sizes, references and roots. <b>No field values</b>: no strings, no numbers. So the file is small, safe to hand over, and good for the question "what takes up memory and who holds it".</p><p>The price: a full blocking collection, a long pause on a large heap. You open a <code>.gcdump</code> in Visual Studio or PerfView; on Linux you can get a type table: <code>dotnet-gcdump report file.gcdump</code>.</p>',
+      deep: 'The events go through a buffer inside the process itself, which can grow up to 256 MB — keep that in mind in a container with a tight limit. On a very large heap events can be dropped and the snapshot comes out incomplete; take a full dump then. By default collect waits 30 seconds (-t changes the timeout). Visual Studio can open two .gcdump files and compare them.'
+    },
+    {
+      t: 'choice',
+      q: 'A cache holds thousands of strings. You need to see which URLs exactly are in them. What do you capture?',
+      options: [
+        'A process dump with dotnet-dump',
+        'A heap snapshot with dotnet-gcdump',
+        'Counters with dotnet-counters',
+        'A trace with the gc-collect profile'
+      ],
+      answer: 0,
+      explain: 'Object contents exist only in a full memory dump: dumpheap finds the strings, dumpobj shows their text. A .gcdump holds only types, sizes and references, and counters and gc-collect know nothing about individual objects.',
+      wrong: { 1: 'A heap snapshot shows how many strings there are and who holds them, but not their text: a .gcdump has no field values.' }
+    },
+    {
+      t: 'learn',
+      title: 'dotnet-dump: all of memory, plus SOS',
+      body: '<p><code>dotnet-dump collect -p 1902</code> writes a dump. <code>--type</code> sets the kind: <code>Full</code> (the default, all memory including module images), <code>Heap</code> (all memory except mapped images), <code>Mini</code> and <code>Triage</code> (stacks and modules, no heap). Memory analysis needs Full or Heap. The file is as big as the process’s memory and contains everything: passwords, tokens, customer data.</p><p><code>dotnet-dump analyze file</code> opens a console with SOS commands:</p><ul><li><code>dumpheap -stat</code> — types by total size, the largest at the bottom;</li><li><code>dumpheap -mt &lt;MT&gt;</code> — addresses of objects of one type;</li><li><code>dumpobj &lt;address&gt;</code> — an object’s fields;</li><li><code>gcroot &lt;address&gt;</code> — the path from a root to the object;</li><li><code>eeheap -gc</code>, <code>finalizequeue</code>, <code>gchandles</code> — heap segments, the finalization queue, handles.</li></ul>',
+      deep: 'You can also get a dump at the moment of a crash, without the tool: the environment variables DOTNET_DbgEnableMiniDump=1 and DOTNET_DbgMiniDumpType (1 — Mini, 2 — Heap, 3 — Triage, 4 — Full). In a container collect needs the ptrace capability, and taking a full dump can temporarily raise memory use — with a hard limit the container risks being killed. Back in .NET Framework the same was done with WinDbg and the SOS extension; dotnet-dump has the same commands, without a native debugger.'
+    },
+    {
+      t: 'order',
+      q: 'Put the steps of a dump analysis in order',
+      items: [
+        'dotnet-dump collect -p 1902 --type Full',
+        'dotnet-dump analyze core_20261012_101500',
+        'dumpheap -stat',
+        'dumpheap -mt 00007f6c20a67498',
+        'gcroot 00007f6ad09421f8'
+      ],
+      explain: 'First take the dump and open it. Then statistics by type — find the suspicious type and its MT. By MT, list the instances and take an address from it. And for that address, the path to a root.'
+    },
+    {
+      t: 'learn',
+      title: 'dotnet-trace: who allocates',
+      body: '<p>A heap snapshot shows what <b>survived</b>. If the problem is that the code <b>allocates a lot</b> and the GC runs nonstop, you need a trace.</p><p><code>dotnet-trace collect -p 1902 --profile gc-verbose</code> records the events of every collection (reason, generation, pause) and a sample of allocations: roughly every 100 KB of allocated memory, an AllocationTick event with the object type and the call stack. Aggregating them shows which methods allocate the most. The <code>gc-collect</code> profile records only collections, with minimal overhead.</p><p>The result is a <code>.nettrace</code> file. You open it in PerfView or Visual Studio.</p>',
+      code: 'dotnet-trace collect -p 1902 --profile gc-verbose --duration 00:00:00:30',
+      deep: 'Profiles have changed between tool versions: in recent dotnet-trace, running without --profile enables dotnet-common and dotnet-sampled-thread-time, and collect no longer has the old cpu-sampling profile. The profiles of your version: dotnet-trace list-profiles. The speedscope format is fine for CPU stacks, but GC events need nettrace. AllocationTick is a sample, not every allocation: rare small allocations may not make it in.'
+    },
+    {
+      t: 'choice',
+      q: 'Counters show 2 GB of allocations per second and 40 gen0 collections per second, but the heap does not grow. What do you capture to find the culprit?',
+      options: [
+        'A dotnet-trace trace with the gc-verbose profile',
+        'Two dotnet-gcdump snapshots, then compare them',
+        'A dotnet-dump dump of type Mini',
+        'dotnet-counters with a 1-second interval'
+      ],
+      answer: 0,
+      explain: 'The heap does not grow, so the objects die quickly and snapshots barely contain them. The answer to "who allocates" comes from allocation stacks in a trace. A Mini dump has no heap, and counters know nothing about stacks.'
+    },
+    {
+      t: 'learn',
+      title: 'PerfView',
+      body: '<p>PerfView is Microsoft’s free analyzer for Windows. It collects traces through ETW — with kernel events and every process on the machine — and opens <code>.nettrace</code> and <code>.gcdump</code> files captured on Linux.</p><p>For memory it has three key things:</p><ul><li><b>GCStats</b> — a table of every collection in a trace: generation, reason, pause, heap size before and after;</li><li><b>a heap snapshot</b> (Memory → Take Heap Snapshot) and a view of the paths to roots;</li><li><b>Diff</b> — comparing two snapshots or two traces against a baseline.</li></ul>',
+      deep: 'On a large heap PerfView by default builds the snapshot from a sample of objects and scales the numbers, so its sizes are approximate — a full dump gives exact figures. Traces and snapshots captured on Linux are analyzed by moving the file to a Windows machine. Back in the .NET Framework era PerfView and WinDbg were the main tools; today PerfView is still the most detailed viewer of GC events.'
+    },
+    {
+      t: 'match',
+      q: 'Match the task with the tool',
+      pairs: [
+        ['A quick look at whether the heap grows', 'dotnet-counters'],
+        ['Which types hold memory, a file without data', 'dotnet-gcdump'],
+        ['Which methods allocate the most', 'dotnet-trace'],
+        ['Field values at the moment of a failure', 'dotnet-dump'],
+        ['A table of every collection with pauses on Windows', 'PerfView']
+      ]
+    }
+  ]
+};
