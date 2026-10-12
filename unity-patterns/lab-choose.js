@@ -1,8 +1,8 @@
 /** CH.12 decision deck and CH.13 interview drill. */
-import { $ } from '../assets/vhs.js?v=202610121138';
-import { t } from '../assets/i18n.js?v=202610121138';
-import { bindSeg } from '../assets/lab.js?v=202610121138';
-import { PRESSURES, recommendPattern, PATTERN_CHAPTERS } from './model-choose.js?v=202610121138';
+import { $ } from '../assets/vhs.js?v=202610121139';
+import { t } from '../assets/i18n.js?v=202610121139';
+import { bindSeg } from '../assets/lab.js?v=202610121139';
+import { PRESSURES, recommendPattern, PATTERN_CHAPTERS } from './model-choose.js?v=202610121139';
 
 export function initChooser() {
   let selected = 'creation';

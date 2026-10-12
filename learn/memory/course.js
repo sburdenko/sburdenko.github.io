@@ -1,25 +1,25 @@
 /** Курс «Память в .NET»: разделы и уроки. Готовые разделы — с уроками, остальные — план со статусом «скоро». */
-import u1l1 from './u1/l1-virtual.js?v=202610121138';
-import u1l2 from './u1/l2-reserve-commit.js?v=202610121138';
-import u1l3 from './u1/l3-stack-cache.js?v=202610121138';
-import u1boss from './u1/boss.js?v=202610121138';
-import u2l1 from './u2/l1-numbers.js?v=202610121138';
-import u2l2 from './u2/l2-tools.js?v=202610121138';
-import u2l3 from './u2/l3-leak.js?v=202610121138';
-import u2boss from './u2/boss.js?v=202610121138';
-import u6l1 from './u6/l1-workstation-server.js?v=202610121138';
-import u6l2 from './u6/l2-background-latency.js?v=202610121138';
-import u6l3 from './u6/l3-datas-config.js?v=202610121138';
-import u6boss from './u6/boss.js?v=202610121138';
-import u7l1 from './u7/l1-finalization.js?v=202610121138';
-import u7l2 from './u7/l2-resurrection.js?v=202610121138';
-import u7l3 from './u7/l3-weak-leaks.js?v=202610121138';
-import u7boss from './u7/boss.js?v=202610121138';
-import u4l1 from './u4/l1-fast-path.js?v=202610121138';
-import u4l2 from './u4/l2-slow-path.js?v=202610121138';
-import u4l3 from './u4/l3-hidden.js?v=202610121138';
-import u4l4 from './u4/l4-pool-measure.js?v=202610121138';
-import u4boss from './u4/boss.js?v=202610121138';
+import u1l1 from './u1/l1-virtual.js?v=202610121139';
+import u1l2 from './u1/l2-reserve-commit.js?v=202610121139';
+import u1l3 from './u1/l3-stack-cache.js?v=202610121139';
+import u1boss from './u1/boss.js?v=202610121139';
+import u2l1 from './u2/l1-numbers.js?v=202610121139';
+import u2l2 from './u2/l2-tools.js?v=202610121139';
+import u2l3 from './u2/l3-leak.js?v=202610121139';
+import u2boss from './u2/boss.js?v=202610121139';
+import u6l1 from './u6/l1-workstation-server.js?v=202610121139';
+import u6l2 from './u6/l2-background-latency.js?v=202610121139';
+import u6l3 from './u6/l3-datas-config.js?v=202610121139';
+import u6boss from './u6/boss.js?v=202610121139';
+import u7l1 from './u7/l1-finalization.js?v=202610121139';
+import u7l2 from './u7/l2-resurrection.js?v=202610121139';
+import u7l3 from './u7/l3-weak-leaks.js?v=202610121139';
+import u7boss from './u7/boss.js?v=202610121139';
+import u4l1 from './u4/l1-fast-path.js?v=202610121139';
+import u4l2 from './u4/l2-slow-path.js?v=202610121139';
+import u4l3 from './u4/l3-hidden.js?v=202610121139';
+import u4l4 from './u4/l4-pool-measure.js?v=202610121139';
+import u4boss from './u4/boss.js?v=202610121139';
 
 export default {
   id: 'memory',

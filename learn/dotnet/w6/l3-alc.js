@@ -1,0 +1,103 @@
+/** .NET изнутри, раздел «Загрузка и хостинг», урок 3: AppDomain тогда, AssemblyLoadContext сейчас — плагины и изоляция зависимостей. */
+export default {
+  id: 'dotnet.w6.l3',
+  title: 'AssemblyLoadContext и плагины',
+  sub: 'AppDomain тогда, контексты загрузки сейчас',
+  minutes: 10,
+  cards: [
+    {
+      t: 'learn',
+      title: 'Тогда: AppDomain — процесс внутри процесса',
+      body: '<p>В .NET Framework один процесс мог держать несколько <b>доменов приложения</b> (AppDomain). У каждого свои загруженные сборки и свои статические поля. Вызов в другой домен шёл через remoting: объект либо сериализовался, либо наследовал <code>MarshalByRefObject</code> и вызывался через прокси. Это было медленно.</p><p>Зато <code>AppDomain.Unload</code> выгружал домен целиком и принудительно: потоки в нём прерывались, сборки исчезали. Так IIS держал несколько сайтов в одном процессе и перезапускал их по одному.</p><p>Сейчас: в .NET (Core) домен <b>один</b>. <code>AppDomain.CurrentDomain</code> остался ради событий — <code>UnhandledException</code>, <code>ProcessExit</code>, <code>AssemblyResolve</code>, — а создать новый домен нельзя.</p>',
+      deep: 'Почему отказались: изоляция доменов стоила дорого в реализации, а настоящей границей безопасности не была — код с полным доверием мог выйти за пределы домена. Рекомендация Microsoft при переносе: для изоляции — отдельный процесс или контейнер, для загрузки и выгрузки кода — AssemblyLoadContext. Вместе с доменами ушли remoting и песочница Code Access Security.'
+    },
+    {
+      t: 'choice',
+      q: 'Старый код хоста плагинов переносят на .NET 8. Что сделает эта строка?',
+      code: 'AppDomain sandbox = AppDomain.CreateDomain("plugins");',
+      options: ['Бросит PlatformNotSupportedException во время работы', 'Не скомпилируется: метода нет', 'Создаст новый домен, как в .NET Framework', 'Вернёт текущий домен'],
+      answer: 0,
+      explain: 'Метод оставлен в API ради совместимости исходников, поэтому код компилируется. Но при вызове он бросает PlatformNotSupportedException: второй домен в современном .NET создать нельзя.',
+      wrong: { 1: 'Класс AppDomain и метод CreateDomain в API есть — иначе перенос старого кода ломался бы ещё при сборке.' }
+    },
+    {
+      t: 'learn',
+      title: 'Сейчас: AssemblyLoadContext',
+      body: '<p><b>AssemblyLoadContext</b> (ALC) — это словарь «простое имя сборки → загруженная сборка» плюс правила, где искать недостающие. Главное правило: в одном контексте у имени <b>одна</b> версия. Если сборка уже загружена, запрос другой версии пройдёт, только если загруженная не ниже запрошенной.</p><p><code>AssemblyLoadContext.Default</code> создаётся при старте и грузит из TPA — списка, который собрал hostpolicy. Выгрузить его нельзя, переопределить поиск можно только через события.</p><p>Свой контекст — новый словарь. В нём можно загрузить Newtonsoft.Json 12, пока хост работает с версией 13.</p>',
+      deep: 'Изоляция здесь только по именам: контексты делят одну кучу, один GC, одни потоки. Тип, загруженный в два контекста, — это два разных типа со своими статическими полями и своими MethodTable. Узнать контекст сборки: AssemblyLoadContext.GetLoadContext(assembly); все контексты процесса: AssemblyLoadContext.All.'
+    },
+    {
+      t: 'multi',
+      q: 'Что даёт отдельный AssemblyLoadContext? Отметь все.',
+      options: ['Две версии одной библиотеки в одном процессе', 'Свои статические поля у копии типа, загруженной в этот контекст', 'Защиту памяти: плагин не испортит объекты хоста', 'Выгрузку сборок, если контекст создан collectible', 'Отдельную кучу и свой сборщик мусора'],
+      answer: [0, 1, 3],
+      explain: 'Контекст изолирует имена, а не память. Куча, GC и потоки общие, и код плагина может сделать с объектами хоста всё, что разрешают ссылки. Нужна настоящая изоляция — запускай плагин в отдельном процессе.'
+    },
+    {
+      t: 'learn',
+      title: 'Как контекст ищет сборку по имени',
+      body: '<p>Сначала выбирается <b>активный контекст</b>. Для статической ссылки это контекст, который загрузил ссылающуюся сборку. Поэтому зависимости плагина сами идут в контекст плагина.</p><p>Дальше активный контекст пробует по порядку и останавливается на первом успехе:</p><ul><li>свой кэш по имени;</li><li>свой метод <code>Load</code> — его ты переопределяешь;</li><li>контекст по умолчанию: его кэш и TPA;</li><li>событие <code>Resolving</code> активного контекста;</li><li>событие <code>AppDomain.AssemblyResolve</code>.</li></ul><p><code>Load</code>, вернувший <code>null</code>, значит «не моё, спроси Default». На этом построено разделение общих сборок.</p>'
+    },
+    {
+      t: 'order',
+      q: 'Плагин впервые обращается к типу из Dapper. Расставь, где контекст плагина ищет сборку',
+      items: ['Кэш контекста плагина по имени', 'Переопределённый Load контекста плагина', 'Default: его кэш и TPA', 'Событие Resolving контекста плагина', 'Событие AppDomain.AssemblyResolve'],
+      explain: 'Свой кэш, свой Load, потом Default, и только потом события. Обработчик AssemblyResolve — последний шанс, общий для всего процесса.'
+    },
+    {
+      t: 'learn',
+      title: 'Один тип — две личности',
+      body: '<p>Тип в .NET определяется не только именем, а <b>экземпляром сборки</b>. Если контекст плагина загрузит свою копию <code>Contracts.dll</code>, то <code>IPlugin</code> хоста и <code>IPlugin</code> плагина — разные типы. Приведение в хосте бросит <code>InvalidCastException</code>, причём в сообщении оба типа называются одинаково.</p><p>Правило: общие контракты живут только в Default. <code>Load</code> плагина возвращает для них <code>null</code>, а в папку плагина их не кладут вовсе:</p>',
+      code: '<PropertyGroup>\n  <EnableDynamicLoading>true</EnableDynamicLoading>\n</PropertyGroup>\n<ItemGroup>\n  <ProjectReference Include="..\\Contracts\\Contracts.csproj">\n    <Private>false</Private>\n    <ExcludeAssets>runtime</ExcludeAssets>\n  </ProjectReference>\n</ItemGroup>',
+      lang: 'xml',
+      deep: '<p><code>EnableDynamicLoading</code> помечает проект как подгружаемый компонент: в вывод копируются все зависимости, и появляется plugin.deps.json. <code>Private=false</code> и <code>ExcludeAssets=runtime</code> не дают Contracts.dll (и её зависимостям из пакетов) попасть в папку плагина.</p><p>Чтобы найти, откуда пришли два «одинаковых» типа, сравни <code>a.GetType().Assembly</code> и <code>AssemblyLoadContext.GetLoadContext(...)</code> для обоих объектов.</p>'
+    },
+    {
+      t: 'choice',
+      q: 'Хост грузит плагин в свой контекст. Строка (IPlugin)Activator.CreateInstance(type)! бросает InvalidCastException, хотя тип реализует IPlugin. В папке плагина лежит Contracts.dll. В чём причина?',
+      options: ['Контекст плагина загрузил свою копию Contracts.dll', 'Плагин собран под другую версию .NET', 'Activator не умеет создавать типы из чужого контекста', 'IPlugin нужно пометить [Serializable]'],
+      answer: 0,
+      explain: 'Load плагина нашёл Contracts.dll рядом и загрузил её в контекст плагина. Теперь там свой IPlugin. Убери сборку контрактов из вывода плагина или верни null для неё в Load — тогда она придёт из Default, общая с хостом.',
+      wrong: { 3: '[Serializable] и маршалинг нужны были для вызовов между доменами. Контексты делят одну кучу, объект передаётся по ссылке.' }
+    },
+    {
+      t: 'learn',
+      title: 'AssemblyDependencyResolver: deps.json плагина',
+      body: '<p>Где лежат зависимости плагина, знает его <code>plugin.deps.json</code> (формат — в разделе «Сборки и версии»). <b>AssemblyDependencyResolver</b> читает его и переводит имя сборки или нативной библиотеки в полный путь. Нашёл — грузим в контекст плагина. Не нашёл (это сборка фреймворка или общий контракт) — <code>null</code>, и сборка придёт из Default.</p>',
+      code: 'class PluginLoadContext : AssemblyLoadContext\n{\n    private readonly AssemblyDependencyResolver _resolver;\n\n    public PluginLoadContext(string pluginPath)\n        => _resolver = new AssemblyDependencyResolver(pluginPath);\n\n    protected override Assembly? Load(AssemblyName name)\n    {\n        string? path = _resolver.ResolveAssemblyToPath(name);\n        return path != null ? LoadFromAssemblyPath(path) : null;\n    }\n\n    protected override IntPtr LoadUnmanagedDll(string name)\n    {\n        string? path = _resolver.ResolveUnmanagedDllToPath(name);\n        return path != null ? LoadUnmanagedDllFromPath(path) : IntPtr.Zero;\n    }\n}',
+      deep: 'Резолвер понимает то же, что hostpolicy: папки runtimes/&lt;rid&gt;/ для платформенных сборок, нативные библиотеки, сателлитные сборки ресурсов. Поэтому плагин с нативной зависимостью (SQLite, например) работает без ручного разбора папок. Если сборка есть и у хоста, и у плагина, выбор делает Load: вернул путь — плагин получит свою копию, вернул null — общую из Default.'
+    },
+    {
+      t: 'blanks',
+      q: 'Допиши Load контекста плагина',
+      code: 'protected override Assembly? Load(AssemblyName name)\n{\n    string? path = _resolver.___(name);\n    return path != null ? ___(path) : null;\n}',
+      tiles: ['ResolveAssemblyToPath', 'LoadFromAssemblyPath', 'Assembly.LoadFrom', 'ResolveUnmanagedDllToPath', 'LoadFromStream'],
+      answer: ['ResolveAssemblyToPath', 'LoadFromAssemblyPath'],
+      explain: 'LoadFromAssemblyPath — метод этого же контекста, сборка попадёт в него. Assembly.LoadFrom загрузил бы её в Default, и изоляция пропала бы.'
+    },
+    {
+      t: 'learn',
+      title: 'LoadFrom, LoadFile и Load(byte[]) сегодня',
+      body: '<p>Старые методы <code>Assembly</code> работают и сейчас, но поверх контекстов:</p><ul><li><code>Assembly.LoadFrom(path)</code> грузит в <b>Default</b> и добавляет обработчик <code>AssemblyResolve</code>, который ищет зависимости в той же папке;</li><li><code>Assembly.LoadFile(path)</code> — в <b>новый безымянный</b> контекст;</li><li><code>Assembly.Load(byte[])</code> — тоже в новый контекст, на каждый вызов.</li></ul><p>Ловушка Default: если сборка с таким именем есть в TPA, контекст по умолчанию возьмёт её, даже если ты явно передал другой путь или поток. Поэтому плагины грузят в свой контекст, а не в Default.</p>',
+      deep: 'Assembly.LoadFile кэширует сборки по пути: второй вызов с тем же путём вернёт ту же сборку. Зависимости такой сборки ищутся уже по обычному алгоритму, то есть в основном в Default. Методы Assembly.Load(string) и Type.GetType(string) выбирают активный контекст по вызывающему коду или по AssemblyLoadContext.CurrentContextualReflectionContext — его выставляет EnterContextualReflection, чтобы рефлексия внутри плагина находила сборки плагина.'
+    },
+    {
+      t: 'choice',
+      q: 'В TPA хоста есть Newtonsoft.Json 13. Хост вызывает AssemblyLoadContext.Default.LoadFromAssemblyPath("plugins/Newtonsoft.Json.dll"), где лежит версия 12. Что загрузится?',
+      options: ['Версия 13 из TPA', 'Версия 12 из папки plugins', 'Обе, в Default станет две версии', 'FileLoadException: конфликт версий'],
+      answer: 0,
+      explain: 'В контексте по умолчанию сборка из TPA с тем же именем важнее указанного пути. Чтобы получить версию 12, её нужно грузить в отдельный контекст.',
+      wrong: { 2: 'В одном контексте у имени только одна версия. Две версии возможны только в двух контекстах.' }
+    },
+    {
+      t: 'match',
+      q: 'Куда попадёт сборка?',
+      pairs: [
+        ['alc.LoadFromAssemblyPath(path)', 'В контекст alc'],
+        ['Статическая ссылка из сборки плагина', 'Поиск начинает контекст плагина'],
+        ['Assembly.LoadFrom(path)', 'В Default, зависимости — из той же папки'],
+        ['Assembly.LoadFile(path)', 'В новый безымянный контекст']
+      ]
+    }
+  ]
+};
