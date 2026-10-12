@@ -31,7 +31,7 @@ export default {
       t: 'learn',
       title: 'The apphost: app.exe is not your program',
       body: '<p>Next to <code>app.dll</code> the build puts <code>app.exe</code> (just <code>app</code> on Linux). This is the <b>apphost</b>, a small native launcher from the SDK. During the build the SDK copies the template and writes the name <code>app.dll</code> into it. None of your code is inside.</p><p>The apphost has one job: find hostfxr. For a framework-dependent app it searches for a .NET install in order and takes the <b>first one found</b>:</p><ul><li>the folder in <code>DOTNET_ROOT</code> (there are per-architecture variants such as <code>DOTNET_ROOT_X64</code>);</li><li>the registered location: on Windows the registry key <code>HKLM\\SOFTWARE\\dotnet\\Setup\\InstalledVersions\\&lt;arch&gt;</code>, on Linux and macOS the file <code>/etc/dotnet/install_location</code>;</li><li>the default location: <code>%ProgramFiles%\\dotnet</code>, <code>/usr/share/dotnet</code>, <code>/usr/local/share/dotnet</code>.</li></ul><p>The <code>PATH</code> variable plays no part in this search.</p>',
-      deep: '<p>The apphost template contains a placeholder: the 32 bytes of the SHA-256 of the string "foobar". The SDK finds that sequence and writes the dll path over it. That is why you cannot rename app.dll after the build: the apphost will look for the old name.</p><p>Since .NET 9 you can set the search order at build time with the <code>AppHostDotNetSearch</code> property (AppLocal, AppRelative, EnvironmentVariable, Global) and <code>AppHostRelativeDotNet</code>. <code>UseAppHost=false</code> turns the apphost off. Microsoft recommends launching through the apphost: the process list shows the app name instead of dotnet, and you can attach a manifest and an icon to the exe.</p>'
+      deep: '<p>The apphost template contains a placeholder: the SHA-256 of the string "foobar" written as text, 64 hex characters at the start of a 1024-byte buffer. The SDK finds that string and writes the dll path over it. That is why you cannot rename app.dll after the build: the apphost will look for the old name.</p><p>Since .NET 9 you can set the search order at build time with the <code>AppHostDotNetSearch</code> property (AppLocal, AppRelative, EnvironmentVariable, Global) and <code>AppHostRelativeDotNet</code>. <code>UseAppHost=false</code> turns the apphost off. Microsoft recommends launching through the apphost: the process list shows the app name instead of dotnet, and you can attach a manifest and an icon to the exe.</p>'
     },
     {
       t: 'multi',
@@ -89,9 +89,9 @@ export default {
       t: 'learn',
       title: 'When it will not start: host tracing',
       body: '<p>Failures before <code>Main</code> show up neither in the app logs nor in a managed debugger. Turn on host tracing: each layer writes what it looked for, where, and what it picked.</p>',
-      code: '# Linux, macOS\nDOTNET_HOST_TRACE=1 DOTNET_HOST_TRACEFILE=host.txt ./app\n\n# what is installed\ndotnet --list-runtimes',
+      code: '# Linux, macOS\nCOREHOST_TRACE=1 COREHOST_TRACEFILE=host.txt ./app\n\n# what is installed\ndotnet --list-runtimes',
       lang: 'plain',
-      deep: 'The old variable names, COREHOST_TRACE, COREHOST_TRACEFILE and COREHOST_TRACE_VERBOSITY, still work. DOTNET_HOST_TRACE_VERBOSITY sets the detail level from 1 to 4. The trace shows which hostfxr was loaded, which runtimeconfig.json was read, which framework versions were considered, and the full TPA.'
+      deep: 'COREHOST_TRACE_VERBOSITY sets the detail level from 1 to 4. Newer hosts also accept the names DOTNET_HOST_TRACE, DOTNET_HOST_TRACEFILE and DOTNET_HOST_TRACE_VERBOSITY, but the .NET 9 host and older ones do not understand them, while the COREHOST_* names work everywhere. The trace shows which hostfxr was loaded, which runtimeconfig.json was read, which framework versions were considered, and the full TPA.'
     },
     {
       t: 'choice',

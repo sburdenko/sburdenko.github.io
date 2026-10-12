@@ -58,7 +58,7 @@ export default {
       q: 'What is left in the optimized machine code of Size<long>()?',
       options: ['Only return 8', 'Both typeof checks and return 8', 'A helper call to look T up in the dictionary', 'Boxing T and comparing Type objects'],
       answer: 0,
-      explain: 'long is a value type, so Size<long> has its own copy. typeof(long) == typeof(int) is known to be false, typeof(long) == typeof(long) is true. The JIT folds both checks, and the method becomes a single return of a constant.',
+      explain: 'long is a value type, so Size<long> has its own copy. typeof(long) == typeof(int) is known to be false, typeof(long) == typeof(long) is true. The JIT folds both checks, and all that is left of the method is returning the constant 8.',
       wrong: { 2: 'Only shared code needs the dictionary. In a copy for a value type T is known at compile time.' }
     },
     {

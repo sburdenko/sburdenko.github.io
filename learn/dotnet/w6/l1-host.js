@@ -31,7 +31,7 @@ export default {
       t: 'learn',
       title: 'Apphost: app.exe — не твоя программа',
       body: '<p>Рядом с <code>app.dll</code> сборка кладёт <code>app.exe</code> (в Linux — <code>app</code>). Это <b>apphost</b> — маленький нативный запускатель из SDK. При сборке SDK копирует шаблон и вписывает в него имя <code>app.dll</code>. Твоего кода внутри нет.</p><p>Задача apphost — найти hostfxr. Для приложения, зависящего от фреймворка, он ищет установку .NET по порядку и берёт <b>первую найденную</b>:</p><ul><li>папка из <code>DOTNET_ROOT</code> (есть варианты по архитектуре, например <code>DOTNET_ROOT_X64</code>);</li><li>зарегистрированное место: в Windows — ключ реестра <code>HKLM\\SOFTWARE\\dotnet\\Setup\\InstalledVersions\\&lt;arch&gt;</code>, в Linux и macOS — файл <code>/etc/dotnet/install_location</code>;</li><li>место по умолчанию: <code>%ProgramFiles%\\dotnet</code>, <code>/usr/share/dotnet</code>, <code>/usr/local/share/dotnet</code>.</li></ul><p>Переменная <code>PATH</code> в этом поиске не участвует.</p>',
-      deep: '<p>В шаблоне apphost есть место-заглушка: 32 байта SHA-256 от строки «foobar». SDK находит эту последовательность и записывает поверх путь к dll. Поэтому переименовать app.dll после сборки нельзя — apphost будет искать старое имя.</p><p>С .NET 9 порядок поиска можно задать при сборке: свойства <code>AppHostDotNetSearch</code> (AppLocal, AppRelative, EnvironmentVariable, Global) и <code>AppHostRelativeDotNet</code>. Отключить apphost — <code>UseAppHost=false</code>. Microsoft советует запускать через apphost: в списке процессов видно имя приложения, а не dotnet, и к exe можно приложить манифест и иконку.</p>'
+      deep: '<p>В шаблоне apphost есть место-заглушка: SHA-256 от строки «foobar», записанный текстом — 64 шестнадцатеричных символа в начале буфера на 1024 байта. SDK находит эту строку и записывает поверх путь к dll. Поэтому переименовать app.dll после сборки нельзя — apphost будет искать старое имя.</p><p>С .NET 9 порядок поиска можно задать при сборке: свойства <code>AppHostDotNetSearch</code> (AppLocal, AppRelative, EnvironmentVariable, Global) и <code>AppHostRelativeDotNet</code>. Отключить apphost — <code>UseAppHost=false</code>. Microsoft советует запускать через apphost: в списке процессов видно имя приложения, а не dotnet, и к exe можно приложить манифест и иконку.</p>'
     },
     {
       t: 'multi',
@@ -89,9 +89,9 @@ export default {
       t: 'learn',
       title: 'Когда не запускается: трассировка хоста',
       body: '<p>Ошибки до <code>Main</code> не видны ни в логах приложения, ни в отладчике управляемого кода. Включи трассировку хоста: каждый слой напишет, что искал, где и что выбрал.</p>',
-      code: '# Linux, macOS\nDOTNET_HOST_TRACE=1 DOTNET_HOST_TRACEFILE=host.txt ./app\n\n# что установлено\ndotnet --list-runtimes',
+      code: '# Linux, macOS\nCOREHOST_TRACE=1 COREHOST_TRACEFILE=host.txt ./app\n\n# что установлено\ndotnet --list-runtimes',
       lang: 'plain',
-      deep: 'Старые имена переменных — COREHOST_TRACE, COREHOST_TRACEFILE, COREHOST_TRACE_VERBOSITY — тоже работают. Уровень подробности задаёт DOTNET_HOST_TRACE_VERBOSITY от 1 до 4. В трассе видно, какой hostfxr загружен, какой runtimeconfig.json прочитан, какие версии фреймворка рассматривались и полный TPA.'
+      deep: 'Уровень подробности задаёт COREHOST_TRACE_VERBOSITY от 1 до 4. В новых версиях хоста появились и имена DOTNET_HOST_TRACE, DOTNET_HOST_TRACEFILE, DOTNET_HOST_TRACE_VERBOSITY, но хост .NET 9 и старше их не понимает, а имена COREHOST_* работают везде. В трассе видно, какой hostfxr загружен, какой runtimeconfig.json прочитан, какие версии фреймворка рассматривались и полный TPA.'
     },
     {
       t: 'choice',

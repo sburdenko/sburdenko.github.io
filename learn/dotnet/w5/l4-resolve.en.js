@@ -33,7 +33,7 @@ export default {
       t: 'learn',
       title: 'The TPA: a list instead of a disk walk',
       body: '<p>At startup the host turns the app deps.json and the framework deps.json into a list of full paths — the <b>TPA</b> (Trusted Platform Assemblies) — and hands it to the runtime. The next unit covers this chain in detail.</p><p>When code needs an assembly, the default context looks it up in the TPA <b>by simple name</b> — nobody walks the disk. Once found, the version is checked: no lower than requested (lesson 2).</p><p>Which raises a question: what if the same assembly is both in an app package and in the shared framework? Only one gets into the list — <b>the one with the higher version</b>.</p>',
-      deep: 'The conflict is resolved twice. At build time the SDK (the ResolvePackageFileConflicts task) compares package files with framework files and drops the losers. At startup hostpolicy, while building the TPA, compares assemblyVersion and, on a tie, fileVersion. That is why deps.json stores both versions: this is the only place where FileVersion affects loading. You can see the outcome in the host trace (DOTNET_HOST_TRACE=1).'
+      deep: 'The conflict is resolved twice. At build time the SDK (the ResolvePackageFileConflicts task) compares package files with framework files and drops the losers. At startup hostpolicy, while building the TPA, compares assemblyVersion and, on a tie, fileVersion. That is why deps.json stores both versions: this is the only place where FileVersion affects loading. You can see the outcome in the host trace (COREHOST_TRACE=1).'
     },
     {
       t: 'choice',
