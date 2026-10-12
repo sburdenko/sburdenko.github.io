@@ -1,0 +1,99 @@
+/** .NET inside out, unit "Assemblies and versions", lesson 3: strong names, the GAC and assembly lookup in .NET Framework — then and now. */
+export default {
+  id: 'dotnet.w5.l3',
+  title: 'Strong names and the GAC',
+  sub: 'Signing, PublicKeyToken, binding redirects — then and now',
+  minutes: 9,
+  cards: [
+    {
+      t: 'learn',
+      title: 'A name you cannot clash with by accident',
+      body: '<p>Two vendors can each ship their own <code>Utils.dll</code>. By simple name you cannot tell them apart. A <b>strong name</b> adds the author\'s <b>public key</b> to the name, version and culture.</p><p>At build time the compiler hashes the file and signs the hash with the <b>private</b> RSA key. The public key goes into the manifest, the signature into a separate area of the PE file. A consumer stores a short fingerprint of the key in AssemblyRef — the <b>PublicKeyToken</b>, 8 bytes.</p>',
+      code: '<PropertyGroup>\n  <SignAssembly>true</SignAssembly>\n  <AssemblyOriginatorKeyFile>Shop.snk</AssemblyOriginatorKeyFile>\n</PropertyGroup>\n<!-- the key pair is created by sn -k Shop.snk -->',
+      lang: 'xml',
+      deep: '<p>The PublicKeyToken is the last 8 bytes of the SHA-1 hash of the public key, in reverse order (ECMA-335, section II.6.2.1.3). The full name of a signed assembly: <code>Shop, Version=1.2.0.0, Culture=neutral, PublicKeyToken=…</code>.</p><p>Open-source projects that do not want to expose the private key have <b>public signing</b> (<code>PublicSign</code>): only the public key goes into the assembly, and the signature is not real. The identity is the same, but the assembly is not "signed" in the cryptographic sense. A similar trick is delay signing: the real signature is applied later, on a secured machine.</p>'
+    },
+    {
+      t: 'choice',
+      q: 'What does a consumer store in the AssemblyRef of a strong-named dependency?',
+      options: ['Name, version, culture and PublicKeyToken', 'The whole public key and the dependency\'s signature', 'The author\'s private key', 'FileVersion and the file path'],
+      answer: 0,
+      explain: 'A reference needs only the identity. Instead of the full public key, compilers write its 8-byte fingerprint.',
+      wrong: { 2: 'The private key never leaves the author — otherwise the signature would be meaningless.' }
+    },
+    {
+      t: 'learn',
+      title: 'Then: the GAC and the answer to DLL hell',
+      body: '<p>In the history course you saw DLL hell: a new program overwrites a shared DLL, and an old one breaks. .NET Framework answered with the <b>Global Assembly Cache</b> (GAC) — a shared store that admits only strong-named assemblies.</p><p>Since the identity includes the version and the key, Shop 1.0 and Shop 2.0 live side by side in the GAC, and each app gets the one it was built against. Hence <b>strict binding</b>: a reference to 1.0.0.0 loads only 1.0.0.0.</p><p>One more Framework rule: strong naming is "viral" — a signed assembly can reference only signed ones.</p>',
+      code: 'gacutil /i Shop.dll\n:: .NET Framework 4.x: C:\\Windows\\Microsoft.NET\\assembly\\\n:: before 4.0:         C:\\Windows\\assembly\\',
+      lang: 'plain',
+      deep: '<p>A strong name is <b>identity, not protection</b>. Starting with .NET Framework 3.5 SP1, the signature of fully trusted assemblies is usually not verified at load time (strong-name bypass) — it is verified when installing into the GAC. To prove who wrote the code, use Authenticode and NuGet package signing.</p><p>That is why Microsoft even recommends that open-source libraries keep the key pair right in the repository — Newtonsoft.Json and NodaTime, for example, do so.</p>'
+    },
+    {
+      t: 'multi',
+      q: 'What did a strong name give you in .NET Framework? Select all.',
+      options: ['The right to put the assembly into the GAC', 'Two versions of one assembly side by side', 'The ability to reference the assembly from other signed assemblies', 'A guarantee that this very author wrote the code', 'Faster JIT compilation'],
+      answer: [0, 1, 2],
+      explain: 'The strong-name signature has long gone unverified during normal loading, and the keys of many libraries are public. It is an identity, not an author certificate.'
+    },
+    {
+      t: 'learn',
+      title: 'How Framework found an assembly',
+      body: '<p>When code needed a dependency, the .NET Framework loader (called Fusion) went step by step:</p><ul><li><b>configuration</b>: binding redirects from app.config, publisher policy from the GAC, machine.config — these may change the requested version;</li><li><b>already loaded?</b> — then return it;</li><li><b>the GAC</b> — for strong-named assemblies only;</li><li><b>codeBase</b> from the configuration, or <b>probing</b>: the app folder, a subfolder named after the assembly, folders from <code>&lt;probing privatePath&gt;</code>, first .dll, then .exe.</li></ul>',
+      flow: ['Configuration', 'Already loaded?', 'GAC', 'codeBase or probing'],
+      deep: 'Probing tries paths like [folder]/Shop.dll, [folder]/Shop/Shop.dll, [folder]/[privatePath]/Shop.dll, [folder]/[privatePath]/Shop/Shop.dll. The file found is checked against the reference: name, key, version. A mismatch gives FileLoadException with HRESULT 0x80131040; nothing found gives FileNotFoundException. You debugged this with the Fusion log: fuslogvw.exe showed every path it tried.'
+    },
+    {
+      t: 'order',
+      q: 'Put the .NET Framework assembly lookup steps in order',
+      items: ['Apply redirects and policy from configuration', 'Check whether it is already loaded', 'Look in the GAC', 'Probe the app folders'],
+      explain: 'First the configuration decides which version to look for, then already loaded assemblies, the GAC, and only at the end the disk next to the app. That is why an assembly in the GAC beats a copy in the bin folder.'
+    },
+    {
+      t: 'learn',
+      title: 'Binding redirects',
+      body: '<p>Strict binding requires the exact version. But Reports.dll was built against Newtonsoft.Json 12, Charts.dll against 13, and the folder can hold only one file. The way out is a <b>binding redirect</b>: "load every version in this range as 13.0.0.0".</p><p>You do not have to write them by hand: in Framework app projects, MSBuild with <code>AutoGenerateBindingRedirects</code> adds them to <code>App.exe.config</code> at build time.</p>',
+      code: '<runtime>\n  <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">\n    <dependentAssembly>\n      <assemblyIdentity name="Newtonsoft.Json"\n                        publicKeyToken="30ad4fe6b2a6aeed" culture="neutral" />\n      <bindingRedirect oldVersion="0.0.0.0-13.0.0.0" newVersion="13.0.0.0" />\n    </dependentAssembly>\n  </assemblyBinding>\n</runtime>',
+      lang: 'xml',
+      deep: 'Publisher policy is the same redirect, but from the library author: a separate signed assembly policy.1.0.Shop.dll in the GAC. This is how Microsoft shipped fixes to shared components without touching app configuration. An app could opt out with &lt;publisherPolicy apply="no"/&gt;.'
+    },
+    {
+      t: 'blanks',
+      q: 'Complete the redirect: load any version up to 13 as 13.0.0.0',
+      code: '<dependentAssembly>\n  <assemblyIdentity name="Newtonsoft.Json"\n                    ___="30ad4fe6b2a6aeed" culture="neutral" />\n  <bindingRedirect ___="0.0.0.0-13.0.0.0" ___="13.0.0.0" />\n</dependentAssembly>',
+      lang: 'xml',
+      tiles: ['publicKeyToken', 'oldVersion', 'newVersion', 'fileVersion', 'codeBase'],
+      answer: ['publicKeyToken', 'oldVersion', 'newVersion'],
+      explain: 'The assembly is identified by name, key token and culture. oldVersion is the range that references ask for; newVersion is what to load instead.'
+    },
+    {
+      t: 'learn',
+      title: 'Now: a strong name means almost nothing',
+      body: '<p>In .NET Core and .NET 5+:</p><ul><li>there is no GAC. Shared assemblies live in the folder of the installed runtime;</li><li>the runtime <b>does not validate</b> the strong-name signature and <b>does not use</b> it for binding;</li><li>binding redirects are not needed and are not read from app.config: a version no lower than requested loads.</li></ul><p>Microsoft guidance for libraries: modern .NET only — signing is optional. If .NET Framework or .NET Standard is among the targets — sign all targets with one key. And <b>never change the key</b>: a new key is a new identity.</p>',
+      deep: 'The compiler reports warning CS8002 when a signed assembly references an unsigned one. For libraries that target only .NET Core and .NET 5+ you can suppress it: a strong name gives nothing there. Another "do not" from the guidance: do not ship two packages, signed and unsigned (Contoso.Api and Contoso.Api.StrongNamed). To the CLR they are different assemblies and different types.'
+    },
+    {
+      t: 'choice',
+      q: 'A library targets only net8.0. Does it need a strong name?',
+      options: ['Not necessarily: the modern runtime does not use strong names', 'Yes, otherwise .NET 8 will not load it', 'Yes, otherwise nuget.org will not accept the package', 'It must not: .NET 8 rejects signed assemblies'],
+      answer: 0,
+      explain: 'Strong names matter for .NET Framework and .NET Standard. For a library that targets only modern .NET it gives nothing — but does no harm either.'
+    },
+    {
+      t: 'choice',
+      q: 'A netstandard2.0 library is strong-named. The author lost the key and signed the new version with another one. What breaks?',
+      options: ['.NET Framework apps: a different PublicKeyToken is a different identity, old references reject it', 'Nothing: the key is checked only when installing into the GAC', 'Only IDE hints', 'Every .NET 8 app stops loading it'],
+      answer: 0,
+      explain: 'The key token is part of the identity. To Framework this is a completely different assembly, and a redirect will not help: it redirects versions, not keys.',
+      wrong: { 3: 'The modern runtime does not use the strong name for binding — nothing changes there.' }
+    },
+    {
+      t: 'tapline',
+      q: 'In a .NET Framework app one library references Newtonsoft.Json 9.0.0.0, another 12.0.0.0, and the folder has 13.0.0.0. Which line leaves one of the references without a redirect?',
+      code: '<dependentAssembly>\n  <assemblyIdentity name="Newtonsoft.Json"\n                    publicKeyToken="30ad4fe6b2a6aeed" culture="neutral" />\n  <bindingRedirect oldVersion="0.0.0.0-11.0.0.0" newVersion="13.0.0.0" />\n</dependentAssembly>',
+      lang: 'xml',
+      answer: 3,
+      explain: 'The range ends at 11.0.0.0: the reference to 9.0.0.0 is redirected, but the one to 12.0.0.0 is not, and loading fails with FileLoadException. The upper bound must be 13.0.0.0.'
+    }
+  ]
+};

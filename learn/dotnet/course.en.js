@@ -34,6 +34,11 @@ import w8l1 from './w8/l1-tiers.en.js?v=202610121138';
 import w8l2 from './w8/l2-r2r-aot.en.js?v=202610121138';
 import w8l3 from './w8/l3-inline-bench.en.js?v=202610121138';
 import w8boss from './w8/boss.en.js?v=202610121138';
+import w5l1 from './w5/l1-anatomy.en.js?v=202610121138';
+import w5l2 from './w5/l2-versions.en.js?v=202610121138';
+import w5l3 from './w5/l3-strong-names.en.js?v=202610121138';
+import w5l4 from './w5/l4-resolve.en.js?v=202610121138';
+import w5boss from './w5/boss.en.js?v=202610121138';
 
 export default {
   id: 'dotnet',
@@ -64,7 +69,12 @@ export default {
       blurb: 'Threads and the scheduler, data races, lock and Interlocked, deadlock, the thread pool and its starvation. You switch the threads yourself and catch the bugs.',
       lessons: [w4l1, w4l2, w4l3, w4l4, w4l5, w4boss]
     },
-    { id: 'w5', title: 'Assemblies and versions', soon: true, blurb: 'What is inside an assembly, three version numbers and which one the loader checks, strong names and the GAC then and deps.json now, NuGet and version conflicts.' },
+    {
+      id: 'w5',
+      title: 'Assemblies and versions',
+      blurb: 'What an assembly holds, its three versions and which one the loader checks, strong names and the GAC then and now, deps.json instead of folder probing, and how NuGet settles on one package version.',
+      lessons: [w5l1, w5l2, w5l3, w5l4, w5boss]
+    },
     { id: 'w6', title: 'Loading and hosting', soon: true, blurb: 'How dotnet app.dll starts: apphost, hostfxr and rollForward; AppDomain then and AssemblyLoadContext now — plugins and unloading; trimming and single-file.' },
     {
       id: 'w7',

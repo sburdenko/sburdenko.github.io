@@ -34,6 +34,11 @@ import w8l1 from './w8/l1-tiers.js?v=202610121138';
 import w8l2 from './w8/l2-r2r-aot.js?v=202610121138';
 import w8l3 from './w8/l3-inline-bench.js?v=202610121138';
 import w8boss from './w8/boss.js?v=202610121138';
+import w5l1 from './w5/l1-anatomy.js?v=202610121138';
+import w5l2 from './w5/l2-versions.js?v=202610121138';
+import w5l3 from './w5/l3-strong-names.js?v=202610121138';
+import w5l4 from './w5/l4-resolve.js?v=202610121138';
+import w5boss from './w5/boss.js?v=202610121138';
 
 export default {
   id: 'dotnet',
@@ -64,7 +69,12 @@ export default {
       blurb: 'Потоки и планировщик, гонка данных, lock и Interlocked, deadlock, пул потоков и его голодание. Ты сам переключаешь потоки и ловишь баги.',
       lessons: [w4l1, w4l2, w4l3, w4l4, w4l5, w4boss]
     },
-    { id: 'w5', title: 'Сборки и версии', soon: true, blurb: 'Что лежит в сборке, три номера версии и какой смотрит загрузчик, строгие имена и GAC тогда и deps.json сейчас, NuGet и конфликты версий.' },
+    {
+      id: 'w5',
+      title: 'Сборки и версии',
+      blurb: 'Что лежит в сборке, три её версии и какую из них смотрит загрузчик, строгие имена и GAC тогда и сейчас, deps.json вместо поиска по папкам и как NuGet выбирает одну версию пакета.',
+      lessons: [w5l1, w5l2, w5l3, w5l4, w5boss]
+    },
     { id: 'w6', title: 'Загрузка и хостинг', soon: true, blurb: 'Как запускается dotnet app.dll: apphost, hostfxr и rollForward; AppDomain тогда и AssemblyLoadContext сейчас — плагины и выгрузка; trimming и single-file.' },
     {
       id: 'w7',
