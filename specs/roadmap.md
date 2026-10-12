@@ -63,7 +63,7 @@
 
 | id | Раздел | Уроки | Статус | Что внутри |
 |---|---|---|---|---|
-| u7 | Задачи без await | 4 + финал | ⬜ | `ContinueWith` и его ловушки, `TaskScheduler` и `TaskCreationOptions`, дочерние задачи, `Parallel.For/Invoke` и PLINQ, таймеры (`System.Threading.Timer`, `PeriodicTimer`, кто держит таймер), фоновые и обычные потоки, кооперативная отмена: `Register`, связанные токены |
+| u7 | Задачи без await | 4 + финал | ✅ | `ContinueWith` и его ловушки, `TaskScheduler` и `TaskCreationOptions`, дочерние задачи, `Parallel.For/Invoke` и PLINQ, таймеры (`System.Threading.Timer`, `PeriodicTimer`, кто держит таймер), фоновые и обычные потоки, кооперативная отмена: `Register`, связанные токены |
 | u8 | Синхронизация глубже | 5 + финал курса | ✅ | Модель памяти и `volatile` (перестановка чтений и записей), `Interlocked` и цикл CompareExchange, spin-блокировки против объектов ядра (`Mutex`, `Semaphore`, события), гибридные: `Monitor` (`Wait`/`Pulse`), `SemaphoreSlim`, `ReaderWriterLockSlim`, `lock` и тип `Lock` в .NET 9; двойная проверка, `Lazy<T>`, конкурентные коллекции |
 
 ## Новый курс «Память в .NET» — 8 разделов, ~30 уроков
