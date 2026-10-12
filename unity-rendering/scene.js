@@ -1,6 +1,6 @@
 /** Изометрический квартал: сам по себе не знает про батчинг, только рисует объекты и их состояние. */
-import { fitCanvas, shade, hexShade, RM } from '../assets/vhs.js?v=202610101649';
-import { MATERIALS } from './model.js?v=202610101649';
+import { fitCanvas, shade, hexShade, RM } from '../assets/vhs.js?v=202610121037';
+import { MATERIALS } from './model.js?v=202610121037';
 
 const HOLO = ['#8ff0ff', '#ff9ae6'];
 
