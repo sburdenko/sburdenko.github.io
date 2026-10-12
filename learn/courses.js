@@ -30,7 +30,7 @@ export const COURSES = [
   {
     id: 'csharp', group: 'net', badge: 'C#', color: 'var(--cpu)',
     title: { ru: 'C# глубже', en: 'Deeper C#' },
-    blurb: { ru: 'Для тех, кто уже пишет на C#: дженерики и ограничения, делегаты и замыкания, LINQ и его цена, Span и защитные копии, pattern matching и новое в C# 12–14. Подбираешь where, ловишь замыкание в for, считаешь вызовы Where и переставляешь ветки switch.', en: 'For people who already write C#: generics and constraints, delegates and closures, LINQ and its cost, Span and defensive copies, pattern matching and what is new in C# 12–14. Pick where clauses, catch the closure in a for loop, count Where calls and reorder switch arms.' },
+    blurb: { ru: 'Для тех, кто уже пишет на C#: устройство типа и значимые типы, члены и версии библиотеки, параметры, дженерики, интерфейсы, делегаты и замыкания, строки и перечисления, исключения, рефлексия, LINQ и его цена, Span и защитные копии, pattern matching и новое в C# 12–14. Подбираешь where, ловишь замыкание в for, считаешь вызовы Where и переставляешь ветки switch.', en: 'For people who already write C#: how a type is built and value types, members and library versioning, parameters, generics, interfaces, delegates and closures, strings and enums, exceptions, reflection, LINQ and its cost, Span and defensive copies, pattern matching and what is new in C# 12–14. Pick where clauses, catch the closure in a for loop, count Where calls and reorder switch arms.' },
     load: loader(() => import('./csharp/course.js?v=202610121141'), () => import('./csharp/course.en.js?v=202610121141'))
   },
   {
@@ -42,7 +42,7 @@ export const COURSES = [
   {
     id: 'async', group: 'net', badge: 'async', color: '#b28dff',
     title: { ru: 'Async/await до дна', en: 'Async/await in depth' },
-    blurb: { ru: 'От «зачем вообще асинхронность» до машины состояний, SynchronizationContext, deadlock с .Result и async в Unity. Двигаешь время, ловишь deadlock и шагаешь по MoveNext.', en: 'From “why async at all” to the state machine, SynchronizationContext, the .Result deadlock and async in Unity. Move time forward, catch a deadlock and step through MoveNext.' },
+    blurb: { ru: 'От «зачем вообще асинхронность» до машины состояний, SynchronizationContext, deadlock с .Result, async в Unity, задачи без await и синхронизация до модели памяти. Двигаешь время, ловишь deadlock и шагаешь по MoveNext.', en: 'From “why async at all” to the state machine, SynchronizationContext, the .Result deadlock, async in Unity, tasks without await and synchronization down to the memory model. Move time forward, catch a deadlock and step through MoveNext.' },
     load: loader(() => import('./async/course.js?v=202610121141'), () => import('./async/course.en.js?v=202610121141'))
   },
   {
