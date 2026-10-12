@@ -95,7 +95,7 @@ export default {
       ],
       answer: 0,
       explain: 'That method throws an ordinary exception while there is still stack left — you can catch it and return an error to the client. Even more robust: cap the depth or rewrite the walk with an explicit Stack<T>.',
-      wrong: { 1: 'StackOverflowException cannot be caught in .NET: the process terminates immediately.', 2: 'Pool threads are created with the default stack size; the exe header only sets the main thread.', 3: 'The stack is not managed by the garbage collector.' }
+      wrong: { 1: 'StackOverflowException cannot be caught in .NET: the process terminates immediately.', 2: 'A bigger stack only moves the limit: the client will send deeper nesting. Besides, pool threads do not necessarily take their stack size from the exe header.', 3: 'The stack is not managed by the garbage collector.' }
     },
     {
       t: 'choice',

@@ -10,7 +10,7 @@ export default {
       title: 'Сначала замер',
       body: '<p>Прежде чем убирать аллокации, узнай, сколько их. Самый точный счётчик под рукой — <code>GC.GetAllocatedBytesForCurrentThread()</code>: сколько байт выделил <b>текущий поток</b> за всю жизнь. Рантайм ведёт его в том же контексте аллокации, поэтому вызов дешёвый, а разница «после минус до» точна до объекта.</p><p>Два правила:</p><ul><li>сначала прогрей код одним вызовом: первый вызов тянет JIT, статические конструкторы, ленивые кэши;</li><li>счётчик потоковый: если работа уходит в другой поток (<code>Task.Run</code>, пул потоков), он её не увидит.</li></ul>',
       code: 'static long BytesPerCall(Action action)\n{\n    action();  // прогрев: JIT, статические конструкторы\n    long before = GC.GetAllocatedBytesForCurrentThread();\n    action();\n    return GC.GetAllocatedBytesForCurrentThread() - before;\n}\n\nConsole.WriteLine(BytesPerCall(() => "12,34,56".Split(\',\')));',
-      deep: 'Счётчик складывается из <code>alloc_bytes</code> и <code>alloc_bytes_uoh</code> контекста аллокации минус неиспользованный остаток текущей порции — поэтому он точен, хотя порции выдаются по 8 КБ. В .NET Framework этого метода не было; там приходилось смотреть на <code>AppDomain.MonitoringTotalAllocatedMemorySize</code> или на счётчики производительности.'
+      deep: 'Счётчик складывается из <code>alloc_bytes</code> и <code>alloc_bytes_uoh</code> контекста аллокации минус неиспользованный остаток текущей порции — поэтому он точен, хотя порции выдаются по 8 КБ. В .NET Framework этот метод появился только в версии 4.8; до неё приходилось смотреть на <code>AppDomain.MonitoringTotalAllocatedMemorySize</code> или на счётчики производительности.'
     },
     {
       t: 'choice',

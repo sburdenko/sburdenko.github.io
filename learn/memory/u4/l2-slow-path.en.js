@@ -8,13 +8,13 @@ export default {
     {
       t: 'learn',
       title: 'When the fast path will not do',
-      body: '<p>Pointer bumping works for most objects. But in some cases the JIT or the fast path itself sends the allocation to the collector — down the <b>slow path</b>:</p><ul><li><b>the chunk ran out</b> — the object did not fit in what was left;</li><li><b>the object is large</b> — 85,000 bytes or more, it belongs in the LOH, not generation 0;</li><li><b>the type has a finalizer</b> — the object must also be registered in the finalization queue.</li></ul><p>The first case is decided at allocation time. The JIT sees the second and third in advance: for such types it calls the slow helper right away.</p>',
+      body: '<p>Pointer bumping works for most objects. But in some cases the JIT or the fast path itself sends the allocation to the collector — down the <b>slow path</b>:</p><ul><li><b>the chunk ran out</b> — the object did not fit in what was left;</li><li><b>the object is large</b> — 85,000 bytes or more, it belongs in the LOH, not generation 0;</li><li><b>the type has a finalizer</b> — the object must also be registered in the finalization queue.</li></ul><p>The first case is decided at allocation time. A finalizer and the size of an ordinary object are visible to the JIT in advance: for such types it calls the slow helper right away. The size of an array is known only at run time, so a large array is sent down the slow path by the helper itself.</p>',
       code: 'var a = new Point();          // fast path (almost always)\nvar b = new byte[200_000];    // slow: LOH\nvar c = new FileStream(path, FileMode.Open);\n// slow: FileStream has a finalizer',
       deep: 'You can see this in <code>CEEInfo::getNewHelperStatic</code> (jitinterface.cpp): the slow helper <code>CORINFO_HELP_NEWFAST</code> is the default, and the fast <code>CORINFO_HELP_NEWSFAST</code> is chosen only if the type has no finalizer, is not a COM object and is smaller than <code>LARGE_OBJECT_SIZE</code>. For arrays the size is known only at run time, so the helper itself checks the threshold.'
     },
     {
       t: 'multi',
-      q: 'Which allocations will the JIT send straight down the slow path? Select all.',
+      q: 'Which allocations always take the slow path? Select all.',
       code: 'new Plain();\nnew WithFinalizer();\nnew Person("Ann");\nnew double[20_000];\nnew string(\'x\', 10);\n\nclass Plain { public int X; }\nclass WithFinalizer { ~WithFinalizer() { } }\nrecord Person(string Name);',
       options: ['new Plain()', 'new WithFinalizer()', 'new Person("Ann")', 'new double[20_000]', 'new string(\'x\', 10)'],
       answer: [1, 3],
