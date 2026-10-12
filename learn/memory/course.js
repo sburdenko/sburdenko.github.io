@@ -1,30 +1,36 @@
 /** Курс «Память в .NET»: разделы и уроки. Готовые разделы — с уроками, остальные — план со статусом «скоро». */
-import u1l1 from './u1/l1-virtual.js?v=202610121139';
-import u1l2 from './u1/l2-reserve-commit.js?v=202610121139';
-import u1l3 from './u1/l3-stack-cache.js?v=202610121139';
-import u1boss from './u1/boss.js?v=202610121139';
-import u2l1 from './u2/l1-numbers.js?v=202610121139';
-import u2l2 from './u2/l2-tools.js?v=202610121139';
-import u2l3 from './u2/l3-leak.js?v=202610121139';
-import u2boss from './u2/boss.js?v=202610121139';
-import u6l1 from './u6/l1-workstation-server.js?v=202610121139';
-import u6l2 from './u6/l2-background-latency.js?v=202610121139';
-import u6l3 from './u6/l3-datas-config.js?v=202610121139';
-import u6boss from './u6/boss.js?v=202610121139';
-import u7l1 from './u7/l1-finalization.js?v=202610121139';
-import u7l2 from './u7/l2-resurrection.js?v=202610121139';
-import u7l3 from './u7/l3-weak-leaks.js?v=202610121139';
-import u7boss from './u7/boss.js?v=202610121139';
-import u4l1 from './u4/l1-fast-path.js?v=202610121139';
-import u4l2 from './u4/l2-slow-path.js?v=202610121139';
-import u4l3 from './u4/l3-hidden.js?v=202610121139';
-import u4l4 from './u4/l4-pool-measure.js?v=202610121139';
-import u4boss from './u4/boss.js?v=202610121139';
-import u3l1 from './u3/l1-header.js?v=202610121139';
-import u3l2 from './u3/l2-layout.js?v=202610121139';
-import u3l3 from './u3/l3-arrays-strings.js?v=202610121139';
-import u3l4 from './u3/l4-heaps.js?v=202610121139';
-import u3boss from './u3/boss.js?v=202610121139';
+import u1l1 from './u1/l1-virtual.js?v=202610121140';
+import u1l2 from './u1/l2-reserve-commit.js?v=202610121140';
+import u1l3 from './u1/l3-stack-cache.js?v=202610121140';
+import u1boss from './u1/boss.js?v=202610121140';
+import u2l1 from './u2/l1-numbers.js?v=202610121140';
+import u2l2 from './u2/l2-tools.js?v=202610121140';
+import u2l3 from './u2/l3-leak.js?v=202610121140';
+import u2boss from './u2/boss.js?v=202610121140';
+import u6l1 from './u6/l1-workstation-server.js?v=202610121140';
+import u6l2 from './u6/l2-background-latency.js?v=202610121140';
+import u6l3 from './u6/l3-datas-config.js?v=202610121140';
+import u6boss from './u6/boss.js?v=202610121140';
+import u7l1 from './u7/l1-finalization.js?v=202610121140';
+import u7l2 from './u7/l2-resurrection.js?v=202610121140';
+import u7l3 from './u7/l3-weak-leaks.js?v=202610121140';
+import u7boss from './u7/boss.js?v=202610121140';
+import u4l1 from './u4/l1-fast-path.js?v=202610121140';
+import u4l2 from './u4/l2-slow-path.js?v=202610121140';
+import u4l3 from './u4/l3-hidden.js?v=202610121140';
+import u4l4 from './u4/l4-pool-measure.js?v=202610121140';
+import u4boss from './u4/boss.js?v=202610121140';
+import u3l1 from './u3/l1-header.js?v=202610121140';
+import u3l2 from './u3/l2-layout.js?v=202610121140';
+import u3l3 from './u3/l3-arrays-strings.js?v=202610121140';
+import u3l4 from './u3/l4-heaps.js?v=202610121140';
+import u3boss from './u3/boss.js?v=202610121140';
+import u5l1 from './u5/l1-triggers.js?v=202610121140';
+import u5l2 from './u5/l2-suspension.js?v=202610121140';
+import u5l3 from './u5/l3-mark.js?v=202610121140';
+import u5l4 from './u5/l4-plan.js?v=202610121140';
+import u5l5 from './u5/l5-sweep-compact.js?v=202610121140';
+import u5boss from './u5/boss.js?v=202610121140';
 
 export default {
   id: 'memory',
@@ -57,7 +63,13 @@ export default {
       blurb: 'Почему new в .NET почти бесплатен — сдвиг указателя в контексте аллокации потока — и когда он идёт медленным путём или в LOH. Скрытые аллокации в замыканиях, упаковке, итераторах, params, строках и async; ArrayPool, stackalloc, string.Create и замер байт на вызов.',
       lessons: [u4l1, u4l2, u4l3, u4l4, u4boss]
     },
-    { id: 'u5', title: 'Как работает сборка', soon: true, blurb: 'Когда запускается GC, остановка потоков и safepoint, маркировка от корней и card table, планирование, sweep и compact.' },
+    {
+      id: 'u5',
+      title: 'Как работает сборка',
+      blurb: 'Что запускает сборку и как выбирается поколение, как потоки останавливают в безопасных точках, маркировка от корней через GC info и card table, план с выбором sweep или compact, переезд объектов и обновление ссылок.',
+      source: { title: 'Book of the Runtime: Garbage collection design', url: 'https://github.com/dotnet/runtime/blob/main/docs/design/coreclr/botr/garbage-collection.md' },
+      lessons: [u5l1, u5l2, u5l3, u5l4, u5l5, u5boss]
+    },
     {
       id: 'u6',
       title: 'Режимы GC',
