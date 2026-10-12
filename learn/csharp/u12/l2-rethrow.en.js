@@ -60,7 +60,7 @@ export default {
     },
     {
       t: 'multi',
-      q: 'After which options will the top-level e.ToString() still contain the method where the error happened? Select all.',
+      q: 'After which options will e.ToString() in the top-level handler still show the method where the error happened? Select all.',
       options: ['throw;', 'throw ex;', 'ExceptionDispatchInfo.Capture(ex).Throw();', 'throw new AppException("…", ex);', 'throw new AppException(ex.Message);'],
       answer: [0, 2, 3],
       explain: 'throw; and ExceptionDispatchInfo keep the original stack. A wrapper with ex in the constructor keeps it in InnerException, and ToString prints it. throw ex; starts the stack over, and a wrapper without ex loses the original exception entirely.'

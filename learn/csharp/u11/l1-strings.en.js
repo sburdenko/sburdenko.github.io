@@ -70,15 +70,15 @@ export default {
     {
       t: 'learn',
       title: 'ICU surprises since .NET 5',
-      body: '<p>Before .NET 5, linguistic comparison on Windows went through NLS — the Windows library. Since .NET 5, <b>ICU</b> is used wherever it is available. Its Unicode rules are stricter, and old code started behaving differently.</p><p>Example: for ICU the pair <code>\\r\\n</code> is one indivisible text element. So a culture-sensitive <code>IndexOf("\\n")</code> does not find the <code>\\n</code> inside <code>\\r\\n</code> and returns -1. Meanwhile <code>IndexOf(\'\\n\')</code> with a char is ordinal and finds it.</p><p>Also: linguistic comparison skips zero-width characters and <code>\\0</code>, so <code>s.IndexOf("\\0")</code> can return 0 for any string.</p>',
-      deep: '<p>If the app does not need language rules, build it with <code>&lt;InvariantGlobalization&gt;true&lt;/InvariantGlobalization&gt;</code>: ICU is not loaded, every culture behaves like the invariant one, and linguistic operations become ordinal. This is the usual choice for containers and Native AOT — smaller size and no libicu dependency. You can bring NLS back on Windows with the <code>System.Globalization.UseNls</code> setting, but that is a migration aid, not a path for new code.</p>'
+      body: '<p>Before .NET 5, linguistic comparison on Windows went through NLS — the Windows library. Since .NET 5, <b>ICU</b> is used wherever it is available. Its Unicode rules are stricter, and old code started behaving differently.</p><p>The best-known example is .NET 5: for ICU the pair <code>\\r\\n</code> was one indivisible text element, and a culture-sensitive <code>"\\r\\n".IndexOf("\\n")</code> returned -1. .NET 6 fixed that behavior, but the lesson stays: the result of a linguistic search depends on the runtime and library version.</p><p>What still holds: linguistic comparison skips zero-width characters and <code>\\0</code>, so <code>s.IndexOf("\\0")</code> returns 0 for any string. Meanwhile <code>IndexOf(\'\\0\')</code> with a char is ordinal and honestly returns -1.</p>',
+      deep: '<p>If the app does not need language rules, build it with <code>&lt;InvariantGlobalization&gt;true&lt;/InvariantGlobalization&gt;</code>: ICU is not loaded, and linguistic operations become ordinal. By default no culture other than the invariant one can be created in this mode: since .NET 8 <code>new CultureInfo("de-DE")</code> throws <code>CultureNotFoundException</code>. This is the usual choice for containers and Native AOT — smaller size and no libicu dependency. You can bring NLS back on Windows with the <code>System.Globalization.UseNls</code> setting, but that is a migration aid, not a path for new code.</p>'
     },
     {
       t: 'tapline',
-      q: '.NET 8 on Linux, culture en-US. Which line returns -1?',
-      code: 'string s = "line1\\r\\nline2";\nint a = s.IndexOf(\'\\n\');\nint b = s.IndexOf("\\n");\nint c = s.IndexOf("\\n", StringComparison.Ordinal);\nbool d = s.Contains("\\n");',
+      q: '.NET 9 on Linux (ICU), culture en-US. The string has no \\0 character. Which line still returns 0?',
+      code: 'string s = "line1\\r\\nline2";\nint a = s.IndexOf(\'\\0\');\nint b = s.IndexOf("\\0");\nint c = s.IndexOf("\\0", StringComparison.Ordinal);\nbool d = s.Contains("\\0");',
       answer: 2,
-      explain: 'IndexOf(string) without a StringComparison is linguistic, and for ICU \\r\\n cannot be split. IndexOf(char), Contains and explicit Ordinal compare code units and find \\n at position 6.'
+      explain: 'IndexOf(string) without a StringComparison is linguistic, and ICU skips \\0: nothing is left of the pattern, so it is "found" at the very start. IndexOf(char), Contains and explicit Ordinal compare code units: they give -1 and false.'
     },
     {
       t: 'learn',

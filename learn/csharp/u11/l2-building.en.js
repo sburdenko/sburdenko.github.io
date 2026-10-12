@@ -81,7 +81,7 @@ export default {
       t: 'learn',
       title: 'Interpolation remembers the culture',
       body: '<p>The interpolation handler formats values using the <b>current culture</b>, just like <code>ToString()</code>. On a German machine <code>$"{1.5}"</code> gives "1,5", and a date comes out in the local format. For text on screen that is right. For JSON, logs, SQL and file names it is a bug that shows up only for some users.</p><p>For machine text set the culture explicitly:</p><ul><li><code>value.ToString(CultureInfo.InvariantCulture)</code>;</li><li><code>string.Create(CultureInfo.InvariantCulture, $"...")</code> — interpolation with a culture and no extra allocations;</li><li>there is also the older <code>FormattableString.Invariant($"...")</code>, but it creates a FormattableString object and boxes the arguments.</li></ul>',
-      deep: '<p>The analyzer <b>CA1305</b> flags formatting calls without an <code>IFormatProvider</code>. In projects where all text is machine text, the simplest fix is to turn on <code>InvariantGlobalization</code> — then every culture behaves like the invariant one.</p>'
+      deep: '<p>The analyzer <b>CA1305</b> flags formatting calls without an <code>IFormatProvider</code>. In projects where all text is machine text, the simplest fix is to turn on <code>InvariantGlobalization</code> — then the current culture is always invariant, and by default no other culture can be created.</p>'
     },
     {
       t: 'tapline',

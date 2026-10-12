@@ -70,15 +70,15 @@ export default {
     {
       t: 'learn',
       title: 'Сюрпризы ICU с .NET 5',
-      body: '<p>До .NET 5 на Windows лингвистическое сравнение шло через NLS — библиотеку Windows. С .NET 5 везде, где она есть, используется <b>ICU</b>. Правила Unicode там строже, и старый код стал вести себя иначе.</p><p>Пример: для ICU пара <code>\\r\\n</code> — один неделимый элемент текста. Поэтому <code>IndexOf("\\n")</code> по культуре не находит <code>\\n</code> внутри <code>\\r\\n</code> и возвращает -1. А <code>IndexOf(\'\\n\')</code> с символом — порядковый и находит.</p><p>Ещё: символы нулевой ширины и <code>\\0</code> лингвистическое сравнение пропускает, так что <code>s.IndexOf("\\0")</code> может вернуть 0 для любой строки.</p>',
-      deep: '<p>Если приложению не нужны правила языков, его можно собрать с <code>&lt;InvariantGlobalization&gt;true&lt;/InvariantGlobalization&gt;</code>: ICU не загружается, все культуры ведут себя как инвариантная, а лингвистические операции сводятся к порядковым. Так обычно делают для контейнеров и Native AOT — меньше размер и нет зависимости от libicu. Вернуть NLS на Windows можно настройкой <code>System.Globalization.UseNls</code>, но это путь для миграции, а не для нового кода.</p>'
+      body: '<p>До .NET 5 на Windows лингвистическое сравнение шло через NLS — библиотеку Windows. С .NET 5 везде, где она есть, используется <b>ICU</b>. Правила Unicode там строже, и старый код стал вести себя иначе.</p><p>Самый известный пример — .NET 5: для ICU пара <code>\\r\\n</code> была неделимым элементом текста, и <code>"\\r\\n".IndexOf("\\n")</code> по культуре возвращал -1. В .NET 6 это поведение исправили, но урок остался: результат лингвистического поиска зависит от версии рантайма и библиотеки.</p><p>Что действует и сейчас: символы нулевой ширины и <code>\\0</code> лингвистическое сравнение пропускает, так что <code>s.IndexOf("\\0")</code> возвращает 0 для любой строки. А <code>IndexOf(\'\\0\')</code> с символом — порядковый и честно возвращает -1.</p>',
+      deep: '<p>Если приложению не нужны правила языков, его можно собрать с <code>&lt;InvariantGlobalization&gt;true&lt;/InvariantGlobalization&gt;</code>: ICU не загружается, а лингвистические операции сводятся к порядковым. Культуры, кроме инвариантной, в этом режиме по умолчанию не создаются: с .NET 8 <code>new CultureInfo("de-DE")</code> бросает <code>CultureNotFoundException</code>. Так обычно делают для контейнеров и Native AOT — меньше размер и нет зависимости от libicu. Вернуть NLS на Windows можно настройкой <code>System.Globalization.UseNls</code>, но это путь для миграции, а не для нового кода.</p>'
     },
     {
       t: 'tapline',
-      q: '.NET 8 на Linux, культура en-US. Какая строка вернёт -1?',
-      code: 'string s = "line1\\r\\nline2";\nint a = s.IndexOf(\'\\n\');\nint b = s.IndexOf("\\n");\nint c = s.IndexOf("\\n", StringComparison.Ordinal);\nbool d = s.Contains("\\n");',
+      q: '.NET 9 на Linux (ICU), культура en-US. В строке нет символа \\0. Какая строка всё равно вернёт 0?',
+      code: 'string s = "line1\\r\\nline2";\nint a = s.IndexOf(\'\\0\');\nint b = s.IndexOf("\\0");\nint c = s.IndexOf("\\0", StringComparison.Ordinal);\nbool d = s.Contains("\\0");',
       answer: 2,
-      explain: 'IndexOf(string) без StringComparison — лингвистический, а для ICU \\r\\n неделим. IndexOf(char), Contains и явный Ordinal сравнивают коды и находят \\n на позиции 6.'
+      explain: 'IndexOf(string) без StringComparison — лингвистический, а ICU пропускает \\0: от образца ничего не остаётся, и он «находится» в самом начале. IndexOf(char), Contains и явный Ordinal сравнивают коды: дают -1 и false.'
     },
     {
       t: 'learn',

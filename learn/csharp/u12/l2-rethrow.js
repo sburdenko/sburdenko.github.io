@@ -60,7 +60,7 @@ export default {
     },
     {
       t: 'multi',
-      q: 'После каких вариантов в e.ToString() на верхнем уровне останется метод, где ошибка возникла? Отметь все.',
+      q: 'После каких вариантов e.ToString() в обработчике верхнего уровня всё ещё покажет метод, где ошибка возникла? Отметь все.',
       options: ['throw;', 'throw ex;', 'ExceptionDispatchInfo.Capture(ex).Throw();', 'throw new AppException("…", ex);', 'throw new AppException(ex.Message);'],
       answer: [0, 2, 3],
       explain: 'throw; и ExceptionDispatchInfo сохраняют исходный стек. Обёртка с ex в конструкторе хранит его в InnerException, и ToString его печатает. throw ex; начинает стек заново, а обёртка без ex теряет исходное исключение целиком.'
