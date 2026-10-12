@@ -20,6 +20,11 @@ import u4l2 from './u4/l2-slow-path.en.js?v=202610121139';
 import u4l3 from './u4/l3-hidden.en.js?v=202610121139';
 import u4l4 from './u4/l4-pool-measure.en.js?v=202610121139';
 import u4boss from './u4/boss.en.js?v=202610121139';
+import u3l1 from './u3/l1-header.en.js?v=202610121139';
+import u3l2 from './u3/l2-layout.en.js?v=202610121139';
+import u3l3 from './u3/l3-arrays-strings.en.js?v=202610121139';
+import u3l4 from './u3/l4-heaps.en.js?v=202610121139';
+import u3boss from './u3/boss.en.js?v=202610121139';
 
 export default {
   id: 'memory',
@@ -39,7 +44,13 @@ export default {
       source: { title: 'Microsoft Learn: Debug a memory leak in .NET', url: 'https://learn.microsoft.com/en-us/dotnet/core/diagnostics/debug-memory-leak' },
       lessons: [u2l1, u2l2, u2l3, u2boss]
     },
-    { id: 'u3', title: 'Inside the heap', soon: true, blurb: 'The object header and the type pointer, field layout and alignment, the SOH, LOH and POH, regions in .NET 7+ and frozen segments.' },
+    {
+      id: 'u3',
+      title: 'Inside the heap',
+      blurb: 'What an object is made of: the header, the sync block and the MethodTable, how the CLR lays out and aligns fields, how arrays and strings sit in memory. The SOH, LOH and POH, regions in .NET 7+ and the .NET 8 non-GC heap.',
+      source: { title: 'Microsoft Learn: The large object heap', url: 'https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/large-object-heap' },
+      lessons: [u3l1, u3l2, u3l3, u3l4, u3boss]
+    },
     {
       id: 'u4',
       title: 'Allocation',
