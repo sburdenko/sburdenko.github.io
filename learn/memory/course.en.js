@@ -7,6 +7,10 @@ import u2l1 from './u2/l1-numbers.en.js?v=202610121134';
 import u2l2 from './u2/l2-tools.en.js?v=202610121134';
 import u2l3 from './u2/l3-leak.en.js?v=202610121134';
 import u2boss from './u2/boss.en.js?v=202610121134';
+import u6l1 from './u6/l1-workstation-server.en.js?v=202610121134';
+import u6l2 from './u6/l2-background-latency.en.js?v=202610121134';
+import u6l3 from './u6/l3-datas-config.en.js?v=202610121134';
+import u6boss from './u6/boss.en.js?v=202610121134';
 
 export default {
   id: 'memory',
@@ -29,7 +33,13 @@ export default {
     { id: 'u3', title: 'Inside the heap', soon: true, blurb: 'The object header and the type pointer, field layout and alignment, the SOH, LOH and POH, regions in .NET 7+ and frozen segments.' },
     { id: 'u4', title: 'Allocation', soon: true, blurb: 'Pointer bumping and the allocation context, the slow path and the LOH, hidden allocations in closures, boxing, LINQ and strings, ArrayPool and stackalloc.' },
     { id: 'u5', title: 'How a collection works', soon: true, blurb: 'When the GC kicks in, suspending threads and safepoints, marking from roots and the card table, planning, sweep and compact.' },
-    { id: 'u6', title: 'GC modes', soon: true, blurb: 'Workstation and Server, background GC, latency modes, DATAS and the settings in runtimeconfig.json.' },
+    {
+      id: 'u6',
+      title: 'GC modes',
+      blurb: 'Workstation and Server, background GC and the foreground collections that run during it, GCSettings.LatencyMode latency modes, DATAS in .NET 8–9, settings in runtimeconfig.json and environment variables, container limits.',
+      source: { title: 'Microsoft Learn: Garbage collector config settings', url: 'https://learn.microsoft.com/en-us/dotnet/core/runtime-config/garbage-collector' },
+      lessons: [u6l1, u6l2, u6l3, u6boss]
+    },
     { id: 'u7', title: 'Lifetime', soon: true, blurb: 'Finalization from the inside and resurrection, SafeHandle, weak references, ConditionalWeakTable, leaks through events and statics.' },
     { id: 'u8', title: 'Advanced', soon: true, blurb: 'Pinning and the POH, unsafe code and pointers, GC.TryStartNoGCRegion, the GC API and GCSettings, Native AOT and memory.' }
   ]

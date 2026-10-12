@@ -78,7 +78,7 @@
 | u3 | Устройство кучи | 4 + финал | ⬜ | Заголовок объекта и указатель на тип, раскладка полей и выравнивание, SOH, LOH, POH, регионы (.NET 7+), frozen-сегменты |
 | u4 | Аллокация | 4 + финал | ⬜ | Сдвиг указателя и контекст аллокации, медленный путь, LOH; скрытые аллокации (замыкания, упаковка, LINQ, `params`, строки), `ArrayPool`, `stackalloc`, `GC.GetAllocatedBytesForCurrentThread` |
 | u5 | Как работает сборка | 5 + финал | ⬜ | Когда запускается GC, остановка потоков и safepoint, маркировка (корни, card table), планирование, sweep и compact |
-| u6 | Режимы GC | 3 + финал | ⬜ | Workstation и Server, Background GC, режимы задержки, DATAS (.NET 8–9), настройки в runtimeconfig |
+| u6 | Режимы GC | 3 + финал | ✅ | Workstation и Server, Background GC, режимы задержки, DATAS (.NET 8–9), настройки в runtimeconfig |
 | u7 | Время жизни | 3 + финал | ⬜ | Финализация изнутри и воскрешение, `SafeHandle`, слабые ссылки, `ConditionalWeakTable`, утечки через события и статику |
 | u8 | Продвинутое | 4 + финал курса | ⬜ | Закрепление и POH, `unsafe` и указатели, `GC.TryStartNoGCRegion`, API GC и `GCSettings`, Native AOT и память |
 

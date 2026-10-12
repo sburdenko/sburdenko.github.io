@@ -1,0 +1,121 @@
+/** Курс «Память в .NET», раздел «Режимы GC», урок 3: DATAS, настройки сборщика и контейнеры. */
+export default {
+  id: 'mem.u6.l3',
+  title: 'DATAS, настройки и контейнеры',
+  sub: 'Куча по размеру приложения, runtimeconfig.json и лимиты памяти',
+  minutes: 11,
+  cards: [
+    {
+      t: 'learn',
+      title: 'DATAS: куча по размеру данных, а не машины',
+      body: '<p>Классический Server GC подбирает бюджет под пропускную способность: чем больше ядер, тем больше куч и тем больше памяти он себе позволяет. Один и тот же сервис на разных машинах занимает очень разный объём, а когда нагрузка спадает, куча не спешит уменьшаться.</p><p><b>DATAS</b> (Dynamic Adaptation To Application Sizes) меняет цель: размер кучи должен быть примерно пропорционален объёму <b>долгоживущих данных</b>. Та же работа на разных машинах — похожий размер кучи. Нагрузка выросла или упала — куча следует за ней.</p><p>Версии: в <b>.NET 8</b> DATAS включается вручную, с <b>.NET 9</b> он включён по умолчанию. Это часть <b>Server GC</b>: приложение на Workstation он не затрагивает.</p>'
+    },
+    {
+      t: 'learn',
+      title: 'Что DATAS делает внутри',
+      body: '<ul><li><b>Меняет число куч на ходу.</b> Стартует с одной кучи, как Workstation, и добавляет кучи, когда потокам приходится ждать памяти. Потолок — число ядер, как у обычного Server GC. Нагрузка спала — кучи убираются.</li><li><b>Ограничивает бюджет поколения 0</b> исходя из объёма долгоживущих данных: маленькому приложению — маленький бюджет, даже на большой машине.</li><li><b>При необходимости делает полные сжимающие сборки,</b> чтобы фрагментация не росла, — это тоже держит кучу компактной.</li></ul><p>Получается гибрид: от одной кучи, как Workstation, до кучи на ядро, как Server.</p>',
+      deep: '<p>Целевая метрика DATAS — <b>TCP</b> (Throughput Cost Percentage): доля времени, которую приложение теряет на паузы GC и ожидание при выделении. По умолчанию цель — 2%, настройка <code>System.GC.DTargetTCP</code> (.NET 9). Если цена выше цели, DATAS добавляет кучи.</p><p>Потолок бюджета поколения 0 считается по формуле, где множитель убывает как <code>1/√</code>(размер приложения в МБ), и зажат между минимумом и максимумом. Для её подстройки в .NET 10 появились <code>System.GC.DGen0GrowthPercent</code>, <code>DGen0GrowthMaxFactor</code> и <code>DGen0GrowthMinFactor</code>.</p>'
+    },
+    {
+      t: 'choice',
+      q: 'ASP.NET Core-сервис обновили с .NET 8 на .NET 9, настройки GC не трогали. Рабочий набор упал в разы, а сборок поколения 0 стало заметно больше. Почему?',
+      options: [
+        'В .NET 9 для Server GC по умолчанию включён DATAS: меньше куч и меньше бюджет поколения 0',
+        'В .NET 9 ASP.NET Core перешёл на Workstation GC',
+        'В .NET 9 выключили фоновую сборку по умолчанию',
+        'В .NET 9 сборщик перестал сжимать кучу'
+      ],
+      answer: 0,
+      explain: 'Web SDK по-прежнему включает Server GC, а с .NET 9 к нему по умолчанию добавлен DATAS. Бюджет поколения 0 теперь привязан к объёму живых данных, поэтому сборок больше, а памяти меньше.',
+      wrong: { 1: 'Server GC в веб-проектах остался — изменилось его поведение.', 2: 'Фоновая сборка по-прежнему включена по умолчанию.' }
+    },
+    {
+      t: 'learn',
+      title: 'Цена DATAS и как его выключить',
+      body: '<p>Память экономится не даром. В замерах Microsoft на TechEmpower рабочий набор на 48-ядерной машине упал более чем на 80%, а пиковая пропускная способность — на 2–3%. Сборок поколений 0 и 1 становится заметно больше.</p><p>Второе — старт. DATAS начинает с одной кучи, и пока он не добавит куч, множество выделяющих потоков ждут. То же при резком переходе от тишины к пику.</p><p>Если пропускная способность важнее памяти, DATAS выключают:</p><ul><li><code>System.GC.DynamicAdaptationMode</code> = <code>0</code> (в csproj <code>GarbageCollectionAdaptationMode</code>, в окружении <code>DOTNET_GCDynamicAdaptationMode</code>);</li><li>или задают <code>System.GC.HeapCount</code> — фиксированное число куч значит «число куч не менять», и DATAS выключается.</li></ul>',
+      code: '<PropertyGroup>\n  <!-- .NET 9+: вернуть классический Server GC -->\n  <GarbageCollectionAdaptationMode>0</GarbageCollectionAdaptationMode>\n</PropertyGroup>',
+      deep: '<p>В .NET 8 то же свойство со значением <code>1</code> включает DATAS вручную — вместе с <code>ServerGarbageCollection</code>. Без Server GC оно ни на что не влияет.</p><p>Совет от команды GC: .NET 9 не LTS, поэтому многие впервые встретят DATAS при переходе с .NET 8 на .NET 10. Перед таким обновлением посмотри на счётчики: размер кучи, число сборок, процент времени в GC.</p>'
+    },
+    {
+      t: 'multi',
+      q: 'ASP.NET Core на .NET 9, Server GC, DATAS по умолчанию. Какие настройки выключат DATAS? Отметь все.',
+      options: [
+        'System.GC.DynamicAdaptationMode = 0',
+        'System.GC.HeapCount = 8',
+        'ServerGarbageCollection = false',
+        'System.GC.ConserveMemory = 5',
+        'System.GC.RetainVM = true'
+      ],
+      answer: [0, 1, 2],
+      explain: 'DynamicAdaptationMode = 0 выключает его прямо. HeapCount фиксирует число куч, и DATAS отключается. Workstation вообще не использует DATAS. ConserveMemory и RetainVM — другие ручки, они с ним совместимы.'
+    },
+    {
+      t: 'learn',
+      title: 'Три места для настроек',
+      body: '<p>Настройки сборщика читаются <b>один раз при старте</b>. Поменял переменную в работающем процессе — ничего не случится. Задать их можно тремя способами:</p><ul><li><b>csproj</b> — для части есть свойства MSBuild (<code>ServerGarbageCollection</code>, <code>ConcurrentGarbageCollection</code>, <code>RetainVMGarbageCollection</code>, <code>GarbageCollectionAdaptationMode</code>), остальные — через элемент <code>RuntimeHostConfigurationOption</code>. Всё это попадает в <code>runtimeconfig.json</code>.</li><li><b>runtimeconfig.json</b> — секция <code>configProperties</code>, имена вида <code>System.GC.Server</code>, числа <b>десятичные</b>.</li><li><b>Переменные окружения</b> — <code>DOTNET_gcServer</code>, <code>DOTNET_GCHeapCount</code> и так далее, числа <b>шестнадцатеричные</b>.</li></ul><p>Переменная окружения сильнее файла: рантайм сначала смотрит её. Удобно, чтобы поменять режим в контейнере без пересборки.</p>',
+      code: '<PropertyGroup>\n  <ServerGarbageCollection>true</ServerGarbageCollection>\n</PropertyGroup>\n<ItemGroup>\n  <!-- у HeapCount нет своего свойства MSBuild -->\n  <RuntimeHostConfigurationOption Include="System.GC.HeapCount" Value="4" />\n</ItemGroup>',
+      deep: '<p>Префикс <code>DOTNET_</code> работает с .NET 6, старый <code>COMPlus_</code> по-прежнему понимается. Обрати внимание на регистр имён: <code>DOTNET_gcServer</code> и <code>DOTNET_gcConcurrent</code> с маленькой буквы, остальные — <code>DOTNET_GCHeapCount</code>, <code>DOTNET_GCHeapHardLimit</code>. Пиши имена точно как в документации.</p><p>Есть и <code>runtimeconfig.template.json</code> в папке проекта: его <code>configProperties</code> SDK вливает в итоговый файл при сборке. Итог можно проверить в процессе через <code>GC.GetConfigurationVariables()</code>.</p>'
+    },
+    {
+      t: 'choice',
+      q: 'В Dockerfile написали ENV DOTNET_GCHeapCount=16, Server GC включён, DATAS не трогали. Сколько куч получит сборщик на машине с 32 ядрами?',
+      options: ['22', '16', '32', 'Число куч будет меняться: DATAS'],
+      answer: 0,
+      explain: 'В переменных окружения числа шестнадцатеричные: 0x16 = 22. Чтобы получить 16 куч, пиши DOTNET_GCHeapCount=10 или 0x10. А раз число куч задано явно, DATAS выключен.',
+      wrong: { 1: '16 было бы в runtimeconfig.json, там числа десятичные. В окружении то же значение читается как hex.', 3: 'Явный HeapCount выключает DATAS: число куч фиксируется.' }
+    },
+    {
+      t: 'learn',
+      title: 'Ручки, которые держат память',
+      body: '<ul><li><b>System.GC.HeapHardLimit</b> — потолок в байтах для кучи и служебных структур GC. Дошли до него — сборщик пытается освободить место, а не вышло — <code>OutOfMemoryException</code>. Вариант в процентах от памяти — <b>HeapHardLimitPercent</b>. Только для 64-битных процессов.</li><li><b>System.GC.HeapCount</b> — сколько куч у Server GC. На Workstation не действует.</li><li><b>System.GC.ConserveMemory</b> — от 0 до 9 (.NET 6+): чем больше, тем чаще сборщик сжимает кучу ради экономии памяти, в том числе LOH. Цена — больше сборок и пауз.</li><li><b>System.GC.RetainVM</b> — не отдавать освобождённую память ОС сразу, а держать в запасе. Помогает, если куча постоянно растёт и сжимается: меньше обращений к ОС. Цена — процесс дольше выглядит «толстым».</li></ul>',
+      deep: '<p>Есть пределы и по отдельным кучам: <code>HeapHardLimitSOH</code>, <code>HeapHardLimitLOH</code>, <code>HeapHardLimitPOH</code> (.NET 5+). Если задан любой из них, общий <code>HeapHardLimit</code> игнорируется.</p><p>Ещё одна полезная ручка — <code>System.GC.HighMemoryPercent</code>: при какой загрузке физической памяти сборщик переходит к агрессивным сжимающим сборкам (по умолчанию 90%). Мелкому процессу на большой машине её поднимают, а крупный, наоборот, заставляют реагировать раньше.</p>'
+    },
+    {
+      t: 'match',
+      q: 'Соедини настройку и что она делает',
+      pairs: [
+        ['System.GC.HeapHardLimit', 'Потолок кучи в байтах'],
+        ['System.GC.HeapCount', 'Сколько куч у Server GC'],
+        ['System.GC.ConserveMemory', 'Беречь память ценой частых сжатий, 0–9'],
+        ['System.GC.RetainVM', 'Не возвращать освобождённое ОС сразу'],
+        ['System.GC.DynamicAdaptationMode', 'Включить или выключить DATAS']
+      ]
+    },
+    {
+      t: 'blanks',
+      q: 'runtimeconfig.template.json: Server GC с четырьмя кучами. Допиши имена',
+      code: '{\n  "configProperties": {\n    "System.GC.___": true,\n    "System.GC.___": 4\n  }\n}',
+      tiles: ['Server', 'HeapCount', 'gcServer', 'ServerGarbageCollection', 'GCHeapCount', 'Concurrent'],
+      answer: ['Server', 'HeapCount'],
+      explain: 'В runtimeconfig имена вида System.GC.Server и System.GC.HeapCount. gcServer и GCHeapCount — хвосты переменных окружения (DOTNET_gcServer), ServerGarbageCollection — свойство MSBuild.'
+    },
+    {
+      t: 'learn',
+      title: 'Контейнеры: GC видит лимиты',
+      body: '<p>В контейнере машина «большая», а процессу дали кусочек. Рантайм читает лимиты cgroup (v1 и v2) и считает их своей машиной:</p><ul><li><b>Лимит памяти.</b> Если он задан, а <code>HeapHardLimit</code> — нет, потолок кучи ставится сам: <b>75%</b> лимита, но не меньше 20 МБ. Оставшаяся четверть — нативной памяти, стекам потоков, коду JIT.</li><li><b>Лимит процессора.</b> <code>Environment.ProcessorCount</code> учитывает квоту CPU, и Server GC создаёт столько куч, сколько ядер разрешено. При лимите в одно ядро Server GC не включится вовсе.</li></ul><p>Что видит сборщик, можно проверить в коде:</p>',
+      code: 'var info = GC.GetGCMemoryInfo();\nConsole.WriteLine(info.TotalAvailableMemoryBytes); // потолок кучи или лимит\nConsole.WriteLine(Environment.ProcessorCount);     // с учётом квоты CPU\nConsole.WriteLine(GCSettings.IsServerGC);',
+      deep: '<p>«Тогда и сейчас»: до .NET Core 3.0 Server GC в контейнере с небольшим лимитом памяти часто выходил за него — размеры и бюджеты куч считались по меркам всей машины, и контейнер убивал OOM killer. С .NET Core 3.0 сборщик понимает лимиты, появились <code>HeapHardLimit</code> и значение по умолчанию 75%. Поддержка cgroup v2 — с .NET 5.</p><p>Потолок кучи не защищает от OOM killer целиком: нативные выделения, стеки и буферы вне кучи в него не входят. Если их много, процент снижают через <code>HeapHardLimitPercent</code>.</p>'
+    },
+    {
+      t: 'choice',
+      q: 'Контейнер с лимитом памяти 512 МБ, .NET 8, никаких настроек GC. Приложение копит живые объекты без остановки. Что случится?',
+      options: [
+        'Около 384 МБ кучи сборщик упрётся в потолок и бросит OutOfMemoryException',
+        'Куча дорастёт до 512 МБ, затем процесс убьёт OOM killer без исключения',
+        'Сборщик не знает про лимит и будет расти до памяти всего узла',
+        'Около 256 МБ: по умолчанию потолок — половина лимита'
+      ],
+      answer: 0,
+      explain: 'При заданном лимите контейнера потолок кучи по умолчанию — 75% от него: 384 МБ из 512. Дойдя до него и не освободив место сборкой, рантайм бросает управляемое OutOfMemoryException — его видно в логах, в отличие от тихого убийства OOM killer.',
+      wrong: { 1: 'OOM killer возможен, если много памяти уходит мимо кучи, но управляемую кучу сборщик сам остановит на 75% лимита.', 2: 'Так бывало до .NET Core 3.0. Современный рантайм читает лимиты cgroup.' }
+    },
+    {
+      t: 'choice',
+      q: 'Под в Kubernetes: лимит CPU 2, узел на 16 ядер, .NET 8, Server GC, DATAS не включали. Сколько куч создаст сборщик?',
+      options: ['2', '16', '1', '8'],
+      answer: 0,
+      explain: 'Рантайм учитывает квоту CPU контейнера: Environment.ProcessorCount вернёт 2, и Server GC создаст две кучи. Если бы лимит был 1, работал бы Workstation. На .NET 9 с DATAS сборщик начал бы с одной кучи и добавлял бы их до двух.',
+      wrong: { 1: 'Так было бы без лимита: по куче на каждое ядро узла. Квоту CPU рантайм учитывает.', 2: 'С одной кучи стартует DATAS, а в .NET 8 он по умолчанию выключен.' }
+    }
+  ]
+};
