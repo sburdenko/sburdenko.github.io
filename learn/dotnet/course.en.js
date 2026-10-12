@@ -30,6 +30,10 @@ import w7l1 from './w7/l1-sharing.en.js?v=202610121136';
 import w7l2 from './w7/l2-reflection.en.js?v=202610121136';
 import w7l3 from './w7/l3-dynamic-gen.en.js?v=202610121136';
 import w7boss from './w7/boss.en.js?v=202610121136';
+import w8l1 from './w8/l1-tiers.en.js?v=202610121136';
+import w8l2 from './w8/l2-r2r-aot.en.js?v=202610121136';
+import w8l3 from './w8/l3-inline-bench.en.js?v=202610121136';
+import w8boss from './w8/boss.en.js?v=202610121136';
 
 export default {
   id: 'dotnet',
@@ -68,6 +72,11 @@ export default {
       blurb: 'How the JIT shares generic code through __Canon and dictionaries, what lies behind metadata tokens, MethodInfo and Invoke, how the dynamic call site cache works, and why source generators replace reflection.',
       lessons: [w7l1, w7l2, w7l3, w7boss]
     },
-    { id: 'w8', title: 'Runtime performance', soon: true, blurb: 'Tiered compilation and PGO, ReadyToRun and Native AOT, inlining and devirtualization, BenchmarkDotNet and honest measurement.' }
+    {
+      id: 'w8',
+      title: 'Runtime performance',
+      blurb: 'How .NET makes code fast on the fly: JIT tiers, OSR and Dynamic PGO, ReadyToRun versus Native AOT, inlining and devirtualization — and how to measure the result honestly with BenchmarkDotNet. Course final.',
+      lessons: [w8l1, w8l2, w8l3, w8boss]
+    }
   ]
 };

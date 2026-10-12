@@ -54,7 +54,7 @@
 | w5 | Сборки и версии | 4 + финал | ⬜ | Что лежит в сборке (манифест, метаданные, ресурсы), три версии (`AssemblyVersion`, `FileVersion`, `InformationalVersion`) и что из них смотрит загрузчик, строгие имена тогда и сейчас, GAC и поиск сборок в Framework против `deps.json` и `runtimeconfig.json`, NuGet и разрешение конфликтов версий |
 | w6 | Загрузка и хостинг | 4 + финал | ⬜ | Как запускается `dotnet app.dll`: apphost, hostfxr, hostpolicy, `rollForward`; AppDomain тогда и `AssemblyLoadContext` сейчас — плагины, изоляция и выгрузка; политика необработанных исключений; trimming и single-file |
 | w7 | Дженерики и рефлексия изнутри | 3 + финал | ✅ | Как JIT делит код дженериков между ссылочными типами и копирует для значимых, токены метаданных и `MethodInfo`, цена рефлексии изнутри, `dynamic` и call site cache, source generators |
-| w8 | Производительность рантайма | 3 + финал курса | ⬜ | Tiered compilation и PGO, R2R и Native AOT в цифрах, inlining и devirtualization, BenchmarkDotNet и как не обмануть себя замером |
+| w8 | Производительность рантайма | 3 + финал курса | ✅ | Tiered compilation и PGO, R2R и Native AOT в цифрах, inlining и devirtualization, BenchmarkDotNet и как не обмануть себя замером |
 
 ## Курс «Async/await до дна» — продолжение «C# глубже»
 

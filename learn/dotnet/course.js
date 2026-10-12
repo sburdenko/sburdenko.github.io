@@ -30,6 +30,10 @@ import w7l1 from './w7/l1-sharing.js?v=202610121136';
 import w7l2 from './w7/l2-reflection.js?v=202610121136';
 import w7l3 from './w7/l3-dynamic-gen.js?v=202610121136';
 import w7boss from './w7/boss.js?v=202610121136';
+import w8l1 from './w8/l1-tiers.js?v=202610121136';
+import w8l2 from './w8/l2-r2r-aot.js?v=202610121136';
+import w8l3 from './w8/l3-inline-bench.js?v=202610121136';
+import w8boss from './w8/boss.js?v=202610121136';
 
 export default {
   id: 'dotnet',
@@ -68,6 +72,11 @@ export default {
       blurb: 'Как JIT делит код дженериков через __Canon и словари, что стоит за токенами метаданных, MethodInfo и Invoke, как устроен кэш call site у dynamic и почему source generators заменяют рефлексию.',
       lessons: [w7l1, w7l2, w7l3, w7boss]
     },
-    { id: 'w8', title: 'Производительность рантайма', soon: true, blurb: 'Tiered compilation и PGO, ReadyToRun и Native AOT, inlining и девиртуализация, BenchmarkDotNet и честный замер.' }
+    {
+      id: 'w8',
+      title: 'Производительность рантайма',
+      blurb: 'Как .NET делает код быстрым на ходу: уровни JIT, OSR и Dynamic PGO, ReadyToRun и Native AOT в сравнении, встраивание и девиртуализация — и как честно замерить результат в BenchmarkDotNet. Финал курса.',
+      lessons: [w8l1, w8l2, w8l3, w8boss]
+    }
   ]
 };

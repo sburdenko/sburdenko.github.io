@@ -1,0 +1,102 @@
+/** .NET inside out, unit "Runtime performance", lesson 3: inlining, devirtualization and honest measurement with BenchmarkDotNet. */
+export default {
+  id: 'dotnet.w8.l3',
+  title: 'Inlining, devirtualization and measuring',
+  sub: 'Inlining, sealed, guarded devirtualization and BenchmarkDotNet',
+  minutes: 11,
+  cards: [
+    {
+      t: 'learn',
+      title: 'Inlining: the call is gone',
+      body: '<p><b>Inlining</b> means the JIT copies the body of the called method straight into the caller. The savings on the call itself are modest. What matters is what opens up afterwards: the JIT sees the arguments and the body together and can simplify the code further — fold constants, drop array bounds checks, keep a struct in registers.</p><p>Recall from lesson 1: Tier 0 inlines nothing. Inlining is the job of Tier 1, R2R and Native AOT.</p>',
+      code: 'static int Square(int x) => x * x;\n\nstatic int Area() => Square(5);\n// after inlining: return 25;\n// no call, no multiplication',
+      deep: '<p>The decision is made from the callee CIL. A rough picture of the RyuJIT heuristics: very small methods (around 16 bytes of IL — getters, wrappers) are inlined almost always; larger ones go through a benefit model that weighs constant arguments, loops and the profile; methods above roughly 100 bytes of IL are usually not inlined. The thresholds are an implementation detail and change between versions.</p><p>The price of inlining is larger machine code. Too much inlining bloats hot code and hurts the instruction cache, which is why the JIT is careful.</p>'
+    },
+    {
+      t: 'choice',
+      q: 'Why does inlining often speed code up by more than the call itself costs?',
+      options: ['Once the body is inserted, the JIT sees the arguments and can simplify the code further', 'The inlined method runs in parallel on another core', 'The garbage collector does not run in inlined code', 'Inlined code is saved to disk and never recompiled'],
+      answer: 0,
+      explain: 'A call costs little. The win is in the optimizations that become possible once the method body and its arguments are in one place: constants fold, checks disappear.'
+    },
+    {
+      t: 'learn',
+      title: 'What blocks inlining',
+      body: '<ul><li><b>Size</b>: inlining a large body does not pay off.</li><li><b>Virtual calls</b>: for a virtual or interface call the JIT does not know whose body to insert.</li><li><b>Exception handling</b>: for a long time methods with <code>try</code>/<code>catch</code>/<code>finally</code> were never inlined; in .NET 10 the JIT learned to inline some of them, mainly those with <code>try</code>/<code>finally</code>.</li><li><b>throw</b>: a method that only throws is not inlined, and a <code>throw</code> inside bloats the body.</li><li>Recursion and <code>[MethodImpl(MethodImplOptions.NoInlining)]</code>.</li></ul><p><code>[MethodImpl(MethodImplOptions.AggressiveInlining)]</code> lifts the size limit but not the others: a virtual call still will not be inlined with it. The classic trick is to move the throw into a separate method so the hot one stays small.</p>',
+      code: 'public int this[int i]\n{\n    get\n    {\n        if ((uint)i >= (uint)_count)\n            ThrowIndex();      // cold path: a separate method\n        return _items[i];\n    }\n}\n\n[DoesNotReturn]\nstatic void ThrowIndex() => throw new ArgumentOutOfRangeException("i");',
+      deep: '<p>The .NET libraries themselves work this way: internal ThrowHelper classes keep all the throwing code apart. The JIT sees that the method does not return and moves its call into the cold part of the code.</p><p>The runtime reports why inlining did not happen through the <code>MethodJitInliningFailed</code> event with a text reason (visible in PerfView and <code>dotnet-trace</code>). Quicker is to look at the machine code via <code>DOTNET_JitDisasm</code>: if a <code>call</code> remains, it was not inlined.</p>'
+    },
+    {
+      t: 'tapline',
+      q: 'Get is tiny, yet it will not be inlined into Sum. Which line is to blame?',
+      code: 'class Cache\n{\n    private readonly int[] _items = new int[16];\n\n    public virtual int Get(int i) => _items[i & 15];\n\n    public int Sum() => Get(0) + Get(1);\n}',
+      answer: 4,
+      explain: 'Get is virtual: this may be a subclass of Cache with a different Get, and the JIT does not know whose body to insert. Making the class sealed or dropping virtual helps.'
+    },
+    {
+      t: 'learn',
+      title: 'Devirtualization: getting a direct call back',
+      body: '<p>If the JIT has <b>proven</b> the exact type of the object, a virtual call becomes a direct one — and it can be inlined. Where the JIT learns this from:</p><ul><li>the class or method is <code>sealed</code> — there can be no subclasses with another body;</li><li>the object was created right there with <code>new</code>;</li><li>the object sits in a <code>static readonly</code> field and Tier 1 sees its type (lesson 1);</li><li>it is a struct: nothing derives from it.</li></ul><p>So <code>sealed</code> on classes without subclasses is a free hint to the JIT. Analyzer <b>CA1852</b> suggests sealing internal classes that have no subclasses.</p>',
+      code: 'abstract class Shape { public abstract double Area(); }\n\nsealed class Circle : Shape\n{\n    public double R;\n    public override double Area() => Math.PI * R * R;\n}\n\ndouble One(Circle c) => c.Area(); // exactly Circle: a direct call\ndouble Any(Shape s) => s.Area();  // type unknown: a call through the method table',
+      deep: '<p>Generics over structs: for every value type T the JIT makes a separate copy of the code, so in <code>M&lt;T&gt;(T x) where T : IShape</code> the call <code>x.Area()</code> on a struct becomes direct and gets inlined. For reference T the code is shared and the type is unknown there (more in the unit on generics inside out).</p><p><code>sealed</code> speeds up type checks too: <code>obj is Circle</code> for a sealed class is a single type pointer comparison, no hierarchy walk.</p>'
+    },
+    {
+      t: 'learn',
+      title: 'Guarded devirtualization: betting on the profile',
+      body: '<p>Often the type is statically unknown: anything can arrive in <code>Any(Shape s)</code>. But Dynamic PGO sees that in practice it is almost always <code>Circle</code>. Then Tier 1 performs <b>guarded devirtualization</b> (GDV): it checks the type with a single comparison and on the common path calls the method directly — with inlining.</p><p>The fallback is an ordinary virtual call, so the code is correct for any type. If the load changes, the check simply starts missing more often: Tier 1 is not rebuilt. The same trick works for interface calls and delegates.</p>',
+      code: '// what Tier 1 does with s.Area() when the profile says "almost always Circle"\nif (s.GetType() == typeof(Circle))\n    result = Math.PI * ((Circle)s).R * ((Circle)s).R; // inlined\nelse\n    result = s.Area();                                // ordinary call'
+    },
+    {
+      t: 'multi',
+      q: 'When can the JIT call s.Area() directly or inline it? Select all.',
+      options: ['Circle is sealed and the variable has type Circle', 'The object was just created with new Circle() in the same method', 'The PGO profile showed that Circle almost always arrives (with a type check)', 'Area is marked AggressiveInlining and the object type is unknown', 'The method runs in Tier 0'],
+      answer: [0, 1, 2],
+      explain: 'The exact type is required: from sealed, from a nearby new, or from the profile — under a check. AggressiveInlining does not say whose body to insert, and Tier 0 does not inline at all.'
+    },
+    {
+      t: 'learn',
+      title: 'BenchmarkDotNet: a measurement you can trust',
+      body: '<p>Why a <code>Stopwatch</code> around a single call lies: the first call includes the JIT and slow Tier 0, a Debug build is unoptimized, a single run drowns in noise, and a garbage collection caused by other code can land in the middle of the measurement.</p><p><b>BenchmarkDotNet</b> does all this for you: it builds the project in Release, runs each benchmark in a separate process, warms the method up until timings are stable, does many iterations and computes statistics. It will refuse to run an unoptimized build.</p>',
+      code: 'using BenchmarkDotNet.Attributes;\nusing BenchmarkDotNet.Running;\n\nBenchmarkRunner.Run<ShapeBench>();\n\n[MemoryDiagnoser]\npublic class ShapeBench\n{\n    private Shape _any = new Circle { R = 2 };\n    private Circle _circle = new Circle { R = 2 };\n\n    [Benchmark(Baseline = true)]\n    public double Virtual() => _any.Area();\n\n    [Benchmark]\n    public double Sealed() => _circle.Area();\n}',
+      deep: '<p>Run it with <code>dotnet run -c Release</code>. Columns: Mean — the average, Error — half of the 99.9% confidence interval, StdDev — the spread, Ratio — relative to the Baseline, Allocated and Gen0 — from <code>[MemoryDiagnoser]</code>.</p><p>You can compare runtimes and settings in one run: <code>[SimpleJob(RuntimeMoniker.Net80)]</code>, <code>[SimpleJob(RuntimeMoniker.NativeAot80)]</code>, and through the job configuration — environment variables such as <code>DOTNET_TieredPGO=0</code>. <code>[DisassemblyDiagnoser]</code> shows the machine code that was actually measured.</p>'
+    },
+    {
+      t: 'choice',
+      q: 'In the benchmark above, Sealed got a Ratio of about 0.97 — nearly the same as Virtual. Why is the difference so small?',
+      options: ['Dynamic PGO did guarded devirtualization: Virtual also has Circle.Area inlined behind a type check', 'BenchmarkDotNet cannot measure virtual calls', 'A virtual call in .NET costs nothing', 'The measurement ran in a Debug build'],
+      answer: 0,
+      explain: '_any always holds a Circle, the profile saw it, and Tier 1 put in a type check with the inlined body. What remains is the cost of one comparison. Set DOTNET_TieredPGO=0 and the gap will most likely grow.',
+      wrong: { 2: 'By itself a virtual call is an indirect jump and a barrier to inlining. Here PGO hid it.', 3: 'BenchmarkDotNet will not run in Debug — it checks that the build is optimized.' }
+    },
+    {
+      t: 'learn',
+      title: 'Fooling yourself: dead code and laziness',
+      body: '<ul><li><b>Dead code elimination</b>: if the result is unused, the JIT may throw the computation away, and you measure nothing. Return the result from the method: BenchmarkDotNet will "consume" it.</li><li><b>Constant folding</b>: <code>Square(5)</code> becomes 25 at compile time. Keep inputs in fields, set them with <code>[Params]</code> and prepare them in <code>[GlobalSetup]</code>.</li><li><b>LINQ laziness</b>: return an <code>IEnumerable</code> and you only measured creating the query. Enumerate the sequence: <code>.Consume(consumer)</code> with BenchmarkDotNet <code>Consumer</code>.</li></ul>',
+      code: 'private readonly Consumer _consumer = new();\nprivate int[] _data = null!;\n\n[GlobalSetup]\npublic void Setup() => _data = Enumerable.Range(0, 1000).ToArray();\n\n[Benchmark]\npublic void Bad() => Math.Sqrt(_data.Length); // result thrown away\n\n[Benchmark]\npublic void Good() => _data.Where(x => x % 2 == 0).Consume(_consumer);'
+    },
+    {
+      t: 'tapline',
+      q: 'Which benchmark measures almost no work?',
+      code: '[Benchmark]\npublic int Count() => _data.Count(x => x > 0);\n\n[Benchmark]\npublic IEnumerable<int> Filter() => _data.Where(x => x > 0);\n\n[Benchmark]\npublic int[] FilterAll() => _data.Where(x => x > 0).ToArray();',
+      answer: 4,
+      explain: 'Where is lazy: Filter only creates the query object, and filtering never starts. BenchmarkDotNet consumes the returned reference but will not enumerate it. Count and ToArray walk the whole array.'
+    },
+    {
+      t: 'match',
+      q: 'Match the BenchmarkDotNet attribute or class to its purpose',
+      pairs: [
+        ['[MemoryDiagnoser]', 'Allocated and Gen0 columns'],
+        ['Baseline = true', 'Ratio column relative to the reference'],
+        ['[GlobalSetup]', 'Preparing data outside the measurement'],
+        ['Consumer', 'Enumerate a sequence so it is not thrown away'],
+        ['[DisassemblyDiagnoser]', 'Machine code of the measured method']
+      ]
+    },
+    {
+      t: 'order',
+      q: 'How does BenchmarkDotNet run a single benchmark? Put the steps in order.',
+      items: ['Builds a separate project in Release', 'Starts a separate process', 'Picks the number of calls per iteration (pilot)', 'Warms the method up until timings are stable', 'Runs the main measurements and computes statistics'],
+      explain: 'A separate process cuts off the influence of other code and another JIT state. The pilot picks the call count so an iteration is not too short for the timer. Warmup brings the method to Tier 1, and only then do the measurements run.'
+    }
+  ]
+};
