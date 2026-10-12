@@ -1,7 +1,7 @@
 /** Финал курса async/await: платформы и всё вместе. */
 export default {
   id: 'as.u6.boss',
-  title: 'Финал курса',
+  title: 'Финал: платформы',
   sub: 'Сервер, окно и игра — один механизм',
   minutes: 8,
   boss: true,

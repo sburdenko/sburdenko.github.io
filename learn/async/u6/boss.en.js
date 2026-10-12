@@ -1,7 +1,7 @@
 /** Async course final: platforms and everything together (English version). */
 export default {
   id: 'as.u6.boss',
-  title: 'Course final',
+  title: 'Final: platforms',
   sub: 'Server, window and game: one mechanism',
   minutes: 8,
   boss: true,
