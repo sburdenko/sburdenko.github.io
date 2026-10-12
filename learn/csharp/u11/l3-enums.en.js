@@ -1,0 +1,93 @@
+/** Deeper C#, unit "Strings, enums, arrays", lesson 3: enums and flags. */
+export default {
+  id: 'cs.u11.l3',
+  title: 'Enums and flags',
+  sub: 'A struct over an integer, baked-in values, undefined values, [Flags] and HasFlag',
+  minutes: 10,
+  cards: [
+    {
+      t: 'learn',
+      title: 'To the CLR an enum is a struct over an integer',
+      body: '<p>An enumeration (enum) is a value type derived from <code>System.Enum</code>. It has exactly one instance field — <code>value__</code> of the underlying integer type (<code>int</code> by default). The member names are <b>constants</b>: static literal fields holding a number.</p><p>So a <code>Color</code> variable takes as much space as its underlying type, and in machine code it is just a number. You can pick the underlying type: <code>byte</code>, <code>short</code>, <code>long</code> and their unsigned pairs.</p>',
+      code: 'enum Color : byte { Red, Green, Blue = 10 }\n\n// IL:\n// .class sealed Color extends System.Enum\n//   .field public specialname rtspecialname uint8 value__\n//   .field public static literal valuetype Color Red = uint8(0)\n//   .field public static literal valuetype Color Green = uint8(1)\n//   .field public static literal valuetype Color Blue = uint8(10)',
+      deep: '<p>Since it is a plain integer inside, a boxed enum unboxes into its underlying type and back: <code>(int)(object)DayOfWeek.Monday</code> works — we saw this in the unit "How a type is built". Methods like <code>ToString</code> are declared in <code>System.Enum</code>, which is a reference type, so calling them on an enum value usually requires boxing.</p><p>The constraint <code>where T : struct, Enum</code> is available since C# 7.3; the generic APIs are built on it: <code>Enum.Parse&lt;T&gt;</code>, <code>Enum.GetValues&lt;T&gt;()</code> (.NET 5).</p>'
+    },
+    {
+      t: 'choice',
+      q: 'enum Color { Red, Green, Blue }. What does Color c = (Color)42; do?',
+      options: ['Compiles and runs: c holds the number 42', 'Throws InvalidCastException', 'Does not compile', 'Runs, and c ends up as Blue'],
+      answer: 0,
+      explain: 'Casting an integer to an enum just changes the type of the number. The CLR does not check whether such a member exists. c.ToString() returns "42".',
+      wrong: { 1: 'There is no check on the cast: an enum is the same integer.', 3: 'The value is not clamped to the nearest member; it stays 42.' }
+    },
+    {
+      t: 'learn',
+      title: 'Values are baked into the calling code',
+      body: '<p>An enum member is a constant. When the app writes <code>Status.Blocked</code>, the compiler puts a <b>number</b> into its IL, not a reference to the field. After the build the app does not know the name, only 1.</p><p>The "version 2" scenario: the library inserted a new member at the start, and all implicit numbers shifted. An app built against the old version keeps comparing with the old numbers — which now mean something else. No load error, just a silently wrong result.</p><p>Rules for public enums: set values explicitly, add new members at the end, never renumber or remove old ones.</p>',
+      code: '// library v1\nenum Status { Active, Blocked }           // Blocked = 1\n\n// library v2\nenum Status { Pending, Active, Blocked }  // Blocked = 2, 1 is Active\n\n// an app built against v1, in IL:\n// if ((int)user.Status == 1) ...'
+    },
+    {
+      t: 'choice',
+      q: 'The library was updated to v2 from the card above, and the app was not rebuilt. What does its check if (user.Status == Status.Blocked) do?',
+      options: ['Compares with 1 and treats active users as blocked', 'Compares with Blocked by name and works correctly', 'Fails with MissingFieldException', 'Compares with 2'],
+      answer: 0,
+      explain: 'The app\'s IL holds the number 1 — the value of Blocked at build time. In v2 one means Active. Nobody looks the field up by name, so there is no exception either.',
+      wrong: { 2: 'MissingFieldException can happen when code accesses a field. The compiler has already substituted the constant as a number.' }
+    },
+    {
+      t: 'learn',
+      title: 'Undefined values',
+      body: '<p>An enum variable can hold any number: from a cast, a database, JSON, or <code>default</code>. Details that matter:</p><ul><li><code>default(Color)</code> and uninitialized fields are always <b>0</b>, even if there is no member with value 0. That is why the first member is usually <code>None</code> or <code>Unknown = 0</code>.</li><li><code>Enum.TryParse&lt;Color&gt;("42", out c)</code> returns <b>true</b>: a numeric string parses into the number whether or not such a member exists.</li><li><code>Enum.IsDefined(c)</code> checks whether there is a member with exactly that value.</li><li>A <code>switch</code> statement without <code>default</code> simply skips an unknown value. A <code>switch</code> expression that lists every name produces warning <b>CS8524</b> and throws <code>SwitchExpressionException</code> on an unknown value.</li></ul>',
+      code: 'string Act(Light l) => l switch\n{\n    Light.Red => "stop",\n    Light.Green => "go",\n    _ => throw new ArgumentOutOfRangeException(nameof(l))\n};',
+      deep: '<p>Why the compiler wants a <code>_</code> arm even though every name is listed: to it, <code>Light</code> is the whole <code>int</code> range, and the names are just a few points in it. The separate warning CS8524 (rather than the usual CS8509) is specifically about unnamed values — so you can suppress it if the input is definitely validated.</p><p><code>Enum.IsDefined</code> in .NET 5+ has a generic form <code>IsDefined&lt;T&gt;(T)</code> without boxing; the runtime caches member values, but it is still a lookup, not a single comparison. On a hot path the range check is written by hand: <code>(uint)l &lt;= (uint)Light.Green</code>, if the values are contiguous.</p>'
+    },
+    {
+      t: 'multi',
+      q: 'enum Color { Red = 1, Green = 2 }. What is true? Select all.',
+      options: ['Enum.TryParse<Color>("42", out var c) returns true', 'Enum.IsDefined((Color)42) returns false', 'default(Color) is 0 even though there is no such member', '(Color)42 throws at run time', 'A switch expression with arms for Red and Green and no _ gives a warning'],
+      answer: [0, 1, 2, 4],
+      explain: 'Casting to an enum checks nothing — that is exactly why IsDefined and the _ arm exist. TryParse accepts any numeric string that fits the underlying type.'
+    },
+    {
+      t: 'learn',
+      title: 'Flags and what [Flags] does',
+      body: '<p>A flags enum is one where every member is a separate bit: values 1, 2, 4, 8… Combinations are built with <code>|</code>, tested with <code>&amp;</code>, cleared with <code>&amp; ~</code>.</p><p>The <code>[Flags]</code> attribute does <b>not</b> assign powers of two — you write them yourself; otherwise for None, Read, Write, Exec implicit numbering gives 0, 1, 2, 3, and Read | Write collides with Exec. The attribute changes only the text form: <code>ToString</code> prints the combination by names, and <code>Enum.Parse</code> understands "Read, Write".</p>',
+      code: '[Flags]\nenum Perm { None = 0, Read = 1, Write = 2, Exec = 4 }\n\nvar p = Perm.Read | Perm.Write;   // 3\np &= ~Perm.Write;                 // clear Write\nbool canRead = (p & Perm.Read) != 0;\nConsole.WriteLine(Perm.Read | Perm.Exec); // "Read, Exec"',
+      deep: '<p>If a number cannot be fully decomposed into defined flags, <code>ToString</code> prints it as digits: for <code>(Perm)9</code> — "9". Handy combinations can be declared as members: <code>ReadWrite = Read | Write</code>; <code>ToString</code> will prefer that name. Up to 64 flags fit into <code>long</code>/<code>ulong</code>; beyond that you need a <code>BitArray</code> or your own struct.</p>'
+    },
+    {
+      t: 'choice',
+      q: 'The [Flags] attribute was removed from Perm, the values stayed. What does Console.WriteLine(Perm.Read | Perm.Write) print?',
+      options: ['3', 'Read, Write', 'Read | Write', 'Write'],
+      answer: 0,
+      explain: 'Without [Flags], ToString looks for a member with exactly the value 3, finds none and prints the number. The bitwise operations themselves work the same with or without the attribute.'
+    },
+    {
+      t: 'learn',
+      title: 'HasFlag: then and now',
+      body: '<p>The signature is <code>bool HasFlag(Enum flag)</code>. The parameter type is <code>System.Enum</code>, a reference type, so the argument is boxed. The method itself is declared in <code>System.Enum</code>, so the value it is called on is boxed too. Inside there is also a check that the types match, otherwise <code>ArgumentException</code>.</p><p>In .NET Framework each call cost two allocations, and hot code replaced it with <code>(p &amp; f) == f</code>. Since .NET Core 2.1 the JIT recognizes <code>HasFlag</code> as an intrinsic and emits the same bitwise comparison — no boxing.</p><p>The logical trap remains: <code>p.HasFlag(Perm.None)</code> is always true — every number "contains" zero bits.</p>',
+      deep: '<p>The optimization kicks in when the JIT sees both types exactly. In code where the value already sits in an <code>Enum</code> or <code>object</code>, the boxing has already happened earlier, and there is no miracle. One more subtlety: <code>Enum.IsDefined</code> returns false for a flag combination unless that combination is declared as its own member — you cannot validate flags with IsDefined.</p>'
+    },
+    {
+      t: 'tapline',
+      q: 'Which of the variables b–e gets true?',
+      code: '[Flags] enum Perm { None = 0, Read = 1, Write = 2, Exec = 4 }\nPerm p = Perm.Read;\nbool b = p.HasFlag(Perm.None);\nbool c = (p & Perm.Write) == Perm.Write;\nbool d = Enum.IsDefined(Perm.Read | Perm.Write);\nbool e = p.HasFlag(Perm.Exec);',
+      answer: 2,
+      explain: 'HasFlag(None) checks (p & 0) == 0 — always true. p has neither Write nor Exec, and the value 3 is not declared as a member, so IsDefined returns false.'
+    },
+    {
+      t: 'learn',
+      title: 'Cost: where an enum costs money',
+      body: '<p>Comparisons, <code>switch</code>, bitwise operations — free: it is integer work. The JIT often turns a <code>switch</code> over dense values into a jump table.</p><p>You pay where a name or reflection is involved:</p><ul><li><code>ToString()</code> and interpolation — a name lookup by value (the runtime caches the name table, but a string is still produced);</li><li><code>Enum.Parse</code>, <code>GetNames</code>, <code>GetValues</code> — string parsing and new arrays on every call;</li><li>non-generic APIs (<code>Enum.IsDefined(typeof(T), value)</code>, <code>HasFlag</code> before .NET Core 2.1) — boxing.</li></ul><p>If names are needed on a hot path (logs, JSON), people write their own <code>switch</code> with string literals or a cached array of names.</p>',
+      deep: '<p>Serializers solve it the same way: <code>System.Text.Json</code> with <code>JsonStringEnumConverter</code> caches the names, and its source generator emits code without reflection. For Native AOT the generic <code>Enum.GetValues&lt;T&gt;()</code> is preferable to the <code>Type</code>-based versions: the non-generic <code>GetValues(Type)</code> creates an array of a type the AOT compiler may not have prepared, and it is annotated with a warning.</p>'
+    },
+    {
+      t: 'blanks',
+      q: 'Complete a generic check that a value is a declared enum member',
+      code: 'static bool IsKnown<T>(T value) where T : struct, ___\n    => Enum.___(value);',
+      tiles: ['Enum', 'IsDefined', 'IConvertible', 'TryParse', 'class'],
+      answer: ['Enum', 'IsDefined'],
+      explain: 'The struct, Enum constraint (C# 7.3) admits only enums. Enum.IsDefined<T>(T) from .NET 5 works without boxing and without typeof.'
+    }
+  ]
+};

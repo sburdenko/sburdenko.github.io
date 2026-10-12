@@ -1,0 +1,94 @@
+/** C# глубже, раздел «Члены типа и версии», урок 3: virtual, new, override, sealed, call и callvirt, таблица методов. */
+export default {
+  id: 'cs.u8.l3',
+  title: 'virtual, new и override',
+  sub: 'Таблица методов, call и callvirt и что ломается у потребителя при смене new на override',
+  minutes: 10,
+  cards: [
+    {
+      t: 'learn',
+      title: 'Таблица виртуальных методов',
+      body: '<p>У каждого типа есть MethodTable — та самая структура, на которую указывает объект (см. раздел «Устройство типа»). В ней лежит <b>таблица слотов</b>: по одному слоту на каждый виртуальный метод, в слоте — адрес кода.</p><p>Наследник получает копию таблицы родителя, а дальше:</p><ul><li><code>override</code> <b>заменяет адрес в слоте родителя</b> — слот тот же, код новый;</li><li><code>new</code> <b>не трогает слот родителя</b>: метод с тем же именем становится отдельным методом (а <code>new virtual</code> — новым слотом в конце таблицы).</li></ul><p>Вызов виртуального метода — это «возьми у объекта MethodTable, возьми слот номер N, перейди по адресу». Какой код выполнится, решает объект, а не тип переменной.</p>',
+      code: 'class Shape            { public virtual string Name() => "shape"; }\nclass Circle : Shape   { public override string Name() => "circle"; }\nclass Square : Shape   { public new string Name() => "square"; }\n\n// слот Name у Shape:  Shape.Name\n// слот Name у Circle: Circle.Name  (заменён)\n// слот Name у Square: Shape.Name   (не тронут)'
+    },
+    {
+      t: 'choice',
+      q: 'Классы из примера выше. Что напечатает код?',
+      code: 'Shape a = new Circle();\nShape b = new Square();\nConsole.WriteLine($"{a.Name()} {b.Name()}");',
+      options: ['circle shape', 'circle square', 'shape shape', 'shape square'],
+      answer: 0,
+      explain: 'Вызов идёт через слот Shape.Name. У Circle в слоте его переопределение, у Square — по-прежнему метод Shape: new создал отдельный метод, который виден только через переменную типа Square.',
+      wrong: { 1: 'Square.Name с new вызвался бы только через переменную типа Square. Через Shape слот ведёт в Shape.Name.' }
+    },
+    {
+      t: 'learn',
+      title: 'Модификаторы в IL',
+      body: '<p>Ключевые слова C# превращаются в флаги метода в метаданных:</p><ul><li><code>virtual</code> → <code>newslot virtual</code>: новый слот;</li><li><code>override</code> → <code>virtual</code> без <code>newslot</code>: занять слот родителя с той же сигнатурой;</li><li><code>sealed override</code> → <code>final virtual</code>: слот занят, дальше переопределять нельзя;</li><li><code>new</code> у невиртуального метода → обычный метод без флагов;</li><li><code>abstract</code> → <code>newslot abstract virtual</code>, кода нет.</li></ul><p>Само слово <code>new</code> в IL не попадает. Это лишь ответ компилятору: «я знаю, что прячу метод родителя».</p>',
+      code: '.method public hidebysig newslot virtual instance string Name()   // virtual\n.method public hidebysig virtual instance string Name()           // override\n.method public final hidebysig virtual instance string Name()     // sealed override\n.method public hidebysig instance string Name()                   // new',
+      deep: '<p>Флаг <code>hidebysig</code> говорит, что метод прячет родительский только при совпадении сигнатуры, а не по одному имени. C# ставит его всегда.</p><p>Неявная реализация метода интерфейса без <code>virtual</code> выглядит в IL как <code>virtual final newslot</code>: CLR нужна виртуальность, чтобы вызывать метод через интерфейс, но для C# он остаётся невиртуальным и запечатанным.</p>'
+    },
+    {
+      t: 'learn',
+      title: 'call и callvirt',
+      body: '<p>В IL две инструкции вызова экземплярного метода:</p><ul><li><code>call</code> — вызвать именно этот метод, адрес известен заранее. Проверки на null нет.</li><li><code>callvirt</code> — проверить ссылку на null, а если метод виртуальный, найти код через слот объекта.</li></ul><p>C# ставит <code>callvirt</code> почти для всех вызовов экземплярных методов у ссылочных типов — <b>даже невиртуальных</b>: так вызов на null сразу даёт <code>NullReferenceException</code>. JIT для невиртуального метода всё равно делает прямой вызов, добавив дешёвую проверку на null.</p><p><code>call</code> C# использует для статических методов, методов структур и <code>base.Method()</code> — там нужен ровно метод родителя, а не слот.</p>',
+      code: 'order.Total();      // callvirt  Order::Total   (даже если Total не virtual)\nMath.Max(a, b);     // call      Math::Max\npoint.Length();     // call      Point::Length  (Point — struct)\nbase.ToString();    // call      Object::ToString — мимо слота'
+    },
+    {
+      t: 'match',
+      q: 'Соедини вызов и инструкцию IL, которую поставит C#',
+      pairs: [
+        ['list.Clear() у List<int>', 'callvirt'],
+        ['base.Dispose() в переопределении', 'call без проверки слота'],
+        ['Path.Combine(a, b)', 'call, статический метод'],
+        ['span.Slice(1) у Span<byte>', 'call, метод структуры']
+      ]
+    },
+    {
+      t: 'learn',
+      title: 'Цена виртуального вызова и sealed',
+      body: '<p>Виртуальный вызов — два чтения памяти (MethodTable, затем слот) и косвенный переход. Само по себе это наносекунды. Дороже другое: <b>JIT не может встроить (inline) метод</b>, код которого неизвестен до запуска.</p><p>Если JIT уверен в точном типе, он делает <b>девиртуализацию</b> — прямой вызов, а дальше и встраивание. Помогает:</p><ul><li><code>sealed</code> у класса или метода — наследников нет, слот не заменят;</li><li>точный тип виден из кода: <code>new Circle().Name()</code>;</li><li>динамический PGO (по умолчанию с .NET 8): JIT замечает, что почти всегда приходит <code>Circle</code>, и ставит проверку «если Circle — прямой вызов, иначе через слот».</li></ul>',
+      deep: '<p>Поэтому в современных кодовых базах классы часто делают <code>sealed</code> по умолчанию, а анализатор CA1852 предлагает запечатать внутренние классы без наследников. Бонус: <code>is</code> и приведения к <code>sealed</code>-типу сводятся к сравнению указателя на MethodTable.</p><p>Вызов через интерфейс устроен сложнее, чем через слот класса: CLR использует механизм заглушек (virtual stub dispatch) с кэшем по типу объекта. В .NET 8–10 и для него работает guarded devirtualization через PGO.</p>'
+    },
+    {
+      t: 'multi',
+      q: 'Когда JIT может вызвать Name() напрямую, без перехода через слот? Отметь все.',
+      options: ['Класс Circle помечен sealed, вызов через переменную Circle', 'В Circle метод объявлен как sealed override, вызов через переменную Circle', 'new Circle().Name()', 'Вызов через переменную Shape, а Shape — абстрактный класс', 'Name объявлен virtual, но его никто не переопределил'],
+      answer: [0, 1, 2],
+      explain: 'sealed класс и sealed override гарантируют, что ниже по иерархии слот не заменят. Для new Circle() точный тип виден прямо из кода. Абстрактность Shape ничего не говорит о наследнике, а «никто не переопределил» JIT знать не может: сборку с наследником могут загрузить позже. Динамический PGO в таких местах ставит проверку типа с запасным путём через слот — это уже не безусловный прямой вызов.'
+    },
+    {
+      t: 'learn',
+      title: 'Версия 2: new меняют на override',
+      body: '<p>Библиотека <code>Shapes.dll</code> v1: <code>Square.Name()</code> объявлен с <code>new</code>. Приложение держит квадраты в <code>List&lt;Shape&gt;</code> и печатает <code>s.Name()</code> — получает «shape». Под это поведение написаны тесты и отчёты.</p><p>В v2 автор исправил «ошибку»: заменил <code>new</code> на <code>override</code>. Приложение не перекомпилировали. Что происходит:</p><ul><li>в IL приложения по-прежнему <code>callvirt Shape::Name</code> — ссылка валидна, ошибок загрузки нет;</li><li>но слот <code>Name</code> у <code>Square</code> теперь занят переопределением — и тот же вызов печатает «square».</li></ul><p>Двоичная совместимость сохранилась, а поведение поменялось. Обратная замена <code>override</code> → <code>new</code> так же тихо ломает вызовы через базовый тип: они перестают доходить до наследника.</p>',
+      code: '// Приложение, собрано с v1, IL не менялся:\nforeach (Shape s in shapes)\n    Console.WriteLine(s.Name());   // callvirt Shape::Name\n\n// с Shapes v1 (new):      shape\n// с Shapes v2 (override): square'
+    },
+    {
+      t: 'tapline',
+      q: 'Приложение собрано с Shapes v1, где Square.Name объявлен с new. Его запускают с v2, где там override. Вывод какой строки изменится?',
+      code: 'var sq = new Square();\nShape sh = sq;\nobject o = sq;\nConsole.WriteLine(sq.Name());\nConsole.WriteLine(sh.Name());\nConsole.WriteLine(o.GetType().Name);',
+      answer: 4,
+      explain: 'sq.Name() и в v1, и в v2 попадает в Square.Name — тип переменной Square. sh.Name() идёт через слот Shape.Name: в v1 там метод Shape, в v2 — переопределение Square. GetType().Name — всегда "Square".'
+    },
+    {
+      t: 'learn',
+      title: 'Версия 2: в базовом классе появился метод',
+      body: '<p>Обратный случай. В приложении есть <code>class MyButton : Button</code> со своим методом <code>void Refresh()</code>. В v2 UI-библиотеки в <code>Button</code> добавили <code>virtual void Refresh()</code> и вызывают его изнутри при перерисовке.</p><p>Без перекомпиляции метод приложения в IL обычный, невиртуальный — он не занимает слот <code>Button.Refresh</code>. Библиотека вызывает свою версию, а <code>MyButton.Refresh</code> молчит.</p><p>При перекомпиляции компилятор выдаст предупреждение <b>CS0114</b>: «метод прячет унаследованный; добавь override или new». По умолчанию C# считает его <code>new</code> — это сознательное решение языка: новый метод в базе не должен незаметно перехватывать чужой код.</p>',
+      deep: '<p>Другие изменения библиотеки, которые ломают потребителей без перекомпиляции:</p><ul><li>класс стал <code>sealed</code>, а потребитель от него наследуется — <code>TypeLoadException</code> при загрузке его типа;</li><li>в базовый класс добавили <code>abstract</code>-метод — у наследника потребителя нет реализации, тоже <code>TypeLoadException</code>;</li><li>метод перестал быть <code>virtual</code> — переопределению потребителя больше нечего переопределять: оно становится отдельным методом и перестаёт вызываться через базу.</li></ul><p>Добавить <code>virtual</code> невиртуальному методу безопасно для вызывающих из C#: они и так зовут его через <code>callvirt</code>.</p>'
+    },
+    {
+      t: 'multi',
+      q: 'Что сломает собранного с v1 потребителя-наследника при замене только dll библиотеки? Отметь все.',
+      options: ['Базовый класс стал sealed', 'В базовый класс добавили abstract-метод', 'Публичный метод базового класса стал virtual', 'В базовый класс добавили новый private-метод'],
+      answer: [0, 1],
+      explain: 'Наследоваться от sealed нельзя, а незакрытый абстрактный метод делает тип незагружаемым — оба случая дают TypeLoadException. Добавить virtual безопасно: вызовы уже идут через callvirt. Приватный метод потребитель не видит.'
+    },
+    {
+      t: 'blanks',
+      q: 'Запрети дальнейшее переопределение, но сохрани своё',
+      code: 'class Circle : Shape\n{\n    public ___ ___ string Name() => "circle";\n}',
+      tiles: ['sealed', 'override', 'new', 'virtual', 'static'],
+      answer: ['sealed', 'override'],
+      explain: 'sealed override занимает слот родителя и ставит флаг final: наследники Circle не смогут его переопределить, а JIT может девиртуализировать вызов через переменную Circle.'
+    }
+  ]
+};

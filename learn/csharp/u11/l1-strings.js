@@ -1,0 +1,99 @@
+/** C# глубже, раздел «Строки, перечисления, массивы», урок 1: строка в памяти, интернирование и сравнение. */
+export default {
+  id: 'cs.u11.l1',
+  title: 'Строка изнутри и сравнение',
+  sub: 'Раскладка в куче, пул литералов, ordinal против культуры и турецкая i',
+  minutes: 10,
+  cards: [
+    {
+      t: 'learn',
+      title: 'Что лежит в куче',
+      body: '<p>Что строка неизменяема, ты уже знаешь. Теперь — как она устроена. Объект <code>string</code> — это заголовок, указатель на тип, поле длины (<code>int</code>) и сразу за ним символы в UTF-16, по 2 байта на <code>char</code>. В конце CLR кладёт нулевой символ: так строку можно отдать в нативный код без копирования.</p><p>Длина хранится в объекте, а символы лежат в нём же — это единственный, кроме массивов, тип переменного размера. Поэтому строку нельзя «дорастить на месте»: любая операция, меняющая текст, выделяет новый объект и копирует символы.</p><p>Неизменяемость дальше окупается: строку можно делить между потоками без блокировок, класть ключом в словарь и хранить одну копию одинакового текста.</p>',
+      code: 'string s = "abc";\n// [заголовок 8][указатель на тип 8][длина 4]\n// [\'a\' 2][\'b\' 2][\'c\' 2][\'\\0\' 2]\n// 28 байт → с выравниванием до 8: 32',
+      deep: '<p>В исходниках рантайма это класс <code>String</code> с полями <code>_stringLength</code> и <code>_firstChar</code>: адрес первого символа — просто адрес поля. Так работают <code>fixed (char* p = s)</code> и <code>MemoryMarshal.GetReference(s.AsSpan())</code>.</p><p>Начиная с .NET 8 строковые литералы, как правило, размещаются в отдельной куче, которую сборщик не обходит (NonGC heap). Адрес такого объекта не меняется, и JIT вшивает его прямо в машинный код вместо загрузки через таблицу.</p>'
+    },
+    {
+      t: 'choice',
+      q: 'Сколько байт займёт в куче строка "abc" в 64-битном процессе?',
+      options: ['32', '6', '24', '28'],
+      answer: 0,
+      explain: '16 байт служебной части, 4 байта длины, 3 × 2 байта символов и 2 байта нулевого символа — 28. Объекты выравниваются по 8 байт, получается 32.',
+      wrong: { 1: '6 байт — только символы. Строка — объект, у неё есть заголовок, указатель на тип и длина.', 3: '28 — сумма полей, но размер объекта на x64 округляется до кратного 8.' }
+    },
+    {
+      t: 'learn',
+      title: 'Интернирование: что попадает в пул',
+      body: '<p>IL-инструкция <code>ldstr</code> загружает литерал. CLR гарантирует, что одинаковые литералы во всём процессе — <b>один объект</b>, даже если они в разных сборках. Для этого рантайм держит пул интернирования (intern pool) — хеш-таблицу «текст → строка».</p><p>Компилятор складывает константы сам: <code>"hel" + "lo"</code> превращается в один литерал <code>"hello"</code> ещё при сборке (constant folding).</p><p>Строки, собранные во время работы, в пул не попадают. Положить их туда можно вызовом <code>string.Intern(s)</code>: он вернёт строку из пула, а если её там нет — добавит.</p>',
+      code: 'string a = "hello";\nstring b = "hel" + "lo";           // один литерал\nstring c = "hel" + Console.ReadLine(); // строка из кучи\nstring d = string.Intern(c);       // из пула',
+      deep: '<p>Цена <code>Intern</code>: хеш всего текста и поиск в общей таблице рантайма. Строки в пуле живут до конца процесса — сборщик их не освобождает. Интернировать произвольный ввод (имена из запросов, строки из файла) — способ получить утечку памяти.</p><p>Если нужна дедупликация повторяющихся строк, например при разборе большого CSV, лучше свой словарь или <code>HashSet&lt;string&gt;</code>, который можно отпустить. <code>string.IsInterned(s)</code> проверяет, есть ли текст в пуле, ничего не добавляя.</p>'
+    },
+    {
+      t: 'multi',
+      q: 'Пользователь ввёл «lo». Какие выражения вернут true? Отметь все.',
+      code: 'string a = "hello";\nstring b = "hel" + "lo";\nstring c = "hel" + Console.ReadLine();\nstring d = string.Intern(c);',
+      options: ['ReferenceEquals(a, b)', 'ReferenceEquals(a, c)', 'ReferenceEquals(a, d)', 'ReferenceEquals(c, d)'],
+      answer: [0, 2],
+      explain: 'b — тот же литерал после свёртки констант. c собрана при запуске — это новый объект. Intern нашёл в пуле литерал "hello" и вернул его, поэтому d — это a, а не c.'
+    },
+    {
+      t: 'learn',
+      title: 'Два способа сравнить строки',
+      body: '<p><b>Порядковое</b> (ordinal) сравнение идёт по кодам UTF-16, символ за символом. Оно быстрое и предсказуемое: результат не зависит от машины.</p><p><b>Лингвистическое</b> (culture-sensitive) применяет правила языка: «ё» рядом с «е», «ß» и «ss» могут считаться равными, невидимые символы игнорируются. Правила берутся из библиотеки ICU (в Linux, macOS и новых Windows) или NLS (в старых Windows).</p><p>Подвох в значениях по умолчанию:</p><ul><li><code>==</code>, <code>Equals</code>, <code>Contains</code>, <code>Replace</code>, <code>IndexOf(char)</code> — порядковые;</li><li><code>CompareTo</code>, <code>string.Compare</code>, <code>StartsWith(string)</code>, <code>EndsWith(string)</code>, <code>IndexOf(string)</code>, <code>ToUpper()</code>, <code>ToLower()</code> — по <b>текущей культуре</b> потока.</li></ul>',
+      deep: '<p>Сортировка тоже лингвистическая: <code>List&lt;string&gt;.Sort()</code> и <code>OrderBy(s =&gt; s)</code> идут через <code>Comparer&lt;string&gt;.Default</code>, то есть через <code>CompareTo</code>. Анализаторы <b>CA1307</b> и <b>CA1310</b> подсвечивают вызовы, где способ сравнения не указан явно, а <b>CA1309</b> предлагает ordinal.</p>'
+    },
+    {
+      t: 'match',
+      q: 'Соедини значение StringComparison и что оно делает',
+      pairs: [
+        ['Ordinal', 'Сравнивает коды UTF-16 один в один'],
+        ['OrdinalIgnoreCase', 'Коды, регистр приведён без правил языка'],
+        ['CurrentCulture', 'Правила языка текущего потока'],
+        ['InvariantCulture', 'Правила языка, одинаковые на любой машине'],
+        ['CurrentCultureIgnoreCase', 'Язык потока, регистр не важен']
+      ]
+    },
+    {
+      t: 'learn',
+      title: 'Турецкая i',
+      body: '<p>В турецком две буквы i: с точкой (i → <b>İ</b>) и без точки (ı → <b>I</b>). Поэтому в культуре tr-TR <code>"i".ToUpper()</code> даёт «İ» (U+0130), а не латинскую «I».</p><p>Код, который сравнивает команды, ключи или имена заголовков через <code>ToUpper()</code>, на турецкой машине ломается. Ошибки нет, просто сравнение тихо возвращает false.</p><p>Правило: <b>идентификаторы</b> (ключи, протоколы, пути, имена в конфиге) сравнивай порядково — <code>StringComparison.OrdinalIgnoreCase</code> или <code>ToUpperInvariant()</code>. <b>Текст для человека</b> (сортировка имён в интерфейсе) — по культуре.</p>',
+      code: 'CultureInfo.CurrentCulture = new CultureInfo("tr-TR");\n\n"file".ToUpper();           // "FİLE"\n"file".ToUpperInvariant();  // "FILE"\n"file".Equals("FILE",\n    StringComparison.OrdinalIgnoreCase); // true'
+    },
+    {
+      t: 'choice',
+      q: 'Сервер запущен с культурой tr-TR. Клиент прислал команду «quit». Что произойдёт?',
+      code: 'if (cmd.ToUpper() == "QUIT")\n    Stop();',
+      options: ['Stop не вызовется: ToUpper вернёт «QUİT»', 'Stop вызовется: == сравнивает без учёта регистра', 'Бросит CultureNotFoundException', 'Stop вызовется: ToUpper всегда использует латиницу'],
+      answer: 0,
+      explain: 'ToUpper() без аргументов берёт текущую культуру, и i превращается в İ. Дальше == честно сравнивает коды — и они не совпадают. Надёжно: cmd.Equals("quit", StringComparison.OrdinalIgnoreCase).',
+      wrong: { 1: '== у строк сравнивает порядково и с учётом регистра.' }
+    },
+    {
+      t: 'learn',
+      title: 'Сюрпризы ICU с .NET 5',
+      body: '<p>До .NET 5 на Windows лингвистическое сравнение шло через NLS — библиотеку Windows. С .NET 5 везде, где она есть, используется <b>ICU</b>. Правила Unicode там строже, и старый код стал вести себя иначе.</p><p>Пример: для ICU пара <code>\\r\\n</code> — один неделимый элемент текста. Поэтому <code>IndexOf("\\n")</code> по культуре не находит <code>\\n</code> внутри <code>\\r\\n</code> и возвращает -1. А <code>IndexOf(\'\\n\')</code> с символом — порядковый и находит.</p><p>Ещё: символы нулевой ширины и <code>\\0</code> лингвистическое сравнение пропускает, так что <code>s.IndexOf("\\0")</code> может вернуть 0 для любой строки.</p>',
+      deep: '<p>Если приложению не нужны правила языков, его можно собрать с <code>&lt;InvariantGlobalization&gt;true&lt;/InvariantGlobalization&gt;</code>: ICU не загружается, все культуры ведут себя как инвариантная, а лингвистические операции сводятся к порядковым. Так обычно делают для контейнеров и Native AOT — меньше размер и нет зависимости от libicu. Вернуть NLS на Windows можно настройкой <code>System.Globalization.UseNls</code>, но это путь для миграции, а не для нового кода.</p>'
+    },
+    {
+      t: 'tapline',
+      q: '.NET 8 на Linux, культура en-US. Какая строка вернёт -1?',
+      code: 'string s = "line1\\r\\nline2";\nint a = s.IndexOf(\'\\n\');\nint b = s.IndexOf("\\n");\nint c = s.IndexOf("\\n", StringComparison.Ordinal);\nbool d = s.Contains("\\n");',
+      answer: 2,
+      explain: 'IndexOf(string) без StringComparison — лингвистический, а для ICU \\r\\n неделим. IndexOf(char), Contains и явный Ordinal сравнивают коды и находят \\n на позиции 6.'
+    },
+    {
+      t: 'learn',
+      title: 'Словари, хеши и сортировка',
+      body: '<p>Ключи словаря сравниваются через <code>IEqualityComparer&lt;string&gt;</code>. По умолчанию — порядково и с учётом регистра. Нужен другой режим — передай компаратор в конструктор: <code>StringComparer.OrdinalIgnoreCase</code>. Это быстрее, чем приводить каждый ключ к верхнему регистру: не создаются новые строки.</p><p>Для сортировки списка имён в интерфейсе бери <code>StringComparer.CurrentCulture</code>, для стабильного порядка в файле или протоколе — <code>StringComparer.Ordinal</code>.</p>',
+      code: 'var headers = new Dictionary<string, string>(\n    StringComparer.OrdinalIgnoreCase);\nheaders["Content-Type"] = "text/html";\nheaders["content-type"];  // нашёл\n\nnames.Sort(StringComparer.Ordinal);',
+      deep: '<p><code>string.GetHashCode()</code> в .NET Core и .NET 5+ <b>рандомизирован</b>: у одной и той же строки в разных запусках процесса разный хеш (алгоритм Marvin со случайным зерном). Это защита от атак на хеш-таблицы подбором коллизий. В .NET Framework хеш по умолчанию был стабилен, и старый код иногда сохранял его в файл или базу — после переезда такой код ломается. Хеш строки нельзя хранить вне процесса.</p>'
+    },
+    {
+      t: 'blanks',
+      q: 'Сделай словарь заголовков нечувствительным к регистру и ключ — независимым от культуры',
+      code: 'var map = new Dictionary<string, int>(\n    StringComparer.___);\nstring key = header.ToUpper___();',
+      tiles: ['OrdinalIgnoreCase', 'Invariant', 'CurrentCulture', 'Ordinal', 'Culture'],
+      answer: ['OrdinalIgnoreCase', 'Invariant'],
+      explain: 'StringComparer.OrdinalIgnoreCase сравнивает без учёта регистра и без правил языка. ToUpperInvariant приводит регистр одинаково на любой машине — турецкая i не помешает.'
+    }
+  ]
+};
