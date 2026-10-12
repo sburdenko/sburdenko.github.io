@@ -47,7 +47,7 @@ export default {
       t: 'learn',
       title: 'The Lock type in .NET 9',
       body: '<p>Since .NET 9 and C# 13 there is a dedicated <code>System.Threading.Lock</code> type. The lock state lives in the fields of the <code>Lock</code> object itself, not in the header of an arbitrary object and not in the sync block table. The docs recommend it for new locks as the fastest option.</p><p>The compiler recognizes the type: <code>lock</code> on a <code>Lock</code> becomes not <code>Monitor.Enter</code> but <code>using (_gate.EnterScope())</code>. <code>EnterScope</code> returns a <code>ref struct</code> whose <code>Dispose</code> releases the lock.</p><p>The catch: cast the <code>Lock</code> to <code>object</code> — and <code>lock</code> silently becomes the old header-based Monitor. The compiler warns: <b>CS9216</b>. And <code>Lock</code> has no <code>Wait</code>/<code>Pulse</code>: for condition variables you still need <code>Monitor</code>.</p>',
-      code: 'private readonly Lock _gate = new();\n\npublic void Add(int x)\n{\n    lock (_gate)          // the compiler calls _gate.EnterScope()\n    {\n        _sum += x;\n    }\n}\n\nobject o = _gate;\nlock (o) { }              // CS9216: this is Monitor again'
+      code: 'private readonly Lock _gate = new();\n\npublic void Add(int x)\n{\n    lock (_gate)          // the compiler calls _gate.EnterScope()\n    {\n        _sum += x;\n    }\n}\n\nobject o = _gate;        // CS9216: the warning is here, on the conversion\nlock (o) { }              // this is Monitor again'
     },
     {
       t: 'blanks',

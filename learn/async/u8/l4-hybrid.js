@@ -47,7 +47,7 @@ export default {
       t: 'learn',
       title: 'Тип Lock в .NET 9',
       body: '<p>С .NET 9 и C# 13 есть отдельный тип <code>System.Threading.Lock</code>. Состояние замка живёт в полях самого объекта <code>Lock</code>, а не в заголовке произвольного объекта и не в таблице sync block. Документация рекомендует его для новых замков как самый быстрый вариант.</p><p>Компилятор узнаёт тип: <code>lock</code> по <code>Lock</code> превращается не в <code>Monitor.Enter</code>, а в <code>using (_gate.EnterScope())</code>. <code>EnterScope</code> возвращает <code>ref struct</code>, его <code>Dispose</code> отпускает замок.</p><p>Подвох: приведи <code>Lock</code> к <code>object</code> — и <code>lock</code> молча станет старым Monitor по заголовку. Компилятор предупредит: <b>CS9216</b>. И у <code>Lock</code> нет <code>Wait</code>/<code>Pulse</code>: для условных переменных остаётся <code>Monitor</code>.</p>',
-      code: 'private readonly Lock _gate = new();\n\npublic void Add(int x)\n{\n    lock (_gate)          // компилятор вызовет _gate.EnterScope()\n    {\n        _sum += x;\n    }\n}\n\nobject o = _gate;\nlock (o) { }              // CS9216: это уже Monitor'
+      code: 'private readonly Lock _gate = new();\n\npublic void Add(int x)\n{\n    lock (_gate)          // компилятор вызовет _gate.EnterScope()\n    {\n        _sum += x;\n    }\n}\n\nobject o = _gate;        // CS9216: предупреждение здесь, на приведении\nlock (o) { }              // это уже Monitor'
     },
     {
       t: 'blanks',

@@ -39,7 +39,7 @@ export default {
     {
       t: 'learn',
       title: 'Объекты ядра: WaitHandle',
-      body: '<p><code>Mutex</code>, <code>Semaphore</code>, <code>EventWaitHandle</code> (и его наследники <code>AutoResetEvent</code>, <code>ManualResetEvent</code>) — обёртки над объектами ОС. Все они наследники <code>WaitHandle</code> и держат дескриптор ядра.</p><ul><li><b>Цена</b>: каждый <code>WaitOne</code>, <code>Set</code>, <code>Release</code> — системный вызов, даже если ждать не пришлось. Это в десятки раз дороже входа в свободный <code>lock</code>.</li><li><b>Сила</b>: у объекта может быть <b>имя</b>, и тогда его видят другие процессы. Плюс <code>WaitHandle.WaitAny/WaitAll</code> — ждать сразу несколько объектов.</li></ul><p>Межпроцессная синхронизация — главная причина брать их сегодня. Внутри одного процесса почти всегда есть лёгкая замена: <code>lock</code>, <code>SemaphoreSlim</code>, <code>ManualResetEventSlim</code>.</p>',
+      body: '<p><code>Mutex</code>, <code>Semaphore</code>, <code>EventWaitHandle</code> (и его наследники <code>AutoResetEvent</code>, <code>ManualResetEvent</code>) — обёртки над объектами ОС. Все они наследники <code>WaitHandle</code> и держат дескриптор ядра.</p><ul><li><b>Цена</b>: в Windows каждый <code>WaitOne</code>, <code>Set</code>, <code>Release</code> — системный вызов, даже если ждать не пришлось. В Linux и macOS рантайм эмулирует эти объекты в своём слое, без системного вызова на свободном объекте, но путь всё равно длинный. В обоих случаях это в десятки раз дороже входа в свободный <code>lock</code>.</li><li><b>Сила</b>: у объекта может быть <b>имя</b>, и тогда его видят другие процессы. Плюс <code>WaitHandle.WaitAny/WaitAll</code> — ждать сразу несколько объектов.</li></ul><p>Межпроцессная синхронизация — главная причина брать их сегодня. Внутри одного процесса почти всегда есть лёгкая замена: <code>lock</code>, <code>SemaphoreSlim</code>, <code>ManualResetEventSlim</code>.</p>',
       deep: '<p>Имена работают по-разному. В Windows именованными бывают все три типа, префикс <code>Global\\</code> делает имя видимым во всех сеансах, <code>Local\\</code> (по умолчанию) — только в своём. В Linux и macOS рантайм эмулирует только именованный <code>Mutex</code>; имя у <code>Semaphore</code> или <code>EventWaitHandle</code> там приводит к <code>PlatformNotSupportedException</code>.</p><p>В .NET Framework WaitHandle наследовался от MarshalByRefObject и служил ещё и для синхронизации между AppDomain. В современном .NET доменов приложений нет.</p>'
     },
     {
@@ -77,7 +77,7 @@ export default {
     {
       t: 'multi',
       q: 'Что правда? Отметь все.',
-      options: ['Каждый WaitOne у Mutex — системный вызов, даже если мьютекс свободен', 'Semaphore можно отпустить из другого потока', 'SpinLock реентерабелен, как lock', 'SpinWait на одноядерной машине сразу уступает процессор', 'Именованный Semaphore работает в Linux так же, как в Windows'],
+      options: ['В Windows каждый WaitOne у Mutex — системный вызов, даже если мьютекс свободен', 'Semaphore можно отпустить из другого потока', 'SpinLock реентерабелен, как lock', 'SpinWait на одноядерной машине сразу уступает процессор', 'Именованный Semaphore работает в Linux так же, как в Windows'],
       answer: [0, 1, 3],
       explain: 'SpinLock не реентерабелен — в отличие от Monitor и Mutex. Именованными на Linux и macOS бывают только мьютексы, для Semaphore и EventWaitHandle имя поддерживается лишь в Windows.'
     }
