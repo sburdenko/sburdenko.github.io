@@ -86,13 +86,13 @@ export default {
       t: 'learn',
       title: 'Leaks: events and closures',
       body: '<p>A leak in .NET is always a path from a root to an object nobody needs. The usual suspects were listed in the "How to measure" unit; here is the mechanism of the two least obvious ones. The first is <b>closures</b>.</p><p>All lambdas of one method that capture variables of the same scope share <b>one closure object</b> (a display class): the compiler puts all captured variables into it as fields. A lambda that needs only <code>id</code> also holds a megabyte-sized <code>big</code> if a neighboring lambda captured it.</p><p>One more thing: a subscription with a lambda <code>e += () =&gt; ...</code> cannot be undone unless the delegate is saved in a variable: a new lambda gives a different delegate, and <code>-=</code> finds nothing.</p>',
-      code: 'void Start(byte[] big, int id)\n{\n    Task.Run(() => Process(big));\n    Bus.Changed += () => Log(id);   // holds both id and big\n}',
+      code: 'static void Start(byte[] big, int id)\n{\n    Task.Run(() => Process(big));\n    Bus.Changed += () => Log(id);   // holds both id and big\n}',
       deep: '<p>For events of long-lived publishers there are "weak events": the subscription holds the subscriber through a weak reference (<code>WeakEventManager</code> in WPF, <code>WeakReferenceMessenger</code> in CommunityToolkit.Mvvm). The cost is extra handles and the fact that unsubscribing happens only after a collection.</p><p>A dump helps find the path that holds an object, as in the "How to measure" unit: the chain from a root to the object is the answer.</p>'
     },
     {
       t: 'choice',
       q: 'The handler in the static Bus uses only id. What does it keep in memory?',
-      code: 'void Start(byte[] big, int id)\n{\n    Task.Run(() => Process(big));\n    Bus.Changed += () => Log(id);\n}',
+      code: 'static void Start(byte[] big, int id)\n{\n    Task.Run(() => Process(big));\n    Bus.Changed += () => Log(id);\n}',
       options: [
         'A closure object with fields id and big: the array lives as long as the subscription',
         'Just a copy of id: each lambda captures its own variables',
@@ -101,7 +101,7 @@ export default {
       ],
       answer: 0,
       explain: 'big and id are parameters of the same scope, the compiler puts them into one display class, and both lambdas are its methods. The delegate in Bus references that whole object. The fix is splitting into separate methods or copying what you need into a separate local in a nested scope.',
-      wrong: { 3: 'Neither lambda touches instance fields or methods, so this does not get into the closure.' }
+      wrong: { 3: 'Start is static: it has no this, so only big and id get into the closure.' }
     },
     {
       t: 'learn',

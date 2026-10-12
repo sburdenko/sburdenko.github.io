@@ -87,7 +87,7 @@ export default {
     {
       t: 'choice',
       q: 'Which of these can be changed while the process runs, without a restart?',
-      options: ['GCSettings.LatencyMode', 'System.GC.Server', 'System.GC.HeapHardLimit', 'DOTNET_GCHeapCount'],
+      options: ['GCSettings.LatencyMode', 'System.GC.Server', 'System.GC.Concurrent', 'DOTNET_GCHeapCount'],
       answer: 0,
       explain: 'The runtime reads runtimeconfig.json settings and environment variables once, when the collector initializes. The latency mode is the only one here that changes from code on the fly.',
       wrong: { 3: 'You can change the variable, but the process already read it at startup — it will not see the change.' }

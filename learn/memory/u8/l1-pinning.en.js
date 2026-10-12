@@ -89,7 +89,7 @@ export default {
       title: 'The POH: a heap where nothing moves',
       body: '<p>Since .NET 5 the collector has a <b>pinned object heap</b> (POH). Objects in it never move, so they need no pinning and leave no holes in the SOH.</p><ul><li>allocate an array with <code>GC.AllocateArray&lt;T&gt;(length, pinned: true)</code> or <code>GC.AllocateUninitializedArray&lt;T&gt;(length, pinned: true)</code> — without zeroing;</li><li>the POH is collected together with generation 2, that is, rarely;</li><li>allocating there is slower than usual: a free list instead of a pointer bump.</li></ul><p>Takeaway: the POH is for long-lived buffers allocated once, such as a pool for sockets. Putting temporary arrays there is a bad idea.</p>',
       code: '// A buffer pool for native I/O\nbyte[] block = GC.AllocateUninitializedArray<byte>(\n    64 * 1024, pinned: true);\n\n// in unsafe code fixed (byte* p = block) is a formality:\n// the object does not move anyway',
-      deep: '<p>Only arrays go to the POH. In .NET 5–7 the element type could not contain references; the docs for .NET 8 and later no longer list that restriction. Before the POH, pools of pinned buffers were made large (≥ 85,000 bytes) so they landed in the LOH, which is not compacted by default. Kestrel in ASP.NET Core keeps its memory blocks in the POH.</p>'
+      deep: '<p>Only arrays go to the POH. In .NET 5–7 the element type could not contain references (<code>ArgumentException</code>); .NET 8 lifted that restriction. Before the POH, pools of pinned buffers were made large (≥ 85,000 bytes) so they landed in the LOH, which is not compacted by default. Kestrel in ASP.NET Core keeps its memory blocks in the POH.</p>'
     },
     {
       t: 'blanks',

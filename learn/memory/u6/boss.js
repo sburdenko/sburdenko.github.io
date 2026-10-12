@@ -87,7 +87,7 @@ export default {
     {
       t: 'choice',
       q: 'Что из этого можно поменять во время работы процесса, без перезапуска?',
-      options: ['GCSettings.LatencyMode', 'System.GC.Server', 'System.GC.HeapHardLimit', 'DOTNET_GCHeapCount'],
+      options: ['GCSettings.LatencyMode', 'System.GC.Server', 'System.GC.Concurrent', 'DOTNET_GCHeapCount'],
       answer: 0,
       explain: 'Настройки в runtimeconfig.json и переменных окружения рантайм читает один раз при инициализации сборщика. Режим задержки — единственное здесь, что меняется из кода на ходу.',
       wrong: { 3: 'Переменную можно поменять, но процесс уже прочитал её при старте — изменение он не увидит.' }
