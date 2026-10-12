@@ -32,6 +32,10 @@ import u7l1 from './u7/l1-boxing.js?v=202610121134';
 import u7l2 from './u7/l2-mutable.js?v=202610121134';
 import u7l3 from './u7/l3-equality-layout.js?v=202610121134';
 import u7boss from './u7/boss.js?v=202610121134';
+import u12l1 from './u12/l1-finally.js?v=202610121134';
+import u12l2 from './u12/l2-rethrow.js?v=202610121134';
+import u12l3 from './u12/l3-unhandled.js?v=202610121134';
+import u12boss from './u12/boss.js?v=202610121134';
 
 export default {
   id: 'csharp',
@@ -66,6 +70,12 @@ export default {
       title: 'Делегаты, события и замыкания',
       blurb: 'Func и Action, многоадресные делегаты, event и утечки подписок, лямбды и что именно они захватывают.',
       lessons: [u2l1, u2l2, u2l3, u2boss]
+    },
+    {
+      id: 'u12',
+      title: 'Исключения и надёжность',
+      blurb: 'Что гарантирует finally и когда он не выполняется, фильтры when и два прохода обработки, throw против throw ex и ExceptionDispatchInfo, навсегда сломанный тип, что роняет процесс, цена исключения, TryXxx и свои исключения.',
+      lessons: [u12l1, u12l2, u12l3, u12boss]
     },
     {
       id: 'u3',

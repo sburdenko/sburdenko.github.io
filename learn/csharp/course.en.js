@@ -32,6 +32,10 @@ import u7l1 from './u7/l1-boxing.en.js?v=202610121134';
 import u7l2 from './u7/l2-mutable.en.js?v=202610121134';
 import u7l3 from './u7/l3-equality-layout.en.js?v=202610121134';
 import u7boss from './u7/boss.en.js?v=202610121134';
+import u12l1 from './u12/l1-finally.en.js?v=202610121134';
+import u12l2 from './u12/l2-rethrow.en.js?v=202610121134';
+import u12l3 from './u12/l3-unhandled.en.js?v=202610121134';
+import u12boss from './u12/boss.en.js?v=202610121134';
 
 export default {
   id: 'csharp',
@@ -66,6 +70,12 @@ export default {
       title: 'Delegates, events and closures',
       blurb: 'Func and Action, multicast delegates, events and subscription leaks, lambdas and exactly what they capture.',
       lessons: [u2l1, u2l2, u2l3, u2boss]
+    },
+    {
+      id: 'u12',
+      title: 'Exceptions and reliability',
+      blurb: 'What finally guarantees and when it does not run, when filters and two-pass handling, throw vs throw ex and ExceptionDispatchInfo, a type broken for good, what crashes the process, the cost of an exception, TryXxx and your own exceptions.',
+      lessons: [u12l1, u12l2, u12l3, u12boss]
     },
     {
       id: 'u3',

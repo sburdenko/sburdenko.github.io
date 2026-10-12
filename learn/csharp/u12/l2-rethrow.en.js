@@ -1,0 +1,108 @@
+/** Deeper C#, unit "Exceptions and reliability", lesson 2: rethrowing, ExceptionDispatchInfo and TypeInitializationException. */
+export default {
+  id: 'cs.u12.l2',
+  title: 'Rethrowing and broken types',
+  sub: 'throw vs throw ex, ExceptionDispatchInfo and TypeInitializationException',
+  minutes: 9,
+  cards: [
+    {
+      t: 'learn',
+      title: 'What is in StackTrace',
+      body: '<p>An exception\'s stack trace is collected <b>during unwinding</b>: the runtime records into the exception object the frames it passes — from the throw point to the frame with the <code>catch</code>. Frames above the handler do not get in. For the full stack of the current thread use <code>Environment.StackTrace</code>.</p><p>The text is built <b>lazily</b>: until you read <code>e.StackTrace</code> or <code>e.ToString()</code>, the object holds only method addresses. The runtime resolves names and line numbers on read, and line numbers come from the PDB if it is next to the binary.</p>',
+      code: 'static void Run()\n{\n    try { Deep(3); }\n    catch (Exception e)\n    {\n        // frames of Deep and Run.\n        // Main, which called Run, is not here.\n        Console.WriteLine(e.StackTrace);\n    }\n}\n\nstatic void Deep(int n)\n{\n    if (n == 0) throw new Exception();\n    Deep(n - 1);\n}'
+    },
+    {
+      t: 'learn',
+      title: 'throw; vs throw ex;',
+      body: '<p>Inside a <code>catch</code> there are two ways to pass a caught exception on:</p><p><code>throw;</code> — a <b>rethrow</b>. The same object flies on, and the collected stack is extended: the original throw point is kept.</p><p><code>throw ex;</code> — a <b>new throw</b> of the same object. The runtime takes this line as the origin and starts the stack over. The method where the error really happened disappears from the log.</p><p>The .NET analyzer flags this as <b>CA2200</b>. The rule is simple: inside a catch, rethrow only with <code>throw;</code>.</p>',
+      code: 'void B1()\n{\n    try { A(); }\n    catch (Exception ex) { throw ex; }  // stack: B1, Main\n}\n\nvoid B2()\n{\n    try { A(); }\n    catch (Exception) { throw; }        // stack: A, B2, Main\n}'
+    },
+    {
+      t: 'tapline',
+      q: 'The error log has no Parse method in it, even though Parse is what failed. Which line is to blame?',
+      code: 'Order Load(string path)\n{\n    try\n    {\n        var text = File.ReadAllText(path);\n        return Parse(text);\n    }\n    catch (FormatException e)\n    {\n        log.Warn($"bad file {path}");\n        throw e;\n    }\n}',
+      answer: 10,
+      explain: 'throw e throws the exception anew, and the stack starts at the line in Load. You need throw; — then Parse and everything below it stays in the stack.'
+    },
+    {
+      t: 'learn',
+      title: 'Wrap without losing the cause',
+      body: '<p>Sometimes a low-level exception should become your own: the caller does not care about <code>SqlException</code>, it cares that "the order was not saved". So you throw a new exception and pass the old one to the constructor — it lands in <code>InnerException</code>.</p><p><code>e.ToString()</code> prints the whole chain: the outer one, then <code>---&gt;</code> and the inner one with its own stack, then the line <code>--- End of inner exception stack trace ---</code>. Log through <code>ToString()</code> or hand the whole exception to the logger — <code>e.Message</code> shows only the top level.</p>',
+      code: 'try\n{\n    db.Insert(order);\n}\ncatch (DbException e)\n{\n    throw new OrderSaveException(\n        $"Order {order.Id} was not saved", e);  // e → InnerException\n}'
+    },
+    {
+      t: 'choice',
+      q: 'The repository layer caught a DbException and wants to report upward with its own error. What is right?',
+      options: [
+        'throw new RepositoryException("save failed", e);',
+        'throw new RepositoryException("save failed: " + e.Message);',
+        'throw new RepositoryException(e.StackTrace);',
+        'log.Error(e); return null;'
+      ],
+      answer: 0,
+      explain: 'The original exception goes into InnerException whole: type, message, stack. Glued strings lose the type and half the details, and return null turns the error into a silent bug further down.',
+      wrong: { 2: 'A stack written as a string into Message is invisible to the debugger and to error-tracking systems. And the original error type is lost too.' }
+    },
+    {
+      t: 'learn',
+      title: 'ExceptionDispatchInfo: rethrow somewhere else',
+      body: '<p><code>throw;</code> works only inside a <code>catch</code> — outside it is error <b>CS0156</b>. But sometimes an exception is caught in one place and must be thrown later or on another thread: a worker thread saved an error, and the main thread must throw it.</p><p>That is what <code>ExceptionDispatchInfo</code> is for (namespace <code>System.Runtime.ExceptionServices</code>). <code>Capture(e)</code> remembers the exception and its stack, <code>Throw()</code> throws the same object, keeping the original stack. In the log the new frames are separated by the line <code>--- End of stack trace from previous location ---</code>.</p><p>This is exactly how <code>await</code> throws a failed task\'s exception: the stack shows both the place inside the task and the place of the await.</p>',
+      code: 'ExceptionDispatchInfo? error = null;\n\nvar worker = new Thread(() =>\n{\n    try { Work(); }\n    catch (Exception e) { error = ExceptionDispatchInfo.Capture(e); }\n});\nworker.Start();\nworker.Join();\n\nerror?.Throw();  // the original Work stack + this frame',
+      deep: '<p>There is also a short static form, <code>ExceptionDispatchInfo.Throw(e)</code>. Both methods are marked <code>[DoesNotReturn]</code>, so nullable analysis knows code does not continue after them. But C# reachability rules ignore this attribute: in a method with a return value you still need a <code>return</code> or <code>throw</code> after <code>Throw()</code>.</p><p>.NET 5 added <code>ExceptionDispatchInfo.SetCurrentStackTrace(e)</code> — it writes the current stack into an exception that has never been thrown.</p>'
+    },
+    {
+      t: 'blanks',
+      q: 'Save the exception from the handler and throw it later with the original stack',
+      code: 'ExceptionDispatchInfo? saved = null;\ntry { Step(); }\ncatch (Exception e) { saved = ExceptionDispatchInfo.___(e); }\n\nCleanup();\nsaved?.___();',
+      tiles: ['Capture', 'Throw', 'Rethrow', 'Save', 'Raise'],
+      answer: ['Capture', 'Throw'],
+      explain: 'Capture remembers the exception together with its stack; Throw throws the same object and appends the new frames to the stack after a separator.'
+    },
+    {
+      t: 'multi',
+      q: 'After which options will the top-level e.ToString() still contain the method where the error happened? Select all.',
+      options: ['throw;', 'throw ex;', 'ExceptionDispatchInfo.Capture(ex).Throw();', 'throw new AppException("…", ex);', 'throw new AppException(ex.Message);'],
+      answer: [0, 2, 3],
+      explain: 'throw; and ExceptionDispatchInfo keep the original stack. A wrapper with ex in the constructor keeps it in InnerException, and ToString prints it. throw ex; starts the stack over, and a wrapper without ex loses the original exception entirely.'
+    },
+    {
+      t: 'learn',
+      title: 'TypeInitializationException: a type broken for good',
+      body: '<p>A static constructor and static field initializers run <b>once</b> — before the first use of the type. If they throw, the CLR wraps the exception in a <code>TypeInitializationException</code> and puts the original in <code>InnerException</code>.</p><p>There is no second attempt. The runtime marks the type as failed to initialize, and <b>any</b> use of it — a static field, a method, <code>new</code> — throws <code>TypeInitializationException</code> again, for the rest of the process\'s life. Even members that have nothing to do with the error. Only a restart fixes it.</p>',
+      code: 'static class Cfg\n{\n    public static int Calls;\n    public static readonly int Port = Init();\n\n    static int Init()\n    {\n        Calls++;\n        return int.Parse("abc");  // FormatException\n    }\n}\n\n// Cfg.Port  → TypeInitializationException\n// Cfg.Port  → again, Init is not called\n// Cfg.Calls → the same exception',
+      deep: '<p>In CoreCLR a repeated access throws <b>the same object</b> — the <code>TypeInitializationException</code> saved on the first failure, with the stack of that first failure. Handy for diagnostics: the cause is visible even if somebody swallowed the first exception.</p><p>Exactly when initialization runs depends on the <code>beforefieldinit</code> flag: without an explicit static constructor the runtime may do it before the first access (details in the "Type members and versioning" unit). So the exception may fly out somewhere you do not expect.</p>'
+    },
+    {
+      t: 'choice',
+      q: 'The LIMIT variable is not set. A service reads Settings.Path on every request. What happens from the second request on?',
+      code: 'static class Settings\n{\n    public static readonly string Root = "/srv";\n    public static readonly int Limit =\n        int.Parse(Environment.GetEnvironmentVariable("LIMIT")!);\n    public static string Path => Root + "/data";\n}',
+      options: [
+        'TypeInitializationException again; initializers are not rerun',
+        'ArgumentNullException from int.Parse on every access',
+        'Path works: Root was initialized after all',
+        'Limit is 0 and everything else works'
+      ],
+      answer: 0,
+      explain: 'The initializers of all static fields are part of one static constructor. It failed, the type is marked broken, and Path is unavailable along with everything else until the process restarts.',
+      wrong: { 1: 'int.Parse(null) does throw ArgumentNullException, but only once and wrapped. The initializer is not run again.' }
+    },
+    {
+      t: 'learn',
+      title: 'How not to break a type',
+      body: '<p>The rule: static initialization holds only what cannot fail. Reading configuration, files, the network, parsing strings — move them where the error can be handled: an explicit <code>Initialize</code> method, a service constructor at startup, the DI container.</p><p><code>Lazy&lt;T&gt;</code> does not save you automatically: in its default mode it also <b>caches the factory\'s exception</b> and throws it on every access to <code>Value</code>. Only <code>LazyThreadSafetyMode.PublicationOnly</code> retries the factory after a failure.</p>',
+      code: 'static readonly Lazy<Config> _config = new(\n    LoadConfig,\n    LazyThreadSafetyMode.PublicationOnly);  // failed — try again\n\npublic static Config Config => _config.Value;',
+      deep: '<p>In .NET Framework a broken type could be "cured" by unloading the AppDomain: in a new domain the type was loaded and initialized afresh. Modern .NET has no domains; only a collectible <code>AssemblyLoadContext</code> gives a similar effect: an assembly loaded into a new context means new types with new statics. For an ordinary application the answer is a restart.</p>'
+    },
+    {
+      t: 'match',
+      q: 'Match the construct with what it does to the stack or the error',
+      pairs: [
+        ['throw;', 'Keeps the original stack'],
+        ['throw ex;', 'Starts the stack at this line'],
+        ['ExceptionDispatchInfo.Throw()', 'Rethrow outside catch with the original stack'],
+        ['new X("…", ex)', 'The cause goes into InnerException'],
+        ['TypeInitializationException', 'Static initialization failed']
+      ]
+    }
+  ]
+};
