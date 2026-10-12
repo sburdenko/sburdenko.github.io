@@ -1,16 +1,20 @@
 /** Курс «Память в .NET»: разделы и уроки. Готовые разделы — с уроками, остальные — план со статусом «скоро». */
-import u1l1 from './u1/l1-virtual.js?v=202610121134';
-import u1l2 from './u1/l2-reserve-commit.js?v=202610121134';
-import u1l3 from './u1/l3-stack-cache.js?v=202610121134';
-import u1boss from './u1/boss.js?v=202610121134';
-import u2l1 from './u2/l1-numbers.js?v=202610121134';
-import u2l2 from './u2/l2-tools.js?v=202610121134';
-import u2l3 from './u2/l3-leak.js?v=202610121134';
-import u2boss from './u2/boss.js?v=202610121134';
-import u6l1 from './u6/l1-workstation-server.js?v=202610121134';
-import u6l2 from './u6/l2-background-latency.js?v=202610121134';
-import u6l3 from './u6/l3-datas-config.js?v=202610121134';
-import u6boss from './u6/boss.js?v=202610121134';
+import u1l1 from './u1/l1-virtual.js?v=202610121135';
+import u1l2 from './u1/l2-reserve-commit.js?v=202610121135';
+import u1l3 from './u1/l3-stack-cache.js?v=202610121135';
+import u1boss from './u1/boss.js?v=202610121135';
+import u2l1 from './u2/l1-numbers.js?v=202610121135';
+import u2l2 from './u2/l2-tools.js?v=202610121135';
+import u2l3 from './u2/l3-leak.js?v=202610121135';
+import u2boss from './u2/boss.js?v=202610121135';
+import u6l1 from './u6/l1-workstation-server.js?v=202610121135';
+import u6l2 from './u6/l2-background-latency.js?v=202610121135';
+import u6l3 from './u6/l3-datas-config.js?v=202610121135';
+import u6boss from './u6/boss.js?v=202610121135';
+import u7l1 from './u7/l1-finalization.js?v=202610121135';
+import u7l2 from './u7/l2-resurrection.js?v=202610121135';
+import u7l3 from './u7/l3-weak-leaks.js?v=202610121135';
+import u7boss from './u7/boss.js?v=202610121135';
 
 export default {
   id: 'memory',
@@ -40,7 +44,12 @@ export default {
       source: { title: 'Microsoft Learn: Garbage collector config settings', url: 'https://learn.microsoft.com/en-us/dotnet/core/runtime-config/garbage-collector' },
       lessons: [u6l1, u6l2, u6l3, u6boss]
     },
-    { id: 'u7', title: 'Время жизни', soon: true, blurb: 'Финализация изнутри и воскрешение, SafeHandle, слабые ссылки, ConditionalWeakTable, утечки через события и статику.' },
+    {
+      id: 'u7',
+      title: 'Время жизни',
+      blurb: 'Финализация изнутри: две очереди, поток финализатора, воскрешение и SuppressFinalize. SafeHandle и критические финализаторы, слабые ссылки и GCHandle, ConditionalWeakTable и утечки через замыкания, статику и таймеры.',
+      lessons: [u7l1, u7l2, u7l3, u7boss]
+    },
     { id: 'u8', title: 'Продвинутое', soon: true, blurb: 'Закрепление и POH, unsafe и указатели, GC.TryStartNoGCRegion, API сборщика и GCSettings, Native AOT и память.' }
   ]
 };

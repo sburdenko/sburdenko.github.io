@@ -1,16 +1,20 @@
 /** Course "Memory in .NET": units and lessons (English version). Finished units have lessons; the rest are planned and marked "soon". */
-import u1l1 from './u1/l1-virtual.en.js?v=202610121134';
-import u1l2 from './u1/l2-reserve-commit.en.js?v=202610121134';
-import u1l3 from './u1/l3-stack-cache.en.js?v=202610121134';
-import u1boss from './u1/boss.en.js?v=202610121134';
-import u2l1 from './u2/l1-numbers.en.js?v=202610121134';
-import u2l2 from './u2/l2-tools.en.js?v=202610121134';
-import u2l3 from './u2/l3-leak.en.js?v=202610121134';
-import u2boss from './u2/boss.en.js?v=202610121134';
-import u6l1 from './u6/l1-workstation-server.en.js?v=202610121134';
-import u6l2 from './u6/l2-background-latency.en.js?v=202610121134';
-import u6l3 from './u6/l3-datas-config.en.js?v=202610121134';
-import u6boss from './u6/boss.en.js?v=202610121134';
+import u1l1 from './u1/l1-virtual.en.js?v=202610121135';
+import u1l2 from './u1/l2-reserve-commit.en.js?v=202610121135';
+import u1l3 from './u1/l3-stack-cache.en.js?v=202610121135';
+import u1boss from './u1/boss.en.js?v=202610121135';
+import u2l1 from './u2/l1-numbers.en.js?v=202610121135';
+import u2l2 from './u2/l2-tools.en.js?v=202610121135';
+import u2l3 from './u2/l3-leak.en.js?v=202610121135';
+import u2boss from './u2/boss.en.js?v=202610121135';
+import u6l1 from './u6/l1-workstation-server.en.js?v=202610121135';
+import u6l2 from './u6/l2-background-latency.en.js?v=202610121135';
+import u6l3 from './u6/l3-datas-config.en.js?v=202610121135';
+import u6boss from './u6/boss.en.js?v=202610121135';
+import u7l1 from './u7/l1-finalization.en.js?v=202610121135';
+import u7l2 from './u7/l2-resurrection.en.js?v=202610121135';
+import u7l3 from './u7/l3-weak-leaks.en.js?v=202610121135';
+import u7boss from './u7/boss.en.js?v=202610121135';
 
 export default {
   id: 'memory',
@@ -40,7 +44,12 @@ export default {
       source: { title: 'Microsoft Learn: Garbage collector config settings', url: 'https://learn.microsoft.com/en-us/dotnet/core/runtime-config/garbage-collector' },
       lessons: [u6l1, u6l2, u6l3, u6boss]
     },
-    { id: 'u7', title: 'Lifetime', soon: true, blurb: 'Finalization from the inside and resurrection, SafeHandle, weak references, ConditionalWeakTable, leaks through events and statics.' },
+    {
+      id: 'u7',
+      title: 'Object lifetime',
+      blurb: 'Finalization inside out: two queues, the finalizer thread, resurrection and SuppressFinalize. SafeHandle and critical finalizers, weak references and GCHandle, ConditionalWeakTable and leaks through closures, statics and timers.',
+      lessons: [u7l1, u7l2, u7l3, u7boss]
+    },
     { id: 'u8', title: 'Advanced', soon: true, blurb: 'Pinning and the POH, unsafe code and pointers, GC.TryStartNoGCRegion, the GC API and GCSettings, Native AOT and memory.' }
   ]
 };
