@@ -8,11 +8,11 @@
  *   reveal(ok) — подсветить верное и неверное после проверки;
  *   key(e) — горячие клавиши (цифры выбирают вариант).
  */
-import { esc } from '../assets/vhs.js?v=202610121140';
-import { codeHtml } from './code-view.js?v=202610121140';
-import { shuffle, scramble, check, blankCount } from './engine.js?v=202610121140';
-import { mountRig } from './rigs.js?v=202610121140';
-import { t } from './ui.js?v=202610121140';
+import { esc } from '../assets/vhs.js?v=202610121141';
+import { codeHtml } from './code-view.js?v=202610121141';
+import { shuffle, scramble, check, blankCount } from './engine.js?v=202610121141';
+import { mountRig } from './rigs.js?v=202610121141';
+import { t } from './ui.js?v=202610121141';
 
 const h = (tag, cls, html) => {
   const el = document.createElement(tag);

@@ -80,7 +80,7 @@
 | u5 | Как работает сборка | 5 + финал | ✅ | Когда запускается GC, остановка потоков и safepoint, маркировка (корни, card table), планирование, sweep и compact |
 | u6 | Режимы GC | 3 + финал | ✅ | Workstation и Server, Background GC, режимы задержки, DATAS (.NET 8–9), настройки в runtimeconfig |
 | u7 | Время жизни | 3 + финал | ✅ | Финализация изнутри и воскрешение, `SafeHandle`, слабые ссылки, `ConditionalWeakTable`, утечки через события и статику |
-| u8 | Продвинутое | 4 + финал курса | ⬜ | Закрепление и POH, `unsafe` и указатели, `GC.TryStartNoGCRegion`, API GC и `GCSettings`, Native AOT и память |
+| u8 | Продвинутое | 4 + финал курса | ✅ | Закрепление и POH, `unsafe` и указатели, `GC.TryStartNoGCRegion`, API GC и `GCSettings`, Native AOT и память |
 
 ## Стенды, которые нужны
 

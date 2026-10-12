@@ -1,5 +1,5 @@
 /** Общие утилиты и VHS-эффекты для всех кассет сайта. */
-export { rng } from './rand.js?v=202610121140';
+export { rng } from './rand.js?v=202610121141';
 
 export const $ = (s, r = document) => r.querySelector(s);
 export const $$ = (s, r = document) => [...r.querySelectorAll(s)];

@@ -1,36 +1,41 @@
 /** Course "Memory in .NET": units and lessons (English version). Finished units have lessons; the rest are planned and marked "soon". */
-import u1l1 from './u1/l1-virtual.en.js?v=202610121140';
-import u1l2 from './u1/l2-reserve-commit.en.js?v=202610121140';
-import u1l3 from './u1/l3-stack-cache.en.js?v=202610121140';
-import u1boss from './u1/boss.en.js?v=202610121140';
-import u2l1 from './u2/l1-numbers.en.js?v=202610121140';
-import u2l2 from './u2/l2-tools.en.js?v=202610121140';
-import u2l3 from './u2/l3-leak.en.js?v=202610121140';
-import u2boss from './u2/boss.en.js?v=202610121140';
-import u6l1 from './u6/l1-workstation-server.en.js?v=202610121140';
-import u6l2 from './u6/l2-background-latency.en.js?v=202610121140';
-import u6l3 from './u6/l3-datas-config.en.js?v=202610121140';
-import u6boss from './u6/boss.en.js?v=202610121140';
-import u7l1 from './u7/l1-finalization.en.js?v=202610121140';
-import u7l2 from './u7/l2-resurrection.en.js?v=202610121140';
-import u7l3 from './u7/l3-weak-leaks.en.js?v=202610121140';
-import u7boss from './u7/boss.en.js?v=202610121140';
-import u4l1 from './u4/l1-fast-path.en.js?v=202610121140';
-import u4l2 from './u4/l2-slow-path.en.js?v=202610121140';
-import u4l3 from './u4/l3-hidden.en.js?v=202610121140';
-import u4l4 from './u4/l4-pool-measure.en.js?v=202610121140';
-import u4boss from './u4/boss.en.js?v=202610121140';
-import u3l1 from './u3/l1-header.en.js?v=202610121140';
-import u3l2 from './u3/l2-layout.en.js?v=202610121140';
-import u3l3 from './u3/l3-arrays-strings.en.js?v=202610121140';
-import u3l4 from './u3/l4-heaps.en.js?v=202610121140';
-import u3boss from './u3/boss.en.js?v=202610121140';
-import u5l1 from './u5/l1-triggers.en.js?v=202610121140';
-import u5l2 from './u5/l2-suspension.en.js?v=202610121140';
-import u5l3 from './u5/l3-mark.en.js?v=202610121140';
-import u5l4 from './u5/l4-plan.en.js?v=202610121140';
-import u5l5 from './u5/l5-sweep-compact.en.js?v=202610121140';
-import u5boss from './u5/boss.en.js?v=202610121140';
+import u1l1 from './u1/l1-virtual.en.js?v=202610121141';
+import u1l2 from './u1/l2-reserve-commit.en.js?v=202610121141';
+import u1l3 from './u1/l3-stack-cache.en.js?v=202610121141';
+import u1boss from './u1/boss.en.js?v=202610121141';
+import u2l1 from './u2/l1-numbers.en.js?v=202610121141';
+import u2l2 from './u2/l2-tools.en.js?v=202610121141';
+import u2l3 from './u2/l3-leak.en.js?v=202610121141';
+import u2boss from './u2/boss.en.js?v=202610121141';
+import u6l1 from './u6/l1-workstation-server.en.js?v=202610121141';
+import u6l2 from './u6/l2-background-latency.en.js?v=202610121141';
+import u6l3 from './u6/l3-datas-config.en.js?v=202610121141';
+import u6boss from './u6/boss.en.js?v=202610121141';
+import u7l1 from './u7/l1-finalization.en.js?v=202610121141';
+import u7l2 from './u7/l2-resurrection.en.js?v=202610121141';
+import u7l3 from './u7/l3-weak-leaks.en.js?v=202610121141';
+import u7boss from './u7/boss.en.js?v=202610121141';
+import u4l1 from './u4/l1-fast-path.en.js?v=202610121141';
+import u4l2 from './u4/l2-slow-path.en.js?v=202610121141';
+import u4l3 from './u4/l3-hidden.en.js?v=202610121141';
+import u4l4 from './u4/l4-pool-measure.en.js?v=202610121141';
+import u4boss from './u4/boss.en.js?v=202610121141';
+import u3l1 from './u3/l1-header.en.js?v=202610121141';
+import u3l2 from './u3/l2-layout.en.js?v=202610121141';
+import u3l3 from './u3/l3-arrays-strings.en.js?v=202610121141';
+import u3l4 from './u3/l4-heaps.en.js?v=202610121141';
+import u3boss from './u3/boss.en.js?v=202610121141';
+import u5l1 from './u5/l1-triggers.en.js?v=202610121141';
+import u5l2 from './u5/l2-suspension.en.js?v=202610121141';
+import u5l3 from './u5/l3-mark.en.js?v=202610121141';
+import u5l4 from './u5/l4-plan.en.js?v=202610121141';
+import u5l5 from './u5/l5-sweep-compact.en.js?v=202610121141';
+import u5boss from './u5/boss.en.js?v=202610121141';
+import u8l1 from './u8/l1-pinning.en.js?v=202610121141';
+import u8l2 from './u8/l2-unsafe.en.js?v=202610121141';
+import u8l3 from './u8/l3-gc-api.en.js?v=202610121141';
+import u8l4 from './u8/l4-native-aot.en.js?v=202610121141';
+import u8boss from './u8/boss.en.js?v=202610121141';
 
 export default {
   id: 'memory',
@@ -83,6 +88,12 @@ export default {
       blurb: 'Finalization inside out: two queues, the finalizer thread, resurrection and SuppressFinalize. SafeHandle and critical finalizers, weak references and GCHandle, ConditionalWeakTable and leaks through closures, statics and timers.',
       lessons: [u7l1, u7l2, u7l3, u7boss]
     },
-    { id: 'u8', title: 'Advanced', soon: true, blurb: 'Pinning and the POH, unsafe code and pointers, GC.TryStartNoGCRegion, the GC API and GCSettings, Native AOT and memory.' }
+    {
+      id: 'u8',
+      title: 'Advanced',
+      blurb: 'Pinning and the pinned object heap, unsafe code, pointers and native memory, no-GC regions and the collector API, and what changes in memory under Native AOT without a JIT. The course final.',
+      source: { title: 'Microsoft Learn: Garbage collection', url: 'https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/' },
+      lessons: [u8l1, u8l2, u8l3, u8l4, u8boss]
+    }
   ]
 };
