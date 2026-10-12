@@ -26,6 +26,10 @@ import w4l3 from './w4/l3-locks.en.js?v=202610121136';
 import w4l4 from './w4/l4-pool.en.js?v=202610121136';
 import w4l5 from './w4/l5-starvation.en.js?v=202610121136';
 import w4boss from './w4/boss.en.js?v=202610121136';
+import w7l1 from './w7/l1-sharing.en.js?v=202610121136';
+import w7l2 from './w7/l2-reflection.en.js?v=202610121136';
+import w7l3 from './w7/l3-dynamic-gen.en.js?v=202610121136';
+import w7boss from './w7/boss.en.js?v=202610121136';
 
 export default {
   id: 'dotnet',
@@ -56,8 +60,14 @@ export default {
       blurb: 'Threads and the scheduler, data races, lock and Interlocked, deadlock, the thread pool and its starvation. You switch the threads yourself and catch the bugs.',
       lessons: [w4l1, w4l2, w4l3, w4l4, w4l5, w4boss]
     },
-    { id: 'w5', title: 'Assemblies and loading', soon: true, blurb: 'How the CLR finds and loads assemblies: AssemblyLoadContext, versions and NuGet, trimming, plugins.' },
-    { id: 'w6', title: 'Generics and reflection under the hood', soon: true, blurb: 'How the JIT compiles generics for value and reference types, what reflection costs, and what source generators replace.' },
-    { id: 'w7', title: 'Performance', soon: true, blurb: 'Span<T> and Memory<T>, allocations and ArrayPool, profiling and BenchmarkDotNet.' }
+    { id: 'w5', title: 'Assemblies and versions', soon: true, blurb: 'What is inside an assembly, three version numbers and which one the loader checks, strong names and the GAC then and deps.json now, NuGet and version conflicts.' },
+    { id: 'w6', title: 'Loading and hosting', soon: true, blurb: 'How dotnet app.dll starts: apphost, hostfxr and rollForward; AppDomain then and AssemblyLoadContext now — plugins and unloading; trimming and single-file.' },
+    {
+      id: 'w7',
+      title: 'Generics and reflection inside out',
+      blurb: 'How the JIT shares generic code through __Canon and dictionaries, what lies behind metadata tokens, MethodInfo and Invoke, how the dynamic call site cache works, and why source generators replace reflection.',
+      lessons: [w7l1, w7l2, w7l3, w7boss]
+    },
+    { id: 'w8', title: 'Runtime performance', soon: true, blurb: 'Tiered compilation and PGO, ReadyToRun and Native AOT, inlining and devirtualization, BenchmarkDotNet and honest measurement.' }
   ]
 };

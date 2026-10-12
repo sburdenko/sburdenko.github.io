@@ -15,6 +15,11 @@ import u7l1 from './u7/l1-finalization.js?v=202610121136';
 import u7l2 from './u7/l2-resurrection.js?v=202610121136';
 import u7l3 from './u7/l3-weak-leaks.js?v=202610121136';
 import u7boss from './u7/boss.js?v=202610121136';
+import u4l1 from './u4/l1-fast-path.js?v=202610121136';
+import u4l2 from './u4/l2-slow-path.js?v=202610121136';
+import u4l3 from './u4/l3-hidden.js?v=202610121136';
+import u4l4 from './u4/l4-pool-measure.js?v=202610121136';
+import u4boss from './u4/boss.js?v=202610121136';
 
 export default {
   id: 'memory',
@@ -35,7 +40,12 @@ export default {
       lessons: [u2l1, u2l2, u2l3, u2boss]
     },
     { id: 'u3', title: 'Устройство кучи', soon: true, blurb: 'Заголовок объекта и указатель на тип, раскладка полей и выравнивание, SOH, LOH и POH, регионы в .NET 7+ и frozen-сегменты.' },
-    { id: 'u4', title: 'Аллокация', soon: true, blurb: 'Сдвиг указателя и контекст аллокации, медленный путь и LOH, скрытые аллокации в замыканиях, упаковке, LINQ и строках, ArrayPool и stackalloc.' },
+    {
+      id: 'u4',
+      title: 'Аллокация',
+      blurb: 'Почему new в .NET почти бесплатен — сдвиг указателя в контексте аллокации потока — и когда он идёт медленным путём или в LOH. Скрытые аллокации в замыканиях, упаковке, итераторах, params, строках и async; ArrayPool, stackalloc, string.Create и замер байт на вызов.',
+      lessons: [u4l1, u4l2, u4l3, u4l4, u4boss]
+    },
     { id: 'u5', title: 'Как работает сборка', soon: true, blurb: 'Когда запускается GC, остановка потоков и safepoint, маркировка от корней и card table, планирование, sweep и compact.' },
     {
       id: 'u6',

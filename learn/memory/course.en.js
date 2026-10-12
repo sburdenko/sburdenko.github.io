@@ -15,6 +15,11 @@ import u7l1 from './u7/l1-finalization.en.js?v=202610121136';
 import u7l2 from './u7/l2-resurrection.en.js?v=202610121136';
 import u7l3 from './u7/l3-weak-leaks.en.js?v=202610121136';
 import u7boss from './u7/boss.en.js?v=202610121136';
+import u4l1 from './u4/l1-fast-path.en.js?v=202610121136';
+import u4l2 from './u4/l2-slow-path.en.js?v=202610121136';
+import u4l3 from './u4/l3-hidden.en.js?v=202610121136';
+import u4l4 from './u4/l4-pool-measure.en.js?v=202610121136';
+import u4boss from './u4/boss.en.js?v=202610121136';
 
 export default {
   id: 'memory',
@@ -35,7 +40,12 @@ export default {
       lessons: [u2l1, u2l2, u2l3, u2boss]
     },
     { id: 'u3', title: 'Inside the heap', soon: true, blurb: 'The object header and the type pointer, field layout and alignment, the SOH, LOH and POH, regions in .NET 7+ and frozen segments.' },
-    { id: 'u4', title: 'Allocation', soon: true, blurb: 'Pointer bumping and the allocation context, the slow path and the LOH, hidden allocations in closures, boxing, LINQ and strings, ArrayPool and stackalloc.' },
+    {
+      id: 'u4',
+      title: 'Allocation',
+      blurb: 'Why new in .NET is nearly free — a pointer bump in the thread\'s allocation context — and when it takes the slow path or goes to the LOH. Hidden allocations in closures, boxing, iterators, params, strings and async; ArrayPool, stackalloc, string.Create and measuring bytes per call.',
+      lessons: [u4l1, u4l2, u4l3, u4l4, u4boss]
+    },
     { id: 'u5', title: 'How a collection works', soon: true, blurb: 'When the GC kicks in, suspending threads and safepoints, marking from roots and the card table, planning, sweep and compact.' },
     {
       id: 'u6',

@@ -26,6 +26,10 @@ import w4l3 from './w4/l3-locks.js?v=202610121136';
 import w4l4 from './w4/l4-pool.js?v=202610121136';
 import w4l5 from './w4/l5-starvation.js?v=202610121136';
 import w4boss from './w4/boss.js?v=202610121136';
+import w7l1 from './w7/l1-sharing.js?v=202610121136';
+import w7l2 from './w7/l2-reflection.js?v=202610121136';
+import w7l3 from './w7/l3-dynamic-gen.js?v=202610121136';
+import w7boss from './w7/boss.js?v=202610121136';
 
 export default {
   id: 'dotnet',
@@ -56,8 +60,14 @@ export default {
       blurb: 'Потоки и планировщик, гонка данных, lock и Interlocked, deadlock, пул потоков и его голодание. Ты сам переключаешь потоки и ловишь баги.',
       lessons: [w4l1, w4l2, w4l3, w4l4, w4l5, w4boss]
     },
-    { id: 'w5', title: 'Сборки и загрузка', soon: true, blurb: 'Как CLR находит и грузит сборки: AssemblyLoadContext, версии и NuGet, trimming, плагины.' },
-    { id: 'w6', title: 'Дженерики и рефлексия изнутри', soon: true, blurb: 'Как JIT компилирует дженерики для значимых и ссылочных типов, во что обходится рефлексия и что заменяют source generators.' },
-    { id: 'w7', title: 'Производительность', soon: true, blurb: 'Span<T> и Memory<T>, аллокации и ArrayPool, профилирование и BenchmarkDotNet.' }
+    { id: 'w5', title: 'Сборки и версии', soon: true, blurb: 'Что лежит в сборке, три номера версии и какой смотрит загрузчик, строгие имена и GAC тогда и deps.json сейчас, NuGet и конфликты версий.' },
+    { id: 'w6', title: 'Загрузка и хостинг', soon: true, blurb: 'Как запускается dotnet app.dll: apphost, hostfxr и rollForward; AppDomain тогда и AssemblyLoadContext сейчас — плагины и выгрузка; trimming и single-file.' },
+    {
+      id: 'w7',
+      title: 'Дженерики и рефлексия изнутри',
+      blurb: 'Как JIT делит код дженериков через __Canon и словари, что стоит за токенами метаданных, MethodInfo и Invoke, как устроен кэш call site у dynamic и почему source generators заменяют рефлексию.',
+      lessons: [w7l1, w7l2, w7l3, w7boss]
+    },
+    { id: 'w8', title: 'Производительность рантайма', soon: true, blurb: 'Tiered compilation и PGO, ReadyToRun и Native AOT, inlining и девиртуализация, BenchmarkDotNet и честный замер.' }
   ]
 };
