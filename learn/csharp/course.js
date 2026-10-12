@@ -1,4 +1,7 @@
 /** Курс «C# глубже»: дженерики, делегаты, LINQ, Span и современный C#. */
+import u6l1 from './u6/l1-object.js?v=202610101649';
+import u6l2 from './u6/l2-casts.js?v=202610101649';
+import u6l3 from './u6/l3-primitives.js?v=202610101649';
 import u1l1 from './u1/l1-why.js?v=202610101649';
 import u1l2 from './u1/l2-constraints.js?v=202610101649';
 import u1l3 from './u1/l3-variance.js?v=202610101649';
@@ -25,6 +28,12 @@ export default {
   id: 'csharp',
   title: 'C# глубже',
   units: [
+    {
+      id: 'u6',
+      title: 'Устройство типа',
+      blurb: 'Что есть у любого объекта: System.Object, заголовок и указатель на тип, контракт Equals/GetHashCode; приведения, is, as и распаковка; примитивы, checked и переполнение, dynamic и его цена.',
+      lessons: [u6l1, u6l2, u6l3]
+    },
     {
       id: 'u1',
       title: 'Дженерики',

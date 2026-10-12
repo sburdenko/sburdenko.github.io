@@ -1,4 +1,7 @@
 /** The "Deeper C#" course: generics, delegates, LINQ, Span and modern C#. */
+import u6l1 from './u6/l1-object.en.js?v=202610101649';
+import u6l2 from './u6/l2-casts.en.js?v=202610101649';
+import u6l3 from './u6/l3-primitives.en.js?v=202610101649';
 import u1l1 from './u1/l1-why.en.js?v=202610101649';
 import u1l2 from './u1/l2-constraints.en.js?v=202610101649';
 import u1l3 from './u1/l3-variance.en.js?v=202610101649';
@@ -25,6 +28,12 @@ export default {
   id: 'csharp',
   title: 'Deeper C#',
   units: [
+    {
+      id: 'u6',
+      title: 'How a type is built',
+      blurb: 'What every object has: System.Object, the header and the type pointer, the Equals/GetHashCode contract; casts, is, as and unboxing; primitives, checked and overflow, dynamic and its cost.',
+      lessons: [u6l1, u6l2, u6l3]
+    },
     {
       id: 'u1',
       title: 'Generics',
