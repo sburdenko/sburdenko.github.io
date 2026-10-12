@@ -1,7 +1,8 @@
 /** Курс «Память в .NET»: разделы и уроки. Готовые разделы — с уроками, остальные — план со статусом «скоро». */
-import u1l1 from './u1/l1-virtual.js?v=202610121037';
-import u1l2 from './u1/l2-reserve-commit.js?v=202610121037';
-import u1l3 from './u1/l3-stack-cache.js?v=202610121037';
+import u1l1 from './u1/l1-virtual.js?v=202610121129';
+import u1l2 from './u1/l2-reserve-commit.js?v=202610121129';
+import u1l3 from './u1/l3-stack-cache.js?v=202610121129';
+import u1boss from './u1/boss.js?v=202610121129';
 
 export default {
   id: 'memory',
@@ -12,7 +13,7 @@ export default {
       title: 'Память глазами ОС',
       blurb: 'Что видит операционная система, когда .NET просит память: виртуальные адреса и страницы, reserve и commit, почему у процесса несколько чисел «занятой» памяти, предел стека и кэши процессора.',
       source: { title: 'Microsoft Learn: Virtual address spaces', url: 'https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/virtual-address-spaces' },
-      lessons: [u1l1, u1l2, u1l3]
+      lessons: [u1l1, u1l2, u1l3, u1boss]
     },
     { id: 'u2', title: 'Как измерять', soon: true, blurb: 'Working set, private bytes и управляемая куча — разные числа. dotnet-counters, dotnet-gcdump, dotnet-trace и PerfView; как читать дамп и искать утечку.' },
     { id: 'u3', title: 'Устройство кучи', soon: true, blurb: 'Заголовок объекта и указатель на тип, раскладка полей и выравнивание, SOH, LOH и POH, регионы в .NET 7+ и frozen-сегменты.' },
