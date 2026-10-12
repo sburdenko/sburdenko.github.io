@@ -1,12 +1,12 @@
 /** Курс «Память в .NET»: разделы и уроки. Готовые разделы — с уроками, остальные — план со статусом «скоро». */
-import u1l1 from './u1/l1-virtual.js?v=202610121133';
-import u1l2 from './u1/l2-reserve-commit.js?v=202610121133';
-import u1l3 from './u1/l3-stack-cache.js?v=202610121133';
-import u1boss from './u1/boss.js?v=202610121133';
-import u2l1 from './u2/l1-numbers.js?v=202610121133';
-import u2l2 from './u2/l2-tools.js?v=202610121133';
-import u2l3 from './u2/l3-leak.js?v=202610121133';
-import u2boss from './u2/boss.js?v=202610121133';
+import u1l1 from './u1/l1-virtual.js?v=202610121134';
+import u1l2 from './u1/l2-reserve-commit.js?v=202610121134';
+import u1l3 from './u1/l3-stack-cache.js?v=202610121134';
+import u1boss from './u1/boss.js?v=202610121134';
+import u2l1 from './u2/l1-numbers.js?v=202610121134';
+import u2l2 from './u2/l2-tools.js?v=202610121134';
+import u2l3 from './u2/l3-leak.js?v=202610121134';
+import u2boss from './u2/boss.js?v=202610121134';
 
 export default {
   id: 'memory',

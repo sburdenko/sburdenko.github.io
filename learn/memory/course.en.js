@@ -1,12 +1,12 @@
 /** Course "Memory in .NET": units and lessons (English version). Finished units have lessons; the rest are planned and marked "soon". */
-import u1l1 from './u1/l1-virtual.en.js?v=202610121133';
-import u1l2 from './u1/l2-reserve-commit.en.js?v=202610121133';
-import u1l3 from './u1/l3-stack-cache.en.js?v=202610121133';
-import u1boss from './u1/boss.en.js?v=202610121133';
-import u2l1 from './u2/l1-numbers.en.js?v=202610121133';
-import u2l2 from './u2/l2-tools.en.js?v=202610121133';
-import u2l3 from './u2/l3-leak.en.js?v=202610121133';
-import u2boss from './u2/boss.en.js?v=202610121133';
+import u1l1 from './u1/l1-virtual.en.js?v=202610121134';
+import u1l2 from './u1/l2-reserve-commit.en.js?v=202610121134';
+import u1l3 from './u1/l3-stack-cache.en.js?v=202610121134';
+import u1boss from './u1/boss.en.js?v=202610121134';
+import u2l1 from './u2/l1-numbers.en.js?v=202610121134';
+import u2l2 from './u2/l2-tools.en.js?v=202610121134';
+import u2l3 from './u2/l3-leak.en.js?v=202610121134';
+import u2boss from './u2/boss.en.js?v=202610121134';
 
 export default {
   id: 'memory',
