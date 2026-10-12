@@ -40,9 +40,9 @@ export default {
     {
       t: 'learn',
       title: 'foreach: the loop variable is read-only',
-      body: '<p>The <code>foreach</code> variable is a copy of the current element, and it is <b>read-only</b>. You cannot assign to its field: error <b>CS1654</b>.</p><p>You can call a mutating method, but as with any read-only variable of a value type, the compiler calls it on a <b>defensive copy</b>. Neither the collection element nor even the variable <code>p</code> itself changes.</p>',
-      code: 'foreach (var p in list)\n{\n    p.X = 1;        // CS1654\n    p.Offset(1);    // compiles: a copy of a copy changes\n}',
-      deep: '<p>The same mechanism produces a famous infinite loop: the <code>List&lt;T&gt;.Enumerator</code> enumerator is a mutable struct. Put it in a <code>readonly</code> field, and every <code>_e.MoveNext()</code> runs on a fresh defensive copy: it always starts at the beginning, always returns true, and <code>_e.Current</code> stays the default value.</p>'
+      body: '<p>The <code>foreach</code> variable is a copy of the current element, and it is <b>read-only</b>. You cannot assign to its field: error <b>CS1654</b>.</p><p>You can call a mutating method, and it is easy to get this wrong in both directions. The compiler makes no defensive copy for the loop variable: the method changes <code>p</code> itself, and the next line of the body sees the new value. But <code>p</code> is already a copy of the element, so the collection element does not change. On the next iteration <code>p</code> is filled again, and the change is gone.</p>',
+      code: 'foreach (var p in list)\n{\n    p.X = 1;        // CS1654\n    p.Offset(1);    // compiles: p changes, not the element\n}',
+      deep: '<p>For a <code>readonly</code> <b>field</b>, though, the defensive copy is real, and it produces a famous infinite loop: the <code>List&lt;T&gt;.Enumerator</code> enumerator is a mutable struct. Put it in a <code>readonly</code> field, and every <code>_e.MoveNext()</code> runs on a fresh defensive copy: it always starts at the beginning, always returns true, and <code>_e.Current</code> stays the default value.</p>'
     },
     {
       t: 'multi',
@@ -55,7 +55,7 @@ export default {
         'CollectionsMarshal.AsSpan(list)[0].X = 1;'
       ],
       answer: [0, 1, 4],
-      explain: 'An array element is a variable, the method changes it in place. with creates a modified copy, and the assignment puts it back into the list. AsSpan gives a Span over the list\'s internal array, and its indexer returns a ref. list[0].Offset changes a temporary copy, and foreach changes a copy of the loop variable, even for an array.'
+      explain: 'An array element is a variable, the method changes it in place. with creates a modified copy, and the assignment puts it back into the list. AsSpan gives a Span over the list\'s internal array, and its indexer returns a ref. list[0].Offset changes a temporary copy, and foreach changes the loop variable, which is itself a copy of the element, even for an array.'
     },
     {
       t: 'learn',
@@ -85,7 +85,7 @@ export default {
         ['arr[i].Move() on Point[]', 'The array element itself'],
         ['list[i].Move() on List<Point>', 'A temporary copy of the element'],
         ['movers[i].Move() on List<IMover>', 'The box stored in the list'],
-        ['p.Move() in foreach (var p in list)', 'A defensive copy of the loop variable'],
+        ['p.Move() in foreach (var p in list)', 'The loop variable, a copy of the element'],
         ['span[i].Move() on Span<Point>', 'The memory element under the span']
       ]
     },
