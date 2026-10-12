@@ -28,6 +28,10 @@ import u9l1 from './u9/l1-ref.en.js?v=202610121134';
 import u9l2 from './u9/l2-args.en.js?v=202610121134';
 import u9l3 from './u9/l3-props.en.js?v=202610121134';
 import u9boss from './u9/boss.en.js?v=202610121134';
+import u7l1 from './u7/l1-boxing.en.js?v=202610121134';
+import u7l2 from './u7/l2-mutable.en.js?v=202610121134';
+import u7l3 from './u7/l3-equality-layout.en.js?v=202610121134';
+import u7boss from './u7/boss.en.js?v=202610121134';
 
 export default {
   id: 'csharp',
@@ -38,6 +42,12 @@ export default {
       title: 'How a type is built',
       blurb: 'What every object has: System.Object, the header and the type pointer, the Equals/GetHashCode contract; casts, is, as and unboxing; primitives, checked and overflow, dynamic and its cost.',
       lessons: [u6l1, u6l2, u6l3, u6boss]
+    },
+    {
+      id: 'u7',
+      title: 'Value types all the way',
+      blurb: 'Boxing you cannot see in the code: interfaces, GetType and ValueType methods; a mutable struct in a collection and in foreach; ValueType.Equals via reflection, IEquatable<T>, record struct and field layout.',
+      lessons: [u7l1, u7l2, u7l3, u7boss]
     },
     {
       id: 'u9',

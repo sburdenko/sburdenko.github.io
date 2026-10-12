@@ -28,6 +28,10 @@ import u9l1 from './u9/l1-ref.js?v=202610121134';
 import u9l2 from './u9/l2-args.js?v=202610121134';
 import u9l3 from './u9/l3-props.js?v=202610121134';
 import u9boss from './u9/boss.js?v=202610121134';
+import u7l1 from './u7/l1-boxing.js?v=202610121134';
+import u7l2 from './u7/l2-mutable.js?v=202610121134';
+import u7l3 from './u7/l3-equality-layout.js?v=202610121134';
+import u7boss from './u7/boss.js?v=202610121134';
 
 export default {
   id: 'csharp',
@@ -38,6 +42,12 @@ export default {
       title: 'Устройство типа',
       blurb: 'Что есть у любого объекта: System.Object, заголовок и указатель на тип, контракт Equals/GetHashCode; приведения, is, as и распаковка; примитивы, checked и переполнение, dynamic и его цена.',
       lessons: [u6l1, u6l2, u6l3, u6boss]
+    },
+    {
+      id: 'u7',
+      title: 'Значимые типы до конца',
+      blurb: 'Упаковка, которой не видно в коде: интерфейсы, GetType и методы ValueType; изменяемая структура в коллекции и foreach; ValueType.Equals через отражение, IEquatable<T>, record struct и раскладка полей.',
+      lessons: [u7l1, u7l2, u7l3, u7boss]
     },
     {
       id: 'u9',
