@@ -1,30 +1,39 @@
 /** Курс «C# глубже»: дженерики, делегаты, LINQ, Span и современный C#. */
-import u1l1 from './u1/l1-why.js?v=202610101649';
-import u1l2 from './u1/l2-constraints.js?v=202610101649';
-import u1l3 from './u1/l3-variance.js?v=202610101649';
-import u1boss from './u1/boss.js?v=202610101649';
-import u2l1 from './u2/l1-delegates.js?v=202610101649';
-import u2l2 from './u2/l2-events.js?v=202610101649';
-import u2l3 from './u2/l3-closures.js?v=202610101649';
-import u2boss from './u2/boss.js?v=202610101649';
-import u3l1 from './u3/l1-lazy.js?v=202610101649';
-import u3l2 from './u3/l2-materialize.js?v=202610101649';
-import u3l3 from './u3/l3-cost.js?v=202610101649';
-import u3boss from './u3/boss.js?v=202610101649';
-import u4l1 from './u4/l1-span.js?v=202610101649';
-import u4l2 from './u4/l2-refstruct.js?v=202610101649';
-import u4l3 from './u4/l3-copies.js?v=202610101649';
-import u4boss from './u4/boss.js?v=202610101649';
-import u5l1 from './u5/l1-patterns.js?v=202610101649';
-import u5l2 from './u5/l2-records.js?v=202610101649';
-import u5l3 from './u5/l3-nullable.js?v=202610101649';
-import u5l4 from './u5/l4-modern.js?v=202610101649';
-import u5boss from './u5/boss.js?v=202610101649';
+import u6l1 from './u6/l1-object.js?v=202610121037';
+import u6l2 from './u6/l2-casts.js?v=202610121037';
+import u6l3 from './u6/l3-primitives.js?v=202610121037';
+import u1l1 from './u1/l1-why.js?v=202610121037';
+import u1l2 from './u1/l2-constraints.js?v=202610121037';
+import u1l3 from './u1/l3-variance.js?v=202610121037';
+import u1boss from './u1/boss.js?v=202610121037';
+import u2l1 from './u2/l1-delegates.js?v=202610121037';
+import u2l2 from './u2/l2-events.js?v=202610121037';
+import u2l3 from './u2/l3-closures.js?v=202610121037';
+import u2boss from './u2/boss.js?v=202610121037';
+import u3l1 from './u3/l1-lazy.js?v=202610121037';
+import u3l2 from './u3/l2-materialize.js?v=202610121037';
+import u3l3 from './u3/l3-cost.js?v=202610121037';
+import u3boss from './u3/boss.js?v=202610121037';
+import u4l1 from './u4/l1-span.js?v=202610121037';
+import u4l2 from './u4/l2-refstruct.js?v=202610121037';
+import u4l3 from './u4/l3-copies.js?v=202610121037';
+import u4boss from './u4/boss.js?v=202610121037';
+import u5l1 from './u5/l1-patterns.js?v=202610121037';
+import u5l2 from './u5/l2-records.js?v=202610121037';
+import u5l3 from './u5/l3-nullable.js?v=202610121037';
+import u5l4 from './u5/l4-modern.js?v=202610121037';
+import u5boss from './u5/boss.js?v=202610121037';
 
 export default {
   id: 'csharp',
   title: 'C# глубже',
   units: [
+    {
+      id: 'u6',
+      title: 'Устройство типа',
+      blurb: 'Что есть у любого объекта: System.Object, заголовок и указатель на тип, контракт Equals/GetHashCode; приведения, is, as и распаковка; примитивы, checked и переполнение, dynamic и его цена.',
+      lessons: [u6l1, u6l2, u6l3]
+    },
     {
       id: 'u1',
       title: 'Дженерики',
