@@ -221,6 +221,7 @@ Cloud Datastore Viewer и `gcloud auth activate-service-account`) или в ко
 ```sh
 python3 -m http.server 8000   # или любой статический сервер
 npm test                      # node --test tests/*.test.js
+npm run typecheck             # проверка типов в js (JSDoc + checkJs), нужен npm install
 npm run stamp                 # перед коммитом: обновить метки ?v= у js и css
 ```
 
@@ -233,6 +234,15 @@ npm run stamp                 # перед коммитом: обновить м
 
 Файлы подключаются как ES-модули, поэтому открывать `index.html` по `file://` не получится —
 нужен локальный сервер. Сборка не требуется: что лежит в репозитории, то и раздаёт GitHub Pages.
+
+## Типы
+
+Код остаётся обычным JavaScript без сборки, но типы проверяются: `npm install`, затем
+`npm run typecheck` (TypeScript с `checkJs`, конфиг — `tsconfig.json`). Форма данных описана в
+`learn/types.d.ts` (карточки, урок, раздел, курс), а ядро подписано в JSDoc:
+`/** @param {...} */` перед функцией. Проверяются `learn/`, `tools/` и тесты платформы; старые кассеты
+в проверку не входят. Тест `tests/content.test.js` проверяет те же формы на данных курсов. Адреса вида
+`./x.js?v=…` tsc не понимает, поэтому `tools/typecheck.mjs` прогоняет копию исходников с метками снятыми.
 
 ## Про модели
 

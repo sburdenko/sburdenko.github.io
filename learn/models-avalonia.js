@@ -2,7 +2,7 @@
  * Модели курса «Avalonia: основы»: Grid, панели, привязки и селекторы стилей.
  * Без DOM — тесты проходят задания теми же действиями, что кнопки.
  */
-import { tr } from './i18n.js?v=202610130727';
+import { tr } from './i18n.js?v=202610130923';
 
 /* =====================================================================
    Grid: ширины колонок из ColumnDefinitions="Auto,200,*,2*".
@@ -200,7 +200,7 @@ export function select(selector) {
 }
 
 export const selRig = {
-  init: () => ({ sel: null }),
+  init: _card => ({ sel: null }),
   act(card, s0, a) {
     const i = a.indexOf(':'), k = i < 0 ? a : a.slice(0, i), v = a.slice(i + 1);
     if (k === 'reset') return selRig.init(card);

@@ -26,7 +26,7 @@ export async function createAdapter(settings, emit) {
     let first = true;
     fa.onAuthStateChanged(auth, u => {
       emit(toUser(u));
-      if (first) { first = false; resolve(); }
+      if (first) { first = false; resolve(undefined); }
     });
   });
   return {

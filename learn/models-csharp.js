@@ -3,7 +3,7 @@
  * выделения памяти, защитные копии структур и порядок веток switch.
  * Без DOM — тесты проходят задания теми же действиями, что кнопки.
  */
-import { tr } from './i18n.js?v=202610130727';
+import { tr } from './i18n.js?v=202610130923';
 
 /* =====================================================================
    Ограничения дженериков: что скомпилируется внутри метода и какие T подойдут.
@@ -218,7 +218,7 @@ export const linqRig = {
 export const PARSE = {
   split: { name: 'Split', code: 'foreach (var part in line.Split(\',\'))\n    sum += int.Parse(part);', allocs: n => 1 + n, what: n => tr({ ru: `массив string[${n}] и ${n} новых строк`, en: `a string[${n}] array and ${n} new strings` }) },
   substring: { name: 'Substring', code: 'int start = 0;\nfor (int i = 0; i <= line.Length; i++)\n    if (i == line.Length || line[i] == \',\')\n    {\n        sum += int.Parse(line.Substring(start, i - start));\n        start = i + 1;\n    }', allocs: n => n, what: n => tr({ ru: `${n} новых строк`, en: `${n} new strings` }) },
-  span: { name: 'Span', code: 'ReadOnlySpan<char> rest = line;\nwhile (!rest.IsEmpty)\n{\n    int comma = rest.IndexOf(\',\');\n    var part = comma < 0 ? rest : rest[..comma];\n    sum += int.Parse(part);\n    rest = comma < 0 ? default : rest[(comma + 1)..];\n}', allocs: () => 0, what: () => tr({ ru: 'ничего: срезы смотрят в исходную строку', en: 'nothing: slices point into the original string' }) }
+  span: { name: 'Span', code: 'ReadOnlySpan<char> rest = line;\nwhile (!rest.IsEmpty)\n{\n    int comma = rest.IndexOf(\',\');\n    var part = comma < 0 ? rest : rest[..comma];\n    sum += int.Parse(part);\n    rest = comma < 0 ? default : rest[(comma + 1)..];\n}', allocs: _n => 0, what: _n => tr({ ru: 'ничего: срезы смотрят в исходную строку', en: 'nothing: slices point into the original string' }) }
 };
 
 export const allocRig = {

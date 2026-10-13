@@ -62,12 +62,16 @@ async function stringsFor(course, name, lang) {
   return merged;
 }
 
+/** @returns {Promise<import('./types.d.ts').Lesson>} */
 export async function loadLesson(course, id, lang) {
   const [skeleton, strings] = await Promise.all([readJson(`${course}/lessons/${id}.json`), stringsFor(course, id, lang)]);
   return fill(skeleton, strings);
 }
 
-/** Курс целиком из исходных файлов: разделы из course.json и все их уроки на языке lang. */
+/**
+ * Курс целиком из исходных файлов: разделы из course.json и все их уроки на языке lang.
+ * @returns {Promise<import('./types.d.ts').Course>}
+ */
 export async function loadCourseFromSource(course, lang) {
   const [skeleton, strings] = await Promise.all([readJson(`${course}/course.json`), stringsFor(course, 'course', lang)]);
   const head = fill(skeleton, strings);

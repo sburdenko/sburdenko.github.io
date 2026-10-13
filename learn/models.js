@@ -8,7 +8,7 @@
 
 /* ---------- стековая машина CIL ---------- */
 
-import { tr } from './i18n.js?v=202610130727';
+import { tr } from './i18n.js?v=202610130923';
 
 const BIN = {
   add: [(a, b) => a + b, '+'],
@@ -35,6 +35,7 @@ export function parseOp(line) {
  * Возвращает кадры: кадр 0 — до запуска, дальше по одному на инструкцию.
  */
 export function runIL(program, args = []) {
+  /** @type {{ pc?: number, stack: any[], note: string, error?: any, ret?: any }[]} */
   const frames = [{ pc: -1, stack: [], note: tr({ ru: 'Машина готова. Стек пуст.', en: 'The machine is ready. The stack is empty.' }) }];
   const stack = [];
   const push = (stackNow, note, extra = {}) => frames.push({ stack: [...stackNow], note, ...extra });
