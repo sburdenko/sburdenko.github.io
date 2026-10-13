@@ -125,7 +125,7 @@ index.html                 Bathys: главная страница, грузит
 shelf/index.html           полка кассет
 learn/
   app.js                   каталог → курс → урок, профиль (адрес в hash); learn/index.html — переадресация на /
-  i18n.js  ui.js           язык (tr({ ru, en }), plural) и строки интерфейса
+  i18n.js  ui.js           язык (tr({ ru, en }), plural) и загрузка строк интерфейса из content/ui/<язык>.json
   auth/                    вход: auth.js — интерфейс, config.js — какой провайдер, firebase.js — адаптер
   engine.js                очередь карточек, проверка ответов, очки (без DOM)
   progress.js              XP, серия дней, звёзды; localStorage (без DOM)
@@ -141,6 +141,7 @@ learn/
   cards.js  rigs*.js       отрисовка карточек и стендов
   content.js               загрузчик курсов из данных: структура урока + строки на нужном языке
   courses.js               реестр курсов; сами курсы лежат в content/ (jsonCourse('id'))
+content/ui/<язык>.json     строки интерфейса и тексты каталога курсов (ключ → строка)
 content/<курс>/            курсы-данные: lessons/<id>.json — структура, i18n/<язык>/<id>.json — строки,
                            bundle.<язык>.json — свёртка для сайта (собирается npm run stamp)
 tools/content-*.mjs        перевод курса из модулей в данные, добавление урока, сборка bundle

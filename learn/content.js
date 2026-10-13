@@ -19,7 +19,7 @@ export const HOLE = '⟦⟧';
 /** Порядок запасных языков: сначала нужный, потом английский, потом русский (язык-источник). */
 export const FALLBACKS = ['en', 'ru'];
 
-async function readJson(rel) {
+export async function readJson(rel) {
   const url = new URL(`../content/${rel}`, import.meta.url);
   if (inNode) {
     const { readFile } = await import('node:fs/promises');

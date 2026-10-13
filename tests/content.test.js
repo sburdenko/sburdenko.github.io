@@ -12,7 +12,7 @@ import { fill, setPath, loadCourse, loadCourseFromSource, loadLesson, HOLE } fro
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', 'content');
 const read = (...p) => JSON.parse(readFileSync(join(root, ...p), 'utf8'));
-const courses = existsSync(root) ? readdirSync(root, { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name) : [];
+const courses = existsSync(root) ? readdirSync(root, { withFileTypes: true }).filter(d => d.isDirectory() && existsSync(join(root, d.name, 'course.json'))).map(d => d.name) : [];   // content/ui — не курс
 
 test('fill подставляет строки по путям и ругается на несуществующий путь', () => {
   const sk = { a: HOLE, list: [HOLE, 'x', { q: HOLE }] };
@@ -76,3 +76,14 @@ for (const id of courses) {
     }
   });
 }
+
+test('строки интерфейса: у каждого ключа есть ru и en, одинаковые подстановки, в en нет кириллицы', () => {
+  const ru = read('ui', 'ru.json'), en = read('ui', 'en.json');
+  assert.deepEqual(Object.keys(en).sort(), Object.keys(ru).sort(), 'наборы ключей ru и en различаются');
+  const vars = s => [...s.matchAll(/\{(\w+)\}/g)].map(m => m[1]).sort().join();
+  for (const k of Object.keys(ru)) {
+    assert.equal(typeof ru[k], 'string'); assert.equal(typeof en[k], 'string');
+    assert.equal(vars(en[k]), vars(ru[k]), `${k}: подстановки {…} различаются`);
+    assert.ok(!/[А-Яа-яЁё]/.test(en[k]), `${k}: кириллица в английской строке`);
+  }
+});
