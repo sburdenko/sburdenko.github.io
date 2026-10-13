@@ -1,6 +1,6 @@
 /** Маленькие стенды к главам: static, dynamic, SRP Batcher, instancing, GPU Resident Drawer. */
-import { $, $$, fmt, fmtI, bytes, fitCanvas, RM } from '../assets/vhs.js?v=202610131111';
-import { t, onLang } from '../assets/i18n.js?v=202610131111';
+import { $, $$, fmt, fmtI, bytes, fitCanvas, RM } from '../assets/vhs.js?v=202610131220';
+import { t, onLang } from '../assets/i18n.js?v=202610131220';
 
 /* ---------------- CH.03 static batching ---------------- */
 export function initStaticMini() {
