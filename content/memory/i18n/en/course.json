@@ -1,0 +1,20 @@
+{
+ "title": "Memory in .NET",
+ "units/0/title": "Memory through the OS’s eyes",
+ "units/0/blurb": "What the operating system sees when .NET asks for memory: virtual addresses and pages, reserve and commit, why a process has several \"memory used\" numbers, the stack limit and CPU caches.",
+ "units/0/source/title": "Microsoft Learn: Virtual address spaces",
+ "units/1/title": "How to measure",
+ "units/1/blurb": "Working set, private bytes and the managed heap are different numbers. dotnet-counters, dotnet-gcdump, dotnet-trace and PerfView; how to read a dump and hunt down a leak.",
+ "units/2/title": "Inside the heap",
+ "units/2/blurb": "The object header and the type pointer, field layout and alignment, the SOH, LOH and POH, regions in .NET 7+ and frozen segments.",
+ "units/3/title": "Allocation",
+ "units/3/blurb": "Pointer bumping and the allocation context, the slow path and the LOH, hidden allocations in closures, boxing, LINQ and strings, ArrayPool and stackalloc.",
+ "units/4/title": "How a collection works",
+ "units/4/blurb": "When the GC kicks in, suspending threads and safepoints, marking from roots and the card table, planning, sweep and compact.",
+ "units/5/title": "GC modes",
+ "units/5/blurb": "Workstation and Server, background GC, latency modes, DATAS and the settings in runtimeconfig.json.",
+ "units/6/title": "Lifetime",
+ "units/6/blurb": "Finalization from the inside and resurrection, SafeHandle, weak references, ConditionalWeakTable, leaks through events and statics.",
+ "units/7/title": "Advanced",
+ "units/7/blurb": "Pinning and the POH, unsafe code and pointers, GC.TryStartNoGCRegion, the GC API and GCSettings, Native AOT and memory."
+}
