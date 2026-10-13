@@ -1,0 +1,15 @@
+{
+ "title": "Async/await до дна",
+ "units/0/title": "Зачем асинхронность",
+ "units/0/blurb": "Ожидание против работы, Task как обещание результата и главное открытие: пока идёт ввод-вывод, поток не нужен.",
+ "units/1/title": "async и await в деле",
+ "units/1/blurb": "Первый async-метод, что возвращать, куда деваются исключения, WhenAll и WhenAny, отмена через CancellationToken.",
+ "units/2/title": "Под капотом",
+ "units/2/blurb": "Во что компилятор превращает async-метод: машина состояний, awaiter, быстрый путь и ValueTask, ExecutionContext и AsyncLocal.",
+ "units/3/title": "Контекст и deadlock",
+ "units/3/blurb": "SynchronizationContext, классический deadlock с .Result, ConfigureAwait(false), async до самого верха и голод пула потоков.",
+ "units/4/title": "Ловушки и продвинутое",
+ "units/4/blurb": "Fire-and-forget и async void, SemaphoreSlim вместо lock, TaskCompletionSource, IAsyncEnumerable и await using, Channel и Parallel.ForEachAsync.",
+ "units/5/title": "Платформы",
+ "units/5/blurb": "ASP.NET Core, WPF и WinForms, Unity: Awaitable, корутины, UniTask и отмена вместе с объектом. Финал курса."
+}

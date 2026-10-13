@@ -1,0 +1,48 @@
+{
+ "id": "formats3d",
+ "title": "⟦⟧",
+ "units": [
+  {
+   "id": "u1",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["f3d.u1.l1", "f3d.u1.l2", "f3d.u1.l3", "f3d.u1.l4", "f3d.u1.boss"]
+  },
+  {
+   "id": "u2",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["f3d.u2.l1", "f3d.u2.l2", "f3d.u2.l3", "f3d.u2.l4", "f3d.u2.l5", "f3d.u2.l6", "f3d.u2.boss"]
+  },
+  {
+   "id": "u3",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["f3d.u3.l1", "f3d.u3.l2", "f3d.u3.l3", "f3d.u3.l4", "f3d.u3.boss"]
+  },
+  {
+   "id": "u4",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["f3d.u4.l1", "f3d.u4.l2", "f3d.u4.l3", "f3d.u4.l4", "f3d.u4.boss"]
+  },
+  {
+   "id": "u5",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["f3d.u5.l1", "f3d.u5.l2", "f3d.u5.l3", "f3d.u5.boss"]
+  },
+  {
+   "id": "u6",
+   "title": "⟦⟧",
+   "soon": true,
+   "blurb": "⟦⟧"
+  },
+  {
+   "id": "u7",
+   "title": "⟦⟧",
+   "soon": true,
+   "blurb": "⟦⟧"
+  }
+ ]
+}

@@ -1,0 +1,67 @@
+{
+ "id": "as.u5.l5",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "await Parallel.ForEachAsync(urls,\n    new ParallelOptions { MaxDegreeOfParallelism = 8 },\n    async (url, ct) => await DownloadAsync(url, ct));"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "await Parallel.ForEachAsync(urls,\n    new ParallelOptions { ___ = 8 },\n    async (url, ct) => await DownloadAsync(url, ct));",
+   "lang": "cs",
+   "tiles": ["MaxDegreeOfParallelism", "BoundedCapacity", "Timeout", "Priority"],
+   "answer": ["MaxDegreeOfParallelism"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Channel<T>", "⟦⟧"],
+    ["CreateBounded", "⟦⟧"],
+    ["ReadAllAsync", "⟦⟧"],
+    ["Parallel.ForEachAsync", "⟦⟧"]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,206 @@
+{
+ "id": "rv.u1.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 12,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "public class ElementKey\n{\n    public string ModelId;\n    public int ElementId;\n\n    public override bool Equals(object obj) =>\n        obj is ElementKey k && k.ModelId == ModelId && k.ElementId == ElementId;\n}\n\npublic class Element\n{\n    public ElementKey Key;\n    public string Name;\n    public string Floor;\n    public Bounds Bounds;\n    public Element Parent;\n    public List<Element> Children = new List<Element>();\n    public int Id => Key.ElementId;\n}\n\npublic class Clash\n{\n    public Element A;\n    public Element B;\n    public bool IsResolved;\n}\n\npublic class ClashService\n{\n    private readonly List<Clash> _clashes = new List<Clash>();\n    private readonly Dictionary<ElementKey, List<Clash>> _cache = new Dictionary<ElementKey, List<Clash>>();\n    private int _processed;\n    private GameObject _marker;\n\n    public event Action Completed;\n\n    public async void RunAsync(IEnumerable<Element> elements)\n    {\n        var tasks = new List<Task>();\n        for (int i = 0; i < 8; i++)\n        {\n            tasks.Add(Task.Run(() => ProcessChunk(elements, i)));\n        }\n        await Task.WhenAll(tasks);\n        Completed?.Invoke();\n    }\n\n    private void ProcessChunk(IEnumerable<Element> elements, int chunk)\n    {\n        var mine = elements.Where(e => e.Id % 8 == chunk);\n        foreach (var a in mine)\n        {\n            foreach (var b in mine)\n            {\n                if (a.Id < b.Id && a.Bounds.Intersects(b.Bounds))\n                {\n                    _clashes.Add(new Clash { A = a, B = b });\n                    _processed++;\n                }\n            }\n        }\n    }\n\n    public void RemoveResolved()\n    {\n        foreach (var c in _clashes)\n        {\n            if (c.IsResolved)\n                _clashes.Remove(c);\n        }\n    }\n\n    public List<Clash> GetClashesFor(ElementKey key)\n    {\n        if (!_cache.ContainsKey(key))\n            _cache[key] = _clashes.Where(c => c.A.Key.Equals(key) || c.B.Key.Equals(key)).ToList();\n        return _cache[key];\n    }\n\n    public void CollectFloor(Element node, string floor, List<Element> result)\n    {\n        if (node.Floor == floor)\n            result.Add(node);\n        foreach (var child in node.Children)\n            CollectFloor(child, floor, result);\n    }\n\n    public bool IsOnLevel(Element e, float levelHeight) =>\n        e.Bounds.min.y == levelHeight;\n\n    public void Import(string path)\n    {\n        try\n        {\n            var json = File.ReadAllText(path);\n            _clashes.AddRange(JsonConvert.DeserializeObject<List<Clash>>(json));\n        }\n        catch (Exception ex)\n        {\n            Debug.LogError(ex.Message);\n            throw ex;\n        }\n    }\n\n    public void Highlight()\n    {\n        _marker?.SetActive(true);\n    }\n}",
+   "bugs": [
+    {
+     "lines": [0, 5, 6],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [2, 3],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [17],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [36],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [41],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [49],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [50, 52],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [56],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [31, 57],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [54],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [65, 68],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [74, 76],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [75],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [84],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [88],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [100],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [99],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [97],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [95],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [94],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [106],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [32],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [15, 16],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 18,
+    "maxFalse": 3
+   },
+   "solve": ["flag:0", "flag:2", "flag:17", "flag:36", "flag:41", "flag:49", "flag:50", "flag:56", "flag:31", "flag:54", "flag:65", "flag:74", "flag:75", "flag:84", "flag:88", "flag:100", "flag:99", "flag:97", "flag:95", "flag:94", "flag:106", "flag:32", "flag:15", "check"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public async ___ RunAsync(IEnumerable<Element> elements)\n{\n    var all = elements.___();\n    var tasks = new List<Task>();\n    for (int i = 0; i < 8; i++)\n    {\n        int chunk = i;\n        tasks.Add(Task.Run(() => ProcessChunk(all, chunk)));\n    }\n    await Task.WhenAll(tasks);\n}",
+   "tiles": ["Task", "ToList", "void", "Where"],
+   "answer": ["Task", "ToList"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "catch (Exception ex)\n{\n    Debug.LogError(ex.Message);\n    throw ex;\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "Collection was modified"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "MissingReferenceException"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  }
+ ]
+}

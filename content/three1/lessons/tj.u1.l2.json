@@ -1,0 +1,74 @@
+{
+ "id": "tj.u1.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "const scene = new THREE.Scene();\nconst camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100);\ncamera.position.z = 5;\n\nconst renderer = new THREE.WebGLRenderer({ antialias: true });\nrenderer.setSize(w, h);\ndocument.body.appendChild(renderer.domElement);\n\nconst cube = new THREE.Mesh(\n  new THREE.BoxGeometry(1, 1, 1),\n  new THREE.MeshNormalMaterial());\nscene.add(cube);\n\nrenderer.render(scene, camera);"
+  },
+  {
+   "t": "rig",
+   "rig": "tjfirst",
+   "task": "⟦⟧",
+   "lock": ["loop"],
+   "goal": {
+    "visible": true
+   },
+   "solve": ["add", "camz:5", "render"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "renderer.render(scene, camera)"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "const cube = new THREE.Mesh(geometry, material);\ncube.position.x = 1;\nrenderer.render(scene, camera);",
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "const box = new THREE.___(\n  new THREE.___(1, 1, 1),\n  new THREE.MeshNormalMaterial());",
+   "tiles": ["Mesh", "BoxGeometry", "Cube", "Box", "Object3D"],
+   "answer": ["Mesh", "BoxGeometry"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["BoxGeometry", "⟦⟧"],
+    ["MeshNormalMaterial", "⟦⟧"],
+    ["renderer.domElement", "⟦⟧"],
+    ["scene.add", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

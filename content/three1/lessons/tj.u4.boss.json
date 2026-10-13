@@ -1,0 +1,81 @@
+{
+ "id": "tj.u4.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "tjlight",
+   "task": "⟦⟧",
+   "start": {
+    "mat": "basic"
+   },
+   "goal": {
+    "look": "shaded",
+    "shadow": true
+   },
+   "solve": ["mat:lambert", "dir", "sm", "lc", "cc", "fr"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "renderer.shadowMap.enabled = true;\nsun.castShadow = true;\nambient.castShadow = true;\nknot.castShadow = true;\nfloor.receiveShadow = true;",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "MeshBasicMaterial"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "{ metalness: ___, roughness: ___ }",
+   "tiles": ["1", "0.1", "0", "5"],
+   "answer": ["1", "0.1"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "tjlight",
+   "task": "⟦⟧",
+   "start": {
+    "amb": true
+   },
+   "lock": ["mat", "shadows"],
+   "goal": {
+    "look": "shaded"
+   },
+   "solve": ["dir"]
+  }
+ ]
+}

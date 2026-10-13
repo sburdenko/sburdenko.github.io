@@ -1,0 +1,82 @@
+{
+ "id": "as.u1.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "timeline",
+   "task": "⟦⟧",
+   "start": {
+    "ctx": "ui",
+    "call": "sync"
+   },
+   "lock": ["ctx"],
+   "goal": {
+    "status": "done",
+    "call": "sync"
+   },
+   "solve": ["end"]
+  },
+  {
+   "t": "rig",
+   "rig": "timeline",
+   "task": "⟦⟧",
+   "start": {
+    "ctx": "ui",
+    "call": "sync"
+   },
+   "lock": ["ctx"],
+   "goal": {
+    "status": "done",
+    "call": "await",
+    "clickBy": 2
+   },
+   "solve": ["call:await", "end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

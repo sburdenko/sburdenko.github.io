@@ -1,0 +1,74 @@
+{
+ "id": "av.u2.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "panels",
+   "task": "⟦⟧",
+   "start": "stack-h",
+   "goal": {
+    "panel": "stack-v"
+   },
+   "solve": ["panel:stack-v"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "xml"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["Margin", "Padding", "Width"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "<Button HorizontalAlignment=\"___\" ___=\"12\" Content=\"OK\"/>",
+   "lang": "xml",
+   "tiles": ["Center", "Margin", "Padding", "Middle", "Stretch"],
+   "answer": ["Center", "Margin"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Measure", "⟦⟧"],
+    ["Arrange", "⟦⟧"],
+    ["Margin", "⟦⟧"],
+    ["Padding", "⟦⟧"]
+   ]
+  }
+ ]
+}

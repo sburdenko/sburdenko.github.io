@@ -1,0 +1,11 @@
+{
+ "title": "The history of .NET",
+ "units/0/title": "The .NET Framework era",
+ "units/0/blurb": "Why Microsoft built .NET, how Framework grew from generics to async, and why 4.8 is the last version yet still powers plugins for older Revit and AutoCAD.",
+ "units/1/title": "Mono, Unity and Xamarin",
+ "units/1/blurb": "An open implementation of the ECMA standard, C# in Unity (Mono, IL2CPP, the road to CoreCLR) and on phones: Xamarin and MAUI.",
+ "units/2/title": "Open source, .NET Core and .NET Standard",
+ "units/2/blurb": "Open source, a new cross-platform .NET, the standard as an API contract, and why 2.1 is in Unity and .NET 10 but not in Framework. Plus multi-targeting.",
+ "units/3/title": "One .NET and where it is today",
+ "units/3/blurb": ".NET 5-10, LTS and STS, what is new in .NET 10 and C# 14, where .NET runs today, and how Framework differs from modern .NET."
+}

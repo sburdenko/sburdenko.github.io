@@ -1,0 +1,74 @@
+{
+ "id": "cs.u1.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "generics",
+   "task": "⟦⟧",
+   "sig": "T MaxOrNew<T>(T a, T b)",
+   "ops": ["newT", "cmp"],
+   "goal": {
+    "allow": ["int"],
+    "deny": ["string"]
+   },
+   "solve": ["c:struct", "c:cmp"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "IComparable<T>"],
+    ["⟦⟧", "new()"],
+    ["⟦⟧", "unmanaged"],
+    ["⟦⟧", "INumber<T>"]
+   ]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "void Reset<T>(ref T value)\n{\n    value = default;\n    value = null;\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "class Box<T> where T : ___",
+   "tiles": ["class", "struct", "new()", "notnull"],
+   "answer": ["class"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

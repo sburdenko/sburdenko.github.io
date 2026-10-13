@@ -1,0 +1,30 @@
+{
+ "id": "avalonia",
+ "title": "⟦⟧",
+ "units": [
+  {
+   "id": "u1",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["av.u1.l1", "av.u1.l2", "av.u1.l3", "av.u1.boss"]
+  },
+  {
+   "id": "u2",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["av.u2.l1", "av.u2.l2", "av.u2.l3", "av.u2.boss"]
+  },
+  {
+   "id": "u3",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["av.u3.l1", "av.u3.l2", "av.u3.l3", "av.u3.l4", "av.u3.boss"]
+  },
+  {
+   "id": "u4",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["av.u4.l1", "av.u4.l2", "av.u4.l3", "av.u4.l4", "av.u4.boss"]
+  }
+ ]
+}

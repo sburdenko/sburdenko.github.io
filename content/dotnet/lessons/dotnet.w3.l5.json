@@ -1,0 +1,90 @@
+{
+ "id": "dotnet.w3.l5",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "sealed class MyHandle : SafeHandleZeroOrMinusOneIsInvalid\n{\n    public MyHandle() : base(ownsHandle: true) { }\n    protected override bool ReleaseHandle() => CloseHandle(handle);\n}"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "gc",
+   "task": "⟦⟧",
+   "objects": [
+    {
+     "id": "Window",
+     "refs": ["View"]
+    },
+    {
+     "id": "View"
+    }
+   ],
+   "roots": [
+    {
+     "name": "form.window",
+     "to": "Window"
+    },
+    {
+     "name": "AppEvents.Changed (static)",
+     "to": "Window",
+     "btn": "-= OnChanged",
+     "cut": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "kind": "dead",
+    "ids": ["Window", "View"]
+   },
+   "solve": ["root:form.window", "gc:0", "root:AppEvents.Changed (static)", "gc:2"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

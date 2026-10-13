@@ -1,0 +1,91 @@
+{
+ "id": "av.u4.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 8,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "selectors",
+   "task": "⟦⟧",
+   "options": ["Button.primary", ".danger", "#Save", "StackPanel > Button"],
+   "goal": {
+    "ids": [8]
+   },
+   "solve": ["sel:.danger"]
+  },
+  {
+   "t": "rig",
+   "rig": "grid",
+   "task": "⟦⟧",
+   "labels": ["⟦⟧", "⟦⟧"],
+   "content": [110, 200],
+   "start": ["200", "200"],
+   "goal": {
+    "at": {
+     "400": [110, 290],
+     "800": [110, 690]
+    }
+   },
+   "solve": ["col:0:Auto", "col:1:*"]
+  },
+  {
+   "t": "rig",
+   "rig": "bind",
+   "task": "⟦⟧",
+   "start": {
+    "mode": "OneWay",
+    "notify": false
+   },
+   "goal": {
+    "sync": ["type", "code"]
+   },
+   "solve": ["mode:TwoWay", "notify", "type", "code"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public partial class MainViewModel : ObservableObject\n{\n    [ObservableProperty] private string _name = \"\";\n    public TextBox? NameBox { get; set; }\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["DockPanel", "⟦⟧"],
+    ["ColumnDefinitions=\"Auto,*\"", "⟦⟧"],
+    ["[ObservableProperty]", "⟦⟧"],
+    ["Selector=\".danger\"", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  }
+ ]
+}

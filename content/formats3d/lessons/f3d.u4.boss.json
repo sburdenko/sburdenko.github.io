@@ -1,0 +1,83 @@
+{
+ "id": "f3d.u4.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "bim",
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "filter",
+    "type": "IfcWindow",
+    "storey": 2
+   },
+   "solve": ["type:IfcWindow", "storey:2"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "clash",
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "count",
+    "tol": 150,
+    "n": 4
+   },
+   "solve": ["tol:150", "run"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "#140=IFCPROPERTYSINGLEVALUE('FireRating',$,IFCLABEL('REI 90'),$);\n#120=IFCWALL('2O2Fr$t4X7Zf8NOew3FLOH',#5,'Exterior wall 300',$,$,#121,#130,$,.STANDARD.);\n#130=IFCPRODUCTDEFINITIONSHAPE($,$,(#131));",
+   "lang": "plain",
+   "answer": 1,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["RVT", "PLN", "NWD", "IFC", "BCF"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["IfcProject", "IfcSite", "IfcBuilding", "IfcBuildingStorey"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["IFC", "⟦⟧"],
+    ["BCF", "⟦⟧"],
+    ["NWD", "⟦⟧"],
+    ["GlobalId", "⟦⟧"]
+   ]
+  }
+ ]
+}

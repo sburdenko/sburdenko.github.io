@@ -1,0 +1,137 @@
+{
+ "id": "rv.u0.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public static ModelManager Instance = new ModelManager();\n\npublic ModelManager()\n{\n    _log = new FileStream(\"log.txt\", FileMode.Append);\n    SelectionService.Current.SelectionChanged += OnSelectionChanged;\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "public class ModelManager\n{\n    public static ModelManager Instance = new ModelManager();\n\n    private FileStream _log;\n\n    public event Action<ElementInfo> ElementSelected;\n\n    public ModelManager()\n    {\n        _log = new FileStream(\"log.txt\", FileMode.Append);\n        SelectionService.Current.SelectionChanged += OnSelectionChanged;\n    }\n\n    private void OnSelectionChanged(int id)\n    {\n        var bytes = Encoding.UTF8.GetBytes(\"Selected \" + id + \"\\n\");\n        _log.Write(bytes, 0, bytes.Length);\n    }\n}",
+   "bugs": [
+    {
+     "lines": [0],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [2],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [8],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [10],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [11],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [17],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 4,
+    "maxFalse": 2
+   },
+   "solve": ["flag:0", "flag:2", "flag:8", "flag:10", "flag:11", "check"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "tiles": ["readonly", "private", "-=", "public", "+=", "const"],
+   "answer": ["readonly", "private", "-="],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "IDisposable / using"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "Application.persistentDataPath"]
+   ]
+  }
+ ]
+}

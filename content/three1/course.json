@@ -1,0 +1,36 @@
+{
+ "id": "three1",
+ "title": "⟦⟧",
+ "units": [
+  {
+   "id": "u1",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["tj.u1.l1", "tj.u1.l2", "tj.u1.l3", "tj.u1.boss"]
+  },
+  {
+   "id": "u2",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["tj.u2.l1", "tj.u2.l2", "tj.u2.l3", "tj.u2.boss"]
+  },
+  {
+   "id": "u3",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["tj.u3.l1", "tj.u3.l2", "tj.u3.boss"]
+  },
+  {
+   "id": "u4",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["tj.u4.l1", "tj.u4.l2", "tj.u4.l3", "tj.u4.boss"]
+  },
+  {
+   "id": "u5",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["tj.u5.l1", "tj.u5.l2", "tj.u5.boss"]
+  }
+ ]
+}

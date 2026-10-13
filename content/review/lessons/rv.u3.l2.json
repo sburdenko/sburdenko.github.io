@@ -1,0 +1,116 @@
+{
+ "id": "rv.u3.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "private void Recolor(List<GameObject> markers)\n{\n    for (int i = 0; i < markers.Count; i++)\n    {\n        var r = markers[i].GetComponent<Renderer>();\n        r.material.color = i < 10 ? Color.red : Color.gray;\n    }\n}\n\nprivate void Dim(Renderer r)\n{\n    r.sharedMaterial.color = Color.gray;\n}\n\nprivate void Glow(Renderer r)\n{\n    r.material.SetFloat(\"_Glow\", 1f);\n}",
+   "bugs": [
+    {
+     "lines": [5, 16],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [11],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 2,
+    "maxFalse": 2
+   },
+   "solve": ["flag:5", "flag:11", "check"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 1,
+   "explain": "⟦⟧",
+   "wrong": {
+    "0": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 2,
+   "explain": "⟦⟧",
+   "wrong": {
+    "0": "⟦⟧",
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "[SerializeField] private Material _red;\n[SerializeField] private Material _gray;\n\nprivate void Paint(Renderer r, int index)\n{\n    var target = index < 10 ? _red : _gray;\n    if (r.___ != target)\n        r.___ = target;\n}",
+   "tiles": ["sharedMaterial", "sharedMaterial", "material", "color"],
+   "answer": ["sharedMaterial", "sharedMaterial"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "foreach (var r in renderers)\n{\n    r.sharedMaterial = _red;\n    r.shadowCastingMode = ShadowCastingMode.Off;\n    r.SetPropertyBlock(_block);\n}",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["SRP Batcher", "⟦⟧"],
+    ["GPU Instancing", "⟦⟧"],
+    ["MaterialPropertyBlock", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  }
+ ]
+}

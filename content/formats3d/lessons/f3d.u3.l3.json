@@ -1,0 +1,74 @@
+{
+ "id": "f3d.u3.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "ISO-10303-21;\nHEADER;\nFILE_SCHEMA(('AP242_MANAGED_MODEL_BASED_3D_ENGINEERING_MIM_LF'));\nENDSEC;\nDATA;\n#10=CARTESIAN_POINT('',(0.,0.,0.));\n#11=DIRECTION('',(0.,0.,1.));\n#12=AXIS2_PLACEMENT_3D('',#10,#11,$);\n#13=CYLINDRICAL_SURFACE('',#12,50.);\nENDSEC;\nEND-ISO-10303-21;",
+   "lang": "plain"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "ISO-10303-21;\nHEADER;\nFILE_SCHEMA(('AP242_MANAGED_MODEL_BASED_3D_ENGINEERING_MIM_LF'));\nENDSEC;\nDATA;\n#10=CARTESIAN_POINT('',(0.,0.,0.));\n#11=DIRECTION('',(0.,0.,1.));\n#12=AXIS2_PLACEMENT_3D('',#10,#11,$);\n#13=CYLINDRICAL_SURFACE('',#12,50.);\nENDSEC;\nEND-ISO-10303-21;",
+   "lang": "plain",
+   "answer": 8,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "ISO-10303-21;\nHEADER;\nFILE_SCHEMA(('AP242_MANAGED_MODEL_BASED_3D_ENGINEERING_MIM_LF'));\nENDSEC;\nDATA;\n#10=CARTESIAN_POINT('',(0.,0.,0.));\n#11=DIRECTION('',(0.,0.,1.));\n#12=AXIS2_PLACEMENT_3D('',#10,#11,$);\n#13=CYLINDRICAL_SURFACE('',#12,50.);\nENDSEC;\nEND-ISO-10303-21;",
+   "lang": "plain",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["STEP", "STL", "FBX", "OBJ"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["ISO 10303", "⟦⟧"],
+    ["AP242", "⟦⟧"],
+    ["IGES", "⟦⟧"],
+    ["PMI", "⟦⟧"]
+   ]
+  }
+ ]
+}

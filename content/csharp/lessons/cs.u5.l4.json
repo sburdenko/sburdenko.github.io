@@ -1,0 +1,71 @@
+{
+ "id": "cs.u5.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 8,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "int[] a = [1, 2, 3];\nList<int> b = [0, ..a, 4];     // 0, 1, 2, 3, 4\nReadOnlySpan<char> sep = [',', ';'];"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "List<int> all = [0, ___a, 5];",
+   "tiles": ["..", "...", "*", "&"],
+   "answer": [".."],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "private readonly Lock _gate = new();\n\nlock (_gate) { _count++; }"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public string Title { get; set => field = value.Trim(); }\n\norder?.Status = Status.Paid;"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "C# 12"],
+    ["⟦⟧", "⟦⟧"],
+    ["System.Threading.Lock", "C# 13"],
+    ["⟦⟧", "C# 14"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "NullReferenceException", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "params ReadOnlySpan<T>", "async/await", "LINQ"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  }
+ ]
+}

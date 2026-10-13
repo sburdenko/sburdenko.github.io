@@ -49,7 +49,7 @@ export function split(ru, en) {
 function pretty(v, ind = '') {
   const simple = x => x === null || typeof x !== 'object';
   if (Array.isArray(v)) {
-    if (v.every(simple)) return JSON.stringify(v).replace(/,/g, ', ');
+    if (v.every(simple)) return '[' + v.map(x => JSON.stringify(x)).join(', ') + ']';
     return '[\n' + v.map(x => ind + ' ' + pretty(x, ind + ' ')).join(',\n') + '\n' + ind + ']';
   }
   if (v && typeof v === 'object') {

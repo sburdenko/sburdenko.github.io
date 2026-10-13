@@ -1,0 +1,71 @@
+{
+ "id": "cs.u2.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public class Button\n{\n    public event EventHandler? Clicked;\n    public void Press() => Clicked?.Invoke(this, EventArgs.Empty);\n}"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var b = new Button();\nb.Clicked += OnClick;\nb.Clicked -= OnClick;\nb.Clicked = null;",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public event EventHandler<OrderEventArgs>? OrderPlaced;\n\nshop.OrderPlaced += (sender, e) => Console.WriteLine(e.OrderId);"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "Clicked___Invoke(this, EventArgs.Empty);",
+   "tiles": ["?.", ".", "!.", "??"],
+   "answer": ["?."],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["event", "⟦⟧"],
+    ["EventHandler<T>", "⟦⟧"],
+    ["?.Invoke", "⟦⟧"],
+    ["-=", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  }
+ ]
+}

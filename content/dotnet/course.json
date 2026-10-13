@@ -1,0 +1,52 @@
+{
+ "id": "dotnet",
+ "title": "⟦⟧",
+ "units": [
+  {
+   "id": "w1",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://learn.microsoft.com/en-us/dotnet/standard/managed-execution-process"
+   },
+   "lessons": ["dotnet.w1.l1", "dotnet.w1.l2", "dotnet.w1.l3", "dotnet.w1.l4", "dotnet.w1.l5", "dotnet.w1.l6", "dotnet.w1.l7", "dotnet.w1.l8", "dotnet.w1.boss"]
+  },
+  {
+   "id": "w2",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["dotnet.w2.l1", "dotnet.w2.l2", "dotnet.w2.l3", "dotnet.w2.l4", "dotnet.w2.l5", "dotnet.w2.boss"]
+  },
+  {
+   "id": "w3",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["dotnet.w3.l1", "dotnet.w3.l2", "dotnet.w3.l3", "dotnet.w3.l4", "dotnet.w3.l5", "dotnet.w3.boss"]
+  },
+  {
+   "id": "w4",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["dotnet.w4.l1", "dotnet.w4.l2", "dotnet.w4.l3", "dotnet.w4.l4", "dotnet.w4.l5", "dotnet.w4.boss"]
+  },
+  {
+   "id": "w5",
+   "title": "⟦⟧",
+   "soon": true,
+   "blurb": "⟦⟧"
+  },
+  {
+   "id": "w6",
+   "title": "⟦⟧",
+   "soon": true,
+   "blurb": "⟦⟧"
+  },
+  {
+   "id": "w7",
+   "title": "⟦⟧",
+   "soon": true,
+   "blurb": "⟦⟧"
+  }
+ ]
+}

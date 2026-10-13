@@ -1,0 +1,111 @@
+{
+ "id": "rv.u2.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "csharp"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "⟦⟧",
+   "bugs": [
+    {
+     "lines": [2],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [6],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [14],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 3,
+    "maxFalse": 2
+   },
+   "solve": ["flag:2", "flag:6", "flag:14", "check"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "await _throttle.___(ct);\ntry\n{\n    var bytes = await Http.GetByteArrayAsync(url);\n    await Task.___(50, ct);\n    return Tile.Parse(bytes);\n}\n___\n{\n    _throttle.___();\n}",
+   "tiles": ["WaitAsync", "Delay", "finally", "Release", "Wait", "Sleep", "catch"],
+   "answer": ["WaitAsync", "Delay", "finally", "Release"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

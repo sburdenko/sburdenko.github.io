@@ -1,0 +1,88 @@
+{
+ "id": "dotnet.w4.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "datarace",
+   "mode": "plain",
+   "task": "⟦⟧",
+   "goal": "lost",
+   "solve": ["step:B", "step:A", "step:B", "step:B", "step:A", "step:A"]
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "deadlock",
+   "toggle": true,
+   "task": "⟦⟧",
+   "goal": "fixed",
+   "solve": ["fix", "step:A", "step:A", "step:A", "step:A", "step:A", "step:B", "step:B", "step:B", "step:B", "step:B"]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["Interlocked.Increment", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "class Account\n{\n    public void Deposit(int x)\n    {\n        lock (this)\n        {\n            _balance += x;\n        }\n    }\n}",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "pool",
+   "adds": ["block", "async"],
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "done",
+    "n": 8,
+    "of": "async"
+   },
+   "solve": ["add:async:8", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["lock", "⟦⟧"],
+    ["Interlocked", "⟦⟧"],
+    ["ThreadPool", "⟦⟧"],
+    ["Deadlock", "⟦⟧"]
+   ]
+  }
+ ]
+}

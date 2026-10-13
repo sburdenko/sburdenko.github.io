@@ -1,0 +1,65 @@
+{
+ "id": "as.u5.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "async IAsyncEnumerable<Order> ReadOrdersAsync()\n{\n    await foreach (var line in File.ReadLinesAsync(path))   // .NET 7+\n        yield return Parse(line);\n}\n\nawait foreach (var o in ReadOrdersAsync())\n    Handle(o);"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "___ ___ (var o in ReadOrdersAsync())\n    Handle(o);",
+   "lang": "cs",
+   "tiles": ["await", "foreach", "for", "async", "using"],
+   "answer": ["await", "foreach"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "await using var conn = new SqlConnection(cs);\nawait conn.OpenAsync();"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["IAsyncEnumerable", "⟦⟧"],
+    ["await foreach", "⟦⟧"],
+    ["IAsyncDisposable", "⟦⟧"],
+    ["[EnumeratorCancellation]", "⟦⟧"]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,83 @@
+{
+ "id": "cs.u3.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "linq",
+   "task": "⟦⟧",
+   "start": {
+    "twice": true,
+    "orderBy": true
+   },
+   "lock": ["twice"],
+   "goal": {
+    "max": {
+     "read": 6,
+     "where": 6
+    },
+    "o": {
+     "twice": true
+    }
+   },
+   "solve": ["orderBy", "toList", "end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var q = items.Where(Check);\nvar n = q.Count();\nvar first = q.First();\nvar list = q.ToList();",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var vip = db.Customers\n    .ToList()\n    .Where(c => c.Total > 1000)\n    .Take(10);",
+   "answer": 1,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["First()", "Any()", "ToArray()", "OrderBy()", "Where()"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "if (orders.___(o => o.IsLate)) Warn();",
+   "tiles": ["Any", "Count", "All", "Where"],
+   "answer": ["Any"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

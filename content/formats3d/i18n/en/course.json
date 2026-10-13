@@ -1,0 +1,17 @@
+{
+ "title": "3D formats",
+ "units/0/title": "What a 3D model is made of",
+ "units/0/blurb": "Vertices and triangles, normals and the front face, UVs and materials, the scene, units and axes. You need these to understand any format.",
+ "units/1/title": "Meshes: formats for display and exchange",
+ "units/1/blurb": "OBJ, STL, PLY, glTF/GLB, FBX, Collada, USD/USDZ: what each can do, where you will meet it, and what gets lost in conversion.",
+ "units/2/title": "CAD: exact geometry",
+ "units/2/blurb": "B-rep and NURBS instead of triangles, tessellation with tolerances, STEP and IGES, DWG, DXF, DWF and 3DM.",
+ "units/3/title": "BIM: buildings made of smart objects",
+ "units/3/blurb": "Objects with properties instead of meshes, IFC from the inside, RVT, PLN and Navisworks, clash detection and BCF issues.",
+ "units/4/title": "Point clouds",
+ "units/4/blurb": "Site scans: points, intensity and classes, LAS and LAZ, E57, PTS/XYZ, ReCap and the scan-to-BIM path.",
+ "units/5/title": "Delivering 3D to the web",
+ "units/5/blurb": "Draco, meshopt and KTX2, levels of detail, 3D Tiles and streaming huge models and point clouds.",
+ "units/6/title": "New representations",
+ "units/6/blurb": "Gaussian splatting and NeRF: scenes made of neither triangles nor points, and the formats used to store them."
+}

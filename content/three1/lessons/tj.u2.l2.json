@@ -1,0 +1,82 @@
+{
+ "id": "tj.u2.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "tjcam",
+   "task": "⟦⟧",
+   "start": {
+    "near": 5,
+    "z": 3
+   },
+   "lock": ["fov", "far"],
+   "goal": {
+    "see": ["a", "b", "c"]
+   },
+   "solve": ["near:0.1"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "tjcam",
+   "task": "⟦⟧",
+   "lock": ["fov", "z"],
+   "goal": {
+    "see": ["a", "b"],
+    "hide": ["c"]
+   },
+   "solve": ["far:10"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "camera.position.set(4, 3, 6);\ncamera.lookAt(0, 0, 0);"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "import { OrbitControls } from 'three/addons/controls/OrbitControls.js';\n\nconst controls = new OrbitControls(camera, renderer.domElement);\ncontrols.enableDamping = true;\n\nrenderer.setAnimationLoop(() => {\n  controls.update();\n  renderer.render(scene, camera);\n});"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "renderer.setAnimationLoop(() => {\n  cube.rotation.y += 0.01;\n  renderer.render(scene, camera);\n});",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["lookAt", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "import { OrbitControls } from 'three/___/controls/OrbitControls.js';",
+   "tiles": ["addons", "examples", "src", "controls"],
+   "answer": ["addons"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

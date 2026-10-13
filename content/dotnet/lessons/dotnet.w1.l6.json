@@ -1,0 +1,86 @@
+{
+ "id": "dotnet.w1.l6",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["JIT", "⟦⟧"],
+    ["NGen", "⟦⟧"],
+    ["Native Image Cache", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "race",
+   "task": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["ReadyToRun", "Native AOT", "NGen", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "<PropertyGroup>\n  <___>true</___>\n</PropertyGroup>",
+   "lang": "plain",
+   "tiles": ["PublishAot", "PublishReadyToRun", "PublishAot", "Optimize"],
+   "answer": ["PublishAot", "PublishAot"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["JIT", "⟦⟧"],
+    ["ReadyToRun", "⟦⟧"],
+    ["Native AOT", "⟦⟧"],
+    ["NGen", "⟦⟧"]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,155 @@
+{
+ "id": "rv.u1.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "catch (IOException)\n{\n    Cleanup();\n    ___;\n}",
+   "tiles": ["throw", "throw ex", "throw null", "return"],
+   "answer": ["throw"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "var data = JsonConvert.DeserializeObject<List<Clash>>(json);\nif (data ___ null)\n    throw new InvalidDataException(\"empty file\");\n_clashes.AddRange(data);",
+   "tiles": ["==", "!=", "?.", "??"],
+   "answer": ["=="],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "public class Element\n{\n    public ElementKey Key;\n    public Element Parent;\n    public List<Element> Children = new List<Element>();\n}\n\nprivate GameObject _marker;\n\npublic void Import(string path)\n{\n    try\n    {\n        var json = File.ReadAllText(path);\n        _clashes.AddRange(JsonConvert.DeserializeObject<List<Clash>>(json));\n    }\n    catch (Exception ex)\n    {\n        Debug.LogError(ex.Message);\n        throw ex;\n    }\n}\n\npublic void Highlight()\n{\n    _marker?.SetActive(true);\n}",
+   "bugs": [
+    {
+     "lines": [3, 4],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [7],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [13],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [14],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [16],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [18],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [19],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [25],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 6,
+    "maxFalse": 2
+   },
+   "solve": ["flag:3", "flag:7", "flag:13", "flag:14", "flag:16", "flag:18", "flag:19", "flag:25", "check"]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["obj?.Method()", "obj ?? other", "obj is null", "obj == null"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public void Highlight()\n{\n    if (_marker ___ null)\n        _marker.SetActive(true);\n}",
+   "tiles": ["!=", "?.", "is not", "??"],
+   "answer": ["!="],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["Self referencing loop detected", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

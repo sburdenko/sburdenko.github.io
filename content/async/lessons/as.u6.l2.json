@@ -1,0 +1,80 @@
+{
+ "id": "as.u6.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "timeline",
+   "api": true,
+   "task": "⟦⟧",
+   "start": {
+    "ctx": "ui",
+    "call": "await",
+    "cfa": true
+   },
+   "lock": ["ctx", "call"],
+   "goal": {
+    "status": "done",
+    "ctx": "ui",
+    "cfa": false
+   },
+   "solve": ["cfa", "end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "NullReferenceException", "OutOfMemoryException"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// WPF\nawait Dispatcher.InvokeAsync(() => label.Content = text);\n\n// WinForms\nlabel.BeginInvoke(() => label.Text = text);"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Dispatcher.InvokeAsync", "⟦⟧"],
+    ["Control.BeginInvoke", "⟦⟧"],
+    ["Task.Run", "⟦⟧"],
+    ["DispatcherSynchronizationContext", "⟦⟧"]
+   ]
+  }
+ ]
+}

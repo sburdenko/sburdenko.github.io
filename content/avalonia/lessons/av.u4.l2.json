@@ -1,0 +1,74 @@
+{
+ "id": "av.u4.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "<Application RequestedThemeVariant=\"Default\">\n  <Application.Styles>\n    <FluentTheme/>\n  </Application.Styles>\n</Application>",
+   "lang": "xml"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "<Application.Resources>\n  <SolidColorBrush x:Key=\"Accent\" Color=\"#4f7cff\"/>\n</Application.Resources>\n\n<Button Background=\"{DynamicResource Accent}\"/>",
+   "lang": "xml"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "<ResourceDictionary.ThemeDictionaries>\n  <ResourceDictionary x:Key=\"Light\">\n    <SolidColorBrush x:Key=\"Panel\" Color=\"#f3f3f3\"/>\n  </ResourceDictionary>\n  <ResourceDictionary x:Key=\"Dark\">\n    <SolidColorBrush x:Key=\"Panel\" Color=\"#1e1e1e\"/>\n  </ResourceDictionary>\n</ResourceDictionary.ThemeDictionaries>",
+   "lang": "xml"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "<Border Background=\"{___ Panel}\"/>",
+   "lang": "xml",
+   "tiles": ["DynamicResource", "StaticResource", "Binding", "Resource"],
+   "answer": ["DynamicResource"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["FluentTheme", "⟦⟧"],
+    ["RequestedThemeVariant", "⟦⟧"],
+    ["StaticResource", "⟦⟧"],
+    ["DynamicResource", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  }
+ ]
+}

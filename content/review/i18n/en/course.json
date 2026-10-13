@@ -1,0 +1,11 @@
+{
+ "title": "Code review: find the bugs",
+ "units/0/title": "Task 1: ModelManager",
+ "units/0/blurb": "A mutable struct and its copies, a singleton with side effects, an unclosed FileStream, HttpClient with .Result, Dictionary<object,…>, an empty catch and a God class — everything hiding in a “simple” model manager.",
+ "units/1/title": "Task 2: ClashService",
+ "units/1/blurb": "A closure in a loop, async void, dictionary keys, collections, recursion, exceptions and Unity’s “fake null” — a dozen bugs in one clash-detection service.",
+ "units/2/title": "Task 3: TileLoader",
+ "units/2/blurb": "Blocking inside async, a deadlock on Unity’s main thread, races and GetOrAdd, a timer the GC collects, and a tidy-looking cancellation that cancels nothing.",
+ "units/3/title": "Task 4: ClashMarkers",
+ "units/3/blurb": "Allocations in Update, leaked materials and broken batching, OnEnable without OnDisable, HasFlag, a comparator that throws, and a cache that is LRU in name only."
+}

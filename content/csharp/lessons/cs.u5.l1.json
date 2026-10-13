@@ -1,0 +1,72 @@
+{
+ "id": "cs.u5.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 8,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "patterns",
+   "task": "⟦⟧",
+   "start": ["circle", "point", "rect", "square", "any", "nul"],
+   "solve": ["up:point", "up:square", "up:nul"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "if (name is ___ null ___ \"\") Greet(name);",
+   "tiles": ["not", "and not", "or", "!=", "is"],
+   "answer": ["not", "and not"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Circle { R: 0 }", "⟦⟧"],
+    [">= 18", "⟦⟧"],
+    ["[var first, ..]", "⟦⟧"],
+    ["_", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

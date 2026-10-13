@@ -1,0 +1,81 @@
+{
+ "id": "av.u3.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "xml"
+  },
+  {
+   "t": "rig",
+   "rig": "bind",
+   "task": "⟦⟧",
+   "start": {
+    "mode": "TwoWay",
+    "notify": true
+   },
+   "lock": ["mode", "notify"],
+   "goal": {
+    "sync": ["type"]
+   },
+   "solve": ["type"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "null", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "bind",
+   "task": "⟦⟧",
+   "start": {
+    "mode": "TwoWay",
+    "notify": true
+   },
+   "lock": ["mode", "notify"],
+   "goal": {
+    "sync": ["code"]
+   },
+   "solve": ["code"]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "<TextBlock Text=\"{___ ___}\"/>",
+   "lang": "xml",
+   "tiles": ["Binding", "Title", "Bind", "DataContext", "this"],
+   "answer": ["Binding", "Title"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["DataContext", "⟦⟧"],
+    ["{Binding Name}", "⟦⟧"],
+    ["StringFormat", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,42 @@
+{
+ "id": "async",
+ "title": "⟦⟧",
+ "units": [
+  {
+   "id": "u1",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["as.u1.l1", "as.u1.l2", "as.u1.l3", "as.u1.boss"]
+  },
+  {
+   "id": "u2",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["as.u2.l1", "as.u2.l2", "as.u2.l3", "as.u2.l4", "as.u2.l5", "as.u2.boss"]
+  },
+  {
+   "id": "u3",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["as.u3.l1", "as.u3.l2", "as.u3.l3", "as.u3.l4", "as.u3.boss"]
+  },
+  {
+   "id": "u4",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["as.u4.l1", "as.u4.l2", "as.u4.l3", "as.u4.l4", "as.u4.l5", "as.u4.boss"]
+  },
+  {
+   "id": "u5",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["as.u5.l1", "as.u5.l2", "as.u5.l3", "as.u5.l4", "as.u5.l5", "as.u5.boss"]
+  },
+  {
+   "id": "u6",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["as.u6.l1", "as.u6.l2", "as.u6.l3", "as.u6.l4", "as.u6.boss"]
+  }
+ ]
+}

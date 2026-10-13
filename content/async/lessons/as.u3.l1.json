@@ -1,0 +1,70 @@
+{
+ "id": "as.u3.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "statemachine",
+   "task": "⟦⟧",
+   "goal": "async",
+   "solve": ["step", "step", "step", "step", "step", "step", "step", "step", "step", "step", "step", "step", "step"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["3", "2", "1", "4"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "statemachine",
+   "task": "⟦⟧",
+   "goal": "cached",
+   "solve": ["cached", "step", "step", "step", "step", "step", "step", "step", "step", "step"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["0", "1", "2"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["state", "⟦⟧"],
+    ["MoveNext", "⟦⟧"],
+    ["awaiter", "⟦⟧"],
+    ["SetResult", "⟦⟧"]
+   ]
+  }
+ ]
+}

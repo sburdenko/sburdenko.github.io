@@ -1,0 +1,130 @@
+{
+ "id": "rv.u1.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "foreach (var c in _clashes)\n{\n    if (c.IsResolved)\n        _clashes.Remove(c);\n}",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public void RemoveResolved()\n{\n    _clashes.___(c => c.IsResolved);\n}",
+   "tiles": ["RemoveAll", "Remove", "Clear", "Where"],
+   "answer": ["RemoveAll"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["_clashes.RemoveAll(c => c.IsResolved)", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "public void RemoveResolved()\n{\n    foreach (var c in _clashes)\n    {\n        if (c.IsResolved)\n            _clashes.Remove(c);\n    }\n}\n\npublic void CollectFloor(Element node, string floor, List<Element> result)\n{\n    if (node.Floor == floor)\n        result.Add(node);\n    foreach (var child in node.Children)\n        CollectFloor(child, floor, result);\n}\n\npublic bool IsOnLevel(Element e, float levelHeight) =>\n    e.Bounds.min.y == levelHeight;",
+   "bugs": [
+    {
+     "lines": [2, 5],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [13, 14],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [18],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 3,
+    "maxFalse": 2
+   },
+   "solve": ["flag:2", "flag:14", "flag:18", "check"]
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "tiles": ["Push", "Pop", "Add", "Peek", "Contains"],
+   "answer": ["Push", "Pop", "Add"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["Math.Abs(e.Bounds.min.y - levelHeight) < 0.01f", "e.Bounds.min.y.Equals(levelHeight)", "(int)e.Bounds.min.y == (int)levelHeight", "e.Bounds.min.y <= levelHeight"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Collection was modified", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  }
+ ]
+}

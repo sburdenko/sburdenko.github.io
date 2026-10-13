@@ -1,0 +1,101 @@
+{
+ "id": "av.u4.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 8,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "xml"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "selectors",
+   "task": "⟦⟧",
+   "options": ["#Save", "Button", ".primary", "StackPanel > Button"],
+   "goal": {
+    "ids": [2, 3, 5, 8]
+   },
+   "solve": ["sel:Button"]
+  },
+  {
+   "t": "rig",
+   "rig": "selectors",
+   "task": "⟦⟧",
+   "options": ["StackPanel Button", "StackPanel > Button", ".toolbar Button", "Button.primary"],
+   "goal": {
+    "ids": [2, 3]
+   },
+   "solve": ["sel:StackPanel > Button"]
+  },
+  {
+   "t": "rig",
+   "rig": "selectors",
+   "task": "⟦⟧",
+   "options": [".toolbar > Button", ".toolbar Button", "Border > Button", "Window > Button"],
+   "goal": {
+    "ids": [2, 3, 5]
+   },
+   "solve": ["sel:.toolbar Button"]
+  },
+  {
+   "t": "rig",
+   "rig": "selectors",
+   "task": "⟦⟧",
+   "options": ["TextBlock", "#h1", "TextBlock.h1", ".toolbar TextBlock"],
+   "goal": {
+    "ids": [6]
+   },
+   "solve": ["sel:TextBlock.h1"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "<Style Selector=\"Button.primary:pointerover /template/ ContentPresenter\">\n  <Setter Property=\"Background\" Value=\"#6b93ff\"/>\n</Style>",
+   "lang": "xml",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Button", "⟦⟧"],
+    [".primary", "⟦⟧"],
+    ["#Save", "⟦⟧"],
+    [":disabled", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["Button", ".danger", "Button.primary.danger", "Button.warning"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "xml",
+   "tiles": ["Classes", "Class", "Style", "x:Name"],
+   "answer": ["Classes"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

@@ -1,0 +1,88 @@
+{
+ "id": "tj.u5.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 8,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "tjfirst",
+   "task": "⟦⟧",
+   "goal": {
+    "visible": true,
+    "spin": true
+   },
+   "solve": ["camz:5", "add", "loop"]
+  },
+  {
+   "t": "rig",
+   "rig": "tjcam",
+   "task": "⟦⟧",
+   "start": {
+    "fov": 35,
+    "z": 3
+   },
+   "lock": ["fov", "near", "far"],
+   "goal": {
+    "see": ["a", "b", "c"]
+   },
+   "solve": ["z:10"]
+  },
+  {
+   "t": "rig",
+   "rig": "tjlight",
+   "task": "⟦⟧",
+   "goal": {
+    "look": "shaded",
+    "shadow": true
+   },
+   "solve": ["dir", "sm", "lc", "cc", "fr"]
+  },
+  {
+   "t": "rig",
+   "rig": "tjtex",
+   "task": "⟦⟧",
+   "start": {
+    "repeat": 4,
+    "wrap": "repeat"
+   },
+   "lock": ["rep", "wrap"],
+   "goal": {
+    "tiles": "tiled",
+    "colors": true
+   },
+   "solve": ["cs:srgb"]
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "camera.position.z = 5"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "SRGBColorSpace"],
+    ["⟦⟧", "dispose()"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["OrbitControls", "GLTFLoader", "DRACOLoader", "PerspectiveCamera"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

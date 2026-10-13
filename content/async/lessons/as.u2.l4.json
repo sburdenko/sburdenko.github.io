@@ -1,0 +1,75 @@
+{
+ "id": "as.u2.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "combinators",
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "time",
+    "mode": "all",
+    "max": 500
+   },
+   "solve": ["mode:all"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "combinators",
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "skip"
+   },
+   "solve": ["fail:A"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["Task.WhenAny", "Task.WhenAll", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var tasks = new List<Task<string>>();\nforeach (var url in urls)\n{\n    var html = await http.GetStringAsync(url);\n    tasks.Add(Task.FromResult(html));\n}\nawait Task.WhenAll(tasks);",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "var tasks = urls.Select(u => http.GetStringAsync(u));\nstring[] pages = await Task.___(tasks);",
+   "lang": "cs",
+   "tiles": ["WhenAll", "WhenAny", "Run", "Delay"],
+   "answer": ["WhenAll"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

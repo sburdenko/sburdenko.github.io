@@ -1,0 +1,70 @@
+{
+ "id": "cs.u1.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["IEnumerable<object> x = new List<string>();", "List<object> x = new List<string>();", "IList<object> x = new List<string>();"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["IEnumerable<out T>", "⟦⟧"],
+    ["Action<in T>", "⟦⟧"],
+    ["List<T>", "⟦⟧"],
+    ["Func<in T, out R>", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "object[] arr = new string[2];\narr[0] = 42;   // ArrayTypeMismatchException"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "T Sum<T>(T[] xs) where T : INumber<T>\n{\n    T total = T.Zero;\n    foreach (var x in xs) total += x;\n    return total;\n}\n\nSum(new[] { 1, 2, 3 });        // int\nSum(new[] { 1.5, 2.5 });       // double"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "T Sum<T>(T[] xs) where T : ___<T>\n{\n    T total = T.___;",
+   "tiles": ["INumber", "Zero", "IComparable", "Default", "IEquatable"],
+   "answer": ["INumber", "Zero"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

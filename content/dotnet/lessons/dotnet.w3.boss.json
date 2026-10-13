@@ -1,0 +1,115 @@
+{
+ "id": "dotnet.w3.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "gc",
+   "task": "⟦⟧",
+   "objects": [
+    {
+     "id": "Session",
+     "refs": ["Cart"]
+    },
+    {
+     "id": "Cart",
+     "refs": ["Item"]
+    },
+    {
+     "id": "Item"
+    },
+    {
+     "id": "Logger",
+     "fin": true
+    }
+   ],
+   "roots": [
+    {
+     "name": "user",
+     "to": "Session"
+    },
+    {
+     "name": "logger",
+     "to": "Logger"
+    }
+   ],
+   "gen1": true,
+   "goal": {
+    "kind": "dead",
+    "ids": ["Session", "Cart", "Item", "Logger"]
+   },
+   "solve": ["root:user", "root:logger", "gc:0", "fin", "gc:1"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "___ var conn = new SqlConnection(cs);\nconn.Open();\nreturn Count(conn);",
+   "lang": "cs",
+   "tiles": ["using", "lock", "await", "fixed"],
+   "answer": ["using"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "class PriceView\n{\n    public PriceView()\n    {\n        Market.PriceChanged += OnPrice;\n    }\n    void OnPrice(decimal p) => Render(p);\n}",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Gen 0", "⟦⟧"],
+    ["LOH", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["Dispose()", "⟦⟧"]
+   ]
+  }
+ ]
+}

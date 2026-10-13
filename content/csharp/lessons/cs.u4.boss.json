@@ -1,0 +1,77 @@
+{
+ "id": "cs.u4.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "allocs",
+   "task": "⟦⟧",
+   "start": "substring",
+   "goal": {
+    "max": 0
+   },
+   "solve": ["way:span"]
+  },
+  {
+   "t": "rig",
+   "rig": "copies",
+   "task": "⟦⟧",
+   "start": {
+    "pass": "ref"
+   },
+   "goal": {
+    "max": 0,
+    "safe": true
+   },
+   "solve": ["pass:in", "ro"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "Span<int> nums = stackalloc int[4];\nobject boxed = nums;\nint first = nums[0];",
+   "answer": 1,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["ReadOnlyMemory<byte>", "ReadOnlySpan<byte>", "Span<byte>"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Span<T>", "⟦⟧"],
+    ["Memory<T>", "⟦⟧"],
+    ["readonly struct", "⟦⟧"],
+    ["ArrayPool", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

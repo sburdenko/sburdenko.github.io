@@ -4,6 +4,7 @@
  *                                          на месте переводимых строк стоит метка HOLE («⟦⟧»)
  *   content/<курс>/i18n/<язык>/<id>.json — только строки: { "cards/3/q": "…" }, путь внутри структуры
  *   content/<курс>/course.json (+ i18n/<язык>/course.json) — разделы и список уроков
+ *   content/<курс>/bundle.<язык>.json    — всё вместе для одного языка, собирается скриптом (сайт грузит его)
  * Один и тот же JSON читают сайт, тесты и (позже) мобильный клиент. Если строки на нужном языке
  * нет, берётся английская, потом русская. Пути в строках — через «/»; числа — индексы массивов.
  */
@@ -66,8 +67,8 @@ export async function loadLesson(course, id, lang) {
   return fill(skeleton, strings);
 }
 
-/** Курс целиком: разделы из course.json и все их уроки на языке lang. */
-export async function loadCourse(course, lang) {
+/** Курс целиком из исходных файлов: разделы из course.json и все их уроки на языке lang. */
+export async function loadCourseFromSource(course, lang) {
   const [skeleton, strings] = await Promise.all([readJson(`${course}/course.json`), stringsFor(course, 'course', lang)]);
   const head = fill(skeleton, strings);
   await Promise.all(head.units.map(async u => {
@@ -80,4 +81,17 @@ export async function loadCourse(course, lang) {
 /** Запись для реестра курсов: load.ru() и load.en() возвращают { default: курс }, как модули. */
 export function jsonCourse(course, langs = ['ru', 'en']) {
   return Object.fromEntries(langs.map(lang => [lang, async () => ({ default: await loadCourse(course, lang) })]));
+}
+
+/**
+ * Курс для сайта и мобильных клиентов: один файл на язык (bundle.<язык>.json), собранный из исходников
+ * командой tools/content-bundle.mjs. Языка нет — берётся английский, потом русский. В node (тесты,
+ * инструменты) читаются исходные файлы: так проверка не зависит от того, свежий ли bundle.
+ */
+export async function loadCourse(course, lang) {
+  if (inNode) return loadCourseFromSource(course, lang);
+  for (const l of [...new Set([lang, ...FALLBACKS])]) {
+    try { return await readJson(`${course}/bundle.${l}.json`); } catch { /* пробуем следующий язык */ }
+  }
+  throw new Error(`content/${course}: нет bundle ни для ${lang}, ни для запасных языков`);
 }

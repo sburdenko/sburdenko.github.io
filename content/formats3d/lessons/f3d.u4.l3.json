@@ -1,0 +1,72 @@
+{
+ "id": "f3d.u4.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "clash",
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "count",
+    "tol": 0,
+    "n": 2
+   },
+   "solve": ["run"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["2", "0", "4", "5"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "clash",
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "count",
+    "tol": 50,
+    "n": 3
+   },
+   "solve": ["tol:50", "run"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["RVT", "Revit"],
+    ["PLN", "Archicad"],
+    ["NWC", "⟦⟧"],
+    ["NWD", "⟦⟧"]
+   ]
+  }
+ ]
+}

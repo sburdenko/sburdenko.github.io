@@ -1,0 +1,69 @@
+{
+ "id": "hs.u2.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "years",
+   "task": "⟦⟧",
+   "goal": {
+    "visit": [2004, 2005, 2011, 2016]
+   },
+   "solve": ["year:2004", "year:2005", "year:2011", "year:2016"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["Mono 1.0", "Unity 1.0", "Xamarin", "MAUI", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["ECMA-335", "⟦⟧"],
+    ["IL2CPP", "⟦⟧"],
+    ["MAUI", "⟦⟧"],
+    ["Avalonia", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

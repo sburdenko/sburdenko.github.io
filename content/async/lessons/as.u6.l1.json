@@ -1,0 +1,94 @@
+{
+ "id": "as.u6.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "timeline",
+   "task": "⟦⟧",
+   "start": {
+    "ctx": "console",
+    "call": "result"
+   },
+   "lock": ["ctx", "cfa"],
+   "goal": {
+    "status": "done",
+    "ctx": "console",
+    "call": "result"
+   },
+   "solve": ["end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "timeline",
+   "task": "⟦⟧",
+   "start": {
+    "ctx": "console",
+    "call": "result"
+   },
+   "lock": ["ctx", "cfa"],
+   "goal": {
+    "status": "done",
+    "ctx": "console",
+    "call": "await"
+   },
+   "solve": ["call:await", "end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public async Task<IActionResult> Order(int id)\n{\n    var order = await _db.Orders.FindAsync(id);\n    _ = Task.Run(() => _db.SaveChangesAsync());\n    return Ok(order);\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["ASP.NET Core", "⟦⟧"],
+    ["ASP.NET Framework", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["BackgroundService", "⟦⟧"]
+   ]
+  }
+ ]
+}

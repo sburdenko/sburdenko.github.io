@@ -1,0 +1,85 @@
+{
+ "id": "f3d.u4.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "bim",
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "filter",
+    "type": "IfcDoor",
+    "storey": 2
+   },
+   "solve": ["type:IfcDoor", "storey:2"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["3", "2", "5", "1"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "bim",
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "sel",
+    "type": "IfcWall"
+   },
+   "solve": ["type:IfcWall", "fire", "sel:2O2Fr$t4X7Zf8NOew3FLOH"]
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["IfcProject", "IfcSite", "IfcBuilding", "IfcBuildingStorey", "IfcWall"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "#120=IFCWALL('2O2Fr$t4X7Zf8NOew3FLOH',#5,'Exterior wall 300',$,$,#121,#130,$,.STANDARD.);\n#140=IFCPROPERTYSINGLEVALUE('FireRating',$,IFCLABEL('REI 90'),$);\n#141=IFCPROPERTYSET('3xYz…',#5,'Pset_WallCommon',$,(#140));\n#150=IFCRELDEFINESBYPROPERTIES('1aBc…',#5,$,$,(#120),#141);",
+   "lang": "plain",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "#120=IFCWALL('2O2Fr$t4X7Zf8NOew3FLOH',#5,'Exterior wall 300',$,$,#121,#130,$,.STANDARD.);\n#140=IFCPROPERTYSINGLEVALUE('FireRating',$,IFCLABEL('REI 90'),$);\n#141=IFCPROPERTYSET('3xYz…',#5,'Pset_WallCommon',$,(#140));\n#150=IFCRELDEFINESBYPROPERTIES('1aBc…',#5,$,$,(#120),#141);",
+   "lang": "plain",
+   "answer": 1,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["IfcBuildingStorey", "⟦⟧"],
+    ["Pset_WallCommon", "⟦⟧"],
+    ["GlobalId", "⟦⟧"],
+    ["IfcRelContainedInSpatialStructure", "⟦⟧"]
+   ]
+  }
+ ]
+}

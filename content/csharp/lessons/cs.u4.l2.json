@@ -1,0 +1,62 @@
+{
+ "id": "cs.u4.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "class Parser\n{\n    private Span<byte> _buffer;\n    public int Count;\n}",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "async Task ProcessAsync(byte[] data)\n{\n    Span<byte> head = data.AsSpan(0, 4);\n    await SendAsync();\n    Use(head);\n}",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "async Task SendAsync(ReadOnlyMemory<byte> data)\n{\n    await _stream.WriteAsync(data);\n    Log(data.Span[0]);\n}"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["Memory<T>", "Span<T>", "ref Span<T>"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Span<T>", "⟦⟧"],
+    ["Memory<T>", "⟦⟧"],
+    ["ref struct", "⟦⟧"],
+    [".Span", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  }
+ ]
+}

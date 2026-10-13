@@ -1,0 +1,70 @@
+{
+ "id": "dotnet.w4.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["Task.Run(…)", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "code": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "pool",
+   "adds": ["cpu"],
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "done",
+    "n": 16
+   },
+   "solve": ["add:cpu:8", "add:cpu:8", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["Task.Run(…)", "⟦⟧", "⟦⟧", "⟦⟧", "new Thread(…).Start()"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Thread", "⟦⟧"],
+    ["ThreadPool", "⟦⟧"],
+    ["Task.Run", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

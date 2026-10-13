@@ -1,0 +1,69 @@
+{
+ "id": "tj.u5.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 8,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';\n\nconst gltf = await new GLTFLoader().loadAsync('chair.glb');\nscene.add(gltf.scene);"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "gltf.meshes[0]"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';\n\nconst draco = new DRACOLoader().setDecoderPath('/draco/');\nconst loader = new GLTFLoader().setDRACOLoader(draco);"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "model.traverse(o => {\n  if (o.isMesh) {\n    o.geometry.dispose();\n    o.material.map?.dispose();\n    o.material.dispose();\n  }\n});\nscene.remove(model);"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "function swap(next) {\n  scene.remove(current);\n  scene.add(next);\n  current = next;\n}",
+   "answer": 1,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["GLTFLoader", "⟦⟧"],
+    ["Box3", "⟦⟧"],
+    ["DRACOLoader", "⟦⟧"],
+    ["dispose()", "⟦⟧"]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,139 @@
+{
+ "id": "rv.u3.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "private readonly List<GameObject> _markers = new List<GameObject>();\nprivate ClashFilter _filter = ClashFilter.Hard | ClashFilter.Soft;\n\nprivate void OnEnable()\n{\n    ClashEvents.Selected += OnSelected;\n    StartCoroutine(Pulse());\n}\n\nprivate void OnDestroy()\n{\n    ClashEvents.Selected -= OnSelected;\n}\n\nprivate IEnumerator Pulse()\n{\n    while (true)\n    {\n        foreach (var m in _markers)\n            m.transform.localScale = Vector3.one * (1f + Mathf.Sin(Time.time * 4f) * 0.1f);\n        yield return new WaitForSeconds(0.05f);\n    }\n}\n\nprivate void OnSelected(int clashId, ClashFilter type)\n{\n    if (!_filter.HasFlag(type))\n        return;\n}",
+   "bugs": [
+    {
+     "lines": [5, 6, 11],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [0, 18, 19],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [20],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [26],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 3,
+    "maxFalse": 2
+   },
+   "solve": ["flag:5", "flag:18", "flag:26", "check"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["0", "1", "2", "⟦⟧"],
+   "answer": 2,
+   "explain": "⟦⟧",
+   "wrong": {
+    "0": "⟦⟧",
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "private Coroutine _pulse;\n\nprivate void OnEnable()\n{\n    ClashEvents.Selected += OnSelected;\n    _pulse = StartCoroutine(Pulse());\n}\n\nprivate void ___()\n{\n    ClashEvents.Selected ___ OnSelected;\n    if (_pulse != null) StopCoroutine(_pulse);\n}",
+   "tiles": ["OnDisable", "OnDestroy", "-=", "+="],
+   "answer": ["OnDisable", "-="],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["if (m == null)", "if (!m)", "if (m is null)", "if (m != null && m.activeSelf)"],
+   "answer": 2,
+   "explain": "⟦⟧",
+   "wrong": {
+    "0": "⟦⟧",
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var filter = ClashFilter.Hard | ClashFilter.Soft;\nbool r = filter.HasFlag(ClashFilter.Hard | ClashFilter.Clearance);",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 1,
+   "explain": "⟦⟧",
+   "wrong": {
+    "0": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "if ((_filter ___ type) ___ 0)\n    return;",
+   "tiles": ["&", "|", "==", "!="],
+   "answer": ["&", "=="],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  }
+ ]
+}

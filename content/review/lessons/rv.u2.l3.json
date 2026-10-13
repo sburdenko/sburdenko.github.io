@@ -1,0 +1,123 @@
+{
+ "id": "rv.u2.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 12,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "tiles": ["new", "Dispose", "static", "Abort"],
+   "answer": ["new", "Dispose"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "csharp",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["Task<Task>", "Task", "void", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "public TileLoader(Slider progressBar)\n{\n    _progressBar = progressBar;\n    var timer = new Timer(_ => ReportProgress(), null, 0, 1000);\n}\n\npublic void PreloadAll(IEnumerable<int> ids)\n{\n    foreach (var id in ids)\n        GetTileAsync(id,\n            CancellationToken.None);\n}\n\npublic void StartBackgroundCompaction(CancellationToken ct)\n{\n    Task.Factory.StartNew(async () =>\n    {\n        while (!ct.IsCancellationRequested)\n        {\n            Compact();\n            await Task.Delay(1000);\n        }\n    });\n}",
+   "bugs": [
+    {
+     "lines": [3],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [8, 9],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [10],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [15, 20],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 3,
+    "maxFalse": 2
+   },
+   "solve": ["flag:3", "flag:8", "flag:10", "flag:15", "check"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "await _throttle.WaitAsync(ct);\ntry\n{\n    var resp = await Http.GetAsync(url);\n    resp.EnsureSuccessStatusCode();\n    await Task.Delay(50, ct);\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public Task PreloadAllAsync(IEnumerable<int> ids, CancellationToken ct)\n{\n    var tasks = ids.Select(id => GetTileAsync(id, ct)).ToList();\n    return Task.WhenAll(tasks);\n}",
+   "lang": "csharp"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  }
+ ]
+}

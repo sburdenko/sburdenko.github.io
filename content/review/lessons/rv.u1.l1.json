@@ -1,0 +1,137 @@
+{
+ "id": "rv.u1.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "for (int i = 0; i < 8; i++)\n    tasks.Add(Task.Run(() => ProcessChunk(elements, i)));",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "public async void RunAsync(IEnumerable<Element> elements)\n{\n    var tasks = new List<Task>();\n    for (int i = 0; i < 8; i++)\n    {\n        tasks.Add(Task.Run(() => ProcessChunk(elements, i)));\n    }\n    await Task.WhenAll(tasks);\n    Completed?.Invoke();\n}\n\nprivate void ProcessChunk(IEnumerable<Element> elements, int chunk)\n{\n    var mine = elements.Where(e => e.Id % 8 == chunk);\n    foreach (var a in mine)\n    {\n        foreach (var b in mine)\n        {\n            if (a.Id < b.Id && a.Bounds.Intersects(b.Bounds))\n            {\n                _clashes.Add(new Clash { A = a, B = b });\n                _processed++;\n            }\n        }\n    }\n}",
+   "bugs": [
+    {
+     "lines": [0],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [5],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [13],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [14, 16],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [20],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [21],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 4,
+    "maxFalse": 2
+   },
+   "solve": ["flag:0", "flag:5", "flag:13", "flag:14", "flag:20", "flag:21", "check"]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "for (int i = 0; i < 8; i++)\n{\n    int chunk = ___;\n    tasks.Add(Task.Run(() => ProcessChunk(elements, ___)));\n}",
+   "tiles": ["i", "chunk", "8", "elements"],
+   "answer": ["i", "chunk"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["_clashes.Add(clash)", "_processed++", "⟦⟧", "Interlocked.Increment(ref _processed)"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["async void", "async Task"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["_processed++", "Interlocked.Increment"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  }
+ ]
+}

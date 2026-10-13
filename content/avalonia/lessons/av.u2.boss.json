@@ -1,0 +1,82 @@
+{
+ "id": "av.u2.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "grid",
+   "task": "⟦⟧",
+   "labels": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "content": [0, 0, 0],
+   "start": ["*", "*", "*"],
+   "goal": {
+    "at": {
+     "400": [200, 100, 100],
+     "800": [200, 500, 100]
+    }
+   },
+   "solve": ["col:0:200", "col:2:100"]
+  },
+  {
+   "t": "rig",
+   "rig": "panels",
+   "task": "⟦⟧",
+   "start": "wrap",
+   "goal": {
+    "panel": "dock"
+   },
+   "solve": ["panel:dock"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["WrapPanel", "StackPanel", "DockPanel"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "xml",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "<Grid ColumnDefinitions=\"___,___,___\">",
+   "lang": "xml",
+   "tiles": ["Auto", "*", "150", "2*", "Fill"],
+   "answer": ["Auto", "*", "150"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "Margin"],
+    ["⟦⟧", "Padding"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "DockPanel"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

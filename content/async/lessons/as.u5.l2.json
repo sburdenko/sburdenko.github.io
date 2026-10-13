@@ -1,0 +1,66 @@
+{
+ "id": "as.u5.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "static readonly SemaphoreSlim _gate = new(1, 1);\n\nawait _gate.WaitAsync();\ntry\n{\n    await WriteToFileAsync(data);\n}\nfinally\n{\n    _gate.Release();\n}"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "await _gate.___();\ntry { await WriteAsync(); }\nfinally { _gate.___(); }",
+   "lang": "cs",
+   "tiles": ["WaitAsync", "Release", "Wait", "Dispose", "Enter"],
+   "answer": ["WaitAsync", "Release"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["lock", "⟦⟧"],
+    ["SemaphoreSlim", "⟦⟧"],
+    ["WaitAsync", "⟦⟧"],
+    ["CS1996", "⟦⟧"]
+   ]
+  }
+ ]
+}

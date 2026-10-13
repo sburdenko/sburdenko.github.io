@@ -1,0 +1,78 @@
+{
+ "id": "f3d.u2.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["FBX", "STL", "PLY", "DXF"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "convert",
+   "task": "⟦⟧",
+   "assetName": "⟦⟧",
+   "asset": ["geometry", "uv", "hierarchy", "skin", "cameras"],
+   "goal": {
+    "kind": "tried",
+    "n": 3
+   },
+   "solve": ["fmt:obj", "fmt:fbx", "fmt:dae"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "<COLLADA version=\"1.4.1\">\n  <asset>\n    <unit name=\"meter\" meter=\"1\"/>\n    <up_axis>Z_UP</up_axis>\n  </asset>\n  <library_geometries>…</library_geometries>\n</COLLADA>",
+   "lang": "plain",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "<COLLADA version=\"1.4.1\">\n  <asset>\n    <unit name=\"meter\" meter=\"1\"/>\n    <up_axis>Z_UP</up_axis>\n  </asset>\n  <library_geometries>…</library_geometries>\n</COLLADA>",
+   "lang": "plain",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["FBX", "⟦⟧"],
+    ["DAE", "⟦⟧"],
+    ["glTF", "⟦⟧"],
+    ["FBX SDK", "⟦⟧"]
+   ]
+  }
+ ]
+}

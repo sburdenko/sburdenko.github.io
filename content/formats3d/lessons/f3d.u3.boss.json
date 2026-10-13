@@ -1,0 +1,83 @@
+{
+ "id": "f3d.u3.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "tess",
+   "start": 6,
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "err",
+    "max": 0.1,
+    "maxTris": 260
+   },
+   "solve": ["n:64"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "nurbs",
+   "task": "⟦⟧",
+   "goal": {
+    "max": 0.001
+   },
+   "solve": ["w-:0.05", "w-:0.05", "w-:0.05", "w-:0.05", "w-:0.05", "w-:0.05", "w+:0.005"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "#20=CARTESIAN_POINT('',(0.,0.,0.));\n#21=DIRECTION('',(0.,0.,1.));\n#22=AXIS2_PLACEMENT_3D('',#20,#21,$);\n#23=SPHERICAL_SURFACE('',#22,25.);",
+   "lang": "plain",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["STEP", "IGES", "3DM", "STL", "GLB"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["STEP", "⟦⟧"],
+    ["DXF", "⟦⟧"],
+    ["NURBS", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

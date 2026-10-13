@@ -1,0 +1,92 @@
+{
+ "id": "cs.u6.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["(Manager)o", "castclass", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "object o = new Employee();\nEmployee e = (Employee)o;\nobject n = null;\nManager m1 = (Manager)n;\nManager m2 = (Manager)o;",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["(Manager)o", "InvalidCastException"],
+    ["o as Manager", "⟦⟧"],
+    ["o is Manager", "⟦⟧"],
+    ["o is Manager m", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["(long)(int)o", "(long)o", "(short)o", "(double)o"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["object o = \"hi\"; int n = (int)o;", "object o = 42; long l = (long)o;", "object o = null; string s = (string)o;", "object o = new Celsius(5); var f = (Fahrenheit)o;", "object o = 42; int n = (int)o;"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "if (o is ___ m) m.Approve();\n\nif (input is not ___) Use(input);",
+   "tiles": ["Manager", "null", "as", "default", "object"],
+   "answer": ["Manager", "null"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

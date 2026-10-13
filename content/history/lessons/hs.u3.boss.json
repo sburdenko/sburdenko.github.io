@@ -1,0 +1,80 @@
+{
+ "id": "hs.u3.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "tfm",
+   "task": "⟦⟧",
+   "goal": {
+    "hosts": ["revit24", "revit25", "unity", "app10"],
+    "max": 1
+   },
+   "solve": ["tfm:ns20"]
+  },
+  {
+   "t": "rig",
+   "rig": "tfm",
+   "task": "⟦⟧",
+   "goal": {
+    "hosts": ["revit24", "revit25", "unity", "app10"],
+    "max": 3,
+    "prefer": {
+     "app10": "net10",
+     "unity": "ns21"
+    }
+   },
+   "solve": ["tfm:net10", "tfm:ns21", "tfm:net48"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "AppDomain"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "<___>net8.0;netstandard2.0</TargetFrameworks>",
+   "lang": "xml",
+   "tiles": ["TargetFrameworks", "TargetFramework", "Frameworks", "Platforms"],
+   "answer": ["TargetFrameworks"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["2014", "⟦⟧"],
+    ["2016", ".NET Core 1.0"],
+    ["2017", ".NET Standard 2.0"],
+    ["2019", ".NET Standard 2.1"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "netstandard2.0", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

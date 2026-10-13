@@ -1,0 +1,77 @@
+{
+ "id": "dotnet.w3.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "files",
+   "task": "⟦⟧",
+   "buttons": ["open", "forget", "gc", "fin"],
+   "goal": {
+    "n": 2,
+    "noDispose": true
+   },
+   "solve": ["open", "open", "forget:fs1", "gc", "fin", "open"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "files",
+   "task": "⟦⟧",
+   "buttons": ["open", "dispose", "using", "forget", "gc", "fin"],
+   "goal": {
+    "n": 2
+   },
+   "solve": ["open", "dispose:fs1", "open"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "var fs = new FileStream(path, FileMode.Open);\n___\n{\n    Work(fs);\n}\n___\n{\n    fs?.Dispose();\n}",
+   "lang": "cs",
+   "tiles": ["try", "finally", "catch", "lock"],
+   "answer": ["try", "finally"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "sealed class Report : IDisposable\n{\n    private readonly FileStream _file = File.OpenWrite(\"report.txt\");\n    public void Dispose() => _file.Dispose();\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  }
+ ]
+}

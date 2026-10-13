@@ -1,0 +1,82 @@
+{
+ "id": "as.u4.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "timeline",
+   "task": "⟦⟧",
+   "start": {
+    "ctx": "ui",
+    "call": "await"
+   },
+   "goal": {
+    "status": "deadlock"
+   },
+   "solve": ["call:result", "end"]
+  },
+  {
+   "t": "rig",
+   "rig": "timeline",
+   "task": "⟦⟧",
+   "start": {
+    "ctx": "ui",
+    "call": "result"
+   },
+   "goal": {
+    "status": "done",
+    "ctx": "ui",
+    "call": "await",
+    "cfa": false
+   },
+   "solve": ["call:await", "end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "Deadlock"],
+    ["⟦⟧", "⟦⟧"],
+    ["ConfigureAwait(false)", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

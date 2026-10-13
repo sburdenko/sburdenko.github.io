@@ -1,0 +1,93 @@
+{
+ "id": "f3d.u5.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "points",
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "fit",
+    "n": "100M",
+    "maxBytes": 1000000000
+   },
+   "solve": ["n:100M", "fmt:laz"]
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "STL"],
+    ["⟦⟧", "GLB"],
+    ["⟦⟧", "STEP"],
+    ["⟦⟧", "IFC"]
+   ]
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "LAZ"],
+    ["⟦⟧", "E57"],
+    ["⟦⟧", "BCF"],
+    ["⟦⟧", "USDZ"]
+   ]
+  },
+  {
+   "t": "rig",
+   "rig": "convert",
+   "task": "⟦⟧",
+   "assetName": "⟦⟧",
+   "asset": ["geometry", "vcolor"],
+   "goal": {
+    "kind": "keep",
+    "not": ["gltf", "fbx", "usd", "dae"]
+   },
+   "solve": ["fmt:ply"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["STEP", "STL", "PLY", "LAS"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["glTF", "IFC", "STEP", "E57", "RVT", "DWG"],
+   "answer": [0, 1, 2, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

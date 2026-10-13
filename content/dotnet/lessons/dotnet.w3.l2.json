@@ -1,0 +1,122 @@
+{
+ "id": "dotnet.w3.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "gc",
+   "task": "⟦⟧",
+   "objects": [
+    {
+     "id": "Cache"
+    },
+    {
+     "id": "Temp1"
+    },
+    {
+     "id": "Temp2"
+    }
+   ],
+   "roots": [
+    {
+     "name": "cache",
+     "to": "Cache"
+    },
+    {
+     "name": "t1",
+     "to": "Temp1"
+    },
+    {
+     "name": "t2",
+     "to": "Temp2"
+    }
+   ],
+   "gen1": true,
+   "goal": {
+    "kind": "gen",
+    "id": "Cache",
+    "gen": 2,
+    "dead": ["Temp1", "Temp2"]
+   },
+   "solve": ["root:t1", "root:t2", "gc:0", "gc:1"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "gc",
+   "task": "⟦⟧",
+   "objects": [
+    {
+     "id": "Buffer",
+     "big": true
+    },
+    {
+     "id": "Small"
+    }
+   ],
+   "roots": [
+    {
+     "name": "buf",
+     "to": "Buffer"
+    },
+    {
+     "name": "s",
+     "to": "Small"
+    }
+   ],
+   "goal": {
+    "kind": "dead",
+    "ids": ["Buffer", "Small"]
+   },
+   "solve": ["root:buf", "root:s", "gc:0", "gc:2"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

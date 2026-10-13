@@ -1,0 +1,103 @@
+{
+ "id": "as.u6.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "timeline",
+   "api": true,
+   "task": "⟦⟧",
+   "start": {
+    "ctx": "unity",
+    "call": "await",
+    "cfa": true
+   },
+   "lock": ["ctx", "call"],
+   "goal": {
+    "status": "error",
+    "ctx": "unity"
+   },
+   "solve": ["end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["UnityException: … can only be called from the main thread", "NullReferenceException", "MissingReferenceException"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "timeline",
+   "api": true,
+   "task": "⟦⟧",
+   "start": {
+    "ctx": "unity",
+    "call": "await",
+    "cfa": true
+   },
+   "lock": ["ctx", "call"],
+   "goal": {
+    "status": "done",
+    "ctx": "unity",
+    "cfa": false
+   },
+   "solve": ["cfa", "end"]
+  },
+  {
+   "t": "rig",
+   "rig": "timeline",
+   "task": "⟦⟧",
+   "start": {
+    "ctx": "unity",
+    "call": "await"
+   },
+   "lock": ["ctx", "cfa"],
+   "goal": {
+    "status": "deadlock",
+    "ctx": "unity"
+   },
+   "solve": ["call:result", "end"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "await Awaitable.___();\nvar path = FindPath(map);\nawait Awaitable.___();\ntransform.position = path[0];",
+   "lang": "cs",
+   "tiles": ["BackgroundThreadAsync", "MainThreadAsync", "NextFrameAsync", "Task.Run", "Yield"],
+   "answer": ["BackgroundThreadAsync", "MainThreadAsync"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["NextFrameAsync", "⟦⟧"],
+    ["WaitForSecondsAsync", "⟦⟧"],
+    ["BackgroundThreadAsync", "⟦⟧"],
+    ["MainThreadAsync", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

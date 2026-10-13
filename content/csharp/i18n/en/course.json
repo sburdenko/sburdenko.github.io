@@ -1,0 +1,15 @@
+{
+ "title": "Deeper C#",
+ "units/0/title": "How a type is built",
+ "units/0/blurb": "What every object has: System.Object, the header and the type pointer, the Equals/GetHashCode contract; casts, is, as and unboxing; primitives, checked and overflow, dynamic and its cost.",
+ "units/1/title": "Generics",
+ "units/1/blurb": "Why they exist, how the JIT compiles them for value and reference types, where constraints, covariance and contravariance, and generic math with INumber<T>.",
+ "units/2/title": "Delegates, events and closures",
+ "units/2/blurb": "Func and Action, multicast delegates, events and subscription leaks, lambdas and exactly what they capture.",
+ "units/3/title": "LINQ and its cost",
+ "units/3/blurb": "Deferred execution and Take, ToList and multiple enumeration, the buffering OrderBy, IQueryable and SQL from lambdas.",
+ "units/4/title": "Performance",
+ "units/4/blurb": "Span<T> and copy-free slices, the rules of ref struct and Memory<T>, readonly struct, in and defensive copies.",
+ "units/5/title": "Modern C#",
+ "units/5/blurb": "Pattern matching, records, nullable references, required and what is new in C# 12, 13 and 14. The course final."
+}

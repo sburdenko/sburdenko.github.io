@@ -1,0 +1,70 @@
+{
+ "id": "as.u3.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "statemachine",
+   "cached": true,
+   "task": "⟦⟧",
+   "goal": "cached",
+   "solve": ["step", "step", "step", "step", "step", "step", "step", "step", "step"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "async void"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public ValueTask<User> GetUserAsync(int id)\n{\n    if (_cache.TryGetValue(id, out var u))\n        return new ValueTask<User>(u);\n    return new ValueTask<User>(LoadUserAsync(id));\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["return Task.CompletedTask", "new ValueTask<int>(42)", "⟦⟧", "⟦⟧", "Task.Run(…)"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Task.CompletedTask", "⟦⟧"],
+    ["Task.FromResult", "⟦⟧"],
+    ["ValueTask", "⟦⟧"],
+    ["IsCompleted = true", "⟦⟧"]
+   ]
+  }
+ ]
+}

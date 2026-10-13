@@ -1,0 +1,66 @@
+{
+ "id": "as.u2.l5",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "async Task ProcessAsync(List<Item> items, CancellationToken ct)\n{\n    foreach (var item in items)\n    {\n        ct.ThrowIfCancellationRequested();\n        await SaveAsync(item);\n    }\n}",
+   "answer": 5,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "await SaveAsync(item, ___);",
+   "lang": "cs",
+   "tiles": ["ct", "cts", "null", "true"],
+   "answer": ["ct"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["CancellationTokenSource", "⟦⟧"],
+    ["CancellationToken", "⟦⟧"],
+    ["OperationCanceledException", "⟦⟧"],
+    ["WaitAsync", "⟦⟧"]
+   ]
+  }
+ ]
+}

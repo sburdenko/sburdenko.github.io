@@ -1,0 +1,92 @@
+{
+ "id": "hs.u3.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "<PropertyGroup>\n  <TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>\n</PropertyGroup>",
+   "lang": "xml"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "tfm",
+   "task": "⟦⟧",
+   "hosts": ["revit24", "revit25", "unity"],
+   "goal": {
+    "hosts": ["revit24", "revit25", "unity"],
+    "max": 2,
+    "prefer": {
+     "revit25": "net8"
+    }
+   },
+   "solve": ["tfm:net8", "tfm:ns20"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["net8.0", "netstandard2.0", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "#if ___\n    LegacyInit();\n#endif",
+   "tiles": ["NETFRAMEWORK", "NET8_0_OR_GREATER", "NETSTANDARD2_1", "DEBUG"],
+   "answer": ["NETFRAMEWORK"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "tfm",
+   "task": "⟦⟧",
+   "hosts": ["revit24", "revit25", "unity"],
+   "goal": {
+    "hosts": ["revit24", "revit25", "unity"],
+    "max": 3,
+    "prefer": {
+     "revit24": "net48",
+     "revit25": "net8"
+    }
+   },
+   "solve": ["tfm:net48", "tfm:net8", "tfm:ns21"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["NETFRAMEWORK", "⟦⟧"],
+    ["NETSTANDARD2_0", "⟦⟧"],
+    ["NET8_0_OR_GREATER", "⟦⟧"],
+    ["DEBUG", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

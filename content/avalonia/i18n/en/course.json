@@ -1,0 +1,11 @@
+{
+ "title": "Avalonia basics",
+ "units/0/title": "Getting started",
+ "units/0/blurb": "What Avalonia is and how it differs from WPF and MAUI, a first project from a template, and AXAML markup.",
+ "units/1/title": "Layout",
+ "units/1/blurb": "Measure and Arrange, Margin and Padding, the StackPanel, WrapPanel and DockPanel panels, and Grid with Auto, pixels and stars.",
+ "units/2/title": "Bindings and MVVM",
+ "units/2/blurb": "DataContext and {Binding}, INotifyPropertyChanged and modes, CommunityToolkit.Mvvm, compiled bindings and commands.",
+ "units/3/title": "Styles, lists and the UI thread",
+ "units/3/blurb": "Style selectors and pseudo-classes, themes and resources, lists with ObservableCollection and DataTemplate, Dispatcher.UIThread. The course final."
+}

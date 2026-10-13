@@ -1,0 +1,89 @@
+{
+ "id": "cs.u3.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "linq",
+   "task": "⟦⟧",
+   "start": {
+    "twice": true
+   },
+   "lock": ["orderBy", "twice"],
+   "goal": {
+    "max": {
+     "read": 6
+    },
+    "o": {
+     "twice": true
+    }
+   },
+   "solve": ["toList", "end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "linq",
+   "task": "⟦⟧",
+   "start": {
+    "toList": true
+   },
+   "lock": ["orderBy", "twice"],
+   "goal": {
+    "max": {
+     "where": 4
+    }
+   },
+   "solve": ["toList", "end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var active = db.Users.Where(u => u.IsActive);\nif (active.Any())\n{\n    foreach (var u in active)\n        Notify(u);\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["ToList", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["First()", "⟦⟧"]
+   ]
+  }
+ ]
+}

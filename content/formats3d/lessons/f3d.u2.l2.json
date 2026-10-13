@@ -1,0 +1,69 @@
+{
+ "id": "f3d.u2.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "ply\nformat binary_little_endian 1.0\nelement vertex 120000\nproperty float x\nproperty float y\nproperty float z\nproperty uchar red\nproperty uchar green\nproperty uchar blue\nelement face 0\nend_header",
+   "lang": "plain",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "ply\nformat binary_little_endian 1.0\nelement vertex 120000\nproperty float x\nproperty float y\nproperty float z\nproperty uchar red\nproperty uchar green\nproperty uchar blue\nelement face 0\nend_header",
+   "lang": "plain",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["PLY", "STL", "DAE"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "element vertex 3\nproperty float x\nproperty float y\nproperty float z\nproperty ___ red",
+   "lang": "plain",
+   "tiles": ["uchar", "vertex", "face", "ply"],
+   "answer": ["uchar"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["ply", "⟦⟧"],
+    ["element", "⟦⟧"],
+    ["property", "⟦⟧"],
+    ["end_header", "⟦⟧"]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,91 @@
+{
+ "id": "av.u3.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 8,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "bind",
+   "task": "⟦⟧",
+   "start": {
+    "mode": "TwoWay",
+    "notify": false
+   },
+   "lock": ["mode"],
+   "goal": {
+    "sync": ["code"]
+   },
+   "solve": ["notify", "code"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "bind",
+   "task": "⟦⟧",
+   "start": {
+    "mode": "OneWay",
+    "notify": true
+   },
+   "lock": ["notify"],
+   "goal": {
+    "sync": ["type"]
+   },
+   "solve": ["mode:TwoWay", "type"]
+  },
+  {
+   "t": "rig",
+   "rig": "bind",
+   "task": "⟦⟧",
+   "start": {
+    "mode": "OneTime",
+    "notify": true
+   },
+   "lock": ["notify"],
+   "goal": {
+    "sync": ["type", "code"]
+   },
+   "solve": ["mode:TwoWay", "type", "code"]
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["OneWay", "⟦⟧"],
+    ["TwoWay", "⟦⟧"],
+    ["OneTime", "⟦⟧"],
+    ["OneWayToSource", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public string Name\n{\n    get => _name;\n    set { _name = value; OnPropertyChanged(); }\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

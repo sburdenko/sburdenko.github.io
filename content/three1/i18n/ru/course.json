@@ -1,0 +1,13 @@
+{
+ "title": "Three.js: начальный уровень",
+ "units/0/title": "Первая сцена",
+ "units/0/blurb": "Что такое Three.js, сцена, камера, рендерер и Mesh, цикл анимации и изменение размера окна.",
+ "units/1/title": "Камера",
+ "units/1/blurb": "PerspectiveCamera: fov, aspect, near и far, z-fighting, lookAt и OrbitControls, OrthographicCamera.",
+ "units/2/title": "Объекты в сцене",
+ "units/2/blurb": "position, rotation в радианах и scale, оси, иерархия: Group, локальные и мировые координаты.",
+ "units/3/title": "Свет и материалы",
+ "units/3/blurb": "Basic, Lambert и Standard, источники света и их затухание, четыре флага теней.",
+ "units/4/title": "Текстуры и модели",
+ "units/4/blurb": "TextureLoader, sRGB и повтор, загрузка glTF, центр и масштаб модели, dispose. Финал курса."
+}

@@ -1,0 +1,11 @@
+{
+ "title": "Avalonia: основы",
+ "units/0/title": "Знакомство",
+ "units/0/blurb": "Что такое Avalonia и чем она отличается от WPF и MAUI, первый проект из шаблона и разметка AXAML.",
+ "units/1/title": "Раскладка",
+ "units/1/blurb": "Measure и Arrange, Margin и Padding, панели StackPanel, WrapPanel и DockPanel, Grid с Auto, пикселями и звёздочками.",
+ "units/2/title": "Привязки и MVVM",
+ "units/2/blurb": "DataContext и {Binding}, INotifyPropertyChanged и режимы, CommunityToolkit.Mvvm, compiled bindings и команды.",
+ "units/3/title": "Стили, списки и UI-поток",
+ "units/3/blurb": "Селекторы стилей и псевдоклассы, темы и ресурсы, списки с ObservableCollection и DataTemplate, Dispatcher.UIThread. Финал курса."
+}
