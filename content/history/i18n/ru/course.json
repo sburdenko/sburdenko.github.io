@@ -1,0 +1,11 @@
+{
+ "title": "История .NET",
+ "units/0/title": "Эпоха .NET Framework",
+ "units/0/blurb": "Зачем Microsoft сделала .NET, как Framework рос от дженериков до async и почему версия 4.8 — последняя, но всё ещё нужна плагинам старых Revit и AutoCAD.",
+ "units/1/title": "Mono, Unity и Xamarin",
+ "units/1/blurb": "Открытая реализация по стандарту ECMA, C# в Unity (Mono, IL2CPP, путь к CoreCLR) и на телефонах: Xamarin и MAUI.",
+ "units/2/title": "Open source, .NET Core и .NET Standard",
+ "units/2/blurb": "Открытые исходники, новый кросс-платформенный .NET, стандарт как контракт API и почему 2.1 есть в Unity и .NET 10, но не во Framework. Мульти-таргетинг.",
+ "units/3/title": "Один .NET и где он сейчас",
+ "units/3/blurb": ".NET 5–10, LTS и STS, что нового в .NET 10 и C# 14, где сегодня работает .NET и чем Framework отличается от современного .NET."
+}

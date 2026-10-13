@@ -1,0 +1,22 @@
+{
+ "title": "Async all the way",
+ "sub": "How to really cure a deadlock",
+ "cards/0/title": "Don't mix them",
+ "cards/0/body": "<p>If the code inside is asynchronous, the code outside should await too, all the way up to the event handler or Main. That's <b>async all the way</b>.</p><p>Mixing them with .Result and .Wait() is called <b>sync-over-async</b>: it gives you both deadlocks and pool starvation.</p>",
+ "cards/1/task": "Fix the deadlock properly: no ConfigureAwait, just make the handler async.",
+ "cards/2/q": "Why is await better than .Result in a handler?",
+ "cards/2/options/0": "The UI thread doesn't block: continuations and clicks keep running, so a deadlock is impossible",
+ "cards/2/options/1": "The code is shorter",
+ "cards/2/options/2": "The network replies faster",
+ "cards/2/explain": "No blocked thread, no wait cycle.",
+ "cards/3/title": "async Main and async handlers",
+ "cards/3/body": "<p>Since C# 7.1, Main can be <code>async Task Main()</code>. Event handlers are <code>async void</code>: the one sensible place for void. ASP.NET Core controllers return <code>Task&lt;IActionResult&gt;</code>.</p>",
+ "cards/4/q": "Where is the sync-over-async?",
+ "cards/4/explain": ".Result holds a pool thread for the whole database query.",
+ "cards/5/q": "Fix the controller",
+ "cards/5/explain": "async in the declaration, await before the call.",
+ "cards/6/title": "The reverse problem: async-over-sync",
+ "cards/6/body": "<p>Wrapping a synchronous blocking call in Task.Run and naming the method …Async is a trick: a thread is still busy, just a different one.</p><p>Don't do this in a library: let the caller decide whether they need Task.Run.</p>",
+ "cards/7/q": "Which of these are sync-over-async? Select all that apply.",
+ "cards/7/explain": "Any synchronous wait on a task blocks the thread."
+}

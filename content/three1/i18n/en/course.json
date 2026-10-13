@@ -1,0 +1,13 @@
+{
+ "title": "Three.js: beginner",
+ "units/0/title": "Your first scene",
+ "units/0/blurb": "What Three.js is; scene, camera, renderer and Mesh; the animation loop and window resizing.",
+ "units/1/title": "The camera",
+ "units/1/blurb": "PerspectiveCamera: fov, aspect, near and far; z-fighting, lookAt and OrbitControls; OrthographicCamera.",
+ "units/2/title": "Objects in the scene",
+ "units/2/blurb": "position, rotation in radians and scale; axes; hierarchy with Group, local and world coordinates.",
+ "units/3/title": "Lights and materials",
+ "units/3/blurb": "Basic, Lambert and Standard; light sources and their falloff; the four shadow flags.",
+ "units/4/title": "Textures and models",
+ "units/4/blurb": "TextureLoader, sRGB and repeating, loading glTF, centering and scaling a model, dispose. The course final."
+}

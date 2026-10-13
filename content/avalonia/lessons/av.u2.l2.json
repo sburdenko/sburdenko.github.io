@@ -1,0 +1,84 @@
+{
+ "id": "av.u2.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "panels",
+   "task": "⟦⟧",
+   "start": "stack-v",
+   "goal": {
+    "panel": "dock"
+   },
+   "solve": ["panel:dock"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "panels",
+   "task": "⟦⟧",
+   "start": "stack-h",
+   "goal": {
+    "panel": "wrap",
+    "w": 220
+   },
+   "solve": ["w:220", "panel:wrap"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "panels",
+   "task": "⟦⟧",
+   "start": "dock",
+   "goal": {
+    "panel": "stack-h"
+   },
+   "solve": ["panel:stack-h"]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "xml",
+   "tiles": ["Left", "Top", "Fill", "Start"],
+   "answer": ["Left"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["StackPanel", "⟦⟧"],
+    ["WrapPanel", "⟦⟧"],
+    ["DockPanel", "⟦⟧"],
+    ["Canvas", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  }
+ ]
+}

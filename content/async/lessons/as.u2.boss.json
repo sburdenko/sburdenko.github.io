@@ -1,0 +1,84 @@
+{
+ "id": "as.u2.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "combinators",
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "time",
+    "mode": "all",
+    "max": 500
+   },
+   "solve": ["mode:all"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public async Task<User> LoadUserAsync(int id)\npublic async void UploadAsync(byte[] data)\npublic ValueTask<int> GetCachedAsync(string key)",
+   "answer": 1,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "combinators",
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "inner",
+    "n": 2
+   },
+   "solve": ["mode:all", "fail:B", "fail:C"]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "Task<string> first = await Task.___(t1, t2, t3);\nstring page = await first;",
+   "lang": "cs",
+   "tiles": ["WhenAny", "WhenAll", "Run", "Yield"],
+   "answer": ["WhenAny"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["async void", "⟦⟧"],
+    ["WhenAll", "⟦⟧"],
+    ["WhenAny", "⟦⟧"],
+    ["CancellationToken", "⟦⟧"]
+   ]
+  }
+ ]
+}

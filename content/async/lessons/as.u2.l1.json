@@ -1,0 +1,79 @@
+{
+ "id": "as.u2.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "async Task<int> GetLengthAsync(string url)\n{\n    string html = await http.GetStringAsync(url);\n    return html.Length;\n}"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "null", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "async Task<int> CountAsync()\n{\n    var list = new List<int>();\n    var data = await LoadAsync();\n    list.AddRange(data);\n    return list.Count;\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "___ Task<string> LoadAsync()\n{\n    var text = ___ File.ReadAllTextAsync(path);\n    return text.Trim();\n}",
+   "lang": "cs",
+   "tiles": ["async", "await", "Task", "void", "static"],
+   "answer": ["async", "await"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "timeline",
+   "task": "⟦⟧",
+   "start": {
+    "ctx": "console",
+    "call": "await"
+   },
+   "lock": ["call", "cfa"],
+   "goal": {
+    "status": "done",
+    "ctx": "ui",
+    "call": "await"
+   },
+   "solve": ["end", "ctx:ui", "end"]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

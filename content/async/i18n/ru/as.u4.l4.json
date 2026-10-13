@@ -1,0 +1,22 @@
+{
+ "title": "Async до самого верха",
+ "sub": "Как лечить deadlock по-настоящему",
+ "cards/0/title": "Не смешивай",
+ "cards/0/body": "<p>Если внутри асинхронный код, снаружи тоже должен быть await — вплоть до обработчика события или Main. Это и есть <b>async all the way</b>.</p><p>Смешивание через .Result и .Wait() называют <b>sync-over-async</b>: оно даёт и deadlock, и голодание пула.</p>",
+ "cards/1/task": "Почини deadlock правильно: без ConfigureAwait, сделав обработчик асинхронным.",
+ "cards/2/q": "Чем await лучше .Result в обработчике?",
+ "cards/2/options/0": "UI-поток не блокируется: продолжения и клики выполняются, deadlock невозможен",
+ "cards/2/options/1": "Код короче",
+ "cards/2/options/2": "Сеть отвечает быстрее",
+ "cards/2/explain": "Нет заблокированного потока — нет цикла ожидания.",
+ "cards/3/title": "async Main и async-обработчики",
+ "cards/3/body": "<p>С C# 7.1 Main может быть <code>async Task Main()</code>. Обработчики событий — <code>async void</code>: это единственное разумное место для void. Контроллеры ASP.NET Core возвращают <code>Task&lt;IActionResult&gt;</code>.</p>",
+ "cards/4/q": "Где sync-over-async?",
+ "cards/4/explain": ".Result держит поток пула всё время запроса к базе.",
+ "cards/5/q": "Исправь контроллер",
+ "cards/5/explain": "async в объявлении, await перед вызовом.",
+ "cards/6/title": "Обратная беда: async-over-sync",
+ "cards/6/body": "<p>Обернуть синхронный блокирующий вызов в Task.Run и назвать метод …Async — обман: поток всё равно занят, просто другой.</p><p>В библиотеке так не делай: пусть вызывающий сам решит, нужен ли ему Task.Run.</p>",
+ "cards/7/q": "Что из этого — sync-over-async? Отметь все.",
+ "cards/7/explain": "Любое синхронное ожидание задачи блокирует поток."
+}

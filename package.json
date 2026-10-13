@@ -4,6 +4,6 @@
   "type": "module",
   "scripts": {
     "test": "node --test tests/*.test.js",
-    "stamp": "node tools/stamp.mjs"
+    "stamp": "node tools/content-bundle.mjs && node tools/stamp.mjs"
   }
 }

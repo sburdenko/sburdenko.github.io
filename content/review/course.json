@@ -1,0 +1,30 @@
+{
+ "id": "review",
+ "title": "⟦⟧",
+ "units": [
+  {
+   "id": "u0",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["rv.u0.l1", "rv.u0.l2", "rv.u0.l3", "rv.u0.l4", "rv.u0.boss"]
+  },
+  {
+   "id": "u1",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["rv.u1.l1", "rv.u1.l2", "rv.u1.l3", "rv.u1.l4", "rv.u1.boss"]
+  },
+  {
+   "id": "u2",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["rv.u2.l1", "rv.u2.l2", "rv.u2.l3", "rv.u2.boss"]
+  },
+  {
+   "id": "u3",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["rv.u3.l1", "rv.u3.l2", "rv.u3.l3", "rv.u3.l4", "rv.u3.boss"]
+  }
+ ]
+}

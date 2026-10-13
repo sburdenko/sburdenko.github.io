@@ -1,0 +1,73 @@
+{
+ "id": "tj.u4.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "tjlight",
+   "task": "⟦⟧",
+   "start": {
+    "amb": true,
+    "dir": true
+   },
+   "lock": ["mat"],
+   "goal": {
+    "look": "shaded",
+    "shadow": true
+   },
+   "solve": ["sm", "lc", "cc", "fr"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["renderer.shadowMap.enabled = true", "scene.shadow = true", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["DirectionalLight", "PointLight", "SpotLight", "AmbientLight"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["shadowMap.enabled", "⟦⟧"],
+    ["light.castShadow", "⟦⟧"],
+    ["mesh.castShadow", "⟦⟧"],
+    ["mesh.receiveShadow", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "floor.___ = true;",
+   "tiles": ["receiveShadow", "castShadow", "shadow", "shadowMap"],
+   "answer": ["receiveShadow"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

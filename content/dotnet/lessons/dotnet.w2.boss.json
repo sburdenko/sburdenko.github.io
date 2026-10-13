@@ -1,0 +1,96 @@
+{
+ "id": "dotnet.w2.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var a = new Size(2, 3);\nvar b = a;\nb.W = 10;",
+   "options": ["2", "10", "0"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var a = new Size(2, 3);\nvar b = a;\nb.W = 10;",
+   "options": ["10", "2", "0"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["new List<int>()", "⟦⟧", "⟦⟧", "object o = 3.14;", "bool flag = true;"],
+   "answer": [0, 2, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "static void Reset(Point q) => q = new Point(0, 0);\nReset(p);",
+   "options": ["⟦⟧", "⟦⟧", "NullReferenceException"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "object o = 1;\ndouble d = (double)o;",
+   "options": ["InvalidCastException", "d = 1.0", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "string s = \"hi\";\ns.ToUpper();\ns = s + \"!\";\nConsole.WriteLine(s);",
+   "answer": 1,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["101", "100", "1"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "static void Inc(ref int x) => x++;\nint n = 1;\nInc(ref n);",
+   "options": ["2", "1", "0"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["struct", "⟦⟧"],
+    ["class", "⟦⟧"],
+    ["string", "⟦⟧"],
+    ["object o = 5", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "static double Length(___ Vector3 v) =>\n    Math.Sqrt(v.X * v.X + v.Y * v.Y + v.Z * v.Z);",
+   "lang": "cs",
+   "tiles": ["in", "ref", "out", "params"],
+   "answer": ["in"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

@@ -1,0 +1,73 @@
+{
+ "id": "hs.u4.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "years",
+   "task": "⟦⟧",
+   "goal": {
+    "year": 2024
+   },
+   "solve": ["year:2024"]
+  },
+  {
+   "t": "rig",
+   "rig": "tfm",
+   "task": "⟦⟧",
+   "hosts": ["revit24", "revit25"],
+   "goal": {
+    "hosts": ["revit24", "revit25"],
+    "max": 2,
+    "prefer": {
+     "revit24": "net48",
+     "revit25": "net8"
+    }
+   },
+   "solve": ["tfm:net48", "tfm:net8"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "ASP.NET Core"],
+    ["⟦⟧", "Avalonia"],
+    ["⟦⟧", "Unity"],
+    ["⟦⟧", ".NET 8"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", ".NET Framework"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

@@ -1,0 +1,146 @@
+{
+ "id": "rv.u0.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "private void OnSelectionChanged(int id)\n{\n    try\n    {\n        var e = _byId[id];\n        ElementSelected(e);\n        var bytes = Encoding.UTF8.GetBytes(\"Selected \" + id + \" at \" + DateTime.Now + \"\\n\");\n        _log.Write(bytes, 0, bytes.Length);\n    }\n    catch (Exception) { }\n}"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "public List<ElementInfo> FindByName(string name)\n{\n    var result = new List<ElementInfo>();\n    for (int i = 0; i < _elements.Count; i++)\n    {\n        if (_elements[i].Name.ToLower().Contains(name.ToLower()))\n            result.Add(_elements[i]);\n    }\n    return result;\n}\n\nprivate void OnSelectionChanged(int id)\n{\n    try\n    {\n        var e = _byId[id];\n        ElementSelected(e);\n        var bytes = Encoding.UTF8.GetBytes(\"Selected \" + id + \" at \" + DateTime.Now + \"\\n\");\n        _log.Write(bytes, 0, bytes.Length);\n    }\n    catch (Exception) { }\n}",
+   "bugs": [
+    {
+     "lines": [5],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [15],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [16],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [17, 18],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [20],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 4,
+    "maxFalse": 2
+   },
+   "solve": ["flag:5", "flag:15", "flag:16", "flag:17", "flag:20", "check"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "if (_elements[i].Name.ToLower().Contains(name.ToLower()))",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public List<ElementInfo> FindByName(string name)\n{\n    var result = new List<ElementInfo>();\n    if (string.IsNullOrEmpty(name)) return result;\n    foreach (var e in _elements)\n    {\n        if (e.Name ___ null && e.Name.IndexOf(name, StringComparison.___) >= 0)\n            result.Add(e);\n    }\n    return result;\n}",
+   "tiles": ["!=", "OrdinalIgnoreCase", "==", "CurrentCulture", "Ordinal"],
+   "answer": ["!=", "OrdinalIgnoreCase"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public int CountClashes()\n{\n    int count = 0;\n    for (int i = 0; i < _elements.Count; i++)\n        for (int j = 0; j < _elements.Count; j++)\n            if (i != j && _elements[i].Box.Intersects(_elements[j].Box))\n                count++;\n    return count;\n}",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["6", "3", "9"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "if (!_byId.TryGetValue(id, out var e))\n{\n    Debug.LogWarning(\"Unknown element id \" + id);\n    return;\n}\nElementSelected?.Invoke(e);",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "catch (Exception ex) { throw ex; }"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

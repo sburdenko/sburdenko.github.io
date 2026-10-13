@@ -1,0 +1,78 @@
+{
+ "id": "as.u1.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "timeline",
+   "task": "⟦⟧",
+   "start": {
+    "ctx": "console",
+    "call": "await"
+   },
+   "lock": ["ctx", "call", "cfa"],
+   "goal": {
+    "status": "done",
+    "ctx": "console"
+   },
+   "solve": ["tick", "tick", "end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "pool",
+   "adds": ["block", "async"],
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "done",
+    "n": 16,
+    "of": "async"
+   },
+   "solve": ["add:async:8", "add:async:8", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["IOCP", "⟦⟧"],
+    ["epoll", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["await", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

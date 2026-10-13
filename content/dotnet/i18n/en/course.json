@@ -1,0 +1,18 @@
+{
+ "title": ".NET under the hood",
+ "units/0/title": "How .NET code runs",
+ "units/0/blurb": "A program's journey from C# source to CPU instructions: the compiler, CIL, metadata, JIT, AOT and the CLR itself.",
+ "units/0/source/title": "Microsoft Learn: Managed execution process",
+ "units/1/title": "Types and memory",
+ "units/1/blurb": "Value and reference types, the stack and the heap, boxing, argument passing and what makes string special, on a rig that shows every variable and every object.",
+ "units/2/title": "Garbage collection and resources",
+ "units/2/blurb": "Roots and reachability, generations and the LOH, finalizers, IDisposable and using, SafeHandle and memory leaks. You run the collections yourself and see who survives.",
+ "units/3/title": "Threads and the thread pool",
+ "units/3/blurb": "Threads and the scheduler, data races, lock and Interlocked, deadlock, the thread pool and its starvation. You switch the threads yourself and catch the bugs.",
+ "units/4/title": "Assemblies and loading",
+ "units/4/blurb": "How the CLR finds and loads assemblies: AssemblyLoadContext, versions and NuGet, trimming, plugins.",
+ "units/5/title": "Generics and reflection under the hood",
+ "units/5/blurb": "How the JIT compiles generics for value and reference types, what reflection costs, and what source generators replace.",
+ "units/6/title": "Performance",
+ "units/6/blurb": "Span<T> and Memory<T>, allocations and ArrayPool, profiling and BenchmarkDotNet."
+}

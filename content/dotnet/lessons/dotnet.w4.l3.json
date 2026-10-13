@@ -1,0 +1,89 @@
+{
+ "id": "dotnet.w4.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "static readonly object _gate = new();\n\nlock (_gate)\n{\n    count++;\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "datarace",
+   "mode": "lock",
+   "task": "⟦⟧",
+   "goal": "done",
+   "solve": ["step:A", "step:A", "step:A", "step:A", "step:A", "step:B", "step:B", "step:B", "step:B", "step:B"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "Interlocked.Increment(ref count);"
+  },
+  {
+   "t": "rig",
+   "rig": "datarace",
+   "mode": "atomic",
+   "random": true,
+   "task": "⟦⟧",
+   "goal": "random",
+   "solve": ["random"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "deadlock",
+   "task": "⟦⟧",
+   "goal": "deadlock",
+   "solve": ["step:A", "step:B"]
+  },
+  {
+   "t": "rig",
+   "rig": "deadlock",
+   "toggle": true,
+   "task": "⟦⟧",
+   "goal": "fixed",
+   "solve": ["fix", "step:A", "step:A", "step:A", "step:A", "step:A", "step:B", "step:B", "step:B", "step:B", "step:B"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["lock", "⟦⟧"],
+    ["Interlocked", "⟦⟧"],
+    ["Deadlock", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

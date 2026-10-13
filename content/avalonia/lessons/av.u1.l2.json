@@ -1,0 +1,71 @@
+{
+ "id": "av.u1.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "dotnet new install Avalonia.Templates\ndotnet new avalonia.mvvm -o MyApp\ncd MyApp\ndotnet run",
+   "lang": "plain"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public static void Main(string[] args) =>\n    BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);\n\npublic static AppBuilder BuildAvaloniaApp() =>\n    AppBuilder.Configure<App>()\n        .UsePlatformDetect()\n        .WithInterFont()\n        .LogToTrace();"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public override void OnFrameworkInitializationCompleted()\n{\n    if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)\n        desktop.MainWindow = new MainWindow\n        {\n            DataContext = new MainWindowViewModel()\n        };\n    base.OnFrameworkInitializationCompleted();\n}"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Program.cs", "⟦⟧"],
+    ["App.axaml", "⟦⟧"],
+    ["MainWindow.axaml", "⟦⟧"],
+    ["MainWindowViewModel.cs", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "dotnet ___ avalonia.mvvm -o MyApp",
+   "lang": "plain",
+   "tiles": ["new", "run", "build", "add"],
+   "answer": ["new"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

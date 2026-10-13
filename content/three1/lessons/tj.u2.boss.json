@@ -1,0 +1,81 @@
+{
+ "id": "tj.u2.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "tjcam",
+   "task": "⟦⟧",
+   "start": {
+    "fov": 35,
+    "z": 3,
+    "near": 5,
+    "far": 10
+   },
+   "goal": {
+    "see": ["a", "b", "c"]
+   },
+   "solve": ["fov:50", "near:0.1", "far:50"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "camera.position.set(4, 3, 6);\ncamera.___(0, 0, 0);",
+   "tiles": ["lookAt", "rotate", "target", "look"],
+   "answer": ["lookAt"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["OrthographicCamera", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["controls.update()", "controls.reset()", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "tjcam",
+   "task": "⟦⟧",
+   "lock": ["fov", "z"],
+   "goal": {
+    "see": ["a", "b"],
+    "hide": ["c"]
+   },
+   "solve": ["far:10"]
+  }
+ ]
+}

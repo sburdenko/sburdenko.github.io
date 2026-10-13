@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { fill, setPath, loadCourse, loadLesson, HOLE } from '../learn/content.js';
+import { fill, setPath, loadCourse, loadCourseFromSource, loadLesson, HOLE } from '../learn/content.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', 'content');
 const read = (...p) => JSON.parse(readFileSync(join(root, ...p), 'utf8'));
@@ -63,5 +63,16 @@ for (const id of courses) {
     const lid = lessonIds()[0];
     const en = await loadLesson(id, lid, 'en');
     assert.deepEqual(await loadLesson(id, lid, 'xx'), en);
+  });
+}
+
+for (const id of courses) {
+  test(`content/${id}: bundle совпадает с исходниками (если устарел — npm run stamp)`, async () => {
+    const langs = readdirSync(join(root, id, 'i18n'));
+    assert.ok(langs.includes('ru') && langs.includes('en'));
+    for (const lang of langs) {
+      assert.ok(existsSync(join(root, id, `bundle.${lang}.json`)), `${id}: нет bundle.${lang}.json`);
+      assert.deepEqual(read(id, `bundle.${lang}.json`), JSON.parse(JSON.stringify(await loadCourseFromSource(id, lang))), `${id}/${lang}: bundle устарел`);
+    }
   });
 }

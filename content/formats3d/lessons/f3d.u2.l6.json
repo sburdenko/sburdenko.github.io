@@ -1,0 +1,79 @@
+{
+ "id": "f3d.u2.l6",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "convert",
+   "task": "⟦⟧",
+   "assetName": "⟦⟧",
+   "asset": ["geometry"],
+   "goal": {
+    "kind": "fmt",
+    "fmt": "stl"
+   },
+   "solve": ["fmt:stl"]
+  },
+  {
+   "t": "rig",
+   "rig": "convert",
+   "task": "⟦⟧",
+   "assetName": "⟦⟧",
+   "asset": ["geometry", "normals", "vcolor"],
+   "goal": {
+    "kind": "keep",
+    "not": ["gltf", "fbx", "usd", "dae"]
+   },
+   "solve": ["fmt:ply"]
+  },
+  {
+   "t": "rig",
+   "rig": "convert",
+   "task": "⟦⟧",
+   "assetName": "⟦⟧",
+   "asset": ["geometry", "normals", "uv", "pbr", "hierarchy", "skin", "cameras", "units"],
+   "goal": {
+    "kind": "fmt",
+    "fmt": "usd"
+   },
+   "solve": ["fmt:usd"]
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "glTF/GLB"],
+    ["⟦⟧", "USDZ"],
+    ["⟦⟧", "FBX"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

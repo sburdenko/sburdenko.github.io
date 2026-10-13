@@ -1,0 +1,86 @@
+{
+ "id": "cs.u5.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 8,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "patterns",
+   "task": "⟦⟧",
+   "start": ["rect", "square", "circle", "point", "nul", "any"],
+   "solve": ["up:point", "up:point", "up:point", "up:circle", "up:circle", "up:square"]
+  },
+  {
+   "t": "rig",
+   "rig": "generics",
+   "task": "⟦⟧",
+   "sig": "void SortSmall<T>(T a, T b)",
+   "ops": ["stack", "cmp"],
+   "goal": {
+    "allow": ["int"]
+   },
+   "solve": ["c:unmanaged", "c:cmp"]
+  },
+  {
+   "t": "rig",
+   "rig": "closures",
+   "task": "⟦⟧",
+   "start": "for",
+   "variants": ["for", "copy"],
+   "goal": {
+    "out": "0 1 2",
+    "variants": ["copy"]
+   },
+   "solve": ["variant:copy", "end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var q = users.Where(u => u.IsActive);\nif (q.Any()) Console.WriteLine(q.Count());",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public record Point(int X, int Y);\nvar p = new Point(1, 2);\nvar q = p with { X = 5 };\np.Y = 3;",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "ReadOnlySpan<char>"],
+    ["⟦⟧", "readonly struct + in"],
+    ["⟦⟧", "record"],
+    ["⟦⟧", "INumber<T>"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public string Name { get; set => ___ = value.Trim(); }",
+   "tiles": ["field", "value", "this.Name", "_name"],
+   "answer": ["field"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

@@ -1,0 +1,76 @@
+{
+ "id": "tj.u3.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "tjgraph",
+   "task": "⟦⟧",
+   "goal": {
+    "orbits": 3,
+    "dist": 2.4
+   },
+   "solve": ["parent:earth", "scale", "orbit", "orbit", "orbit"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["rotation.y = THREE.MathUtils.degToRad(30)", "rotation.y = 30", "rotation.y = 30 * 180 / Math.PI"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "const car = new THREE.Group();\ncar.add(body);\nscene.add(wheel);\ncar.rotation.y = Math.PI / 6;",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "earth.___(moon);\nmoon.position.x = 1.2;",
+   "tiles": ["add", "attach", "push", "set"],
+   "answer": ["add"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "Y"],
+    ["⟦⟧", "Z"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "Group"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "tjgraph",
+   "task": "⟦⟧",
+   "lock": ["scale"],
+   "goal": {
+    "orbits": 2,
+    "dist": 1.2
+   },
+   "solve": ["parent:earth", "orbit", "orbit"]
+  }
+ ]
+}

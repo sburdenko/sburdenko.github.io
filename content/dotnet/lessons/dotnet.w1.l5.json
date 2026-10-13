@@ -1,0 +1,132 @@
+{
+ "id": "dotnet.w1.l5",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"]
+  },
+  {
+   "t": "rig",
+   "rig": "jit",
+   "task": "⟦⟧",
+   "methods": [
+    {
+     "name": "Main",
+     "calls": ["Add", "Log"]
+    },
+    {
+     "name": "Add"
+    },
+    {
+     "name": "Log"
+    },
+    {
+     "name": "Unused"
+    }
+   ],
+   "goal": {
+    "kind": "calls",
+    "name": "Add",
+    "min": 2
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["1", "1000", "0", "500"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["3", "4", "1", "0"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "rig",
+   "rig": "jit",
+   "task": "⟦⟧",
+   "methods": [
+    {
+     "name": "Main",
+     "calls": ["Add", "Log"]
+    },
+    {
+     "name": "Add"
+    },
+    {
+     "name": "Log"
+    },
+    {
+     "name": "Unused"
+    }
+   ],
+   "goal": {
+    "kind": "calls",
+    "name": "Main",
+    "min": 1
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "jit",
+   "task": "⟦⟧",
+   "methods": [
+    {
+     "name": "Add"
+    }
+   ],
+   "tiered": true,
+   "goal": {
+    "kind": "state",
+    "name": "Add",
+    "state": "tier1"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["2", "1", "1000", "30"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

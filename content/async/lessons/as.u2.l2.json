@@ -1,0 +1,66 @@
+{
+ "id": "as.u2.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public async void SaveAsync(Order o)\n{\n    await db.InsertAsync(o);\n}\npublic async Task LoadAsync() => await db.LoadAsync();",
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Task", "⟦⟧"],
+    ["Task<T>", "⟦⟧"],
+    ["ValueTask<T>", "⟦⟧"],
+    ["async void", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public async ___ SaveAsync(Order o)\n{\n    await db.InsertAsync(o);\n}",
+   "lang": "cs",
+   "tiles": ["Task", "void", "object", "int"],
+   "answer": ["Task"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

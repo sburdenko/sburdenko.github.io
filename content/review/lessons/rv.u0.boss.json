@@ -1,0 +1,184 @@
+{
+ "id": "rv.u0.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 12,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "public struct ElementInfo\n{\n    public int Id;\n    public string Name;\n    public Bounds Box;\n    public List<int> ChildIds;\n\n    public void Rename(string newName)\n    {\n        Name = newName;\n    }\n}\n\npublic class ModelManager\n{\n    public static ModelManager Instance = new ModelManager();\n\n    private List<ElementInfo> _elements = new List<ElementInfo>();\n    private Dictionary<object, ElementInfo> _byId = new Dictionary<object, ElementInfo>();\n    private FileStream _log;\n    private HttpClient _http;\n\n    public event Action<ElementInfo> ElementSelected;\n\n    public ModelManager()\n    {\n        _log = new FileStream(\"log.txt\", FileMode.Append);\n        SelectionService.Current.SelectionChanged += OnSelectionChanged;\n    }\n\n    public void Load(string url)\n    {\n        _http = new HttpClient();\n        var json = _http.GetStringAsync(url).Result;\n        var elements = JsonConvert.DeserializeObject<List<ElementInfo>>(json);\n\n        foreach (var e in elements)\n        {\n            _elements.Add(e);\n            _byId.Add(e.Id, e);\n        }\n    }\n\n    public void RenameAll(string prefix)\n    {\n        foreach (var e in _elements)\n        {\n            e.Rename(prefix + e.Name);\n        }\n    }\n\n    public List<ElementInfo> FindByName(string name)\n    {\n        var result = new List<ElementInfo>();\n        for (int i = 0; i < _elements.Count; i++)\n        {\n            if (_elements[i].Name.ToLower().Contains(name.ToLower()))\n                result.Add(_elements[i]);\n        }\n        return result;\n    }\n\n    public int CountClashes()\n    {\n        int count = 0;\n        for (int i = 0; i < _elements.Count; i++)\n            for (int j = 0; j < _elements.Count; j++)\n                if (i != j && _elements[i].Box.Intersects(_elements[j].Box))\n                    count++;\n        return count;\n    }\n\n    private void OnSelectionChanged(int id)\n    {\n        try\n        {\n            var e = _byId[id];\n            ElementSelected(e);\n            var bytes = Encoding.UTF8.GetBytes(\"Selected \" + id + \" at \" + DateTime.Now + \"\\n\");\n            _log.Write(bytes, 0, bytes.Length);\n        }\n        catch (Exception) { }\n    }\n}",
+   "bugs": [
+    {
+     "lines": [0, 7, 9],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [5],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [15],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [17],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [18],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [20, 32],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [24],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [26],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [27],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [30, 33],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [34, 36],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [38],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [39],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [45, 47],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [56],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [66, 67],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [76],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [77],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [78, 79],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [81],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 16,
+    "maxFalse": 3
+   },
+   "solve": ["flag:0", "flag:5", "flag:15", "flag:17", "flag:18", "flag:20", "flag:24", "flag:26", "flag:27", "flag:30", "flag:34", "flag:38", "flag:39", "flag:45", "flag:56", "flag:66", "flag:76", "flag:77", "flag:78", "flag:81", "check"]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public static ModelManager Instance = new ModelManager();\n\npublic ModelManager()\n{\n    _log = new FileStream(\"log.txt\", FileMode.Append);\n    SelectionService.Current.SelectionChanged += OnSelectionChanged;\n}",
+   "answer": 5,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "tiles": ["class", "?.", "struct", ".", "readonly"],
+   "answer": ["class", "?."],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "static readonly HttpClient"],
+    [".Result", "async Task LoadAsync + await"],
+    ["⟦⟧", "⟦⟧"],
+    ["_byId[id]", "TryGetValue"],
+    ["catch (Exception) { }", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  }
+ ]
+}

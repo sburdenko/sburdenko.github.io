@@ -1,0 +1,162 @@
+{
+ "id": "rv.u3.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 14,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "[Flags]\npublic enum ClashFilter { None = 0, Hard = 1, Soft = 2, Clearance = 4 }\n\npublic struct ClashScore\n{\n    public float Weight;\n    public float Severity;\n}\n\npublic class ClashMarkers : MonoBehaviour\n{\n    [SerializeField] private GameObject _markerPrefab;\n\n    private readonly List<GameObject> _markers = new List<GameObject>();\n    private readonly ThumbnailCache _thumbnails = new ThumbnailCache(100);\n    private ClashFilter _filter = ClashFilter.Hard | ClashFilter.Soft;\n\n    private void OnEnable()\n    {\n        ClashEvents.Selected += OnSelected;\n        StartCoroutine(Pulse());\n    }\n\n    private void OnDestroy()\n    {\n        ClashEvents.Selected -= OnSelected;\n    }\n\n    private void Update()\n    {\n        var visible = _markers\n            .Where(m => m.activeSelf)\n            .OrderBy(m => Vector3.Distance(Camera.main.transform.position, m.transform.position))\n            .ToList();\n\n        for (int i = 0; i < visible.Count; i++)\n        {\n            var renderer = visible[i].GetComponent<Renderer>();\n            renderer.material.color = i < 10 ? Color.red : Color.gray;\n            visible[i].GetComponentInChildren<TextMesh>().text = \"Clash \" + (i + 1);\n        }\n    }\n\n    private IEnumerator Pulse()\n    {\n        while (true)\n        {\n            foreach (var m in _markers)\n                m.transform.localScale = Vector3.one * (1f + Mathf.Sin(Time.time * 4f) * 0.1f);\n            yield return new WaitForSeconds(0.05f);\n        }\n    }\n\n    private void OnSelected(int clashId, ClashFilter type)\n    {\n        if (!_filter.HasFlag(type))\n            return;\n        // ...\n    }\n\n    public void SortBySeverity(List<ClashScore> scores)\n    {\n        scores.Sort((a, b) => a.Severity > b.Severity ? -1 : 1);\n    }\n\n    public float TotalWeight(IList<ClashScore> scores)\n    {\n        float total = 0f;\n        foreach (var s in scores)\n            total += s.Weight;\n        return total;\n    }\n}\n\npublic class ThumbnailCache\n{\n    private readonly int _capacity;\n    private readonly Dictionary<int, Texture2D> _map = new Dictionary<int, Texture2D>();\n    private readonly LinkedList<int> _order = new LinkedList<int>();\n\n    public ThumbnailCache(int capacity) => _capacity = capacity;\n\n    public Texture2D Get(int id)\n    {\n        return _map.TryGetValue(id, out var texture) ? texture : null;\n    }\n\n    public void Put(int id, Texture2D texture)\n    {\n        if (_map.Count >= _capacity)\n        {\n            var oldest = _order.Last.Value;\n            _order.RemoveLast();\n            _map.Remove(oldest);\n        }\n\n        _map[id] = texture;\n        _order.AddLast(id);\n    }\n}",
+   "bugs": [
+    {
+     "lines": [30, 31, 33],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [32],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [37],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [38],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [39],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [19, 20, 25],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [49],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [13, 47, 48],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [55],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [62],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [65, 68],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [84],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [91, 97],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [89, 96],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [92, 93],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [80],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 13,
+    "maxFalse": 3
+   },
+   "solve": ["flag:30", "flag:32", "flag:37", "flag:38", "flag:39", "flag:19", "flag:49", "flag:13", "flag:55", "flag:62", "flag:65", "flag:84", "flag:91", "check"]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "list.Sort((a, b) => a.Score > b.Score ? -1 : 1);\nlist.Sort((a, b) => b.Score.CompareTo(a.Score));\nlist.Sort((a, b) => a.Id.CompareTo(b.Id));",
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["Awake", "OnEnable", "Start", "Update", "OnDisable", "OnDestroy"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "float d = (a.position - b.position).___;",
+   "tiles": ["sqrMagnitude", "magnitude", "normalized", "Distance"],
+   "answer": ["sqrMagnitude"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["Frame Debugger", "⟦⟧"],
+    ["Memory Profiler", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  }
+ ]
+}

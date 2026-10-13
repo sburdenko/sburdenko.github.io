@@ -1,0 +1,70 @@
+{
+ "id": "as.u5.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public async Task ImportAsync(IEnumerable<Row> rows)\n{\n    foreach (var r in rows)\n        _db.InsertAsync(r);\n    await _db.CommitAsync();\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "lock (_sync)\n{\n    var data = await LoadAsync();\n    _cache = data;\n}",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["TaskCreationOptions.RunContinuationsAsynchronously", "TaskCreationOptions.LongRunning", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "___ using var conn = new SqlConnection(cs);",
+   "lang": "cs",
+   "tiles": ["await", "async", "lock", "static"],
+   "answer": ["await"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["CS4014", "⟦⟧"],
+    ["CS1996", "⟦⟧"],
+    ["TrySetResult", "⟦⟧"],
+    ["BoundedChannel", "⟦⟧"]
+   ]
+  }
+ ]
+}

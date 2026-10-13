@@ -1,0 +1,66 @@
+{
+ "id": "as.u2.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "try\n{\n    var json = await http.GetStringAsync(url);\n}\ncatch (HttpRequestException e)\n{\n    Log(e.Message);\n}"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "try { var r = GetAsync().Result; }\ncatch (HttpRequestException) { … }",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "combinators",
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "inner",
+    "n": 2
+   },
+   "solve": ["mode:all", "fail:A", "fail:C"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["await", "⟦⟧"],
+    [".Result", "AggregateException"],
+    ["GetAwaiter().GetResult()", "⟦⟧"],
+    ["UnobservedTaskException", "⟦⟧"]
+   ]
+  }
+ ]
+}

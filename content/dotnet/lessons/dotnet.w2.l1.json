@@ -1,0 +1,175 @@
+{
+ "id": "dotnet.w2.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "memory",
+   "task": "⟦⟧",
+   "goal": "both",
+   "variants": {
+    "struct": {
+     "code": "Point p1 = new Point(1, 2);\nPoint p2 = p1;\np2.X = 100;\nConsole.WriteLine(p1.X);",
+     "steps": [
+      {
+       "line": 0,
+       "note": "⟦⟧",
+       "ops": [
+        {
+         "op": "new",
+         "name": "p1",
+         "type": "Point",
+         "kind": "val",
+         "fields": {
+          "X": 1,
+          "Y": 2
+         }
+        }
+       ]
+      },
+      {
+       "line": 1,
+       "note": "⟦⟧",
+       "ops": [
+        {
+         "op": "copy",
+         "to": "p2",
+         "from": "p1"
+        }
+       ]
+      },
+      {
+       "line": 2,
+       "note": "⟦⟧",
+       "ops": [
+        {
+         "op": "set",
+         "target": "p2",
+         "field": "X",
+         "value": 100
+        }
+       ]
+      },
+      {
+       "line": 3,
+       "note": "⟦⟧",
+       "ops": []
+      }
+     ]
+    },
+    "class": {
+     "code": "Point p1 = new Point(1, 2);\nPoint p2 = p1;\np2.X = 100;\nConsole.WriteLine(p1.X);",
+     "steps": [
+      {
+       "line": 0,
+       "note": "⟦⟧",
+       "ops": [
+        {
+         "op": "new",
+         "name": "p1",
+         "type": "Point",
+         "kind": "ref",
+         "fields": {
+          "X": 1,
+          "Y": 2
+         }
+        }
+       ]
+      },
+      {
+       "line": 1,
+       "note": "⟦⟧",
+       "ops": [
+        {
+         "op": "copy",
+         "to": "p2",
+         "from": "p1"
+        }
+       ]
+      },
+      {
+       "line": 2,
+       "note": "⟦⟧",
+       "ops": [
+        {
+         "op": "set",
+         "target": "p2",
+         "field": "X",
+         "value": 100
+        }
+       ]
+      },
+      {
+       "line": 3,
+       "note": "⟦⟧",
+       "ops": []
+      }
+     ]
+    }
+   },
+   "solve": ["step", "step", "step", "step", "variant:class", "step", "step", "step", "step"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "Point p1 = new Point(1, 2);\nPoint p2 = p1;\np2.X = 100;\nConsole.WriteLine(p1.X);",
+   "options": ["1", "100", "0", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "Point p1 = new Point(1, 2);\nPoint p2 = p1;\np2.X = 100;\nConsole.WriteLine(p1.X);",
+   "options": ["100", "1", "0", "NullReferenceException"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["int", "bool", "DateTime", "string", "int[]", "List<int>"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var a = new Point(1, 2);\nvar b = new Point(1, 2);\nConsole.WriteLine(a.Equals(b));",
+   "options": ["False", "True", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var a = new Point(1, 2);\nvar b = a;\nvar c = new Point(1, 2);\nc.X = 50;\nb.X = 50;",
+   "answer": 4,
+   "explain": "⟦⟧"
+  }
+ ]
+}

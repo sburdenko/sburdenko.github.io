@@ -1,0 +1,91 @@
+{
+ "id": "cs.u2.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 8,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "closures",
+   "task": "⟦⟧",
+   "start": "for",
+   "variants": ["for"],
+   "goal": {
+    "out": "3 3 3"
+   },
+   "solve": ["end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "closures",
+   "task": "⟦⟧",
+   "start": "for",
+   "variants": ["for", "copy"],
+   "goal": {
+    "out": "0 1 2",
+    "variants": ["copy"]
+   },
+   "solve": ["variant:copy", "end"]
+  },
+  {
+   "t": "rig",
+   "rig": "closures",
+   "task": "⟦⟧",
+   "start": "foreach",
+   "variants": ["foreach"],
+   "goal": {
+    "out": "0 1 2"
+   },
+   "solve": ["end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "int count = 0;\nAction inc = () => count++;\ninc();\ninc();\nConsole.WriteLine(count);",
+   "options": ["2", "0", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

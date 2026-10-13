@@ -1,0 +1,68 @@
+{
+ "id": "tj.u5.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "const tex = await new THREE.TextureLoader().loadAsync('wood.jpg');\ntex.colorSpace = THREE.SRGBColorSpace;\nconst mat = new THREE.MeshStandardMaterial({ map: tex });"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "tjtex",
+   "task": "⟦⟧",
+   "goal": {
+    "tiles": "tiled",
+    "colors": true
+   },
+   "solve": ["rep:4", "wrap:repeat", "cs:srgb"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "normalMap", "roughnessMap"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "tex.wrapS = tex.wrapT = THREE.___;\ntex.repeat.set(___, 8);",
+   "tiles": ["RepeatWrapping", "8", "ClampToEdgeWrapping", "4", "MirroredRepeatWrapping"],
+   "answer": ["RepeatWrapping", "8"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["TextureLoader", "⟦⟧"],
+    ["map", "⟦⟧"],
+    ["SRGBColorSpace", "⟦⟧"],
+    ["RepeatWrapping", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["tex.needsUpdate = true", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

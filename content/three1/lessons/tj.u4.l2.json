@@ -1,0 +1,69 @@
+{
+ "id": "tj.u4.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "tjlight",
+   "task": "⟦⟧",
+   "start": {
+    "amb": true
+   },
+   "lock": ["shadows", "mat", "dir"],
+   "goal": {
+    "look": "shaded"
+   },
+   "solve": ["pt"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "const sun = new THREE.DirectionalLight(0xffffff, 2.5);\nsun.position.set(3, 5, 2);\nscene.add(sun);"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["DirectionalLight", "⟦⟧"],
+    ["PointLight", "⟦⟧"],
+    ["SpotLight", "⟦⟧"],
+    ["AmbientLight", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  }
+ ]
+}

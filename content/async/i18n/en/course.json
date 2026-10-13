@@ -1,0 +1,15 @@
+{
+ "title": "Async/await in depth",
+ "units/0/title": "Why async",
+ "units/0/blurb": "Waiting vs. working, Task as a promise of a result, and the big reveal: while I/O is in flight, no thread is needed.",
+ "units/1/title": "async and await in action",
+ "units/1/blurb": "Your first async method, what to return, where exceptions go, WhenAll and WhenAny, and cancellation with CancellationToken.",
+ "units/2/title": "Under the hood",
+ "units/2/blurb": "What the compiler turns an async method into: the state machine, the awaiter, the fast path and ValueTask, ExecutionContext and AsyncLocal.",
+ "units/3/title": "Context and deadlock",
+ "units/3/blurb": "SynchronizationContext, the classic .Result deadlock, ConfigureAwait(false), async all the way and thread-pool starvation.",
+ "units/4/title": "Pitfalls and advanced topics",
+ "units/4/blurb": "Fire-and-forget and async void, SemaphoreSlim instead of lock, TaskCompletionSource, IAsyncEnumerable and await using, Channel and Parallel.ForEachAsync.",
+ "units/5/title": "Platforms",
+ "units/5/blurb": "ASP.NET Core, WPF and WinForms, Unity: Awaitable, coroutines, UniTask and cancellation tied to the object. The course final."
+}

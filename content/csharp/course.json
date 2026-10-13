@@ -1,0 +1,42 @@
+{
+ "id": "csharp",
+ "title": "⟦⟧",
+ "units": [
+  {
+   "id": "u6",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["cs.u6.l1", "cs.u6.l2", "cs.u6.l3"]
+  },
+  {
+   "id": "u1",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["cs.u1.l1", "cs.u1.l2", "cs.u1.l3", "cs.u1.boss"]
+  },
+  {
+   "id": "u2",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["cs.u2.l1", "cs.u2.l2", "cs.u2.l3", "cs.u2.boss"]
+  },
+  {
+   "id": "u3",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["cs.u3.l1", "cs.u3.l2", "cs.u3.l3", "cs.u3.boss"]
+  },
+  {
+   "id": "u4",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["cs.u4.l1", "cs.u4.l2", "cs.u4.l3", "cs.u4.boss"]
+  },
+  {
+   "id": "u5",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["cs.u5.l1", "cs.u5.l2", "cs.u5.l3", "cs.u5.l4", "cs.u5.boss"]
+  }
+ ]
+}

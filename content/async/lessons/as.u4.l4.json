@@ -1,0 +1,70 @@
+{
+ "id": "as.u4.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "timeline",
+   "task": "⟦⟧",
+   "start": {
+    "ctx": "ui",
+    "call": "result"
+   },
+   "lock": ["ctx", "cfa"],
+   "goal": {
+    "status": "done",
+    "call": "await",
+    "cfa": false,
+    "ctx": "ui"
+   },
+   "solve": ["call:await", "end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public IActionResult Get(int id)\n{\n    var user = _repo.GetUserAsync(id).Result;\n    return Ok(user);\n}",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public ___ Task<IActionResult> Get(int id)\n{\n    var user = ___ _repo.GetUserAsync(id);\n    return Ok(user);\n}",
+   "lang": "cs",
+   "tiles": ["async", "await", "void", "lock"],
+   "answer": ["async", "await"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["task.Result", "task.Wait()", "task.GetAwaiter().GetResult()", "await task", "await Task.WhenAll(tasks)"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  }
+ ]
+}

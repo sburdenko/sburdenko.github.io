@@ -1,0 +1,65 @@
+{
+ "id": "tj.u3.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "mesh.rotation.y = Math.___;",
+   "tiles": ["PI", "PI / 2", "180", "TAU"],
+   "answer": ["PI"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["position.y = 2", "⟦⟧"],
+    ["rotation.y = Math.PI / 2", "⟦⟧"],
+    ["scale.setScalar(0.5)", "⟦⟧"],
+    ["scale.x = -1", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["Mesh", "⟦⟧", "⟦⟧", "Group", "⟦⟧"],
+   "answer": [0, 1, 2, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["≈ 3.1416", "180", "0.5"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

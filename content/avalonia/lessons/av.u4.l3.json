@@ -1,0 +1,75 @@
+{
+ "id": "av.u4.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "<ListBox ItemsSource=\"{Binding People}\">\n  <ListBox.ItemTemplate>\n    <DataTemplate x:DataType=\"m:Person\">\n      <StackPanel Orientation=\"Horizontal\" Spacing=\"8\">\n        <TextBlock Text=\"{Binding Name}\"/>\n        <TextBlock Text=\"{Binding Age}\"/>\n      </StackPanel>\n    </DataTemplate>\n  </ListBox.ItemTemplate>\n</ListBox>",
+   "lang": "xml"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "<ListBox ___=\"{Binding Orders}\"/>",
+   "lang": "xml",
+   "tiles": ["ItemsSource", "Items", "DataContext", "Source"],
+   "answer": ["ItemsSource"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "xml",
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["ItemsSource", "⟦⟧"],
+    ["DataTemplate", "⟦⟧"],
+    ["ObservableCollection", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  }
+ ]
+}

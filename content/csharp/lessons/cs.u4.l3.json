@@ -1,0 +1,81 @@
+{
+ "id": "cs.u4.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "copies",
+   "task": "⟦⟧",
+   "goal": {
+    "max": 0,
+    "safe": true
+   },
+   "solve": ["pass:in", "ro"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "copies",
+   "task": "⟦⟧",
+   "start": {
+    "pass": "in"
+   },
+   "goal": {
+    "max": 0,
+    "safe": true
+   },
+   "solve": ["ro"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public readonly struct Matrix\n{\n    public readonly float M11, M12; // …\n    public float Det() => …;\n}"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["ref", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["in + readonly struct", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public ___ struct Vec4 { … }\nfloat Len(___ Vec4 v) => …;",
+   "tiles": ["readonly", "in", "ref", "static", "out"],
+   "answer": ["readonly", "in"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

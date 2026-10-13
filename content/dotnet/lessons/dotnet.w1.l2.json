@@ -1,0 +1,81 @@
+{
+ "id": "dotnet.w1.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["C# · F# · VB", "⟦⟧", "⟦⟧", "CLR"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// C#\nstatic int Add(int a, int b) => a + b;\n\n// F#\nlet add a b = a + b\n\n// Visual Basic\nFunction Add(a As Integer, b As Integer) As Integer\n    Return a + b\nEnd Function"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "int x = int.MaxValue;\nConsole.WriteLine(x + 1);",
+   "options": ["-2147483648", "2147483648", "⟦⟧", "0"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public class Counter\n{\n    private uint _hidden;\n    public int Total { get; set; }\n    public uint Count { get; set; }\n    public string Name { get; set; }\n}",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["C#", "csc (Roslyn)"],
+    ["F#", "fsc"],
+    ["Visual Basic", "vbc"],
+    ["CLR", "⟦⟧"]
+   ]
+  }
+ ]
+}

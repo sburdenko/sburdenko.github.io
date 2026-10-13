@@ -1,0 +1,116 @@
+{
+ "id": "dotnet.w3.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "gc",
+   "task": "⟦⟧",
+   "objects": [
+    {
+     "id": "Order",
+     "refs": ["Item"]
+    },
+    {
+     "id": "Item",
+     "refs": ["Price"]
+    },
+    {
+     "id": "Price"
+    },
+    {
+     "id": "Log"
+    }
+   ],
+   "roots": [
+    {
+     "name": "order",
+     "to": "Order"
+    },
+    {
+     "name": "log",
+     "to": "Log"
+    }
+   ],
+   "goal": {
+    "kind": "dead",
+    "ids": ["Log"],
+    "keep": ["Order", "Item", "Price"]
+   },
+   "solve": ["root:log", "gc:0"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "gc",
+   "task": "⟦⟧",
+   "objects": [
+    {
+     "id": "A",
+     "refs": ["B"]
+    },
+    {
+     "id": "B",
+     "refs": ["A"]
+    }
+   ],
+   "roots": [
+    {
+     "name": "a",
+     "to": "A"
+    }
+   ],
+   "goal": {
+    "kind": "dead",
+    "ids": ["A", "B"]
+   },
+   "solve": ["root:a", "gc:0"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

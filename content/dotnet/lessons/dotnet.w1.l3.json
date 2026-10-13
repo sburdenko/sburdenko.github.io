@@ -1,0 +1,118 @@
+{
+ "id": "dotnet.w1.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "il"
+  },
+  {
+   "t": "rig",
+   "rig": "stack",
+   "task": "⟦⟧",
+   "program": ["ldarg.0", "ldarg.1", "add", "ret"],
+   "args": [
+    {
+     "name": "a",
+     "value": 40
+    },
+    {
+     "name": "b",
+     "value": 2
+    }
+   ],
+   "goal": "ret"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "ldarg.0\nldarg.1\nadd\nret",
+   "lang": "il",
+   "options": ["2", "40", "42", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "ldarg.0\n___\nmul\n___\nadd\nret",
+   "lang": "il",
+   "tiles": ["ldarg.1", "ldarg.2", "add", "ldarg.0"],
+   "answer": ["ldarg.1", "ldarg.2"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "stack",
+   "task": "⟦⟧",
+   "program": ["ldarg.0", "ldarg.1", "mul", "ldarg.2", "add", "ret"],
+   "args": [
+    {
+     "name": "a",
+     "value": 5
+    },
+    {
+     "name": "b",
+     "value": 8
+    },
+    {
+     "name": "c",
+     "value": 2
+    }
+   ],
+   "goal": "ret"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "stack",
+   "task": "⟦⟧",
+   "program": ["ldarg.0", "add", "ret"],
+   "args": [
+    {
+     "name": "a",
+     "value": 40
+    }
+   ],
+   "goal": "error"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  }
+ ]
+}

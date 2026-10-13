@@ -1,0 +1,147 @@
+{
+ "id": "rv.u0.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "public void RenameAll(string prefix)\n{\n    foreach (var e in _elements)\n    {\n        e.Rename(prefix + e.Name);\n    }\n}",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["foreach (var e in _elements) e.Name = \"X\";", "foreach (var e in _elements) e.Rename(\"X\");", "_elements[0].Name = \"X\";", "_elements[0].Rename(\"X\");"],
+   "answer": [0, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "public struct ElementInfo\n{\n    public int Id;\n    public string Name;\n    public Bounds Box;\n    public List<int> ChildIds;\n    public void Rename(string newName) { Name = newName; }\n}\n\npublic void AddAll(List<ElementInfo> elements)\n{\n    foreach (var e in elements)\n    {\n        _elements.Add(e);\n        _byId.Add(e.Id, e);\n    }\n}\n\npublic void RenameAll(string prefix)\n{\n    foreach (var e in _elements)\n        e.Rename(prefix + e.Name);\n}",
+   "bugs": [
+    {
+     "lines": [0, 6],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [5],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [13, 14],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [20, 21],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 3,
+    "maxFalse": 2
+   },
+   "solve": ["flag:0", "flag:5", "flag:13", "flag:20", "check"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "for (int i = 0; i < _elements.Count; i++)\n    _elements[i].Rename(prefix + _elements[i].Name);",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "for (int i = 0; i < _elements.Count; i++)\n{\n    var e = _elements[i];\n    e.Name = prefix + e.Name;\n    ___ = e;\n    _byId[___] = e;\n}",
+   "tiles": ["_elements[i]", "e.Id", "i", "e.Name"],
+   "answer": ["_elements[i]", "e.Id"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var a = _elements[0];\na.Name = \"X\";\na.ChildIds.Add(42);",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public readonly struct ElementInfo\n{\n    public readonly int Id;\n    public readonly string Name;\n    public ElementInfo(int id, string name) { Id = id; Name = name; }\n    public ElementInfo WithName(string n) => new ElementInfo(Id, n);\n}\n\n_elements[i] = _elements[i].WithName(prefix + _elements[i].Name);",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["ElementSelected(e)", "⟦⟧"],
+    ["default(ElementInfo).ChildIds.Add(1)", "NullReferenceException"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  }
+ ]
+}

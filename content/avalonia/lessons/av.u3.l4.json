@@ -1,0 +1,73 @@
+{
+ "id": "av.u3.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "xml"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "<Button Command=\"{Binding ___}\"/>",
+   "lang": "xml",
+   "tiles": ["DeleteCommand", "Delete", "OnDelete", "Delete()"],
+   "answer": ["DeleteCommand"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[RelayCommand(CanExecute = nameof(CanSave))]\nprivate void Save() { … }\n\nprivate bool CanSave() => !string.IsNullOrWhiteSpace(Name);\n\n[ObservableProperty]\n[NotifyCanExecuteChangedFor(nameof(SaveCommand))]\nprivate string _name = \"\";"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "LoadAsyncCommand", "LoadAsync"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["ICommand", "⟦⟧"],
+    ["[RelayCommand]", "⟦⟧"],
+    ["CanExecute", "⟦⟧"],
+    ["IsRunning", "⟦⟧"]
+   ]
+  }
+ ]
+}

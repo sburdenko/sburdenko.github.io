@@ -1,0 +1,30 @@
+{
+ "id": "history",
+ "title": "⟦⟧",
+ "units": [
+  {
+   "id": "u1",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["hs.u1.l1", "hs.u1.l2", "hs.u1.l3", "hs.u1.boss"]
+  },
+  {
+   "id": "u2",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["hs.u2.l1", "hs.u2.l2", "hs.u2.l3", "hs.u2.boss"]
+  },
+  {
+   "id": "u3",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["hs.u3.l1", "hs.u3.l2", "hs.u3.l3", "hs.u3.l4", "hs.u3.boss"]
+  },
+  {
+   "id": "u4",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["hs.u4.l1", "hs.u4.l2", "hs.u4.l3", "hs.u4.l4", "hs.u4.boss"]
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "id": "dotnet.w4.l5",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "pool",
+   "adds": ["block"],
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "threads",
+    "min": 6
+   },
+   "solve": ["add:block:8", "add:block:8", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "pool",
+   "adds": ["block", "async"],
+   "task": "⟦⟧",
+   "goal": {
+    "kind": "done",
+    "n": 16,
+    "of": "async"
+   },
+   "solve": ["add:async:8", "add:async:8", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1", "tick:1"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "await httpClient.GetAsync(…)", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  }
+ ]
+}

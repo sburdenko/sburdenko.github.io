@@ -1,0 +1,143 @@
+{
+ "id": "rv.u1.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "public class ElementKey\n{\n    public string ModelId;\n    public int ElementId;\n\n    public override bool Equals(object obj) =>\n        obj is ElementKey k && k.ModelId == ModelId && k.ElementId == ElementId;\n}\n\npublic class Element\n{\n    public ElementKey Key;\n    public int Id => Key.ElementId;\n}\n\npublic List<Clash> GetClashesFor(ElementKey key)\n{\n    if (!_cache.ContainsKey(key))\n        _cache[key] = _clashes.Where(c => c.A.Key.Equals(key) || c.B.Key.Equals(key)).ToList();\n    return _cache[key];\n}",
+   "bugs": [
+    {
+     "lines": [0, 5, 6],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [2, 3],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [12],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [17, 19],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [18],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 4,
+    "maxFalse": 2
+   },
+   "solve": ["flag:0", "flag:2", "flag:12", "flag:17", "flag:18", "check"]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public override int ___() =>\n    HashCode.___(ModelId, ElementId);",
+   "tiles": ["GetHashCode", "Combine", "ToString", "Equals"],
+   "answer": ["GetHashCode", "Combine"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "if (!_cache.ContainsKey(key))\n    _cache[key] = Build(key);\nreturn _cache[key];",
+   "options": ["if (!_cache.TryGetValue(key, out var list)) _cache[key] = list = Build(key); return list;", "return _cache.ContainsKey(key) ? _cache[key] : Build(key);", "return _cache[key] ?? Build(key);"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "int id = -3;\nint chunk = id % 8;",
+   "options": ["-3", "5", "3"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["float ==", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  }
+ ]
+}

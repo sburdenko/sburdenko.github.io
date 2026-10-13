@@ -1,0 +1,246 @@
+{
+ "id": "dotnet.w2.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "memory",
+   "task": "⟦⟧",
+   "goal": "end",
+   "code": "static void Main()\n{\n    int count = 3;\n    var hero = new Hero { Hp = 10 };\n    Heal(hero, count);\n}\nstatic void Heal(Hero h, int amount)\n{\n    h.Hp += amount;\n}",
+   "steps": [
+    {
+     "line": 2,
+     "note": "⟦⟧",
+     "ops": [
+      {
+       "op": "int",
+       "name": "count",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "line": 3,
+     "note": "⟦⟧",
+     "ops": [
+      {
+       "op": "new",
+       "name": "hero",
+       "type": "Hero",
+       "kind": "ref",
+       "fields": {
+        "Hp": 10
+       }
+      }
+     ]
+    },
+    {
+     "line": 4,
+     "note": "⟦⟧",
+     "ops": [
+      {
+       "op": "call",
+       "fn": "Heal",
+       "params": [
+        {
+         "name": "h",
+         "from": "hero"
+        },
+        {
+         "name": "amount",
+         "from": "count"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "line": 8,
+     "note": "⟦⟧",
+     "ops": [
+      {
+       "op": "set",
+       "target": "h",
+       "field": "Hp",
+       "value": 13
+      }
+     ]
+    },
+    {
+     "line": 9,
+     "note": "⟦⟧",
+     "ops": [
+      {
+       "op": "ret"
+      }
+     ]
+    }
+   ],
+   "solve": ["step", "step", "step", "step", "step"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "memory",
+   "task": "⟦⟧",
+   "goal": "both",
+   "variants": {
+    "struct": {
+     "code": "var pts = new Point[2];\npts[0] = new Point(1, 1);\npts[1] = new Point(2, 2);",
+     "steps": [
+      {
+       "line": 0,
+       "note": "⟦⟧",
+       "ops": [
+        {
+         "op": "arr",
+         "name": "pts",
+         "elem": "Point",
+         "kind": "val",
+         "items": [
+          {
+           "X": 0,
+           "Y": 0
+          },
+          {
+           "X": 0,
+           "Y": 0
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "line": 1,
+       "note": "⟦⟧",
+       "ops": [
+        {
+         "op": "set",
+         "target": "pts",
+         "field": "0",
+         "value": {
+          "X": 1,
+          "Y": 1
+         }
+        }
+       ]
+      },
+      {
+       "line": 2,
+       "note": "⟦⟧",
+       "ops": [
+        {
+         "op": "set",
+         "target": "pts",
+         "field": "1",
+         "value": {
+          "X": 2,
+          "Y": 2
+         }
+        }
+       ]
+      }
+     ]
+    },
+    "class": {
+     "code": "var pts = new Point[2];\npts[0] = new Point(1, 1);\npts[1] = new Point(2, 2);",
+     "steps": [
+      {
+       "line": 0,
+       "note": "⟦⟧",
+       "ops": [
+        {
+         "op": "arr",
+         "name": "pts",
+         "elem": "Point",
+         "kind": "ref",
+         "items": [null, null]
+        }
+       ]
+      },
+      {
+       "line": 1,
+       "note": "⟦⟧",
+       "ops": [
+        {
+         "op": "newin",
+         "target": "pts",
+         "field": "0",
+         "type": "Point",
+         "fields": {
+          "X": 1,
+          "Y": 1
+         }
+        }
+       ]
+      },
+      {
+       "line": 2,
+       "note": "⟦⟧",
+       "ops": [
+        {
+         "op": "newin",
+         "target": "pts",
+         "field": "1",
+         "type": "Point",
+         "fields": {
+          "X": 2,
+          "Y": 2
+         }
+        }
+       ]
+      }
+     ]
+    }
+   },
+   "solve": ["step", "step", "step", "variant:class", "step", "step", "step"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

@@ -1,0 +1,71 @@
+{
+ "id": "hs.u1.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "years",
+   "task": "⟦⟧",
+   "goal": {
+    "visit": [2002, 2005, 2007, 2012, 2019]
+   },
+   "solve": ["year:2002", "year:2005", "year:2007", "year:2012", "year:2019"]
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": [".NET Framework 1.0", "⟦⟧", "LINQ", "async/await", "Framework 4.8"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["DLL hell", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["2002", "⟦⟧"],
+    ["2005", "⟦⟧"],
+    ["2007", "LINQ"],
+    ["2012", "async/await"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "<TargetFramework>___</TargetFramework>",
+   "lang": "xml",
+   "tiles": ["net48", "net8.0", "netstandard2.1"],
+   "answer": ["net48"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

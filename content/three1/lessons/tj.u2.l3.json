@@ -1,0 +1,65 @@
+{
+ "id": "tj.u2.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "const h = 10, w = h * aspect;\nconst camera = new THREE.OrthographicCamera(-w / 2, w / 2, h / 2, -h / 2, 0.1, 100);"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "window.addEventListener('resize', () => {\n  const w = 10 * innerWidth / innerHeight;\n  camera.left = -5; camera.right = 5;\n  camera.updateProjectionMatrix();\n  renderer.setSize(innerWidth, innerHeight);\n});",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["PerspectiveCamera", "⟦⟧"],
+    ["OrthographicCamera", "⟦⟧"],
+    ["zoom", "⟦⟧"],
+    ["left / right", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "fov", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "camera.___ = 2;\ncamera.___();",
+   "tiles": ["zoom", "updateProjectionMatrix", "fov", "scale", "update"],
+   "answer": ["zoom", "updateProjectionMatrix"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

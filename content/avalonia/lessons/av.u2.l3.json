@@ -1,0 +1,97 @@
+{
+ "id": "av.u2.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 8,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "xml"
+  },
+  {
+   "t": "rig",
+   "rig": "grid",
+   "task": "⟦⟧",
+   "labels": ["⟦⟧", "⟦⟧"],
+   "content": [90, 300],
+   "start": ["*", "*"],
+   "goal": {
+    "at": {
+     "400": [200, 200],
+     "800": [200, 600]
+    }
+   },
+   "solve": ["col:0:200"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["600", "400", "200"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "grid",
+   "task": "⟦⟧",
+   "labels": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "content": [48, 0, 0],
+   "start": ["100", "*", "*"],
+   "goal": {
+    "at": {
+     "400": [48, 234.7, 117.3],
+     "800": [48, 501.3, 250.7]
+    }
+   },
+   "solve": ["col:0:Auto", "col:1:2*"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["200, 400, 200", "266, 266, 266", "100, 600, 100"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "<Button Grid.___=\"0\" Grid.___=\"1\" Content=\"OK\"/>",
+   "lang": "xml",
+   "tiles": ["Row", "Column", "Span", "Cell"],
+   "answer": ["Row", "Column"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["200", "⟦⟧"],
+    ["Auto", "⟦⟧"],
+    ["*", "⟦⟧"],
+    ["2*", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  }
+ ]
+}

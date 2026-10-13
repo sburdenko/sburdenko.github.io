@@ -1,0 +1,103 @@
+{
+ "id": "cs.u6.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["24", "0", "8", "16"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["ToString", "Equals", "GetHashCode", "GetType", "MemberwiseClone"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var set = new HashSet<Point> { new Point { X = 1, Y = 2 } };\nConsole.WriteLine(set.Contains(new Point { X = 1, Y = 2 }));",
+   "options": ["⟦⟧", "True", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var p = new Point { X = 1, Y = 2 };\nvar set = new HashSet<Point> { p };\nConsole.WriteLine(set.Contains(p));\np.X = 10;\nConsole.WriteLine(set.Contains(p));",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public override bool Equals(object? o) =>\n    o ___ Point p && p.X == X && p.Y == Y;\n\npublic override int GetHashCode() => ___.Combine(X, Y);",
+   "tiles": ["is", "HashCode", "as", "Object", "RuntimeHelpers"],
+   "answer": ["is", "HashCode"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["ReferenceEquals(a, b)", "⟦⟧"],
+    ["MemberwiseClone()", "⟦⟧"],
+    ["GetType()", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["Finalize()", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["False", "True", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

@@ -1,0 +1,135 @@
+{
+ "id": "rv.u3.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "private void Update()\n{\n    var visible = _markers\n        .Where(m => m.activeSelf)\n        .OrderBy(m => Vector3.Distance(Camera.main.transform.position, m.transform.position))\n        .ToList();\n\n    for (int i = 0; i < visible.Count; i++)\n    {\n        var renderer = visible[i].GetComponent<Renderer>();\n        renderer.material.color = i < 10 ? Color.red : Color.gray;\n        visible[i].GetComponentInChildren<TextMesh>().text = \"Clash \" + (i + 1);\n    }\n}",
+   "bugs": [
+    {
+     "lines": [2, 3, 5],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [4],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [9],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [10],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [11],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 4,
+    "maxFalse": 2
+   },
+   "solve": ["flag:2", "flag:4", "flag:9", "flag:11", "check"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 1,
+   "explain": "⟦⟧",
+   "wrong": {
+    "0": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "private struct MarkerView\n{\n    public Renderer Renderer;\n    public TextMesh Label;\n}\n\nprivate readonly List<MarkerView> _views = new List<MarkerView>();\n\nprivate void Register(GameObject go)\n{\n    _views.Add(new MarkerView\n    {\n        Renderer = go.___<Renderer>(),\n        Label = go.___<TextMesh>()\n    });\n}",
+   "tiles": ["GetComponent", "GetComponentInChildren", "FindObjectOfType", "AddComponent"],
+   "answer": ["GetComponent", "GetComponentInChildren"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "private static readonly WaitForSeconds PulseDelay = ___ WaitForSeconds(0.05f);\n\nprivate IEnumerator Pulse()\n{\n    while (true)\n    {\n        // ...\n        yield return ___;\n    }\n}",
+   "tiles": ["new", "PulseDelay", "Pulse", "default"],
+   "answer": ["new", "PulseDelay"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "public float TotalWeight(IList<ClashScore> scores)\n{\n    float total = 0f;\n    foreach (var s in scores)\n        total += s.Weight;\n    return total;\n}",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 1,
+   "explain": "⟦⟧",
+   "wrong": {
+    "0": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "private void Update()\n{\n    transform.position += Vector3.up * Time.deltaTime;\n    float d = (target.position - transform.position).sqrMagnitude;\n    var near = new List<Collider>();\n    if (d < 4f) _isNear = true;\n}",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["\"Clash \" + (i + 1)", "⟦⟧"],
+    ["⟦⟧", "sqrMagnitude"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  }
+ ]
+}

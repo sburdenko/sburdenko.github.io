@@ -1,0 +1,81 @@
+{
+ "id": "hs.u4.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "years",
+   "task": "⟦⟧",
+   "goal": {
+    "visit": [2002, 2004, 2014, 2016, 2020, 2025]
+   },
+   "solve": ["year:2002", "year:2004", "year:2014", "year:2016", "year:2020", "year:2025"]
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": [".NET Framework 1.0", "Mono 1.0", "⟦⟧", ".NET Core 1.0", ".NET 5", ".NET 10"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "tfm",
+   "task": "⟦⟧",
+   "goal": {
+    "hosts": ["revit24", "revit25", "unity", "app10"],
+    "max": 1
+   },
+   "solve": ["tfm:ns20"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Framework 4.8", "⟦⟧"],
+    [".NET Standard", "⟦⟧"],
+    [".NET 10", "⟦⟧"],
+    ["Mono", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "<TargetFrameworks>___;___</TargetFrameworks>",
+   "lang": "xml",
+   "tiles": ["net48", "net8.0-windows", "netstandard2.1", "net10.0"],
+   "answer": ["net48", "net8.0-windows"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

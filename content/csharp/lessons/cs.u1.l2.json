@@ -1,0 +1,91 @@
+{
+ "id": "cs.u1.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 8,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "generics",
+   "task": "⟦⟧",
+   "sig": "T Create<T>()",
+   "ops": ["newT"],
+   "goal": {
+    "allow": ["list", "point"]
+   },
+   "solve": ["c:new"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "generics",
+   "task": "⟦⟧",
+   "sig": "class Cache<T>",
+   "ops": ["nullT"],
+   "goal": {
+    "allow": ["string", "list"],
+    "deny": ["int"]
+   },
+   "solve": ["c:class"]
+  },
+  {
+   "t": "rig",
+   "rig": "generics",
+   "task": "⟦⟧",
+   "sig": "void Fill<T>(T value)",
+   "ops": ["stack"],
+   "goal": {
+    "allow": ["int", "point"]
+   },
+   "solve": ["c:unmanaged"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "T Make<T>() where T : ___, IDisposable, ___",
+   "tiles": ["class", "new()", "struct", "unmanaged"],
+   "answer": ["class", "new()"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["new()", "new T()"],
+    ["class", "T x = null"],
+    ["unmanaged", "stackalloc T[n]"],
+    ["IComparable<T>", "a.CompareTo(b)"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["int", "DateTime", "Point (struct)", "string", "int?"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  }
+ ]
+}

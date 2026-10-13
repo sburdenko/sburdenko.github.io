@@ -1,0 +1,73 @@
+{
+ "id": "cs.u2.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "closures",
+   "task": "⟦⟧",
+   "start": "for",
+   "goal": {
+    "out": "0 1 2"
+   },
+   "solve": ["variant:foreach", "end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "int x = 10;\nFunc<int> get = () => x;\nx = 20;\nConsole.WriteLine(get());",
+   "options": ["20", "10", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public MainWindow()\n{\n    InitializeComponent();\n    App.ThemeChanged += OnThemeChanged;\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Func<int, bool>", "⟦⟧"],
+    ["Action<string>", "⟦⟧"],
+    ["event", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "App.ThemeChanged ___ OnThemeChanged;",
+   "tiles": ["-=", "+=", "=", "=="],
+   "answer": ["-="],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

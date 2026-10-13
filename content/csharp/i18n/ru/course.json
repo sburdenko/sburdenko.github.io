@@ -1,0 +1,15 @@
+{
+ "title": "C# глубже",
+ "units/0/title": "Устройство типа",
+ "units/0/blurb": "Что есть у любого объекта: System.Object, заголовок и указатель на тип, контракт Equals/GetHashCode; приведения, is, as и распаковка; примитивы, checked и переполнение, dynamic и его цена.",
+ "units/1/title": "Дженерики",
+ "units/1/blurb": "Зачем они, как JIT компилирует их для значимых и ссылочных типов, ограничения where, ковариантность и контравариантность, обобщённая математика INumber<T>.",
+ "units/2/title": "Делегаты, события и замыкания",
+ "units/2/blurb": "Func и Action, многоадресные делегаты, event и утечки подписок, лямбды и что именно они захватывают.",
+ "units/3/title": "LINQ и его цена",
+ "units/3/blurb": "Ленивое выполнение и Take, ToList и повторный перебор, буферизующий OrderBy, IQueryable и SQL из лямбд.",
+ "units/4/title": "Производительность",
+ "units/4/blurb": "Span<T> и срезы без копий, правила ref struct и Memory<T>, readonly struct, in и защитные копии.",
+ "units/5/title": "Современный C#",
+ "units/5/blurb": "Pattern matching, records, nullable-ссылки, required и новое в C# 12, 13 и 14. Финал курса."
+}

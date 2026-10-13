@@ -1,0 +1,151 @@
+{
+ "id": "rv.u0.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public void Load(string url)\n{\n    _http = new HttpClient();\n    var json = _http.GetStringAsync(url).Result;\n    var elements = JsonConvert.DeserializeObject<List<ElementInfo>>(json);\n\n    foreach (var e in elements)\n    {\n        _elements.Add(e);\n        _byId.Add(e.Id, e);\n    }\n}"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var json = _http.GetStringAsync(url).Result;",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "rig",
+   "rig": "hunt",
+   "task": "⟦⟧",
+   "code": "private List<ElementInfo> _elements = new List<ElementInfo>();\nprivate Dictionary<object, ElementInfo> _byId = new Dictionary<object, ElementInfo>();\nprivate HttpClient _http;\n\npublic void Load(string url)\n{\n    _http = new HttpClient();\n    var json = _http.GetStringAsync(url).Result;\n    var elements = JsonConvert.DeserializeObject<List<ElementInfo>>(json);\n\n    foreach (var e in elements)\n    {\n        _elements.Add(e);\n        _byId.Add(e.Id, e);\n    }\n}",
+   "bugs": [
+    {
+     "lines": [1],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [6],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [4, 7],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [8, 10],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [12],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    },
+    {
+     "lines": [13],
+     "title": "⟦⟧",
+     "why": "⟦⟧"
+    }
+   ],
+   "goal": {
+    "min": 5,
+    "maxFalse": 2
+   },
+   "solve": ["flag:1", "flag:4", "flag:6", "flag:8", "flag:12", "flag:13", "check"]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "tiles": ["readonly", "int", "object", "const", "long"],
+   "answer": ["readonly", "int"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var d = new Dictionary<object, string>();\nd.Add(7, \"pipe\");\nshort key = 7;\nbool found = d.ContainsKey(key);",
+   "options": ["false", "true", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["_http = new HttpClient()", "⟦⟧"],
+    [".Result", "⟦⟧"],
+    ["DeserializeObject(...)", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["_byId.Add(e.Id, e)", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

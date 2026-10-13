@@ -1,0 +1,64 @@
+{
+ "id": "as.u5.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "Task<Location> GetLocationAsync()\n{\n    var tcs = new TaskCompletionSource<Location>(\n        TaskCreationOptions.RunContinuationsAsynchronously);\n    gps.OnFix += loc => tcs.TrySetResult(loc);\n    gps.OnError += e => tcs.TrySetException(e);\n    gps.Start();\n    return tcs.Task;\n}"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var tcs = new TaskCompletionSource<string>();\nclient.OnMessage += m => tcs.TrySetResult(m);\nclient.OnError += e => { log.Error(e); };\nreturn tcs.Task;",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["SetResult", "SetException", "SetCanceled", "Dispose"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["TaskCompletionSource", "⟦⟧"],
+    ["TrySetResult", "⟦⟧"],
+    ["RunContinuationsAsynchronously", "⟦⟧"],
+    ["SetException", "⟦⟧"]
+   ]
+  }
+ ]
+}

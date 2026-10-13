@@ -1,0 +1,71 @@
+{
+ "id": "tj.u1.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "tjfirst",
+   "task": "⟦⟧",
+   "goal": {
+    "visible": true,
+    "spin": true
+   },
+   "solve": ["add", "camz:5", "loop"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "const renderer = new THREE.WebGLRenderer();\nrenderer.setSize(800, 600);\nscene.add(cube);\nrenderer.render(scene, camera);",
+   "answer": 1,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["camera.aspect = w / h", "camera.updateProjectionMatrix()", "renderer.setSize(w, h)"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["WebGL", "⟦⟧"],
+    ["Three.js", "⟦⟧"],
+    ["Mesh", "⟦⟧"],
+    ["−Z", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "renderer.___(() => {\n  cube.rotation.y += 0.01;\n  renderer.___(scene, camera);\n});",
+   "tiles": ["setAnimationLoop", "render", "loop", "draw", "update"],
+   "answer": ["setAnimationLoop", "render"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

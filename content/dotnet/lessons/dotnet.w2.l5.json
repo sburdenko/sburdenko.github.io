@@ -1,0 +1,113 @@
+{
+ "id": "dotnet.w2.l5",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 5,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "memory",
+   "task": "⟦⟧",
+   "goal": "end",
+   "code": "⟦⟧",
+   "steps": [
+    {
+     "line": 0,
+     "note": "⟦⟧",
+     "ops": [
+      {
+       "op": "str",
+       "name": "a",
+       "text": "⟦⟧"
+      }
+     ]
+    },
+    {
+     "line": 1,
+     "note": "⟦⟧",
+     "ops": [
+      {
+       "op": "copy",
+       "to": "b",
+       "from": "a"
+      }
+     ]
+    },
+    {
+     "line": 2,
+     "note": "⟦⟧",
+     "ops": [
+      {
+       "op": "concat",
+       "name": "b",
+       "from": "b",
+       "text": "⟦⟧"
+      }
+     ]
+    },
+    {
+     "line": 3,
+     "note": "⟦⟧",
+     "ops": []
+    }
+   ],
+   "solve": ["step", "step", "step", "step"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "options": ["True", "False"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "var sb = new StringBuilder();\nfor (int i = 0; i < 10_000; i++)\n    sb.Append(i);\nstring s = sb.ToString();"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "string s = \"\";\nfor (int i = 0; i < 1000; i++)\n    s += \"x\";",
+   "options": ["⟦⟧", "1", "0", "2"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "var sb = new ___();\nforeach (var w in words)\n    sb.___(w);\nreturn sb.ToString();",
+   "tiles": ["StringBuilder", "Append", "string", "Concat", "Add"],
+   "answer": ["StringBuilder", "Append"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

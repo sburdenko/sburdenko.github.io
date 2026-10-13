@@ -1,0 +1,91 @@
+{
+ "id": "f3d.u2.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "convert",
+   "task": "⟦⟧",
+   "assetName": "⟦⟧",
+   "asset": ["geometry", "normals", "uv", "pbr", "hierarchy", "skin", "morph"],
+   "goal": {
+    "kind": "keep",
+    "not": ["fbx"]
+   },
+   "solve": ["fmt:gltf"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["STL", "PLY", "glTF", "USD"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "ply\nformat ascii 1.0\nelement vertex 8\nproperty float x\nproperty float y\nproperty float z\nproperty uchar red\nend_header",
+   "lang": "plain",
+   "answer": 6,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "usd",
+   "task": "⟦⟧",
+   "goal": {
+    "color": "red",
+    "legs": 3
+   },
+   "solve": ["layer:shot", "var:bar"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["DAE (Collada)", "STL", "USD", "PLY"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["OBJ", "⟦⟧"],
+    ["STL", "⟦⟧"],
+    ["PLY", "⟦⟧"],
+    ["USDZ", "⟦⟧"]
+   ]
+  }
+ ]
+}

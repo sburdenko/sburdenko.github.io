@@ -1,0 +1,84 @@
+{
+ "id": "cs.u3.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 8,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "linq",
+   "task": "⟦⟧",
+   "lock": ["toList", "twice"],
+   "goal": {
+    "o": {
+     "orderBy": true
+    },
+    "min": {
+     "read": 6
+    }
+   },
+   "solve": ["orderBy", "end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "db.Users.Where(u => u.Age > 18).Select(u => u.Name)\n// SELECT Name FROM Users WHERE Age > 18"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var names = db.Orders\n    .Where(o => o.Total > 100)\n    .AsEnumerable()\n    .Where(o => IsVip(o.Customer))\n    .Select(o => o.Id);",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["IEnumerable", "⟦⟧"],
+    ["IQueryable", "⟦⟧"],
+    ["OrderBy", "⟦⟧"],
+    ["Any()", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  }
+ ]
+}

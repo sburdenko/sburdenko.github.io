@@ -1,0 +1,70 @@
+{
+ "id": "cs.u3.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 7,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "linq",
+   "task": "⟦⟧",
+   "lock": ["orderBy", "toList", "twice"],
+   "goal": {
+    "max": {
+     "read": 4
+    }
+   },
+   "solve": ["end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var list = new List<int> { 1, 2, 3 };\nvar big = list.Where(x => x > 1);\nlist.Add(10);\nConsole.WriteLine(big.Count());",
+   "options": ["3", "2", "4"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["foreach", "ToList()", "Count()", "Where(...)", "Select(...)"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Where", "⟦⟧"],
+    ["Select", "⟦⟧"],
+    ["Take", "⟦⟧"],
+    ["ToList", "⟦⟧"]
+   ]
+  }
+ ]
+}
