@@ -1,0 +1,102 @@
+{
+ "id": "as.u7.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var sw = Stopwatch.StartNew();\nawait Task.Factory.StartNew(async () => await Task.Delay(1000));\nConsole.WriteLine(sw.ElapsedMilliseconds);",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "Task.Factory.StartNew(async () =>\n{\n    while (true)\n    {\n        var msg = await queue.ReadAsync();\n        Handle(msg);\n    }\n}, TaskCreationOptions.LongRunning);",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var parent = Task.Factory.StartNew(() =>\n{\n    Task.Factory.StartNew(() =>\n    {\n        Thread.Sleep(500);\n        Console.WriteLine(\"child\");\n    }, TaskCreationOptions.AttachedToParent);\n    Console.WriteLine(\"parent\");\n});\nparent.Wait();\nConsole.WriteLine(\"done\");",
+   "options": ["parent, child, done", "parent, done, child", "child, parent, done", "done, parent, child"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "Task.Factory.StartNew(PollHardware,\n    CancellationToken.None,\n    TaskCreationOptions.___ | TaskCreationOptions.DenyChildAttach,\n    TaskScheduler.___);",
+   "tiles": ["LongRunning", "Default", "Current", "PreferFairness", "AttachedToParent"],
+   "answer": ["LongRunning", "Default"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["LongRunning", "⟦⟧"],
+    ["PreferFairness", "⟦⟧"],
+    ["AttachedToParent", "⟦⟧"],
+    ["DenyChildAttach", "⟦⟧"],
+    ["HideScheduler", "⟦⟧"]
+   ]
+  }
+ ]
+}

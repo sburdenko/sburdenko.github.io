@@ -1,0 +1,91 @@
+{
+ "id": "as.u8.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 11,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public T Take()\n{\n    lock (_gate)\n    {\n        if (_items.Count == 0)\n            Monitor.Wait(_gate);\n        return _items.Dequeue();\n    }\n}",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "private readonly ___ _gate = new();\n\npublic void Add(int x)\n{\n    using (_gate.___())\n    {\n        _sum += x;\n    }\n}",
+   "tiles": ["Lock", "EnterScope", "object", "Enter", "SpinLock", "Monitor"],
+   "answer": ["Lock", "EnterScope"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "Monitor.Wait / Pulse"],
+    ["⟦⟧", "SemaphoreSlim"],
+    ["⟦⟧", "ReaderWriterLockSlim"],
+    ["⟦⟧", "ManualResetEventSlim"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2, 3],
+   "explain": "⟦⟧"
+  }
+ ]
+}

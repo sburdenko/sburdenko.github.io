@@ -1,0 +1,99 @@
+{
+ "id": "cs.u13.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[JsonSerializable(typeof(Order))]\ninternal partial class AppJson : JsonSerializerContext { }\n\nstring json = JsonSerializer.Serialize(order, AppJson.Default.Order);\nOrder? back = JsonSerializer.Deserialize(json, AppJson.Default.Order);",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "[___(typeof(Order))]\ninternal ___ class AppJson : JsonSerializerContext { }\n\nvar json = JsonSerializer.Serialize(order, AppJson.___.Order);",
+   "tiles": ["JsonSerializable", "partial", "Default", "Serializable", "sealed", "Instance"],
+   "answer": ["JsonSerializable", "partial", "Default"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "static partial class Patterns\n{\n    [GeneratedRegex(@\"^\\d{4}-\\d{2}-\\d{2}$\")]\n    public static partial Regex IsoDate();\n}\n\nstatic partial class Log\n{\n    [LoggerMessage(EventId = 1, Level = LogLevel.Information, Message = \"Order {Id} paid\")]\n    public static partial void OrderPaid(ILogger logger, int id);\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["JsonSerializerContext", "⟦⟧"],
+    ["[GeneratedRegex]", "⟦⟧"],
+    ["[LoggerMessage]", "⟦⟧"],
+    ["UnsafeAccessor", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "string a = JsonSerializer.Serialize(order);    // IL2026 + IL3050\nvar t = typeof(List<>).MakeGenericType(type);  // IL3050\nType? u = Type.GetType(Console.ReadLine()!);   // IL2057",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "new DynamicMethod(\"x\", typeof(int), Type.EmptyTypes)", "JsonSerializer.Serialize(order, AppJson.Default.Order)", "typeof(Order).GetMethod(\"Calc\")", "⟦⟧"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "static void Run(\n    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type t)\n    => t.GetMethod(\"Start\")?.Invoke(null, null);\n\nRun(typeof(Job));\nType j = typeof(Job);\nRun(j);\nRun(Type.GetType(Console.ReadLine()!)!);",
+   "answer": 7,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

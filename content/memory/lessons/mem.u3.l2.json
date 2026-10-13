@@ -1,0 +1,102 @@
+{
+ "id": "mem.u3.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "class Tick\n{\n    public byte Side;\n    public long Time;\n    public byte Flags;\n}",
+   "options": ["32", "40", "26", "24"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "code": "class Row\n{\n    public short S;\n    public object? R;\n    public int I;\n    public byte B;\n    public long L;\n}",
+   "items": ["object R", "long L", "int I", "short S", "byte B"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "struct S\n{\n    public byte A;\n    public long B;\n    public byte C;\n}",
+   "options": ["24", "16", "10", "17"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "[StructLayout(LayoutKind.___, Pack = ___)]\nstruct PacketHeader\n{\n    public byte Version;\n    public long Timestamp;\n    public byte Flags;\n}",
+   "tiles": ["Sequential", "Auto", "Explicit", "1", "8", "4"],
+   "answer": ["Sequential", "1"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

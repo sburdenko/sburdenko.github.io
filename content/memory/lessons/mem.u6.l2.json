@@ -1,0 +1,95 @@
+{
+ "id": "mem.u6.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Batch", "⟦⟧"],
+    ["Interactive", "⟦⟧"],
+    ["LowLatency", "⟦⟧"],
+    ["SustainedLowLatency", "⟦⟧"],
+    ["NoGCRegion", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "GCLatencyMode old = GCSettings.LatencyMode;\ntry\n{\n    GCSettings.LatencyMode = GCLatencyMode.___;\n    RunTradingSession();\n}\nfinally\n{\n    GCSettings.___ = old;\n}",
+   "tiles": ["SustainedLowLatency", "LatencyMode", "LowLatency", "NoGCRegion", "IsServerGC", "Batch"],
+   "answer": ["SustainedLowLatency", "LatencyMode"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;\nConsole.WriteLine(GCSettings.LatencyMode);",
+   "options": ["Batch", "SustainedLowLatency", "Interactive", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var before = GCSettings.LatencyMode;\nGCSettings.LatencyMode = GCLatencyMode.LowLatency;\nGCSettings.LatencyMode = GCLatencyMode.Batch;\nGCSettings.LatencyMode = GCLatencyMode.NoGCRegion;\nGCSettings.LatencyMode = before;",
+   "answer": 3,
+   "explain": "⟦⟧"
+  }
+ ]
+}

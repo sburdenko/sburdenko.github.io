@@ -1,0 +1,116 @@
+{
+ "id": "mem.u6.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 11,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["System.GC.DynamicAdaptationMode = 0", "System.GC.HeapCount = 8", "ServerGarbageCollection = false", "System.GC.ConserveMemory = 5", "System.GC.RetainVM = true"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["22", "16", "32", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["System.GC.HeapHardLimit", "⟦⟧"],
+    ["System.GC.HeapCount", "⟦⟧"],
+    ["System.GC.ConserveMemory", "⟦⟧"],
+    ["System.GC.RetainVM", "⟦⟧"],
+    ["System.GC.DynamicAdaptationMode", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "{\n  \"configProperties\": {\n    \"System.GC.___\": true,\n    \"System.GC.___\": 4\n  }\n}",
+   "tiles": ["Server", "HeapCount", "gcServer", "ServerGarbageCollection", "GCHeapCount", "Concurrent"],
+   "answer": ["Server", "HeapCount"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["2", "16", "1", "8"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  }
+ ]
+}

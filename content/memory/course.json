@@ -10,49 +10,69 @@
     "title": "⟦⟧",
     "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/virtual-address-spaces"
    },
-   "lessons": ["mem.u1.l1", "mem.u1.l2", "mem.u1.l3"]
+   "lessons": ["mem.u1.l1", "mem.u1.l2", "mem.u1.l3", "mem.u1.boss"]
   },
   {
    "id": "u2",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://learn.microsoft.com/en-us/dotnet/core/diagnostics/debug-memory-leak"
+   },
+   "lessons": ["mem.u2.l1", "mem.u2.l2", "mem.u2.l3", "mem.u2.boss"]
   },
   {
    "id": "u3",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/large-object-heap"
+   },
+   "lessons": ["mem.u3.l1", "mem.u3.l2", "mem.u3.l3", "mem.u3.l4", "mem.u3.boss"]
   },
   {
    "id": "u4",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["mem.u4.l1", "mem.u4.l2", "mem.u4.l3", "mem.u4.l4", "mem.u4.boss"]
   },
   {
    "id": "u5",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://github.com/dotnet/runtime/blob/main/docs/design/coreclr/botr/garbage-collection.md"
+   },
+   "lessons": ["mem.u5.l1", "mem.u5.l2", "mem.u5.l3", "mem.u5.l4", "mem.u5.l5", "mem.u5.boss"]
   },
   {
    "id": "u6",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://learn.microsoft.com/en-us/dotnet/core/runtime-config/garbage-collector"
+   },
+   "lessons": ["mem.u6.l1", "mem.u6.l2", "mem.u6.l3", "mem.u6.boss"]
   },
   {
    "id": "u7",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["mem.u7.l1", "mem.u7.l2", "mem.u7.l3", "mem.u7.boss"]
   },
   {
    "id": "u8",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/"
+   },
+   "lessons": ["mem.u8.l1", "mem.u8.l2", "mem.u8.l3", "mem.u8.l4", "mem.u8.boss"]
   }
  ]
 }

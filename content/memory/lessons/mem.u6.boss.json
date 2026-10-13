@@ -1,0 +1,78 @@
+{
+ "id": "mem.u6.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var old = GCSettings.LatencyMode;\ntry\n{\n    GCSettings.LatencyMode = GCLatencyMode.LowLatency;\n    ProcessMarketBurst();\n}\nfinally\n{\n    GCSettings.LatencyMode = old;\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "Workstation GC"],
+    ["⟦⟧", "System.GC.Concurrent = false"],
+    ["⟦⟧", "SustainedLowLatency"],
+    ["⟦⟧", "DynamicAdaptationMode = 0"],
+    ["⟦⟧", "System.GC.RetainVM = true"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "ENV DOTNET_gcServer=___\nENV DOTNET_GCHeapHardLimit=___",
+   "tiles": ["1", "C800000", "209715200", "true", "200"],
+   "answer": ["1", "C800000"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["GCSettings.LatencyMode", "System.GC.Server", "System.GC.Concurrent", "DOTNET_GCHeapCount"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

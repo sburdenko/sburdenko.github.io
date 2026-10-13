@@ -1,0 +1,75 @@
+{
+ "id": "as.u8.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "static void Add(int amount)\n{\n    int current = Volatile.Read(ref _total);\n    while (true)\n    {\n        int seen = Interlocked.CompareExchange(ref _total, current, current + amount);\n        if (seen == current) return;\n        current = seen;\n    }\n}",
+   "answer": 5,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "private readonly Lock _gate = new();\n\npublic async Task SaveAsync(Data d)\n{\n    lock (_gate)\n    {\n        await File.WriteAllTextAsync(PathToFile, d.ToJson());\n    }\n}",
+   "answer": 6,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["SemaphoreSlim", "Semaphore", "Monitor (lock)", "Mutex", "System.Threading.Lock"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "Interlocked.Increment"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "SemaphoreSlim.WaitAsync"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "Channel<T>"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

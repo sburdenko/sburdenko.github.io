@@ -1,0 +1,95 @@
+{
+ "id": "cs.u8.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "Shape a = new Circle();\nShape b = new Square();\nConsole.WriteLine($\"{a.Name()} {b.Name()}\");",
+   "options": ["circle shape", "circle square", "shape shape", "shape square"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": ".method public hidebysig newslot virtual instance string Name()   // virtual\n.method public hidebysig virtual instance string Name()           // override\n.method public final hidebysig virtual instance string Name()     // sealed override\n.method public hidebysig instance string Name()                   // new",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "callvirt"],
+    ["⟦⟧", "⟦⟧"],
+    ["Path.Combine(a, b)", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "new Circle().Name()", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var sq = new Square();\nShape sh = sq;\nobject o = sq;\nConsole.WriteLine(sq.Name());\nConsole.WriteLine(sh.Name());\nConsole.WriteLine(o.GetType().Name);",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "class Circle : Shape\n{\n    public ___ ___ string Name() => \"circle\";\n}",
+   "tiles": ["sealed", "override", "new", "virtual", "static"],
+   "answer": ["sealed", "override"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

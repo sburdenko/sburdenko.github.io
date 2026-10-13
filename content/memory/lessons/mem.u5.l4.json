@@ -1,0 +1,86 @@
+{
+ "id": "mem.u5.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["Mark", "Plan", "⟦⟧"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["GC.Collect(2, GCCollectionMode.Forced, blocking: true, compacting: true)", "GC.Collect(2, GCCollectionMode.Aggressive, blocking: true, compacting: true)", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var buf = new byte[4096];\nvar span = buf.AsSpan();\nvar h = GCHandle.Alloc(buf, GCHandleType.Pinned);\nIntPtr p = h.AddrOfPinnedObject();\nProcess(p);\nh.Free();",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "GCSettings.LargeObjectHeapCompactionMode =\n    GCLargeObjectHeapCompactionMode.___;\nGC.___();",
+   "tiles": ["CompactOnce", "Collect", "Default", "KeepAlive", "SuppressFinalize"],
+   "answer": ["CompactOnce", "Collect"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

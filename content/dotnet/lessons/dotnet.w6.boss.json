@@ -1,0 +1,90 @@
+{
+ "id": "dotnet.w6.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["10.0.2", "8.0.17", "9.0.6", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "[MethodImpl(MethodImplOptions.NoInlining)]\nstatic WeakReference Run(string path)\n{\n    var alc = new PluginLoadContext(path);\n    IPlugin plugin = Create(alc, path);\n    string report = plugin.BuildReport();\n    Host.Settings.Changed += plugin.OnSettingsChanged;\n    Console.WriteLine(report);\n    alc.Unload();\n    return new WeakReference(alc);\n}",
+   "answer": 6,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "<PropertyGroup>\n  <RuntimeIdentifier>linux-x64</RuntimeIdentifier>\n  <SelfContained>true</SelfContained>\n  <___>true</___>\n  <PublishTrimmed>true</PublishTrimmed>\n</PropertyGroup>",
+   "lang": "xml",
+   "tiles": ["PublishSingleFile", "PublishSingleFile", "PublishReadyToRun", "UseAppHost", "EnableDynamicLoading"],
+   "answer": ["PublishSingleFile", "PublishSingleFile"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

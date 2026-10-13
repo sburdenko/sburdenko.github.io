@@ -1,0 +1,82 @@
+{
+ "id": "mem.u4.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["new long[11_000]", "new long[10_000]", "new byte[80_000]", "new string('x', 40_000)"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "void Handle(Request r)\n{\n    if (_logger.IsEnabled)\n        _logger.Log(() => $\"Handle {r.Id}\");\n    Process(r);\n}",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "long Total(IEnumerable<Order> orders)\n{\n    long sum = 0;\n    foreach (var o in orders)\n        sum += o.Amount;\n    return sum;\n}\n\nvar list = LoadOrders();  // List<Order>\nlong total = 0;\nfor (int i = 0; i < 1_000_000; i++)\n    total += Total(list);",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "tiles": ["GetAllocatedBytesForCurrentThread", "before", "GetTotalMemory", "Collect", "bytes"],
+   "answer": ["GetAllocatedBytesForCurrentThread", "before"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["1024", "1000", "16", "4096"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["GC.GetAllocatedBytesForCurrentThread", "⟦⟧"],
+    ["GC.GetTotalAllocatedBytes", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

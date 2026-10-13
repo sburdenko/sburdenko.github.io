@@ -1,0 +1,87 @@
+{
+ "id": "mem.u2.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "HandleTable:\n    000001F2A0011388 (pinned handle)\n    -> 000001F2B4C01000 System.Object[]\n    -> 000001F2B4C2A3D0 MyApp.PriceFeed\n    -> 000001F2B4C2A460 System.EventHandler<MyApp.PriceChangedEventArgs>\n    -> 000001F2B4D88E10 MyApp.Views.OrderWindow\n    -> 000001F2B4D99000 MyApp.Views.OrderViewModel",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[MethodImpl(MethodImplOptions.NoInlining)]\nstatic WeakReference OpenAndClose(PriceFeed feed)\n{\n    var w = new OrderWindow(feed);\n    w.Close();\n    return new WeakReference(w);\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "var wr = OpenAndClose(feed);\nGC.___();\nGC.WaitForPendingFinalizers();\nGC.Collect();\nAssert.False(wr.___);",
+   "tiles": ["Collect", "IsAlive", "Target", "KeepAlive", "SuppressFinalize"],
+   "answer": ["Collect", "IsAlive"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

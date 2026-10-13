@@ -1,0 +1,110 @@
+{
+ "id": "mem.u8.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "var old = GCSettings.LatencyMode;\nGCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;\ntry\n{\n    RunTradingSession();\n}\nfinally\n{\n    GCSettings.LatencyMode = old;\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "if (GC.TryStartNoGCRegion(16 * 1024 * 1024))\n{\n    try\n    {\n        RenderCriticalFrame();\n    }\n    finally\n    {\n        if (GCSettings.LatencyMode == GCLatencyMode.NoGCRegion)\n            GC.EndNoGCRegion();\n    }\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "if (GC.TryStartNoGCRegion(32 * 1024 * 1024, disallowFullBlockingGC: true))\n{\n    GC.RegisterNoGCRegionCallback(24 * 1024 * 1024,\n        () => metrics.Warn(\"NoGC budget 75% used\"));\n    ProcessBurst();\n    if (GCSettings.LatencyMode == GCLatencyMode.NoGCRegion)\n        GC.EndNoGCRegion();\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "if (GC.TryStartNoGCRegion(4_000_000))\n{\n    var frame = new byte[100_000];\n    Process(frame);\n    GC.Collect();\n    GC.EndNoGCRegion();\n}",
+   "answer": 5,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "IntPtr buf = Marshal.AllocHGlobal(size);\nGC.___(size);\n// ...\nMarshal.FreeHGlobal(buf);\nGC.___(size);",
+   "tiles": ["AddMemoryPressure", "RemoveMemoryPressure", "Collect", "KeepAlive", "SuppressFinalize"],
+   "answer": ["AddMemoryPressure", "RemoveMemoryPressure"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "GC.GetTotalPauseDuration()"],
+    ["⟦⟧", "GCSettings.IsServerGC"],
+    ["⟦⟧", "GC.GetConfigurationVariables()"],
+    ["⟦⟧", "GC.GetGCMemoryInfo()"],
+    ["⟦⟧", "GC.GetGeneration(obj)"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

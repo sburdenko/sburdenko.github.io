@@ -1,0 +1,81 @@
+{
+ "id": "cs.u12.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "try\n{\n    try { throw new Exception(); }\n    catch (Exception) when (Log(\"A\")) { }\n    finally { Console.Write(\"F \"); }\n}\ncatch (Exception) when (Log(\"B\"))\n{\n    Console.Write(\"C \");\n}",
+   "options": ["A B F C", "A F B C", "F A B C", "A B C F"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "static class Settings\n{\n    public static readonly string Root =\n        Environment.GetEnvironmentVariable(\"ROOT\") ?? \"/srv\";\n    public static readonly int Limit =\n        int.Parse(Environment.GetEnvironmentVariable(\"LIMIT\")!);\n    public static string Path => Root + \"/data\";\n}",
+   "answer": 5,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "throw new AggregateException(saved);"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Thread.Abort", "PlatformNotSupportedException"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "try\n{\n    total += prices[key];\n}\ncatch (KeyNotFoundException)\n{\n    missing++;\n}",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "try\n{\n    Run(ct);\n}\ncatch (Exception e) ___ (e is not ___Exception)\n{\n    log.Error(e, \"job failed\");\n}",
+   "tiles": ["when", "if", "OperationCanceled", "Aggregate", "Argument"],
+   "answer": ["when", "OperationCanceled"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

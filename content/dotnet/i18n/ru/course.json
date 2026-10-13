@@ -9,10 +9,12 @@
  "units/2/blurb": "Корни и достижимость, поколения и LOH, финализаторы, IDisposable и using, SafeHandle и утечки памяти. Сам запускаешь сборки и смотришь, кто выжил.",
  "units/3/title": "Потоки и пул потоков",
  "units/3/blurb": "Потоки и планировщик, гонка данных, lock и Interlocked, deadlock, пул потоков и его голодание. Ты сам переключаешь потоки и ловишь баги.",
- "units/4/title": "Сборки и загрузка",
- "units/4/blurb": "Как CLR находит и грузит сборки: AssemblyLoadContext, версии и NuGet, trimming, плагины.",
- "units/5/title": "Дженерики и рефлексия изнутри",
- "units/5/blurb": "Как JIT компилирует дженерики для значимых и ссылочных типов, во что обходится рефлексия и что заменяют source generators.",
- "units/6/title": "Производительность",
- "units/6/blurb": "Span<T> и Memory<T>, аллокации и ArrayPool, профилирование и BenchmarkDotNet."
+ "units/4/title": "Сборки и версии",
+ "units/4/blurb": "Что лежит в сборке, три её версии и какую из них смотрит загрузчик, строгие имена и GAC тогда и сейчас, deps.json вместо поиска по папкам и как NuGet выбирает одну версию пакета.",
+ "units/5/title": "Загрузка и хостинг",
+ "units/5/blurb": "Как dotnet app.dll доходит до Main: apphost, hostfxr, hostpolicy и выбор версии через rollForward. AssemblyLoadContext вместо AppDomain — плагины, изоляция и выгрузка, а ещё почему падает процесс и что меняют single-file и trimming.",
+ "units/6/title": "Дженерики и рефлексия изнутри",
+ "units/6/blurb": "Как JIT делит код дженериков через __Canon и словари, что стоит за токенами метаданных, MethodInfo и Invoke, как устроен кэш call site у dynamic и почему source generators заменяют рефлексию.",
+ "units/7/title": "Производительность рантайма",
+ "units/7/blurb": "Как .NET делает код быстрым на ходу: уровни JIT, OSR и Dynamic PGO, ReadyToRun и Native AOT в сравнении, встраивание и девиртуализация — и как честно замерить результат в BenchmarkDotNet. Финал курса."
 }

@@ -1,0 +1,107 @@
+{
+ "id": "cs.u8.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["total = Money.op_Addition(total, price)", "callvirt Money::op_Addition", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "static bool Same<T>(T a, T b) where T : class => a == b;",
+   "options": ["False", "True", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["public static implicit operator Money(decimal d)", "public static explicit operator decimal(Money m)", "public static implicit operator object(Money m)", "public static implicit operator IComparable(Money m)", "public implicit operator string(Money m)"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "string? s = null;\nConsole.WriteLine(s.IsBlank());\nConsole.WriteLine(s.Truncate(3));",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var item = new Item();\nConsole.WriteLine(item.Show());\nConsole.WriteLine(Ext.Show(item, 5));\nConsole.WriteLine(item.Show(5));\n\nstatic class Ext\n{\n    public static string Show(this Item i) => \"ext0\";\n    public static string Show(this Item i, int n) => \"ext\";\n}\nclass Item { public string Show(object o) => \"inst\"; }",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public static class ListExt\n{\n    ___<T>(List<T> list)\n    {\n        public bool IsEmpty => list.Count == 0;\n    }\n}",
+   "tiles": ["extension", "this", "static", "operator", "implicit"],
+   "answer": ["extension"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

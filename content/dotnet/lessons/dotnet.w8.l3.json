@@ -1,0 +1,104 @@
+{
+ "id": "dotnet.w8.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 11,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "class Cache\n{\n    private readonly int[] _items = new int[16];\n\n    public virtual int Get(int i) => _items[i & 15];\n\n    public int Sum() => Get(0) + Get(1);\n}",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "using BenchmarkDotNet.Attributes;\nusing BenchmarkDotNet.Running;\n\nBenchmarkRunner.Run<ShapeBench>();\n\n[MemoryDiagnoser]\npublic class ShapeBench\n{\n    private Shape _any = new Circle { R = 2 };\n    private Circle _circle = new Circle { R = 2 };\n\n    [Benchmark(Baseline = true)]\n    public double Virtual() => _any.Area();\n\n    [Benchmark]\n    public double Sealed() => _circle.Area();\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "[Benchmark]\npublic int Count() => _data.Count(x => x > 0);\n\n[Benchmark]\npublic IEnumerable<int> Filter() => _data.Where(x => x > 0);\n\n[Benchmark]\npublic int[] FilterAll() => _data.Where(x => x > 0).ToArray();",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["[MemoryDiagnoser]", "⟦⟧"],
+    ["Baseline = true", "⟦⟧"],
+    ["[GlobalSetup]", "⟦⟧"],
+    ["Consumer", "⟦⟧"],
+    ["[DisassemblyDiagnoser]", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

@@ -1,0 +1,153 @@
+{
+ "id": "mem.u1.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "memory",
+   "task": "⟦⟧",
+   "goal": "end",
+   "code": "static void Main()\n{\n    var origin = new Vector2(0, 0);   // struct\n    Draw(origin);\n}\nstatic void Draw(Vector2 at)\n{\n    var list = new List<int>();\n    int count = 3;\n}",
+   "steps": [
+    {
+     "line": 2,
+     "note": "⟦⟧",
+     "ops": [
+      {
+       "op": "new",
+       "name": "origin",
+       "type": "Vector2",
+       "kind": "val",
+       "fields": {
+        "X": 0,
+        "Y": 0
+       }
+      }
+     ]
+    },
+    {
+     "line": 3,
+     "note": "⟦⟧",
+     "ops": [
+      {
+       "op": "call",
+       "fn": "Draw",
+       "params": [
+        {
+         "name": "at",
+         "from": "origin"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "line": 7,
+     "note": "⟦⟧",
+     "ops": [
+      {
+       "op": "new",
+       "name": "list",
+       "type": "List<int>",
+       "kind": "ref",
+       "fields": {
+        "Count": 0
+       }
+      }
+     ]
+    },
+    {
+     "line": 8,
+     "note": "⟦⟧",
+     "ops": [
+      {
+       "op": "int",
+       "name": "count",
+       "value": 3
+      }
+     ]
+    },
+    {
+     "line": 9,
+     "note": "⟦⟧",
+     "ops": [
+      {
+       "op": "ret"
+      }
+     ]
+    }
+   ],
+   "solve": ["step", "step", "step", "step", "step"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "False sharing"]
+   ]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "void Handle(int n)\n{\n    Span<byte> small = stackalloc byte[256];\n    int[] arr = new int[n];\n    Span<byte> buf = stackalloc byte[n];\n    Process(small, arr, buf);\n}",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

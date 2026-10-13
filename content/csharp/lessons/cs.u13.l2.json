@@ -1,0 +1,106 @@
+{
+ "id": "cs.u13.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["null", "⟦⟧", "TypeLoadException", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "try\n{\n    typeof(Order).GetMethod(\"Pay\")!.Invoke(order, null);\n}\ncatch (InvalidOperationException)\n{\n    Console.WriteLine(\"A\");\n}\ncatch (Exception e)\n{\n    Console.WriteLine(\"B \" + e.GetType().Name);\n}",
+   "options": ["B TargetInvocationException", "A", "B InvalidOperationException", "B AmbiguousMatchException"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "PropertyInfo p = typeof(Order).GetProperty(\"Total\")!;\nvar get = p.___!.CreateDelegate<___<Order, decimal>>();\ndecimal t = get(order);",
+   "tiles": ["GetMethod", "Func", "SetMethod", "Action", "GetValue", "Predicate"],
+   "answer": ["GetMethod", "Func"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "static Func<object, object?> Getter(PropertyInfo p)\n{\n    var obj = Expression.Parameter(typeof(object));\n    var body = Expression.Convert(\n        Expression.Property(Expression.Convert(obj, p.DeclaringType!), p),\n        typeof(object));\n    return Expression.Lambda<Func<object, object?>>(body, obj).Compile();\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["MethodInfo.Invoke", "⟦⟧"],
+    ["CreateDelegate", "⟦⟧"],
+    ["Expression.Compile", "⟦⟧"],
+    ["UnsafeAccessor", "⟦⟧"],
+    ["GetMethod(\"Name\")", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

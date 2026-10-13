@@ -1,0 +1,101 @@
+{
+ "id": "dotnet.w7.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["2", "4", "1", "3"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["List<object>", "List<int[]>", "List<int?>", "List<DateTime>", "List<Action>"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "class Registry<T> { public static int Hits; }\n\nRegistry<string>.Hits = 5;\nRegistry<object>.Hits = 7;\nConsole.WriteLine(Registry<string>.Hits);\nConsole.WriteLine(Registry<Uri>.Hits);\nConsole.WriteLine(Registry<object>.Hits);",
+   "answer": 5,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "static bool Less<T>(T a, T b) where T : IComparable<T>\n    => a.CompareTo(b) < 0;\n\n// IL:\n// ldarga.s   a\n// ldarg.1\n// constrained. !!T\n// callvirt   instance int32 class System.IComparable`1<!!T>::CompareTo(!0)",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["System.__Canon", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["constrained.", "⟦⟧"],
+    ["Counter<string>.Count", "⟦⟧"],
+    ["typeof(T) == typeof(int)", "⟦⟧"]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,100 @@
+{
+ "id": "mem.u2.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "dotnet-counters monitor -n Shop --counters System.Runtime[dotnet.gc.last_collection.heap.size,dotnet.gc.heap.total_allocated]",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "dotnet.gc.heap.total_allocated"],
+    ["⟦⟧", "dotnet.gc.last_collection.heap.size"],
+    ["⟦⟧", "dotnet.gc.pause.time"],
+    ["⟦⟧", "dotnet.gc.last_collection.heap.fragmentation.size"],
+    ["⟦⟧", "dotnet.process.memory.working_set"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "dotnet-counters ___ -p 1902 --refresh-interval 5 --format ___ -o gc.csv",
+   "tiles": ["collect", "monitor", "csv", "nettrace", "speedscope"],
+   "answer": ["collect", "csv"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["dotnet-dump collect -p 1902 --type Full", "dotnet-dump analyze core_20261012_101500", "dumpheap -stat", "dumpheap -mt 00007f6c20a67498", "gcroot 00007f6ad09421f8"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "dotnet-trace collect -p 1902 --profile gc-verbose --duration 00:00:00:30",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "dotnet-counters"],
+    ["⟦⟧", "dotnet-gcdump"],
+    ["⟦⟧", "dotnet-trace"],
+    ["⟦⟧", "dotnet-dump"],
+    ["⟦⟧", "PerfView"]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,97 @@
+{
+ "id": "cs.u11.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "enum Color : byte { Red, Green, Blue = 10 }\n\n// IL:\n// .class sealed Color extends System.Enum\n//   .field public specialname rtspecialname uint8 value__\n//   .field public static literal valuetype Color Red = uint8(0)\n//   .field public static literal valuetype Color Green = uint8(1)\n//   .field public static literal valuetype Color Blue = uint8(10)",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "string Act(Light l) => l switch\n{\n    Light.Red => \"stop\",\n    Light.Green => \"go\",\n    _ => throw new ArgumentOutOfRangeException(nameof(l))\n};",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["3", "Read, Write", "Read | Write", "Write"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "[Flags] enum Perm { None = 0, Read = 1, Write = 2, Exec = 4 }\nPerm p = Perm.Read;\nbool b = p.HasFlag(Perm.None);\nbool c = (p & Perm.Write) == Perm.Write;\nbool d = Enum.IsDefined(Perm.Read | Perm.Write);\nbool e = p.HasFlag(Perm.Exec);",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "static bool IsKnown<T>(T value) where T : struct, ___\n    => Enum.___(value);",
+   "tiles": ["Enum", "IsDefined", "IConvertible", "TryParse", "class"],
+   "answer": ["Enum", "IsDefined"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

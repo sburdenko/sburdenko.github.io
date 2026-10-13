@@ -1,0 +1,80 @@
+{
+ "id": "cs.u11.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["a.StartsWith(\"id\")", "string.Compare(a, b)", "a == b", "a.Contains(\"id\")", "⟦⟧"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "string.Intern(url.ToLower())", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["\"hel\" + \"lo\"", "⟦⟧"],
+    ["\"GET \"u8", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["object o = (int?)5", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "int? n = TryReadAge();\nint age = n.___();\n\nbool ok = Enum.___<Color>(text, out var c)\n    && Enum.IsDefined(c);",
+   "tiles": ["GetValueOrDefault", "Value", "TryParse", "Parse", "HasValue"],
+   "answer": ["GetValueOrDefault", "TryParse"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "string[] names = { \"a\", \"b\" };\nobject[] objs = names;\nobjs[0] = \"c\";\nobjs[1] = null;\nReadOnlySpan<object> ro = objs;\nSpan<object> span = objs;",
+   "answer": 5,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

@@ -1,0 +1,115 @@
+{
+ "id": "cs.u2.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["op.Invoke(2, 3)", "op.DynamicInvoke(2, 3)", "⟦⟧", "op.BeginInvoke(2, 3, null, null)"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "Func<int, int> twice = x => x * 2;\nConsole.WriteLine(twice.Target is null);",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "Action log = () => Console.Write(\"1\");\nAction copy = log;\nlog += () => Console.Write(\"2\");\ncopy += () => Console.Write(\"3\");\nlog();\ncopy();",
+   "options": ["1213", "123123", "1212", "12313"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "Func<string, bool> rules = IsNotEmpty;\nrules += IsShort;\nvar results = new List<bool>();\nforeach (Func<string, bool> r in rules.___())\n    results.Add(r.___(\"abc\"));",
+   "tiles": ["GetInvocationList", "Invoke", "DynamicInvoke", "Combine", "BeginInvoke"],
+   "answer": ["GetInvocationList", "Invoke"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "class Panel\n{\n    private readonly Dictionary<string, Delegate?> _handlers = new();\n\n    public event EventHandler? Resized\n    {\n        add => _handlers[\"Resized\"] = Delegate.Combine(_handlers.GetValueOrDefault(\"Resized\"), value);\n        remove => _handlers[\"Resized\"] = Delegate.Remove(_handlers.GetValueOrDefault(\"Resized\"), value);\n    }\n\n    protected void OnResized() =>\n        (_handlers.GetValueOrDefault(\"Resized\") as EventHandler)?.Invoke(this, EventArgs.Empty);\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "class Panel\n{\n    private EventHandler? _resized;\n\n    public event EventHandler? Resized\n    {\n        add => _resized += value;\n        remove => _resized -= value;\n    }\n\n    void Raise()\n    {\n        _resized?.Invoke(this, EventArgs.Empty);\n        Resized?.Invoke(this, EventArgs.Empty);\n    }\n}",
+   "answer": 13,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["_target", "⟦⟧"],
+    ["_methodPtr", "⟦⟧"],
+    ["Delegate.Combine", "⟦⟧"],
+    ["GetInvocationList()", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2, 4],
+   "explain": "⟦⟧"
+  }
+ ]
+}

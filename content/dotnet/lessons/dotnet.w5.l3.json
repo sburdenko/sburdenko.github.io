@@ -1,0 +1,102 @@
+{
+ "id": "dotnet.w5.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "xml",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "plain",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "GAC", "⟦⟧"],
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "<runtime>\n  <assemblyBinding xmlns=\"urn:schemas-microsoft-com:asm.v1\">\n    <dependentAssembly>\n      <assemblyIdentity name=\"Newtonsoft.Json\"\n                        publicKeyToken=\"30ad4fe6b2a6aeed\" culture=\"neutral\" />\n      <bindingRedirect oldVersion=\"0.0.0.0-13.0.0.0\" newVersion=\"13.0.0.0\" />\n    </dependentAssembly>\n  </assemblyBinding>\n</runtime>",
+   "lang": "xml",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "<dependentAssembly>\n  <assemblyIdentity name=\"Newtonsoft.Json\"\n                    ___=\"30ad4fe6b2a6aeed\" culture=\"neutral\" />\n  <bindingRedirect ___=\"0.0.0.0-13.0.0.0\" ___=\"13.0.0.0\" />\n</dependentAssembly>",
+   "lang": "xml",
+   "tiles": ["publicKeyToken", "oldVersion", "newVersion", "fileVersion", "codeBase"],
+   "answer": ["publicKeyToken", "oldVersion", "newVersion"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "<dependentAssembly>\n  <assemblyIdentity name=\"Newtonsoft.Json\"\n                    publicKeyToken=\"30ad4fe6b2a6aeed\" culture=\"neutral\" />\n  <bindingRedirect oldVersion=\"0.0.0.0-11.0.0.0\" newVersion=\"13.0.0.0\" />\n</dependentAssembly>",
+   "lang": "xml",
+   "answer": 3,
+   "explain": "⟦⟧"
+  }
+ ]
+}

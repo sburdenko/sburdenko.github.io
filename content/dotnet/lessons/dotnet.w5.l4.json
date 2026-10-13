@@ -1,0 +1,103 @@
+{
+ "id": "dotnet.w5.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "{\n  \"runtimeOptions\": {\n    \"tfm\": \"net9.0\",\n    \"framework\": {\n      \"name\": \"Microsoft.NETCore.App\",\n      \"version\": \"9.0.0\"\n    }\n  }\n}",
+   "lang": "plain"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "\"targets\": {\n  \".NETCoreApp,Version=v9.0\": {\n    \"App/1.0.0\": {\n      \"dependencies\": { \"Acme.Pricing\": \"3.7.2\" },\n      \"runtime\": { \"App.dll\": {} }\n    },\n    \"Acme.Pricing/3.7.2\": {\n      \"runtime\": {\n        \"lib/net8.0/Acme.Pricing.dll\": {\n          \"assemblyVersion\": \"3.0.0.0\",\n          \"fileVersion\": \"3.7.2.41\"\n        }\n      }\n    }\n  }\n}",
+   "lang": "plain",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "<ItemGroup>\n  <PackageReference Include=\"Acme.Pricing\" Version=\"3.7.2\" />\n  <PackageReference Include=\"Acme.Tax\" Version=\"[2.0.0]\" />\n  <PackageReference Include=\"Acme.Log\" Version=\"[1.0,2.0)\" />\n  <PackageReference Include=\"Acme.Feed\" Version=\"5.*\" />\n</ItemGroup>",
+   "lang": "xml",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["3.7.2", "⟦⟧"],
+    ["[2.0.0]", "⟦⟧"],
+    ["[1.0,2.0)", "⟦⟧"],
+    ["5.*", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "plain",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "<Project>\n  <PropertyGroup>\n    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>\n  </PropertyGroup>\n  <ItemGroup>\n    <PackageVersion Include=\"Acme.Log\" Version=\"1.6.0\" />\n  </ItemGroup>\n</Project>",
+   "lang": "xml",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "<!-- Directory.Packages.props -->\n<ItemGroup>\n  <___ Include=\"Acme.Log\" Version=\"1.6.0\" />\n</ItemGroup>\n\n<!-- App.csproj -->\n<ItemGroup>\n  <___ Include=\"Acme.Log\" />\n</ItemGroup>",
+   "lang": "xml",
+   "tiles": ["PackageVersion", "PackageReference", "Reference", "PackageDownload"],
+   "answer": ["PackageVersion", "PackageReference"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2, 4],
+   "explain": "⟦⟧"
+  }
+ ]
+}

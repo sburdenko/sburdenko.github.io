@@ -13,7 +13,7 @@ export interface ChoiceCard { t: 'choice'; q: string; options: string[]; answer:
 export interface MultiCard { t: 'multi'; q: string; options: string[]; answer: number[]; explain: string; code?: string; lang?: string; deep?: string }
 
 /** Расставить шаги: items уже в правильном порядке, показываются перемешанными. */
-export interface OrderCard { t: 'order'; q: string; items: string[]; explain?: string }
+export interface OrderCard { t: 'order'; q: string; items: string[]; explain?: string; code?: string; lang?: string }
 
 /** Вставить плитки в пропуски «___» в коде: answer — плитки по порядку пропусков. */
 export interface BlanksCard { t: 'blanks'; q: string; code: string; tiles: string[]; answer: string[]; explain?: string; lang?: string }
@@ -22,7 +22,7 @@ export interface BlanksCard { t: 'blanks'; q: string; code: string; tiles: strin
 export interface TaplineCard { t: 'tapline'; q: string; code: string; answer: number; explain?: string; lang?: string }
 
 /** Соединить пары: [левое, правое]. */
-export interface MatchCard { t: 'match'; q: string; pairs: [string, string][] }
+export interface MatchCard { t: 'match'; q: string; pairs: [string, string][]; code?: string; lang?: string }
 
 /** Стенд: rig — имя стенда в rigs*.js, solve — действия, которые выполняют задание (проверяются тестами). */
 export interface RigCard { t: 'rig'; rig: string; task: string; goal?: any; solve?: string[]; [field: string]: any }

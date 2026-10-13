@@ -1,0 +1,105 @@
+{
+ "id": "cs.u9.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["MissingFieldException", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public string Name\n{\n    get;\n    set => field = value.Trim();\n}\n\npublic int Percent\n{\n    get;\n    set => field = Math.Clamp(value, 0, 100);\n}"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "class User\n{\n    public string Name { get; set => field = value.Trim(); } = \"  Bob  \";\n}",
+   "options": ["⟦⟧", "\"Bob\"", "null", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var a = new { X = 1, Y = 2 };\nvar b = new { X = 1, Y = 2 };\nvar c = new { Y = 2, X = 1 };\nConsole.Write($\"{a.Equals(b)} {a == b} {a.Equals(c)}\");",
+   "options": ["True False False", "True True True", "True True False", "False False False"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var t = (Name: \"Ann\", Age: 30);\nforeach (var f in t.GetType().GetFields())\n    Console.Write(f.Name + \" \");",
+   "options": ["Item1 Item2", "Name Age", "⟦⟧", "Rest"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public void ___(___ int width, ___ int height)\n{\n    width = Width;\n    height = Height;\n}",
+   "tiles": ["Deconstruct", "out", "out", "ref", "in", "Destruct"],
+   "answer": ["Deconstruct", "out", "out"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

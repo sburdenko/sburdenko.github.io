@@ -1,0 +1,97 @@
+{
+ "id": "cs.u12.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var t = new Thread(() => throw new InvalidOperationException());\ntry\n{\n    t.Start();\n    t.Join();\n}\ncatch (Exception)\n{\n    Console.WriteLine(\"caught\");\n}",
+   "options": ["⟦⟧", "caught", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public bool TryLoad(int id, [___(true)] out User? user)\n{\n    if (!_rows.TryGetValue(id, out var row))\n    {\n        user = null;\n        return ___;\n    }\n    user = Map(row);\n    return true;\n}",
+   "tiles": ["NotNullWhen", "MaybeNull", "NotNull", "false", "true"],
+   "answer": ["NotNullWhen", "false"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public sealed class OrderNotFoundException : Exception\n{\n    public int OrderId { get; }\n\n    public OrderNotFoundException() { }\n    public OrderNotFoundException(string message) : base(message) { }\n    public OrderNotFoundException(string message, Exception inner)\n        : base(message, inner) { }\n    public OrderNotFoundException(int orderId)\n        : base($\"Order {orderId} not found\") => OrderId = orderId;\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["System.Exception", "NullReferenceException", "InvalidOperationException", "IndexOutOfRangeException", "ArgumentOutOfRangeException"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "catch (Exception e) when (e is not OperationCanceledException)\n{\n    log.Warn(e, \"item skipped\");\n}"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "void UploadAll(IEnumerable<string> files, CancellationToken ct)\n{\n    foreach (var file in files)\n    {\n        try\n        {\n            Upload(file, ct);\n        }\n        catch (Exception e)\n        {\n            log.Warn(e, $\"skip {file}\");\n        }\n    }\n}",
+   "answer": 8,
+   "explain": "⟦⟧"
+  }
+ ]
+}

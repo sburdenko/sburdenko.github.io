@@ -1,0 +1,100 @@
+{
+ "id": "mem.u5.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "rig",
+   "rig": "gc",
+   "task": "⟦⟧",
+   "objects": [
+    {
+     "id": "Cache",
+     "gen": 2,
+     "refs": ["Entry"]
+    },
+    {
+     "id": "Entry"
+    }
+   ],
+   "roots": [
+    {
+     "name": "cache",
+     "to": "Cache"
+    }
+   ],
+   "cuts": [
+    {
+     "from": "Cache",
+     "to": "Entry",
+     "label": "cache.Entry = null"
+    }
+   ],
+   "goal": {
+    "kind": "dead",
+    "ids": ["Entry"],
+    "keep": ["Cache"]
+   },
+   "solve": ["cut:Cache>Entry", "gc:0"]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "Restart EE"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "int[] counts = new int[16];\nItem[] items = cache.Items;\ncounts[3] = 5;\nItem fresh = new Item();\nitems[3] = fresh;\nitems[4] = null;",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["GC.Collect(2, GCCollectionMode.Forced, true, compacting: true)", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["POH", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  }
+ ]
+}

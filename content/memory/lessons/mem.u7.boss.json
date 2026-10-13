@@ -1,0 +1,98 @@
+{
+ "id": "mem.u7.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "rig",
+   "rig": "gc",
+   "task": "⟦⟧",
+   "objects": [
+    {
+     "id": "Owner",
+     "refs": ["Handle"]
+    },
+    {
+     "id": "Handle",
+     "fin": true
+    }
+   ],
+   "roots": [
+    {
+     "name": "o",
+     "to": "Owner"
+    }
+   ],
+   "goal": {
+    "kind": "dead",
+    "ids": ["Owner", "Handle"]
+   },
+   "solve": ["root:o", "gc:0", "fin", "gc:2"]
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "class Session : IDisposable\n{\n    static readonly List<Session> All = new();\n    readonly Timer _ping;\n\n    public Session()\n    {\n        All.Add(this);\n        _ping = new Timer(_ => Ping(), null, 0, 5000);\n    }\n\n    public void Dispose() => _ping.Dispose();\n    void Ping() { }\n}",
+   "answer": 7,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "ConditionalWeakTable"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "static readonly ___<Widget, Meta> _meta = new();\n\nMeta MetaOf(Widget w) => _meta.___(w, _ => new Meta(w));",
+   "tiles": ["ConditionalWeakTable", "GetValue", "Dictionary", "WeakReference", "TryGetValue"],
+   "answer": ["ConditionalWeakTable", "GetValue"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  }
+ ]
+}
