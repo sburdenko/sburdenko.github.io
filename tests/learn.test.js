@@ -425,7 +425,7 @@ test('таймлайн: API главного потока после ConfigureAw
 });
 
 test('машина состояний: без готовых ответов две паузы, с готовыми ни одной', () => {
-  const a = smFrames(false), c = smFrames(true);
+  const a = /** @type {any[]} */ (smFrames(false)), c = /** @type {any[]} */ (smFrames(true));
   assert.equal(a[a.length - 1].pauses, 2);
   assert.equal(c[c.length - 1].pauses, 0);
   assert.ok(a[a.length - 1].calls > c[c.length - 1].calls, 'MoveNext вызывается чаще, когда метод приостанавливается');

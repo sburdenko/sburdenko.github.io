@@ -6,7 +6,7 @@
  * card.bugs   — [{ lines: [номера строк], title, why, cat? }]: любая из строк баги засчитывает его
  * card.goal   — { min, maxFalse }: сколько багов нужно найти и сколько ложных отметок допустимо
  */
-import { tr } from './i18n.js?v=202610130727';
+import { tr } from './i18n.js?v=202610130923';
 
 export const HUNT_DEFAULT = { maxFalse: 2 };
 
@@ -25,7 +25,7 @@ export function huntNeed(card) {
 }
 
 export const huntRig = {
-  init: () => ({ flag: [], checked: false, revealed: false }),
+  init: _card => ({ flag: [], checked: false, revealed: false }),
   act(card, s0, a) {
     const [k, v] = a.split(':');
     if (k === 'reset') return huntRig.init(card);

@@ -101,8 +101,8 @@ async function main() {
 
   if (!keep) {
     for (const f of readdirSync(join(root, 'learn', dir), { recursive: true })) {
-      const full = join(root, 'learn', dir, f);
-      if (/\.js$/.test(f) && existsSync(full)) rmSync(full);
+      const full = join(root, 'learn', dir, String(f));
+      if (/\.js$/.test(String(f)) && existsSync(full)) rmSync(full);
     }
     console.log(`старые модули learn/${dir}/*.js удалены (они остаются в истории git)`);
   }

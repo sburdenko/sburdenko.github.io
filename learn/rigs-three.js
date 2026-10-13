@@ -1,16 +1,16 @@
 /** Стенды курса «Three.js: начальный уровень». Логика — в models-three.js, картинка — настоящий Three.js. */
-import { esc } from '../assets/vhs.js?v=202610130727';
-import { drive, act } from './rig-kit.js?v=202610130727';
-import { codeHtml } from './code-view.js?v=202610130727';
-import { makeView, VIEW_ASPECT } from './three-view.js?v=202610130727';
-import { tr } from './i18n.js?v=202610130727';
+import { esc } from '../assets/vhs.js?v=202610130923';
+import { drive, act } from './rig-kit.js?v=202610130923';
+import { codeHtml } from './code-view.js?v=202610130923';
+import { makeView, VIEW_ASPECT } from './three-view.js?v=202610130923';
+import { tr } from './i18n.js?v=202610130923';
 import {
   firstRig, firstView, firstCode,
   CAM_OBJECTS, CAM_OPTIONS, camSees, camRig,
   EARTH_R, MOON_R, orbitWorld, graphRig,
   MATERIALS, LIGHTS, SHADOW_FLAGS, lightView, lightRig,
   texView, texRig
-} from './models-three.js?v=202610130727';
+} from './models-three.js?v=202610130923';
 
 const seg = (items, cur, prefix) => `<div class="seg wrap literal">${items.map(([v, label]) => act(`${prefix}:${v}`, esc(tr(label)), '').replace('class=""', `aria-pressed="${String(v) === String(cur)}"`)).join('')}</div>`;
 const tog = (a, on, text) => act(a, `${on ? '✓ ' : ''}${esc(text)}`, '').replace('class=""', `aria-pressed="${on}"`);
@@ -24,6 +24,7 @@ const lock = card => new Set(card.lock ?? []);
  * SVG вида сверху (ось X вправо, ось Z вниз — к зрителю; камера смотрит вверх, вдоль −Z).
  * cam: { z, fov, near, far }; items: [{ x, z, color, label, hide, size }]; k — пикселей на единицу.
  */
+/** @param {{ cam: any, items: any[], k: number, oy: number, hint?: string }} p */
 function topSvg({ cam, items, k, oy, hint }) {
   const ox = 100, W = 200, H = 200;
   const X = x => ox + x * k, Z = z => oy + z * k;

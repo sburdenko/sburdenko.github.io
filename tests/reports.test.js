@@ -41,13 +41,14 @@ test('cardSnippet берёт вопрос, задание или заголов�
 });
 
 test('очередь: сохраняется, фильтрует мусор и ограничена', () => {
+  /** @type {any} */
   const store = (() => { const m = new Map(); return { getItem: k => m.get(k) ?? null, setItem: (k, v) => m.set(k, v) }; })();
   const ok = buildReport(ctx, { categories: ['typo'], text: '' });
   saveQueue([ok, { junk: true }], store);
   assert.deepEqual(loadQueue(store), [ok]);
   saveQueue(Array.from({ length: 50 }, () => ok), store);
   assert.equal(loadQueue(store).length, 20);
-  assert.deepEqual(loadQueue({ getItem() { throw new Error('private'); } }), []);
+  assert.deepEqual(loadQueue(/** @type {any} */ ({ getItem() { throw new Error('private'); } })), []);
 });
 
 test('строки окна жалобы есть на обоих языках', () => {

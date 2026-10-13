@@ -2,7 +2,7 @@
  * Модели курса «Async/await до дна». Без DOM — покрыты тестами.
  * Вход тот же, что у других стендов: init(card), act(card, s, 'действие'), goal(card, s).
  */
-import { tr } from './i18n.js?v=202610130727';
+import { tr } from './i18n.js?v=202610130923';
 
 const clone = x => structuredClone(x);
 
@@ -178,6 +178,7 @@ export const SM_MOVENEXT = 'void MoveNext()\n{\n    switch (state)\n    {\n     
 /** Кадры: строка исходника, строка MoveNext, поля машины, пояснение. */
 export function smFrames(cached) {
   const F = (src, mn, fields, note, extra = {}) => ({ src, mn, fields: { ...fields }, note: tr(note), ...extra });
+  /** @type {Record<string, string | number>} */
   const f = { state: -1, a: '—', b: '—', awaiter: '—' };
   const out = [F(-1, -1, f, { ru: 'Вызов SumAsync(): компилятор создал структуру-машину с полями state, a, b, awaiter и вызвал MoveNext.', en: 'Calling SumAsync(): the compiler created a state machine struct with fields state, a, b, awaiter and called MoveNext.' }, { calls: 0, pauses: 0 })];
   let calls = 1, pauses = 0;

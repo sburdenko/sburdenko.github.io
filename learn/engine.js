@@ -6,7 +6,7 @@
  * ответили верно. Карточки без ответа (learn, rig) просто пролистываются. В match ошибки
  * видны сразу на карточке, поэтому она считается ошибочной, но повторно не ставится.
  */
-import { rng } from '../assets/rand.js?v=202610130727';
+import { rng } from '../assets/rand.js?v=202610130923';
 
 export const GRADED = new Set(['choice', 'multi', 'order', 'blanks', 'tapline']);
 export const TYPES = new Set([...GRADED, 'learn', 'rig', 'match']);
@@ -38,6 +38,9 @@ const sameSet = (a, b) => Array.isArray(a) && a.length === b.length && b.every(v
  * Проверка ответа. input — в исходных индексах карточки, не в индексах показа:
  * choice/tapline — число, multi — массив индексов, order — массив индексов items
  * в том порядке, как их расставил человек, blanks — массив строк по пропускам.
+ * @param {{ t: string, answer?: any, items?: string[] }} card — достаточно полей t, answer и items
+ * @param {any} [input]
+ * @returns {boolean}
  */
 export function check(card, input) {
   switch (card.t) {
@@ -49,7 +52,10 @@ export function check(card, input) {
   }
 }
 
-/** Сколько пропусков ___ в шаблоне кода. */
+/**
+ * Сколько пропусков ___ в шаблоне кода.
+ * @param {string} code
+ */
 export const blankCount = code => code.split('___').length - 1;
 
 export function start(lesson) {

@@ -5,16 +5,16 @@
  *   #/dotnet      курс
  *   #/dotnet/<id> урок поверх курса
  */
-import { $, esc, startNoise, setLocale } from '../assets/vhs.js?v=202610130727';
-import { GROUPS, COURSES, findCourse, lessonsOf, loadCourses, courseTitle, courseBlurb } from './courses.js?v=202610130727';
-import { getLang, switchLang, tr, LANGS, LANG_NAMES } from './i18n.js?v=202610130727';
-import { t } from './ui.js?v=202610130727';
-import { auth } from './auth/auth.js?v=202610130727';
-import { CATEGORIES, MAX_TEXT, buildReport } from './reports/report.js?v=202610130727';
-import { submit, flushQueue, reportsEnabled } from './reports/reports.js?v=202610130727';
-import * as P from './progress.js?v=202610130727';
-import * as E from './engine.js?v=202610130727';
-import { renderCard, feedback } from './cards.js?v=202610130727';
+import { $, esc, startNoise, setLocale } from '../assets/vhs.js?v=202610130923';
+import { GROUPS, COURSES, findCourse, lessonsOf, loadCourses, courseTitle, courseBlurb } from './courses.js?v=202610130923';
+import { getLang, switchLang, tr, LANGS, LANG_NAMES } from './i18n.js?v=202610130923';
+import { t } from './ui.js?v=202610130923';
+import { auth } from './auth/auth.js?v=202610130923';
+import { CATEGORIES, MAX_TEXT, buildReport } from './reports/report.js?v=202610130923';
+import { submit, flushQueue, reportsEnabled } from './reports/reports.js?v=202610130923';
+import * as P from './progress.js?v=202610130923';
+import * as E from './engine.js?v=202610130923';
+import { renderCard, feedback } from './cards.js?v=202610130923';
 
 /** Полка кассет — отдельный модуль сайта. */
 const SHELF_URL = new URL('../shelf/', import.meta.url).href;
@@ -72,12 +72,12 @@ function ask(text, yes = t('ask.yes'), no = t('ask.cancel')) {
     const done = v => { wrap.remove(); askClose = null; resolve(v); };
     askClose = done;
     wrap.onclick = e => {
-      const b = e.target.closest('button');
+      const b = /** @type {HTMLElement | null} */ (/** @type {Element} */ (e.target).closest('button'));
       if (b) done(b.dataset.v === '1');
       else if (e.target === wrap) done(false);
     };
     document.body.append(wrap);
-    wrap.querySelector('.cta-btn').focus();
+    /** @type {HTMLElement} */ (wrap.querySelector('.cta-btn')).focus();
   });
 }
 
@@ -410,16 +410,19 @@ function openReport() {
   askClose = close;
   document.body.append(wrap);
   fit();
-  const msg = wrap.querySelector('#rpMsg'), text = wrap.querySelector('#rpText'), yes = wrap.querySelector('#rpYes');
+  const msg = /** @type {HTMLElement} */ (wrap.querySelector('#rpMsg'));
+  const text = /** @type {HTMLTextAreaElement} */ (wrap.querySelector('#rpText'));
+  const yes = /** @type {HTMLButtonElement} */ (wrap.querySelector('#rpYes'));
   const say = (key, kind) => { msg.textContent = t(key); msg.dataset.kind = kind ?? ''; };
   wrap.addEventListener('click', e => {
-    const b = e.target.closest('.rp-cat');
+    const target = /** @type {HTMLElement} */ (e.target);
+    const b = /** @type {HTMLElement | null} */ (target.closest('.rp-cat'));
     if (b) {
       const on = !picked.has(b.dataset.id);
       on ? picked.add(b.dataset.id) : picked.delete(b.dataset.id);
-      b.setAttribute('aria-pressed', on);
+      b.setAttribute('aria-pressed', String(on));
       if (msg.dataset.kind === 'warn') say('', '');
-    } else if (e.target === wrap || e.target.id === 'rpNo') close();
+    } else if (target === wrap || target.id === 'rpNo') close();
   });
   wrap.querySelector('form').onsubmit = async e => {
     e.preventDefault();
@@ -443,8 +446,9 @@ function openReport() {
       </div>
       <div class="rp-foot"><div class="row-btns"><button type="button" class="cta-btn" id="rpDone">${esc(t('rp.close'))}</button></div></div>`;
     fit();
-    wrap.querySelector('#rpDone').onclick = close;
-    wrap.querySelector('#rpDone').focus();
+    const done = /** @type {HTMLButtonElement} */ (wrap.querySelector('#rpDone'));
+    done.onclick = close;
+    done.focus();
   };
   if (matchMedia('(pointer:fine)').matches) text.focus();   // на телефоне не открываем клавиатуру сразу: сначала видны категории
 }

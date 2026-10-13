@@ -12,7 +12,7 @@ import { fill, setPath, loadCourse, loadCourseFromSource, loadLesson, HOLE } fro
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', 'content');
 const read = (...p) => JSON.parse(readFileSync(join(root, ...p), 'utf8'));
-const courses = existsSync(root) ? readdirSync(root, { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name) : [];
+const courses = existsSync(root) ? readdirSync(root, { withFileTypes: true }).filter(d => d.isDirectory() && existsSync(join(root, d.name, 'course.json'))).map(d => d.name) : [];   // content/ui — не курс
 
 test('fill подставляет строки по путям и ругается на несуществующий путь', () => {
   const sk = { a: HOLE, list: [HOLE, 'x', { q: HOLE }] };
@@ -74,5 +74,57 @@ for (const id of courses) {
       assert.ok(existsSync(join(root, id, `bundle.${lang}.json`)), `${id}: нет bundle.${lang}.json`);
       assert.deepEqual(read(id, `bundle.${lang}.json`), JSON.parse(JSON.stringify(await loadCourseFromSource(id, lang))), `${id}/${lang}: bundle устарел`);
     }
+  });
+}
+
+test('строки интерфейса: у каждого ключа есть ru и en, одинаковые подстановки, в en нет кириллицы', () => {
+  const ru = read('ui', 'ru.json'), en = read('ui', 'en.json');
+  assert.deepEqual(Object.keys(en).sort(), Object.keys(ru).sort(), 'наборы ключей ru и en различаются');
+  const vars = s => [...s.matchAll(/\{(\w+)\}/g)].map(m => m[1]).sort().join();
+  for (const k of Object.keys(ru)) {
+    assert.equal(typeof ru[k], 'string'); assert.equal(typeof en[k], 'string');
+    assert.equal(vars(en[k]), vars(ru[k]), `${k}: подстановки {…} различаются`);
+    assert.ok(!/[А-Яа-яЁё]/.test(en[k]), `${k}: кириллица в английской строке`);
+  }
+});
+
+/* Форма карточек — зеркало типов из learn/types.d.ts: если меняешь одно, поправь и другое. */
+const is = {
+  str: v => typeof v === 'string',
+  num: v => Number.isInteger(v),
+  strs: v => Array.isArray(v) && v.every(x => typeof x === 'string'),
+  nums: v => Array.isArray(v) && v.every(Number.isInteger),
+  pairs: v => Array.isArray(v) && v.every(p => Array.isArray(p) && p.length === 2 && p.every(x => typeof x === 'string'))
+};
+const SHAPE = {
+  learn: { need: { title: is.str, body: is.str }, may: { deep: is.str, code: is.str, lang: is.str, flow: is.strs } },
+  choice: { need: { q: is.str, options: is.strs, answer: is.num, explain: is.str }, may: { wrong: v => v && typeof v === 'object', code: is.str, lang: is.str, deep: is.str } },
+  multi: { need: { q: is.str, options: is.strs, answer: is.nums, explain: is.str }, may: { code: is.str, lang: is.str, deep: is.str } },
+  order: { need: { q: is.str, items: is.strs }, may: { explain: is.str } },
+  blanks: { need: { q: is.str, code: is.str, tiles: is.strs, answer: is.strs }, may: { explain: is.str, lang: is.str } },
+  tapline: { need: { q: is.str, code: is.str, answer: is.num }, may: { explain: is.str, lang: is.str } },
+  match: { need: { q: is.str, pairs: is.pairs }, may: {} },
+  rig: { need: { rig: is.str, task: is.str }, may: null }   // у стендов своя форма полей
+};
+
+for (const id of courses) {
+  test(`content/${id}: карточки подходят под типы из types.d.ts`, async () => {
+    const bad = [];
+    for (const lang of ['ru', 'en']) {
+      const course = await loadCourseFromSource(id, lang);
+      for (const u of course.units) for (const l of u.lessons ?? []) {
+        for (const [i, card] of l.cards.entries()) {
+          const at = `${l.id} #${i + 1} (${card.t}/${lang})`, shape = SHAPE[card.t];
+          if (!shape) { bad.push(`${at}: неизвестный тип`); continue; }
+          for (const [k, ok] of Object.entries(shape.need)) if (!ok(card[k])) bad.push(`${at}: поле ${k}`);
+          if (shape.may) for (const k of Object.keys(card)) {
+            if (k === 't' || k in shape.need) continue;
+            if (!(k in shape.may)) bad.push(`${at}: лишнее поле ${k}`);
+            else if (!shape.may[k](card[k])) bad.push(`${at}: поле ${k}`);
+          }
+        }
+      }
+    }
+    assert.deepEqual(bad, [], bad.slice(0, 8).join('\n'));
   });
 }

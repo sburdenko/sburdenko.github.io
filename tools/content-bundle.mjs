@@ -11,7 +11,7 @@ import { loadCourseFromSource } from '../learn/content.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', 'content');
 let files = 0, bytes = 0;
-for (const d of readdirSync(root, { withFileTypes: true }).filter(d => d.isDirectory())) {
+for (const d of readdirSync(root, { withFileTypes: true }).filter(d => d.isDirectory() && existsSync(join(root, d.name, 'course.json')))) {   // content/ui — строки интерфейса, не курс
   const langs = readdirSync(join(root, d.name, 'i18n'), { withFileTypes: true }).filter(l => l.isDirectory()).map(l => l.name);
   for (const lang of langs) {
     const json = JSON.stringify(await loadCourseFromSource(d.name, lang));
