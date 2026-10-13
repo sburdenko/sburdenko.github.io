@@ -1,0 +1,58 @@
+{
+ "id": "memory",
+ "title": "⟦⟧",
+ "units": [
+  {
+   "id": "u1",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/virtual-address-spaces"
+   },
+   "lessons": ["mem.u1.l1", "mem.u1.l2", "mem.u1.l3"]
+  },
+  {
+   "id": "u2",
+   "title": "⟦⟧",
+   "soon": true,
+   "blurb": "⟦⟧"
+  },
+  {
+   "id": "u3",
+   "title": "⟦⟧",
+   "soon": true,
+   "blurb": "⟦⟧"
+  },
+  {
+   "id": "u4",
+   "title": "⟦⟧",
+   "soon": true,
+   "blurb": "⟦⟧"
+  },
+  {
+   "id": "u5",
+   "title": "⟦⟧",
+   "soon": true,
+   "blurb": "⟦⟧"
+  },
+  {
+   "id": "u6",
+   "title": "⟦⟧",
+   "soon": true,
+   "blurb": "⟦⟧"
+  },
+  {
+   "id": "u7",
+   "title": "⟦⟧",
+   "soon": true,
+   "blurb": "⟦⟧"
+  },
+  {
+   "id": "u8",
+   "title": "⟦⟧",
+   "soon": true,
+   "blurb": "⟦⟧"
+  }
+ ]
+}

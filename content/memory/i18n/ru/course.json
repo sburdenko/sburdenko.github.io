@@ -1,0 +1,20 @@
+{
+ "title": "Память в .NET",
+ "units/0/title": "Память глазами ОС",
+ "units/0/blurb": "Что видит операционная система, когда .NET просит память: виртуальные адреса и страницы, reserve и commit, почему у процесса несколько чисел «занятой» памяти, предел стека и кэши процессора.",
+ "units/0/source/title": "Microsoft Learn: Virtual address spaces",
+ "units/1/title": "Как измерять",
+ "units/1/blurb": "Working set, private bytes и управляемая куча — разные числа. dotnet-counters, dotnet-gcdump, dotnet-trace и PerfView; как читать дамп и искать утечку.",
+ "units/2/title": "Устройство кучи",
+ "units/2/blurb": "Заголовок объекта и указатель на тип, раскладка полей и выравнивание, SOH, LOH и POH, регионы в .NET 7+ и frozen-сегменты.",
+ "units/3/title": "Аллокация",
+ "units/3/blurb": "Сдвиг указателя и контекст аллокации, медленный путь и LOH, скрытые аллокации в замыканиях, упаковке, LINQ и строках, ArrayPool и stackalloc.",
+ "units/4/title": "Как работает сборка",
+ "units/4/blurb": "Когда запускается GC, остановка потоков и safepoint, маркировка от корней и card table, планирование, sweep и compact.",
+ "units/5/title": "Режимы GC",
+ "units/5/blurb": "Workstation и Server, фоновая сборка, режимы задержки, DATAS и настройки в runtimeconfig.json.",
+ "units/6/title": "Время жизни",
+ "units/6/blurb": "Финализация изнутри и воскрешение, SafeHandle, слабые ссылки, ConditionalWeakTable, утечки через события и статику.",
+ "units/7/title": "Продвинутое",
+ "units/7/blurb": "Закрепление и POH, unsafe и указатели, GC.TryStartNoGCRegion, API сборщика и GCSettings, Native AOT и память."
+}
