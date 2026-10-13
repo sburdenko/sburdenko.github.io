@@ -1,0 +1,103 @@
+{
+ "id": "cs.u11.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["32", "6", "24", "28"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "code": "string a = \"hello\";\nstring b = \"hel\" + \"lo\";\nstring c = \"hel\" + Console.ReadLine();\nstring d = string.Intern(c);",
+   "options": ["ReferenceEquals(a, b)", "ReferenceEquals(a, c)", "ReferenceEquals(a, d)", "ReferenceEquals(c, d)"],
+   "answer": [0, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Ordinal", "⟦⟧"],
+    ["OrdinalIgnoreCase", "⟦⟧"],
+    ["CurrentCulture", "⟦⟧"],
+    ["InvariantCulture", "⟦⟧"],
+    ["CurrentCultureIgnoreCase", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "CultureInfo.CurrentCulture = new CultureInfo(\"tr-TR\");\n\n\"file\".ToUpper();           // \"FİLE\"\n\"file\".ToUpperInvariant();  // \"FILE\"\n\"file\".Equals(\"FILE\",\n    StringComparison.OrdinalIgnoreCase); // true"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "if (cmd.ToUpper() == \"QUIT\")\n    Stop();",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "string s = \"line1\\r\\nline2\";\nint a = s.IndexOf('\\0');\nint b = s.IndexOf(\"\\0\");\nint c = s.IndexOf(\"\\0\", StringComparison.Ordinal);\nbool d = s.Contains(\"\\0\");",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "var map = new Dictionary<string, int>(\n    StringComparer.___);\nstring key = header.ToUpper___();",
+   "tiles": ["OrdinalIgnoreCase", "Invariant", "CurrentCulture", "Ordinal", "Culture"],
+   "answer": ["OrdinalIgnoreCase", "Invariant"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

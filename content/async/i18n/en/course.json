@@ -11,5 +11,9 @@
  "units/4/title": "Pitfalls and advanced topics",
  "units/4/blurb": "Fire-and-forget and async void, SemaphoreSlim instead of lock, TaskCompletionSource, IAsyncEnumerable and await using, Channel and Parallel.ForEachAsync.",
  "units/5/title": "Platforms",
- "units/5/blurb": "ASP.NET Core, WPF and WinForms, Unity: Awaitable, coroutines, UniTask and cancellation tied to the object. The course final."
+ "units/5/blurb": "ASP.NET Core, WPF and WinForms, Unity: Awaitable, coroutines, UniTask and cancellation tied to the object.",
+ "units/6/title": "Tasks without await",
+ "units/6/blurb": "ContinueWith and its traps, TaskScheduler and StartNew vs. Task.Run, child tasks, Parallel and PLINQ for CPU work, timers and who holds them, background threads, Register and linked tokens.",
+ "units/7/title": "Synchronization in depth",
+ "units/7/blurb": "The memory model and volatile, Interlocked and the CAS loop, spinning vs kernel objects, Monitor and the Lock type, Lazy<T> and concurrent collections. The course final."
 }

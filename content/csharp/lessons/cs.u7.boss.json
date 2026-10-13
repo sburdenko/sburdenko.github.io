@@ -1,0 +1,85 @@
+{
+ "id": "cs.u7.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var arr = new Counter[1];\n((ICounter)arr[0]).Inc();\narr[0].Inc();\nICounter i = arr[0];\ni.Inc();\nConsole.WriteLine(arr[0].Value);",
+   "options": ["1", "0", "2", "3"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["s.GetType();", "s.Equals(other);", "using (s) { }", "Max(s, other);  // where T : IComparable<T>", "s.GetHashCode();"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var list = new List<Point> { default };\nvar arr = new Point[1];\narr[0].Offset(1);\nlist[0] = list[0] with { X = 2 };\nlist[0].Offset(1);\nforeach (ref var p in CollectionsMarshal.AsSpan(list)) p.Offset(1);",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public ___ record ___ Key(string City, int Id);",
+   "tiles": ["readonly", "struct", "class", "ref", "sealed"],
+   "answer": ["readonly", "struct"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["struct { int A; int B; }", "⟦⟧"],
+    ["struct { byte A; int B; }", "⟦⟧"],
+    ["struct { double X; }", "⟦⟧"],
+    ["struct { string S; }", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "struct R\n{\n    public byte Kind;\n    public double Value;\n    public int Id;\n}",
+   "options": ["24", "13", "16", "17"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

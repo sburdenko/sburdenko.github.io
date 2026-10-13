@@ -1,0 +1,107 @@
+{
+ "id": "as.u7.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "using var timer = new ___(TimeSpan.FromMinutes(1));\nwhile (await timer.___(ct))\n    await SyncAsync(ct);",
+   "tiles": ["PeriodicTimer", "WaitForNextTickAsync", "Timer", "Change", "Elapsed"],
+   "answer": ["PeriodicTimer", "WaitForNextTickAsync"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "static void Main()\n{\n    Task.Run(() =>\n    {\n        Thread.Sleep(2000);\n        File.WriteAllText(\"done.txt\", \"ok\");\n    });\n    Console.WriteLine(\"main end\");\n}",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "var tcs = new TaskCompletionSource(\n    TaskCreationOptions.RunContinuationsAsynchronously);\nusing var reg = ct.Register(() => tcs.TrySetCanceled(ct));\n\nlegacy.OnDone += () => tcs.TrySetResult();\nlegacy.Start();\nawait tcs.Task;",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var cts = new CancellationTokenSource();\ncts.Cancel();\ncts.Token.Register(() => Console.WriteLine(\"A\"));\nConsole.WriteLine(\"B\");",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "InvalidOperationException"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "while (!appStopping.IsCancellationRequested)\n{\n    var req = await queue.ReadAsync(appStopping);\n    var cts = CancellationTokenSource.CreateLinkedTokenSource(appStopping);\n    cts.CancelAfter(TimeSpan.FromSeconds(30));\n    await HandleAsync(req, cts.Token);\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Register", "⟦⟧"],
+    ["CreateLinkedTokenSource", "⟦⟧"],
+    ["CancelAfter", "⟦⟧"],
+    ["IsBackground = true", "⟦⟧"],
+    ["PeriodicTimer", "⟦⟧"]
+   ]
+  }
+ ]
+}

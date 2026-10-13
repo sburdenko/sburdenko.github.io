@@ -1,0 +1,92 @@
+{
+ "id": "as.u8.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Interlocked.Increment(ref n)", "11"],
+    ["Interlocked.Exchange(ref n, 3)", "⟦⟧"],
+    ["Interlocked.CompareExchange(ref n, 7, 10)", "⟦⟧"],
+    ["Interlocked.CompareExchange(ref n, 7, 99)", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "static void Push(Node node)\n{\n    Node? head = Volatile.Read(ref _head);\n    node.Next = head;\n    while (true)\n    {\n        Node? seen = Interlocked.CompareExchange(ref _head, node, head);\n        if (seen == head) return;\n        head = seen;\n    }\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "static Config? _config;\n\nstatic Config Get()\n{\n    var existing = Volatile.Read(ref _config);\n    if (existing != null) return existing;\n\n    var created = new Config();\n    var winner = Interlocked.___(ref _config, created, ___);\n    return winner ?? created;\n}",
+   "tiles": ["CompareExchange", "null", "Exchange", "created", "existing"],
+   "answer": ["CompareExchange", "null"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2, 4],
+   "explain": "⟦⟧"
+  }
+ ]
+}

@@ -1,0 +1,101 @@
+{
+ "id": "cs.u12.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "Order Load(string path)\n{\n    try\n    {\n        var text = File.ReadAllText(path);\n        return Parse(text);\n    }\n    catch (FormatException e)\n    {\n        log.Warn($\"bad file {path}\");\n        throw e;\n    }\n}",
+   "answer": 10,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "try\n{\n    db.Insert(order);\n}\ncatch (DbException e)\n{\n    throw new OrderSaveException(\n        $\"Order {order.Id} was not saved\", e);  // e → InnerException\n}"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["throw new RepositoryException(\"save failed\", e);", "throw new RepositoryException(\"save failed: \" + e.Message);", "throw new RepositoryException(e.StackTrace);", "log.Error(e); return null;"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "ExceptionDispatchInfo? saved = null;\ntry { Step(); }\ncatch (Exception e) { saved = ExceptionDispatchInfo.___(e); }\n\nCleanup();\nsaved?.___();",
+   "tiles": ["Capture", "Throw", "Rethrow", "Save", "Raise"],
+   "answer": ["Capture", "Throw"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["throw;", "throw ex;", "ExceptionDispatchInfo.Capture(ex).Throw();", "throw new AppException(\"…\", ex);", "throw new AppException(ex.Message);"],
+   "answer": [0, 2, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "static class Settings\n{\n    public static readonly string Root = \"/srv\";\n    public static readonly int Limit =\n        int.Parse(Environment.GetEnvironmentVariable(\"LIMIT\")!);\n    public static string Path => Root + \"/data\";\n}",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["throw;", "⟦⟧"],
+    ["throw ex;", "⟦⟧"],
+    ["ExceptionDispatchInfo.Throw()", "⟦⟧"],
+    ["new X(\"…\", ex)", "⟦⟧"],
+    ["TypeInitializationException", "⟦⟧"]
+   ]
+  }
+ ]
+}

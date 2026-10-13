@@ -1,0 +1,104 @@
+{
+ "id": "dotnet.w5.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "xml",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["AssemblyVersion", "⟦⟧"],
+    ["FileVersion", "⟦⟧"],
+    ["InformationalVersion", "⟦⟧"],
+    ["PackageVersion", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "var asm = typeof(Order).Assembly;\nConsole.WriteLine(asm.GetName().Version);  // 2.4.1.0\nConsole.WriteLine(asm.GetCustomAttribute<AssemblyInformationalVersionAttribute>()\n    ?.InformationalVersion);               // 2.4.1-beta.2+a1b2c3d\nConsole.WriteLine(FileVersionInfo.GetVersionInfo(asm.Location).FileVersion);\n                                           // 2.4.1.0",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["AssemblyVersion", "FileVersion", "InformationalVersion", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "<PropertyGroup>\n  <Version>3.7.2</Version>\n  <AssemblyVersion>3.0.0.0</AssemblyVersion>\n  <FileVersion>3.7.2.41</FileVersion>\n</PropertyGroup>",
+   "lang": "xml",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "[assembly: ___(\"3.0.0.0\")]\n[assembly: ___(\"3.7.2.41\")]\n[assembly: ___(\"3.7.2+a1b2c3d\")]",
+   "tiles": ["AssemblyVersion", "AssemblyFileVersion", "AssemblyInformationalVersion", "AssemblyProduct", "AssemblyTitle"],
+   "answer": ["AssemblyVersion", "AssemblyFileVersion", "AssemblyInformationalVersion"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var asm = Assembly.GetEntryAssembly()!;\nstring a = asm.GetName().Version!.ToString();\nstring b = FileVersionInfo.GetVersionInfo(asm.Location).FileVersion!;\nstring c = asm.GetCustomAttribute<AssemblyInformationalVersionAttribute>()!\n    .InformationalVersion;\nstring d = asm.ImageRuntimeVersion;",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  }
+ ]
+}

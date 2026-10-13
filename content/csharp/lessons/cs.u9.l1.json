@@ -1,0 +1,112 @@
+{
+ "id": "cs.u9.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["ref", "⟦⟧"],
+    ["out", "⟦⟧"],
+    ["in", "⟦⟧"],
+    ["ref readonly", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "static int Peek(ref readonly int x) => x;\n\nint v = 1;\nPeek(ref v);\nPeek(in v);\nPeek(v);\nPeek(out v);",
+   "answer": 6,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "static ref int FindMax(int[] a)\n{\n    int best = 0;\n    for (int i = 1; i < a.Length; i++)\n        if (a[i] > a[best]) best = i;\n    return ref a[best];\n}\n\nint[] a = [3, 9, 4];\nref int m = ref FindMax(a);\nm = 0;                     // a == [3, 0, 4]"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "int[] a = [3, 9, 4];\nint m = FindMax(a);\nm = 0;\nConsole.WriteLine(string.Join(\",\", a));",
+   "options": ["3,9,4", "3,0,4", "0,9,4", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var arr = new Point[1];\nvar list = new List<Point> { new Point() };\narr[0].X = 5;\nCollectionsMarshal.AsSpan(list)[0].X = 5;\nlist[0].X = 5;",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "var counts = new Dictionary<string, int>();\nforeach (var word in words)\n{\n    ___ int c = ___ CollectionsMarshal.GetValueRefOrAddDefault(counts, word, ___ _);\n    c++;\n}",
+   "tiles": ["ref", "ref", "out", "in", "var"],
+   "answer": ["ref", "ref", "out"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

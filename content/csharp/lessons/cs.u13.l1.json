@@ -1,0 +1,105 @@
+{
+ "id": "cs.u13.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["[Route(\"/orders\")]", "⟦⟧", "GetCustomAttribute", "new RouteAttribute(…)"],
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var a = new Order();\nvar b = new Order();\nvar x = typeof(Order).GetCustomAttribute<AuditAttribute>();\nvar y = typeof(Order).GetCustomAttribute<AuditAttribute>();\n\nclass AuditAttribute : Attribute\n{\n    public AuditAttribute() => Console.WriteLine(\"ctor\");\n}\n\n[Audit] class Order { }",
+   "options": ["2", "0", "1", "4"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "static class Cfg\n{\n    public const int Ms = 500;\n    public static readonly int Retries = 3;\n}\n\n[Timeout(Cfg.Ms * 2)]\n[Name(nameof(Cfg))]\n[Retry(Cfg.Retries)]\n[Handler(typeof(List<int>))]\nclass Job { }",
+   "answer": 8,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method,\n    AllowMultiple = true, Inherited = false)]\npublic class RouteAttribute : Attribute { /* … */ }",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "[___(AttributeTargets.Method, AllowMultiple = ___)]\nclass RouteAttribute : ___\n{\n    public RouteAttribute(string path) => Path = path;\n    public string Path { get; }\n}\n\nclass OrdersApi\n{\n    [Route(\"/orders\")]\n    [Route(\"/api/orders\")]\n    public void List() { }\n}",
+   "tiles": ["AttributeUsage", "true", "Attribute", "false", "Serializable", "object"],
+   "answer": ["AttributeUsage", "true", "Attribute"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["[Serializable]", "⟦⟧"],
+    ["[StructLayout]", "⟦⟧"],
+    ["[DllImport]", "⟦⟧"],
+    ["[FieldOffset]", "⟦⟧"],
+    ["[Obsolete]", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "options": ["50", "100", "⟦⟧", "0"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  }
+ ]
+}

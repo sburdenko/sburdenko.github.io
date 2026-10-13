@@ -1,0 +1,107 @@
+{
+ "id": "cs.u10.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var r = new Report();\nIExportable e = r;\ne.Export();\nr.Export();\n((IExportable)r).Export();",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "class Numbers : IEnumerable<int>\n{\n    private readonly int[] _items = [1, 2, 3];\n\n    public IEnumerator<int> GetEnumerator() =>\n        ((IEnumerable<int>)_items).GetEnumerator();\n\n    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();\n}"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var c = new Counter();\n((ICounter)c).Inc();\nICounter a = c;\na.Inc();\nConsole.WriteLine($\"{c.Value} {a.Value}\");",
+   "options": ["0 1", "1 2", "2 2", "0 2"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "static void Twice<T>(___ T x) where T : ___\n{\n    x.Inc();\n    x.Inc();\n}",
+   "tiles": ["ref", "ICounter", "in", "object", "out", "class"],
+   "answer": ["ref", "ICounter"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["ICounter i = c;", "IEnumerable<int> e = list; foreach (var x in e) { }", "⟦⟧", "int v = c.Value;", "foreach (var x in list) { }"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["void IFoo.Run()", "⟦⟧"],
+    ["ICounter i = c", "⟦⟧"],
+    ["where T : ICounter", "⟦⟧"],
+    ["constrained.", "⟦⟧"],
+    ["dispatch stub", "⟦⟧"]
+   ]
+  }
+ ]
+}

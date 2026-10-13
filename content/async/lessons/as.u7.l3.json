@@ -1,0 +1,106 @@
+{
+ "id": "as.u7.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "int count = 0;\nParallel.ForEach(words, w =>\n{\n    if (w.Length > 5)\n        count++;\n});\nConsole.WriteLine(count);",
+   "answer": 4,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "var opts = new ParallelOptions\n{\n    MaxDegreeOfParallelism = 2,\n    CancellationToken = ct\n};\n\nParallel.Invoke(opts,\n    () => BuildIndex(),\n    () => CompressLogs(),\n    () => ResizeImages());"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["state.Break()", "state.Stop()", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "int[] r = Enumerable.Range(1, 8)\n    .AsParallel()\n    .Select(x => x * 10)\n    .ToArray();",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "var errors = lines\n    .___()\n    .___(4)\n    .Where(l => Parse(l).IsError)\n    .ToList();",
+   "tiles": ["AsParallel", "WithDegreeOfParallelism", "AsOrdered", "ToParallel", "MaxDegreeOfParallelism"],
+   "answer": ["AsParallel", "WithDegreeOfParallelism"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Parallel.For", "⟦⟧"],
+    ["Parallel.Invoke", "⟦⟧"],
+    ["AsOrdered", "⟦⟧"],
+    ["ForAll", "⟦⟧"],
+    ["Parallel.ForEachAsync", "⟦⟧"]
+   ]
+  }
+ ]
+}

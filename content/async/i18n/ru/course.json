@@ -11,5 +11,9 @@
  "units/4/title": "Ловушки и продвинутое",
  "units/4/blurb": "Fire-and-forget и async void, SemaphoreSlim вместо lock, TaskCompletionSource, IAsyncEnumerable и await using, Channel и Parallel.ForEachAsync.",
  "units/5/title": "Платформы",
- "units/5/blurb": "ASP.NET Core, WPF и WinForms, Unity: Awaitable, корутины, UniTask и отмена вместе с объектом. Финал курса."
+ "units/5/blurb": "ASP.NET Core, WPF и WinForms, Unity: Awaitable, корутины, UniTask и отмена вместе с объектом.",
+ "units/6/title": "Задачи без await",
+ "units/6/blurb": "ContinueWith и его ловушки, TaskScheduler и StartNew против Task.Run, дочерние задачи, Parallel и PLINQ для работы процессора, таймеры и кто их держит, фоновые потоки, Register и связанные токены.",
+ "units/7/title": "Синхронизация глубже",
+ "units/7/blurb": "Модель памяти и volatile, Interlocked и цикл CAS, спин против объектов ядра, Monitor и тип Lock, Lazy<T> и конкурентные коллекции. Финал курса."
 }

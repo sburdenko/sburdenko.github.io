@@ -1,0 +1,72 @@
+{
+ "id": "mem.u2.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Environment.WorkingSet", "⟦⟧"],
+    ["GC.GetTotalMemory(false)", "⟦⟧"],
+    ["GCMemoryInfo.TotalCommittedBytes", "⟦⟧"],
+    ["GC.GetTotalAllocatedBytes()", "⟦⟧"],
+    ["Process.PrivateMemorySize64", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "dotnet-counters monitor -n Shop --counters System.Runtime[___]",
+   "tiles": ["dotnet.gc.last_collection.heap.size", "dotnet.gc.heap.total_allocated", "dotnet.process.memory.working_set", "dotnet.gc.pause.time"],
+   "answer": ["dotnet.gc.last_collection.heap.size"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "> dumpheap -stat -live\n> dumpheap -mt 00007ffa1c2b4a10\n> dumpobj 000001f2b4d88e10\n> gcroot 000001f2b4d88e10\n> finalizequeue",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

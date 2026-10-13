@@ -1,0 +1,82 @@
+{
+ "id": "cs.u8.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "options": ["1 https://v2", "2 https://v2", "1 https://v1", "2 https://v1"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "class Repo\n{\n    protected Repo() { Warmup(); }\n    protected virtual void Warmup() { }\n}\nclass SqlRepo : Repo\n{\n    readonly string table = \"orders\";\n    readonly string conn;\n    public SqlRepo(string c) { conn = c; }\n    protected override void Warmup()\n    {\n        Console.WriteLine(table.Length);\n        Console.WriteLine(conn.Length);\n    }\n}",
+   "answer": 13,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "Shape s = null;\nConsole.WriteLine(s.Area());",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["op_Addition", "operator +"],
+    ["op_Implicit", "implicit operator"],
+    [".cctor", "⟦⟧"],
+    ["newslot virtual", "virtual"],
+    ["final virtual", "sealed override"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public class Defaults\n{\n    public static ___ int TimeoutSec = 30;\n    ___ Defaults() { }\n}",
+   "tiles": ["readonly", "static", "const", "sealed", "virtual"],
+   "answer": ["readonly", "static"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  }
+ ]
+}

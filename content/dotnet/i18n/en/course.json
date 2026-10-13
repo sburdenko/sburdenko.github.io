@@ -9,10 +9,12 @@
  "units/2/blurb": "Roots and reachability, generations and the LOH, finalizers, IDisposable and using, SafeHandle and memory leaks. You run the collections yourself and see who survives.",
  "units/3/title": "Threads and the thread pool",
  "units/3/blurb": "Threads and the scheduler, data races, lock and Interlocked, deadlock, the thread pool and its starvation. You switch the threads yourself and catch the bugs.",
- "units/4/title": "Assemblies and loading",
- "units/4/blurb": "How the CLR finds and loads assemblies: AssemblyLoadContext, versions and NuGet, trimming, plugins.",
- "units/5/title": "Generics and reflection under the hood",
- "units/5/blurb": "How the JIT compiles generics for value and reference types, what reflection costs, and what source generators replace.",
- "units/6/title": "Performance",
- "units/6/blurb": "Span<T> and Memory<T>, allocations and ArrayPool, profiling and BenchmarkDotNet."
+ "units/4/title": "Assemblies and versions",
+ "units/4/blurb": "What an assembly holds, its three versions and which one the loader checks, strong names and the GAC then and now, deps.json instead of folder probing, and how NuGet settles on one package version.",
+ "units/5/title": "Loading and hosting",
+ "units/5/blurb": "How dotnet app.dll reaches Main: apphost, hostfxr, hostpolicy and picking a version with rollForward. AssemblyLoadContext instead of AppDomain — plugins, isolation and unloading, plus why the process crashes and what single-file and trimming change.",
+ "units/6/title": "Generics and reflection inside out",
+ "units/6/blurb": "How the JIT shares generic code through __Canon and dictionaries, what lies behind metadata tokens, MethodInfo and Invoke, how the dynamic call site cache works, and why source generators replace reflection.",
+ "units/7/title": "Runtime performance",
+ "units/7/blurb": "How .NET makes code fast on the fly: JIT tiers, OSR and Dynamic PGO, ReadyToRun versus Native AOT, inlining and devirtualization — and how to measure the result honestly with BenchmarkDotNet. Course final."
 }

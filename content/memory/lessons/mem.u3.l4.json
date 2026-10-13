@@ -1,0 +1,102 @@
+{
+ "id": "mem.u3.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["new byte[84_990]", "new int[20_000]", "new string('x', 45_000)", "new long[10_000]", "⟦⟧"],
+   "answer": [0, 2, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "GCSettings.___ =\n    GCLargeObjectHeapCompactionMode.___;\nGC.___();",
+   "tiles": ["LargeObjectHeapCompactionMode", "CompactOnce", "Collect", "Default", "LatencyMode", "AlwaysCompact"],
+   "answer": ["LargeObjectHeapCompactionMode", "CompactOnce", "Collect"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["GC.AllocateArray<byte>(4096, pinned: true)", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "Console.WriteLine(GC.GetGeneration(\"hello\"));        // 2147483647\nConsole.WriteLine(GC.GetGeneration(typeof(string))); // 2147483647\nConsole.WriteLine(GC.GetGeneration(new object()));   // 0",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["new byte[100]", "⟦⟧"],
+    ["new byte[100_000]", "LOH"],
+    ["GC.AllocateArray<byte>(100, pinned: true)", "POH"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var a = new byte[10];\nvar b = new byte[100_000];\nvar c = GC.AllocateArray<byte>(10, pinned: true);\nstring d = \"literal\";\nConsole.WriteLine(GC.GetGeneration(a));\nConsole.WriteLine(GC.GetGeneration(b));\nConsole.WriteLine(GC.GetGeneration(c));\nConsole.WriteLine(GC.GetGeneration(d));",
+   "answer": 7,
+   "explain": "⟦⟧"
+  }
+ ]
+}

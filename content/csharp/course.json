@@ -6,7 +6,25 @@
    "id": "u6",
    "title": "⟦⟧",
    "blurb": "⟦⟧",
-   "lessons": ["cs.u6.l1", "cs.u6.l2", "cs.u6.l3"]
+   "lessons": ["cs.u6.l1", "cs.u6.l2", "cs.u6.l3", "cs.u6.boss"]
+  },
+  {
+   "id": "u7",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["cs.u7.l1", "cs.u7.l2", "cs.u7.l3", "cs.u7.boss"]
+  },
+  {
+   "id": "u8",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["cs.u8.l1", "cs.u8.l2", "cs.u8.l3", "cs.u8.l4", "cs.u8.boss"]
+  },
+  {
+   "id": "u9",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["cs.u9.l1", "cs.u9.l2", "cs.u9.l3", "cs.u9.boss"]
   },
   {
    "id": "u1",
@@ -15,10 +33,34 @@
    "lessons": ["cs.u1.l1", "cs.u1.l2", "cs.u1.l3", "cs.u1.boss"]
   },
   {
+   "id": "u10",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["cs.u10.l1", "cs.u10.l2", "cs.u10.boss"]
+  },
+  {
    "id": "u2",
    "title": "⟦⟧",
    "blurb": "⟦⟧",
-   "lessons": ["cs.u2.l1", "cs.u2.l2", "cs.u2.l3", "cs.u2.boss"]
+   "lessons": ["cs.u2.l1", "cs.u2.l2", "cs.u2.l3", "cs.u2.l4", "cs.u2.boss"]
+  },
+  {
+   "id": "u11",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["cs.u11.l1", "cs.u11.l2", "cs.u11.l3", "cs.u11.l4", "cs.u11.boss"]
+  },
+  {
+   "id": "u12",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["cs.u12.l1", "cs.u12.l2", "cs.u12.l3", "cs.u12.boss"]
+  },
+  {
+   "id": "u13",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["cs.u13.l1", "cs.u13.l2", "cs.u13.l3", "cs.u13.boss"]
   },
   {
    "id": "u3",

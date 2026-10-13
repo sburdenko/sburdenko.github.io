@@ -37,6 +37,18 @@
    "title": "⟦⟧",
    "blurb": "⟦⟧",
    "lessons": ["as.u6.l1", "as.u6.l2", "as.u6.l3", "as.u6.l4", "as.u6.boss"]
+  },
+  {
+   "id": "u7",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["as.u7.l1", "as.u7.l2", "as.u7.l3", "as.u7.l4", "as.u7.boss"]
+  },
+  {
+   "id": "u8",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["as.u8.l1", "as.u8.l2", "as.u8.l3", "as.u8.l4", "as.u8.l5", "as.u8.boss"]
   }
  ]
 }

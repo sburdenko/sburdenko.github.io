@@ -1,0 +1,106 @@
+{
+ "id": "mem.u4.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "long before = GC.GetAllocatedBytesForCurrentThread();\nawait Task.Run(() => ProcessBatch(items));\nlong after = GC.GetAllocatedBytesForCurrentThread();",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[MemoryDiagnoser]\npublic class ParseBench\n{\n    private readonly string _line = \"12,34,56\";\n\n    [Benchmark(Baseline = true)]\n    public int Split() => _line.Split(',').Sum(int.Parse);\n\n    [Benchmark]\n    public int Span() => SumBySpan(_line);\n}"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "byte[] buf = ArrayPool<byte>.Shared.Rent(64 * 1024);\ntry\n{\n    int read = await stream.ReadAsync(buf);\n    Process(buf.AsSpan(0, read));\n}\nfinally\n{\n    ArrayPool<byte>.Shared.Return(buf);\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "uint Hash(Stream stream, int count)\n{\n    byte[] buf = ArrayPool<byte>.Shared.Rent(count);\n    try\n    {\n        stream.ReadExactly(buf, 0, count);\n        return Checksum(buf);\n    }\n    finally\n    {\n        ArrayPool<byte>.Shared.Return(buf);\n    }\n}",
+   "answer": 6,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "char[]? rented = null;\nSpan<char> buf = len <= 256\n    ? stackalloc char[256]\n    : (rented = ArrayPool<char>.Shared.Rent(len));\ntry\n{\n    Fill(buf[..len]);\n}\nfinally\n{\n    if (rented != null) ArrayPool<char>.Shared.Return(rented);\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "tiles": ["stackalloc", "Rent", "Return", "new", "Create", "Clear"],
+   "answer": ["stackalloc", "Rent", "Return"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "string id = string.Create(9, (Prefix: 'U', N: 42), static (span, s) =>\n{\n    span[0] = s.Prefix;\n    s.N.TryFormat(span[1..], out _, \"D8\");\n});\n// \"U00000042\"",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var buf = ArrayPool<byte>.Shared.Rent(1024);\nint n = Fill(buf);\nArrayPool<byte>.Shared.Return(buf);\nSend(buf.AsSpan(0, n));",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "ArrayPool<T>.Shared"],
+    ["⟦⟧", "stackalloc + Span<T>"],
+    ["⟦⟧", "string.Create"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "MemoryDiagnoser"]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,90 @@
+{
+ "id": "cs.u6.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "public override bool Equals(object? o) =>\n    o is Point p && p.X == X && p.Y == Y;\n\npublic override int GetHashCode() => 0;",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "int? x = 5;\nConsole.WriteLine(x.GetType());",
+   "options": ["System.Int32", "System.Nullable`1[System.Int32]", "System.Object", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "object o = (short)7;\nint a = (short)o;\nint b = (int)o;\nDayOfWeek d = (DayOfWeek)(object)1;\nstring? s = o as string;",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["castclass", "(Manager)o"],
+    ["isinst", "o as Manager"],
+    ["unbox.any", "⟦⟧"],
+    ["add.ovf", "⟦⟧"],
+    ["call op_Addition", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "object a = 1;\nobject b = 1;\nConsole.WriteLine(a == b);\nConsole.WriteLine(a.Equals(b));",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "checked\n{\n    int r = Add(int.MaxValue, 1);\n    Console.WriteLine(r);\n}\n\nstatic int Add(int a, int b) => a + b;",
+   "options": ["-2147483648", "⟦⟧", "2147483648", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "long big = 5_000_000_000;\nint n = ___((int)big);\n\nif (o ___ int i) Use(i);",
+   "tiles": ["checked", "unchecked", "is", "as", "default"],
+   "answer": ["checked", "is"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "dynamic d = new List<int> { 1, 2 };\nvar n = d.Count;",
+   "options": ["dynamic", "int", "object", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

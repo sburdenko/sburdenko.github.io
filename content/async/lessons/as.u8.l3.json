@@ -1,0 +1,84 @@
+{
+ "id": "as.u8.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "private SpinLock _spin = new(enableThreadOwnerTracking: false);\n\nbool taken = false;\ntry\n{\n    _spin.Enter(ref taken);\n    _items[_count++] = item;\n}\nfinally\n{\n    if (taken) _spin.Exit();\n}"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "class Buffer\n{\n    private readonly SpinLock _spin = new(false);\n    private int _count;\n\n    public void Add()\n    {\n        bool taken = false;\n        try { _spin.Enter(ref taken); _count++; }\n        finally { if (taken) _spin.Exit(); }\n    }\n}",
+   "answer": 2,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Mutex", "⟦⟧"],
+    ["Semaphore", "⟦⟧"],
+    ["AutoResetEvent", "⟦⟧"],
+    ["ManualResetEvent", "⟦⟧"],
+    ["SpinLock", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "using var gate = new ___(true, @\"Global\\Exporter\", out bool ___);\nif (!isFirst)\n    return;",
+   "tiles": ["Mutex", "isFirst", "SemaphoreSlim", "Monitor", "lockTaken"],
+   "answer": ["Mutex", "isFirst"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  }
+ ]
+}

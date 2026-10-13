@@ -1,0 +1,108 @@
+{
+ "id": "cs.u7.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 11,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["struct A { int X; int Y; }", "struct B { int Id; string Name; }", "struct C { float X; float Y; }", "struct D { byte Flag; int Value; }", "struct E { long Ticks; int Kind; int Extra; }"],
+   "answer": [0, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "readonly struct Key : IEquatable<Key>\n{\n    public readonly string Region; public readonly int Id;\n    public bool Equals(Key o) => Region == o.Region && Id == o.Id;\n    public override bool Equals(object? o) => o is Key k && Equals(k);\n    public override int GetHashCode() => HashCode.Combine(Region, Id);\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "struct Point : ___<Point>\n{\n    public int X, Y;\n    public bool Equals(Point o) => X == o.X && Y == o.Y;\n    public override bool Equals(object? o) => o is Point p && ___(p);\n    public override int GetHashCode() => HashCode.Combine(X, Y);\n}",
+   "tiles": ["IEquatable", "Equals", "IComparable", "ReferenceEquals", "IEqualityComparer"],
+   "answer": ["IEquatable", "Equals"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var a = new P { X = 1, Y = 2 };\nvar b = new P { X = 1, Y = 2 };\nConsole.WriteLine(a == b);",
+   "options": ["⟦⟧", "True", "False", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["long Ticks", "int Count", "short Code", "byte Flag"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Unsafe.SizeOf<T>()", "⟦⟧"],
+    ["Marshal.SizeOf<T>()", "⟦⟧"],
+    ["[StructLayout(LayoutKind.Auto)]", "⟦⟧"],
+    ["[StructLayout(LayoutKind.Sequential, Pack = 1)]", "⟦⟧"],
+    ["[FieldOffset(8)]", "⟦⟧"]
+   ]
+  }
+ ]
+}

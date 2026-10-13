@@ -1,0 +1,79 @@
+{
+ "id": "as.u7.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "void OnClick(object sender, RoutedEventArgs e)\n{\n    Task.Factory.StartNew(() => Heavy());\n}",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var t = LoadAsync();\nvar show = t.ContinueWith(x => Show(x.Result),\n    TaskContinuationOptions.OnlyOnRanToCompletion);\nvar log = t.ContinueWith(x => Log(x.Exception!),\n    TaskContinuationOptions.OnlyOnFaulted);\nawait Task.WhenAll(show, log);",
+   "answer": 5,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var report = rows\n    .AsParallel()\n    // ???\n    .Select(r => Heavy(r))\n    .ToList();",
+   "options": [".AsOrdered()", ".WithDegreeOfParallelism(1)", ".OrderBy(r => r)", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "___ var cts = CancellationTokenSource.___(ct);\ncts.___(TimeSpan.FromSeconds(10));\nreturn await FetchAsync(cts.Token);",
+   "tiles": ["using", "CreateLinkedTokenSource", "CancelAfter", "await", "Register", "Cancel"],
+   "answer": ["using", "CreateLinkedTokenSource", "CancelAfter"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Unwrap()", "⟦⟧"],
+    ["LongRunning", "⟦⟧"],
+    ["ParallelLoopState.Break()", "⟦⟧"],
+    ["ExecuteSynchronously", "⟦⟧"],
+    ["CancellationToken.Register", "⟦⟧"]
+   ]
+  }
+ ]
+}

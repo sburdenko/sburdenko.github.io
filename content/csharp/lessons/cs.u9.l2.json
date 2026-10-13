@@ -1,0 +1,102 @@
+{
+ "id": "cs.u9.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["3", "5", "MissingMethodException", "0"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var log = new Log();\nILog ilog = log;\nlog.Write(\"a\");\nilog.Write(\"b\");\n\ninterface ILog { void Write(string s, int level = 1); }\nclass Log : ILog\n{\n    public void Write(string s, int level = 2) => Console.Write(level);\n}",
+   "options": ["21", "22", "11", "12"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "int n = 0;\nint Next() => ++n;\nvoid M(int a, int b) => Console.Write($\"{a}{b}\");\n\nM(b: Next(), a: Next());",
+   "options": ["21", "12", "11", "22"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["ReadOnlySpan<int>", "int[]", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["params ReadOnlySpan<int>", "⟦⟧"],
+    ["params List<int>", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public static void Log(string format, ___ ___<object?> args)\n{\n    // ...\n}",
+   "tiles": ["params", "ReadOnlySpan", "List", "in", "IEnumerable"],
+   "answer": ["params", "ReadOnlySpan"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

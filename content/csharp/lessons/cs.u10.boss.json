@@ -1,0 +1,73 @@
+{
+ "id": "cs.u10.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 6,
+ "boss": true,
+ "cards": [
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var c = new Counter();\nICounter i = c;\nc.Inc();\ni.Inc();\ni.Inc();\nConsole.WriteLine(c.Value + i.Value);",
+   "options": ["3", "4", "2", "6"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "class Cache : IDisposable, IAsyncDisposable\n{\n    void IDisposable.Dispose() { }\n    public ValueTask DisposeAsync() => ValueTask.CompletedTask;\n}\n\nvar cache = new Cache();\nawait cache.DisposeAsync();\nusing (cache) { }\ncache.Dispose();",
+   "answer": 9,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["IComparable<S> x = s;", "⟦⟧", "object o = s;", "s.CompareTo(t)"],
+   "answer": [0, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public interface IExporter\n{\n    void Export(Report r);\n\n    void ExportAll(IEnumerable<Report> rs)\n    ___\n        foreach (var r in rs) ___(r);\n    }\n}",
+   "tiles": ["{", "Export", "abstract", "base.Export", ";"],
+   "answer": ["{", "Export"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["void IFoo.Run()", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["static abstract", "⟦⟧"],
+    ["constrained. !!T", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

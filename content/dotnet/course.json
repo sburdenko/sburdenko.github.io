@@ -33,20 +33,26 @@
   {
    "id": "w5",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["dotnet.w5.l1", "dotnet.w5.l2", "dotnet.w5.l3", "dotnet.w5.l4", "dotnet.w5.boss"]
   },
   {
    "id": "w6",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["dotnet.w6.l1", "dotnet.w6.l2", "dotnet.w6.l3", "dotnet.w6.l4", "dotnet.w6.boss"]
   },
   {
    "id": "w7",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["dotnet.w7.l1", "dotnet.w7.l2", "dotnet.w7.l3", "dotnet.w7.boss"]
+  },
+  {
+   "id": "w8",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "lessons": ["dotnet.w8.l1", "dotnet.w8.l2", "dotnet.w8.l3", "dotnet.w8.boss"]
   }
  ]
 }

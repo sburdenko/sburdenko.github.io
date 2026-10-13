@@ -100,10 +100,10 @@ const SHAPE = {
   learn: { need: { title: is.str, body: is.str }, may: { deep: is.str, code: is.str, lang: is.str, flow: is.strs } },
   choice: { need: { q: is.str, options: is.strs, answer: is.num, explain: is.str }, may: { wrong: v => v && typeof v === 'object', code: is.str, lang: is.str, deep: is.str } },
   multi: { need: { q: is.str, options: is.strs, answer: is.nums, explain: is.str }, may: { code: is.str, lang: is.str, deep: is.str } },
-  order: { need: { q: is.str, items: is.strs }, may: { explain: is.str } },
+  order: { need: { q: is.str, items: is.strs }, may: { explain: is.str, code: is.str, lang: is.str } },
   blanks: { need: { q: is.str, code: is.str, tiles: is.strs, answer: is.strs }, may: { explain: is.str, lang: is.str } },
   tapline: { need: { q: is.str, code: is.str, answer: is.num }, may: { explain: is.str, lang: is.str } },
-  match: { need: { q: is.str, pairs: is.pairs }, may: {} },
+  match: { need: { q: is.str, pairs: is.pairs }, may: { code: is.str, lang: is.str } },
   rig: { need: { rig: is.str, task: is.str }, may: null }   // у стендов своя форма полей
 };
 

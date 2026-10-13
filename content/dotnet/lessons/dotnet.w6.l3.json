@@ -1,0 +1,108 @@
+{
+ "id": "dotnet.w6.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "AppDomain sandbox = AppDomain.CreateDomain(\"plugins\");",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "<PropertyGroup>\n  <EnableDynamicLoading>true</EnableDynamicLoading>\n</PropertyGroup>\n<ItemGroup>\n  <ProjectReference Include=\"..\\Contracts\\Contracts.csproj\">\n    <Private>false</Private>\n    <ExcludeAssets>runtime</ExcludeAssets>\n  </ProjectReference>\n</ItemGroup>",
+   "lang": "xml",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "class PluginLoadContext : AssemblyLoadContext\n{\n    private readonly AssemblyDependencyResolver _resolver;\n\n    public PluginLoadContext(string pluginPath)\n        => _resolver = new AssemblyDependencyResolver(pluginPath);\n\n    protected override Assembly? Load(AssemblyName name)\n    {\n        string? path = _resolver.ResolveAssemblyToPath(name);\n        return path != null ? LoadFromAssemblyPath(path) : null;\n    }\n\n    protected override IntPtr LoadUnmanagedDll(string name)\n    {\n        string? path = _resolver.ResolveUnmanagedDllToPath(name);\n        return path != null ? LoadUnmanagedDllFromPath(path) : IntPtr.Zero;\n    }\n}",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "protected override Assembly? Load(AssemblyName name)\n{\n    string? path = _resolver.___(name);\n    return path != null ? ___(path) : null;\n}",
+   "tiles": ["ResolveAssemblyToPath", "LoadFromAssemblyPath", "Assembly.LoadFrom", "ResolveUnmanagedDllToPath", "LoadFromStream"],
+   "answer": ["ResolveAssemblyToPath", "LoadFromAssemblyPath"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["alc.LoadFromAssemblyPath(path)", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["Assembly.LoadFrom(path)", "⟦⟧"],
+    ["Assembly.LoadFile(path)", "⟦⟧"]
+   ]
+  }
+ ]
+}

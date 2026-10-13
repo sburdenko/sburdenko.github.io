@@ -1,5 +1,5 @@
 {
- "title": "Course final",
+ "title": "Final: platforms",
  "sub": "Server, window and game: one mechanism",
  "cards/0/task": "Find the platform where .Result doesn't hang.",
  "cards/1/task": "A Unity script moves a transform after await. Make it all work without freezing frames.",

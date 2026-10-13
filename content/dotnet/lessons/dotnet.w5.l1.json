@@ -1,0 +1,105 @@
+{
+ "id": "dotnet.w5.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 9,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "var asm = typeof(Order).Assembly;\nConsole.WriteLine(asm.FullName);\n// Shop, Version=1.2.0.0, Culture=neutral, PublicKeyToken=null\nConsole.WriteLine(typeof(string).Assembly.GetName().Name);\n// System.Private.CoreLib",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": ".assembly extern System.Runtime\n{\n  .publickeytoken = (B0 3F 5F 7F 11 D5 0A 3A )\n  .ver 9:0:0:0\n}\n.assembly Shop\n{\n  .ver 1:2:0:0\n}\n.module Shop.dll",
+   "lang": "il",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "var asm = typeof(Order).Assembly;\nConsole.WriteLine(asm.ManifestModule.Name);  // Shop.dll\nConsole.WriteLine(asm.GetModules().Length);  // 1",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "tiles": ["GetManifestResourceNames", "GetManifestResourceStream", "GetFiles", "GetTypes", "GetManifestResourceInfo"],
+   "answer": ["GetManifestResourceNames", "GetManifestResourceStream"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": ".assembly extern Shop.Core\n{\n  .ver 2:0:0:0\n}\n.assembly Shop\n{\n  .ver 1:2:0:0\n}\n.mresource public Shop.Data.prices.json\n{\n}\n.class extern forwarder Shop.Money\n{\n  .assembly extern Shop.Core\n}",
+   "lang": "il",
+   "answer": 11,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Assembly", "⟦⟧"],
+    ["AssemblyRef", "⟦⟧"],
+    ["ManifestResource", "⟦⟧"],
+    ["ExportedType", "⟦⟧"],
+    ["File", "⟦⟧"]
+   ]
+  }
+ ]
+}
