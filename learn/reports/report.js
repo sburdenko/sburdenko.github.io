@@ -1,4 +1,5 @@
-/**
+
+import { bi } from '../ui.js?v=202610161720';/**
  * Жалобы на карточки: категории, сборка и проверка отчёта. Без DOM и без Firebase —
  * тесты проверяют ровно то, что уйдёт в базу. Правила Firestore (см. firestore.rules)
  * повторяют эти ограничения на стороне сервера.
@@ -6,16 +7,16 @@
 
 /** Категории проблем. Порядок — порядок в окне. */
 export const CATEGORIES = [
-  { id: 'wrong-answer', ru: 'Неверный ответ засчитан или верный не принят', en: 'Wrong answer accepted, or a correct one rejected' },
-  { id: 'unclear', ru: 'Непонятно объяснение или вопрос', en: 'The explanation or question is unclear' },
-  { id: 'typo', ru: 'Опечатка или ошибка в тексте', en: 'Typo or mistake in the text' },
-  { id: 'fact', ru: 'Неточный или устаревший факт', en: 'Inaccurate or outdated fact' },
-  { id: 'translation', ru: 'Плохой перевод', en: 'Bad translation' },
-  { id: 'rig', ru: 'Стенд не работает или ведёт себя странно', en: 'The rig is broken or behaves oddly' },
-  { id: 'ui', ru: 'Не нажимается или съехала вёрстка', en: 'Cannot tap it, or the layout is broken' },
-  { id: 'difficulty', ru: 'Слишком сложно или слишком просто', en: 'Too hard or too easy' },
-  { id: 'idea', ru: 'Идея: чего не хватает', en: 'Idea: what is missing' },
-  { id: 'other', ru: 'Другое', en: 'Something else' }
+  { id: 'wrong-answer', ...bi('x.report.CATEGORIES.1') },
+  { id: 'unclear', ...bi('x.report.CATEGORIES.2') },
+  { id: 'typo', ...bi('x.report.CATEGORIES.3') },
+  { id: 'fact', ...bi('x.report.CATEGORIES.4') },
+  { id: 'translation', ...bi('x.report.CATEGORIES.5') },
+  { id: 'rig', ...bi('x.report.CATEGORIES.6') },
+  { id: 'ui', ...bi('x.report.CATEGORIES.7') },
+  { id: 'difficulty', ...bi('x.report.CATEGORIES.8') },
+  { id: 'idea', ...bi('x.report.CATEGORIES.9') },
+  { id: 'other', ...bi('x.report.CATEGORIES.10') }
 ];
 
 export const CATEGORY_IDS = CATEGORIES.map(c => c.id);

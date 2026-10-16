@@ -8,7 +8,8 @@
 
 /* ---------- стековая машина CIL ---------- */
 
-import { tr } from './i18n.js?v=202610131220';
+import { tr } from './i18n.js?v=202610161720';
+import { t as tl, bi } from './ui.js?v=202610161720';
 
 const BIN = {
   add: [(a, b) => a + b, '+'],
@@ -36,7 +37,7 @@ export function parseOp(line) {
  */
 export function runIL(program, args = []) {
   /** @type {{ pc?: number, stack: any[], note: string, error?: any, ret?: any }[]} */
-  const frames = [{ pc: -1, stack: [], note: tr({ ru: 'Машина готова. Стек пуст.', en: 'The machine is ready. The stack is empty.' }) }];
+  const frames = [{ pc: -1, stack: [], note: tl('m.core.runIL.1') }];
   const stack = [];
   const push = (stackNow, note, extra = {}) => frames.push({ stack: [...stackNow], note, ...extra });
   for (let pc = 0; pc < program.length; pc++) {
@@ -44,38 +45,38 @@ export function runIL(program, args = []) {
     const fail = note => { push(stack, note, { pc, error: true }); return { frames, error: note }; };
     if (ins.op === 'ldarg') {
       const a = args[ins.n];
-      if (!a) return fail(tr({ ru: `У метода нет аргумента №${ins.n}.`, en: `The method has no argument #${ins.n}.` }));
+      if (!a) return fail(tl('m.core.runIL.2', { n: ins.n }));
       stack.push(a.value);
-      push(stack, tr({ ru: `Кладём на стек аргумент ${a.name} = ${a.value}.`, en: `Push argument ${a.name} = ${a.value} onto the stack.` }), { pc });
+      push(stack, tl('m.core.runIL.3', { name: a.name, value: a.value }), { pc });
     } else if (ins.op === 'ldc') {
       stack.push(ins.n);
-      push(stack, tr({ ru: `Кладём на стек число ${ins.n}.`, en: `Push the number ${ins.n} onto the stack.` }), { pc });
+      push(stack, tl('m.core.runIL.4', { n: ins.n }), { pc });
     } else if (ins.op in BIN) {
-      if (stack.length < 2) return fail(tr({ ru: `${ins.op} нужно два числа, а на стеке ${stack.length}. Стек «провалился» — stack underflow.`, en: `${ins.op} needs two numbers, but the stack holds ${stack.length}. Stack underflow.` }));
+      if (stack.length < 2) return fail(tl('m.core.runIL.5', { op: ins.op, length: stack.length }));
       const b = stack.pop(), a = stack.pop();
-      if (ins.op === 'div' && b === 0) return fail(tr({ ru: 'Деление на ноль — DivideByZeroException.', en: 'Division by zero: DivideByZeroException.' }));
+      if (ins.op === 'div' && b === 0) return fail(tl('m.core.runIL.6'));
       const [f, sign] = BIN[ins.op];
       stack.push(f(a, b));
-      push(stack, tr({ ru: `${ins.op}: снимаем ${a} и ${b}, кладём ${a} ${sign} ${b} = ${stack.at(-1)}.`, en: `${ins.op}: pop ${a} and ${b}, push ${a} ${sign} ${b} = ${stack.at(-1)}.` }), { pc });
+      push(stack, tl('m.core.runIL.7', { op: ins.op, a, b, sign, v1: stack.at(-1) }), { pc });
     } else if (ins.op === 'dup') {
-      if (!stack.length) return fail(tr({ ru: 'dup: копировать нечего, стек пуст.', en: 'dup: nothing to copy, the stack is empty.' }));
+      if (!stack.length) return fail(tl('m.core.runIL.8'));
       stack.push(stack.at(-1));
-      push(stack, tr({ ru: `dup: копируем вершину, теперь там два раза ${stack.at(-1)}.`, en: `dup: copy the top, now ${stack.at(-1)} is there twice.` }), { pc });
+      push(stack, tl('m.core.runIL.9', { v1: stack.at(-1) }), { pc });
     } else if (ins.op === 'pop') {
-      if (!stack.length) return fail(tr({ ru: 'pop: снимать нечего, стек пуст.', en: 'pop: nothing to pop, the stack is empty.' }));
+      if (!stack.length) return fail(tl('m.core.runIL.10'));
       const v = stack.pop();
-      push(stack, tr({ ru: `pop: выбрасываем ${v}.`, en: `pop: discard ${v}.` }), { pc });
+      push(stack, tl('m.core.runIL.11', { v1: v }), { pc });
     } else if (ins.op === 'nop') {
-      push(stack, tr({ ru: 'nop: ничего не делаем.', en: 'nop: do nothing.' }), { pc });
+      push(stack, tl('m.core.runIL.12'), { pc });
     } else if (ins.op === 'ret') {
-      if (stack.length !== 1) return fail(tr({ ru: `ret: на стеке должно остаться ровно одно значение, а их ${stack.length}.`, en: `ret: exactly one value must be left on the stack, but there are ${stack.length}.` }));
-      push(stack, tr({ ru: `ret: метод возвращает ${stack[0]}.`, en: `ret: the method returns ${stack[0]}.` }), { pc, ret: stack[0] });
+      if (stack.length !== 1) return fail(tl('m.core.runIL.13', { length: stack.length }));
+      push(stack, tl('m.core.runIL.14', { v1: stack[0] }), { pc, ret: stack[0] });
       return { frames, ret: stack[0] };
     } else {
-      return fail(tr({ ru: `Машина не знает инструкцию «${ins.text}».`, en: `The machine doesn't know the instruction "${ins.text}".` }));
+      return fail(tl('m.core.runIL.15', { text: ins.text }));
     }
   }
-  const note = tr({ ru: 'Программа кончилась без ret.', en: 'The program ended without ret.' });
+  const note = tl('m.core.runIL.16');
   frames.push({ pc: program.length - 1, stack: [...stack], note, error: true });
   return { frames, error: note };
 }
@@ -102,14 +103,14 @@ function callOnce(s, name, depth, log) {
     x.jits++; s.jits++;
     x.state = s.tiered ? 'tier0' : 'native';
     log.push({ name, kind: 'jit', text: s.tiered
-      ? tr({ ru: `${name}: первый вызов → заглушка зовёт JIT → быстрый код Tier 0.`, en: `${name}: first call → the stub calls the JIT → quick Tier 0 code.` })
-      : tr({ ru: `${name}: первый вызов → заглушка зовёт JIT → машинный код готов, заглушка теперь ведёт прямо в него.`, en: `${name}: first call → the stub calls the JIT → machine code is ready, and the stub now jumps straight to it.` }) });
+      ? tl('m.core.callOnce.1', { name })
+      : tl('m.core.callOnce.2', { name }) });
   } else if (s.tiered && x.state === 'tier0' && x.calls >= s.threshold) {
     x.jits++; s.jits++;
     x.state = 'tier1';
-    log.push({ name, kind: 'tier1', text: tr({ ru: `${name}: ${s.threshold}-й вызов — метод «горячий», JIT в фоне собирает оптимизированный Tier 1.`, en: `${name}: call #${s.threshold}, the method is "hot", so the JIT builds optimized Tier 1 code in the background.` }) });
+    log.push({ name, kind: 'tier1', text: tl('m.core.callOnce.3', { name, threshold: s.threshold }) });
   } else if (depth === 0) {
-    log.push({ name, kind: 'fast', text: tr({ ru: `${name}: сразу в машинный код, JIT не нужен.`, en: `${name}: straight into machine code, no JIT needed.` }) });
+    log.push({ name, kind: 'fast', text: tl('m.core.callOnce.4', { name }) });
   }
   for (const d of x.deps) callOnce(s, d, depth + 1, log);
 }
@@ -123,8 +124,8 @@ export function jitCall(s, name, times = 1) {
   const fast = log.filter(e => e.kind === 'fast').length;
   const kept = log.filter(e => e.kind !== 'fast');
   if (fast) kept.push({ name, kind: 'fast', text: fast > 1
-    ? tr({ ru: `${name}: ещё ${fast} вызовов сразу в машинный код.`, en: `${name}: ${fast} more calls straight into machine code.` })
-    : tr({ ru: `${name}: сразу в машинный код, JIT не нужен.`, en: `${name}: straight into machine code, no JIT needed.` }) });
+    ? tl('m.core.jitCall.1', { name, fast })
+    : tl('m.core.jitCall.2', { name }) });
   n.log = [...s.log, ...kept].slice(-8);
   return n;
 }
@@ -133,12 +134,12 @@ export function jitCall(s, name, times = 1) {
 
 /** Длины фаз в условных единицах: соотношения правдоподобные, абсолютные значения — нет. Тексты — { ru, en }, стенд берёт их через tr(). */
 export const RACE = [
-  { id: 'jit', name: { ru: 'Обычный (JIT)', en: 'Regular (JIT)' }, phases: [['host', 30], ['jit', 55], ['run', 10]],
-    traits: [{ ru: 'маленький .dll', en: 'small .dll' }, { ru: 'нужен установленный .NET', en: 'needs .NET installed' }, { ru: 'JIT компилирует при каждом запуске', en: 'the JIT compiles on every launch' }] },
+  { id: 'jit', name: bi('m.core.RACE.1'), phases: [['host', 30], ['jit', 55], ['run', 10]],
+    traits: [bi('m.core.RACE.2'), bi('m.core.RACE.3'), bi('m.core.RACE.4')] },
   { id: 'r2r', name: 'ReadyToRun', phases: [['host', 30], ['jit', 12], ['run', 10]],
-    traits: [{ ru: 'файл крупнее: внутри и готовый код, и IL', en: 'bigger file: holds both precompiled code and IL' }, { ru: 'нужен установленный .NET', en: 'needs .NET installed' }, { ru: 'JIT почти не работает на старте', en: 'the JIT barely runs at startup' }] },
+    traits: [bi('m.core.RACE.5'), bi('m.core.RACE.6'), bi('m.core.RACE.7')] },
   { id: 'aot', name: 'Native AOT', phases: [['host', 4], ['run', 10]],
-    traits: [{ ru: 'один нативный файл', en: 'a single native file' }, { ru: '.NET ставить не нужно', en: 'no need to install .NET' }, { ru: 'JIT нет вообще, но нельзя грузить код на лету', en: 'no JIT at all, but you can\'t load code on the fly' }] }
+    traits: [bi('m.core.RACE.8'), bi('m.core.RACE.9'), bi('m.core.RACE.10')] }
 ];
 
 export const raceTotal = lane => lane.phases.reduce((s, [, len]) => s + len, 0);

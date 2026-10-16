@@ -6,7 +6,8 @@
  * card.bugs   — [{ lines: [номера строк], title, why, cat? }]: любая из строк баги засчитывает его
  * card.goal   — { min, maxFalse }: сколько багов нужно найти и сколько ложных отметок допустимо
  */
-import { tr } from './i18n.js?v=202610131220';
+import { tr } from './i18n.js?v=202610161720';
+import { t as tl } from './ui.js?v=202610161720';
 
 export const HUNT_DEFAULT = { maxFalse: 2 };
 
@@ -51,8 +52,5 @@ export const huntRig = {
 /** Одна строка сводки после проверки. */
 export function huntSummary(card, s) {
   const r = huntAnalyze(card, s.flag), need = huntNeed(card);
-  return tr({
-    ru: `Найдено багов: ${r.found.length} из ${need.min}. Лишних отметок: ${r.falseLines.length}${r.falseLines.length > need.maxFalse ? ` (допустимо не больше ${need.maxFalse})` : ''}.`,
-    en: `Bugs found: ${r.found.length} of ${need.min}. Extra flags: ${r.falseLines.length}${r.falseLines.length > need.maxFalse ? ` (at most ${need.maxFalse} allowed)` : ''}.`
-  });
+  return tl('m.hunt.huntSummary.1', { length: r.found.length, min: need.min, length2: r.falseLines.length, extra: r.falseLines.length > need.maxFalse ? tl('m.hunt.allowed', { max: need.maxFalse }) : '' });
 }

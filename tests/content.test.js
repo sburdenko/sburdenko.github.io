@@ -128,3 +128,22 @@ for (const id of courses) {
     assert.deepEqual(bad, [], bad.slice(0, 8).join('\n'));
   });
 }
+
+test('строки стендов: ru и en совпадают по ключам и подстановкам, каждый ключ из кода есть в данных и наоборот', () => {
+  const ru = read('rigs', 'ru.json'), en = read('rigs', 'en.json');
+  assert.deepEqual(Object.keys(en).sort(), Object.keys(ru).sort(), 'наборы ключей ru и en различаются');
+  const vars = s => [...s.matchAll(/\{(\w+)\}/g)].map(m => m[1]).sort().join();
+  // языки вправе отличаться подстановками, только если так требует грамматика — тогда ключ в этом списке с причиной
+  const GRAMMAR = { 'r.3d.convert.3': 'в английском существительное согласуется с числом ({noun}), в русском после «из N» — нет' };
+  for (const k of Object.keys(ru)) {
+    assert.ok(!/[А-Яа-яЁё]/.test(en[k]), `${k}: кириллица в английской строке`);
+    if (!(k in GRAMMAR)) assert.equal(vars(en[k]), vars(ru[k]), `${k}: подстановки {…} различаются`);
+  }
+  // ключи, которые код запрашивает через tl/bi/tp, и ключи в данных — одно и то же множество
+  const learn = join(root, '..', 'learn');
+  const files = readdirSync(learn, { recursive: true }).map(String).filter(f => f.endsWith('.js'));
+  const used = new Set();
+  for (const f of files) for (const m of readFileSync(join(learn, f), 'utf8').matchAll(/\b(?:tl|bi|tp)\('([mrx]\.[^']+)'/g)) used.add(m[1]);
+  assert.deepEqual([...used].filter(k => !(k in ru)), [], 'код просит ключи, которых нет в content/rigs');
+  assert.deepEqual(Object.keys(ru).filter(k => !used.has(k)), [], 'в content/rigs есть ключи, которые код не использует');
+});
