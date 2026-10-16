@@ -1,9 +1,10 @@
 /** Стенд «найди баг»: листинг с нажимаемыми строками. Логика — в models-hunt.js. */
-import { esc } from '../assets/vhs.js?v=202610131220';
-import { drive, act } from './rig-kit.js?v=202610131220';
-import { codeHtml } from './code-view.js?v=202610131220';
-import { tr } from './i18n.js?v=202610131220';
-import { huntAnalyze, huntNeed, huntSummary, huntRig } from './models-hunt.js?v=202610131220';
+import { esc } from '../assets/vhs.js?v=202610161720';
+import { drive, act } from './rig-kit.js?v=202610161720';
+import { codeHtml } from './code-view.js?v=202610161720';
+import { tr } from './i18n.js?v=202610161720';
+import { huntAnalyze, huntNeed, huntSummary, huntRig } from './models-hunt.js?v=202610161720';
+import { t as tl } from './ui.js?v=202610161720';
 
 function hunt(card, host, done) {
   const lines = card.code.split('\n');
@@ -25,10 +26,10 @@ function hunt(card, host, done) {
         + r.found.map(i => bug(card.bugs[i], true)).join('')
         + (s.revealed ? r.missed.map(i => bug(card.bugs[i], false)).join('') : '')
       : '';
-    return `<div class="hunt-code" role="group" aria-label="${esc(tr({ ru: 'Код: нажми на строки с багами', en: 'Code: tap the lines with bugs' }))}">${rows}</div>
-      <div class="pool-stats two"><div class="counter"><b>${s.flag.length}</b><span>${esc(tr({ ru: 'отмечено строк', en: 'lines flagged' }))}</span></div><div class="counter"><b>${need.min}</b><span>${esc(tr({ ru: 'нужно найти багов', en: 'bugs to find' }))}</span></div></div>
+    return `<div class="hunt-code" role="group" aria-label="${esc(tl('r.hunt.hunt.1'))}">${rows}</div>
+      <div class="pool-stats two"><div class="counter"><b>${s.flag.length}</b><span>${esc(tl('r.hunt.hunt.2'))}</span></div><div class="counter"><b>${need.min}</b><span>${esc(tl('r.hunt.hunt.3'))}</span></div></div>
       ${list}
-      <div class="btns">${act('check', tr({ ru: 'Проверить', en: 'Check' }), 'btn primary', s.revealed || !s.flag.length)}${act('reveal', tr({ ru: 'Показать все баги', en: 'Show all bugs' }), 'btn', s.revealed)}${act('reset', tr({ ru: 'Сначала ↺', en: 'Restart ↺' }))}</div>`;
+      <div class="btns">${act('check', tl('r.hunt.hunt.4'), 'btn primary', s.revealed || !s.flag.length)}${act('reveal', tl('r.hunt.hunt.5'), 'btn', s.revealed)}${act('reset', tl('r.hunt.hunt.6'))}</div>`;
   }, done);
 }
 

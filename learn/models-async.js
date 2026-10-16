@@ -2,7 +2,8 @@
  * Модели курса «Async/await до дна». Без DOM — покрыты тестами.
  * Вход тот же, что у других стендов: init(card), act(card, s, 'действие'), goal(card, s).
  */
-import { tr } from './i18n.js?v=202610131220';
+import { tr } from './i18n.js?v=202610161720';
+import { t as tl, bi } from './ui.js?v=202610161720';
 
 const clone = x => structuredClone(x);
 
@@ -14,9 +15,9 @@ const clone = x => structuredClone(x);
 
 export const IO_TICKS = 3;
 export const CTX = {
-  ui: { main: { ru: 'UI-поток', en: 'UI thread' }, loop: true, name: 'WPF / WinForms' },
-  console: { main: { ru: 'Главный поток', en: 'Main thread' }, loop: false, name: { ru: 'консоль / ASP.NET Core', en: 'console / ASP.NET Core' } },
-  unity: { main: { ru: 'Главный поток Unity', en: 'Unity main thread' }, loop: true, name: 'Unity' }
+  ui: { main: bi('m.async.CTX.1'), loop: true, name: 'WPF / WinForms' },
+  console: { main: bi('m.async.CTX.2'), loop: false, name: bi('m.async.CTX.3') },
+  unity: { main: bi('m.async.CTX.4'), loop: true, name: 'Unity' }
 };
 
 /**
@@ -28,14 +29,14 @@ export const CTX = {
 export function simulate(o) {
   const ctx = CTX[o.ctx], ctxName = tr(ctx.name);
   const C1 = o.api
-    ? (o.ctx === 'unity' ? tr({ ru: 'transform.position = … (продолжение)', en: 'transform.position = … (continuation)' }) : tr({ ru: 'label.Text = ответ (продолжение)', en: 'label.Text = response (continuation)' }))
-    : tr({ ru: 'разобрать ответ (продолжение)', en: 'parse response (continuation)' });
-  const C2 = tr({ ru: 'показать результат (обработчик после await)', en: 'show result (handler after await)' });
-  const CLICK = tr({ ru: 'клик пользователя', en: 'user click' });
-  const PARSE = tr({ ru: 'разобрать ответ', en: 'parse response' });
-  const SHOW = tr({ ru: 'показать результат', en: 'show result' });
-  const SHOW_RESULT = tr({ ru: 'показать результат (после .Result)', en: 'show result (after .Result)' });
-  const WAIT_RESULT = tr({ ru: 'ждёт .Result', en: 'waiting on .Result' });
+    ? (o.ctx === 'unity' ? tl('m.async.simulate.1') : tl('m.async.simulate.2'))
+    : tl('m.async.simulate.3');
+  const C2 = tl('m.async.simulate.4');
+  const CLICK = tl('m.async.simulate.5');
+  const PARSE = tl('m.async.simulate.6');
+  const SHOW = tl('m.async.simulate.7');
+  const SHOW_RESULT = tl('m.async.simulate.8');
+  const WAIT_RESULT = tl('m.async.simulate.9');
   const frames = [];
   let mainQ = [], poolQ = [], io = null, syncLeft = 0, syncTail = [], taskDone = false, c2Queued = false;
   let blocked = null, status = 'run', clickAt = null, note;
@@ -48,23 +49,23 @@ export function simulate(o) {
 
   // тик 0: обработчик вызывает метод, тот отправляет запрос
   if (o.call === 'sync') {
-    syncLeft = IO_TICKS; blocked = tr({ ru: 'ждёт ответ сети (синхронный вызов)', en: 'waiting for the network (synchronous call)' });
-    push({ kind: 'run', label: tr({ ru: 'обработчик → GetData(): отправить запрос', en: 'handler → GetData(): send request' }) }, null,
-      tr({ ru: 'Обработчик вызвал обычный синхронный метод. Тот отправил запрос — и теперь поток будет стоять, пока не придёт ответ.', en: 'The handler called a plain synchronous method. It sent the request, and now the thread will sit idle until the response arrives.' }));
+    syncLeft = IO_TICKS; blocked = tl('m.async.simulate.10');
+    push({ kind: 'run', label: tl('m.async.simulate.11') }, null,
+      tl('m.async.simulate.12'));
   } else {
     io = IO_TICKS;
     blocked = o.call === 'result' ? WAIT_RESULT : null;
-    push({ kind: 'run', label: tr({ ru: 'обработчик → GetDataAsync(): отправить запрос', en: 'handler → GetDataAsync(): send request' }) }, null,
-      tr({ ru: 'GetDataAsync выполняется синхронно до первого await, отправляет запрос и возвращает незавершённый Task. ', en: 'GetDataAsync runs synchronously up to the first await, sends the request and returns an unfinished Task. ' }) +
+    push({ kind: 'run', label: tl('m.async.simulate.13') }, null,
+      tl('m.async.simulate.14') +
       (o.call === 'result'
-        ? tr({ ru: 'Обработчик сразу берёт у задачи .Result — и поток блокируется.', en: 'The handler immediately reads the task\'s .Result, and the thread blocks.' })
-        : tr({ ru: 'Обработчик делает await этой задачи и возвращает управление — поток свободен.', en: 'The handler awaits that task and returns control, so the thread is free.' })));
+        ? tl('m.async.simulate.15')
+        : tl('m.async.simulate.16')));
   }
 
   // после результата даём главному потоку разобрать очередь — видно, когда до клика дошли руки
   for (let t = 1; t <= 14 && (status === 'run' || (status === 'done' && mainQ.length)); t++) {
     const said = [];
-    if (t === 1 && ctx.loop) { mainQ.push(CLICK); said.push(tr({ ru: 'Пользователь кликнул — сообщение встало в очередь главного потока.', en: 'The user clicked: the message went into the main thread\'s queue.' })); }
+    if (t === 1 && ctx.loop) { mainQ.push(CLICK); said.push(tl('m.async.simulate.17')); }
     if (io != null) {
       io--;
       if (io === 0) {
@@ -72,25 +73,25 @@ export function simulate(o) {
         const where = target(!o.cfa);
         (where === 'main' ? mainQ : poolQ).push(C1);
         said.push(where === 'main'
-          ? tr({ ru: `Ответ пришёл. await захватил контекст (${ctxName}), поэтому продолжение встало в очередь главного потока.`, en: `The response arrived. await captured the context (${ctxName}), so the continuation went into the main thread's queue.` })
+          ? tl('m.async.simulate.18', { ctxName })
           : o.cfa
-            ? tr({ ru: 'Ответ пришёл. Из-за ConfigureAwait(false) продолжение ушло в пул потоков.', en: 'The response arrived. Because of ConfigureAwait(false), the continuation went to the thread pool.' })
-            : tr({ ru: 'Ответ пришёл. Контекста нет — продолжение выполнит пул потоков.', en: 'The response arrived. There is no context, so the thread pool runs the continuation.' }));
+            ? tl('m.async.simulate.19')
+            : tl('m.async.simulate.20'));
       }
     }
     // главный поток
     let main;
     const runMain = label => {
       main = lane('run', label);
-      if (label === C1) { taskDone = true; said.push(tr({ ru: 'Продолжение выполнено — задача GetDataAsync завершена.', en: 'The continuation ran, so the GetDataAsync task is complete.' })); }
-      if (label === C2 || label === SHOW || label === SHOW_RESULT) { status = 'done'; said.push(tr({ ru: 'Результат показан.', en: 'The result is shown.' })); }
-      if (label === CLICK) { clickAt = t; said.push(tr({ ru: `Клик обработан на тике ${t}.`, en: `The click was handled on tick ${t}.` })); }
+      if (label === C1) { taskDone = true; said.push(tl('m.async.simulate.21')); }
+      if (label === C2 || label === SHOW || label === SHOW_RESULT) { status = 'done'; said.push(tl('m.async.simulate.22')); }
+      if (label === CLICK) { clickAt = t; said.push(tl('m.async.simulate.23', { t })); }
     };
     if (o.call === 'sync' && syncLeft > 0) {
       syncLeft--;
       main = { kind: 'blocked', label: blocked };
-      if (syncLeft === 0) { syncTail = [PARSE, SHOW]; blocked = null; said.push(tr({ ru: 'Ответ пришёл, поток продолжает.', en: 'The response arrived, and the thread carries on.' })); }
-      else if (mainQ.includes(CLICK)) said.push(tr({ ru: 'Клик ждёт в очереди: поток занят ожиданием, окно «не отвечает».', en: 'The click waits in the queue: the thread is busy waiting, and the window is "Not Responding".' }));
+      if (syncLeft === 0) { syncTail = [PARSE, SHOW]; blocked = null; said.push(tl('m.async.simulate.24')); }
+      else if (mainQ.includes(CLICK)) said.push(tl('m.async.simulate.25'));
     } else if (syncTail.length) {
       runMain(syncTail.shift());
     } else if (blocked && taskDone) {
@@ -101,7 +102,7 @@ export function simulate(o) {
     } else if (mainQ.length) {
       runMain(mainQ.shift());
     } else {
-      main = { kind: 'idle', label: ctx.loop ? tr({ ru: 'свободен, крутит очередь сообщений', en: 'free, pumping the message queue' }) : tr({ ru: 'свободен', en: 'free' }) };
+      main = { kind: 'idle', label: ctx.loop ? tl('m.async.simulate.26') : tl('m.async.simulate.27') };
     }
     // пул
     let pool = null;
@@ -112,26 +113,26 @@ export function simulate(o) {
         if (o.api && ctx.loop) {
           status = 'error';
           said.push(o.ctx === 'unity'
-            ? tr({ ru: 'UnityException: get_transform can only be called from the main thread. Unity API можно трогать только из главного потока.', en: 'UnityException: get_transform can only be called from the main thread. The Unity API may only be touched from the main thread.' })
-            : tr({ ru: 'InvalidOperationException: The calling thread cannot access this object because a different thread owns it. Контрол окна можно трогать только из UI-потока.', en: 'InvalidOperationException: The calling thread cannot access this object because a different thread owns it. Window controls may only be touched from the UI thread.' }));
-        } else { taskDone = true; said.push(tr({ ru: 'Продолжение выполнил поток пула — задача GetDataAsync завершена.', en: 'A pool thread ran the continuation, so the GetDataAsync task is complete.' })); }
+            ? tl('m.async.simulate.28')
+            : tl('m.async.simulate.29'));
+        } else { taskDone = true; said.push(tl('m.async.simulate.30')); }
       }
-      if (label === C2) { status = 'done'; said.push(tr({ ru: 'Результат показан. Готово.', en: 'The result is shown. Done.' })); }
+      if (label === C2) { status = 'done'; said.push(tl('m.async.simulate.31')); }
     }
     // обработчик с await продолжится, когда задача завершится
     if (taskDone && o.call === 'await' && !c2Queued && status === 'run') {
       c2Queued = true;
       (target(true) === 'main' ? mainQ : poolQ).push(C2);
       said.push(target(true) === 'main'
-        ? tr({ ru: 'Обработчик ждал через await с захватом контекста — его продолжение встало в очередь главного потока.', en: 'The handler was awaiting with the context captured, so its continuation went into the main thread\'s queue.' })
-        : tr({ ru: 'Продолжение обработчика встало в пул.', en: 'The handler\'s continuation went to the pool.' }));
+        ? tl('m.async.simulate.32')
+        : tl('m.async.simulate.33'));
     }
     // взаимная блокировка: главный поток ждёт задачу, а задача ждёт главный поток
     if (status === 'run' && blocked === WAIT_RESULT && !taskDone && io == null && !poolQ.length && !pool && mainQ.includes(C1)) {
       status = 'deadlock';
-      said.push(tr({ ru: 'DEADLOCK. Главный поток стоит на .Result и ждёт задачу. А задаче, чтобы завершиться, нужно выполнить продолжение — в очереди этого самого главного потока. Никто никого не дождётся.', en: 'DEADLOCK. The main thread is stuck on .Result, waiting for the task. But to finish, the task has to run its continuation, which sits in the queue of that very main thread. Neither will ever get what it is waiting for.' }));
+      said.push(tl('m.async.simulate.34'));
     }
-    note = said.join(' ') || (main.kind === 'blocked' ? tr({ ru: 'Ждём.', en: 'Waiting.' }) : tr({ ru: 'Тик без событий.', en: 'Nothing happens this tick.' }));
+    note = said.join(' ') || (main.kind === 'blocked' ? tl('m.async.simulate.35') : tl('m.async.simulate.36'));
     push(main, pool, note);
   }
   return frames;
@@ -180,40 +181,40 @@ export function smFrames(cached) {
   const F = (src, mn, fields, note, extra = {}) => ({ src, mn, fields: { ...fields }, note: tr(note), ...extra });
   /** @type {Record<string, string | number>} */
   const f = { state: -1, a: '—', b: '—', awaiter: '—' };
-  const out = [F(-1, -1, f, { ru: 'Вызов SumAsync(): компилятор создал структуру-машину с полями state, a, b, awaiter и вызвал MoveNext.', en: 'Calling SumAsync(): the compiler created a state machine struct with fields state, a, b, awaiter and called MoveNext.' }, { calls: 0, pauses: 0 })];
+  const out = [F(-1, -1, f, bi('m.async.smFrames.1'), { calls: 0, pauses: 0 })];
   let calls = 1, pauses = 0;
-  out.push(F(0, 2, f, { ru: 'MoveNext №1. state = −1 — метод только начался, переходов нет.', en: 'MoveNext #1. state = −1: the method has just started, no jumps.' }, { calls, pauses }));
-  f.awaiter = cached ? tr({ ru: 'TaskAwaiter (A готов)', en: 'TaskAwaiter (A ready)' }) : tr({ ru: 'TaskAwaiter (A ещё в пути)', en: 'TaskAwaiter (A still on its way)' });
-  out.push(F(2, 7, f, { ru: 'Вызываем GetAAsync() и берём у задачи awaiter.', en: 'Call GetAAsync() and get the task\'s awaiter.' }, { calls, pauses }));
+  out.push(F(0, 2, f, bi('m.async.smFrames.2'), { calls, pauses }));
+  f.awaiter = cached ? tl('m.async.smFrames.3') : tl('m.async.smFrames.4');
+  out.push(F(2, 7, f, bi('m.async.smFrames.5'), { calls, pauses }));
   if (!cached) {
     f.state = 0;
-    out.push(F(2, 10, f, { ru: 'IsCompleted = false. Запоминаем, где остановились: state = 0.', en: 'IsCompleted = false. Remember where we stopped: state = 0.' }, { calls, pauses }));
+    out.push(F(2, 10, f, bi('m.async.smFrames.6'), { calls, pauses }));
     pauses++;
-    out.push(F(2, 11, f, { ru: 'AwaitUnsafeOnCompleted подписывает MoveNext на завершение задачи, и метод возвращается. Вызывающий получил незавершённый Task, поток свободен.', en: 'AwaitUnsafeOnCompleted subscribes MoveNext to the task\'s completion, and the method returns. The caller gets an unfinished Task, and the thread is free.' }, { calls, pauses, suspended: true }));
+    out.push(F(2, 11, f, bi('m.async.smFrames.7'), { calls, pauses, suspended: true }));
     calls++;
-    out.push(F(2, 4, f, { ru: 'Ответ A пришёл — MoveNext №2. switch видит state = 0 и прыгает на AfterA.', en: 'Response A arrived: MoveNext #2. The switch sees state = 0 and jumps to AfterA.' }, { calls, pauses }));
+    out.push(F(2, 4, f, bi('m.async.smFrames.8'), { calls, pauses }));
   } else {
-    out.push(F(2, 8, f, { ru: 'IsCompleted = true: ответ уже есть. Никакой приостановки — идём дальше в этом же вызове MoveNext.', en: 'IsCompleted = true: the response is already here. No suspension, we keep going in the same MoveNext call.' }, { calls, pauses }));
+    out.push(F(2, 8, f, bi('m.async.smFrames.9'), { calls, pauses }));
   }
   f.a = 2;
-  out.push(F(2, 15, f, { ru: 'GetResult() отдаёт результат: a = 2.', en: 'GetResult() returns the result: a = 2.' }, { calls, pauses }));
-  f.awaiter = cached ? tr({ ru: 'TaskAwaiter (B готов)', en: 'TaskAwaiter (B ready)' }) : tr({ ru: 'TaskAwaiter (B ещё в пути)', en: 'TaskAwaiter (B still on its way)' });
-  out.push(F(3, 16, f, { ru: 'Вызываем GetBAsync().', en: 'Call GetBAsync().' }, { calls, pauses }));
+  out.push(F(2, 15, f, bi('m.async.smFrames.10'), { calls, pauses }));
+  f.awaiter = cached ? tl('m.async.smFrames.11') : tl('m.async.smFrames.12');
+  out.push(F(3, 16, f, bi('m.async.smFrames.13'), { calls, pauses }));
   if (!cached) {
     f.state = 1;
-    out.push(F(3, 19, f, { ru: 'Снова не готово: state = 1.', en: 'Not ready again: state = 1.' }, { calls, pauses }));
+    out.push(F(3, 19, f, bi('m.async.smFrames.14'), { calls, pauses }));
     pauses++;
-    out.push(F(3, 20, f, { ru: 'Подписываемся и возвращаемся — вторая приостановка.', en: 'Subscribe and return: the second suspension.' }, { calls, pauses, suspended: true }));
+    out.push(F(3, 20, f, bi('m.async.smFrames.15'), { calls, pauses, suspended: true }));
     calls++;
-    out.push(F(3, 5, f, { ru: 'Ответ B пришёл — MoveNext №3, прыжок на AfterB.', en: 'Response B arrived: MoveNext #3, jump to AfterB.' }, { calls, pauses }));
+    out.push(F(3, 5, f, bi('m.async.smFrames.16'), { calls, pauses }));
   } else {
-    out.push(F(3, 17, f, { ru: 'Тоже готово — продолжаем без остановки.', en: 'Also ready, so we continue without stopping.' }, { calls, pauses }));
+    out.push(F(3, 17, f, bi('m.async.smFrames.17'), { calls, pauses }));
   }
   f.b = 40;
   out.push(F(3, 24, f, 'b = 40.', { calls, pauses }));
   f.state = -2;
-  out.push(F(4, 25, f, { ru: 'state = −2 — машина закончила работу.', en: 'state = −2: the machine has finished.' }, { calls, pauses }));
-  out.push(F(4, 26, f, { ru: `SetResult(42) завершает задачу. Итого: вызовов MoveNext — ${calls}, приостановок — ${pauses}.`, en: `SetResult(42) completes the task. In total: MoveNext calls: ${calls}, suspensions: ${pauses}.` }, { calls, pauses, done: true }));
+  out.push(F(4, 25, f, bi('m.async.smFrames.18'), { calls, pauses }));
+  out.push(F(4, 26, f, bi('m.async.smFrames.19', { calls, pauses }), { calls, pauses, done: true }));
   return out;
 }
 
@@ -239,14 +240,14 @@ export const smRig = {
    ===================================================================== */
 
 export const TASKS = [
-  { id: 'A', name: { ru: 'профиль', en: 'profile' }, ms: 300 },
-  { id: 'B', name: { ru: 'заказы', en: 'orders' }, ms: 500 },
-  { id: 'C', name: { ru: 'баланс', en: 'balance' }, ms: 200 }
+  { id: 'A', name: bi('m.async.TASKS.1'), ms: 300 },
+  { id: 'B', name: bi('m.async.TASKS.2'), ms: 500 },
+  { id: 'C', name: bi('m.async.TASKS.3'), ms: 200 }
 ];
 
 /** Названия задач в барах и текст результата приходят уже на текущем языке. */
 export function combine(mode, fails) {
-  const bars = [], ALL = tr({ ru: 'все три ответа', en: 'all three responses' });
+  const bars = [], ALL = tl('m.async.combine.1');
   if (mode === 'seq') {
     let t = 0, thrown = null;
     for (const x of TASKS) {
@@ -263,7 +264,7 @@ export function combine(mode, fails) {
     return { bars, total: Math.max(...TASKS.map(x => x.ms)), thrown: failed[0] ?? null, inner: failed, result: failed.length ? null : ALL };
   }
   const first = [...TASKS].sort((p, q) => p.ms - q.ms)[0];
-  return { bars, total: first.ms, thrown: null, inner: [], result: tr({ ru: 'задача ', en: 'task ' }) + first.id + (fails.includes(first.id) ? tr({ ru: ' (упавшая — WhenAny не бросает, исключение внутри задачи)', en: ' (a failed one: WhenAny doesn\'t throw, the exception stays inside the task)' }) : ''), first: first.id };
+  return { bars, total: first.ms, thrown: null, inner: [], result: tl('m.async.combine.2') + first.id + (fails.includes(first.id) ? tl('m.async.combine.3') : ''), first: first.id };
 }
 
 export const combineRig = {

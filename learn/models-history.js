@@ -2,7 +2,8 @@
  * Модели курса «История .NET»: лента лет и совместимость целевых платформ (TFM).
  * Без DOM — тесты проходят задания теми же действиями, что кнопки.
  */
-import { tr } from './i18n.js?v=202610131220';
+import { tr } from './i18n.js?v=202610161720';
+import { t as tl, bi } from './ui.js?v=202610161720';
 
 /* =====================================================================
    Лента лет: что существовало в каждом году.
@@ -18,29 +19,29 @@ const STANDARD = [[2016, '1.x'], [2017, '2.0'], [2019, '2.1']];
 
 /** События года — коротко, по одному факту на строку. Переводятся в stateAt. */
 export const EVENTS = {
-  2002: [{ ru: 'Вышли .NET Framework 1.0, C# 1.0 и Visual Studio .NET. Работает только на Windows.', en: '.NET Framework 1.0, C# 1.0 and Visual Studio .NET are released. Windows only.' }],
-  2003: [{ ru: '.NET Framework 1.1.', en: '.NET Framework 1.1.' }],
-  2004: [{ ru: 'Mono 1.0 — открытая реализация .NET для Linux от компании Ximian (Мигель де Икаса).', en: 'Mono 1.0: an open-source .NET implementation for Linux from Ximian (Miguel de Icaza).' }],
-  2005: [{ ru: '.NET Framework 2.0 и C# 2.0: дженерики.', en: '.NET Framework 2.0 and C# 2.0: generics.' }, { ru: 'Unity 1.0 — игровой движок со скриптами на Mono.', en: 'Unity 1.0: a game engine with scripting on Mono.' }],
-  2006: [{ ru: '.NET Framework 3.0: WPF, WCF и Workflow Foundation.', en: '.NET Framework 3.0: WPF, WCF and Workflow Foundation.' }],
-  2007: [{ ru: '.NET Framework 3.5 и C# 3.0: LINQ и лямбды.', en: '.NET Framework 3.5 and C# 3.0: LINQ and lambdas.' }],
-  2009: [{ ru: 'ASP.NET MVC 1.0.', en: 'ASP.NET MVC 1.0.' }],
-  2010: [{ ru: '.NET Framework 4.0: библиотека задач (TPL) и dynamic.', en: '.NET Framework 4.0: the Task Parallel Library (TPL) and dynamic.' }],
-  2011: [{ ru: 'Основана компания Xamarin: C# для iOS и Android на базе Mono.', en: 'Xamarin is founded: C# for iOS and Android, built on Mono.' }],
-  2012: [{ ru: '.NET Framework 4.5 и C# 5.0: async и await.', en: '.NET Framework 4.5 and C# 5.0: async and await.' }],
-  2014: [{ ru: 'Microsoft открывает исходники: компилятор Roslyn, .NET Foundation, анонс .NET Core под лицензией MIT.', en: 'Microsoft goes open source: the Roslyn compiler, the .NET Foundation, and .NET Core announced under the MIT license.' }],
-  2015: [{ ru: 'C# 6.0 и компилятор Roslyn в Visual Studio 2015.', en: 'C# 6.0 and the Roslyn compiler in Visual Studio 2015.' }, { ru: 'Unity выпускает IL2CPP: C#-код превращается в C++.', en: 'Unity ships IL2CPP: C# code is turned into C++.' }],
-  2016: [{ ru: 'Microsoft покупает Xamarin и делает его бесплатным.', en: 'Microsoft buys Xamarin and makes it free.' }, { ru: '.NET Core 1.0 — официально на Windows, Linux и macOS.', en: '.NET Core 1.0: officially on Windows, Linux and macOS.' }, { ru: 'Первые версии .NET Standard.', en: 'The first versions of .NET Standard.' }],
-  2017: [{ ru: '.NET Core 2.0 и .NET Standard 2.0 — огромный общий набор API.', en: '.NET Core 2.0 and .NET Standard 2.0: a huge shared set of APIs.' }],
-  2018: [{ ru: 'Unity переходит на новый Mono с API .NET 4.x и поддерживает .NET Standard 2.0.', en: 'Unity moves to a new Mono with the .NET 4.x API and supports .NET Standard 2.0.' }],
-  2019: [{ ru: '.NET Framework 4.8 — последняя большая версия Framework.', en: '.NET Framework 4.8: the last major version of Framework.' }, { ru: '.NET Core 3.0: WPF и WinForms (только на Windows). C# 8: nullable-ссылки.', en: '.NET Core 3.0: WPF and WinForms (Windows only). C# 8: nullable reference types.' }, { ru: '.NET Standard 2.1 — и последняя версия стандарта. Framework её не поддерживает.', en: '.NET Standard 2.1, the last version of the standard. Framework does not support it.' }],
-  2020: [{ ru: '.NET 5: «Core» убрали из названия, номер 4 пропустили. C# 9: records.', en: '.NET 5: "Core" is dropped from the name and version 4 is skipped. C# 9: records.' }],
-  2021: [{ ru: '.NET 6 (LTS) и C# 10.', en: '.NET 6 (LTS) and C# 10.' }, { ru: 'Unity 2021.2 поддерживает .NET Standard 2.1.', en: 'Unity 2021.2 supports .NET Standard 2.1.' }],
-  2022: [{ ru: '.NET 7 и C# 11.', en: '.NET 7 and C# 11.' }, { ru: '.NET MAUI сменяет Xamarin.Forms.', en: '.NET MAUI replaces Xamarin.Forms.' }, { ru: 'Unity объявляет переход на CoreCLR.', en: 'Unity announces its move to CoreCLR.' }],
-  2023: [{ ru: '.NET 8 (LTS) и C# 12.', en: '.NET 8 (LTS) and C# 12.' }, { ru: 'Avalonia 11.', en: 'Avalonia 11.' }],
-  2024: [{ ru: '.NET 9 и C# 13.', en: '.NET 9 and C# 13.' }, { ru: 'Revit 2025 и AutoCAD 2025 переходят с Framework 4.8 на .NET 8.', en: 'Revit 2025 and AutoCAD 2025 move from Framework 4.8 to .NET 8.' }, { ru: 'Microsoft передаёт проект Mono сообществу WineHQ.', en: 'Microsoft hands the Mono project over to the WineHQ community.' }],
-  2025: [{ ru: '.NET 10 (LTS) и C# 14.', en: '.NET 10 (LTS) and C# 14.' }, { ru: 'Поддержку версий STS продлили с 18 месяцев до двух лет.', en: 'Support for STS releases is extended from 18 months to two years.' }],
-  2026: [{ ru: '10 ноября заканчивается поддержка .NET 8 и .NET 9.', en: 'Support for .NET 8 and .NET 9 ends on November 10.' }, { ru: '.NET 11 в превью, выход ожидается в ноябре.', en: '.NET 11 is in preview, with release expected in November.' }]
+  2002: [bi('m.history.EVENTS.1')],
+  2003: [bi('m.history.EVENTS.2')],
+  2004: [bi('m.history.EVENTS.3')],
+  2005: [bi('m.history.EVENTS.4'), bi('m.history.EVENTS.5')],
+  2006: [bi('m.history.EVENTS.6')],
+  2007: [bi('m.history.EVENTS.7')],
+  2009: [bi('m.history.EVENTS.8')],
+  2010: [bi('m.history.EVENTS.9')],
+  2011: [bi('m.history.EVENTS.10')],
+  2012: [bi('m.history.EVENTS.11')],
+  2014: [bi('m.history.EVENTS.12')],
+  2015: [bi('m.history.EVENTS.13'), bi('m.history.EVENTS.14')],
+  2016: [bi('m.history.EVENTS.15'), bi('m.history.EVENTS.16'), bi('m.history.EVENTS.17')],
+  2017: [bi('m.history.EVENTS.18')],
+  2018: [bi('m.history.EVENTS.19')],
+  2019: [bi('m.history.EVENTS.20'), bi('m.history.EVENTS.21'), bi('m.history.EVENTS.22')],
+  2020: [bi('m.history.EVENTS.23')],
+  2021: [bi('m.history.EVENTS.24'), bi('m.history.EVENTS.25')],
+  2022: [bi('m.history.EVENTS.26'), bi('m.history.EVENTS.27'), bi('m.history.EVENTS.28')],
+  2023: [bi('m.history.EVENTS.29'), bi('m.history.EVENTS.30')],
+  2024: [bi('m.history.EVENTS.31'), bi('m.history.EVENTS.32'), bi('m.history.EVENTS.33')],
+  2025: [bi('m.history.EVENTS.34'), bi('m.history.EVENTS.35')],
+  2026: [bi('m.history.EVENTS.36'), bi('m.history.EVENTS.37')]
 };
 
 const latest = (list, y) => list.filter(([yy]) => yy <= y).pop()?.[1] ?? null;
@@ -56,7 +57,7 @@ export function stateAt(year) {
     standard: latest(STANDARD, year),
     mono: year >= 2004,
     unity: year >= 2005,
-    platforms: modern ? ['Windows', 'Linux', 'macOS'] : year >= 2004 ? ['Windows', tr({ ru: 'Linux и macOS — только через Mono', en: 'Linux and macOS: only via Mono' })] : ['Windows'],
+    platforms: modern ? ['Windows', 'Linux', 'macOS'] : year >= 2004 ? ['Windows', tl('m.history.stateAt.1')] : ['Windows'],
     events: (EVENTS[year] ?? []).map(e => tr(e))
   };
 }
@@ -98,8 +99,8 @@ export const TFMS = {
 export const HOSTS = {
   revit24: { name: 'Revit 2024', runtime: '.NET Framework 4.8', pick: [['net48', 'ok'], ['ns20', 'ok']] },
   revit25: { name: 'Revit 2025–2026', runtime: '.NET 8', pick: [['net8', 'ok'], ['ns21', 'ok'], ['ns20', 'ok'], ['net48', 'warn']] },
-  unity: { name: 'Unity 6', runtime: { ru: 'Mono / IL2CPP, профиль .NET Standard 2.1', en: 'Mono / IL2CPP, .NET Standard 2.1 profile' }, pick: [['ns21', 'ok'], ['ns20', 'ok'], ['net48', 'warn']] },
-  app10: { name: { ru: 'Приложение на .NET 10', en: '.NET 10 app' }, runtime: '.NET 10', pick: [['net10', 'ok'], ['net8', 'ok'], ['ns21', 'ok'], ['ns20', 'ok'], ['net48', 'warn']] }
+  unity: { name: 'Unity 6', runtime: bi('m.history.HOSTS.1'), pick: [['ns21', 'ok'], ['ns20', 'ok'], ['net48', 'warn']] },
+  app10: { name: bi('m.history.HOSTS.2'), runtime: '.NET 10', pick: [['net10', 'ok'], ['net8', 'ok'], ['ns21', 'ok'], ['ns20', 'ok'], ['net48', 'warn']] }
 };
 
 /** Какую сборку загрузит хост из выбранных целей: { tfm, status } или { tfm: null, status: 'no' }. */
@@ -114,7 +115,7 @@ export function resolveHost(hostId, targets) {
 /** Строка проекта: одна цель — TargetFramework, несколько — TargetFrameworks. */
 export function csprojLine(targets) {
   const names = Object.keys(TFMS).filter(t => targets.includes(t)).map(t => TFMS[t].name);
-  if (!names.length) return tr({ ru: '<!-- выбери хотя бы одну цель -->', en: '<!-- pick at least one target -->' });
+  if (!names.length) return tl('m.history.csprojLine.1');
   return names.length === 1 ? `<TargetFramework>${names[0]}</TargetFramework>` : `<TargetFrameworks>${names.join(';')}</TargetFrameworks>`;
 }
 

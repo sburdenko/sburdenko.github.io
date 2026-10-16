@@ -2,7 +2,8 @@
  * Модели курса «Avalonia: основы»: Grid, панели, привязки и селекторы стилей.
  * Без DOM — тесты проходят задания теми же действиями, что кнопки.
  */
-import { tr } from './i18n.js?v=202610131220';
+import { tr } from './i18n.js?v=202610161720';
+import { t as tl, bi } from './ui.js?v=202610161720';
 
 /* =====================================================================
    Grid: ширины колонок из ColumnDefinitions="Auto,200,*,2*".
@@ -45,7 +46,7 @@ export const gridRig = {
    ===================================================================== */
 
 export const PANELS = {
-  'stack-v': { ru: 'StackPanel (вертикально)', en: 'StackPanel (vertical)' },
+  'stack-v': bi('m.avalonia.PANELS.1'),
   'stack-h': 'StackPanel Orientation="Horizontal"',
   wrap: 'WrapPanel',
   dock: 'DockPanel'
@@ -53,10 +54,10 @@ export const PANELS = {
 
 /** Дети окна: размеры «по содержимому» и сторона для DockPanel. Последний заполняет остаток. */
 export const KIDS = [
-  { name: { ru: 'Шапка', en: 'Header' }, w: 120, h: 36, dock: 'Top' },
-  { name: { ru: 'Меню', en: 'Menu' }, w: 90, h: 80, dock: 'Left' },
-  { name: { ru: 'Статус', en: 'Status' }, w: 110, h: 26, dock: 'Bottom' },
-  { name: { ru: 'Контент', en: 'Content' }, w: 140, h: 70, dock: null }
+  { name: bi('m.avalonia.KIDS.1'), w: 120, h: 36, dock: 'Top' },
+  { name: bi('m.avalonia.KIDS.2'), w: 90, h: 80, dock: 'Left' },
+  { name: bi('m.avalonia.KIDS.3'), w: 110, h: 26, dock: 'Bottom' },
+  { name: bi('m.avalonia.KIDS.4'), w: 140, h: 70, dock: null }
 ];
 
 /** Прямоугольники детей в окне W×H. */
@@ -108,7 +109,7 @@ export const panelRig = {
    ===================================================================== */
 
 export const MODES = ['OneWay', 'TwoWay', 'OneTime', 'OneWayToSource'];
-const TYPED = [{ ru: 'Аня', en: 'Anna' }, { ru: 'Борис', en: 'Boris' }, { ru: 'Вера', en: 'Vera' }, { ru: 'Гоша', en: 'George' }];
+const TYPED = [bi('m.avalonia.TYPED.1'), bi('m.avalonia.TYPED.2'), bi('m.avalonia.TYPED.3'), bi('m.avalonia.TYPED.4')];
 
 /**
  * vm — значение в модели; box — что в TextBox (привязка с режимом mode);
@@ -117,7 +118,7 @@ const TYPED = [{ ru: 'Аня', en: 'Anna' }, { ru: 'Борис', en: 'Boris' }, 
 export const bindRig = {
   init(card) {
     const o = { mode: 'TwoWay', notify: false, ...(card.start ?? {}) };
-    const init = tr({ ru: 'Мир', en: 'World' });
+    const init = tl('m.avalonia.bindRig.1');
     return { ...o, vm: init, box: o.mode === 'OneWayToSource' ? '' : init, label: init, typed: 0, coded: 0, ok: [], log: [] };
   },
   act(card, s0, a) {
@@ -134,20 +135,20 @@ export const bindRig = {
         s.vm = s.box;
         if (s.notify) s.label = s.vm;
       }
-      s.log.push(tr(toSource ? (s.notify ? { ru: 'Ввод записан в модель, модель сообщила об изменении — приветствие обновилось.', en: 'The input went into the model, and the model reported the change — the greeting updated.' }
-        : { ru: 'Ввод записан в модель, но модель промолчала — приветствие не знает об изменении.', en: 'The input went into the model, but the model stayed silent — the greeting knows nothing about the change.' })
-        : { ru: `Режим ${s.mode}: ввод из TextBox в модель не идёт.`, en: `${s.mode} mode: input from the TextBox does not reach the model.` }));
+      s.log.push(tr(toSource ? (s.notify ? bi('m.avalonia.bindRig.2')
+        : bi('m.avalonia.bindRig.3'))
+        : bi('m.avalonia.bindRig.4', { mode: s.mode })));
     } else if (k === 'code') {
       // код меняет свойство модели
       ++s.coded;
-      s.vm = tr({ ru: `Код ${s.coded}`, en: `Code ${s.coded}` });
+      s.vm = tl('m.avalonia.bindRig.5', { coded: s.coded });
       if (s.notify) {
         s.label = s.vm;
         if (s.mode === 'OneWay' || s.mode === 'TwoWay') s.box = s.vm;
       }
-      s.log.push(tr(!s.notify ? { ru: 'Модель изменилась, но не вызвала PropertyChanged — экран ничего не знает.', en: 'The model changed but did not raise PropertyChanged — the screen knows nothing.' }
-        : s.mode === 'OneWay' || s.mode === 'TwoWay' ? { ru: 'Модель сообщила об изменении — TextBox и приветствие обновились.', en: 'The model reported the change — the TextBox and the greeting updated.' }
-        : { ru: `Приветствие обновилось, а TextBox — нет: режим ${s.mode} не переносит изменения из модели.`, en: `The greeting updated, but the TextBox did not: ${s.mode} mode does not carry changes from the model.` }));
+      s.log.push(tr(!s.notify ? bi('m.avalonia.bindRig.6')
+        : s.mode === 'OneWay' || s.mode === 'TwoWay' ? bi('m.avalonia.bindRig.7')
+        : bi('m.avalonia.bindRig.8', { mode: s.mode })));
     } else throw new Error(`неизвестное действие ${a}`);
     if (s.vm === s.box && s.vm === s.label && !s.ok.includes(k)) s.ok.push(k);
     return s;

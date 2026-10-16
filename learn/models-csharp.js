@@ -3,7 +3,8 @@
  * выделения памяти, защитные копии структур и порядок веток switch.
  * Без DOM — тесты проходят задания теми же действиями, что кнопки.
  */
-import { tr } from './i18n.js?v=202610131220';
+import { tr } from './i18n.js?v=202610161720';
+import { t as tl, bi } from './ui.js?v=202610161720';
 
 /* =====================================================================
    Ограничения дженериков: что скомпилируется внутри метода и какие T подойдут.
@@ -21,18 +22,18 @@ export const GEN_TYPES = {
 export const GEN_CONSTRAINTS = { class: 'class', struct: 'struct', unmanaged: 'unmanaged', cmp: 'IComparable<T>', new: 'new()' };
 
 const CONFLICTS = [
-  ['class', 'struct', { ru: 'class и struct взаимоисключают друг друга', en: 'class and struct are mutually exclusive' }],
-  ['class', 'unmanaged', { ru: 'unmanaged — всегда значимый тип, с class не сочетается', en: 'unmanaged is always a value type, so it cannot go with class' }],
-  ['struct', 'unmanaged', { ru: 'unmanaged уже включает struct — вместе их не пишут', en: 'unmanaged already implies struct — you don\'t write both' }],
-  ['struct', 'new', { ru: 'у struct конструктор без параметров есть всегда — new() с ним запрещён', en: 'a struct always has a parameterless constructor — new() is not allowed with it' }],
-  ['unmanaged', 'new', { ru: 'unmanaged уже значимый тип — new() с ним запрещён', en: 'unmanaged is already a value type — new() is not allowed with it' }]
+  ['class', 'struct', bi('m.csharp.CONFLICTS.1')],
+  ['class', 'unmanaged', bi('m.csharp.CONFLICTS.2')],
+  ['struct', 'unmanaged', bi('m.csharp.CONFLICTS.3')],
+  ['struct', 'new', bi('m.csharp.CONFLICTS.4')],
+  ['unmanaged', 'new', bi('m.csharp.CONFLICTS.5')]
 ];
 
 export const GEN_OPS = {
-  newT: { code: 'var x = new T();', ok: cs => cs.includes('new') || cs.includes('struct') || cs.includes('unmanaged'), why: { ru: 'нужно new(), struct или unmanaged', en: 'needs new(), struct or unmanaged' } },
-  cmp: { code: 'a.CompareTo(b)', ok: cs => cs.includes('cmp'), why: { ru: 'нужно IComparable<T>', en: 'needs IComparable<T>' } },
-  nullT: { code: 'T x = null;', ok: cs => cs.includes('class'), why: { ru: 'null можно только ссылочному типу — нужно class', en: 'only a reference type can be null — needs class' } },
-  stack: { code: 'Span<T> buf = stackalloc T[16];', ok: cs => cs.includes('unmanaged'), why: { ru: 'stackalloc — только для unmanaged', en: 'stackalloc works only with unmanaged' } }
+  newT: { code: 'var x = new T();', ok: cs => cs.includes('new') || cs.includes('struct') || cs.includes('unmanaged'), why: bi('m.csharp.GEN_OPS.1') },
+  cmp: { code: 'a.CompareTo(b)', ok: cs => cs.includes('cmp'), why: bi('m.csharp.GEN_OPS.2') },
+  nullT: { code: 'T x = null;', ok: cs => cs.includes('class'), why: bi('m.csharp.GEN_OPS.3') },
+  stack: { code: 'Span<T> buf = stackalloc T[16];', ok: cs => cs.includes('unmanaged'), why: bi('m.csharp.GEN_OPS.4') }
 };
 
 /** Ошибки сочетания ограничений. */
@@ -74,10 +75,7 @@ export const genRig = {
 
 export const CLOSURE_CODE = {
   for: 'var actions = new List<Action>();\nfor (int i = 0; i < 3; i++)\n    actions.Add(() => Console.Write(i));\n\nforeach (var a in actions) a();',
-  copy: {
-    ru: 'var actions = new List<Action>();\nfor (int i = 0; i < 3; i++)\n{\n    int j = i;                     // своя переменная на каждый круг\n    actions.Add(() => Console.Write(j));\n}\nforeach (var a in actions) a();',
-    en: 'var actions = new List<Action>();\nfor (int i = 0; i < 3; i++)\n{\n    int j = i;                     // a fresh variable on every pass\n    actions.Add(() => Console.Write(j));\n}\nforeach (var a in actions) a();'
-  },
+  copy: bi('m.csharp.CLOSURE_CODE.1'),
   foreach: 'var actions = new List<Action>();\nforeach (var i in new[] { 0, 1, 2 })\n    actions.Add(() => Console.Write(i));\n\nforeach (var a in actions) a();'
 };
 
@@ -91,26 +89,26 @@ export function closureFrames(variant) {
   const callLine = variant === 'copy' ? 6 : 4;
   if (variant === 'for') {
     const box = { id: 1, v: 'i', val: 0 };
-    fr.push(F(1, [box], [], [], { ru: 'Компилятор видит, что i захвачена лямбдой, и делает i полем скрытого объекта. Объект один на весь цикл.', en: 'The compiler sees that the lambda captures i and turns i into a field of a hidden object. There is one object for the whole loop.' }));
+    fr.push(F(1, [box], [], [], bi('m.csharp.closureFrames.1')));
     const lam = [];
     for (let i = 0; i < 3; i++) {
       box.val = i; lam.push(1);
-      fr.push(F(2, [box], lam, [], { ru: `i = ${i}. Лямбда №${i + 1} запоминает ссылку на тот же объект, а не число ${i}.`, en: `i = ${i}. Lambda #${i + 1} stores a reference to that same object, not the number ${i}.` }));
+      fr.push(F(2, [box], lam, [], bi('m.csharp.closureFrames.2', { i, v1: i + 1 })));
     }
     box.val = 3;
-    fr.push(F(1, [box], lam, [], { ru: 'i++ сделала i = 3, условие i < 3 ложно — цикл закончился. Все три лямбды смотрят на одно поле i = 3.', en: 'i++ made i = 3, the condition i < 3 is false — the loop is over. All three lambdas look at the same field i = 3.' }));
+    fr.push(F(1, [box], lam, [], bi('m.csharp.closureFrames.3')));
     const out = [];
-    for (let k = 0; k < 3; k++) { out.push(3); fr.push(F(callLine, [box], lam, out, { ru: `Лямбда №${k + 1} читает поле i прямо сейчас — там 3.`, en: `Lambda #${k + 1} reads the field i right now — it holds 3.` })); }
+    for (let k = 0; k < 3; k++) { out.push(3); fr.push(F(callLine, [box], lam, out, bi('m.csharp.closureFrames.4', { v1: k + 1 }))); }
   } else {
     const boxes = [], lam = [];
     const v = variant === 'copy' ? 'j' : 'i';
-    fr.push(F(1, [], [], [], variant === 'copy' ? { ru: 'Захвачена j, объявленная внутри тела цикла, — значит, объект нужен на каждый круг.', en: 'The captured j is declared inside the loop body — so each pass needs its own object.' } : { ru: 'В foreach (с C# 5) переменная i своя на каждый круг.', en: 'In foreach (since C# 5) each pass gets its own variable i.' }));
+    fr.push(F(1, [], [], [], variant === 'copy' ? bi('m.csharp.closureFrames.5') : bi('m.csharp.closureFrames.6')));
     for (let i = 0; i < 3; i++) {
       boxes.push({ id: i + 1, v, val: i }); lam.push(i + 1);
-      fr.push(F(variant === 'copy' ? 4 : 2, boxes, lam, [], { ru: `Круг ${i + 1}: новый объект с ${v} = ${i}, лямбда №${i + 1} ссылается на него.`, en: `Pass ${i + 1}: a new object with ${v} = ${i}; lambda #${i + 1} points to it.` }));
+      fr.push(F(variant === 'copy' ? 4 : 2, boxes, lam, [], bi('m.csharp.closureFrames.7', { v1: i + 1, v2: v, i })));
     }
     const out = [];
-    for (let k = 0; k < 3; k++) { out.push(k); fr.push(F(callLine, boxes, lam, out, { ru: `Лямбда №${k + 1} читает свой объект: ${v} = ${k}.`, en: `Lambda #${k + 1} reads its own object: ${v} = ${k}.` })); }
+    for (let k = 0; k < 3; k++) { out.push(k); fr.push(F(callLine, boxes, lam, out, bi('m.csharp.closureFrames.8', { v1: k + 1, v2: v, k }))); }
   }
   return fr;
 }
@@ -147,7 +145,7 @@ export function linqCode(o) {
     o.orderBy ? '    .OrderBy(x => x)' : null,
     '    .Where(x => x > 2)',
     '    .Select(x => x * 10)',
-    o.toList ? `    .ToList()                // ${tr({ ru: 'выполняется сразу', en: 'runs immediately' })}` : null,
+    o.toList ? `    .ToList()                // ${tl('m.csharp.linqCode.1')}` : null,
     '    .Take(2);',
     o.twice ? 'Console.WriteLine(query.Count());' : null,
     'foreach (var n in query) Console.WriteLine(n);'
@@ -161,28 +159,28 @@ export function linqRun(o) {
     // один перебор цепочки до ToList или до Take(limit)
     let src = LINQ_DATA;
     if (o.orderBy) {
-      for (const x of LINQ_DATA) { c.read++; ev.push(tr({ ru: `читаем ${x}`, en: `read ${x}` })); }
+      for (const x of LINQ_DATA) { c.read++; ev.push(tl('m.csharp.linqRun.1', { x })); }
       src = [...LINQ_DATA].sort((a, b) => a - b);
-      ev.push(tr({ ru: `OrderBy сортирует все ${LINQ_DATA.length} → ${src.join(', ')}`, en: `OrderBy sorts all ${LINQ_DATA.length} → ${src.join(', ')}` }));
+      ev.push(tl('m.csharp.linqRun.2', { length: LINQ_DATA.length, v1: src.join(', ') }));
     }
     const got = [];
     for (const x of src) {
-      if (!o.orderBy) { c.read++; ev.push(tr({ ru: `читаем ${x}`, en: `read ${x}` })); }
+      if (!o.orderBy) { c.read++; ev.push(tl('m.csharp.linqRun.3', { x })); }
       c.where++;
-      if (!(x > 2)) { ev.push(tr({ ru: `Where(${x}) — нет`, en: `Where(${x}) — no` })); continue; }
-      c.select++; ev.push(tr({ ru: `Where(${x}) — да → Select → ${x * 10}`, en: `Where(${x}) — yes → Select → ${x * 10}` }));
+      if (!(x > 2)) { ev.push(tl('m.csharp.linqRun.4', { x })); continue; }
+      c.select++; ev.push(tl('m.csharp.linqRun.5', { x, v1: x * 10 }));
       got.push(x * 10);
-      if (limit && got.length === limit) { ev.push(tr({ ru: `Take(${limit}) получил ${limit} — дальше не читаем`, en: `Take(${limit}) got ${limit} — no more reading` })); break; }
+      if (limit && got.length === limit) { ev.push(tl('m.csharp.linqRun.6', { limit })); break; }
     }
     return got;
   };
   const runs = o.twice ? ['Count()', 'foreach'] : ['foreach'];
   if (o.toList) {
     const list = passSource(0);
-    ev.push(tr({ ru: `ToList: список из ${list.length} готов ещё до перебора`, en: `ToList: a list of ${list.length} is ready before iteration starts` }));
-    for (const r of runs) ev.push(tr({ ru: `${r}: Take(2) берёт ${list.slice(0, 2).join(', ')} из готового списка`, en: `${r}: Take(2) takes ${list.slice(0, 2).join(', ')} from the ready list` }));
+    ev.push(tl('m.csharp.linqRun.7', { length: list.length }));
+    for (const r of runs) ev.push(tl('m.csharp.linqRun.8', { r, v1: list.slice(0, 2).join(', ') }));
   } else {
-    for (const r of runs) { ev.push(tr({ ru: `— ${r} запускает запрос —`, en: `— ${r} runs the query —` })); passSource(2); }
+    for (const r of runs) { ev.push(tl('m.csharp.linqRun.9', { r })); passSource(2); }
   }
   return { ev, c };
 }
@@ -216,9 +214,9 @@ export const linqRig = {
    ===================================================================== */
 
 export const PARSE = {
-  split: { name: 'Split', code: 'foreach (var part in line.Split(\',\'))\n    sum += int.Parse(part);', allocs: n => 1 + n, what: n => tr({ ru: `массив string[${n}] и ${n} новых строк`, en: `a string[${n}] array and ${n} new strings` }) },
-  substring: { name: 'Substring', code: 'int start = 0;\nfor (int i = 0; i <= line.Length; i++)\n    if (i == line.Length || line[i] == \',\')\n    {\n        sum += int.Parse(line.Substring(start, i - start));\n        start = i + 1;\n    }', allocs: n => n, what: n => tr({ ru: `${n} новых строк`, en: `${n} new strings` }) },
-  span: { name: 'Span', code: 'ReadOnlySpan<char> rest = line;\nwhile (!rest.IsEmpty)\n{\n    int comma = rest.IndexOf(\',\');\n    var part = comma < 0 ? rest : rest[..comma];\n    sum += int.Parse(part);\n    rest = comma < 0 ? default : rest[(comma + 1)..];\n}', allocs: _n => 0, what: _n => tr({ ru: 'ничего: срезы смотрят в исходную строку', en: 'nothing: slices point into the original string' }) }
+  split: { name: 'Split', code: 'foreach (var part in line.Split(\',\'))\n    sum += int.Parse(part);', allocs: n => 1 + n, what: n => tl('m.csharp.PARSE.1', { n }) },
+  substring: { name: 'Substring', code: 'int start = 0;\nfor (int i = 0; i <= line.Length; i++)\n    if (i == line.Length || line[i] == \',\')\n    {\n        sum += int.Parse(line.Substring(start, i - start));\n        start = i + 1;\n    }', allocs: n => n, what: n => tl('m.csharp.PARSE.2', { n }) },
+  span: { name: 'Span', code: 'ReadOnlySpan<char> rest = line;\nwhile (!rest.IsEmpty)\n{\n    int comma = rest.IndexOf(\',\');\n    var part = comma < 0 ? rest : rest[..comma];\n    sum += int.Parse(part);\n    rest = comma < 0 ? default : rest[(comma + 1)..];\n}', allocs: _n => 0, what: _n => tl('m.csharp.PARSE.3') }
 };
 
 export const allocRig = {
@@ -236,14 +234,14 @@ export const allocRig = {
    Защитные копии: большая структура, параметр по значению / ref / in, readonly struct.
    ===================================================================== */
 
-export const PASS = { value: { ru: 'по значению', en: 'by value' }, ref: 'ref', in: 'in' };
+export const PASS = { value: bi('m.csharp.PASS.1'), ref: 'ref', in: 'in' };
 
 /** Сколько копий 64-байтной структуры на один вызов Measure(…) с двумя вызовами методов внутри. */
 export function copies(pass, ro) {
-  if (pass === 'value') return { n: 1, why: tr({ ru: 'аргумент копируется целиком при вызове', en: 'the whole argument is copied on the call' }), mutable: false };
-  if (pass === 'ref') return { n: 0, why: tr({ ru: 'передаётся ссылка — но метод может изменить структуру вызывающего', en: 'a reference is passed — but the method can modify the caller\'s struct' }), mutable: true };
-  if (ro) return { n: 0, why: tr({ ru: 'readonly struct: компилятор знает, что методы её не меняют, копий нет', en: 'readonly struct: the compiler knows its methods don\'t modify it, so no copies' }), mutable: false };
-  return { n: 2, why: tr({ ru: 'in + обычная структура: перед каждым вызовом метода — защитная копия (метод мог бы её изменить)', en: 'in + a regular struct: a defensive copy before every method call (the method might modify it)' }), mutable: false };
+  if (pass === 'value') return { n: 1, why: tl('m.csharp.copies.1'), mutable: false };
+  if (pass === 'ref') return { n: 0, why: tl('m.csharp.copies.2'), mutable: true };
+  if (ro) return { n: 0, why: tl('m.csharp.copies.3'), mutable: false };
+  return { n: 2, why: tl('m.csharp.copies.4'), mutable: false };
 }
 
 export const copyRig = {
@@ -266,12 +264,12 @@ export const copyRig = {
    ===================================================================== */
 
 export const ARMS = {
-  point: { pat: 'Circle { R: 0 }', res: { ru: '"точка"', en: '"point"' }, test: x => x?.k === 'circle' && x.r === 0 },
-  circle: { pat: 'Circle c', res: { ru: '"круг"', en: '"circle"' }, test: x => x?.k === 'circle' },
-  square: { pat: 'Rect { W: var w, H: var h } when w == h', res: { ru: '"квадрат"', en: '"square"' }, test: x => x?.k === 'rect' && x.w === x.h, guarded: true },
-  rect: { pat: 'Rect r', res: { ru: '"прямоугольник"', en: '"rectangle"' }, test: x => x?.k === 'rect' },
-  nul: { pat: 'null', res: { ru: '"пусто"', en: '"empty"' }, test: x => x == null },
-  any: { pat: '_', res: { ru: '"что-то ещё"', en: '"something else"' }, test: () => true }
+  point: { pat: 'Circle { R: 0 }', res: bi('m.csharp.ARMS.1'), test: x => x?.k === 'circle' && x.r === 0 },
+  circle: { pat: 'Circle c', res: bi('m.csharp.ARMS.2'), test: x => x?.k === 'circle' },
+  square: { pat: 'Rect { W: var w, H: var h } when w == h', res: bi('m.csharp.ARMS.3'), test: x => x?.k === 'rect' && x.w === x.h, guarded: true },
+  rect: { pat: 'Rect r', res: bi('m.csharp.ARMS.4'), test: x => x?.k === 'rect' },
+  nul: { pat: 'null', res: bi('m.csharp.ARMS.5'), test: x => x == null },
+  any: { pat: '_', res: bi('m.csharp.ARMS.6'), test: () => true }
 };
 
 export const SHAPES = [

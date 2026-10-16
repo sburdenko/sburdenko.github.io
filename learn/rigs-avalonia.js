@@ -1,9 +1,10 @@
 /** Стенды курса «Avalonia: основы»: Grid, панели, привязки, селекторы стилей. */
-import { esc } from '../assets/vhs.js?v=202610131220';
-import { drive, act } from './rig-kit.js?v=202610131220';
-import { codeHtml } from './code-view.js?v=202610131220';
-import { tr } from './i18n.js?v=202610131220';
-import { COL_DEFS, WIDTHS, gridWidths, gridRig, PANELS, KIDS, arrange, panelRig, MODES, bindRig, TREE, select, selRig } from './models-avalonia.js?v=202610131220';
+import { esc } from '../assets/vhs.js?v=202610161720';
+import { drive, act } from './rig-kit.js?v=202610161720';
+import { codeHtml } from './code-view.js?v=202610161720';
+import { tr } from './i18n.js?v=202610161720';
+import { COL_DEFS, WIDTHS, gridWidths, gridRig, PANELS, KIDS, arrange, panelRig, MODES, bindRig, TREE, select, selRig } from './models-avalonia.js?v=202610161720';
+import { t as tl } from './ui.js?v=202610161720';
 
 const seg = (items, cur, prefix) => `<div class="seg wrap literal">${items.map(([v, label]) => act(`${prefix}:${v}`, esc(tr(label)), '').replace('class=""', `aria-pressed="${String(v) === String(cur)}"`)).join('')}</div>`;
 const COLORS = ['var(--gpu)', 'var(--cpu)', '#b28dff', 'var(--osd)'];
@@ -15,10 +16,10 @@ function grid(card, host, done) {
   drive(card, host, gridRig, s => {
     const ws = gridWidths(s.defs, s.w, card.content);
     const cols = s.defs.map((d, i) => `<div class="av-col" style="flex:0 0 ${ws[i] / s.w * 100}%;--c:${COLORS[i]}" title="${esc(card.labels[i])}: ${esc(d)} → ${px(ws[i])} px"><b>${esc(card.labels[i])}</b><span>${esc(d)} → ${px(ws[i])} px</span></div>`).join('');
-    const ctl = s.defs.map((d, i) => `<div class="ctl-group"><span class="ctl-label">${tr({ ru: 'Колонка', en: 'Column' })} ${i + 1}: ${esc(card.labels[i])}</span>${seg(COL_DEFS.map(x => [`${i}:${x}`, x]), `${i}:${d}`, 'col')}</div>`).join('');
+    const ctl = s.defs.map((d, i) => `<div class="ctl-group"><span class="ctl-label">${tl('r.avalonia.grid.1')} ${i + 1}: ${esc(card.labels[i])}</span>${seg(COL_DEFS.map(x => [`${i}:${x}`, x]), `${i}:${d}`, 'col')}</div>`).join('');
     return `<pre class="code small wrapln">${codeHtml(`<Grid ColumnDefinitions="${s.defs.join(',')}">`, 'xml')}</pre>
-      <div class="av-win" style="width:${s.w / 8}%"><div class="av-title">${tr({ ru: 'окно', en: 'window' })} ${s.w} px</div><div class="av-cols">${cols}</div></div>
-      <div class="ctl-group"><span class="ctl-label">${tr({ ru: 'Ширина окна', en: 'Window width' })}</span>${seg(WIDTHS.map(w => [w, `${w} px`]), s.w, 'w')}</div>
+      <div class="av-win" style="width:${s.w / 8}%"><div class="av-title">${tl('r.avalonia.grid.2')} ${s.w} px</div><div class="av-cols">${cols}</div></div>
+      <div class="ctl-group"><span class="ctl-label">${tl('r.avalonia.grid.3')}</span>${seg(WIDTHS.map(w => [w, `${w} px`]), s.w, 'w')}</div>
       ${ctl}`;
   }, done);
 }
@@ -41,22 +42,22 @@ function panelCode(panel) {
 }
 
 function panels(card, host, done) {
-  drive(card, host, panelRig, s => `<div class="av-target"><div class="colh">${tr({ ru: 'Нужно так', en: 'Target' })}</div>${panelSvg(card.goal.panel, card.goal.w ?? 320, 200, 'mini')}</div>
-      <div class="colh">${tr({ ru: 'Сейчас', en: 'Now' })}</div>
+  drive(card, host, panelRig, s => `<div class="av-target"><div class="colh">${tl('r.avalonia.panels.1')}</div>${panelSvg(card.goal.panel, card.goal.w ?? 320, 200, 'mini')}</div>
+      <div class="colh">${tl('r.avalonia.panels.2')}</div>
       ${panelSvg(s.panel, s.w, 200)}
       <pre class="code small">${codeHtml(panelCode(s.panel), 'xml')}</pre>
-      <div class="ctl-group"><span class="ctl-label">${tr({ ru: 'Панель', en: 'Panel' })}</span>${seg(Object.entries(PANELS), s.panel, 'panel')}</div>
-      <div class="ctl-group"><span class="ctl-label">${tr({ ru: 'Ширина окна', en: 'Window width' })}</span>${seg([[320, '320 px'], [220, '220 px']], s.w, 'w')}</div>`, done);
+      <div class="ctl-group"><span class="ctl-label">${tl('r.avalonia.panels.3')}</span>${seg(Object.entries(PANELS), s.panel, 'panel')}</div>
+      <div class="ctl-group"><span class="ctl-label">${tl('r.avalonia.panels.4')}</span>${seg([[320, '320 px'], [220, '220 px']], s.w, 'w')}</div>`, done);
 }
 
 /* ---------- привязки ---------- */
 
 function bindCode(s) {
-  const world = tr({ ru: 'Мир', en: 'World' });
+  const world = tl('r.avalonia.bindCode.1');
   const vm = s.notify
-    ? `private string _name = "${world}";\npublic string Name\n{\n    get => _name;\n    set { _name = value; OnPropertyChanged(); }   // ${tr({ ru: 'сообщаем экрану', en: 'notify the screen' })}\n}`
-    : `public string Name { get; set; } = "${world}";   // ${tr({ ru: 'экран не узнает об изменениях', en: 'the screen will not learn about changes' })}`;
-  return { vm, xaml: `<TextBox Text="{Binding Name, Mode=${s.mode}}"/>\n<TextBlock Text="{Binding Name, StringFormat='${tr({ ru: 'Привет, {0}!', en: 'Hello, {0}!' })}'}"/>` };
+    ? `private string _name = "${world}";\npublic string Name\n{\n    get => _name;\n    set { _name = value; OnPropertyChanged(); }   // ${tl('r.avalonia.bindCode.2')}\n}`
+    : `public string Name { get; set; } = "${world}";   // ${tl('r.avalonia.bindCode.3')}`;
+  return { vm, xaml: `<TextBox Text="{Binding Name, Mode=${s.mode}}"/>\n<TextBlock Text="{Binding Name, StringFormat='${tl('r.avalonia.bindCode.4')}'}"/>` };
 }
 
 function bind(card, host, done) {
@@ -67,13 +68,13 @@ function bind(card, host, done) {
     return `<pre class="code small">${codeHtml(c.vm)}</pre>
       <pre class="code small wrapln">${codeHtml(c.xaml, 'xml')}</pre>
       <div class="av-bind">
-        <div class="av-app"><div class="av-title">${tr({ ru: 'окно', en: 'window' })}</div><div class="av-box">${esc(s.box) || '&nbsp;'}</div><div class="av-label">${esc(tr({ ru: `Привет, ${s.label}!`, en: `Hello, ${s.label}!` }))}</div></div>
-        <div class="av-vm${same ? ' ok' : ''}"><div class="av-title">${tr({ ru: 'модель представления', en: 'view model' })}</div><code>Name = "${esc(s.vm)}"</code></div>
+        <div class="av-app"><div class="av-title">${tl('r.avalonia.bind.1')}</div><div class="av-box">${esc(s.box) || '&nbsp;'}</div><div class="av-label">${esc(tl('r.avalonia.bind.2', { label: s.label }))}</div></div>
+        <div class="av-vm${same ? ' ok' : ''}"><div class="av-title">${tl('r.avalonia.bind.3')}</div><code>Name = "${esc(s.vm)}"</code></div>
       </div>
       ${s.log.length ? `<div class="vm-note${same ? ' ret' : ' err'}">${esc(s.log[s.log.length - 1])}</div>` : ''}
-      <div class="btns">${act('type', tr({ ru: 'Ввести имя в TextBox', en: 'Type a name into the TextBox' }), 'btn primary')}${act('code', tr({ ru: 'Код: Name = …', en: 'Code: Name = …' }), 'btn')}${act('reset', tr({ ru: 'Сначала ↺', en: 'Start over ↺' }))}</div>
-      ${lock.has('mode') ? '' : `<div class="ctl-group"><span class="ctl-label">${tr({ ru: 'Mode у TextBox', en: 'TextBox Mode' })}</span>${seg(MODES.map(m => [m, m]), s.mode, 'mode')}</div>`}
-      ${lock.has('notify') ? '' : `<div class="btns">${act('notify', s.notify ? '✓ INotifyPropertyChanged' : tr({ ru: 'Добавить INotifyPropertyChanged', en: 'Add INotifyPropertyChanged' }), 'btn sm')}</div>`}`;
+      <div class="btns">${act('type', tl('r.avalonia.bind.4'), 'btn primary')}${act('code', tl('r.avalonia.bind.5'), 'btn')}${act('reset', tl('r.avalonia.bind.6'))}</div>
+      ${lock.has('mode') ? '' : `<div class="ctl-group"><span class="ctl-label">${tl('r.avalonia.bind.7')}</span>${seg(MODES.map(m => [m, m]), s.mode, 'mode')}</div>`}
+      ${lock.has('notify') ? '' : `<div class="btns">${act('notify', s.notify ? '✓ INotifyPropertyChanged' : tl('r.avalonia.bind.8'), 'btn sm')}</div>`}`;
   }, done);
 }
 
@@ -87,9 +88,9 @@ function selectors(card, host, done) {
     const got = s.sel ? select(s.sel) : [];
     const want = new Set(card.goal.ids);
     const rows = TREE.map(n => `<div class="av-node${got.includes(n.id) ? ' hit' : ''}${card.showWant && want.has(n.id) ? ' want' : ''}" style="--d:${depth(n)}">${esc(label(n))}</div>`).join('');
-    return `<div class="av-tree"><div class="colh">${tr({ ru: 'Дерево окна', en: 'Window tree' })}</div>${rows}</div>
+    return `<div class="av-tree"><div class="colh">${tl('r.avalonia.selectors.1')}</div>${rows}</div>
       <pre class="code small wrapln">${codeHtml(`<Style Selector="${s.sel ?? '?'}">\n  <Setter Property="Foreground" Value="Gold"/>\n</Style>`, 'xml')}</pre>
-      ${s.sel ? `<div class="vm-note">${tr({ ru: `Выбрано элементов: ${got.length}.`, en: `Elements selected: ${got.length}.` })}</div>` : ''}
+      ${s.sel ? `<div class="vm-note">${tl('r.avalonia.selectors.2', { length: got.length })}</div>` : ''}
       <div class="ctl-group"><span class="ctl-label">Selector</span>${seg(card.options.map(o => [o, o]), s.sel, 'sel')}</div>`;
   }, done);
 }

@@ -1,16 +1,17 @@
 /** Стенды курса «Three.js: начальный уровень». Логика — в models-three.js, картинка — настоящий Three.js. */
-import { esc } from '../assets/vhs.js?v=202610131220';
-import { drive, act } from './rig-kit.js?v=202610131220';
-import { codeHtml } from './code-view.js?v=202610131220';
-import { makeView, VIEW_ASPECT } from './three-view.js?v=202610131220';
-import { tr } from './i18n.js?v=202610131220';
+import { esc } from '../assets/vhs.js?v=202610161720';
+import { drive, act } from './rig-kit.js?v=202610161720';
+import { codeHtml } from './code-view.js?v=202610161720';
+import { makeView, VIEW_ASPECT } from './three-view.js?v=202610161720';
+import { tr } from './i18n.js?v=202610161720';
+import { t as tl } from './ui.js?v=202610161720';
 import {
   firstRig, firstView, firstCode,
   CAM_OBJECTS, CAM_OPTIONS, camSees, camRig,
   EARTH_R, MOON_R, orbitWorld, graphRig,
   MATERIALS, LIGHTS, SHADOW_FLAGS, lightView, lightRig,
   texView, texRig
-} from './models-three.js?v=202610131220';
+} from './models-three.js?v=202610161720';
 
 const seg = (items, cur, prefix) => `<div class="seg wrap literal">${items.map(([v, label]) => act(`${prefix}:${v}`, esc(tr(label)), '').replace('class=""', `aria-pressed="${String(v) === String(cur)}"`)).join('')}</div>`;
 const tog = (a, on, text) => act(a, `${on ? '✓ ' : ''}${esc(text)}`, '').replace('class=""', `aria-pressed="${on}"`);
@@ -40,14 +41,14 @@ function topSvg({ cam, items, k, oy, hint }) {
   }).join('');
   const cx = X(0), cy = Z(cam.z);
   const icon = `<g transform="translate(${cx} ${cy})" class="tp-cam"><rect x="-8" y="-3" width="16" height="11" rx="2"/><polygon points="-5,-3 5,-3 8,-10 -8,-10"/><circle cx="-4" cy="-13" r="3.2"/><circle cx="4" cy="-13" r="3.2"/></g>`;
-  return `<svg class="tp" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(tr({ ru: 'Вид сверху: камера и объекты', en: 'Top view: the camera and the objects' }))}">
+  return `<svg class="tp" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(tl('r.three.topSvg.1'))}">
     ${grid.join('')}
     <polygon points="${poly}" class="tp-f"/>
     ${objs}
     ${icon}
-    <text x="${Math.min(Math.max(cx, 34), 166)}" y="${Math.min(cy + 24, H - 4)}" class="tp-t cam" text-anchor="middle">${esc(tr({ ru: 'камера', en: 'camera' }))} z = ${cam.z}</text>
+    <text x="${Math.min(Math.max(cx, 34), 166)}" y="${Math.min(cy + 24, H - 4)}" class="tp-t cam" text-anchor="middle">${esc(tl('r.three.topSvg.2'))} z = ${cam.z}</text>
     <g class="tp-ax"><line x1="12" y1="${H - 26}" x2="34" y2="${H - 26}"/><line x1="12" y1="${H - 26}" x2="12" y2="${H - 6}"/><text x="38" y="${H - 23}">+X</text><text x="16" y="${H - 6}">+Z</text></g>
-    <text x="${W - 6}" y="12" class="tp-t top" text-anchor="end">${esc(tr({ ru: 'вид сверху', en: 'top view' }))}</text>
+    <text x="${W - 6}" y="12" class="tp-t top" text-anchor="end">${esc(tl('r.three.topSvg.3'))}</text>
     ${hint ? `<text x="${W / 2}" y="${H / 2 - 36}" class="tp-t warn" text-anchor="middle">${esc(hint)}</text>` : ''}
   </svg>`;
 }
@@ -96,8 +97,8 @@ function tjfirst(card, host, done) {
     view.update(s);
     top.innerHTML = topSvg({
       cam: { z: s.camZ, fov: 50, near: 0.1, far: 100 }, k: 18, oy: 56,
-      items: [{ x: 0, z: 0, color: s.added ? '#c47bff' : '#8f86b5', label: s.added ? 'cube' : tr({ ru: 'куб (не в сцене)', en: 'cube (not in scene)' }), hide: !s.added }],
-      hint: s.camZ === 0 ? tr({ ru: 'камера внутри куба', en: 'the camera is inside the cube' }) : ''
+      items: [{ x: 0, z: 0, color: s.added ? '#c47bff' : '#8f86b5', label: s.added ? 'cube' : tl('r.three.tjfirst.1'), hide: !s.added }],
+      hint: s.camZ === 0 ? tl('r.three.tjfirst.2') : ''
     });
   });
 }
@@ -140,10 +141,10 @@ function tjcam(card, host, done) {
   pair.append(top);
   drive(card, host, camRig, s => {
     const seen = camSees(s);
-    const rows = CAM_OBJECTS.map((o, i) => `<div class="cv-row ${seen[i].ok ? 'yes' : 'no'}"><span><b style="color:${o.color}">■</b> ${esc(tr(o.name))} (x ${o.x}, z ${o.z})<small>${esc(seen[i].why)}</small></span><span class="cv-m">${seen[i].ok ? tr({ ru: '✓ видно', en: '✓ visible' }) : tr({ ru: '✗ не видно', en: '✗ not visible' })}</span></div>`).join('');
-    const ctl = Object.entries(CAM_OPTIONS).filter(([k]) => !L.has(k)).map(([k, vals]) => `<div class="ctl-group"><span class="ctl-label">${{ fov: tr({ ru: 'fov (вертикальный угол, °)', en: 'fov (vertical angle, °)' }), z: 'camera.position.z', near: 'near', far: 'far' }[k]}</span>${seg(vals.map(v => [v, String(v)]), s[k], k)}</div>`).join('');
+    const rows = CAM_OBJECTS.map((o, i) => `<div class="cv-row ${seen[i].ok ? 'yes' : 'no'}"><span><b style="color:${o.color}">■</b> ${esc(tr(o.name))} (x ${o.x}, z ${o.z})<small>${esc(seen[i].why)}</small></span><span class="cv-m">${seen[i].ok ? tl('r.three.tjcam.1') : tl('r.three.tjcam.2')}</span></div>`).join('');
+    const ctl = Object.entries(CAM_OPTIONS).filter(([k]) => !L.has(k)).map(([k, vals]) => `<div class="ctl-group"><span class="ctl-label">${{ fov: tl('r.three.tjcam.3'), z: 'camera.position.z', near: 'near', far: 'far' }[k]}</span>${seg(vals.map(v => [v, String(v)]), s[k], k)}</div>`).join('');
     return `<pre class="code small">${codeHtml(`const camera = new THREE.PerspectiveCamera(${s.fov}, w / h, ${s.near}, ${s.far});\ncamera.position.z = ${s.z};`)}</pre>
-      <div class="roots"><div class="colh">${tr({ ru: 'Что попадёт в кадр (по центру кубика)', en: 'What gets into the frame (by cube center)' })}</div>${rows}</div>${ctl}`;
+      <div class="roots"><div class="colh">${tl('r.three.tjcam.4')}</div>${rows}</div>${ctl}`;
   }, done, (box, s) => {
     view.update(s);
     const seen = camSees(s);
@@ -198,9 +199,9 @@ function tjgraph(card, host, done) {
     const w = orbitWorld(s);
     const f = v => v.toFixed(1);
     return `<pre class="code small">${codeHtml(`const pivot = new THREE.Group();\nsun.add(pivot);\npivot.add(earth);             // earth.position.x = ${EARTH_R}\nearth.scale.setScalar(${s.scale});\n${s.parent === 'earth' ? 'earth.add(moon);              // moon.position.x = 1.2' : 'scene.add(moon);              // moon.position.x = 5.2'}\n\npivot.rotation.y = THREE.MathUtils.degToRad(${s.angle});`)}</pre>
-      <div class="pool-stats"><div class="counter"><b>${s.angle}°</b><span>${tr({ ru: 'поворот pivot', en: 'pivot rotation' })}</span></div><div class="counter"><b>${f(w.earth.x)}, ${f(w.earth.z)}</b><span>${tr({ ru: 'Земля в мире (x, z)', en: 'Earth in world (x, z)' })}</span></div><div class="counter"><b>${f(w.moon.x)}, ${f(w.moon.z)}</b><span>${tr({ ru: 'Луна в мире (x, z)', en: 'Moon in world (x, z)' })}</span></div><div class="counter${Math.abs(w.dist - MOON_R * s.scale) < 0.01 && s.parent === 'earth' ? ' good' : ''}"><b>${f(w.dist)}</b><span>${tr({ ru: 'от Луны до Земли', en: 'Moon to Earth' })}</span></div></div>
-      <div class="btns">${act('orbit', 'pivot.rotation.y += 45°', 'btn primary')}${act('reset', tr({ ru: 'Сначала ↺', en: 'Start over ↺' }))}</div>
-      ${L.has('parent') ? '' : `<div class="ctl-group"><span class="ctl-label">${tr({ ru: 'Родитель Луны', en: 'Moon\'s parent' })}</span>${seg([['scene', 'scene.add(moon)'], ['earth', 'earth.add(moon)']], s.parent, 'parent')}</div>`}
+      <div class="pool-stats"><div class="counter"><b>${s.angle}°</b><span>${tl('r.three.tjgraph.1')}</span></div><div class="counter"><b>${f(w.earth.x)}, ${f(w.earth.z)}</b><span>${tl('r.three.tjgraph.2')}</span></div><div class="counter"><b>${f(w.moon.x)}, ${f(w.moon.z)}</b><span>${tl('r.three.tjgraph.3')}</span></div><div class="counter${Math.abs(w.dist - MOON_R * s.scale) < 0.01 && s.parent === 'earth' ? ' good' : ''}"><b>${f(w.dist)}</b><span>${tl('r.three.tjgraph.4')}</span></div></div>
+      <div class="btns">${act('orbit', 'pivot.rotation.y += 45°', 'btn primary')}${act('reset', tl('r.three.tjgraph.5'))}</div>
+      ${L.has('parent') ? '' : `<div class="ctl-group"><span class="ctl-label">${tl('r.three.tjgraph.6')}</span>${seg([['scene', 'scene.add(moon)'], ['earth', 'earth.add(moon)']], s.parent, 'parent')}</div>`}
       ${L.has('scale') ? '' : `<div class="btns seg wrap literal">${tog('scale', s.scale === 2, 'earth.scale = 2')}</div>`}`;
   }, done, (box, s) => view.update(s));
 }
@@ -256,10 +257,10 @@ function tjlight(card, host, done) {
   drive(card, host, lightRig, s => {
     const v = lightView(s);
     const lights = Object.entries(LIGHTS).filter(([k]) => !L.has(k)).map(([k, n]) => tog(k, s[k], `scene.add(new ${n}(…))`)).join('');
-    const shadows = L.has('shadows') ? '' : `<div class="ctl-group"><span class="ctl-label">${tr({ ru: 'Тени — нужны все четыре', en: 'Shadows — all four are needed' })}</span><div class="seg wrap literal">${Object.entries(SHADOW_FLAGS).map(([k, t]) => tog(k, s[k], t)).join('')}</div></div>`;
-    return `<div class="vm-note${v.look === 'shaded' ? ' ret' : v.look === 'black' ? ' err' : ''}">${esc(v.why)}${v.shadow ? tr({ ru: ' Тень на полу есть.', en: ' There is a shadow on the floor.' }) : s.dir && v.missing.length < 4 ? tr({ ru: ` Для тени не хватает: ${v.missing.length}.`, en: ` Missing for the shadow: ${v.missing.length}.` }) : ''}</div>
-      ${L.has('mat') ? '' : `<div class="ctl-group"><span class="ctl-label">${tr({ ru: 'Материал узла', en: 'Knot material' })}</span>${seg(Object.entries(MATERIALS), s.mat, 'mat')}</div>`}
-      <div class="ctl-group"><span class="ctl-label">${tr({ ru: 'Свет', en: 'Lights' })}</span><div class="seg wrap literal">${lights}</div></div>
+    const shadows = L.has('shadows') ? '' : `<div class="ctl-group"><span class="ctl-label">${tl('r.three.tjlight.1')}</span><div class="seg wrap literal">${Object.entries(SHADOW_FLAGS).map(([k, t]) => tog(k, s[k], t)).join('')}</div></div>`;
+    return `<div class="vm-note${v.look === 'shaded' ? ' ret' : v.look === 'black' ? ' err' : ''}">${esc(v.why)}${v.shadow ? tl('r.three.tjlight.2') : s.dir && v.missing.length < 4 ? tl('r.three.tjlight.3', { length: v.missing.length }) : ''}</div>
+      ${L.has('mat') ? '' : `<div class="ctl-group"><span class="ctl-label">${tl('r.three.tjlight.4')}</span>${seg(Object.entries(MATERIALS), s.mat, 'mat')}</div>`}
+      <div class="ctl-group"><span class="ctl-label">${tl('r.three.tjlight.5')}</span><div class="seg wrap literal">${lights}</div></div>
       ${shadows}`;
   }, done, (box, s) => view.update(s));
 }
@@ -302,11 +303,11 @@ function tjtex(card, host, done) {
   drive(card, host, texRig, s => {
     const v = texView(s);
     const good = v.colors && (card.goal.tiles == null || v.tiles === card.goal.tiles);
-    return `<pre class="code small">${codeHtml(`const tex = await new THREE.TextureLoader().loadAsync('tiles.png');\n${s.cs === 'srgb' ? 'tex.colorSpace = THREE.SRGBColorSpace;' : `// ${tr({ ru: 'tex.colorSpace не задан', en: 'tex.colorSpace not set' })}`}\ntex.wrapS = tex.wrapT = THREE.${s.wrap === 'repeat' ? 'RepeatWrapping' : 'ClampToEdgeWrapping'};\ntex.repeat.set(${s.repeat}, ${s.repeat});`)}</pre>
+    return `<pre class="code small">${codeHtml(`const tex = await new THREE.TextureLoader().loadAsync('tiles.png');\n${s.cs === 'srgb' ? 'tex.colorSpace = THREE.SRGBColorSpace;' : `// ${tl('r.three.tjtex.1')}`}\ntex.wrapS = tex.wrapT = THREE.${s.wrap === 'repeat' ? 'RepeatWrapping' : 'ClampToEdgeWrapping'};\ntex.repeat.set(${s.repeat}, ${s.repeat});`)}</pre>
       <div class="vm-note${good ? ' ret' : ''}">${esc(v.why)}</div>
       ${L.has('rep') ? '' : `<div class="ctl-group"><span class="ctl-label">tex.repeat</span>${seg([[1, '1 × 1'], [4, '4 × 4']], s.repeat, 'rep')}</div>`}
       ${L.has('wrap') ? '' : `<div class="ctl-group"><span class="ctl-label">wrapS / wrapT</span>${seg([['clamp', 'ClampToEdgeWrapping'], ['repeat', 'RepeatWrapping']], s.wrap, 'wrap')}</div>`}
-      ${L.has('cs') ? '' : `<div class="ctl-group"><span class="ctl-label">colorSpace</span>${seg([['none', tr({ ru: 'не задан', en: 'not set' })], ['srgb', 'SRGBColorSpace']], s.cs, 'cs')}</div>`}`;
+      ${L.has('cs') ? '' : `<div class="ctl-group"><span class="ctl-label">colorSpace</span>${seg([['none', tl('r.three.tjtex.2')], ['srgb', 'SRGBColorSpace']], s.cs, 'cs')}</div>`}`;
   }, done, (box, s) => view.update(s));
 }
 
