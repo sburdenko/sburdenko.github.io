@@ -2,65 +2,80 @@
  "id": "as.u3.l2",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 5,
+ "minutes": 8,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
-   "t": "match",
+   "t": "rig",
+   "rig": "statemachine",
+   "task": "⟦⟧",
+   "goal": "async",
+   "solve": ["step", "step", "step", "step", "step", "step", "step", "step", "step", "step", "step", "step", "step"]
+  },
+  {
+   "t": "choice",
    "q": "⟦⟧",
-   "pairs": [
-    ["GetAwaiter()", "⟦⟧"],
-    ["IsCompleted", "⟦⟧"],
-    ["OnCompleted(…)", "⟦⟧"],
-    ["GetResult()", "⟦⟧"]
-   ]
+   "options": ["3", "2", "1", "4"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "int a = await GetAAsync();\nint b = await GetBAsync();\nreturn a + b;",
+   "lang": "cs",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "statemachine",
+   "task": "⟦⟧",
+   "goal": "cached",
+   "solve": ["cached", "step", "step", "step", "step", "step", "step", "step", "step", "step"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
   },
   {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "⟦⟧"
+   "deep": "⟦⟧"
   },
   {
-   "t": "choice",
+   "t": "order",
    "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
    "explain": "⟦⟧"
   },
   {
-   "t": "blanks",
+   "t": "match",
    "q": "⟦⟧",
-   "code": "⟦⟧",
-   "lang": "cs",
-   "tiles": ["GetAwaiter", "IsCompleted", "Wait", "Result"],
-   "answer": ["GetAwaiter", "IsCompleted"],
-   "explain": "⟦⟧"
-  },
-  {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
-   "explain": "⟦⟧"
-  },
-  {
-   "t": "multi",
-   "q": "⟦⟧",
-   "options": ["Task", "ValueTask", "Task.Yield()", "⟦⟧", "⟦⟧"],
-   "answer": [0, 1, 2, 3],
-   "explain": "⟦⟧"
-  },
-  {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
-   "explain": "⟦⟧"
+   "pairs": [
+    ["state", "⟦⟧"],
+    ["MoveNext", "⟦⟧"],
+    ["builder.Start", "⟦⟧"],
+    ["builder.SetResult", "⟦⟧"]
+   ]
   }
  ]
 }

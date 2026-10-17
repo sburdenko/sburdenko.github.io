@@ -2,25 +2,32 @@
  "id": "as.u3.l1",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 7,
+ "minutes": 8,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
-   "t": "rig",
-   "rig": "statemachine",
-   "task": "⟦⟧",
-   "goal": "async",
-   "solve": ["step", "step", "step", "step", "step", "step", "step", "step", "step", "step", "step", "step", "step"]
-  },
-  {
-   "t": "choice",
+   "t": "match",
    "q": "⟦⟧",
-   "options": ["3", "2", "1", "4"],
-   "answer": 0,
+   "pairs": [
+    ["GetAwaiter()", "⟦⟧"],
+    ["IsCompleted", "⟦⟧"],
+    ["OnCompleted(…)", "⟦⟧"],
+    ["GetResult()", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "tiles": ["GetAwaiter", "IsCompleted", "Wait", "Result"],
+   "answer": ["GetAwaiter", "IsCompleted"],
    "explain": "⟦⟧"
   },
   {
@@ -31,16 +38,16 @@
    "explain": "⟦⟧"
   },
   {
-   "t": "rig",
-   "rig": "statemachine",
-   "task": "⟦⟧",
-   "goal": "cached",
-   "solve": ["cached", "step", "step", "step", "step", "step", "step", "step", "step", "step"]
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "choice",
    "q": "⟦⟧",
-   "options": ["0", "1", "2"],
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
    "explain": "⟦⟧"
   },
@@ -48,23 +55,37 @@
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "deep": "⟦⟧"
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
-   "t": "order",
+   "t": "choice",
    "q": "⟦⟧",
-   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
    "explain": "⟦⟧"
   },
   {
-   "t": "match",
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
    "q": "⟦⟧",
-   "pairs": [
-    ["state", "⟦⟧"],
-    ["MoveNext", "⟦⟧"],
-    ["awaiter", "⟦⟧"],
-    ["SetResult", "⟦⟧"]
-   ]
+   "options": ["Task", "ValueTask", "Task.Yield()", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
   }
  ]
 }

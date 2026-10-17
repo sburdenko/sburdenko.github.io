@@ -62,7 +62,7 @@
     ["MoveNext", "⟦⟧"],
     ["GetAwaiter", "⟦⟧"],
     ["ExecutionContext", "⟦⟧"],
-    ["PoolingAsyncValueTaskMethodBuilder", "⟦⟧"]
+    ["Task.Yield", "⟦⟧"]
    ]
   }
  ]

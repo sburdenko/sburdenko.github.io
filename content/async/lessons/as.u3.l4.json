@@ -2,12 +2,21 @@
  "id": "as.u3.l4",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 6,
+ "minutes": 8,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
   },
   {
    "t": "choice",
@@ -20,27 +29,32 @@
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "⟦⟧"
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "choice",
    "q": "⟦⟧",
+   "code": "RequestId.Value = \"req-42\";\nawait Task.Delay(100);\nLog(RequestId.Value);",
+   "lang": "cs",
    "options": ["req-42", "null", "⟦⟧"],
    "answer": 0,
    "explain": "⟦⟧"
   },
   {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
    "t": "choice",
    "q": "⟦⟧",
    "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
    "explain": "⟦⟧"
-  },
-  {
-   "t": "learn",
-   "title": "⟦⟧",
-   "body": "⟦⟧",
-   "deep": "⟦⟧"
   },
   {
    "t": "multi",
@@ -54,9 +68,10 @@
    "q": "⟦⟧",
    "pairs": [
     ["Builder", "⟦⟧"],
+    ["SetException", "⟦⟧"],
+    ["ExecutionContext", "⟦⟧"],
     ["AsyncLocal", "⟦⟧"],
-    ["ThreadStatic", "⟦⟧"],
-    ["SynchronizationContext", "⟦⟧"]
+    ["ThreadStatic", "⟦⟧"]
    ]
   }
  ]
