@@ -5,7 +5,7 @@
  "cards/0/body": "<p>В .NET отмена <b>кооперативная</b>: <code>CancellationTokenSource</code> выдаёт токен (<code>CancellationToken</code>), ты передаёшь его в методы, а они сами проверяют его и прекращают работу. Принудительно «убить» задачу нельзя.</p><p>Источник можно создать с таймаутом: <code>new CancellationTokenSource(TimeSpan.FromSeconds(5))</code> сам отменит токен через 5 секунд. Отменить вручную — <code>cts.Cancel()</code>.</p><p>Метод, заметивший отмену, бросает <code>OperationCanceledException</code>. Задача async-метода из-за этого переходит в состояние Canceled (а не Faulted), и await такой задачи снова бросит OperationCanceledException. HttpClient бросает его наследника, <code>TaskCanceledException</code>, поэтому <code>catch (OperationCanceledException)</code> ловит и его.</p>",
  "cards/0/code": "using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));\ntry\n{\n    var data = await http.GetStringAsync(url, cts.Token);\n}\ncatch (OperationCanceledException)\n{\n    Show(\"Слишком долго\");\n}",
  "cards/1/q": "Сервер не ответил за 5 секунд. Что произойдёт?",
- "cards/1/options/0": "Токен отменится, и await бросит OperationCanceledException (точнее, его наследника TaskCanceledException)",
+ "cards/1/options/0": "Токен отменится, и await бросит TaskCanceledException — наследника OperationCanceledException",
  "cards/1/options/1": "Запрос будет ждать дальше",
  "cards/1/options/2": "Программа закроется",
  "cards/1/explain": "Через 5 секунд источник сам отменит токен. HttpClient, получивший токен, прервёт запрос, его задача станет Canceled, и await бросит TaskCanceledException — наследника OperationCanceledException.",

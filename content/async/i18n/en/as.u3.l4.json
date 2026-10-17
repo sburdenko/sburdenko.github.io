@@ -22,7 +22,7 @@
  "cards/4/explain": "ExecutionContext carried the AsyncLocal value along with the continuation, so the thread doesn't matter.",
  "cards/5/title": "ThreadStatic vs. AsyncLocal",
  "cards/5/body": "<p>A <code>[ThreadStatic]</code> field belongs to a thread, not to an operation. If another thread continues the code after await, you read that thread's value. It's either null or, worse, the value of <b>another request</b> that ran on this pool thread earlier. For per-request or per-operation data, use AsyncLocal.</p>",
- "cards/5/code": "[ThreadStatic] static string _userTs;\nstatic readonly AsyncLocal<string> _userAl = new();\n\n_userTs = \"ann\"; _userAl.Value = \"ann\";\nawait Task.Delay(100);     // in a console app some pool thread resumes\nLog(_userTs);              // null, or ANOTHER request's value\nLog(_userAl.Value);        // \"ann\"",
+ "cards/5/code": "[ThreadStatic] static string _userTs;\nstatic readonly AsyncLocal<string> _userAl = new();\n\n_userTs = \"ann\"; _userAl.Value = \"ann\";\nawait Task.Delay(100);     // in a console app some pool thread resumes\nLog(_userTs);              // \"ann\", null, or ANOTHER request's value\nLog(_userAl.Value);        // \"ann\"",
  "cards/5/deep": "A change to AsyncLocal inside a called async method isn't visible to the caller after it returns: ExecutionContext is immutable and copied on write. The value flows down the call chain, not up.",
  "cards/6/q": "An ASP.NET Core server. At the start of a request a [ThreadStatic] field is set: _user = \"ann\". Then comes an await on a database query, then Log(_user). What can Log print?",
  "cards/6/options/0": "Any of the three: ann, null or another request's user name, depending on which pool thread resumes",

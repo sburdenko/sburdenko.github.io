@@ -2,7 +2,7 @@
  "id": "as.u1.l1",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 7,
+ "minutes": 8,
  "cards": [
   {
    "t": "learn",
@@ -29,6 +29,12 @@
     "call": "sync"
    },
    "solve": ["end"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
   },
   {
    "t": "learn",

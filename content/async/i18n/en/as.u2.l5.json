@@ -5,7 +5,7 @@
  "cards/0/body": "<p>Cancellation in .NET is <b>cooperative</b>: a <code>CancellationTokenSource</code> hands out a token (<code>CancellationToken</code>), you pass it to methods, and they check it themselves and stop working. You can't forcibly \"kill\" a task.</p><p>A source can be created with a timeout: <code>new CancellationTokenSource(TimeSpan.FromSeconds(5))</code> cancels its token by itself after 5 seconds. To cancel manually, call <code>cts.Cancel()</code>.</p><p>A method that notices cancellation throws <code>OperationCanceledException</code>. The async method's task then goes into the Canceled state (not Faulted), and awaiting that task throws OperationCanceledException again. HttpClient throws its subclass, <code>TaskCanceledException</code>, so <code>catch (OperationCanceledException)</code> catches it too.</p>",
  "cards/0/code": "using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));\ntry\n{\n    var data = await http.GetStringAsync(url, cts.Token);\n}\ncatch (OperationCanceledException)\n{\n    Show(\"Too slow\");\n}",
  "cards/1/q": "The server didn't reply within 5 seconds. What happens?",
- "cards/1/options/0": "The token is canceled, and await throws OperationCanceledException (more precisely, its subclass TaskCanceledException)",
+ "cards/1/options/0": "The token is canceled, and await throws TaskCanceledException, a subclass of OperationCanceledException",
  "cards/1/options/1": "The request keeps waiting",
  "cards/1/options/2": "The program exits",
  "cards/1/explain": "After 5 seconds the source cancels the token by itself. HttpClient, which received the token, aborts the request, its task becomes Canceled, and await throws TaskCanceledException, a subclass of OperationCanceledException.",

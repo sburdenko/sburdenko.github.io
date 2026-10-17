@@ -1,6 +1,6 @@
 /** PY-03 rigs: lists, tuples, dicts, sets, stack/queue, heap, comprehensions, iterators, sorting. */
-import { lit } from '../shared/py-code.js?v=202610171158';
-import { randInt, pick, randInts, shuffle, distinctInts } from '../../algorithms/patterns/rig-kit.js?v=202610171158';
+import { lit } from '../shared/py-code.js?v=202610171210';
+import { randInt, pick, randInts, shuffle, distinctInts } from '../../algorithms/patterns/rig-kit.js?v=202610171210';
 
 const num = (key, extra = {}) => ({ key, type: 'int', min: -99, max: 99, ...extra });
 const ints = (key, extra = {}) => ({ key, type: 'ints', minLen: 1, maxLen: 10, min: -99, max: 99, ...extra });

@@ -14,6 +14,7 @@
  "cards/3/title": "async Main и async-обработчики",
  "cards/3/body": "<p>С C# 7.1 Main может быть <code>async Task Main()</code>. Обработчики событий — <code>async void</code>: это единственное разумное место для void. Контроллеры ASP.NET Core возвращают <code>Task&lt;IActionResult&gt;</code>.</p>",
  "cards/3/deep": "async Task Main — это сгенерированный Main, который вызывает Main().GetAwaiter().GetResult(). Главный поток консоли действительно блокируется, и это нормально: контекста нет, продолжения выполняет пул.",
+ "cards/3/code": "static async Task Main()                          // консоль, C# 7.1+\n{\n    var html = await http.GetStringAsync(url);\n    Console.WriteLine(html.Length);\n}\n\nbutton.Click += async (s, e) => await SaveAsync(); // событие: async void\n\npublic async Task<IActionResult> Get(int id)       // контроллер ASP.NET Core\n    => Ok(await _repo.GetUserAsync(id));",
  "cards/4/q": "Где sync-over-async?",
  "cards/4/explain": ".Result держит поток пула всё время запроса к базе.",
  "cards/5/q": "Исправь контроллер",

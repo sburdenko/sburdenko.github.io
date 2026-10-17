@@ -14,6 +14,7 @@
  "cards/3/title": "async Main and async handlers",
  "cards/3/body": "<p>Since C# 7.1, Main can be <code>async Task Main()</code>. Event handlers are <code>async void</code>: the one sensible place for void. ASP.NET Core controllers return <code>Task&lt;IActionResult&gt;</code>.</p>",
  "cards/3/deep": "async Task Main is a generated Main that calls Main().GetAwaiter().GetResult(). The console's main thread really does block, and that's fine: there's no context, so the pool runs the continuations.",
+ "cards/3/code": "static async Task Main()                          // console, C# 7.1+\n{\n    var html = await http.GetStringAsync(url);\n    Console.WriteLine(html.Length);\n}\n\nbutton.Click += async (s, e) => await SaveAsync(); // an event: async void\n\npublic async Task<IActionResult> Get(int id)       // an ASP.NET Core controller\n    => Ok(await _repo.GetUserAsync(id));",
  "cards/4/q": "Where is the sync-over-async?",
  "cards/4/explain": ".Result holds a pool thread for the entire database query.",
  "cards/5/q": "Fix the controller",

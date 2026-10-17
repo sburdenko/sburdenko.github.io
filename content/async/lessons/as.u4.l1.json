@@ -2,8 +2,15 @@
  "id": "as.u4.l1",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 9,
+ "minutes": 10,
  "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
   {
    "t": "learn",
    "title": "⟦⟧",

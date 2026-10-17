@@ -2,7 +2,7 @@
  "id": "as.u3.l3",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 9,
+ "minutes": 10,
  "cards": [
   {
    "t": "learn",
@@ -25,6 +25,13 @@
    "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
    "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "learn",
