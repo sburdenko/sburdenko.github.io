@@ -2,12 +2,14 @@
  "id": "as.u3.l3",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 6,
+ "minutes": 10,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "rig",
@@ -16,32 +18,6 @@
    "task": "⟦⟧",
    "goal": "cached",
    "solve": ["step", "step", "step", "step", "step", "step", "step", "step", "step"]
-  },
-  {
-   "t": "learn",
-   "title": "⟦⟧",
-   "body": "⟦⟧"
-  },
-  {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "async void"],
-   "answer": 0,
-   "explain": "⟦⟧"
-  },
-  {
-   "t": "tapline",
-   "q": "⟦⟧",
-   "code": "public ValueTask<User> GetUserAsync(int id)\n{\n    if (_cache.TryGetValue(id, out var u))\n        return new ValueTask<User>(u);\n    return new ValueTask<User>(LoadUserAsync(id));\n}",
-   "answer": 3,
-   "explain": "⟦⟧"
-  },
-  {
-   "t": "multi",
-   "q": "⟦⟧",
-   "options": ["return Task.CompletedTask", "new ValueTask<int>(42)", "⟦⟧", "⟦⟧", "Task.Run(…)"],
-   "answer": [0, 1, 2],
-   "explain": "⟦⟧"
   },
   {
    "t": "choice",
@@ -54,7 +30,58 @@
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["return Task.CompletedTask", "new ValueTask<int>(42)", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public ValueTask<User> GetUserAsync(int id)\n{\n    if (_cache.TryGetValue(id, out var u))\n        return new ValueTask<User>(u);\n    return new ValueTask<User>(LoadUserAsync(id));\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
    "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
   },
   {
    "t": "match",
@@ -62,7 +89,7 @@
    "pairs": [
     ["Task.CompletedTask", "⟦⟧"],
     ["Task.FromResult", "⟦⟧"],
-    ["ValueTask", "⟦⟧"],
+    ["ValueTask<T>", "⟦⟧"],
     ["IsCompleted = true", "⟦⟧"]
    ]
   }

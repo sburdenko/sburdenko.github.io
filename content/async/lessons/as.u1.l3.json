@@ -2,12 +2,13 @@
  "id": "as.u1.l3",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 5,
+ "minutes": 7,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
+   "code": "var html = await http.GetStringAsync(url);\nConsole.WriteLine(html.Length);",
    "deep": "⟦⟧"
   },
   {

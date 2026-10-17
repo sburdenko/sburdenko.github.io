@@ -1,10 +1,10 @@
 /** Стенды курса «История .NET»: лента лет и совместимость целевых платформ. */
-import { esc } from '../assets/vhs.js?v=202610161720';
-import { drive, act } from './rig-kit.js?v=202610161720';
-import { codeHtml } from './code-view.js?v=202610161720';
-import { tr } from './i18n.js?v=202610161720';
-import { FIRST_YEAR, LAST_YEAR, stateAt, yearsRig, TFMS, HOSTS, resolveHost, csprojLine, tfmRig } from './models-history.js?v=202610161720';
-import { t as tl, bi } from './ui.js?v=202610161720';
+import { esc } from '../assets/vhs.js?v=202610171210';
+import { drive, act } from './rig-kit.js?v=202610171210';
+import { codeHtml } from './code-view.js?v=202610171210';
+import { tr } from './i18n.js?v=202610171210';
+import { FIRST_YEAR, LAST_YEAR, stateAt, yearsRig, TFMS, HOSTS, resolveHost, csprojLine, tfmRig } from './models-history.js?v=202610171210';
+import { t as tl, bi } from './ui.js?v=202610171210';
 
 /* ---------- лента лет ---------- */
 

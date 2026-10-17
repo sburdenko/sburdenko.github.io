@@ -2,7 +2,7 @@
  "id": "as.u1.l1",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 5,
+ "minutes": 8,
  "cards": [
   {
    "t": "learn",
@@ -12,7 +12,8 @@
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧"
   },
   {
    "t": "rig",
@@ -28,6 +29,18 @@
     "call": "sync"
    },
    "solve": ["end"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
   },
   {
    "t": "rig",
@@ -53,9 +66,17 @@
    "explain": "⟦⟧"
   },
   {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧"
   },
   {
    "t": "multi",

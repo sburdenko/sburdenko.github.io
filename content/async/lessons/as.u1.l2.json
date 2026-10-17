@@ -2,7 +2,7 @@
  "id": "as.u1.l2",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 5,
+ "minutes": 8,
  "cards": [
   {
    "t": "learn",
@@ -34,31 +34,43 @@
    "explain": "⟦⟧"
   },
   {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
+   "flow": ["Task.Run(f)", "⟦⟧", "⟦⟧", "⟦⟧"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
    "deep": "⟦⟧"
   },
   {
    "t": "choice",
    "q": "⟦⟧",
-   "options": ["await Task.Run(() => Compress(img))", "⟦⟧", "⟦⟧"],
+   "options": ["await Task.Run(() => Compress(img))", "⟦⟧", "Task.Run(() => Compress(img)).Result"],
    "answer": 0,
-   "explain": "⟦⟧"
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
   },
   {
    "t": "choice",
    "q": "⟦⟧",
    "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
-   "explain": "⟦⟧"
-  },
-  {
-   "t": "multi",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": [0, 1, 2],
-   "explain": "⟦⟧"
+   "explain": "⟦⟧",
+   "deep": "⟦⟧"
   },
   {
    "t": "blanks",

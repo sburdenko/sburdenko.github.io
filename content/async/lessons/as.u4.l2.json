@@ -2,12 +2,14 @@
  "id": "as.u4.l2",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 7,
+ "minutes": 8,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "rig",
@@ -68,13 +70,13 @@
   {
    "t": "order",
    "q": "⟦⟧",
-   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
    "explain": "⟦⟧"
   },
   {
    "t": "multi",
    "q": "⟦⟧",
-   "options": ["WPF", "WinForms", "⟦⟧", "ASP.NET Core", "⟦⟧"],
+   "options": ["WPF", "Unity", "⟦⟧", "ASP.NET Core", "⟦⟧"],
    "answer": [0, 1, 2],
    "explain": "⟦⟧"
   }

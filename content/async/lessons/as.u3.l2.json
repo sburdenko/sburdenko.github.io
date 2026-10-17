@@ -2,43 +2,43 @@
  "id": "as.u3.l2",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 5,
+ "minutes": 9,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
-  },
-  {
-   "t": "match",
-   "q": "⟦⟧",
-   "pairs": [
-    ["GetAwaiter()", "⟦⟧"],
-    ["IsCompleted", "⟦⟧"],
-    ["OnCompleted(…)", "⟦⟧"],
-    ["GetResult()", "⟦⟧"]
-   ]
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "⟦⟧"
-  },
-  {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
-   "explain": "⟦⟧"
-  },
-  {
-   "t": "blanks",
-   "q": "⟦⟧",
    "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "statemachine",
+   "task": "⟦⟧",
+   "goal": "async",
+   "solve": ["step", "step", "step", "step", "step", "step", "step", "step", "step", "step", "step", "step", "step"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["3", "2", "1", "4"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "int a = await GetAAsync();\nint b = await GetBAsync();\nreturn a + b;",
    "lang": "cs",
-   "tiles": ["GetAwaiter", "IsCompleted", "Wait", "Result"],
-   "answer": ["GetAwaiter", "IsCompleted"],
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
    "explain": "⟦⟧"
   },
   {
@@ -49,11 +49,11 @@
    "explain": "⟦⟧"
   },
   {
-   "t": "multi",
-   "q": "⟦⟧",
-   "options": ["Task", "ValueTask", "Task.Yield()", "⟦⟧", "⟦⟧"],
-   "answer": [0, 1, 2, 3],
-   "explain": "⟦⟧"
+   "t": "rig",
+   "rig": "statemachine",
+   "task": "⟦⟧",
+   "goal": "cached",
+   "solve": ["cached", "step", "step", "step", "step", "step", "step", "step", "step", "step"]
   },
   {
    "t": "choice",
@@ -61,6 +61,30 @@
    "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
    "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["state", "⟦⟧"],
+    ["MoveNext", "⟦⟧"],
+    ["builder.Start", "⟦⟧"],
+    ["builder.SetResult", "⟦⟧"]
+   ]
   }
  ]
 }

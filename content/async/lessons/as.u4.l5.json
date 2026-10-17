@@ -2,12 +2,22 @@
  "id": "as.u4.l5",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 6,
+ "minutes": 9,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "rig",
@@ -50,7 +60,9 @@
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "deep": "⟦⟧"
+   "deep": "⟦⟧",
+   "code": "dotnet-counters monitor -n MyServer --counters System.Runtime",
+   "lang": "plain"
   },
   {
    "t": "multi",
