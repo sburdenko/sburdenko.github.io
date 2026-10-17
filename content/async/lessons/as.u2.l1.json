@@ -2,18 +2,19 @@
  "id": "as.u2.l1",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 5,
+ "minutes": 7,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "async Task<int> GetLengthAsync(string url)\n{\n    string html = await http.GetStringAsync(url);\n    return html.Length;\n}"
+   "code": "⟦⟧"
   },
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧"
   },
   {
    "t": "choice",
@@ -69,10 +70,10 @@
    "explain": "⟦⟧"
   },
   {
-   "t": "choice",
+   "t": "order",
    "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
+   "code": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
    "explain": "⟦⟧"
   }
  ]

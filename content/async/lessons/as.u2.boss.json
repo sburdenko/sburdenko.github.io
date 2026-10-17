@@ -59,7 +59,7 @@
    "q": "⟦⟧",
    "code": "Task<string> first = await Task.___(t1, t2, t3);\nstring page = await first;",
    "lang": "cs",
-   "tiles": ["WhenAny", "WhenAll", "Run", "Yield"],
+   "tiles": ["WhenAny", "WhenAll", "Run", "Delay"],
    "answer": ["WhenAny"],
    "explain": "⟦⟧"
   },

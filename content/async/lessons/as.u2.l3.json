@@ -2,7 +2,7 @@
  "id": "as.u2.l3",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 6,
+ "minutes": 7,
  "cards": [
   {
    "t": "learn",
@@ -13,7 +13,22 @@
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "async Task SendAsync(string to)\n{\n    if (to is null) throw new ArgumentNullException(nameof(to));\n    await smtp.SendAsync(to);\n}\nvar t = SendAsync(null);\nDoOtherWork();\nawait t;",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
   },
   {
    "t": "choice",
@@ -24,14 +39,9 @@
    "explain": "⟦⟧"
   },
   {
-   "t": "rig",
-   "rig": "combinators",
-   "task": "⟦⟧",
-   "goal": {
-    "kind": "inner",
-    "n": 2
-   },
-   "solve": ["mode:all", "fail:A", "fail:C"]
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
   },
   {
    "t": "choice",
@@ -39,11 +49,6 @@
    "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
    "explain": "⟦⟧"
-  },
-  {
-   "t": "learn",
-   "title": "⟦⟧",
-   "body": "⟦⟧"
   },
   {
    "t": "multi",
