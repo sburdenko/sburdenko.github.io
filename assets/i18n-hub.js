@@ -56,8 +56,8 @@ export const HUB = {
   },
   'hub.tape6Title': { en: 'Algorithm patterns', ru: 'Паттерны алгоритмов' },
   'hub.tape6Desc': {
-    en: 'Sixteen interview patterns from hash maps to DP, shortest paths, bit tricks and data structure design: how to spot each one, a C# skeleton and 86 problems — each played step by step on its own editable rig, with a Hard one in every chapter.',
-    ru: 'Шестнадцать паттернов для собеседования, от хеш-таблиц до DP, кратчайших путей, битовых трюков и дизайна структур: как узнать каждый, каркас на C# и 86 задач — каждая по шагам на своём редактируемом стенде, в каждой главе есть Hard.'
+    en: 'Seventeen interview patterns from hash maps to DP, shortest paths, bit tricks, game pathfinding and data structure design: how to spot each one, a C# skeleton and 91 problems — each played step by step on its own editable rig, with a Hard one in every chapter.',
+    ru: 'Семнадцать паттернов для собеседования, от хеш-таблиц до DP, кратчайших путей, битовых трюков, поиска пути в играх и дизайна структур: как узнать каждый, каркас на C# и 91 задача — каждая по шагам на своём редактируемом стенде, в каждой главе есть Hard.'
   },
   'hub.tape6Tags': {
     en: '<span>Algorithms</span><span>LeetCode</span><span>C#</span><span>16 patterns</span>',

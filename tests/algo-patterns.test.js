@@ -7,6 +7,7 @@ import * as C from '../algorithms/patterns/model-c.js';
 import * as D from '../algorithms/patterns/model-d.js';
 import * as E from '../algorithms/patterns/model-e.js';
 import * as F from '../algorithms/patterns/model-f.js';
+import * as GM from '../algorithms/patterns/model-games.js';
 import * as H from '../algorithms/patterns/model-h.js';
 import { register, bitWidth, hexOf } from '../algorithms/patterns/view-kit.js';
 import { RIGS, PATTERN_IDS, runWithInput, MAX_STEPS } from '../algorithms/patterns/rigs.js';
@@ -800,6 +801,216 @@ test('the uint field reads decimal, hex and binary', () => {
   assert.equal(runWithInput(RIGS.maxXorLimit, { nums: '1 2', queries: '1 | 2' }).error[0], 'in.err.pairs');
 });
 
+/* ---------- chapter 16: games — paths and space ---------- */
+const N8 = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+/** Shortest clear path in cells over 8 directions, by a BFS written here, apart from the model. */
+function bfs8Cells(grid) {
+  const n = grid.length, m = grid[0].length;
+  if (grid[0][0] || grid[n - 1][m - 1]) return -1;
+  const dist = grid.map(r => r.map(() => -1)), queue = [[0, 0]];
+  dist[0][0] = 1;
+  while (queue.length) {
+    const [r, c] = queue.shift();
+    for (const [dr, dc] of N8) {
+      const y = r + dr, x = c + dc;
+      if (y < 0 || x < 0 || y >= n || x >= m || grid[y][x] || dist[y][x] > 0) continue;
+      dist[y][x] = dist[r][c] + 1;
+      queue.push([y, x]);
+    }
+  }
+  return dist[n - 1][m - 1];
+}
+
+test('chapter 16: A* with an admissible h equals BFS, overestimating ones never beat it', () => {
+  repeat(300, () => {
+    const n = len(1, 7), grid = grid01(n, n, 0.3);
+    if (next() < 0.8) { grid[0][0] = 0; grid[n - 1][n - 1] = 0; }
+    const best = bfs8Cells(grid);
+    const che = GM.astarTrace(grid, 'chebyshev'), zero = GM.astarTrace(grid, 'zero');
+    assert.equal(che.length, best, JSON.stringify(grid));
+    assert.equal(zero.length, best, 'h = 0 is Dijkstra, here BFS');
+    assert.ok(che.expanded <= zero.expanded, `an admissible h never expands more than Dijkstra: ${che.expanded} > ${zero.expanded}`);
+    for (const h of ['octile', 'manhattan']) {
+      const r = GM.astarTrace(grid, h);
+      assert.equal(r.length < 0, best < 0, `${h} finds a path whenever one exists`);
+      if (best > 0) assert.ok(r.length >= best, `${h}: ${r.length} < ${best}`);
+      assert.equal(keysOf(r).has('ast.ev.worse'), r.length > best);
+    }
+    for (const r of [che, zero]) {
+      if (best < 0) { assert.deepEqual(r.path, []); continue; }
+      assert.equal(r.path.length, best);
+      assert.deepEqual(r.path[0], [0, 0]);
+      assert.deepEqual(r.path.at(-1), [n - 1, n - 1]);
+      r.path.forEach(([y, x], i) => {
+        assert.equal(grid[y][x], 0, 'the path stays on free cells');
+        if (i) assert.ok(Math.max(Math.abs(y - r.path[i - 1][0]), Math.abs(x - r.path[i - 1][1])) === 1, 'one king move per step');
+      });
+      const popped = r.events.filter(e => e.key === 'ast.ev.pop').map(e => e.args[0]);
+      assert.equal(new Set(popped).size, popped.length, 'a closed cell is never expanded again');
+      for (const e of r.events) if (e.key === 'ast.ev.stale') assert.ok(e.args[1] > e.args[2], 'a skipped entry is really stale');
+    }
+  });
+  const lc = s => s.split(' ').map(r => [...r].map(Number));
+  assert.equal(GM.astarTrace(lc('01 10'), 'chebyshev').length, 2);
+  assert.equal(GM.astarTrace(lc('000 110 110'), 'chebyshev').length, 4);
+  assert.equal(GM.astarTrace(lc('100 110 110'), 'chebyshev').length, -1);
+  assert.equal(GM.astarTrace(lc('0'), 'zero').length, 1);
+  const example = lc('0000000 0000010 0110010 0001110 0101010 0101010 0000000');
+  assert.equal(GM.astarTrace(example, 'manhattan').length, 11, 'the example shows Manhattan returning a longer path');
+  assert.ok(GM.astarTrace(example, 'zero').expanded >= 2 * GM.astarTrace(example, 'chebyshev').expanded);
+  for (const key of ['ast.ev.pop', 'ast.ev.open', 'ast.ev.relax', 'ast.ev.closed', 'ast.ev.stale', 'ast.ev.found']) {
+    assert.ok(keysOfRun(RIGS.astar).has(key), `the example shows ${key}`);
+  }
+});
+
+test('chapter 16: every flow-field arrow goes downhill, and integration equals relaxation to a fixpoint', () => {
+  repeat(200, () => {
+    const rows = len(1, 6), cols = len(1, 7);
+    const cost = Array.from({ length: rows }, () => Array.from({ length: cols }, () => (next() < 0.2 ? 0 : len(1, 9))));
+    const goals = [[len(0, rows - 1), len(0, cols - 1)]];
+    cost[goals[0][0]][goals[0][1]] = 1;
+    if (next() < 0.3) { const g = [len(0, rows - 1), len(0, cols - 1)]; cost[g[0]][g[1]] = 1; if (g.join() !== goals[0].join()) goals.push(g); }
+    const ref = cost.map(r => r.map(() => Infinity));
+    for (const [r, c] of goals) ref[r][c] = 0;
+    for (let changed = true; changed;) {
+      changed = false;
+      cost.forEach((row, r) => row.forEach((v, c) => {
+        if (!v) return;
+        for (const [dr, dc] of N4) {
+          const y = r + dr, x = c + dc;
+          if (y < 0 || x < 0 || y >= rows || x >= cols || !cost[y][x]) continue;
+          if (ref[y][x] + v < ref[r][c]) { ref[r][c] = ref[y][x] + v; changed = true; }
+        }
+      }));
+    }
+    const { integ, dir } = GM.flowFieldTrace(cost, goals);
+    assert.deepEqual(integ, ref, JSON.stringify({ cost, goals }));
+    cost.forEach((row, r) => row.forEach((v, c) => {
+      const goal = goals.some(([y, x]) => y === r && x === c);
+      if (!v || goal || integ[r][c] === Infinity) { assert.equal(dir[r][c], null, 'walls, goals and cut-off cells have no arrow'); return; }
+      const [dr, dc] = GM.FLOW_DIRS[dir[r][c]], y = r + dr, x = c + dc;
+      assert.ok(integ[y][x] < integ[r][c], 'the arrow leads to a neighbour with a smaller integration');
+      assert.equal(integ[r][c], v + integ[y][x], 'and to the cheapest one');
+      let p = [r, c], steps = 0;
+      while (!goals.some(([gy, gx]) => gy === p[0] && gx === p[1])) {
+        const [ar, ac] = GM.FLOW_DIRS[dir[p[0]][p[1]]];
+        p = [p[0] + ar, p[1] + ac];
+        assert.ok(++steps <= rows * cols, 'following the arrows ends at a goal');
+      }
+    }));
+  });
+  for (const key of ['ff.ev.cost', 'ff.ev.seed', 'ff.ev.relax', 'ff.ev.settle', 'ff.ev.row', 'ff.ev.rowCut', 'ff.ev.done']) {
+    assert.ok(keysOfRun(RIGS.flowField).has(key), `the example shows ${key}`);
+  }
+});
+
+test('chapter 16: the spatial grid counts exactly what brute force counts, with fewer checks', () => {
+  repeat(300, () => {
+    const r = len(1, 5), cell = r + len(0, 3);
+    const points = Array.from({ length: len(1, 16) }, () => [len(0, 24), len(0, 24)]);
+    const queries = Array.from({ length: len(1, 3) }, () => [len(0, 24), len(0, 24), len(1, r)]);
+    const brute = queries.map(([x, y, rr]) => points.filter(([a, b]) => (a - x) ** 2 + (b - y) ** 2 <= rr * rr).length);
+    const run = GM.spatialGridTrace(points, queries, cell);
+    assert.deepEqual(run.answers, brute, JSON.stringify({ points, queries, cell }));
+    assert.ok(run.checks <= points.length * queries.length);
+    const cellOf = ([x, y]) => [Math.floor(x / cell), Math.floor(y / cell)];
+    for (const e of run.events) if (e.key === 'sg.ev.newCell' || e.key === 'sg.ev.put') assert.deepEqual([e.args[3], e.args[4]], cellOf(points[e.args[0]]));
+  });
+  assert.deepEqual(GM.spatialGridTrace([[1, 3], [3, 3], [5, 3], [2, 2]], [[2, 3, 1], [4, 3, 1], [1, 1, 2]], 2).answers, [3, 2, 2]);
+  assert.deepEqual(GM.spatialGridTrace([[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]], [[1, 2, 2], [2, 2, 2], [4, 3, 2], [4, 3, 3]], 3).answers, [2, 3, 2, 4]);
+  const run = RIGS.spatialGrid.run(RIGS.spatialGrid.example);
+  assert.ok(run.checks * 2 < run.points.length * run.queries.length, 'the example checks far fewer pairs than brute force');
+  for (const key of ['sg.ev.newCell', 'sg.ev.put', 'sg.ev.query', 'sg.ev.empty', 'sg.ev.hit', 'sg.ev.miss', 'sg.ev.answer', 'sg.ev.done']) {
+    assert.ok(keysOf(run).has(key), `the example shows ${key}`);
+  }
+});
+
+test('chapter 16: union-find agrees with BFS connectivity and finds the last edge of the cycle', () => {
+  const components = (n, edges) => {
+    const seen = Array(n + 1).fill(0);
+    let id = 0;
+    for (let s = 1; s <= n; s++) {
+      if (seen[s]) continue;
+      seen[s] = ++id;
+      for (const queue = [s]; queue.length;) {
+        const v = queue.shift();
+        for (const [a, b] of edges) for (const [p, q] of [[a, b], [b, a]]) if (p === v && !seen[q]) { seen[q] = id; queue.push(q); }
+      }
+    }
+    return seen;
+  };
+  repeat(200, () => {
+    const n = len(3, 10), edges = [];
+    for (let v = 2; v <= n; v++) edges.push(next() < 0.5 ? [len(1, v - 1), v] : [v, len(1, v - 1)]);
+    for (;;) {
+      const a = len(1, n), b = len(1, n);
+      if (a !== b && !edges.some(([p, q]) => (p === a && q === b) || (p === b && q === a))) { edges.push([a, b]); break; }
+    }
+    edges.sort(() => next() - 0.5);
+    let expected = null;
+    for (let k = n - 1; k >= 0 && !expected; k--) {
+      const rest = edges.filter((_, i) => i !== k), comp = components(n, rest);
+      if (comp.slice(1).every(c => c === comp[1])) expected = edges[k];
+    }
+    const run = GM.unionFindTrace(edges);
+    assert.deepEqual(run.answer, expected, JSON.stringify(edges));
+    for (const e of run.events) {
+      if (e.key !== 'uf.ev.union' && e.key !== 'uf.ev.tie' && e.key !== 'uf.ev.cycle') continue;
+      const comp = components(n, edges.slice(0, e.k + 1));
+      const root = v => { while (e.parent[v] !== v) v = e.parent[v]; return v; };
+      for (let a = 1; a <= n; a++) for (let b = a + 1; b <= n; b++) assert.equal(root(a) === root(b), comp[a] === comp[b], `after edge ${e.k}: ${a} and ${b}`);
+      const height = v => (e.parent[v] === v ? 0 : 1 + height(e.parent[v]));
+      for (let v = 1; v <= n; v++) if (e.parent[v] === v) assert.ok(e.rank[v] >= 0 && 2 ** e.rank[v] <= n, 'rank stays logarithmic');
+      for (let v = 1; v <= n; v++) assert.ok(height(v) <= Math.log2(n), 'union by rank keeps trees shallow');
+    }
+  });
+  assert.deepEqual(GM.unionFindTrace([[1, 2], [1, 3], [2, 3]]).answer, [2, 3]);
+  assert.deepEqual(GM.unionFindTrace([[1, 2], [2, 3], [3, 4], [1, 4], [1, 5]]).answer, [1, 4]);
+  for (const key of ['uf.ev.find', 'uf.ev.compress', 'uf.ev.union', 'uf.ev.tie', 'uf.ev.cycle']) {
+    assert.ok(keysOfRun(RIGS.unionFind).has(key), `the example shows ${key}`);
+  }
+});
+
+test('chapter 16: swim in rising water agrees with a BFS for every level', () => {
+  repeat(200, () => {
+    const n = len(1, 5), values = Array.from({ length: n * n }, (_, i) => i).sort(() => next() - 0.5);
+    const grid = Array.from({ length: n }, (_, r) => values.slice(r * n, r * n + n));
+    let t = 0;
+    while (grid[0][0] > t || bfsSteps(n, n, (y, x) => grid[y][x] <= t) < 0) t++;
+    const run = GM.swimTrace(grid);
+    assert.equal(run.answer, t, JSON.stringify(grid));
+    const path = run.events.at(-1).path;
+    assert.ok(path.every(([y, x]) => grid[y][x] <= t), 'the drawn route stays under water');
+  });
+  assert.equal(GM.swimTrace([[0, 2], [1, 3]]).answer, 3);
+  assert.equal(GM.swimTrace([[0, 1, 2, 3, 4], [24, 23, 22, 21, 5], [12, 13, 14, 15, 16], [11, 17, 18, 19, 20], [10, 9, 8, 7, 6]]).answer, 16);
+  for (const key of ['sw.ev.island', 'sw.ev.grow', 'sw.ev.merge', 'sw.ev.done']) assert.ok(keysOfRun(RIGS.swim).has(key), `the example shows ${key}`);
+});
+
+test('chapter 16: the choice field and the cross-field checks', () => {
+  const spec = { type: 'choice', options: GM.H_NAMES };
+  for (const [t, v] of [['chebyshev', 'chebyshev'], ['cheb', 'chebyshev'], ['O', 'octile'], ['man', 'manhattan'], [' zero ', 'zero']]) assert.equal(parseField(t, spec).value, v, t);
+  for (const t of ['', 'x', 'euclid']) assert.deepEqual(parseField(t, spec).error, ['in.err.choice', GM.H_NAMES.join(' · ')], t);
+  assert.equal(formatField('octile', spec), 'octile');
+  assert.deepEqual(runWithInput(RIGS.astar, { grid: '000 000', h: 'zero' }).error, ['in.err.square', 2, 3]);
+  assert.equal(runWithInput(RIGS.flowField, { cost: '111 101', goals: '1 1' }).error[0], 'in.err.goalCell');
+  assert.equal(runWithInput(RIGS.flowField, { cost: '111 101', goals: '1' }).error[0], 'in.err.goalPairs');
+  assert.equal(runWithInput(RIGS.spatialGrid, { points: '1 2', queries: '1 1 4', cell: '3' }).error[0], 'in.err.radius');
+  assert.equal(runWithInput(RIGS.spatialGrid, { points: '1 2', queries: '1 1 0', cell: '3' }).error[0], 'in.err.radiusMin');
+  assert.equal(runWithInput(RIGS.spatialGrid, { points: '1 | 2', queries: '1 1 1', cell: '3' }).error[0], 'in.err.points');
+  assert.equal(runWithInput(RIGS.spatialGrid, { points: '1 2', queries: '1 1', cell: '3' }).error[0], 'in.err.circles');
+  assert.equal(runWithInput(RIGS.unionFind, { edges: '1 2 | 2 3 | 3 9' }).error[0], 'in.err.ufNodes');
+  assert.equal(runWithInput(RIGS.unionFind, { edges: '1 2 | 2 1 | 2 3' }).error[0], 'in.err.ufEdge');
+  assert.equal(runWithInput(RIGS.unionFind, { edges: '1 2 | 1 2 | 3 3' }).error[0], 'in.err.ufEdge');
+  assert.equal(runWithInput(RIGS.unionFind, { edges: '1 2 | 2 3 | 1 3 | 1 2' }).error[0], 'in.err.ufEdge');
+  assert.equal(runWithInput(RIGS.unionFind, { edges: '1 2 | 2 3 | 1 3 | 4 4' }).error[0], 'in.err.ufEdge');
+  assert.equal(runWithInput(RIGS.unionFind, { edges: '1 2 | 2 3 | 1 3 | 3 1' }).error[0], 'in.err.ufEdge');
+  assert.equal(runWithInput(RIGS.unionFind, { edges: '1 2 | 2 1 | 3 4 | 4 3' }).error[0], 'in.err.ufEdge');
+  assert.equal(runWithInput(RIGS.unionFind, { edges: '1 2 | 1 3 | 2 3 | 1 4 | 5 6 | 6 7 | 5 7' }).error[0], 'in.err.ufTree');
+  assert.equal(runWithInput(RIGS.swim, { grid: '0 1 | 1 3' }).error[0], 'in.err.perm');
+  assert.equal(runWithInput(RIGS.swim, { grid: '0 1 | 2 4' }).error[0], 'in.err.perm');
+});
+
 /* ---------- chapter 17: data structure design ---------- */
 test('chapter 17: the trie agrees with a set of strings, one node per distinct prefix', () => {
   repeat(400, () => {
@@ -980,7 +1191,7 @@ test('input fields parse what people type and format back losslessly', () => {
 });
 
 test('every problem owns an editable rig: the example and random inputs parse, run and render', () => {
-  assert.equal(PATTERN_IDS.length, 16);
+  assert.equal(PATTERN_IDS.length, 17);
   const random = rng(7);
   for (const id of PATTERN_IDS) {
     for (const problem of PROBLEMS[id]) {

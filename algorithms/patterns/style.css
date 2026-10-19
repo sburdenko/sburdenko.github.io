@@ -210,6 +210,33 @@
 .stage .rcap.res{fill:var(--osd)}
 .stage .rcap.act{fill:#ffc2e3}
 @media (max-width:420px){.rig .crt{padding:14px 6px}}
+/* games: A*, flow field, spatial hash, Union-Find, rising water */
+.stage .corner-l{text-anchor:start}
+.stage .cell.skip{stroke:var(--bad);stroke-dasharray:4 3;stroke-width:1.8}
+.stage .cell.mud{fill:rgba(255,170,60,.13);stroke:rgba(255,170,60,.5)}
+.stage .cell.deep{fill:rgba(38,227,234,.16);stroke:rgba(38,227,234,.55)}
+.stage .idx.mud{fill:var(--warn)}
+.stage .idx.deep{fill:var(--gpu)}
+.stage .idx.sg-mark{fill:var(--cpu);font-weight:700;font-size:10px}
+.stage .ffa{stroke:#c9bde6;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.stage .ffa.on{stroke:var(--ok);stroke-width:2.8}
+.stage .sgcell{fill:#120b20;stroke:var(--line2);stroke-width:1}
+.stage .sgcell.sgfull{fill:#1d1430}
+.stage .sgcell.sgwin{fill:rgba(255,210,63,.07);stroke:rgba(255,210,63,.55)}
+.stage .sgcell.sgcur{fill:rgba(255,210,63,.18);stroke:var(--osd);stroke-width:2}
+.stage .sgkey{font-size:8.5px}
+.stage .sgq{fill:rgba(38,227,234,.08);stroke:var(--gpu);stroke-width:1.6;stroke-dasharray:5 4}
+.stage .sgx{stroke:var(--gpu);stroke-width:2}
+.stage .pt{fill:#c9bde6;stroke:#0b0715;stroke-width:1.2}
+.stage .pt.pnew{fill:var(--osd)}
+.stage .pt.phit{fill:var(--ok)}
+.stage .pt.pmiss{fill:var(--bad)}
+.stage .pt.pdim{opacity:.5}
+.stage .ptl{font-size:10.5px}
+.stage .ptl.phit{fill:var(--ok)}
+.stage .ptl.pmiss{fill:#ffb3bc}
+.stage .ptl.pdim{opacity:.4}
+.vchip.bad{border-color:var(--bad);color:#ffb3bc}
 /* data structure design: trie, serialization tokens */
 .stage .endring{fill:none;stroke:var(--ok);stroke-width:1.6;opacity:.75}
 .stage .endring.on{stroke-width:2.6;opacity:1}

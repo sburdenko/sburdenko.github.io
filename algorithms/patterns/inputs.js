@@ -184,6 +184,13 @@ function parseUint(text, spec) {
   return v < min || v > max ? fail('range', min, max) : { value: v };
 }
 
+/** One of spec.options; a unique beginning is enough (cheb → chebyshev). */
+function parseChoice(text, spec) {
+  const t = clean(text).toLowerCase(), exact = spec.options.find(o => o === t);
+  const starts = spec.options.filter(o => t && o.startsWith(t));
+  return exact || starts.length === 1 ? { value: exact || starts[0] } : fail('choice', spec.options.join(' · '));
+}
+
 /** Trie operations: insert W, search W, startsWith W (or insert("w")), words of lowercase letters a–z. */
 function parseTrieOps(text, spec) {
   const parts = clean(text).split(/[,\n;]+/).map(p => p.trim()).filter(Boolean), ops = [];
@@ -222,7 +229,7 @@ export const PARSERS = {
   ints: parseInts, int: parseInt1, str: parseStr, words: parseWords, grid: parseGrid,
   tree: parseTree, lists: parseLists, intervals: parseIntervals, ops: parseOps,
   board: parseBoard, cache: parseCache, edges: parseEdges, matrix: parseMatrix, wedges: parseWeightedEdges,
-  uint: parseUint, trie: parseTrieOps, queue: parseQueueOps,
+  uint: parseUint, choice: parseChoice, trie: parseTrieOps, queue: parseQueueOps,
 };
 
 export const FORMATTERS = {
@@ -241,6 +248,7 @@ export const FORMATTERS = {
   matrix: v => v.map(r => r.join(' ')).join(' | '),
   wedges: v => v.map(([u, w, t]) => `${u}>${w}:${t}`).join(' '),
   uint: v => String(v),
+  choice: v => v,
   trie: v => v.map(([op, w]) => `${op} ${w}`).join(', '),
   queue: v => v.map(([op, x]) => (x == null ? op : `${op} ${x}`)).join(', '),
 };
