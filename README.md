@@ -224,7 +224,7 @@ bundle свежий; `tests/learn.test.js` и `tests/learn-en.test.js` прох�
 
 ## Стенд algo: задачи кассеты «Паттерны алгоритмов» в уроке
 
-`learn/models-algo.js` (модель без DOM) и `learn/rigs-algo.js` (отрисовка) показывают в уроке любую из 91 задач
+`learn/models-algo.js` (модель без DOM) и `learn/rigs-algo.js` (отрисовка) показывают в уроке любую из 91 задачи
 кассеты 06: трасса, SVG и тексты шагов берутся из `algorithms/patterns/` без копирования, стили SVG —
 правила `.stage …` из её `style.css`, подключённые с приставкой `.algo-rig`.
 
