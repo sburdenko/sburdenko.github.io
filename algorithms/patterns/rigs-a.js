@@ -50,6 +50,20 @@ export const RIGS_A = {
     random: next => ({ nums: randInts(next, randInt(next, 5, 10), 0, 9).map(v => (v < 4 ? 0 : v)) }),
     run: p => A.moveZeroesTrace(p.nums),
   }, V.moveZeroes),
+  shuffle: defineRig({
+    fields: [nums({ maxLen: 8 }), { key: 'j', type: 'ints', minLen: 0, maxLen: 7, min: 0, max: 7 }],
+    example: { nums: [1, 2, 3, 4, 5, 6], j: [2, 4, 0, 1, 0] },
+    random: next => {
+      const list = randInts(next, randInt(next, 4, 8), 1, 20);
+      return { nums: list, j: list.slice(1).map((_, k) => randInt(next, 0, list.length - 1 - k)) };
+    },
+    check: p => {
+      if (p.j.length !== p.nums.length - 1) return ['in.err.jCount', p.nums.length - 1, p.nums.length];
+      const bad = p.j.findIndex((j, k) => j > p.nums.length - 1 - k);
+      return bad < 0 ? null : ['in.err.jRange', bad + 1, p.j[bad], p.nums.length - 1 - bad];
+    },
+    run: p => ({ ...A.shuffleTrace(p.nums, p.j), nums: p.nums, j: p.j }),
+  }, V.shuffle),
   twoSumII: defineRig({
     fields: [nums({ key: 'numbers', minLen: 2, sorted: true }), target()],
     example: { numbers: [-3, 1, 2, 4, 7, 11, 15], target: 9 },
@@ -148,6 +162,20 @@ export const RIGS_A = {
     check: p => (p.h < p.piles.length ? ['in.err.hours', p.piles.length] : null),
     run: p => ({ ...A.kokoTrace(p.piles, p.h), piles: p.piles, h: p.h }),
   }, V.koko),
+  weightedPick: defineRig({
+    fields: [{ key: 'w', type: 'ints', minLen: 1, maxLen: 8, min: 1, max: 20 }, { key: 'r', type: 'int', min: 0, max: 159 }],
+    example: { w: [3, 1, 4, 2], r: 4 },
+    random: next => {
+      const w = randInts(next, randInt(next, 3, 7), 1, 9), prefix = w.map((_, i) => w.slice(0, i + 1).reduce((s, x) => s + x, 0));
+      const total = prefix.at(-1);
+      return { w, r: next() < 0.4 && w.length > 1 ? pick(next, prefix.slice(0, -1)) : randInt(next, 0, total - 1) };
+    },
+    check: p => {
+      const total = p.w.reduce((s, x) => s + x, 0);
+      return p.r < total ? null : ['in.err.pickR', total - 1, total];
+    },
+    run: p => ({ ...A.weightedPickTrace(p.w, p.r), w: p.w, r: p.r }),
+  }, V.weightedPick),
   median: defineRig({
     fields: [
       { key: 'A', type: 'ints', minLen: 0, maxLen: 7, min: -99, max: 999, sorted: true },

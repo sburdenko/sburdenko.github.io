@@ -1,5 +1,5 @@
 /** Views for chapters 01–04. view(run, event) → SVG string, vars(run, event) → [[i18nKey, html]]. */
-import { CELL, STEP, svg, text, rowWidth, cells, pointers, chip, chips, barLayout, bars, pointerAt } from './view-kit.js?v=202610191254';
+import { CELL, STEP, svg, text, rowWidth, cells, pointers, chip, chips, barLayout, bars, pointerAt, arcBelow } from './view-kit.js?v=202610191254';
 
 const TOP = 40;
 const framed = (n, h, inner) => svg(rowWidth(n) + 20, h, `<g transform="translate(10,0)">${inner}</g>`);
@@ -322,5 +322,65 @@ export const twoSumII = {
   vars(run, e) {
     const sum = e.sum == null ? '—' : e.sum, cls = e.sum == null ? '' : e.sum === run.target ? 'hit' : 'amb';
     return [['var.target', chip(run.target)], ['var.sum', chip(sum, cls)], ['var.answer', chip(e.found ? `[${e.found.join(', ')}]` : '—', e.found ? 'hit' : '')]];
+  },
+};
+
+/** Random Pick with Weight: the weights, their prefix sums with lo / mid / hi, and the line 0…total cut into segments. */
+export const weightedPick = {
+  view(run, e) {
+    const { w, r } = run, n = w.length, x = 64, y2 = TOP + CELL + 50, y3 = y2 + CELL + 58, bar = 26;
+    const built = e.prefix.length, total = run.total, width = Math.max(rowWidth(n), 320), unit = width / total;
+    const searching = e.lo != null, inRange = i => !searching || e.pick != null || (i >= e.lo && i <= e.hi);
+    const clsW = w.map((_, i) => (e.pick === i ? 'ok' : i === built - 1 && !searching ? 'cur' : ''));
+    const clsP = w.map((_, i) => (i >= built ? 'dim' : e.pick === i ? 'ok' : i === e.mid ? (e.key === 'wp.ev.left' ? 'win' : 'bad') : !inRange(i) ? 'dim' : ''));
+    const marks = searching && e.pick == null ? [{ i: e.lo, label: 'lo' }, { i: e.mid, label: 'mid', cls: 'p2' }, { i: e.hi, label: 'hi' }] : [];
+    let s = text(4, TOP + CELL / 2, 'w', 'lbl') + cells(w, clsW, { x, y: TOP })
+      + text(4, y2 + CELL / 2, 'prefix', 'lbl') + cells(w.map((_, i) => (i < built ? e.prefix[i] : '·')), clsP, { x, y: y2 })
+      + pointers(marks, { x, y: y2, count: n });
+    s += text(4, y3 + bar / 2, `[0,${total})`, 'lbl');
+    for (let i = 0; i < built; i++) {
+      const from = i ? e.prefix[i - 1] : 0, x1 = x + from * unit, x2 = x + e.prefix[i] * unit;
+      const cls = `g${i % 5}${e.pick === i ? ' cur' : !inRange(i) ? ' dim' : i === e.mid ? ' cur' : ''}`;
+      s += `<rect class="cell ${cls}" x="${x1}" y="${y3}" width="${x2 - x1}" height="${bar}" rx="3"/>`;
+      if (x2 - x1 >= 12) s += text((x1 + x2) / 2, y3 + bar / 2, i, 'cv small');
+      s += `<line class="tick" x1="${x2}" y1="${y3 - 4}" x2="${x2}" y2="${y3 + bar + 4}"/>` + text(x2, y3 + bar + 13, e.prefix[i], 'idx');
+    }
+    s += text(x, y3 + bar + 13, 0, 'idx');
+    if (searching) {
+      const rx = x + r * unit, cls = e.pick != null ? 'pick' : '';
+      s += `<rect class="water-b" x="${rx}" y="${y3 - 3}" width="${Math.max(unit, 2)}" height="${bar + 6}"/>`
+        + pointerAt(rx + Math.max(unit, 2) / 2, y3 - 2, `r = ${r}`, cls ? 'p3' : 'p2');
+    }
+    return svg(x + width + 24, y3 + bar + 26, s);
+  },
+  vars(run, e) {
+    const out = [['var.total', chip(e.prefix.length === run.w.length ? run.total : '…')]];
+    if (e.lo != null) out.push(['var.r', chip(run.r, 'amb')], ['var.loHi', chip(`${e.lo} / ${e.hi}`)]);
+    if (e.pick != null) out.push(['var.answer', chip(`${e.pick} · ${run.w[e.pick]}/${run.total}`, 'hit')]);
+    return out;
+  },
+};
+
+/** Fisher–Yates: the unshuffled prefix [0..i], the cell chosen as j, and the fixed tail to the right of i. */
+export const shuffle = {
+  view(run, e) {
+    const a = e.a, n = a.length, done = e.key === 'shf.ev.done', arcY = TOP + CELL + 22;
+    const cls = a.map((_, k) => (done || k > e.i ? 'ok' : e.key === 'shf.ev.pick' ? 'win' : ''));
+    if (!done && e.key !== 'shf.ev.start') {
+      if (e.key === 'shf.ev.pick') { cls[e.i] = 'cur'; cls[e.j] = e.j === e.i ? 'cur' : 'src'; } else { cls[e.i] = 'ok'; if (e.j !== e.i) cls[e.j] = 'src'; }
+    }
+    const marks = done || e.key === 'shf.ev.start' ? [] : [{ i: e.i, label: 'i' }, { i: e.j, label: 'j', cls: 'p2' }];
+    let inner = cells(a, cls, { y: TOP }) + pointers(marks, { y: TOP, count: n });
+    if (e.swapped) inner += arcBelow(Math.min(e.i, e.j), Math.max(e.i, e.j), arcY, 12 + Math.abs(e.i - e.j) * 3, 'pick', '⇄');
+    if (n > 1 && !done && e.key !== 'shf.ev.start') {
+      const last = e.key === 'shf.ev.pick' ? e.i : e.i - 1, x2 = last * STEP + CELL;
+      inner += `<line class="cutline" x1="0" y1="${TOP - 34}" x2="${x2}" y2="${TOP - 34}"/>` + text(x2 / 2, TOP - 42, `0…${last}`, 'idx');
+    }
+    return svg(rowWidth(n) + 20, 180, `<g transform="translate(10,14)">${inner}</g>`);
+  },
+  vars(run, e) {
+    const n = run.nums.length, k = n - 1 - e.i;
+    const seq = chips(run.j.map((j, q) => chip(`${n - 1 - q}↔${j}`, q < k ? 'done' : q === k && e.j != null ? 'new' : '')));
+    return [['var.jSeq', seq], ...(e.j != null ? [['var.choices', chip(`[0, ${e.i}] · ${e.i + 1}`)]] : [])];
   },
 };

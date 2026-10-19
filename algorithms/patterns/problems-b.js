@@ -60,6 +60,22 @@ export const PROBLEMS_B = {
     }
     return false;
 }`),
+    p('cycleEntry', 'Linked List Cycle II', 142, 'linked-list-cycle-ii', 'Medium', `public ListNode DetectCycle(ListNode head) {
+    ListNode slow = head, fast = head;
+    while (fast != null && fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+        if (slow == fast) {                 // phase 2: they meet μ steps later
+            var p = head;
+            while (p != slow) {
+                p = p.next;
+                slow = slow.next;
+            }
+            return p;                       // the cycle entrance
+        }
+    }
+    return null;
+}`),
     p('removeNth', 'Remove Nth Node From End of List', 19, 'remove-nth-node-from-end-of-list', 'Medium', `public ListNode RemoveNthFromEnd(ListNode head, int n) {
     var dummy = new ListNode(0, head);
     ListNode fast = dummy, slow = dummy;
@@ -80,6 +96,18 @@ export const PROBLEMS_B = {
         cur = next;
     }
     return prev;
+}`),
+    p('mergeTwo', 'Merge Two Sorted Lists', 21, 'merge-two-sorted-lists', 'Easy', `public ListNode MergeTwoLists(ListNode list1, ListNode list2) {
+    var dummy = new ListNode();
+    var tail = dummy;
+    ListNode a = list1, b = list2;
+    while (a != null && b != null) {
+        if (a.val <= b.val) { tail.next = a; a = a.next; }   // a tie takes list1: stable
+        else { tail.next = b; b = b.next; }
+        tail = tail.next;
+    }
+    tail.next = a ?? b;                     // the sorted rest, one link
+    return dummy.next;
 }`),
     p('lru', 'LRU Cache', 146, 'lru-cache', 'Medium', `public class LRUCache {
     private readonly int capacity;

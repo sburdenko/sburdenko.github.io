@@ -1,5 +1,13 @@
 /** Step texts for the chapter 01–04 rigs added next to the original ones in i18n-a.js. */
 const list = a => `[${a.join(', ')}]`;
+/** Russian plural: 1 элемент, 2 элемента, 5 элементов. */
+const ru = (n, one, few, many) => {
+  const t = Math.abs(n) % 100, u = t % 10;
+  return `${n} ${t > 10 && t < 20 ? many : u === 1 ? one : u > 1 && u < 5 ? few : many}`;
+};
+const en = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+/** n · (n − 1) · … · 2, written out when short. */
+const product = n => (n <= 4 ? Array.from({ length: n - 1 }, (_, k) => n - k).join(' · ') : `${n} · ${n - 1} · … · 2`);
 
 export const EV_A = {
   /* Contains Duplicate */
@@ -121,8 +129,8 @@ export const EV_A = {
 
   /* Median of Two Sorted Arrays */
   'med.ev.start': {
-    en: (m, n, half) => `Cut A (${m} items, the smaller) at i and B at j = ${half} − i, so the left side holds ${half} numbers. Binary search over i.`,
-    ru: (m, n, half) => `Режем A (${m} элементов, меньший) по i, B — по j = ${half} − i, чтобы слева было ${half} чисел. Бинпоиск по i.`,
+    en: (m, n, half) => `Cut A (${en(m, 'item', 'items')}, the smaller) at i and B at j = ${half} − i, so the left side holds ${en(half, 'number', 'numbers')}. Binary search over i.`,
+    ru: (m, n, half) => `Режем A (${ru(m, 'элемент', 'элемента', 'элементов')}, меньший) по i, B — по j = ${half} − i, чтобы слева было ${ru(half, 'число', 'числа', 'чисел')}. Бинпоиск по i.`,
   },
   'med.ev.cut': {
     en: (i, j, al, ar, bl, br, verdict) => `i = ${i}, j = ${j}: A left ${al} | right ${ar}, B left ${bl} | right ${br}. ${verdict === 'ok' ? 'Both left ends ≤ both right ends — <b>the cut is right</b>.' : verdict === 'left' ? `${al} > ${br}: A gives too much — move i left.` : `${bl} > ${ar}: A gives too little — move i right.`}`,
@@ -209,5 +217,57 @@ export const EV_A = {
   'tsii.ev.none': {
     en: target => `The pointers met: every number was dropped with a reason, so no pair adds up to ${target}. (LeetCode promises an answer; here the input is yours.)`,
     ru: target => `Указатели встретились: каждое число отброшено с причиной, значит, пары с суммой ${target} нет. (LeetCode обещает, что ответ есть, но здесь входные данные твои.)`,
+  },
+
+  /* Shuffle an Array */
+  'shf.ev.start': {
+    en: (n, count) => (n === 1 ? 'One element: there is nothing to shuffle.' : `Fisher–Yates: i goes from ${n - 1} down to 1, and j is drawn from [0, i]. The j values come from the field, so the run is repeatable. There are ${product(n)} = ${count} possible j sequences — one per permutation.`),
+    ru: (n, count) => (n === 1 ? 'Один элемент — перемешивать нечего.' : `Фишер–Йетс: i идёт от ${n - 1} вниз до 1, а j тянется из [0, i]. Значения j берутся из поля, поэтому прогон повторяем. Возможных последовательностей j — ${product(n)} = ${count}, по одной на каждую перестановку.`),
+  },
+  'shf.ev.pick': {
+    en: (i, j, choices) => `i = ${i}: j is drawn from [0, ${i}] — ${choices} equally likely choices, i itself included. Here j = <b>${j}</b>.`,
+    ru: (i, j, choices) => `i = ${i}: j тянем из [0, ${i}] — ${ru(choices, 'вариант', 'варианта', 'вариантов')}, все равновероятны, сам i тоже среди них. Выпало j = <b>${j}</b>.`,
+  },
+  'shf.ev.swap': {
+    en: (i, j, x, y) => `Swap a[${i}] = ${x} and a[${j}] = ${y}. a[${i}] = ${y} is final: from now on nothing touches index ${i} and the tail to its right.`,
+    ru: (i, j, x, y) => `Меняем a[${i}] = ${x} и a[${j}] = ${y}. a[${i}] = ${y} теперь окончательный: индекс ${i} и хвост правее больше никто не трогает.`,
+  },
+  'shf.ev.self': {
+    en: (i, v) => `j = i: ${v} stays at index ${i} and is final. Without this choice an element could never keep its place, and every permutation that keeps it would be lost.`,
+    ru: (i, v) => `j = i: ${v} остаётся на индексе ${i} и теперь окончательный. Без этого варианта элемент никогда не оставался бы на своём месте, и все перестановки, где он стоит там же, пропали бы.`,
+  },
+  'shf.ev.done': {
+    en: (a, count) => (count === 1 ? `Done: ${list(a)}.` : `i = 0: the last element has no choice left. Result ${list(a)} — one of ${count} permutations, and each of them is reached by exactly one j sequence: the shuffle is uniform.`),
+    ru: (a, count) => (count === 1 ? `Готово: ${list(a)}.` : `i = 0: последнему элементу выбирать уже не из чего. Итог ${list(a)} — одна из ${count} перестановок, и к каждой ведёт ровно одна последовательность j, значит, все они равновероятны.`),
+  },
+
+  /* Random Pick with Weight */
+  'wp.ev.start': {
+    en: n => `Build the prefix sums of the ${en(n, 'weight', 'weights')}: prefix[i] = w[0] + … + w[i]. Then index i owns the segment [prefix[i] − w[i], prefix[i]), exactly w[i] whole numbers long.`,
+    ru: () => 'Строим префиксные суммы весов: prefix[i] = w[0] + … + w[i]. Тогда индексу i принадлежит отрезок [prefix[i] − w[i], prefix[i]) длиной ровно w[i] целых чисел.',
+  },
+  'wp.ev.prefix': {
+    en: (i, x, from, sum) => `prefix[${i}] = ${from} + ${x} = ${sum}. Index ${i} owns [${from}, ${sum}): ${en(x, 'value', 'values')} of r.`,
+    ru: (i, x, from, sum) => `prefix[${i}] = ${from} + ${x} = ${sum}. Индексу ${i} достаётся [${from}, ${sum}): ${ru(x, 'значение', 'значения', 'значений')} r.`,
+  },
+  'wp.ev.pick': {
+    en: (r, total, lo, hi) => `pickIndex(): r is drawn from [0, ${total}), here r = <b>${r}</b>. We need the first prefix greater than r (upper_bound): lo = ${lo}, hi = ${hi}.`,
+    ru: (r, total, lo, hi) => `pickIndex(): r тянем из [0, ${total}), здесь r = <b>${r}</b>. Нужен первый префикс больше r (upper_bound): lo = ${lo}, hi = ${hi}.`,
+  },
+  'wp.ev.left': {
+    en: (mid, v, r, lo, hi) => `mid = ${mid}: prefix = ${v} > ${r}. Segment ${mid} ends to the right of r, so it may be the answer — keep it: hi = mid = ${hi}.`,
+    ru: (mid, v, r, lo, hi) => `mid = ${mid}: prefix = ${v} > ${r}. Отрезок ${mid} кончается правее r, значит, может оказаться ответом — оставляем его: hi = mid = ${hi}.`,
+  },
+  'wp.ev.edge': {
+    en: (mid, v, r, lo) => `mid = ${mid}: prefix = ${v}, exactly r. Segment ${mid} is open on the right, so ${r} is not in it — it opens the next segment. Go right: lo = mid + 1 = ${lo}.`,
+    ru: (mid, v, r, lo) => `mid = ${mid}: prefix = ${v} — ровно r. Отрезок ${mid} открыт справа, ${r} в него не входит, а открывает следующий. Вправо: lo = mid + 1 = ${lo}.`,
+  },
+  'wp.ev.right': {
+    en: (mid, v, r, lo) => `mid = ${mid}: prefix = ${v} < ${r}. Segment ${mid} ends before r, it and everything to its left drop out: lo = mid + 1 = ${lo}.`,
+    ru: (mid, v, r, lo) => `mid = ${mid}: prefix = ${v} < ${r}. Отрезок ${mid} кончается раньше r, он и всё левее отпадают: lo = mid + 1 = ${lo}.`,
+  },
+  'wp.ev.done': {
+    en: (i, from, to, w, total, r) => `lo = hi: r = ${r} lies in [${from}, ${to}), the answer is index <b>${i}</b>.${r === from && from > 0 ? ' r sat right on a boundary and went to the segment it opens.' : ''} Index ${i} owns ${w} of the ${total} values of r, so it comes out with probability ${w}/${total}.`,
+    ru: (i, from, to, w, total, r) => `lo = hi: r = ${r} лежит в [${from}, ${to}), ответ — индекс <b>${i}</b>.${r === from && from > 0 ? ' r стоял ровно на границе и достался отрезку, который она открывает.' : ''} На индекс ${i} приходится ${w} из ${total} значений r, поэтому он выпадает с вероятностью ${w}/${total}.`,
   },
 };

@@ -1,6 +1,12 @@
 /** Step texts for the chapter 05–08 rigs added next to the original ones in i18n-b.js. */
 const list = a => `[${a.join(', ')}]`;
 const chain = a => a.join(' → ');
+/** Russian plural: 1 шаг, 2 шага, 5 шагов. */
+const ru = (n, one, few, many) => {
+  const t = Math.abs(n) % 100, u = t % 10;
+  return `${n} ${t > 10 && t < 20 ? many : u === 1 ? one : u > 1 && u < 5 ? few : many}`;
+};
+const en = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
 export const EV_B = {
   /* Valid Parentheses */
@@ -180,4 +186,60 @@ export const EV_B = {
     ru: (v, how, r) => (how === 'split' ? `${v}: обе стороны что-то нашли — <b>здесь p и q расходятся</b>, возвращаем ${v}.` : how === 'pass' ? `${v}: нашла только одна сторона (${r}) — передаём наверх.` : `${v}: ни одна сторона ничего не нашла — возвращаем null.`),
   },
   'lca.ev.done': { en: (a, p, q) => `Lowest common ancestor of ${p} and ${q}: <b>${a}</b>.`, ru: (a, p, q) => `Наименьший общий предок ${p} и ${q}: <b>${a}</b>.` },
+
+  /* Merge Two Sorted Lists */
+  'm2.ev.start': {
+    en: (m, n) => `Two sorted lists, ${m} and ${n} nodes long. The dummy node D stands before the answer and tail points at it: whichever node comes first, it is hung on tail.next, with no special case for an empty answer.`,
+    ru: (m, n) => `Два отсортированных списка: ${ru(m, 'узел', 'узла', 'узлов')} и ${ru(n, 'узел', 'узла', 'узлов')}. Фиктивный узел D стоит перед ответом, tail указывает на него: какой бы узел ни шёл первым, он вешается на tail.next, без отдельного случая для пустого ответа.`,
+  },
+  'm2.ev.takeA': {
+    en: (x, y, tail) => `${x} < ${y}: <b>tail.next = a</b> hangs ${x} after ${tail}, a moves on, tail moves onto ${x}.`,
+    ru: (x, y, tail) => `${x} < ${y}: <b>tail.next = a</b> вешает ${x} после ${tail}, a сдвигается дальше, tail переходит на ${x}.`,
+  },
+  'm2.ev.takeB': {
+    en: (x, y, tail) => `${x} > ${y}: <b>tail.next = b</b> hangs ${y} after ${tail}, b moves on, tail moves onto ${y}.`,
+    ru: (x, y, tail) => `${x} > ${y}: <b>tail.next = b</b> вешает ${y} после ${tail}, b сдвигается дальше, tail переходит на ${y}.`,
+  },
+  'm2.ev.tie': {
+    en: (x, y, tail) => `${x} = ${y}: a.val <= b.val holds, so the node from <b>list1</b> goes first, after ${tail}. Equal nodes keep their order — list1 before list2, the merge is stable.`,
+    ru: (x, y, tail) => `${x} = ${y}: условие a.val <= b.val выполнено, поэтому первым идёт узел из <b>list1</b>, после ${tail}. Равные узлы сохраняют порядок — сначала list1, потом list2, слияние устойчиво.`,
+  },
+  'm2.ev.rest': {
+    en: (from, rest, tail) => (from ? `list${3 - from} is empty. The rest of list${from} is already sorted and linked, so <b>tail.next = a ?? b</b> attaches all of it (${rest.join(', ')}) after ${tail} with one link — no loop over ${en(rest.length, 'node', 'nodes')}.` : `Both lists are empty: <b>tail.next = a ?? b</b> writes null after ${tail}.`),
+    ru: (from, rest, tail) => (from ? `list${3 - from} кончился. Остаток list${from} уже отсортирован и связан, поэтому <b>tail.next = a ?? b</b> пришивает его целиком (${rest.join(', ')}) после ${tail} одной ссылкой — без цикла по ${rest.length === 1 ? 'одному узлу' : `${rest.length} узлам`}.` : `Оба списка пусты: <b>tail.next = a ?? b</b> записывает null после ${tail}.`),
+  },
+  'm2.ev.done': {
+    en: (result, links) => `return dummy.next: <b>${result.length ? chain(result) : 'null'}</b>. ${en(links, 'link was', 'links were')} written, not a single new node was created — O(1) memory.`,
+    ru: (result, links) => `return dummy.next: <b>${result.length ? chain(result) : 'null'}</b>. Записано ссылок: ${links}, и ни одного нового узла — память O(1).`,
+  },
+
+  /* Linked List Cycle II */
+  'cye.ev.start': {
+    en: () => 'Phase 1, as in Linked List Cycle: slow moves 1 link, fast moves 2, both from node 0. μ and λ in the picture are for us — the code does not know them.',
+    ru: () => 'Фаза 1, как в Linked List Cycle: slow шагает на 1 ссылку, fast — на 2, оба от узла 0. μ и λ на рисунке — для нас, код их не знает.',
+  },
+  'cye.ev.move': {
+    en: (s, f, k) => `Step ${k}: slow → ${s}, fast → ${f < 0 ? 'null' : f}.`,
+    ru: (s, f, k) => `Шаг ${k}: slow → ${s}, fast → ${f < 0 ? 'null' : f}.`,
+  },
+  'cye.ev.none': {
+    en: () => 'fast reached null — no cycle, return null. Phase 2 does not start.',
+    ru: () => 'fast дошёл до null — цикла нет, возвращаем null. Фаза 2 не начинается.',
+  },
+  'cye.ev.meet': {
+    en: (m, k, fk, lambda, laps, atEntry) => `They meet at node <b>${m}</b> after ${en(k, 'step', 'steps')}: slow walked ${k}, fast ${fk}. The difference k = ${k} is ${laps} × λ: fast is ahead by whole laps of the cycle. ${atEntry ? 'Here the meeting point happens to be the entrance, but in general it is not.' : 'The meeting point is not the entrance — phase 1 only proves there is a cycle.'}`,
+    ru: (m, k, fk, lambda, laps, atEntry) => `Встретились в узле <b>${m}</b> через ${ru(k, 'шаг', 'шага', 'шагов')}: slow прошёл ${k}, fast — ${fk}. Разница k = ${k} — это ${laps} × λ: fast обогнал ровно на целые круги. ${atEntry ? 'Здесь место встречи совпало со входом, но в общем случае это не так.' : 'Место встречи — не вход: фаза 1 только доказывает, что цикл есть.'}`,
+  },
+  'cye.ev.reset': {
+    en: (m, k) => `Phase 2: <b>p = head</b>, slow stays at ${m}. Both now move one link at a time. After μ steps p is at the entrance, and slow has walked k + μ = ${k} + μ in total — the entrance plus whole laps. So they meet exactly there.`,
+    ru: (m, k) => `Фаза 2: <b>p = head</b>, slow остаётся в ${m}. Теперь оба шагают по одной ссылке. Через μ шагов p окажется на входе, а slow всего пройдёт k + μ = ${k} + μ — вход плюс целые круги. Поэтому сойдутся они ровно там.`,
+  },
+  'cye.ev.walk': {
+    en: (p, s, w) => `Phase 2, step ${w}: p → ${p}, slow → ${s}. Not equal yet.`,
+    ru: (p, s, w) => `Фаза 2, шаг ${w}: p → ${p}, slow → ${s}. Пока не совпали.`,
+  },
+  'cye.ev.entry': {
+    en: (node, w, mu, lambda) => `${w ? `p and slow meet at node <b>${node}</b> after ${en(w, 'step', 'steps')}` : `p = head is already where slow stands: node <b>${node}</b>`} — the entrance. Exactly μ = ${mu} ${mu === 1 ? 'step' : 'steps'} of phase 2, as promised; λ = ${lambda}. O(n) time, two pointers of memory.`,
+    ru: (node, w, mu, lambda) => `${w ? `p и slow сошлись в узле <b>${node}</b> через ${ru(w, 'шаг', 'шага', 'шагов')}` : `p = head уже стоит там же, где slow: узел <b>${node}</b>`} — это вход в цикл. Ровно за μ = ${ru(mu, 'шаг', 'шага', 'шагов')}, как и обещано; λ = ${lambda}. Время O(n), память — два указателя.`,
+  },
 };
