@@ -2,7 +2,7 @@
 import {
   CELL, STEP, svg, text, rowWidth, cells, pointers, arrow, node, chip, chips,
   barLayout, bars, gridCells, binaryTree, matrixXY, matrixCells, matrixIndex,
-} from './view-kit.js?v=202610191630';
+} from './view-kit.js?v=202610191639';
 
 const TOP = 40, GAP_HALF = 3;
 const framed = (n, h, inner) => svg(rowWidth(n) + 20, h, `<g transform="translate(10,0)">${inner}</g>`);

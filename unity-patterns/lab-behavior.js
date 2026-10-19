@@ -1,14 +1,14 @@
 /** CH.05 Command, CH.06 State, CH.07 Observer, CH.09 Strategy. */
-import { $, $$, fitCanvas, RM } from '../assets/vhs.js?v=202610191630';
-import { t } from '../assets/i18n.js?v=202610191630';
-import { bindSeg, tile, visibleLoop } from '../assets/lab.js?v=202610191630';
-import { renderCode } from '../assets/code.js?v=202610191630';
-import { SNIPPETS } from './snippets.js?v=202610191630';
+import { $, $$, fitCanvas, RM } from '../assets/vhs.js?v=202610191639';
+import { t } from '../assets/i18n.js?v=202610191639';
+import { bindSeg, tile, visibleLoop } from '../assets/lab.js?v=202610191639';
+import { renderCode } from '../assets/code.js?v=202610191639';
+import { SNIPPETS } from './snippets.js?v=202610191639';
 import {
   MAZE_SIZE, MAZE_WALLS, createCommandState, executeMove, undoMove, redoMove, replayPath,
   createPlayer, tickPlayer, createSubject, setSubscribed, destroyObserver, raise,
   ABILITIES, abilityForStreak, addAbilityCost,
-} from './model-behavior.js?v=202610191630';
+} from './model-behavior.js?v=202610191639';
 
 const ARROWS = { up: '↑', down: '↓', left: '←', right: '→' };
 
