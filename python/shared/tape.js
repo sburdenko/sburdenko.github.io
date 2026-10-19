@@ -2,16 +2,16 @@
  * One call boots a Python tape: language, VHS chrome, chapter map, rigs, quizzes, "got it" buttons and the progress panel.
  * bootTape({ tape, dict, rigs, quizzes, chapters, totals })
  */
-import { $, $$, esc, bootVhs } from '../../assets/vhs.js?v=202610191736';
-import { initI18n, t, onLang } from '../../assets/i18n.js?v=202610191736';
-import { COMMON } from '../../assets/i18n-common.js?v=202610191736';
-import { INPUTS } from '../../algorithms/patterns/i18n-inputs.js?v=202610191736';
-import { SHARED } from './i18n-shared.js?v=202610191736';
-import { FIELD_ERRORS } from './fields.js?v=202610191736';
-import { mountRigs } from './stepper.js?v=202610191736';
-import { mountQuizzes } from './quiz.js?v=202610191736';
-import { pyBlock } from './py-code.js?v=202610191736';
-import { markChapter, isChapterDone, summary, onProgress, exportProgress, importProgress, resetProgress } from './progress.js?v=202610191736';
+import { $, $$, esc, bootVhs } from '../../assets/vhs.js?v=202610191738';
+import { initI18n, t, onLang } from '../../assets/i18n.js?v=202610191738';
+import { COMMON } from '../../assets/i18n-common.js?v=202610191738';
+import { INPUTS } from '../../algorithms/patterns/i18n-inputs.js?v=202610191738';
+import { SHARED } from './i18n-shared.js?v=202610191738';
+import { FIELD_ERRORS } from './fields.js?v=202610191738';
+import { mountRigs } from './stepper.js?v=202610191738';
+import { mountQuizzes } from './quiz.js?v=202610191738';
+import { pyBlock } from './py-code.js?v=202610191738';
+import { markChapter, isChapterDone, summary, onProgress, exportProgress, importProgress, resetProgress } from './progress.js?v=202610191738';
 
 export const TAPES = ['01', '02', '03', '04', '05', '06'];
 

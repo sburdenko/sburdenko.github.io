@@ -1,5 +1,5 @@
 /** Views for chapter 17: data structure design. */
-import { CELL, STEP, svg, text, cells, pointers, arcBelow, node, chip, chips } from './view-kit.js?v=202610191736';
+import { CELL, STEP, svg, text, cells, pointers, arcBelow, node, chip, chips } from './view-kit.js?v=202610191738';
 
 /** Operations as chips: done ones carry their return value, the current one is lit. */
 const opChips = (ops, e, label, result) => chips(ops.map((op, i) => {

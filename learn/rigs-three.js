@@ -1,17 +1,17 @@
 /** Стенды курса «Three.js: начальный уровень». Логика — в models-three.js, картинка — настоящий Three.js. */
-import { esc } from '../assets/vhs.js?v=202610191736';
-import { drive, act } from './rig-kit.js?v=202610191736';
-import { codeHtml } from './code-view.js?v=202610191736';
-import { makeView, VIEW_ASPECT } from './three-view.js?v=202610191736';
-import { tr } from './i18n.js?v=202610191736';
-import { t as tl } from './ui.js?v=202610191736';
+import { esc } from '../assets/vhs.js?v=202610191738';
+import { drive, act } from './rig-kit.js?v=202610191738';
+import { codeHtml } from './code-view.js?v=202610191738';
+import { makeView, VIEW_ASPECT } from './three-view.js?v=202610191738';
+import { tr } from './i18n.js?v=202610191738';
+import { t as tl } from './ui.js?v=202610191738';
 import {
   firstRig, firstView, firstCode,
   CAM_OBJECTS, CAM_OPTIONS, camSees, camRig,
   EARTH_R, MOON_R, orbitWorld, graphRig,
   MATERIALS, LIGHTS, SHADOW_FLAGS, lightView, lightRig,
   texView, texRig
-} from './models-three.js?v=202610191736';
+} from './models-three.js?v=202610191738';
 
 const seg = (items, cur, prefix) => `<div class="seg wrap literal">${items.map(([v, label]) => act(`${prefix}:${v}`, esc(tr(label)), '').replace('class=""', `aria-pressed="${String(v) === String(cur)}"`)).join('')}</div>`;
 const tog = (a, on, text) => act(a, `${on ? '✓ ' : ''}${esc(text)}`, '').replace('class=""', `aria-pressed="${on}"`);

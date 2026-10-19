@@ -1,5 +1,5 @@
 /** Python syntax highlighter and the numbered code panel of the stepper. Pure string builders. */
-import { esc } from '../../assets/vhs.js?v=202610191736';
+import { esc } from '../../assets/vhs.js?v=202610191738';
 
 const KEYWORDS = new Set(('False None True and as assert async await break class continue def del elif else except finally for from '
   + 'global if import in is lambda nonlocal not or pass raise return try while with yield match case').split(' '));
