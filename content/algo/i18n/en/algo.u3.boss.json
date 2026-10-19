@@ -7,7 +7,7 @@
  "cards/0/pairs/1/0": "Merge sorted nums2 into nums1, which has free space at the end",
  "cards/0/pairs/1/1": "Fill from the end, comparing the tails",
  "cards/0/pairs/2/0": "Reverse only the vowels in a string",
- "cards/0/pairs/2/1": "Opposite pointers that skip consonants",
+ "cards/0/pairs/2/1": "Opposite pointers that skip everything but vowels",
  "cards/0/pairs/3/0": "How many pairs in a sorted array sum to < target",
  "cards/0/pairs/3/1": "count += hi − lo, then lo++",
  "cards/0/pairs/4/0": "Rotate an image matrix 90° counterclockwise",

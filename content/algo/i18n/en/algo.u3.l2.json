@@ -39,7 +39,7 @@
  "cards/8/goal/asks/0/options/1/label": "Skip L: −1 is a duplicate",
  "cards/8/goal/asks/0/options/2/label": "The sum is too small — L++",
  "cards/8/goal/asks/0/q": "We fixed −1 (i = 1). L = 2 points to another −1, R = 5 to 2. What happens next?",
- "cards/8/goal/asks/0/explain": "−1 + (−1) + 2 = 0 — a triple. Skipping duplicates applies only to i: the same value in the first-number slot. Here the second −1 sits in the pair — that is a different triple, and it must not be lost.",
+ "cards/8/goal/asks/0/explain": "−1 + (−1) + 2 = 0 — a triple. Duplicates are skipped in two places: at i — the same value in the first-number slot — and at L and R, but only after a match. There has been no match yet, and the second −1 is a partner in the pair: that is a different triple, and it must not be lost.",
  "cards/8/goal/asks/1/options/0/label": "Skips i = 2: nums[2] == nums[1]",
  "cards/8/goal/asks/1/options/1/label": "Finds [-1, 0, 1] again",
  "cards/8/goal/asks/1/options/2/label": "Finds [-1, -1, 2] again — with the other −1",
