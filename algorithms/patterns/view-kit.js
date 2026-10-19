@@ -1,5 +1,5 @@
 /** SVG primitives for the pattern rigs. Pure string builders: no DOM, safe to call from tests. */
-import { esc } from '../../assets/vhs.js?v=202610191642';
+import { esc } from '../../assets/vhs.js?v=202610191643';
 
 export const CELL = 44, GAP = 6, STEP = CELL + GAP;
 

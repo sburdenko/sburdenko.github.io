@@ -413,7 +413,8 @@ export function topKFrequentTrace(nums, k) {
       push('topk.ev.pop', [dropped, df], { cur: x });
     }
   }
-  const top = heap.map(([x]) => x);
+  // как в решении на C#: Dequeue отдаёт наименее частый, res заполняется с конца — первым идёт самый частый
+  const top = [...heap].sort((a, b) => (less(a, b) ? -1 : less(b, a) ? 1 : 0)).reverse().map(([x]) => x);
   push('topk.ev.done', [top, k]);
   return { events, top };
 }
