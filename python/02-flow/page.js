@@ -1,8 +1,8 @@
 /** PY-02 assembly. */
-import { bootTape } from '../shared/tape.js?v=202610191231';
-import { DICT } from './i18n.js?v=202610191231';
-import { RIGS } from './rigs.js?v=202610191231';
-import { QUIZZES } from './quizzes.js?v=202610191231';
+import { bootTape } from '../shared/tape.js?v=202610191232';
+import { DICT } from './i18n.js?v=202610191232';
+import { RIGS } from './rigs.js?v=202610191232';
+import { QUIZZES } from './quizzes.js?v=202610191232';
 
 export const CHAPTERS = [
   { id: 'cond', n: '01' }, { id: 'while', n: '02' }, { id: 'forloop', n: '03' }, { id: 'loopextra', n: '04' }, { id: 'functions', n: '05' },

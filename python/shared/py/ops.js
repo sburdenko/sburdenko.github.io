@@ -2,10 +2,10 @@
 import {
   PyInt, PyBool, PyFloat, PyStr, PyBytes, PyList, PyTuple, PyDict, PySet, PyRange, PyInstance, PyIterator, PyGenerator, PyClass, PySlice,
   NONE, TRUE, FALSE, int, float, bool, str, isTruthy, hashKey, UNHASHABLE, copiedSetSize, bigFloorDiv, bigMod, floatMod, typeName, isIntLike, normIndex, sliceIndices, toNumber,
-} from './objects.js?v=202610191231';
-import { raise, pyError, EXC } from './errors.js?v=202610191231';
-import { TYPES } from './objects.js?v=202610191231';
-import { percentFormat } from './convert.js?v=202610191231';
+} from './objects.js?v=202610191232';
+import { raise, pyError, EXC } from './errors.js?v=202610191232';
+import { TYPES } from './objects.js?v=202610191232';
+import { percentFormat } from './convert.js?v=202610191232';
 
 export const STOP = Symbol('StopIteration');
 
