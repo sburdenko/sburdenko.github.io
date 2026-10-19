@@ -57,8 +57,8 @@
   {
    "id": "u7",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["algo.u7.l1", "algo.u7.l2", "algo.u7.l3", "algo.u7.l4", "algo.u7.l5", "algo.u7.boss"]
   },
   {
    "id": "u8",

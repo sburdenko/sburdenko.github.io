@@ -13,7 +13,7 @@
  "units/5/title": "Stacks and linked lists",
  "units/5/blurb": "Matching brackets and a min stack, the monotonic stack, reversing and merging lists, fast and slow pointers, reversing in groups. LinkedList<T> from the inside and an allocation-free list on indices.",
  "units/6/title": "Binary search",
- "units/6/blurb": "Boundary invariants without off-by-one errors, the rotated array, searching on the answer, the median of two arrays. For games: a weighted loot table and a fair Fisher–Yates shuffle.",
+ "units/6/blurb": "Boundary invariants without off-by-one errors, the rotated array, searching on the answer, the median of two arrays. For games: a weighted loot table, a fair Fisher–Yates shuffle and seed determinism — System.Random versus UnityEngine.Random.",
  "units/7/title": "Sorting, intervals and greedy",
  "units/7/blurb": "How .NET sorts and when you do not need to, merging and inserting intervals, one-pass greedy, Kadane, and how to prove a greedy solution is correct.",
  "units/8/title": "Heaps and top-K",
