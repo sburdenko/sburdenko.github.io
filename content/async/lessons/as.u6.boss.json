@@ -2,7 +2,7 @@
  "id": "as.u6.boss",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 8,
+ "minutes": 10,
  "boss": true,
  "cards": [
   {
@@ -75,12 +75,26 @@
    "explain": "⟦⟧"
   },
   {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
    "t": "match",
    "q": "⟦⟧",
    "pairs": [
-    ["WPF", "DispatcherSynchronizationContext"],
-    ["WinForms", "WindowsFormsSynchronizationContext"],
-    ["Unity", "UnitySynchronizationContext"],
+    ["WPF", "Post → Dispatcher.BeginInvoke"],
+    ["WinForms", "Post → Control.BeginInvoke"],
+    ["Unity", "⟦⟧"],
     ["ASP.NET Core", "⟦⟧"]
    ]
   },

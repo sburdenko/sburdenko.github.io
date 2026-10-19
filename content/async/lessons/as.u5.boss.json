@@ -2,7 +2,7 @@
  "id": "as.u5.boss",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 6,
+ "minutes": 8,
  "boss": true,
  "cards": [
   {
@@ -10,21 +10,27 @@
    "q": "⟦⟧",
    "code": "public async Task ImportAsync(IEnumerable<Row> rows)\n{\n    foreach (var r in rows)\n        _db.InsertAsync(r);\n    await _db.CommitAsync();\n}",
    "answer": 3,
-   "explain": "⟦⟧"
+   "explain": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "tapline",
    "q": "⟦⟧",
    "code": "lock (_sync)\n{\n    var data = await LoadAsync();\n    _cache = data;\n}",
    "answer": 2,
-   "explain": "⟦⟧"
+   "explain": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "choice",
    "q": "⟦⟧",
-   "options": ["TaskCreationOptions.RunContinuationsAsynchronously", "TaskCreationOptions.LongRunning", "⟦⟧"],
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
-   "explain": "⟦⟧"
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
   },
   {
    "t": "choice",
@@ -41,12 +47,32 @@
    "explain": "⟦⟧"
   },
   {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
    "t": "blanks",
    "q": "⟦⟧",
    "code": "___ using var conn = new SqlConnection(cs);",
    "lang": "cs",
    "tiles": ["await", "async", "lock", "static"],
    "answer": ["await"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "async IAsyncEnumerable<Order> ReadOrdersAsync(\n    [___] CancellationToken ct = default)\n{\n    await foreach (var line in File.ReadLinesAsync(path, ct))\n        yield return Parse(line);\n}",
+   "lang": "cs",
+   "tiles": ["EnumeratorCancellation", "ThreadStatic", "WithCancellation", "CancellationToken"],
+   "answer": ["EnumeratorCancellation"],
    "explain": "⟦⟧"
   },
   {
@@ -63,7 +89,9 @@
     ["CS4014", "⟦⟧"],
     ["CS1996", "⟦⟧"],
     ["TrySetResult", "⟦⟧"],
-    ["BoundedChannel", "⟦⟧"]
+    ["Channel.CreateBounded", "⟦⟧"],
+    ["Writer.Complete()", "⟦⟧"],
+    ["CS8425", "⟦⟧"]
    ]
   }
  ]

@@ -9,7 +9,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadCourseFromSource } from '../learn/content.js';
 
-const CHECKED = { async: ['u1', 'u2', 'u3', 'u4'] };
+const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6'] };
 
 /** Понятие → шаблон. Шаблоны ловят API и устойчивые термины, а не имена из примеров кода. */
 const CONCEPTS = {
@@ -44,7 +44,25 @@ const CONCEPTS = {
     'await using': /await using|IAsyncDisposable/,
     'Channel': /\bChannel(<|\.Create)/,
     'SemaphoreSlim': /\bSemaphoreSlim\b/,
-    'Parallel.ForEachAsync': /\bForEachAsync\b/
+    'Parallel.ForEachAsync': /\bForEachAsync\b/,
+    'Writer.Complete': /Writer\.Complete\b|\.Complete\(\)/,
+    'BoundedChannel': /CreateBounded|BoundedChannel/,
+    'ReadAllAsync': /\bReadAllAsync\b/,
+    'TrySetResult': /\bTrySet(Result|Exception|Canceled)\b/,
+    'RunContinuationsAsynchronously': /\bRunContinuationsAsynchronously\b/,
+    'Dispatcher': /\bDispatcher(\.|SynchronizationContext\b)/,
+    'WindowsFormsSynchronizationContext': /\bWindowsFormsSynchronizationContext\b/,
+    'UnitySynchronizationContext': /\bUnitySynchronizationContext\b/,
+    'BeginInvoke': /\bBeginInvoke\b/,
+    'IProgress': /\bI?Progress<\w+>/,
+    'UnityException': /\bUnityException\b/,
+    'MissingReferenceException': /\bMissingReferenceException\b/,
+    'Awaitable.NextFrameAsync': /\bNextFrameAsync\b/,
+    'Awaitable.WaitForSecondsAsync': /\bWaitForSecondsAsync\b/,
+    'Awaitable.BackgroundThreadAsync': /\bBackgroundThreadAsync\b|\bMainThreadAsync\b/,
+    'destroyCancellationToken': /\bdestroyCancellationToken\b/,
+    'UniTask': /\bUniTask\b/,
+    'BackgroundService': /\bBackgroundService\b|\bIHostedService\b/
   }
 };
 

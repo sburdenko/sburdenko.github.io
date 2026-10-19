@@ -1,13 +1,13 @@
 /** Tape 04 wiring: language, VHS effects and every rig. */
-import { bootVhs } from '../assets/vhs.js?v=202610171210';
-import { initI18n, onLang } from '../assets/i18n.js?v=202610171210';
-import { COMMON } from '../assets/i18n-common.js?v=202610171210';
-import { DICT } from './i18n.js?v=202610171210';
-import { initMap, initShaderTable, initSettings, initRenderer, initMsaa, initGrd } from './lab-setup.js?v=202610171210';
-import { initShadows, initAtlas, initModes, initLayers } from './lab-light.js?v=202610171210';
-import { initProbes, initLeak, initEffects } from './lab-gi.js?v=202610171210';
-import { initShaderSteps, initHalo, initSilhouette, initGraph, initMerge } from './lab-frame.js?v=202610171210';
-import { initVolume, initStp, initPso, initDiagnostics, initInterview } from './lab-output.js?v=202610171210';
+import { bootVhs } from '../assets/vhs.js?v=202610190803';
+import { initI18n, onLang } from '../assets/i18n.js?v=202610190803';
+import { COMMON } from '../assets/i18n-common.js?v=202610190803';
+import { DICT } from './i18n.js?v=202610190803';
+import { initMap, initShaderTable, initSettings, initRenderer, initMsaa, initGrd } from './lab-setup.js?v=202610190803';
+import { initShadows, initAtlas, initModes, initLayers } from './lab-light.js?v=202610190803';
+import { initProbes, initLeak, initEffects } from './lab-gi.js?v=202610190803';
+import { initShaderSteps, initHalo, initSilhouette, initGraph, initMerge } from './lab-frame.js?v=202610190803';
+import { initVolume, initStp, initPso, initDiagnostics, initInterview } from './lab-output.js?v=202610190803';
 
 initI18n({ ...COMMON, ...DICT });
 bootVhs();
