@@ -1,0 +1,125 @@
+{
+ "id": "algo.u1.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 10,
+ "boss": true,
+ "cards": [
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "O(2ⁿ)"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [1, 2, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "Queue<Player>", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "void Update() {\n    int team = myTeam;\n    Vector3 me = transform.position;\n    float best = float.MaxValue;\n    for (int i = 0; i < units.Count; i++) {\n        if (units[i].Team == team) continue;\n        float d = (units[i].Pos - me).sqrMagnitude;\n        if (d < best) best = d;\n    }\n    bool hasAllies =\n        units.Exists(u => u.Team == team);\n    hud.Show(best, hasAllies);\n}",
+   "answer": 10,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "bsearch",
+   "input": {
+    "a": [3, 9, 14, 20, 27, 33, 41, 48, 52, 66, 71, 85],
+    "target": 66
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 5,
+      "options": ["mid = 10 → 71 > 66 → hi = mid - 1", "mid = 9 → 66 == 66 → return 9", "mid = 10 → 71 > 66 → lo = mid + 1"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": "binary.ev.found",
+      "options": ["mid = 9 → return 9", "lo > hi → return -1"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "long CountPairs(int[] nums, int target) {\n    var count = new Dictionary<int, int>();\n    long pairs = 0;\n    foreach (int x in nums) {\n        count.TryGetValue(x, out int c);\n        count[x] = c + 1;\n        count.TryGetValue(target - x, out int p);\n        pairs += p;\n    }\n    return pairs;\n}",
+   "answer": 5,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["var pq = new PriorityQueue<int, int>();", "int h = x >>> 1;", "int[] a = [1, 2, 3];", "Span<int> c = stackalloc int[26];", "int hash = HashCode.Combine(x, y);", "var seen = new HashSet<(int, int)>();"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "Array.Sort(a);\nint count = 0;\nfor (int i = 0; i < a.Length; i++)\n    if (Array.BinarySearch(a, target - a[i]) >= 0) count++;",
+   "lang": "cs",
+   "options": ["O(n log n)", "O(n²)", "O(n log² n)", "O(n)"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

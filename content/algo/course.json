@@ -5,8 +5,8 @@
   {
    "id": "u1",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["algo.u1.l1", "algo.u1.l2", "algo.u1.l3", "algo.u1.l4", "algo.u1.l5", "algo.u1.boss"]
   },
   {
    "id": "u2",
