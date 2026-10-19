@@ -63,8 +63,12 @@
   {
    "id": "u8",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://leetcode.com/problems/merge-intervals/"
+   },
+   "lessons": ["algo.u8.l1", "algo.u8.l2", "algo.u8.l3", "algo.u8.l4", "algo.u8.boss"]
   },
   {
    "id": "u9",
