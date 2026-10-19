@@ -184,11 +184,18 @@ function parseUint(text, spec) {
   return v < min || v > max ? fail('range', min, max) : { value: v };
 }
 
+/** One of spec.options; a unique beginning is enough (cheb → chebyshev). */
+function parseChoice(text, spec) {
+  const t = clean(text).toLowerCase(), exact = spec.options.find(o => o === t);
+  const starts = spec.options.filter(o => t && o.startsWith(t));
+  return exact || starts.length === 1 ? { value: exact || starts[0] } : fail('choice', spec.options.join(' · '));
+}
+
 export const PARSERS = {
   ints: parseInts, int: parseInt1, str: parseStr, words: parseWords, grid: parseGrid,
   tree: parseTree, lists: parseLists, intervals: parseIntervals, ops: parseOps,
   board: parseBoard, cache: parseCache, edges: parseEdges, matrix: parseMatrix, wedges: parseWeightedEdges,
-  uint: parseUint,
+  uint: parseUint, choice: parseChoice,
 };
 
 export const FORMATTERS = {
@@ -207,6 +214,7 @@ export const FORMATTERS = {
   matrix: v => v.map(r => r.join(' ')).join(' | '),
   wedges: v => v.map(([u, w, t]) => `${u}>${w}:${t}`).join(' '),
   uint: v => String(v),
+  choice: v => v,
 };
 
 export const parseField = (text, spec) => PARSERS[spec.type](text, spec);
