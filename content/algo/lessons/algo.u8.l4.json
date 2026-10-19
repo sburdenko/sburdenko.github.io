@@ -1,0 +1,154 @@
+{
+ "id": "algo.u8.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 15,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["7: 1, 2, 1, 2, 1", "⟦⟧", "6: 1, 2, 1, 1, 1", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public int Candy(int[] ratings) {\n    int n = ratings.Length;\n    var candies = new int[n];\n    Array.Fill(candies, 1);\n    for (int i = 1; i < n; i++)\n        if (ratings[i] > ratings[i - 1]) candies[i] = ___;\n    for (int i = ___; i >= 0; i--)\n        if (ratings[i] > ratings[i + 1]) candies[i] = ___;\n    return candies.Sum();\n}",
+   "tiles": ["candies[i - 1] + 1", "candies[i] + 1", "n - 2", "n - 1", "Math.Max(candies[i], candies[i + 1] + 1)", "candies[i + 1] + 1"],
+   "answer": ["candies[i - 1] + 1", "n - 2", "Math.Max(candies[i], candies[i + 1] + 1)"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "candy",
+   "input": {
+    "ratings": [1, 2, 3, 4, 2, 5, 4, 3, 2]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 9,
+      "options": [
+       {
+        "label": "4 = max(2, 3 + 1)"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 10,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public int Candy(int[] ratings) {\n    int n = ratings.Length;\n    var candies = new int[n];\n    Array.Fill(candies, 1);\n    for (int i = 1; i < n; i++)\n        if (ratings[i] > ratings[i - 1]) candies[i] = candies[i - 1] + 1;\n    for (int i = n - 2; i >= 0; i--)\n        if (ratings[i] > ratings[i + 1]) candies[i] = candies[i + 1] + 1;\n    return candies.Sum();\n}",
+   "answer": 7,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Candy", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["Jump Game", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["Assign Cookies", "⟦⟧"]
+   ]
+  }
+ ]
+}
