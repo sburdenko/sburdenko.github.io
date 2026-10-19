@@ -254,7 +254,7 @@ while (lo <= hi) {
     ru: (lo, hi, mid, v, t, right) => `mid = ${lo} + (${hi} − ${lo}) / 2 = ${mid}. a[mid] = ${v} ${right ? '<' : '>'} ${t} → ответ ${right ? 'правее' : 'левее'}, другую половину выкидываем.`,
   },
   'binary.ev.narrow': {
-    en: (right, lo, hi) => `${right ? 'lo = mid + 1' : 'hi = mid − 1'}. Left: [${lo}..${hi}], ${Math.max(0, hi - lo + 1)} candidates.`,
+    en: (right, lo, hi) => `${right ? 'lo = mid + 1' : 'hi = mid − 1'}. Left: [${lo}..${hi}], ${Math.max(0, hi - lo + 1)} ${hi - lo === 0 ? 'candidate' : 'candidates'}.`,
     ru: (right, lo, hi) => `${right ? 'lo = mid + 1' : 'hi = mid − 1'}. Осталось [${lo}..${hi}], кандидатов: ${Math.max(0, hi - lo + 1)}.`,
   },
   'binary.ev.found': {

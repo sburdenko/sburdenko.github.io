@@ -3,9 +3,9 @@
  * (course.<id>.title и course.<id>.blurb) в content/ui/<язык>.json.
  * jsonCourse('id') даёт загрузчик на каждый язык; loadCourses(lang) подгружает нужный.
  */
-import { tr } from './i18n.js?v=202610191216';
-import { jsonCourse } from './content.js?v=202610191216';
-import { bi } from './ui.js?v=202610191216';
+import { tr } from './i18n.js?v=202610191219';
+import { jsonCourse } from './content.js?v=202610191219';
+import { bi } from './ui.js?v=202610191219';
 
 /** Группы на полке курсов — по порядку показа. */
 export const GROUPS = [

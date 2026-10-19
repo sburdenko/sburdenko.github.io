@@ -2,8 +2,8 @@
  * Модели стендов курса «3D-форматы». Без DOM — покрыты тестами.
  * У каждого стенда вход init(card), act(card, s, 'действие'), goal(card, s) — как в models-mem.js.
  */
-import { tr } from './i18n.js?v=202610191216';
-import { t as tl, bi } from './ui.js?v=202610191216';
+import { tr } from './i18n.js?v=202610191219';
+import { t as tl, bi } from './ui.js?v=202610191219';
 
 const clone = x => structuredClone(x);
 
