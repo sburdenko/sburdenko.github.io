@@ -1,6 +1,6 @@
 /** Плеер ленты событий: шаг вперёд/назад, перемотка, автопрогон с заданной скоростью. */
-import { clamp, RM } from '../../assets/vhs.js?v=202610191639';
-import { t, onLang } from '../../assets/i18n.js?v=202610191639';
+import { clamp, RM } from '../../assets/vhs.js?v=202610191641';
+import { t, onLang } from '../../assets/i18n.js?v=202610191641';
 
 export function createPlayer(onChange) {
   let run = null, index = 0, playing = false, sps = 6, acc = 0, last = 0, raf = 0;

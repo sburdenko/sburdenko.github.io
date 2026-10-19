@@ -161,6 +161,76 @@ export function reverseKGroupTrace(values, k) {
   return { events, result: order };
 }
 
+/**
+ * Merge Two Sorted Lists behind a dummy node. a and b are the heads still in play (indices into first and second),
+ * merged holds the stitched nodes as [list, index] with list 1 or 2; rest = [from, to) of merged, attached by the last link.
+ */
+export function mergeTwoTrace(first, second) {
+  let a = 0, b = 0;
+  const merged = [], events = [];
+  const value = ([list, k]) => (list === 1 ? first[k] : second[k]);
+  const push = (key, args, extra = {}) => events.push(event(key, args, { a, b, merged: merged.map(m => [...m]), rest: null, ...extra }));
+  push('m2.ev.start', [first.length, second.length]);
+  while (a < first.length && b < second.length) {
+    const x = first[a], y = second[b], tail = merged.length ? value(merged.at(-1)) : 'D';
+    if (x <= y) {
+      merged.push([1, a++]);
+      push(x === y ? 'm2.ev.tie' : 'm2.ev.takeA', [x, y, tail]);
+    } else {
+      merged.push([2, b++]);
+      push('m2.ev.takeB', [x, y, tail]);
+    }
+  }
+  const from = a < first.length ? 1 : b < second.length ? 2 : 0, start = merged.length;
+  const tail = start ? value(merged.at(-1)) : 'D';
+  if (from === 1) for (let k = a; k < first.length; k++) merged.push([1, k]);
+  if (from === 2) for (let k = b; k < second.length; k++) merged.push([2, k]);
+  push('m2.ev.rest', [from, merged.slice(start).map(value), tail], { rest: [start, merged.length] });
+  const result = merged.map(value);
+  push('m2.ev.done', [result, start + 1], { rest: [start, merged.length] });
+  return { events, result, merged };
+}
+
+/**
+ * Linked List Cycle II: Floyd's two phases. next[k] is the index node k links to, -1 for null.
+ * mu (head → entrance) and lambda (cycle length) come from a plain walk and are only drawn: the trace never uses them.
+ */
+export function cycleEntryTrace(next) {
+  const order = new Map();
+  let walk = 0;
+  while (walk !== -1 && !order.has(walk)) { order.set(walk, order.size); walk = next[walk]; }
+  const mu = walk === -1 ? null : order.get(walk), lambda = walk === -1 ? null : order.size - mu;
+  let phase = 1, slow = 0, fast = 0, p = null, meet = null, k = 0, walks = 0;
+  const events = [];
+  const push = (key, args, extra = {}) => events.push(event(key, args, { phase, slow, fast, p, meet, k, walks, entry: null, mu, lambda, ...extra }));
+  push('cye.ev.start', []);
+  while (fast !== -1 && next[fast] !== -1) {
+    slow = next[slow];
+    fast = next[next[fast]];
+    k++;
+    if (slow === fast) { meet = slow; break; }
+    push('cye.ev.move', [slow, fast, k]);
+  }
+  if (meet === null) {
+    push('cye.ev.none', [k]);
+    return { events, entry: -1, mu, lambda, k, walks };
+  }
+  push('cye.ev.meet', [meet, k, 2 * k, lambda, k / lambda, meet === walk]);
+  phase = 2;
+  p = 0;
+  fast = null;
+  push('cye.ev.reset', [meet, k]);
+  while (p !== slow) {
+    p = next[p];
+    slow = next[slow];
+    walks++;
+    if (p === slow) break;
+    push('cye.ev.walk', [p, slow, walks]);
+  }
+  push('cye.ev.entry', [p, walks, mu, lambda, k], { entry: p });
+  return { events, entry: p, mu, lambda, k, walks };
+}
+
 /* ---------- 07 grids and graphs ---------- */
 export function floodFillTrace(image, sr, sc, color) {
   const img = image.map(r => [...r]), from = img[sr][sc], events = [];

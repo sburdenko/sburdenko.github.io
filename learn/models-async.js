@@ -2,8 +2,8 @@
  * Модели курса «Async/await до дна». Без DOM — покрыты тестами.
  * Вход тот же, что у других стендов: init(card), act(card, s, 'действие'), goal(card, s).
  */
-import { tr } from './i18n.js?v=202610191639';
-import { t as tl, bi } from './ui.js?v=202610191639';
+import { tr } from './i18n.js?v=202610191641';
+import { t as tl, bi } from './ui.js?v=202610191641';
 
 const clone = x => structuredClone(x);
 

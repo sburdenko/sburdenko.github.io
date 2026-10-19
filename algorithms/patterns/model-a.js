@@ -451,3 +451,53 @@ export function twoSumIITrace(a, target) {
   push('tsii.ev.none', [target]);
   return { events, found };
 }
+
+/**
+ * Random Pick with Weight: prefix sums, then the first prefix greater than r (upper_bound).
+ * Index i owns the half-open segment [prefix[i − 1], prefix[i]), so an r that lands on a boundary belongs to the right.
+ */
+export function weightedPickTrace(w, r) {
+  const prefix = [], events = [];
+  let lo = null, hi = null;
+  const push = (key, args, extra = {}) => events.push(event(key, args, { prefix: [...prefix], lo, hi, mid: null, pick: null, ...extra }));
+  push('wp.ev.start', [w.length]);
+  let sum = 0;
+  w.forEach((x, i) => {
+    prefix.push(sum += x);
+    push('wp.ev.prefix', [i, x, sum - x, sum]);
+  });
+  lo = 0;
+  hi = w.length - 1;
+  push('wp.ev.pick', [r, sum, lo, hi]);
+  while (lo < hi) {
+    const mid = lo + Math.floor((hi - lo) / 2), v = prefix[mid];
+    const key = v > r ? 'wp.ev.left' : v === r ? 'wp.ev.edge' : 'wp.ev.right';
+    if (v > r) hi = mid; else lo = mid + 1;
+    push(key, [mid, v, r, lo, hi], { mid });
+  }
+  const from = lo ? prefix[lo - 1] : 0;
+  push('wp.ev.done', [lo, from, prefix[lo], w[lo], sum, r], { pick: lo });
+  return { events, prefix, index: lo, total: sum };
+}
+
+/** Fisher–Yates with the random choices given: js[k] is the j drawn for i = n − 1 − k, 0 ≤ j ≤ i. */
+export function shuffleTrace(nums, js) {
+  let a = [...nums], i = a.length - 1, j = null;
+  const events = [];
+  const push = (key, args, extra = {}) => events.push(event(key, args, { a: [...a], i, j, swapped: false, ...extra }));
+  const fact = m => (m <= 1 ? 1 : m * fact(m - 1));
+  push('shf.ev.start', [a.length, fact(a.length)]);
+  for (let k = 0; i > 0; k++, i--) {
+    j = js[k];
+    push('shf.ev.pick', [i, j, i + 1]);
+    if (j === i) push('shf.ev.self', [i, a[i]]);
+    else {
+      const [x, y] = [a[i], a[j]];
+      a = swap(a, i, j);
+      push('shf.ev.swap', [i, j, x, y], { swapped: true });
+    }
+  }
+  j = null;
+  push('shf.ev.done', [a, fact(a.length)]);
+  return { events, result: a };
+}

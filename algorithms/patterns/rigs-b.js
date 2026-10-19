@@ -1,8 +1,8 @@
 /** Editable rigs for chapters 05–08. */
-import * as B from './model-b.js?v=202610191639';
-import * as V from './views-b.js?v=202610191639';
-import { treeFromLevelOrder, levelOrderOf } from './inputs.js?v=202610191639';
-import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202610191639';
+import * as B from './model-b.js?v=202610191641';
+import * as V from './views-b.js?v=202610191641';
+import { treeFromLevelOrder, levelOrderOf } from './inputs.js?v=202610191641';
+import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202610191641';
 
 const values = (extra = {}) => ({ key: 'values', type: 'ints', minLen: 1, maxLen: 8, min: -99, max: 99, ...extra });
 const tree = { key: 'root', type: 'tree', maxNodes: 15, maxDepth: 4, min: -99, max: 99 };
@@ -88,6 +88,19 @@ export const RIGS_B = {
       return { ...B.cycleTrace(next), next };
     },
   }, V.cycle),
+  cycleEntry: defineRig({
+    fields: [{ key: 'n', type: 'int', min: 1, max: 9 }, { key: 'pos', type: 'int', min: -1, max: 8 }],
+    example: { n: 8, pos: 2 },
+    random: next => {
+      const n = randInt(next, 4, 9);
+      return { n, pos: next() < 0.15 ? -1 : randInt(next, 0, n - 1) };
+    },
+    check: p => (p.pos >= p.n ? ['in.err.pos', p.n - 1] : null),
+    run: p => {
+      const next = Array.from({ length: p.n }, (_, i) => (i + 1 < p.n ? i + 1 : p.pos));
+      return { ...B.cycleEntryTrace(next), next };
+    },
+  }, V.cycleEntry),
   removeNth: defineRig({
     fields: [values(), { key: 'n', type: 'int', min: 1, max: 8 }],
     example: { values: [1, 2, 3, 4, 5], n: 2 },
@@ -104,6 +117,18 @@ export const RIGS_B = {
     random: next => ({ values: randInts(next, randInt(next, 3, 7), 1, 9) }),
     run: p => ({ ...B.reverseListTrace(p.values), values: p.values }),
   }, V.reverse),
+  mergeTwo: defineRig({
+    fields: [
+      { key: 'list1', type: 'ints', minLen: 0, maxLen: 6, min: -99, max: 99, sorted: true },
+      { key: 'list2', type: 'ints', minLen: 0, maxLen: 6, min: -99, max: 99, sorted: true },
+    ],
+    example: { list1: [1, 2, 4], list2: [1, 3, 4, 6, 8] },
+    random: next => ({
+      list1: randInts(next, randInt(next, 1, 5), 0, 9).sort((x, y) => x - y),
+      list2: randInts(next, randInt(next, 1, 6), 0, 9).sort((x, y) => x - y),
+    }),
+    run: p => ({ ...B.mergeTwoTrace(p.list1, p.list2), list1: p.list1, list2: p.list2 }),
+  }, V.mergeTwo),
   reverseK: defineRig({
     fields: [values({ maxLen: 10 }), { key: 'k', type: 'int', min: 1, max: 10 }],
     example: { values: [1, 2, 3, 4, 5, 6, 7, 8], k: 3 },
