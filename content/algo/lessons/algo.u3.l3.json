@@ -1,0 +1,160 @@
+{
+ "id": "algo.u3.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 15,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["2", "3", "0"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public int Trap(int[] h) {\n    int total = 0;\n    for (int i = 0; i < h.Length; i++) {\n        int left = 0, right = 0;\n        for (int j = 0; j <= i; j++) left = Math.Max(left, h[j]);\n        for (int j = i; j < h.Length; j++) right = Math.Max(right, h[j]);\n        total += Math.Min(left, right) - h[i];\n    }\n    return total;\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public int Trap(int[] h) {\n    int n = h.Length, total = 0;\n    var maxLeft = new int[n];\n    var maxRight = new int[n];\n    for (int i = 0; i < n; i++) maxLeft[i] = Math.Max(i > 0 ? maxLeft[i - 1] : 0, h[i]);\n    for (int i = n - 1; i >= 0; i--) maxRight[i] = Math.Max(i < n - 1 ? maxRight[i + 1] : 0, h[i]);\n    for (int i = 0; i < n; i++) total += Math.Min(maxLeft[i], maxRight[i]) - h[i];\n    return total;\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public int Trap(int[] h) {\n    int l = 0, r = h.Length - 1, lmax = 0, rmax = 0, total = 0;\n    while (l < r) {\n        if (___) {\n            lmax = Math.Max(lmax, h[l]);\n            total += ___;\n            l++;\n        } else {\n            rmax = Math.Max(rmax, h[r]);\n            total += ___;\n            r--;\n        }\n    }\n    return total;\n}",
+   "tiles": ["h[l] < h[r]", "h[l] > h[r]", "lmax - h[l]", "rmax - h[r]", "Math.Min(lmax, rmax) - h[l]", "h[r] - h[l]"],
+   "answer": ["h[l] < h[r]", "lmax - h[l]", "rmax - h[r]"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "trap",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 5,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 10,
+      "options": [
+       {
+        "label": "2: lmax − 0"
+       },
+       {
+        "label": "3: h[R] − 0"
+       },
+       {
+        "label": "1: rmax − 1"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public int Trap(int[] h) {\n    int l = 0, r = h.Length - 1, lmax = 0, rmax = 0, total = 0;\n    while (l < r) {\n        if (h[l] < h[r]) {\n            lmax = Math.Max(lmax, h[r]);\n            total += lmax - h[l];\n            l++;\n        } else {\n            rmax = Math.Max(rmax, h[r]);\n            total += rmax - h[r];\n            r--;\n        }\n    }\n    return total;\n}",
+   "answer": 4,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}
