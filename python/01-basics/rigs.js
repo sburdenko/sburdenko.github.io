@@ -1,6 +1,6 @@
 /** PY-01 rigs: every rig is real Python that the stand executes; editable fields are spliced in as literals. */
-import { lit } from '../shared/py-code.js?v=202610191132';
-import { randInt, pick } from '../../algorithms/patterns/rig-kit.js?v=202610191132';
+import { lit } from '../shared/py-code.js?v=202610191133';
+import { randInt, pick } from '../../algorithms/patterns/rig-kit.js?v=202610191133';
 
 const text = (key, extra = {}) => ({ key, type: 'text', maxLen: 24, ...extra });
 const num = (key, extra = {}) => ({ key, type: 'int', min: -999999, max: 999999, ...extra });

@@ -15,11 +15,11 @@
  *             q, explain и label переводятся (в данных урока это строки из i18n), остальное — общее.
  * Действия: next, prev, reset (в начало), end (в конец или до вопроса), pick:N.
  */
-import { RIGS as TAPE_RIGS, runWithInput } from '../algorithms/patterns/rigs.js?v=202610191132';
-import { PROBLEMS, NAMES } from '../algorithms/patterns/problems.js?v=202610191132';
-import { DICT } from '../algorithms/patterns/i18n.js?v=202610191132';
-import { formatField } from '../algorithms/patterns/inputs.js?v=202610191132';
-import { tr } from './i18n.js?v=202610191132';
+import { RIGS as TAPE_RIGS, runWithInput } from '../algorithms/patterns/rigs.js?v=202610191133';
+import { PROBLEMS, NAMES } from '../algorithms/patterns/problems.js?v=202610191133';
+import { DICT } from '../algorithms/patterns/i18n.js?v=202610191133';
+import { formatField } from '../algorithms/patterns/inputs.js?v=202610191133';
+import { tr } from './i18n.js?v=202610191133';
 
 /** Строка кассеты на текущем языке: значение — строка или функция от аргументов события. */
 export function tapeText(key, args = []) {

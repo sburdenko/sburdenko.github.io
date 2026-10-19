@@ -2,13 +2,14 @@
  "id": "as.u5.l4",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 6,
+ "minutes": 10,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "async IAsyncEnumerable<Order> ReadOrdersAsync()\n{\n    await foreach (var line in File.ReadLinesAsync(path))   // .NET 7+\n        yield return Parse(line);\n}\n\nawait foreach (var o in ReadOrdersAsync())\n    Handle(o);"
+   "code": "async IAsyncEnumerable<Order> ReadOrdersAsync()\n{\n    await foreach (var line in File.ReadLinesAsync(path))   // .NET 7+\n        yield return Parse(line);\n}\n\nawait foreach (var o in ReadOrdersAsync())\n    Handle(o);",
+   "lang": "cs"
   },
   {
    "t": "choice",
@@ -29,13 +30,54 @@
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
   },
   {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "await using var conn = new SqlConnection(cs);\nawait conn.OpenAsync();"
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "async IAsyncEnumerable<Order> ReadOrdersAsync(CancellationToken ct = default)\n{\n    await foreach (var line in File.ReadLinesAsync(path, ct))\n        yield return Parse(line);\n}\nawait foreach (var o in ReadOrdersAsync().WithCancellation(cts.Token)) Handle(o);",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   },
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "choice",
@@ -47,18 +89,19 @@
   {
    "t": "multi",
    "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": [0, 1, 2],
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2, 3],
    "explain": "⟦⟧"
   },
   {
    "t": "match",
    "q": "⟦⟧",
    "pairs": [
-    ["IAsyncEnumerable", "⟦⟧"],
-    ["await foreach", "⟦⟧"],
-    ["IAsyncDisposable", "⟦⟧"],
-    ["[EnumeratorCancellation]", "⟦⟧"]
+    ["IAsyncEnumerable<T>", "⟦⟧"],
+    ["MoveNextAsync", "⟦⟧"],
+    ["WithCancellation", "⟦⟧"],
+    ["[EnumeratorCancellation]", "⟦⟧"],
+    ["IAsyncDisposable", "⟦⟧"]
    ]
   }
  ]

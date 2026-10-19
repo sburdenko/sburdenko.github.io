@@ -2,12 +2,15 @@
  "id": "as.u5.l2",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 5,
+ "minutes": 10,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
   },
   {
    "t": "choice",
@@ -17,10 +20,37 @@
    "explain": "⟦⟧"
   },
   {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "Monitor.Enter(_sync);\ntry     { await Task.Delay(100); }\nfinally { Monitor.Exit(_sync); }",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   },
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "async void OnSave(object s, RoutedEventArgs e)\n{\n    Monitor.Enter(_sync);\n    try     { await SaveAsync(); }\n    finally { Monitor.Exit(_sync); }\n}",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   },
+   "lang": "cs"
+  },
+  {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "static readonly SemaphoreSlim _gate = new(1, 1);\n\nawait _gate.WaitAsync();\ntry\n{\n    await WriteToFileAsync(data);\n}\nfinally\n{\n    _gate.Release();\n}"
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "blanks",
@@ -46,9 +76,38 @@
    "explain": "⟦⟧"
   },
   {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "async Task RefreshAsync()\n{\n    await _gate.WaitAsync();\n    try     { _cache = await LoadAsync(); await GetAsync(\"total\"); }\n    finally { _gate.Release(); }\n}\nasync Task<int> GetAsync(string key)\n{\n    await _gate.WaitAsync();\n    try     { return _cache[key]; }\n    finally { _gate.Release(); }\n}",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   },
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
    "t": "multi",
    "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": [0, 1],
    "explain": "⟦⟧"
   },
@@ -57,9 +116,10 @@
    "q": "⟦⟧",
    "pairs": [
     ["lock", "⟦⟧"],
-    ["SemaphoreSlim", "⟦⟧"],
+    ["CS1996", "⟦⟧"],
+    ["SemaphoreSlim(1, 1)", "⟦⟧"],
     ["WaitAsync", "⟦⟧"],
-    ["CS1996", "⟦⟧"]
+    ["SemaphoreFullException", "⟦⟧"]
    ]
   }
  ]
