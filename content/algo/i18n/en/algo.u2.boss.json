@@ -28,7 +28,7 @@
  "cards/2/pairs/4/1": "Value v goes into slot v − 1",
  "cards/3/task": "A new problem: how many segments of [2, −2, 3, 0, −3, 1] sum to zero (k = 0). The rig stops once — predict how much count grows.",
  "cards/3/goal/asks/0/q": "x = −3: sum is 0 again, need = 0 − 0 = 0. By how much does count grow?",
- "cards/3/goal/asks/0/explain": "Prefix 0 occurred twice — the empty one and the one after [2, −2] — so two new zero-sum segments end here: [2, −2, 3, 0, −3] and [3, 0, −3]. count = 2 + 2 = 4. Three would come out if the current prefix were stored before the check: with k = 0 it would find itself.",
+ "cards/3/goal/asks/0/explain": "Prefix 0 occurred twice — the empty one and the one after [2, −2] — so two new zero-sum segments end here: [2, −2, 3, 0, −3] and [3, 0, −3]. count = 2 + 2 = 4. +3 would come out if the current prefix were stored before the check: with k = 0 it would find itself.",
  "cards/4/q": "Product of Array Except Self. On [1, 2, 3, 4] this code returns [24, 24, 24, 24] instead of [24, 12, 8, 6]. Tap the line with the bug.",
  "cards/4/explain": "ans[i] must get the product strictly left of i — prefix as it is. prefix * nums[i] includes the element itself: after the first pass ans = [1, 2, 6, 24], and every number ends up in its own product. The invariant: write first, then prefix *= nums[i].",
  "cards/5/q": "What is true about the complexity? Select all.",
