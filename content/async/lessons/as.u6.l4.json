@@ -2,18 +2,14 @@
  "id": "as.u6.l4",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 6,
+ "minutes": 12,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "IEnumerator Blink()\n{\n    while (true)\n    {\n        light.enabled = !light.enabled;\n        yield return new WaitForSeconds(0.5f);\n    }\n}"
-  },
-  {
-   "t": "learn",
-   "title": "⟦⟧",
-   "body": "⟦⟧"
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "choice",
@@ -26,7 +22,22 @@
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "async Awaitable PatrolAsync()\n{\n    var ct = destroyCancellationToken;\n    while (true)\n    {\n        await Awaitable.WaitForSecondsAsync(2f, ct);\n        MoveToNextPoint();\n    }\n}"
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "blanks",
@@ -38,9 +49,32 @@
    "explain": "⟦⟧"
   },
   {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
   },
   {
    "t": "match",
@@ -55,15 +89,8 @@
   {
    "t": "multi",
    "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": [0, 2],
-   "explain": "⟦⟧"
-  },
-  {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2, 4],
    "explain": "⟦⟧"
   }
  ]

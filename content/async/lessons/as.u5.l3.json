@@ -2,32 +2,14 @@
  "id": "as.u5.l3",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 6,
+ "minutes": 11,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "Task<Location> GetLocationAsync()\n{\n    var tcs = new TaskCompletionSource<Location>(\n        TaskCreationOptions.RunContinuationsAsynchronously);\n    gps.OnFix += loc => tcs.TrySetResult(loc);\n    gps.OnError += e => tcs.TrySetException(e);\n    gps.Start();\n    return tcs.Task;\n}"
-  },
-  {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
-   "explain": "⟦⟧"
-  },
-  {
-   "t": "learn",
-   "title": "⟦⟧",
-   "body": "⟦⟧"
-  },
-  {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
-   "explain": "⟦⟧"
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "choice",
@@ -39,14 +21,88 @@
   {
    "t": "tapline",
    "q": "⟦⟧",
-   "code": "var tcs = new TaskCompletionSource<string>();\nclient.OnMessage += m => tcs.TrySetResult(m);\nclient.OnError += e => { log.Error(e); };\nreturn tcs.Task;",
+   "code": "var tcs = new TaskCompletionSource<string>();\nclient.OnMessage += m => tcs.SetResult(m);\nclient.OnError += e => { log.Error(e); };\nreturn tcs.Task;",
    "answer": 2,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
    "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var tcs = new TaskCompletionSource<int>(\n    TaskContinuationOptions.RunContinuationsAsynchronously);\nclient.OnReply += r => tcs.TrySetResult(r);\nclient.Send(request);\nreturn tcs.Task;",
+   "answer": 1,
+   "explain": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "multi",
    "q": "⟦⟧",
-   "options": ["SetResult", "SetException", "SetCanceled", "Dispose"],
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": [0, 1, 2],
    "explain": "⟦⟧"
   },
@@ -56,8 +112,9 @@
    "pairs": [
     ["TaskCompletionSource", "⟦⟧"],
     ["TrySetResult", "⟦⟧"],
+    ["ct.Register", "⟦⟧"],
     ["RunContinuationsAsynchronously", "⟦⟧"],
-    ["SetException", "⟦⟧"]
+    ["CA2247", "⟦⟧"]
    ]
   }
  ]

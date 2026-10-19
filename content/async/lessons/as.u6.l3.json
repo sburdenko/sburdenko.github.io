@@ -2,12 +2,21 @@
  "id": "as.u6.l3",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 7,
+ "minutes": 12,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "rig",
@@ -29,7 +38,7 @@
   {
    "t": "choice",
    "q": "⟦⟧",
-   "options": ["UnityException: … can only be called from the main thread", "NullReferenceException", "MissingReferenceException"],
+   "options": ["UnityException: get_transform can only be called from the main thread", "MissingReferenceException: The object of type 'Transform' has been destroyed", "InvalidOperationException: The calling thread cannot access this object because a different thread owns it"],
    "answer": 0,
    "explain": "⟦⟧"
   },
@@ -67,11 +76,25 @@
    "solve": ["call:result", "end"]
   },
   {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
    "code": "⟦⟧",
-   "deep": "⟦⟧"
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "blanks",
@@ -83,21 +106,31 @@
    "explain": "⟦⟧"
   },
   {
-   "t": "match",
-   "q": "⟦⟧",
-   "pairs": [
-    ["NextFrameAsync", "⟦⟧"],
-    ["WaitForSecondsAsync", "⟦⟧"],
-    ["BackgroundThreadAsync", "⟦⟧"],
-    ["MainThreadAsync", "⟦⟧"]
-   ]
-  },
-  {
    "t": "choice",
    "q": "⟦⟧",
    "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
    "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["NextFrameAsync", "⟦⟧"],
+    ["FixedUpdateAsync", "⟦⟧"],
+    ["BackgroundThreadAsync", "⟦⟧"],
+    ["MainThreadAsync", "⟦⟧"],
+    ["FromAsyncOperation", "⟦⟧"]
+   ]
   }
  ]
 }

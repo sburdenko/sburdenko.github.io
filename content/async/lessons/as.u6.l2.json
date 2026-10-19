@@ -2,12 +2,36 @@
  "id": "as.u6.l2",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 6,
+ "minutes": 12,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
   },
   {
    "t": "rig",
@@ -28,9 +52,18 @@
    "solve": ["cfa", "end"]
   },
   {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
    "t": "choice",
    "q": "⟦⟧",
-   "options": ["⟦⟧", "NullReferenceException", "OutOfMemoryException"],
+   "code": "⟦⟧",
+   "lang": "cs",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
    "explain": "⟦⟧"
   },
@@ -38,17 +71,39 @@
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "// WPF\nawait Dispatcher.InvokeAsync(() => label.Content = text);\n\n// WinForms\nlabel.BeginInvoke(() => label.Text = text);"
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "await Task.Run(() =>\n{\n    var progress = new Progress<int>(p => bar.Value = p);\n    Import(files, progress);\n});",
+   "lang": "cs",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
   },
   {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "⟦⟧"
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "choice",
    "q": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
    "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
    "explain": "⟦⟧"
@@ -60,20 +115,14 @@
    "explain": "⟦⟧"
   },
   {
-   "t": "multi",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": [0, 1, 2],
-   "explain": "⟦⟧"
-  },
-  {
    "t": "match",
    "q": "⟦⟧",
    "pairs": [
-    ["Dispatcher.InvokeAsync", "⟦⟧"],
+    ["Dispatcher.Invoke", "⟦⟧"],
     ["Control.BeginInvoke", "⟦⟧"],
-    ["Task.Run", "⟦⟧"],
-    ["DispatcherSynchronizationContext", "⟦⟧"]
+    ["Progress<T>", "⟦⟧"],
+    ["DispatcherSynchronizationContext", "⟦⟧"],
+    ["VerifyAccess", "⟦⟧"]
    ]
   }
  ]
