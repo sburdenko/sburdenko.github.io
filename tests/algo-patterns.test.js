@@ -6,6 +6,8 @@ import * as B from '../algorithms/patterns/model-b.js';
 import * as C from '../algorithms/patterns/model-c.js';
 import * as D from '../algorithms/patterns/model-d.js';
 import * as E from '../algorithms/patterns/model-e.js';
+import * as F from '../algorithms/patterns/model-f.js';
+import { register, bitWidth, hexOf } from '../algorithms/patterns/view-kit.js';
 import { RIGS, PATTERN_IDS, runWithInput, MAX_STEPS } from '../algorithms/patterns/rigs.js';
 import { parseField, formatField, treeFromLevelOrder, levelOrderOf } from '../algorithms/patterns/inputs.js';
 import { PROBLEMS } from '../algorithms/patterns/problems.js';
@@ -15,6 +17,9 @@ const next = rng(42);
 const ints = (n, lo, hi) => Array.from({ length: n }, () => lo + Math.floor(next() * (hi - lo + 1)));
 const len = (lo, hi) => lo + Math.floor(next() * (hi - lo + 1));
 const repeat = (times, fn) => { for (let i = 0; i < times; i++) fn(i); };
+
+/** Keys of the events in a rig's example run. */
+const keysOfRun = rig => new Set(rig.run(rig.example).events.map(e => e.key));
 
 /* ---------- chapters 01–04 ---------- */
 test('hash map traces agree with brute force', () => {
@@ -53,6 +58,32 @@ test('two pointer traces agree with brute force', () => {
     assert.deepEqual(A.threeSumTrace(t).triples.map(x => x.join()).sort(), [...brute].sort(), `${t}`);
   });
   assert.equal(A.trapTrace([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]).total, 6);
+});
+
+test('Fisher–Yates: every j sequence gives a different permutation, so all n! come out once', () => {
+  for (let n = 1; n <= 5; n++) {
+    const nums = Array.from({ length: n }, (_, i) => 10 + i), seen = new Set();
+    const walk = (js, i) => {
+      if (i === 0) {
+        const { result, events } = A.shuffleTrace(nums, js);
+        let ref = [...nums];
+        js.forEach((j, k) => { const at = n - 1 - k; [ref[at], ref[j]] = [ref[j], ref[at]]; });
+        assert.deepEqual(result, ref, `${js}`);
+        assert.deepEqual([...result].sort((x, y) => x - y), nums, 'a permutation of the input');
+        seen.add(result.join());
+        assert.equal(events.filter(e => e.key === 'shf.ev.self').length, js.filter((j, k) => j === n - 1 - k).length);
+        for (const e of events) if (e.i >= 0 && e.key !== 'shf.ev.start') assert.deepEqual(e.a.slice(e.i + 1), result.slice(e.i + 1), 'the tail right of i is final');
+        return;
+      }
+      for (let j = 0; j <= i; j++) walk([...js, j], i - 1);
+    };
+    walk([], n - 1);
+    assert.equal(seen.size, [1, 1, 2, 6, 24, 120][n], `n = ${n}: every permutation exactly once`);
+  }
+  assert.deepEqual(keysOfRun(RIGS.shuffle), new Set(['shf.ev.start', 'shf.ev.pick', 'shf.ev.swap', 'shf.ev.self', 'shf.ev.done']), 'the example shows a swap and j = i');
+  assert.equal(runWithInput(RIGS.shuffle, { nums: '1 2 3', j: '0' }).error[0], 'in.err.jCount');
+  assert.deepEqual(runWithInput(RIGS.shuffle, { nums: '1 2 3', j: '0 2' }).error, ['in.err.jRange', 2, 2, 1]);
+  assert.ok(!runWithInput(RIGS.shuffle, { nums: '7', j: '' }).error, 'one element needs no j');
 });
 
 test('sliding window traces agree with brute force', () => {
@@ -105,6 +136,27 @@ test('binary search traces agree with brute force', () => {
   });
 });
 
+test('random pick with weight: upper_bound agrees with a linear scan, index i owns exactly w[i] values of r', () => {
+  repeat(200, () => {
+    const w = ints(len(1, 8), 1, 9), total = w.reduce((a, b) => a + b, 0), owned = w.map(() => 0);
+    for (let r = 0; r < total; r++) {
+      const { index, events } = A.weightedPickTrace(w, r);
+      let sum = 0, linear = 0;
+      while ((sum += w[linear]) <= r) linear++;
+      assert.equal(index, linear, `${w} r=${r}`);
+      owned[index]++;
+      const boundary = w.slice(0, -1).some((_, i) => w.slice(0, i + 1).reduce((a, b) => a + b, 0) === r);
+      if (events.some(e => e.key === 'wp.ev.edge')) assert.ok(boundary, 'an edge step means r sits on a boundary');
+      assert.ok(events.filter(e => /wp\.ev\.(left|right|edge)/.test(e.key)).length <= Math.ceil(Math.log2(w.length)), 'O(log n) probes');
+    }
+    assert.deepEqual(owned, w, `${w}: probabilities are w[i] / total`);
+  });
+  assert.deepEqual(keysOfRun(RIGS.weightedPick), new Set(['wp.ev.start', 'wp.ev.prefix', 'wp.ev.pick', 'wp.ev.edge', 'wp.ev.left', 'wp.ev.done']), 'the example puts r on a boundary');
+  assert.equal(A.weightedPickTrace([3, 1, 4, 2], 3).index, 1);
+  assert.equal(A.weightedPickTrace([3, 1, 4, 2], 9).index, 3);
+  assert.deepEqual(runWithInput(RIGS.weightedPick, { w: '3 1 4 2', r: '10' }).error, ['in.err.pickR', 9, 10]);
+});
+
 /* ---------- chapters 05–08 ---------- */
 test('stack traces agree with brute force', () => {
   const balanced = s => { let t = s, prev; do { prev = t; t = t.replace(/\(\)|\[\]|\{\}/g, ''); } while (t !== prev); return t === ''; };
@@ -140,6 +192,42 @@ test('linked list traces agree with brute force', () => {
       assert.deepEqual(B.reverseKGroupTrace(values, k).result, expected, `n=${n} k=${k}`);
     }
   }
+});
+
+test('merge two lists and the cycle entrance agree with brute force', () => {
+  repeat(300, () => {
+    const x = ints(len(0, 6), 0, 6).sort((p, q) => p - q), y = ints(len(0, 6), 0, 6).sort((p, q) => p - q);
+    const { result, merged, events } = B.mergeTwoTrace(x, y);
+    const tagged = [...x.map((v, k) => [v, 1, k]), ...y.map((v, k) => [v, 2, k])].sort((p, q) => p[0] - q[0] || p[1] - q[1] || p[2] - q[2]);
+    assert.deepEqual(result, tagged.map(([v]) => v), `${x} | ${y}`);
+    assert.deepEqual(merged, tagged.map(([, list, k]) => [list, k]), 'stable: on a tie list1 goes first');
+    assert.equal(events.filter(e => e.key === 'm2.ev.rest').length, 1, 'the rest is attached by one step');
+    const rest = events.find(e => e.key === 'm2.ev.rest');
+    assert.ok(merged.slice(rest.rest[0]).every(([list]) => list === rest.args[0]), 'the rest comes from one list');
+  });
+  const ex = B.mergeTwoTrace([1, 2, 4], [1, 3, 4, 6, 8]);
+  assert.deepEqual(new Set(ex.events.map(e => e.key)), new Set(['m2.ev.start', 'm2.ev.tie', 'm2.ev.takeA', 'm2.ev.takeB', 'm2.ev.rest', 'm2.ev.done']));
+  assert.deepEqual(ex.events.find(e => e.key === 'm2.ev.rest').args.slice(0, 2), [2, [4, 6, 8]]);
+
+  for (let n = 1; n <= 9; n++) {
+    for (let pos = -1; pos < n; pos++) {
+      const nextLinks = Array.from({ length: n }, (_, i) => (i + 1 < n ? i + 1 : pos));
+      const seen = new Set();
+      let node = 0;
+      while (node !== -1 && !seen.has(node)) { seen.add(node); node = nextLinks[node]; }
+      const run = B.cycleEntryTrace(nextLinks);
+      assert.equal(run.entry, node, `n=${n} pos=${pos}: the first node visited twice`);
+      if (pos < 0) { assert.equal(run.mu, null); continue; }
+      const mu = pos, lambda = n - pos;
+      assert.deepEqual([run.mu, run.lambda], [mu, lambda]);
+      assert.equal(run.k, lambda * Math.max(1, Math.ceil(mu / lambda)), 'phase 1 ends at the first multiple of λ that is at least μ');
+      assert.equal(run.walks, mu, 'phase 2 takes exactly μ steps');
+      const phase1 = B.cycleTrace(nextLinks).events.filter(e => e.key === 'cyc.ev.move').map(e => [e.slow, e.fast]);
+      assert.deepEqual(run.events.filter(e => e.key === 'cye.ev.move').map(e => [e.slow, e.fast]), phase1, 'phase 1 is Linked List Cycle');
+    }
+  }
+  assert.deepEqual(keysOfRun(RIGS.cycleEntry), new Set(['cye.ev.start', 'cye.ev.move', 'cye.ev.meet', 'cye.ev.reset', 'cye.ev.walk', 'cye.ev.entry']));
+  assert.equal(runWithInput(RIGS.cycleEntry, { n: '4', pos: '4' }).error[0], 'in.err.pos');
 });
 
 test('grid and graph traces agree with brute force', () => {
@@ -614,6 +702,103 @@ test('the weighted edge field reads from>to:weight, triples or nested brackets',
   assert.equal(runWithInput(RIGS.obstacles, { grid: '100 000', k: '1' }).error[0], 'in.err.corners');
 });
 
+/* ---------- chapter 15: bit manipulation ---------- */
+/** Bits of a 32-bit word as a string, by division instead of bit operators: an independent reference. */
+const binary = v => { let u = v < 0 ? v + 2 ** 32 : v, s = ''; for (let i = 0; i < 32; i++) { s = (u % 2) + s; u = Math.floor(u / 2); } return s; };
+
+test('chapter 15: register traces agree with brute force', () => {
+  repeat(300, () => {
+    const n = Math.floor(next() * 2 ** 32);
+    const pop = F.popcountTrace(n);
+    const ones = [...binary(n)].filter(c => c === '1').length;
+    assert.equal(pop.count, ones, `${n}`);
+    assert.equal(pop.power, ones === 1);
+    for (const e of pop.events) if (e.key === 'pop.ev.and') assert.equal(binary(e.x).replace(/1(0*)$/, '0$1'), binary(e.and), 'x & (x − 1) clears exactly the lowest 1');
+
+    const size = len(1, 12), gone = len(0, size);
+    const nums = Array.from({ length: size + 1 }, (_, i) => i).filter(v => v !== gone).sort(() => next() - 0.5);
+    assert.equal(F.missingXorTrace(nums).answer, gone, `${nums}`);
+
+    const vals = [...new Set(ints(len(3, 7), -40, 40))];
+    if (vals.length >= 2) {
+      const [a, b, ...pairs] = vals;
+      const arr = [a, b, ...pairs, ...pairs].sort(() => next() - 0.5);
+      const single = F.singleIIITrace(arr);
+      assert.deepEqual(single.pair, [Math.min(a, b), Math.max(a, b)], `${arr}`);
+      const low = single.events.find(e => e.key === 'sn3.ev.low');
+      const diff = binary(a ^ b), at = 31 - diff.lastIndexOf('1');
+      assert.equal(low.args[3], at, 'x & −x is the lowest bit where a and b differ');
+    }
+
+    const m = len(0, 40);
+    assert.deepEqual(F.countBitsTrace(m).bits, Array.from({ length: m + 1 }, (_, i) => [...i.toString(2)].filter(c => c === '1').length));
+
+    const x = len(-1000, 1000), y = len(-1000, 1000), sum = F.sumBitsTrace(x, y);
+    assert.equal(sum.sum, x + y, `${x} + ${y}`);
+    assert.ok(sum.events.length <= 40, 'at most 32 rounds');
+
+    const pool = ints(len(1, 8), 0, 63), queries = Array.from({ length: len(1, 5) }, () => [len(0, 63), len(0, 63)]);
+    const brute = queries.map(([qx, qm]) => { const ok = pool.filter(v => v <= qm); return ok.length ? Math.max(...ok.map(v => qx ^ v)) : -1; });
+    assert.deepEqual(F.maxXorLimitTrace(pool, queries).answers, brute, `${pool} ${JSON.stringify(queries)}`);
+  });
+  assert.equal(F.popcountTrace(11).count, 3);
+  assert.equal(F.popcountTrace(4294967293).count, 31);
+  assert.equal(F.popcountTrace(0).count, 0);
+  assert.equal(F.missingXorTrace([3, 0, 1]).answer, 2);
+  assert.deepEqual(F.singleIIITrace([1, 2, 1, 3, 2, 5]).pair, [3, 5]);
+  assert.deepEqual(F.singleIIITrace([-1, 0]).pair, [-1, 0]);
+  assert.equal(F.sumBitsTrace(-1, 1).sum, 0);
+  assert.equal(F.sumBitsTrace(-1000, -1000).sum, -2000);
+  assert.deepEqual(F.maxXorLimitTrace([0, 1, 2, 3, 4], [[3, 1], [1, 3], [5, 6]]).answers, [3, 3, 7]);
+  assert.deepEqual(F.maxXorLimitTrace([5, 2, 4, 6, 6, 3], [[12, 4], [8, 1], [6, 3]]).answers, [15, -1, 5]);
+  const shown = [
+    [F.popcountTrace(52), ['pop.ev.minus', 'pop.ev.and', 'pop.ev.done']],
+    [F.popcountTrace(64), ['pop.ev.pow2']],
+    [F.missingXorTrace([9, 6, 4, 2, 3, 5, 7, 0, 1]), ['mis.ev.wait', 'mis.ev.meet', 'mis.ev.done']],
+    [F.singleIIITrace([1, 2, 1, 3, 2, 5]), ['sn3.ev.fold', 'sn3.ev.cancel', 'sn3.ev.neg', 'sn3.ev.low', 'sn3.ev.one', 'sn3.ev.zero']],
+    [F.countBitsTrace(12), ['cb.ev.even', 'cb.ev.odd', 'cb.ev.pow']],
+    [F.sumBitsTrace(13, 11), ['sum.ev.carry', 'sum.ev.nocarry']],
+    [F.sumBitsTrace(-3, 5), ['sum.ev.drop']],
+    [F.maxXorLimitTrace([5, 2, 4, 6, 6, 3], [[12, 4], [8, 1], [6, 3]]), ['mxl.ev.empty', 'mxl.ev.insert', 'mxl.ev.take', 'mxl.ev.same', 'mxl.ev.answer']],
+  ];
+  for (const [run, keys] of shown) for (const key of keys) assert.ok(keysOf(run).has(key), `the example shows ${key}`);
+});
+
+test('the register: width, hex, banks of 16 and marks', () => {
+  assert.equal(bitWidth([0, 255]), 8);
+  assert.equal(bitWidth([256]), 16);
+  assert.equal(bitWidth([65536]), 32);
+  assert.equal(bitWidth([-1]), 32, 'a negative int needs all 32 bits');
+  assert.equal(hexOf(-1), '0xFFFFFFFF');
+  assert.equal(hexOf(44, 8), '0x2C');
+  const wide = register([{ label: 'x', value: -6, ref: -5 }], { bits: 32, signed: true, cursor: 0 });
+  assert.equal((wide.match(/<rect class="bit /g) || []).length, 32);
+  assert.match(wide, /−6 · 0xFFFFFFFA/);
+  assert.equal((wide.match(/class="bit [^"]*chg/g) || []).length, 1, 'only bit 0 differs between −6 and −5');
+  assert.match(wide, /class="bitcol"/);
+  const narrow = register([{ label: 'n', value: 52 }], { bits: 8 });
+  assert.equal((narrow.match(/<rect class="bit one/g) || []).length, 3);
+  assert.match(narrow, /uint32 · 31…8 = 0/);
+  const [w32, w8] = [wide, narrow].map(s => Number(s.match(/viewBox="0 0 (\d+)/)[1]));
+  assert.ok(w32 <= 440 && w8 <= 250, `a 32-bit register wraps into two banks of 16: ${w32}, ${w8}`);
+});
+
+test('the uint field reads decimal, hex and binary', () => {
+  const spec = { type: 'uint', min: 0, max: 4294967295 };
+  for (const t of ['52', '0x34', '0b110100', '0b0011_0100', '0X34']) assert.equal(parseField(t, spec).value, 52, t);
+  assert.equal(parseField('4294967295', spec).value, 4294967295);
+  assert.equal(parseField('0xFFFFFFFF', spec).value, 4294967295);
+  assert.equal(parseField('4294967296', spec).error[0], 'in.err.range');
+  assert.equal(parseField('-1', spec).error[0], 'in.err.uint');
+  assert.equal(parseField('0x', spec).error[0], 'in.err.uint');
+  assert.equal(formatField(52, spec), '52');
+  assert.equal(runWithInput(RIGS.missingXor, { nums: '0 1 5' }).error[0], 'in.err.missing');
+  assert.equal(runWithInput(RIGS.missingXor, { nums: '0 1 1' }).error[0], 'in.err.distinct');
+  assert.equal(runWithInput(RIGS.singleIII, { nums: '1 1 2 2' }).error[0], 'in.err.twoSingles');
+  assert.equal(runWithInput(RIGS.singleIII, { nums: '1 2 3' }).error[0], 'in.err.twoSingles');
+  assert.equal(runWithInput(RIGS.maxXorLimit, { nums: '1 2', queries: '1 | 2' }).error[0], 'in.err.pairs');
+});
+
 /* ---------- wiring ---------- */
 const textsOf = (rig, params) => Object.fromEntries(rig.fields.map(f => [f.key, formatField(params[f.key], f)]));
 
@@ -655,7 +840,7 @@ test('input fields parse what people type and format back losslessly', () => {
 });
 
 test('every problem owns an editable rig: the example and random inputs parse, run and render', () => {
-  assert.equal(PATTERN_IDS.length, 14);
+  assert.equal(PATTERN_IDS.length, 15);
   const random = rng(7);
   for (const id of PATTERN_IDS) {
     for (const problem of PROBLEMS[id]) {
@@ -729,6 +914,6 @@ test('every chapter has texts for each problem, at least one Hard, and code', ()
     }
     assert.equal(new Set(PROBLEMS[id].map(p => p.rig)).size, PROBLEMS[id].length, `${id}: rigs must differ`);
     assert.ok(PROBLEMS[id].some(p => p.diff === 'Hard'), `${id}: no Hard problem`);
-    assert.ok(PROBLEMS[id].length >= 4 && PROBLEMS[id].length <= 6, `${id}: 4–6 problems`);
+    assert.ok(PROBLEMS[id].length >= 4 && PROBLEMS[id].length <= 7, `${id}: 4–7 problems`);
   }
 });

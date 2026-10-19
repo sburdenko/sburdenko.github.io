@@ -1,5 +1,5 @@
 /** Problems and C# solutions for chapters 01–04: hash map, two pointers, sliding window, binary search. */
-import { problem as p } from './problem.js?v=202610191254';
+import { problem as p } from './problem.js?v=202610191657';
 
 export const PROBLEMS_A = {
   hash: [
@@ -71,6 +71,23 @@ export const PROBLEMS_A = {
         if (nums[read] == 0) continue;
         (nums[write], nums[read]) = (nums[read], nums[write]);
         write++;
+    }
+}`),
+    p('shuffle', 'Shuffle an Array', 384, 'shuffle-an-array', 'Medium', `public class Solution {
+    private readonly int[] original;
+    private readonly Random rng = new Random();
+
+    public Solution(int[] nums) => original = (int[])nums.Clone();
+
+    public int[] Reset() => (int[])original.Clone();
+
+    public int[] Shuffle() {
+        var a = (int[])original.Clone();
+        for (int i = a.Length - 1; i > 0; i--) {
+            int j = rng.Next(i + 1);           // 0 ≤ j ≤ i, j = i included
+            (a[i], a[j]) = (a[j], a[i]);       // a[i] is final from here on
+        }
+        return a;
     }
 }`),
     p('twoSumII', 'Two Sum II - Input Array Is Sorted', 167, 'two-sum-ii-input-array-is-sorted', 'Medium', `public int[] TwoSum(int[] numbers, int target) {
@@ -233,6 +250,27 @@ export const PROBLEMS_A = {
         if (hours <= h) hi = k; else lo = k + 1;
     }
     return lo;
+}`),
+    p('weightedPick', 'Random Pick with Weight', 528, 'random-pick-with-weight', 'Medium', `public class Solution {
+    private readonly int[] prefix;
+    private readonly Random rng = new Random();
+
+    public Solution(int[] w) {
+        prefix = new int[w.Length];
+        int sum = 0;
+        for (int i = 0; i < w.Length; i++) prefix[i] = sum += w[i];
+    }
+
+    public int PickIndex() {
+        int r = rng.Next(prefix[prefix.Length - 1]);   // 0 .. total − 1
+        int lo = 0, hi = prefix.Length - 1;
+        while (lo < hi) {                             // the first prefix > r
+            int mid = lo + (hi - lo) / 2;
+            if (prefix[mid] > r) hi = mid;
+            else lo = mid + 1;                        // prefix[mid] == r: r opens the next segment
+        }
+        return lo;
+    }
 }`),
     p('median', 'Median of Two Sorted Arrays', 4, 'median-of-two-sorted-arrays', 'Hard', `public double FindMedianSortedArrays(int[] a, int[] b) {
     if (a.Length > b.Length) return FindMedianSortedArrays(b, a);

@@ -31,6 +31,12 @@ export const INPUTS = {
   'in.err.rotated': { en: () => 'Must be a sorted array rotated at one point, e.g. 4, 5, 6, 7, 0, 1, 2.', ru: () => 'Нужен отсортированный массив, повёрнутый в одной точке, например 4, 5, 6, 7, 0, 1, 2.' },
   'in.err.hours': { en: n => `h must be at least the number of piles (${n}).`, ru: n => `h должно быть не меньше числа куч (${n}).` },
   'in.err.pos': { en: n => `pos is −1 (no cycle) or an index 0–${n}.`, ru: n => `pos — это −1 (без цикла) или индекс 0–${n}.` },
+  'in.err.pickR': { en: (max, total) => `r is drawn from [0, total) — here 0–${max}, since the weights add up to ${total}.`, ru: (max, total) => `r берётся из [0, total) — здесь от 0 до ${max}, потому что сумма весов ${total}.` },
+  'in.err.jCount': {
+    en: (k, n) => (k ? `j needs ${k === 1 ? '1 value' : `${k} values`}: one for every i from ${n - 1} down to 1.` : 'One element: leave j empty.'),
+    ru: (k, n) => (k ? `Нужно значений j: ${k} — по одному на каждый i от ${n - 1} вниз до 1.` : 'Один элемент: оставь j пустым.'),
+  },
+  'in.err.jRange': { en: (q, j, i) => `j #${q} is ${j}, but for i = ${i} it must be in [0, ${i}].`, ru: (q, j, i) => `j №${q} равен ${j}, а для i = ${i} он должен быть в [0, ${i}].` },
   'in.err.cell': { en: (r, c) => `The start must be inside the image: sr 0–${r}, sc 0–${c}.`, ru: (r, c) => `Старт должен быть внутри картинки: sr 0–${r}, sc 0–${c}.` },
   'in.err.sameLen': { en: n => `All words must be as long as begin (${n}).`, ru: n => `Все слова должны быть длины begin (${n}).` },
   'in.err.boardLetters': { en: () => 'Rows are letters only, e.g. ABCE SFCS ADEE.', ru: () => 'Строки только из букв, например ABCE SFCS ADEE.' },

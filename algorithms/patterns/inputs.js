@@ -174,10 +174,21 @@ function parseWeightedEdges(text, spec) {
     || { value: found };
 }
 
+/** One 32-bit word: decimal, 0x hex or 0b binary; “_”, “'” and spaces may group the digits (0b1011_0100). */
+function parseUint(text, spec) {
+  const t = clean(text).replace(/[_'\s]/g, '').toLowerCase();
+  const m = t.match(/^(?:0x([0-9a-f]{1,8})|0b([01]{1,32})|(\d{1,10}))$/);
+  if (!m) return fail('uint', t || '∅');
+  const v = m[1] ? parseInt(m[1], 16) : m[2] ? parseInt(m[2], 2) : Number(m[3]);
+  const { min = 0, max = 4294967295 } = spec;
+  return v < min || v > max ? fail('range', min, max) : { value: v };
+}
+
 export const PARSERS = {
   ints: parseInts, int: parseInt1, str: parseStr, words: parseWords, grid: parseGrid,
   tree: parseTree, lists: parseLists, intervals: parseIntervals, ops: parseOps,
   board: parseBoard, cache: parseCache, edges: parseEdges, matrix: parseMatrix, wedges: parseWeightedEdges,
+  uint: parseUint,
 };
 
 export const FORMATTERS = {
@@ -195,6 +206,7 @@ export const FORMATTERS = {
   edges: v => v.map(([a, b]) => `${a}-${b}`).join(' '),
   matrix: v => v.map(r => r.join(' ')).join(' | '),
   wedges: v => v.map(([u, w, t]) => `${u}>${w}:${t}`).join(' '),
+  uint: v => String(v),
 };
 
 export const parseField = (text, spec) => PARSERS[spec.type](text, spec);

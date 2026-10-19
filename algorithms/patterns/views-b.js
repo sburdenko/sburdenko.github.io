@@ -2,7 +2,7 @@
 import {
   CELL, STEP, svg, text, rowWidth, cells, pointers, arrow, node, chip, chips,
   barLayout, bars, gridCells, binaryTree, matrixXY, matrixCells, matrixIndex,
-} from './view-kit.js?v=202610191254';
+} from './view-kit.js?v=202610191657';
 
 const TOP = 40, GAP_HALF = 3;
 const framed = (n, h, inner) => svg(rowWidth(n) + 20, h, `<g transform="translate(10,0)">${inner}</g>`);
@@ -69,26 +69,67 @@ export const histogram = {
 };
 
 /* ---------- 06 linked list ---------- */
+/** A chain of n nodes whose last one links to entry (−1: null): the tail on a line, the cycle on a ring after it. */
+function ring(next) {
+  const n = next.length, entry = next.at(-1), tail = entry < 0 ? n : entry;
+  const loop = n - tail, pos = [];
+  for (let k = 0; k < tail; k++) pos.push([44 + k * 88, 122]);
+  const cx = 44 + tail * 88 + 80, r = 80;
+  for (let k = 0; k < loop; k++) {
+    const ang = Math.PI + k * 2 * Math.PI / loop;
+    pos.push([cx + r * Math.cos(ang), 122 + r * Math.sin(ang)]);
+  }
+  const nil = [44 + n * 88, 122], at = k => (k < 0 ? nil : pos[k]);
+  const edges = next.map((b, a) => arrow(pos[a][0], pos[a][1], at(b)[0], at(b)[1], 21)).join('');
+  return { entry, tail, pos, nil, at, edges, cx, r, width: entry < 0 ? nil[0] + 44 : cx + r + 40 };
+}
+
 export const cycle = {
   view(run, e) {
-    const n = run.next.length, entry = run.next.at(-1), tail = entry < 0 ? n : entry;
-    const loop = n - tail, pos = [];
-    for (let k = 0; k < tail; k++) pos.push([44 + k * 88, 122]);
-    const cx = 44 + tail * 88 + 80, r = 80;
-    for (let k = 0; k < loop; k++) {
-      const ang = Math.PI + k * 2 * Math.PI / loop;
-      pos.push([cx + r * Math.cos(ang), 122 + r * Math.sin(ang)]);
-    }
-    const nil = [44 + n * 88, 122], at = k => (k < 0 ? nil : pos[k]);
-    let s = run.next.map((b, a) => arrow(pos[a][0], pos[a][1], at(b)[0], at(b)[1], 21)).join('');
+    const { entry, pos, nil, at, edges, width } = ring(run.next);
+    let s = edges;
     pos.forEach(([x, y], k) => { s += node(x, y, k, k === e.meet ? 'ok' : k === e.slow || k === e.fast ? 'cur' : ''); });
     if (entry < 0) s += node(nil[0], nil[1], '∅', e.fast < 0 ? 'cur nil' : 'nil');
     const [sx, sy] = at(e.slow), [fx, fy] = at(e.fast);
     s += text(sx, sy - 31, 'slow', 'sf s') + text(fx, fy + 32, 'fast', 'sf f');
-    return svg(entry < 0 ? nil[0] + 44 : cx + r + 40, 250, s);
+    return svg(width, 250, s);
   },
   vars(run, e) {
     return [['var.slowFast', chip(`${e.slow} / ${e.fast < 0 ? 'null' : e.fast}`)]];
+  },
+};
+
+/** Linked List Cycle II: phase 1 is slow / fast as in Linked List Cycle, phase 2 walks p from the head and slow from the meeting point. */
+export const cycleEntry = {
+  view(run, e) {
+    const { entry, tail, pos, nil, at, edges, cx, width } = ring(run.next);
+    let s = edges;
+    const second = e.phase === 2, found = e.entry != null;
+    pos.forEach(([x, y], k) => {
+      const cls = k === e.entry ? 'ok' : k === e.meet ? 'new' : k === e.slow || (!second && k === e.fast) || (second && k === e.p) ? 'cur' : '';
+      s += node(x, y, k, cls);
+    });
+    if (entry < 0) s += node(nil[0], nil[1], '∅', e.fast < 0 ? 'cur nil' : 'nil');
+    if (e.mu != null) {
+      const y = 186, x2 = pos[tail] ? pos[tail][0] - 4 : 44;
+      if (tail > 0) s += `<line class="cutline" x1="40" y1="${y}" x2="${x2}" y2="${y}"/>` + text((40 + x2) / 2, y + 14, `μ = ${e.mu}`, 'idx need');
+      else s += text(pos[0][0], y + 14, 'μ = 0', 'idx need');
+      s += text(cx, 122, `λ = ${e.lambda}`, 'idx need');
+    }
+    const [sx, sy] = at(e.slow);
+    s += text(sx, sy - 31, 'slow', 'sf s');
+    if (!second) { const [fx, fy] = at(e.fast); s += text(fx, fy + 32, 'fast', 'sf f'); }
+    else { const [px, py] = at(e.p); s += text(px, py + 32, 'p', 'sf f'); }
+    if (e.meet != null && !found && e.meet !== e.slow) { const [mx, my] = at(e.meet); s += text(mx, my - 31, 'meet', 'sf'); }
+    return svg(width, 250, s);
+  },
+  vars(run, e) {
+    const out = [['var.phase', chip(e.phase === 1 ? '1 · slow +1, fast +2' : '2 · p +1, slow +1', 'amb')]];
+    out.push(e.phase === 1 ? ['var.slowFast', chip(`${e.slow} / ${e.fast < 0 ? 'null' : e.fast}`)] : ['var.pSlow', chip(`${e.p} / ${e.slow}`)]);
+    out.push(['var.kSteps', chip(e.k)]);
+    if (e.mu != null) out.push(['var.muLambda', chip(`μ = ${e.mu} · λ = ${e.lambda}`)]);
+    if (e.entry != null) out.push(['var.answer', chip(e.entry, 'hit')]);
+    return out;
   },
 };
 
@@ -132,6 +173,45 @@ export const reverse = {
   },
   vars(run, e) {
     return [['var.prevCur', chip(`${e.prev >= 0 ? run.values[e.prev] : 'null'} / ${e.cur >= 0 ? run.values[e.cur] : 'null'}`)]];
+  },
+};
+
+/** Merge Two Sorted Lists: both inputs on top (taken nodes fade), the result behind the dummy D at the bottom. */
+export const mergeTwo = {
+  view(run, e) {
+    const x0 = 96, gap = 56, px = k => x0 + k * gap, rows = [[run.list1, 46, e.a, 'a', 'path'], [run.list2, 132, e.b, 'b', 'root']];
+    const y3 = 226, last = e.merged.length - 1, justTaken = /takeA|takeB|tie/.test(e.key) ? last : -1;
+    let s = '';
+    rows.forEach(([list, y, head, label, tone], r) => {
+      s += text(4, y, `list${r + 1}`, 'lbl');
+      for (let k = 0; k < list.length; k++) s += arrow(px(k), y, px(k + 1), y, 21, k < head ? 'edge dim' : 'edge');
+      list.forEach((v, k) => { s += node(px(k), y, v, k < head ? 'dim' : tone); });
+      s += node(px(list.length), y, '∅', head >= list.length ? 'cur nil' : 'nil');
+      s += text(px(Math.min(head, list.length)), y - 31, label, `sf ${r ? 'f' : 's'}`);
+    });
+    s += text(4, y3, 'merged', 'lbl');
+    const inRest = k => e.rest && k >= e.rest[0] && k < e.rest[1];
+    e.merged.forEach((_, k) => { s += arrow(px(k), y3, px(k + 1), y3, 21, (e.rest && k === e.rest[0]) || k === justTaken ? 'edge on' : 'edge'); });
+    s += node(px(0), y3, 'D', 'dim');
+    e.merged.forEach(([list, idx], k) => {
+      const v = list === 1 ? run.list1[idx] : run.list2[idx];
+      s += node(px(k + 1), y3, v, k === justTaken ? 'cur' : inRest(k) ? 'ok' : list === 1 ? 'path' : 'root');
+    });
+    if (e.rest) {
+      const tailAt = e.rest[0], x = (px(tailAt) + px(tailAt + 1)) / 2;
+      s += text(x, y3 - 26, 'a ?? b', 'idx need');
+      if (e.rest[1] === e.rest[0]) s += arrow(px(tailAt), y3, px(tailAt + 1), y3, 21, 'edge on') + node(px(tailAt + 1), y3, '∅', 'nil');
+    }
+    const tailK = e.rest ? e.rest[0] : e.merged.length;
+    s += text(px(tailK), y3 + 32, 'tail', 'sf');
+    const width = px(Math.max(run.list1.length, run.list2.length, e.merged.length + (e.rest && e.rest[1] === e.rest[0] ? 1 : 0))) + 36;
+    return svg(width, y3 + 50, s);
+  },
+  vars(run, e) {
+    const head = (list, k) => (k < list.length ? list[k] : 'null');
+    const out = [['var.heads', chip(`${head(run.list1, e.a)} / ${head(run.list2, e.b)}`)]];
+    out.push(['var.links', chip(e.rest ? e.rest[0] + 1 : e.merged.length)]);
+    return out;
   },
 };
 

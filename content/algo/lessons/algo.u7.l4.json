@@ -1,0 +1,128 @@
+{
+ "id": "algo.u7.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 13,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "FindMedianSortedArrays(new[] { 1, 3 }, new[] { 2 });     // 2\nFindMedianSortedArrays(new[] { 1, 2 }, new[] { 3, 4 });  // 2.5\nFindMedianSortedArrays(new int[0], new[] { 5 });         // 5",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public double FindMedianSortedArrays(int[] a, int[] b) {\n    if (a.Length > b.Length) return FindMedianSortedArrays(b, a);\n    int m = a.Length, n = b.Length, half = (m + n + 1) / 2;\n    int lo = 0, hi = m;\n    while (lo <= hi) {\n        int i = (lo + hi) / 2, j = ___;\n        int al = i > 0 ? a[i - 1] : int.MinValue, ar = i < m ? a[i] : ___;\n        int bl = j > 0 ? b[j - 1] : int.MinValue, br = j < n ? b[j] : int.MaxValue;\n        if (al > br) hi = ___;\n        else if (bl > ar) lo = i + 1;\n        else return (m + n) % 2 == 1\n            ? ___\n            : (Math.Max(al, bl) + Math.Min(ar, br)) / 2.0;\n    }\n    throw new ArgumentException(\"Inputs must be sorted\");\n}",
+   "tiles": ["half - i", "m - i", "int.MaxValue", "int.MinValue", "i - 1", "i + 1", "Math.Max(al, bl)", "Math.Min(ar, br)"],
+   "answer": ["half - i", "int.MaxValue", "i - 1", "Math.Max(al, bl)"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "median",
+   "input": {
+    "A": [22, 35, 38, 39],
+    "B": [1, 2, 4, 25, 29, 34]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 2,
+      "options": ["i = 0, j = 5", "i = 1, j = 4", "i = 3, j = 2"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": "med.ev.done",
+      "options": ["27", "25", "28.5", "23.5"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "int m = a.Length, n = b.Length, half = (m + n + 1) / 2;\nint lo = 0, hi = m;\nwhile (lo <= hi) {\n    int i = (lo + hi) / 2, j = half - i;\n    int al = i > 0 ? a[i - 1] : int.MinValue, ar = i < m ? a[i] : int.MaxValue;\n    int bl = j > 0 ? b[j - 1] : int.MinValue, br = j < n ? b[j] : int.MaxValue;\n    if (al > br) hi = i - 1;\n    else if (bl > ar) lo = i + 1;\n    else if ((m + n) % 2 == 1) return Math.Max(al, bl);\n    else return (Math.Max(al, bl) + Math.Min(ar, br)) / 2;\n}",
+   "answer": 9,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["a[i − 1] > b[j]", "hi = i − 1"],
+    ["b[j − 1] > a[i]", "lo = i + 1"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "max(a[i − 1], b[j − 1])"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

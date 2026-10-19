@@ -51,14 +51,14 @@
   {
    "id": "u6",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["algo.u6.l1", "algo.u6.l2", "algo.u6.l3", "algo.u6.l4", "algo.u6.l5", "algo.u6.boss"]
   },
   {
    "id": "u7",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["algo.u7.l1", "algo.u7.l2", "algo.u7.l3", "algo.u7.l4", "algo.u7.l5", "algo.u7.boss"]
   },
   {
    "id": "u8",
@@ -69,14 +69,14 @@
   {
    "id": "u9",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["algo.u9.l1", "algo.u9.l2", "algo.u9.l3", "algo.u9.boss"]
   },
   {
    "id": "u10",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["algo.u10.l1", "algo.u10.l2", "algo.u10.l3", "algo.u10.boss"]
   },
   {
    "id": "u11",

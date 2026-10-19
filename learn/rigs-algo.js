@@ -3,11 +3,12 @@
  * Стили SVG тоже кассетные: правила .stage/.vchip/.mk-* из её style.css подключаются один раз,
  * с приставкой .algo-rig, чтобы остальная её вёрстка не задела страницу курса.
  */
-import { esc } from '../assets/vhs.js?v=202610191254';
-import { drive } from './rig-kit.js?v=202610191254';
-import { tr } from './i18n.js?v=202610191254';
-import { ALGO, algoRig, algoRun, algoAskAt, algoCan, algoBlocked, optionLabel, tapeText } from './models-algo.js?v=202610191254';
-import { t as tl } from './ui.js?v=202610191254';
+import { esc } from '../assets/vhs.js?v=202610191657';
+import { drive } from './rig-kit.js?v=202610191657';
+import { tr } from './i18n.js?v=202610191657';
+import { ALGO, algoRig, algoRun, algoAskAt, algoCan, algoBlocked, optionLabel, tapeText } from './models-algo.js?v=202610191657';
+import { shuffle } from './engine.js?v=202610191657';
+import { t as tl } from './ui.js?v=202610191657';
 
 /* ---------- стили кассеты, точечно ---------- */
 
@@ -52,8 +53,13 @@ const tbtn = (a, sym, label, cls, disabled) =>
   `<button type="button" class="${cls}" data-act="${a}" aria-label="${esc(label)}" title="${esc(label)}"${disabled ? ' disabled' : ''}>${sym}</button>`;
 
 /** Вопрос на текущем шаге: открытый (варианты и промахи) или уже отвеченный (верный вариант и разбор). */
+/** Постоянное число из строки: порядок вариантов не прыгает между перерисовками и у всех одинаков. */
+const seedOf = str => [...str].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0, 2166136261);
+
 function askBlock(card, s, { ask, answered }) {
-  const opts = ask.options.map((o, n) => {
+  // варианты перемешаны, как в обычных карточках: у авторов верный ответ часто первым; pick:N — номер в данных
+  const order = shuffle(ask.options.map((_, n) => n), seedOf(`${card.problem}:${ask.at}`));
+  const opts = order.map(n => [ask.options[n], n]).map(([o, n]) => {
     const wrong = !answered && s.wrong.includes(n), right = answered && n === ask.answer;
     const cls = `btn algo-opt${wrong ? ' bad' : ''}${right ? ' ok' : ''}`;
     const mark = wrong ? '✗ ' : right ? '✓ ' : '';
