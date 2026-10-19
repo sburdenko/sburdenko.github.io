@@ -1,0 +1,144 @@
+{
+ "id": "algo.u10.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 13,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "null → true"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public bool IsValidBST(TreeNode root) => Valid(root, ___, long.MaxValue);\n\nprivate bool Valid(TreeNode node, long lo, long hi) {\n    if (node == null) return ___;\n    if (node.val <= lo || node.val ___ hi) return false;\n    return Valid(node.left, lo, ___) && Valid(node.right, node.val, ___);\n}",
+   "tiles": ["long.MinValue", "int.MinValue", "true", "false", ">=", ">", "node.val", "node.left.val", "hi", "lo"],
+   "answer": ["long.MinValue", "true", ">=", "node.val", "hi"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "validBst",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 3,
+      "options": ["(−∞, 3)", "(−∞, 5)", "(3, 5)"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 4,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var stack = new Stack<TreeNode>();\nint prev = int.MinValue;\nvar node = root;\nwhile (node != null || stack.Count > 0) {\n    while (node != null) { stack.Push(node); node = node.left; }\n    node = stack.Pop();\n    if (node.val <= prev) return false;\n    prev = node.val;\n    node = node.right;\n}\nreturn true;",
+   "answer": 1,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}
