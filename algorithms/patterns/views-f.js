@@ -1,5 +1,5 @@
 /** Views for chapter 15: bit manipulation. Every problem is drawn on the shared register from view-kit.js. */
-import { register, chip, chips, decOf } from './view-kit.js?v=202610191719';
+import { register, chip, chips, decOf } from './view-kit.js?v=202610191721';
 
 const ALL = -1;
 const bit = i => (1 << i) >>> 0;

@@ -184,11 +184,45 @@ function parseUint(text, spec) {
   return v < min || v > max ? fail('range', min, max) : { value: v };
 }
 
+/** Trie operations: insert W, search W, startsWith W (or insert("w")), words of lowercase letters a–z. */
+function parseTrieOps(text, spec) {
+  const parts = clean(text).split(/[,\n;]+/).map(p => p.trim()).filter(Boolean), ops = [];
+  for (const part of parts) {
+    const m = part.match(/^(insert|search|startswith|prefix)\s*\(?\s*["']?([A-Za-z]+)["']?\s*\)?$/i);
+    if (!m) return fail('trieOp', part);
+    const word = m[2].toLowerCase();
+    if (spec.maxWord && word.length > spec.maxWord) return fail('wordMax', spec.maxWord);
+    const op = m[1].toLowerCase();
+    ops.push([op === 'insert' ? 'insert' : op === 'search' ? 'search' : 'startsWith', word]);
+  }
+  return checkLength(ops, spec) || { value: ops };
+}
+
+/** Circular queue operations as LeetCode names them: enQueue V, deQueue, Front, Rear, isEmpty, isFull. */
+const QUEUE_OPS = { dequeue: 'deQueue', front: 'Front', rear: 'Rear', isempty: 'isEmpty', isfull: 'isFull' };
+function parseQueueOps(text, spec) {
+  const parts = clean(text).split(/[,\n;]+/).map(p => p.trim()).filter(Boolean), ops = [];
+  const { min = 0, max = 99 } = spec;
+  for (const part of parts) {
+    const enq = part.match(/^enqueue\s*\(?\s*(-?\d+)\s*\)?$/i);
+    if (enq) {
+      const v = Number(enq[1]);
+      if (v < min || v > max) return fail('range', min, max);
+      ops.push(['enQueue', v]);
+      continue;
+    }
+    const other = part.match(/^(dequeue|front|rear|isempty|isfull)\s*(\(\s*\))?$/i);
+    if (!other) return fail('queueOp', part);
+    ops.push([QUEUE_OPS[other[1].toLowerCase()]]);
+  }
+  return checkLength(ops, spec) || { value: ops };
+}
+
 export const PARSERS = {
   ints: parseInts, int: parseInt1, str: parseStr, words: parseWords, grid: parseGrid,
   tree: parseTree, lists: parseLists, intervals: parseIntervals, ops: parseOps,
   board: parseBoard, cache: parseCache, edges: parseEdges, matrix: parseMatrix, wedges: parseWeightedEdges,
-  uint: parseUint,
+  uint: parseUint, trie: parseTrieOps, queue: parseQueueOps,
 };
 
 export const FORMATTERS = {
@@ -207,6 +241,8 @@ export const FORMATTERS = {
   matrix: v => v.map(r => r.join(' ')).join(' | '),
   wedges: v => v.map(([u, w, t]) => `${u}>${w}:${t}`).join(' '),
   uint: v => String(v),
+  trie: v => v.map(([op, w]) => `${op} ${w}`).join(', '),
+  queue: v => v.map(([op, x]) => (x == null ? op : `${op} ${x}`)).join(', '),
 };
 
 export const parseField = (text, spec) => PARSERS[spec.type](text, spec);

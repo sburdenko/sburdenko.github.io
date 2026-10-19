@@ -16,11 +16,11 @@
  * Действия: next, prev, reset (в начало), end (в конец или до вопроса), pick:N.
  *   Если первый вопрос стоит на at: 1, стенд уже на нём (шаг 0) — solve начинается с pick:N, а не с end.
  */
-import { RIGS as TAPE_RIGS, runWithInput } from '../algorithms/patterns/rigs.js?v=202610191719';
-import { PROBLEMS, NAMES } from '../algorithms/patterns/problems.js?v=202610191719';
-import { DICT } from '../algorithms/patterns/i18n.js?v=202610191719';
-import { formatField } from '../algorithms/patterns/inputs.js?v=202610191719';
-import { tr } from './i18n.js?v=202610191719';
+import { RIGS as TAPE_RIGS, runWithInput } from '../algorithms/patterns/rigs.js?v=202610191721';
+import { PROBLEMS, NAMES } from '../algorithms/patterns/problems.js?v=202610191721';
+import { DICT } from '../algorithms/patterns/i18n.js?v=202610191721';
+import { formatField } from '../algorithms/patterns/inputs.js?v=202610191721';
+import { tr } from './i18n.js?v=202610191721';
 
 /** Строка кассеты на текущем языке: значение — строка или функция от аргументов события. */
 export function tapeText(key, args = []) {

@@ -7,6 +7,7 @@ import * as C from '../algorithms/patterns/model-c.js';
 import * as D from '../algorithms/patterns/model-d.js';
 import * as E from '../algorithms/patterns/model-e.js';
 import * as F from '../algorithms/patterns/model-f.js';
+import * as H from '../algorithms/patterns/model-h.js';
 import { register, bitWidth, hexOf } from '../algorithms/patterns/view-kit.js';
 import { RIGS, PATTERN_IDS, runWithInput, MAX_STEPS } from '../algorithms/patterns/rigs.js';
 import { parseField, formatField, treeFromLevelOrder, levelOrderOf } from '../algorithms/patterns/inputs.js';
@@ -799,6 +800,145 @@ test('the uint field reads decimal, hex and binary', () => {
   assert.equal(runWithInput(RIGS.maxXorLimit, { nums: '1 2', queries: '1 | 2' }).error[0], 'in.err.pairs');
 });
 
+/* ---------- chapter 17: data structure design ---------- */
+test('chapter 17: the trie agrees with a set of strings, one node per distinct prefix', () => {
+  repeat(400, () => {
+    const word = () => Array.from({ length: len(1, 4) }, () => 'abc'[len(0, 2)]).join('');
+    const ops = Array.from({ length: len(1, 10) }, () => [['insert', 'search', 'startsWith'][len(0, 2)], word()]);
+    const words = new Set(), expected = ops.map(([op, w]) => {
+      if (op === 'insert') { words.add(w); return null; }
+      return op === 'search' ? words.has(w) : [...words].some(x => x.startsWith(w));
+    });
+    const run = H.trieTrace(ops);
+    assert.deepEqual(run.results, expected, JSON.stringify(ops));
+    const prefixes = new Set([...words].flatMap(w => [...w].map((_, i) => w.slice(0, i + 1))));
+    assert.equal(run.size, prefixes.size, 'one node per distinct prefix');
+    run.events.slice(1).forEach((e, i) => {
+      assert.equal(e.created - run.events[i].created, e.key === 'trie.ev.make' ? 1 : 0, 'only make creates a node');
+      if (e.key === 'trie.ev.walk' || e.key === 'trie.ev.make') assert.equal(run.nodes[e.cur].ch, e.args[3]);
+    });
+    ops.forEach(([, w], k) => assert.ok(run.events.filter(e => e.op === k).length <= w.length + 1, 'O(L) steps per operation'));
+  });
+  const ex = RIGS.trie.run(RIGS.trie.example);
+  assert.deepEqual(ex.results, [null, true, false, true, null, true, null, false], 'LeetCode #208 example, extended');
+  assert.deepEqual(keysOf(ex), new Set(['trie.ev.start', 'trie.ev.make', 'trie.ev.walk', 'trie.ev.mark', 'trie.ev.word', 'trie.ev.notWord', 'trie.ev.prefix', 'trie.ev.miss', 'trie.ev.done']));
+  assert.deepEqual(parseField('insert("Apple"), startswith app; prefix ap\nsearch a', { type: 'trie', maxWord: 6 }).value,
+    [['insert', 'apple'], ['startsWith', 'app'], ['startsWith', 'ap'], ['search', 'a']]);
+  assert.equal(runWithInput(RIGS.trie, { ops: 'delete app' }).error[0], 'in.err.trieOp');
+  assert.equal(runWithInput(RIGS.trie, { ops: 'insert app1' }).error[0], 'in.err.trieOp');
+  assert.equal(runWithInput(RIGS.trie, { ops: 'insert abcdefg' }).error[0], 'in.err.wordMax');
+  assert.equal(runWithInput(RIGS.trie, { ops: 'insert abcdef, insert ghijkl, insert mnopqr, insert stuvwx, insert yz' }).error[0], 'in.err.trieSize');
+});
+
+/** Every binary tree shape with n nodes, all values 0: shapes that only the null markers can tell apart. */
+const shapes = n => (n === 0 ? [null] : Array.from({ length: n }, (_, l) => l).flatMap(l => shapes(l).flatMap(a => shapes(n - 1 - l).map(b => [0, a, b]))));
+
+test('chapter 17: serialize → deserialize gives the same tree, and the string is pre-order with # markers', () => {
+  const randomSpec = (depth = 0) => (depth > 3 || (depth > 0 && next() < 0.3) ? null : [len(-3, 3), randomSpec(depth + 1), randomSpec(depth + 1)]);
+  const pre = s => (s ? [s[0], ...pre(s[1]), ...pre(s[2])] : ['#']);
+  repeat(300, () => {
+    const spec = randomSpec(), run = H.serializeTrace(spec), n = run.nodes.length;
+    assert.equal(run.text, pre(spec).join(','), 'pre-order with a marker for every null');
+    assert.equal(run.text.split(',').filter(t => t === '#').length, n + 1, 'n + 1 markers');
+    assert.deepEqual(run.rebuilt, spec, run.text);
+    assert.ok(run.same);
+    assert.deepEqual(levelOrderOf(run.rebuilt), levelOrderOf(spec), 'the same tree in LeetCode level order');
+    const des = run.events.filter(e => e.phase === 'des');
+    des.slice(1).forEach((e, i) => assert.ok(e.pos >= des[i].pos, 'the cursor never moves back'));
+    assert.equal(des.filter(e => e.key === 'des.ev.node').length, n);
+    assert.equal(des.filter(e => e.key === 'des.ev.up').length, n);
+  });
+  for (let n = 1; n <= 5; n++) {
+    const all = shapes(n), texts = new Set(all.map(s => H.serializeTrace(s).text));
+    assert.equal(texts.size, all.length, `${n} nodes of equal value: ${all.length} shapes, all strings different`);
+    for (const s of all) assert.deepEqual(H.serializeTrace(s).rebuilt, s);
+  }
+  const ex = RIGS.serialize.run(RIGS.serialize.example);
+  assert.equal(ex.text, '1,2,#,#,3,4,#,#,5,#,#');
+  assert.deepEqual(keysOf(ex), new Set(['ser.ev.start', 'ser.ev.val', 'ser.ev.nil', 'ser.ev.str', 'des.ev.node', 'des.ev.nil', 'des.ev.up', 'des.ev.done']));
+});
+
+test('chapter 17: the circular queue agrees with a plain queue model', () => {
+  repeat(400, () => {
+    const k = len(1, 5);
+    const ops = Array.from({ length: len(1, 16) }, () => {
+      const x = next();
+      return x < 0.45 ? ['enQueue', len(0, 99)] : x < 0.7 ? ['deQueue'] : x < 0.9 ? [['Front', 'Rear'][len(0, 1)]] : [['isEmpty', 'isFull'][len(0, 1)]];
+    });
+    const q = [], after = [];
+    const expected = ops.map(([op, v]) => {
+      let r;
+      if (op === 'enQueue') r = q.length < k ? (q.push(v), true) : false;
+      else if (op === 'deQueue') r = q.length ? (q.shift(), true) : false;
+      else if (op === 'Front') r = q.length ? q[0] : -1;
+      else if (op === 'Rear') r = q.length ? q.at(-1) : -1;
+      else r = op === 'isEmpty' ? q.length === 0 : q.length === k;
+      after.push([...q]);
+      return r;
+    });
+    const run = H.circularQueueTrace(k, ops);
+    assert.deepEqual(run.results, expected, `k=${k} ${JSON.stringify(ops)}`);
+    for (const e of run.events) {
+      if (e.op == null) continue;
+      const live = Array.from({ length: e.count }, (_, i) => e.a[(e.head + i) % k]);
+      assert.deepEqual(live, after[e.op], 'a[head .. head + count) is the queue');
+      assert.equal(e.tail, (e.head + e.count) % k);
+      if (e.key === 'cq.ev.wrap' || e.key === 'cq.ev.enq') assert.equal(e.key === 'cq.ev.wrap', e.args[2] + e.args[3] >= k, 'wrap means head + count ran past the end');
+    }
+  });
+  const ex = RIGS.circularQueue.run(RIGS.circularQueue.example);
+  assert.deepEqual(ex.results.slice(0, 9), [true, true, true, false, 3, true, true, true, 4], 'LeetCode #622 example');
+  assert.deepEqual(keysOf(ex), new Set(['cq.ev.start', 'cq.ev.enq', 'cq.ev.full', 'cq.ev.rear', 'cq.ev.isFull', 'cq.ev.deq', 'cq.ev.wrap', 'cq.ev.headWrap', 'cq.ev.front', 'cq.ev.empty', 'cq.ev.isEmpty', 'cq.ev.done']));
+  assert.deepEqual(parseField('enQueue(5), dequeue(), FRONT, rear, isempty, isFull()', { type: 'queue', min: 0, max: 99 }).value,
+    [['enQueue', 5], ['deQueue'], ['Front'], ['Rear'], ['isEmpty'], ['isFull']]);
+  assert.equal(runWithInput(RIGS.circularQueue, { k: '3', ops: 'push 1' }).error[0], 'in.err.queueOp');
+  assert.equal(runWithInput(RIGS.circularQueue, { k: '3', ops: 'enQueue 100' }).error[0], 'in.err.range');
+});
+
+test('chapter 17: LFU agrees with a naive model of counters and timestamps', () => {
+  repeat(400, () => {
+    const capacity = len(1, 4);
+    const ops = Array.from({ length: len(1, 14) }, () => (next() < 0.5 ? ['put', len(1, 5), len(0, 9)] : ['get', len(1, 5)]));
+    const store = new Map(), gets = [], evicted = [];
+    let clock = 0;
+    const lastOf = [];
+    ops.forEach(([op, key, value]) => {
+      if (op === 'get') {
+        if (!store.has(key)) gets.push(-1);
+        else { const e = store.get(key); e.cnt++; e.t = clock++; gets.push(e.v); }
+      } else if (store.has(key)) {
+        const e = store.get(key); e.v = value; e.cnt++; e.t = clock++;
+      } else {
+        if (store.size === capacity) {
+          const [victim] = [...store].sort(([, a], [, b]) => a.cnt - b.cnt || a.t - b.t)[0];
+          store.delete(victim);
+          evicted.push(victim);
+        }
+        store.set(key, { v: value, cnt: 1, t: clock++ });
+      }
+      lastOf.push(new Map([...store].map(([k, e]) => [k, { ...e }])));
+    });
+    const run = H.lfuTrace(capacity, ops);
+    assert.deepEqual(run.gets, gets, `cap ${capacity} ${JSON.stringify(ops)}`);
+    assert.deepEqual(run.events.filter(e => e.key === 'lfu.ev.evict').map(e => e.args[0]), evicted);
+    assert.deepEqual([...run.contents].sort(), [...store].map(([k, e]) => [k, e.v]).sort());
+    ops.forEach((_, k) => {
+      const last = run.events.filter(e => e.op === k).at(-1), model = lastOf[k];
+      const counts = [...model.values()].map(e => e.cnt);
+      assert.equal(last.minFreq, counts.length ? Math.min(...counts) : last.minFreq, 'minFreq is the lowest count once the operation is over');
+      for (const [f, entries] of last.buckets) {
+        const keys = entries.map(([key]) => key);
+        assert.ok(keys.every(key => model.get(key).cnt === f), `bucket ${f} holds keys used ${f} times`);
+        assert.deepEqual(keys, [...keys].sort((a, b) => model.get(a).t - model.get(b).t), 'oldest first inside a bucket');
+      }
+    });
+  });
+  const ex = RIGS.lfu.run(RIGS.lfu.example);
+  assert.deepEqual(ex.gets, [1, -1, 3, -1, 3, 4], 'LeetCode #460 example');
+  assert.deepEqual(keysOf(ex), new Set(['lfu.ev.start', 'lfu.ev.put', 'lfu.ev.hit', 'lfu.ev.evict', 'lfu.ev.miss', 'lfu.ev.minUp', 'lfu.ev.update', 'lfu.ev.done']));
+  assert.ok(ex.events.some(e => e.key === 'lfu.ev.evict' && e.args[2] > 0), 'the example breaks a tie by recency');
+});
+
 /* ---------- wiring ---------- */
 const textsOf = (rig, params) => Object.fromEntries(rig.fields.map(f => [f.key, formatField(params[f.key], f)]));
 
@@ -840,7 +980,7 @@ test('input fields parse what people type and format back losslessly', () => {
 });
 
 test('every problem owns an editable rig: the example and random inputs parse, run and render', () => {
-  assert.equal(PATTERN_IDS.length, 15);
+  assert.equal(PATTERN_IDS.length, 16);
   const random = rng(7);
   for (const id of PATTERN_IDS) {
     for (const problem of PROBLEMS[id]) {
