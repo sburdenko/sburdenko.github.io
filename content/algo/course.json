@@ -53,8 +53,8 @@
   {
    "id": "u9",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["algo.u9.l1", "algo.u9.l2", "algo.u9.l3", "algo.u9.boss"]
   },
   {
    "id": "u10",
