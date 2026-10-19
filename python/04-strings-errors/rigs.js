@@ -1,6 +1,6 @@
 /** PY-04 rigs: string methods, formatting, Unicode, regex, exceptions, files, modules, stdlib tour. */
-import { lit } from '../shared/py-code.js?v=202610171210';
-import { randInt, pick, randInts, shuffle } from '../../algorithms/patterns/rig-kit.js?v=202610171210';
+import { lit } from '../shared/py-code.js?v=202610190745';
+import { randInt, pick, randInts, shuffle } from '../../algorithms/patterns/rig-kit.js?v=202610190745';
 
 const num = (key, extra = {}) => ({ key, type: 'int', min: -999, max: 9999, ...extra });
 const text = (key, extra = {}) => ({ key, type: 'text', maxLen: 30, ...extra });

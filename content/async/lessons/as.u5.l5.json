@@ -74,7 +74,7 @@
    "q": "⟦⟧",
    "code": "await Parallel.ForEachAsync(urls,\n    new ParallelOptions { ___ = 8 },\n    async (url, ct) => await DownloadAsync(url, ct));",
    "lang": "cs",
-   "tiles": ["MaxDegreeOfParallelism", "CancellationToken", "TaskScheduler", "Timeout"],
+   "tiles": ["MaxDegreeOfParallelism", "CancellationToken", "Timeout", "Priority"],
    "answer": ["MaxDegreeOfParallelism"],
    "explain": "⟦⟧"
   },
