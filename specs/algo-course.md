@@ -4,7 +4,7 @@
 Курс в реестре — `learn/courses.js`, запись `algo` (`load: jsonCourse('algo')`; разделы без уроков — `soon`). Данные — `content/algo/course.json` и `content/algo/i18n/{ru,en}/course.json`; пилотный урок — `algo.u2.l1`.
 
 Источники задач:
-- касета «Паттерны алгоритмов» — `algorithms/patterns/` (12 паттернов, 59 задач, у каждой трасса и решение на C#
+- касета «Паттерны алгоритмов» — `algorithms/patterns/` (13 паттернов, 65 задач, у каждой трасса и решение на C#
   в `problems-*.js`, тексты в `i18n-*.js`); id задачи касеты — первое поле `p('<id>', …)`, его и ставим в карточку
   стенда;
 - касеты `algorithms/bfs-dfs/` (BFS против DFS на сетке и графе, лабиринт, гонка) и `algorithms/two-pointers/`

@@ -1,13 +1,13 @@
 /** Tape 05 wiring: language, VHS effects and every rig. */
-import { bootVhs } from '../assets/vhs.js?v=202610191133';
-import { initI18n, onLang } from '../assets/i18n.js?v=202610191133';
-import { COMMON } from '../assets/i18n-common.js?v=202610191133';
-import { DICT } from './i18n.js?v=202610191133';
-import { initMap, initSolid } from './lab-solid.js?v=202610191133';
-import { initFactory, initPool, initSingleton } from './lab-creation.js?v=202610191133';
-import { initCommand, initState, initObserver, initStrategy } from './lab-behavior.js?v=202610191133';
-import { initUi, initFlyweight, initDirty, initLazy } from './lab-data.js?v=202610191133';
-import { initChooser, initInterview } from './lab-choose.js?v=202610191133';
+import { bootVhs } from '../assets/vhs.js?v=202610191154';
+import { initI18n, onLang } from '../assets/i18n.js?v=202610191154';
+import { COMMON } from '../assets/i18n-common.js?v=202610191154';
+import { DICT } from './i18n.js?v=202610191154';
+import { initMap, initSolid } from './lab-solid.js?v=202610191154';
+import { initFactory, initPool, initSingleton } from './lab-creation.js?v=202610191154';
+import { initCommand, initState, initObserver, initStrategy } from './lab-behavior.js?v=202610191154';
+import { initUi, initFlyweight, initDirty, initLazy } from './lab-data.js?v=202610191154';
+import { initChooser, initInterview } from './lab-choose.js?v=202610191154';
 
 initI18n({ ...COMMON, ...DICT });
 bootVhs();
