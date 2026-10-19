@@ -2,12 +2,12 @@
 export const CORE = {
   'page.title': { en: 'Algorithm patterns · Tape 06', ru: 'Паттерны алгоритмов · Кассета 06' },
   'page.desc': {
-    en: 'Twelve interview patterns and 59 problems: how to spot each pattern, a C# skeleton, and every problem played step by step on its own editable rig, with a solution.',
-    ru: 'Двенадцать паттернов для собеседования и 59 задач: как узнать паттерн, каркас на C#, и каждая задача по шагам на своём редактируемом стенде, с решением.',
+    en: 'Thirteen interview patterns and 65 problems: how to spot each pattern, a C# skeleton, and every problem played step by step on its own editable rig, with a solution.',
+    ru: 'Тринадцать паттернов для собеседования и 65 задач: как узнать паттерн, каркас на C#, и каждая задача по шагам на своём редактируемом стенде, с решением.',
   },
   'hero.eyebrow': { en: 'Tape 06 · Algorithms · interview prep', ru: 'Кассета 06 · Алгоритмы · подготовка к собеседованию' },
   'hero.title': { en: 'Patterns', ru: 'Паттерны' },
-  'hero.subtitle': { en: 'twelve moves, 59 problems', ru: 'двенадцать приёмов, 59 задач' },
+  'hero.subtitle': { en: 'thirteen moves, 65 problems', ru: 'тринадцать приёмов, 65 задач' },
   'hero.lede': {
     en: 'Most interview problems are one of a dozen moves in disguise. Every chapter shows how to spot the move in the statement, gives a C# skeleton and plays four to six problems step by step, where <b>the same move works in a different way</b>. Every chapter has a Hard one, and the tabs marked MUST KNOW are the problems interviews ask most.',
     ru: 'Большая часть задач на собеседовании — один из дюжины приёмов в маскировке. В каждой главе: как узнать приём по условию, каркас на C# и от четырёх до шести задач по шагам, где <b>один и тот же приём работает по-разному</b>. В каждой главе есть задача Hard, а вкладки с пометкой НАДО ЗНАТЬ — то, что спрашивают чаще всего.',
@@ -90,6 +90,7 @@ export const CORE = {
   'var.freq': { en: 'value × count', ru: 'значение × частота' },
   'var.word': { en: 'word', ru: 'слово' },
   'var.merged': { en: 'merged', ru: 'слито' },
+  'var.deque': { en: 'deque front → back (i:value)', ru: 'дека: начало → конец (i:значение)' },
 
   'foot.stop': { en: '■ STOP · END OF TAPE 06', ru: '■ СТОП · КОНЕЦ КАССЕТЫ 06' },
   'foot.line': {

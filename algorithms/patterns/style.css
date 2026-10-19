@@ -166,3 +166,7 @@
 .stage .gcell.onpath{fill:rgba(93,252,154,.35)}
 .stage .gt.letter{font-size:18px;font-weight:700}
 .stage .span.merged{fill:rgba(93,252,154,.35);stroke:var(--ok)}
+.stage .cutline-box{fill:none;stroke:var(--osd);stroke-width:2;stroke-dasharray:5 4}
+/* phone widths: long Russian words in headings and the big title must not push the page sideways */
+.ch-head h2{overflow-wrap:anywhere;hyphens:auto}
+@media (max-width:420px){.hero h1.title{font-size:11.5vw}}

@@ -175,6 +175,18 @@ export const PROBLEMS_A = {
         }
     }
     return bestLen == int.MaxValue ? "" : s.Substring(bestL, bestLen);
+}`, true),
+    p('slidingMax', 'Sliding Window Maximum', 239, 'sliding-window-maximum', 'Hard', `public int[] MaxSlidingWindow(int[] nums, int k) {
+    var dq = new int[nums.Length];     // deque of indices: dq[head..tail), values decrease
+    int head = 0, tail = 0;
+    var res = new int[nums.Length - k + 1];
+    for (int i = 0; i < nums.Length; i++) {
+        while (head < tail && dq[head] <= i - k) head++;               // fell out on the left
+        while (head < tail && nums[dq[tail - 1]] <= nums[i]) tail--;   // never a maximum again
+        dq[tail++] = i;
+        if (i >= k - 1) res[i - k + 1] = nums[dq[head]];               // the front is the maximum
+    }
+    return res;
 }`, true)
   ],
   binary: [

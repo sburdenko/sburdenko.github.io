@@ -139,3 +139,32 @@ export function dpTable(a, b, dp, cur, src) {
   }));
   return svg(ox + dp[0].length * step + 10, oy + dp.length * step + 10, s);
 }
+
+/* ---------- integer matrices: cells line up with cells(), so a matrix and a row under it share columns ---------- */
+export const matrixXY = (r, c, { x = 0, y = 0 } = {}) => [x + c * STEP, y + r * STEP];
+
+/** Matrix cells at (x, y): clsOf(v, r, c) → class, labelOf(v, r, c) → text (the value by default). */
+export function matrixCells(m, clsOf = () => '', { x = 0, y = 0, labelOf = v => v } = {}) {
+  return m.map((row, r) => cells(row.map((v, c) => labelOf(v, r, c)), row.map((v, c) => clsOf(v, r, c)), { x, y: y + r * STEP, index: false })).join('');
+}
+
+/** Column numbers above and row numbers left of a matrix drawn at (x, y). */
+export function matrixIndex(rows, cols, { x = 0, y = 0 } = {}) {
+  let s = '';
+  for (let c = 0; c < cols; c++) s += text(x + c * STEP + CELL / 2, y - 11, c, 'idx');
+  for (let r = 0; r < rows; r++) s += text(x - 12, y + r * STEP + CELL / 2, r, 'idx');
+  return s;
+}
+
+/** A rectangle around rows r1..r2 and columns c1..c2 (cls: best, water, cutline, …). */
+export function matrixBox([r1, c1, r2, c2], cls, { x = 0, y = 0, pad = 3 } = {}) {
+  if (r2 < r1 || c2 < c1) return '';
+  const [bx, by] = matrixXY(r1, c1, { x, y });
+  return `<rect class="${cls}" x="${bx - pad}" y="${by - pad}" width="${(c2 - c1) * STEP + CELL + 2 * pad}" height="${(r2 - r1) * STEP + CELL + 2 * pad}" rx="7"/>`;
+}
+
+/** An arrow from the centre of cell a to the centre of cell b. */
+export function matrixArrow([r1, c1], [r2, c2], cls = 'edge on', { x = 0, y = 0 } = {}) {
+  const [x1, y1] = matrixXY(r1, c1, { x, y }), [x2, y2] = matrixXY(r2, c2, { x, y });
+  return arrow(x1 + CELL / 2, y1 + CELL / 2, x2 + CELL / 2, y2 + CELL / 2, 8, cls);
+}

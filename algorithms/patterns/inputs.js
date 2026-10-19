@@ -53,6 +53,25 @@ function parseGrid(text, spec) {
   return grid.flat().some(v => v > spec.maxDigit) ? fail('gridDigit', spec.maxDigit) : { value: grid };
 }
 
+/** Integer matrix: rows split by “|”, “;” or a new line (or written as [[1,2],[3,4]]), numbers by spaces or commas. */
+function parseMatrix(text, spec) {
+  const body = clean(text).replace(/\]\s*,?\s*\[/g, '|').replace(/[[\](){}"']/g, ' ');
+  const rows = body.split(/[|;\n]/).map(r => r.trim()).filter(Boolean);
+  const { minRows = 1, maxRows = 6, maxCols = 6, min = -Infinity, max = Infinity } = spec;
+  if (rows.length < minRows || rows.length > maxRows) return fail('matRows', minRows, maxRows);
+  const matrix = [];
+  for (const row of rows) {
+    const parsed = parseInts(row, { min, max });
+    if (parsed.error) return parsed;
+    if (!parsed.value.length) return fail('matRows', minRows, maxRows);
+    matrix.push(parsed.value);
+  }
+  if (matrix.some(r => r.length !== matrix[0].length)) return fail('gridRagged');
+  if (matrix[0].length > maxCols) return fail('gridCols', maxCols);
+  if (spec.square && matrix.length !== matrix[0].length) return fail('square', matrix.length, matrix[0].length);
+  return { value: matrix };
+}
+
 function parseTree(text, spec) {
   const parts = tokens(text), values = [];
   for (const part of parts) {
@@ -144,7 +163,7 @@ function parseEdges(text, spec) {
 export const PARSERS = {
   ints: parseInts, int: parseInt1, str: parseStr, words: parseWords, grid: parseGrid,
   tree: parseTree, lists: parseLists, intervals: parseIntervals, ops: parseOps,
-  board: parseBoard, cache: parseCache, edges: parseEdges,
+  board: parseBoard, cache: parseCache, edges: parseEdges, matrix: parseMatrix,
 };
 
 export const FORMATTERS = {
@@ -160,6 +179,7 @@ export const FORMATTERS = {
   board: v => v.map(r => r.join('')).join(' '),
   cache: v => v.map(([op, k, x]) => (op === 'put' ? `put ${k} ${x}` : `get ${k}`)).join(', '),
   edges: v => v.map(([a, b]) => `${a}-${b}`).join(' '),
+  matrix: v => v.map(r => r.join(' ')).join(' | '),
 };
 
 export const parseField = (text, spec) => PARSERS[spec.type](text, spec);

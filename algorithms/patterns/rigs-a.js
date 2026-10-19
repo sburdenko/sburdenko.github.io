@@ -170,4 +170,14 @@ export const RIGS_A = {
     random: next => ({ s: Array.from({ length: randInt(next, 7, 12) }, () => pick(next, 'AABBC')).join(''), k: randInt(next, 0, 2) }),
     run: p => ({ ...A.charReplacementTrace(p.s, p.k), s: p.s, k: p.k }),
   }, V.charReplace),
+  slidingMax: defineRig({
+    fields: [nums({ maxLen: 12 }), k()],
+    example: { nums: [1, 3, -1, -3, 5, 3, 6, 7], k: 3 },
+    random: next => {
+      const list = randInts(next, randInt(next, 6, 11), -5, 15);
+      return { nums: list, k: randInt(next, 2, Math.min(4, list.length)) };
+    },
+    check: kWithin,
+    run: p => ({ ...A.slidingMaxTrace(p.nums, p.k), nums: p.nums, k: p.k }),
+  }, V.slidingMax),
 };

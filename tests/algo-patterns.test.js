@@ -4,6 +4,7 @@ import { rng } from '../assets/rand.js';
 import * as A from '../algorithms/patterns/model-a.js';
 import * as B from '../algorithms/patterns/model-b.js';
 import * as C from '../algorithms/patterns/model-c.js';
+import * as D from '../algorithms/patterns/model-d.js';
 import { RIGS, PATTERN_IDS, runWithInput, MAX_STEPS } from '../algorithms/patterns/rigs.js';
 import { parseField, formatField, treeFromLevelOrder, levelOrderOf } from '../algorithms/patterns/inputs.js';
 import { PROBLEMS } from '../algorithms/patterns/problems.js';
@@ -396,6 +397,82 @@ test('added heap, backtracking, greedy and DP problems agree with brute force', 
   assert.equal(C.regexTrace('mississippi', 'mis*is*p*.').match, false);
 });
 
+/* ---------- sliding window maximum and chapter 13 ---------- */
+const matrixOf = (rows, cols, lo, hi) => Array.from({ length: rows }, () => ints(cols, lo, hi));
+
+test('sliding window maximum: the deque front is the window maximum, every index enters once', () => {
+  repeat(300, () => {
+    const nums = ints(len(1, 12), -5, 9), k = len(1, nums.length);
+    const brute = nums.slice(0, nums.length - k + 1).map((_, l) => Math.max(...nums.slice(l, l + k)));
+    const { ans, events } = A.slidingMaxTrace(nums, k);
+    assert.deepEqual(ans, brute, `${nums} k=${k}`);
+    assert.equal(events.filter(e => e.key === 'swm.ev.push').length, nums.length);
+    for (const e of events) {
+      assert.ok(e.dq.every((j, q) => !q || nums[e.dq[q - 1]] > nums[j]), `values in the deque decrease: ${e.dq}`);
+      if (e.i != null) assert.ok(e.dq.every(j => j <= e.i && j > e.i - k), 'the deque holds window indices only');
+    }
+  });
+  const keys = new Set(A.slidingMaxTrace([1, 3, -1, -3, 5, 3, 6, 7], 3).events.map(e => e.key));
+  for (const key of ['swm.ev.push', 'swm.ev.pop', 'swm.ev.out', 'swm.ev.max']) assert.ok(keys.has(key), `the example shows ${key}`);
+});
+
+test('chapter 13 traces agree with brute force', () => {
+  repeat(200, () => {
+    const nums = ints(len(2, 8), -3, 4);
+    const product = nums.map((_, i) => nums.reduce((p, v, j) => (j === i ? p : p * v), 1) || 0);
+    assert.deepEqual(D.productExceptTrace(nums).ans, product, `${nums}`);
+
+    const n = len(1, 6), sq = matrixOf(n, n, -9, 9);
+    assert.deepEqual(D.rotateTrace(sq).result, sq.map((_, r) => sq.map((_, c) => sq[n - 1 - c][r])), JSON.stringify(sq));
+
+    const rows = len(1, 6), cols = len(1, 6), m = matrixOf(rows, cols, 0, 4);
+    const zr = m.map(row => row.includes(0)), zc = m[0].map((_, c) => m.some(row => row[c] === 0));
+    assert.deepEqual(D.setZeroesTrace(m).result, m.map((row, r) => row.map((v, c) => (zr[r] || zc[c] ? 0 : v))), JSON.stringify(m));
+
+    const spiral = [], seen = new Set();
+    let r = 0, c = 0, d = 0;
+    const dirs = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+    for (let k = 0; k < rows * cols; k++) {
+      spiral.push(m[r][c]); seen.add(`${r},${c}`);
+      const [nr, nc] = [r + dirs[d][0], c + dirs[d][1]];
+      if (nr < 0 || nc < 0 || nr >= rows || nc >= cols || seen.has(`${nr},${nc}`)) d = (d + 1) % 4;
+      r += dirs[d][0]; c += dirs[d][1];
+    }
+    assert.deepEqual(D.spiralTrace(m).order, spiral, JSON.stringify(m));
+
+    const grid = matrixOf(len(1, 5), len(1, 6), 0, 1);
+    let best = 0;
+    for (let r1 = 0; r1 < grid.length; r1++) for (let r2 = r1; r2 < grid.length; r2++)
+      for (let c1 = 0; c1 < grid[0].length; c1++) for (let c2 = c1; c2 < grid[0].length; c2++) {
+        let full = true;
+        for (let y = r1; y <= r2 && full; y++) for (let x = c1; x <= c2; x++) if (!grid[y][x]) { full = false; break; }
+        if (full) best = Math.max(best, (r2 - r1 + 1) * (c2 - c1 + 1));
+      }
+    assert.equal(D.maximalRectTrace(grid).best, best, JSON.stringify(grid));
+  });
+  assert.deepEqual(D.productExceptTrace([1, 2, 3, 4]).ans, [24, 12, 8, 6]);
+  assert.deepEqual(D.productExceptTrace([-1, 1, 0, -3, 3]).ans, [0, 0, 9, 0, 0]);
+  assert.deepEqual(D.setZeroesTrace([[0, 1, 2, 0], [3, 4, 5, 2], [1, 3, 1, 5]]).result, [[0, 0, 0, 0], [0, 4, 5, 0], [0, 3, 1, 0]]);
+  assert.equal(D.maximalRectTrace(['10100', '10111', '11111', '10010'].map(r => [...r].map(Number))).best, 6);
+  const guards = new Set([[[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]], [[1], [2], [3]]].flatMap(m => D.spiralTrace(m).events.map(e => e.key)));
+  assert.ok(guards.has('spi.ev.noRow') && guards.has('spi.ev.noCol'), 'both inner checks of the spiral show up');
+});
+
+test('the matrix field reads rows split by “|”, “;”, new lines or nested brackets', () => {
+  const spec = { type: 'matrix', maxRows: 6, maxCols: 6, min: -99, max: 99 };
+  for (const t of ['1 2 3 | 4 5 6', '[[1,2,3],[4,5,6]]', '1, 2, 3; 4, 5, 6', '1 2 3\n4 5 6']) assert.deepEqual(parseField(t, spec).value, [[1, 2, 3], [4, 5, 6]], t);
+  assert.equal(formatField([[1, 2, 3], [4, 5, 6]], spec), '1 2 3 | 4 5 6');
+  assert.deepEqual(parseField('1 2 | 3', spec).error, ['in.err.gridRagged']);
+  assert.deepEqual(parseField('1 2 | 3 x', spec).error, ['in.err.notInt', 'x']);
+  assert.deepEqual(parseField('1 2 3 | 4 5 6', { ...spec, square: true }).error, ['in.err.square', 2, 3]);
+  assert.deepEqual(parseField('1 2 3 4 5 6 7', spec).error, ['in.err.gridCols', 6]);
+  assert.deepEqual(parseField('', spec).error, ['in.err.matRows', 1, 6]);
+  assert.deepEqual(parseField('1 | 2 | 3 | 4 | 5 | 6 | 7', spec).error, ['in.err.matRows', 1, 6]);
+  assert.equal(parseField('100', spec).error[0], 'in.err.range');
+  const rotate = runWithInput(RIGS.rotate, { matrix: '1 2 | 3 4 | 5 6' });
+  assert.equal(rotate.error[0], 'in.err.square');
+});
+
 /* ---------- wiring ---------- */
 const textsOf = (rig, params) => Object.fromEntries(rig.fields.map(f => [f.key, formatField(params[f.key], f)]));
 
@@ -437,7 +514,7 @@ test('input fields parse what people type and format back losslessly', () => {
 });
 
 test('every problem owns an editable rig: the example and random inputs parse, run and render', () => {
-  assert.equal(PATTERN_IDS.length, 12);
+  assert.equal(PATTERN_IDS.length, 13);
   const random = rng(7);
   for (const id of PATTERN_IDS) {
     for (const problem of PROBLEMS[id]) {

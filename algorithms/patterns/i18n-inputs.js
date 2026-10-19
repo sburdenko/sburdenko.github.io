@@ -42,5 +42,7 @@ export const INPUTS = {
   'in.err.treeDistinct': { en: () => 'Tree values must be distinct here.', ru: () => 'Здесь значения в дереве не должны повторяться.' },
   'in.err.pattern': { en: () => 'A “*” must follow a letter or “.”.', ru: () => '«*» должна стоять после буквы или «.».' },
   'in.err.kDistinct': { en: n => `k must not exceed the number of distinct values (${n}).`, ru: n => `k не больше числа разных значений (${n}).` },
+  'in.err.matRows': { en: (a, b) => `The matrix needs ${a}–${b} rows separated by “|”, e.g. 1 2 | 3 4.`, ru: (a, b) => `В матрице от ${a} до ${b} строк через «|», например 1 2 | 3 4.` },
+  'in.err.square': { en: (r, c) => `The matrix must be square, now it is ${r} × ${c}.`, ru: (r, c) => `Матрица должна быть квадратной, сейчас она ${r} × ${c}.` },
   'in.err.tooBig': { en: n => `This input needs more than ${n} steps — make it smaller.`, ru: n => `Для этих данных нужно больше ${n} шагов — уменьши их.` },
 };

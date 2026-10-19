@@ -279,3 +279,29 @@ export const charReplace = {
       ['var.replace', chip(`${Math.max(0, len - top)} / ${run.k}`, len - top > run.k ? 'amb' : '')], ['var.best', chip(e.best, 'hit')]];
   },
 };
+
+export const slidingMax = {
+  view(run, e) {
+    const n = run.nums.length, x = 64, y2 = TOP + CELL + 40, y3 = y2 + CELL + 40, done = e.key === 'swm.ev.done';
+    const cls = run.nums.map((_, j) => (e.i == null ? '' : j < e.l ? 'dim' : j <= e.i ? 'win' : ''));
+    e.dq.forEach(j => { cls[j] = 'src'; });
+    if (e.gone != null) cls[e.gone] = 'bad';
+    if (e.key === 'swm.ev.max') cls[e.dq[0]] = 'ok';
+    else if (e.i != null && !done) cls[e.i] = 'cur';
+    const drawn = e.side === 'front' ? [e.gone, ...e.dq] : e.side === 'back' ? [...e.dq, e.gone] : e.dq;
+    const dqCls = drawn.map((j, q) => (j === e.gone ? 'bad' : e.key === 'swm.ev.max' && q === 0 ? 'ok' : e.key === 'swm.ev.push' && j === e.i ? 'cur' : 'src'));
+    let s = text(4, TOP + CELL / 2, 'nums', 'lbl') + cells(run.nums, cls, { x, y: TOP })
+      + pointers([{ i: e.l, label: 'L' }, { i: done ? null : e.i, label: 'i', cls: 'p2' }], { x, y: TOP, count: n })
+      + text(4, y2 + CELL / 2, 'deque', 'lbl') + cells(drawn, dqCls, { x, y: y2, index: false });
+    drawn.forEach((j, q) => { s += text(x + q * STEP + CELL / 2, y2 + CELL + 13, `=${run.nums[j]}`, 'idx'); });
+    if (!drawn.length) s += text(x + 8, y2 + CELL / 2, '∅', 'idx');
+    const slots = Math.max(0, n - run.k + 1);
+    const ans = Array.from({ length: slots }, (_, j) => (j < e.ans.length ? e.ans[j] : '·'));
+    const ansCls = ans.map((_, j) => (j >= e.ans.length ? 'dim' : e.key === 'swm.ev.max' && j === e.ans.length - 1 ? 'ok' : done ? 'ok' : ''));
+    s += text(4, y3 + CELL / 2, 'ans', 'lbl') + cells(ans, ansCls, { x, y: y3 });
+    return svg(x + rowWidth(Math.max(n, drawn.length, 1)) + 10, y3 + CELL + 22, s);
+  },
+  vars(run, e) {
+    return [['var.k', chip(run.k)], ['var.deque', chips(e.dq.map((j, q) => chip(`${j}:${run.nums[j]}`, q === 0 ? 'hit' : 'amb')))]];
+  },
+};
