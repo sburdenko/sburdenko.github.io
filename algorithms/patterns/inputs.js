@@ -53,6 +53,25 @@ function parseGrid(text, spec) {
   return grid.flat().some(v => v > spec.maxDigit) ? fail('gridDigit', spec.maxDigit) : { value: grid };
 }
 
+/** Integer matrix: rows split by “|”, “;” or a new line (or written as [[1,2],[3,4]]), numbers by spaces or commas. */
+function parseMatrix(text, spec) {
+  const body = clean(text).replace(/\]\s*,?\s*\[/g, '|').replace(/[[\](){}"']/g, ' ');
+  const rows = body.split(/[|;\n]/).map(r => r.trim()).filter(Boolean);
+  const { minRows = 1, maxRows = 6, maxCols = 6, min = -Infinity, max = Infinity } = spec;
+  if (rows.length < minRows || rows.length > maxRows) return fail('matRows', minRows, maxRows);
+  const matrix = [];
+  for (const row of rows) {
+    const parsed = parseInts(row, { min, max });
+    if (parsed.error) return parsed;
+    if (!parsed.value.length) return fail('matRows', minRows, maxRows);
+    matrix.push(parsed.value);
+  }
+  if (matrix.some(r => r.length !== matrix[0].length)) return fail('gridRagged');
+  if (matrix[0].length > maxCols) return fail('gridCols', maxCols);
+  if (spec.square && matrix.length !== matrix[0].length) return fail('square', matrix.length, matrix[0].length);
+  return { value: matrix };
+}
+
 function parseTree(text, spec) {
   const parts = tokens(text), values = [];
   for (const part of parts) {
@@ -141,10 +160,24 @@ function parseEdges(text, spec) {
   return checkLength(found, spec) || (found.some(([a, b]) => a === b) ? fail('selfEdge') : null) || { value: found };
 }
 
+/** Weighted directed edges as from>to:weight (or [[u,v,w],…], or plain triples). Weights are non-negative. */
+function parseWeightedEdges(text, spec) {
+  const parts = clean(text).replace(/[[\](){}"',;|:>→-]/g, ' ').split(/\s+/).filter(Boolean);
+  if (parts.some(p => !/^\d+$/.test(p)) || parts.length % 3) return fail('wedges');
+  const found = [];
+  for (let i = 0; i < parts.length; i += 3) found.push([Number(parts[i]), Number(parts[i + 1]), Number(parts[i + 2])]);
+  const pairs = new Set(found.map(([u, v]) => `${u},${v}`));
+  return checkLength(found, spec)
+    || (found.some(([u, v]) => u === v) ? fail('selfLoop') : null)
+    || (pairs.size !== found.length ? fail('dupEdge') : null)
+    || (found.some(([, , w]) => w > spec.maxW) ? fail('range', 0, spec.maxW) : null)
+    || { value: found };
+}
+
 export const PARSERS = {
   ints: parseInts, int: parseInt1, str: parseStr, words: parseWords, grid: parseGrid,
   tree: parseTree, lists: parseLists, intervals: parseIntervals, ops: parseOps,
-  board: parseBoard, cache: parseCache, edges: parseEdges,
+  board: parseBoard, cache: parseCache, edges: parseEdges, matrix: parseMatrix, wedges: parseWeightedEdges,
 };
 
 export const FORMATTERS = {
@@ -160,6 +193,8 @@ export const FORMATTERS = {
   board: v => v.map(r => r.join('')).join(' '),
   cache: v => v.map(([op, k, x]) => (op === 'put' ? `put ${k} ${x}` : `get ${k}`)).join(', '),
   edges: v => v.map(([a, b]) => `${a}-${b}`).join(' '),
+  matrix: v => v.map(r => r.join(' ')).join(' | '),
+  wedges: v => v.map(([u, w, t]) => `${u}>${w}:${t}`).join(' '),
 };
 
 export const parseField = (text, spec) => PARSERS[spec.type](text, spec);

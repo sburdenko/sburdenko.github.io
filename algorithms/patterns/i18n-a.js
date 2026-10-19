@@ -13,7 +13,7 @@ export const CH_A = {
   },
   'hash.pitfall': {
     en: '<b>Trap.</b> In Two Sum look up before inserting. Otherwise with target = 2x the number finds itself.',
-    ru: '<b>Ловушка.</b> В Two Sum сначала проверяй map, потом вставляй. Иначе при target = 2x число найдёт само себя.',
+    ru: '<b>Ловушка.</b> В Two Sum сначала проверяй словарь, потом вставляй. Иначе при target = 2x число найдёт само себя.',
   },
   'hash.tpl': {
     en: `var seen = new Dictionary<TKey, TValue>();
@@ -52,12 +52,12 @@ for (int i = 0; i < n; i++) {
     ru: t => `Ищем пару с суммой <b>${t}</b>. Один проход слева направо, запоминаем всё, что уже видели.`,
   },
   'hash.ev.miss': {
-    en: (x, need, i) => `x = ${x}, need ${need}. Not in the map — remember <b>${x} → ${i}</b> and move on.`,
-    ru: (x, need, i) => `x = ${x}, ищем ${need}. В map его нет — запоминаем <b>${x} → ${i}</b> и идём дальше.`,
+    en: (x, need, i) => `x = ${x}, need ${need}. Not in the dictionary — remember <b>${x} → ${i}</b> and move on.`,
+    ru: (x, need, i) => `x = ${x}, ищем ${need}. В словаре его нет — запоминаем <b>${x} → ${i}</b> и идём дальше.`,
   },
   'hash.ev.hit': {
-    en: (x, need, j, i) => `x = ${x}, need ${need}. It is already in the map at index ${j} → answer <b>[${j}, ${i}]</b>.`,
-    ru: (x, need, j, i) => `x = ${x}, ищем ${need}. Оно уже в map на индексе ${j} → ответ <b>[${j}, ${i}]</b>.`,
+    en: (x, need, j, i) => `x = ${x}, need ${need}. It is already in the dictionary at index ${j} → answer <b>[${j}, ${i}]</b>.`,
+    ru: (x, need, j, i) => `x = ${x}, ищем ${need}. Оно уже в словаре на индексе ${j} → ответ <b>[${j}, ${i}]</b>.`,
   },
   'hash.ev.none': { en: t => `The array is over: no pair sums to ${t}.`, ru: t => `Массив кончился: пары с суммой ${t} нет.` },
 
@@ -97,12 +97,14 @@ while (l < r) {
   'twoptr.p': {
     en: [
       { variant: 'Same way: reader and writer', task: 'Move all zeros to the end, keeping the order of the other elements. In place.', idea: 'read walks every element, write marks where the next non-zero goes. Swap and advance write.', why: 'Both pointers go forward, at different speeds. Twin: Remove Element (#27) — same code with != val.', cx: 'O(n) time · O(1) memory' },
+      { variant: 'Towards each other: the sum steers', task: 'The array is sorted in non-decreasing order. Find two numbers that add up to target and return their indices counted from 1. O(1) extra memory.', idea: 'lo at the start, hi at the end. Sum too big → hi−−, too small → lo++, equal → done. Each step throws away one number for good.', why: 'If numbers[lo] + numbers[hi] > target, numbers[hi] is too big even with the smallest number still in play, so no pair with it is left. Two Sum (#1) needs a hash map because its array is unsorted; here the order replaces the memory. It is also the inner loop of 3Sum.', cx: 'O(n) time · O(1) memory' },
       { variant: 'Towards each other: move the weak side', task: 'Pick two lines that, with the x-axis, hold the most water.', idea: 'Start with the outermost lines. The area is capped by the lower one, so move it: moving the higher one can never help.', why: 'The pointers converge, and every “which one moves” decision provably drops a whole batch of pairs.', cx: 'O(n) time · O(1) memory' },
       { variant: 'Sort + fix one', task: 'Find all unique triples that sum to 0.', idea: 'Sort. Fix nums[i] and look for the rest with pointers moving towards each other. Skip equal values to avoid duplicates.', why: 'Two pointers become the inner loop of an outer one. O(n³) turns into O(n²).', cx: 'O(n²) time · O(1) extra' },
       { variant: "Two walls, running maximums", task: "Bars of height h[i]. How much rain water is trapped between them?", idea: "Water above a bar = min(max on the left, max on the right) − its height. Move the lower side inward: its maximum is the binding limit, so its water is already known.", why: "The same “move the weaker side” argument as Container, but each step adds water instead of measuring an area. Asked constantly.", cx: "O(n) time · O(1) memory" }
     ],
     ru: [
       { variant: 'В одну сторону: читатель и писатель', task: 'Сдвинь все нули в конец, сохранив порядок остальных. На месте.', idea: 'read идёт по всем элементам, write указывает, куда положить следующий ненулевой. Меняем местами и сдвигаем write.', why: 'Оба указателя идут вперёд, но с разной скоростью. Близнец — Remove Element (#27): тот же код с условием != val.', cx: 'O(n) время · O(1) память' },
+      { variant: 'Навстречу: сумма подсказывает, кого двигать', task: 'Массив отсортирован по неубыванию. Найди два числа с суммой target и верни их индексы, считая с 1. Доп. память — O(1).', idea: 'lo в начале, hi в конце. Сумма больше target → hi−−, меньше → lo++, равна — готово. Каждый шаг навсегда отбрасывает одно число.', why: 'Если numbers[lo] + numbers[hi] > target, то numbers[hi] слишком велико даже с самым маленьким из оставшихся чисел — пары с ним больше нет. Two Sum (#1) нужен словарь, потому что там массив не отсортирован; здесь порядок заменяет память. Это же внутренний цикл 3Sum.', cx: 'O(n) время · O(1) память' },
       { variant: 'Навстречу: двигаем слабую сторону', task: 'Выбери две линии, которые вместе с осью X держат больше всего воды.', idea: 'Начинаем с крайних линий. Площадь ограничена меньшей высотой, поэтому двигаем её: сдвиг большей гарантированно не поможет.', why: 'Указатели сходятся, и каждое решение «кого двигать» доказуемо отсекает целую пачку пар.', cx: 'O(n) время · O(1) память' },
       { variant: 'Сортировка + фиксируем один', task: 'Найди все уникальные тройки с суммой 0.', idea: 'Сортируем. Фиксируем nums[i], остаток ищем указателями навстречу. Одинаковые значения пропускаем, чтобы не было дублей.', why: 'Два указателя становятся внутренним циклом внешнего. O(n³) превращается в O(n²).', cx: 'O(n²) время · O(1) доп. память' },
       { variant: "Две стены и бегущие максимумы", task: "Столбики высотой h[i]. Сколько дождевой воды задержится между ними?", idea: "Вода над столбиком = min(максимум слева, максимум справа) − высота. Двигаем более низкую сторону: её максимум и есть ограничение, значит её воду уже можно посчитать.", why: "Тот же довод «двигай слабую сторону», что в Container, но каждый шаг добавляет воду, а не меряет площадь. Спрашивают постоянно.", cx: "O(n) время · O(1) память" }
@@ -168,6 +170,7 @@ for (int r = 0; r < n; r++) {
       { variant: 'Variable window: minimise', task: 'Minimal length of a subarray with sum ≥ target. All numbers are positive.', idea: 'Grow r and accumulate. While the sum is ≥ target the window qualifies: record its length and shrink from the left to make it shorter.', why: 'The mirror of #3: shrink while the window is VALID, and take the answer inside the while.', cx: 'O(n) time · O(1) memory' },
       { variant: "Window with a replacement budget", task: "Replace at most k characters to get the longest block of one repeated letter. How long can it be?", idea: "A window is fine while length − (count of its most frequent letter) ≤ k: that many letters get replaced. Grow r; shrink l while the budget is exceeded.", why: "The condition is not “no repeats” or “sum ≥ target” but a derived quantity. The classic version keeps maxFreq without decreasing it — a subtle O(n) optimisation worth mentioning.", cx: "O(n · 26) time · O(26) memory" },
       { variant: "Window with a counter of needs", task: "The shortest substring of s that contains every character of t, repeats included.", idea: "Grow r until the window covers t (formed == need.Count). Then shrink from the left while it still covers, recording the shortest.", why: "The general window template: two counters, a “formed” number and shrink-while-valid. Permutation in String (#567) and Find All Anagrams (#438) are the same code.", cx: "O(|s| + |t|) time · O(alphabet) memory" },
+      { variant: 'Monotonic deque in the window', task: 'A window of size k slides over the array. Return the maximum of every window position.', idea: 'Keep a deque of indices whose values decrease from front to back. A new number pops every smaller one off the back — they can never be a maximum again; the front leaves when it falls out on the left. The front is always the answer.', why: 'The sum of a window updates in O(1), the maximum does not — a removed element might have been the maximum. The deque keeps exactly the candidates. .NET has no Deque&lt;T&gt;: an int[] with head and tail (every index enters once) or LinkedList&lt;T&gt;, which allocates a node per element.', cx: 'O(n) time: every index is pushed and popped once · O(k) memory' },
     ],
     ru: [
       { variant: 'Окно фиксированного размера', task: 'Найди непрерывный подмассив длины k с максимальным средним.', idea: 'Считаем сумму первых k. Дальше на каждом шаге прибавляем новый элемент справа и вычитаем ушедший слева.', why: 'Размер задан, поэтому l двигается строго вместе с r и while не нужен.', cx: 'O(n) время · O(1) память' },
@@ -175,6 +178,7 @@ for (int r = 0; r < n; r++) {
       { variant: 'Переменное окно: минимум', task: 'Минимальная длина подмассива с суммой ≥ target. Все числа положительные.', idea: 'Расширяем r и копим сумму. Пока сумма ≥ target, окно подходит: записываем длину и сжимаем слева, пытаясь сделать короче.', why: 'Зеркально задаче #3: сжимаем, пока окно ВАЛИДНО, и ответ берём внутри while.', cx: 'O(n) время · O(1) память' },
       { variant: "Окно с бюджетом замен", task: "Заменив не больше k символов, получи самый длинный блок из одной повторяющейся буквы. Какой он длины?", idea: "Окно годится, пока длина − (сколько в нём самой частой буквы) ≤ k: столько букв и придётся заменить. Расширяем r, сжимаем l, пока бюджет превышен.", why: "Условие здесь не «без повторов» и не «сумма ≥ target», а производная величина. В классической версии maxFreq никогда не уменьшают — тонкая оптимизация до O(n), о ней стоит сказать.", cx: "O(n · 26) время · O(26) память" },
       { variant: "Окно со счётчиком потребностей", task: "Самая короткая подстрока s, которая содержит все символы t с учётом повторов.", idea: "Расширяем r, пока окно не покроет t (formed == need.Count). Потом сжимаем слева, пока покрытие держится, и запоминаем самое короткое.", why: "Общий шаблон окна: два счётчика, число «закрытых» символов и сжатие, пока окно валидно. Permutation in String (#567) и Find All Anagrams (#438) — тот же код.", cx: "O(|s| + |t|) время · O(алфавит) память" },
+      { variant: 'Монотонная дека в окне', task: 'Окно размера k скользит по массиву. Верни максимум окна в каждом его положении.', idea: 'Держим деку индексов, значения в которой убывают от начала к концу. Новое число выталкивает с конца все меньшие — они уже никогда не станут максимумом; начало уходит, когда выпадает из окна слева. Ответ всегда в начале деки.', why: 'Сумму окна можно обновить за O(1), а максимум — нет: ушедший элемент мог быть максимумом. Дека хранит ровно тех, кто ещё может им стать. В .NET нет Deque&lt;T&gt;: подойдёт int[] с head и tail (каждый индекс входит один раз) или LinkedList&lt;T&gt;, который выделяет узел на каждый элемент.', cx: 'O(n) время: каждый индекс один раз входит и один раз выходит · O(k) память' },
     ],
   },
   'window.ev.start': {
@@ -252,7 +256,7 @@ while (lo <= hi) {
     ru: (lo, hi, mid, v, t, right) => `mid = ${lo} + (${hi} − ${lo}) / 2 = ${mid}. a[mid] = ${v} ${right ? '<' : '>'} ${t} → ответ ${right ? 'правее' : 'левее'}, другую половину выкидываем.`,
   },
   'binary.ev.narrow': {
-    en: (right, lo, hi) => `${right ? 'lo = mid + 1' : 'hi = mid − 1'}. Left: [${lo}..${hi}], ${Math.max(0, hi - lo + 1)} candidates.`,
+    en: (right, lo, hi) => `${right ? 'lo = mid + 1' : 'hi = mid − 1'}. Left: [${lo}..${hi}], ${Math.max(0, hi - lo + 1)} ${hi - lo === 0 ? 'candidate' : 'candidates'}.`,
     ru: (right, lo, hi) => `${right ? 'lo = mid + 1' : 'hi = mid − 1'}. Осталось [${lo}..${hi}], кандидатов: ${Math.max(0, hi - lo + 1)}.`,
   },
   'binary.ev.found': {

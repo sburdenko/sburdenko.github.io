@@ -1,13 +1,13 @@
 /** CH.08 MVP/MVVM, CH.10 Flyweight, CH.11 Dirty Flag. */
-import { $, fitCanvas, bytes, fmtI, RM } from '../assets/vhs.js?v=202610190803';
-import { t } from '../assets/i18n.js?v=202610190803';
-import { bindSeg, isPressed, togglePressed, tile, visibleLoop } from '../assets/lab.js?v=202610190803';
-import { renderCode } from '../assets/code.js?v=202610190803';
-import { SNIPPETS } from './snippets.js?v=202610190803';
+import { $, fitCanvas, bytes, fmtI, RM } from '../assets/vhs.js?v=202610191254';
+import { t } from '../assets/i18n.js?v=202610191254';
+import { bindSeg, isPressed, togglePressed, tile, visibleLoop } from '../assets/lab.js?v=202610191254';
+import { renderCode } from '../assets/code.js?v=202610191254';
+import { SNIPPETS } from './snippets.js?v=202610191254';
 import {
   MAX_HEALTH, createHealth, healthAction, healthStatus, UNIT_FIELDS, flyweightMemory, editBaseAttack,
   SECTOR_GRID, createSectors, sectorsTick, playerOnPath, opSequence, lazyRecalc,
-} from './model-data.js?v=202610190803';
+} from './model-data.js?v=202610191254';
 
 /* ---------------- MVP / MVVM ---------------- */
 const LABELS = ['Tank', 'Scout', 'Medic', 'Sniper'];

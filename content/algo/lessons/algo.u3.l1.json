@@ -1,0 +1,148 @@
+{
+ "id": "algo.u3.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 14,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "int[] a = { 0, 1, 0, 3, 12 };\nMoveZeroes(a); // a = [1, 3, 12, 0, 0]",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "nums[read] == 0?", "⟦⟧", "⟦⟧", "write++, read++"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public void MoveZeroes(int[] nums) {\n    int write = 0;\n    for (int read = 0; read < nums.Length; read++) {\n        if (___) continue;\n        (nums[write], nums[read]) = (___, ___);\n        ___;\n    }\n}",
+   "tiles": ["nums[read] == 0", "nums[write] == 0", "nums[read]", "nums[write]", "write++", "read++", "nums[read] = 0"],
+   "answer": ["nums[read] == 0", "nums[read]", "nums[write]", "write++"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "moveZeroes",
+   "input": {
+    "nums": [2, 0, 0, 7, 0, 4, 9]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 4,
+      "options": ["0", "7", "2"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 6,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// [-4, -1, 0, 3, 10]\n// l = -4, r = 10: 16 < 100  → res[4] = 100, r--\n// l = -4, r = 3:  16 > 9    → res[3] = 16,  l++\n// l = -1, r = 3:  1 < 9     → res[2] = 9,   r--\n// l = -1, r = 0:  1 > 0     → res[1] = 1,   l++\n// l = r = 0                 → res[0] = 0    → [0, 1, 9, 16, 100]",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public int[] SortedSquares(int[] nums) {\n    int n = nums.Length, l = 0, r = n - 1;\n    var res = new int[n];\n    for (int w = ___; w >= 0; w--) {\n        if (Math.Abs(nums[l]) > Math.Abs(nums[r])) {\n            res[w] = nums[l] * nums[l];\n            ___;\n        } else {\n            res[w] = nums[r] * nums[r];\n            ___;\n        }\n    }\n    return res;\n}",
+   "tiles": ["n - 1", "0", "n", "l++", "r--", "l--", "r++"],
+   "answer": ["n - 1", "l++", "r--"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public bool IsPalindrome(string s) {\n    int l = 0, r = s.Length - 1;\n    while (l < r) {\n        while (l < r && !char.IsLetterOrDigit(s[l])) l++;\n        while (l < r && !char.IsLetterOrDigit(s[r])) r--;\n        if (char.ToLowerInvariant(s[l]) != char.ToLowerInvariant(s[r])) return false;\n        l++; r--;\n    }\n    return true;\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public bool IsPalindrome(string s) {\n    int l = 0, r = s.Length - 1;\n    while (l < r) {\n        while (!char.IsLetterOrDigit(s[l])) l++;\n        while (l < r && !char.IsLetterOrDigit(s[r])) r--;\n        if (char.ToLowerInvariant(s[l]) != char.ToLowerInvariant(s[r])) return false;\n        l++; r--;\n    }\n    return true;\n}",
+   "answer": 3,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

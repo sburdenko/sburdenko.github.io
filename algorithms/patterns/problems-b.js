@@ -1,5 +1,5 @@
 /** Problems and C# solutions for chapters 05–08: stack, linked list, DFS/BFS, trees. */
-import { problem as p } from './problem.js?v=202610190803';
+import { problem as p } from './problem.js?v=202610191254';
 
 export const PROBLEMS_B = {
   stack: [
@@ -157,6 +157,17 @@ private void Sink(char[][] g, int r, int c) {
     g[r][c] = '0';
     Sink(g, r + 1, c); Sink(g, r - 1, c);
     Sink(g, r, c + 1); Sink(g, r, c - 1);
+}`),
+    p('islandPerimeter', 'Island Perimeter', 463, 'island-perimeter', 'Easy', `public int IslandPerimeter(int[][] grid) {
+    int rows = grid.Length, cols = grid[0].Length, perimeter = 0;
+    for (int r = 0; r < rows; r++)
+        for (int c = 0; c < cols; c++) {
+            if (grid[r][c] == 0) continue;
+            perimeter += 4;                                       // a lone cell has four sides
+            if (c + 1 < cols && grid[r][c + 1] == 1) perimeter -= 2;  // the shared side is lost by both cells
+            if (r + 1 < rows && grid[r + 1][c] == 1) perimeter -= 2;
+        }
+    return perimeter;                     // left and up were counted from the other side
 }`),
     p('oranges', 'Rotting Oranges', 994, 'rotting-oranges', 'Medium', `public int OrangesRotting(int[][] grid) {
     int rows = grid.Length, cols = grid[0].Length, fresh = 0;

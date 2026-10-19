@@ -162,4 +162,52 @@ export const EV_A = {
   },
   'lrc.ev.shrink': { en: (out, len, need) => `Drop “${out}” from the left: length ${len}, replace ${need}.`, ru: (out, len, need) => `Убираем «${out}» слева: длина ${len}, заменить ${need}.` },
   'lrc.ev.done': { en: best => `Longest window: <b>${best}</b>.`, ru: best => `Самое длинное окно: <b>${best}</b>.` },
+
+  /* Sliding Window Maximum */
+  'swm.ev.start': {
+    en: k => `Window of size ${k}. The deque keeps indices whose values decrease from front to back: the front is the maximum, the rest are candidates for later.`,
+    ru: k => `Окно размера ${k}. Дека хранит индексы, значения которых убывают от начала к концу: в начале — максимум, дальше — кандидаты на потом.`,
+  },
+  'swm.ev.out': {
+    en: (j, v, l) => `The window now starts at ${l}. Index ${j} (value ${v}) fell out on the left — remove it from the <b>front</b>.`,
+    ru: (j, v, l) => `Окно теперь начинается с ${l}. Индекс ${j} (значение ${v}) выпал слева — убираем его из <b>начала</b>.`,
+  },
+  'swm.ev.pop': {
+    en: (j, v, x, i) => `${v} (index ${j}) ≤ ${x}: while ${x} is in the window, ${v} can never be the maximum — pop it from the <b>back</b>.`,
+    ru: (j, v, x, i) => `${v} (индекс ${j}) ≤ ${x}: пока ${x} в окне, ${v} максимумом уже не станет — выталкиваем с <b>конца</b>.`,
+  },
+  'swm.ev.push': {
+    en: (i, x, size, full) => `Push index ${i} (value ${x}) to the back. The deque holds ${size}, values still decrease.${full ? '' : ' The window is not full yet.'}`,
+    ru: (i, x, size, full) => `Кладём индекс ${i} (значение ${x}) в конец. В деке ${size}, значения по-прежнему убывают.${full ? '' : ' Окно ещё не заполнено.'}`,
+  },
+  'swm.ev.max': {
+    en: (l, i, max, j) => `Window [${l}..${i}] is full: its maximum is the front, index ${j} → <b>${max}</b>.`,
+    ru: (l, i, max, j) => `Окно [${l}..${i}] заполнено: его максимум — начало деки, индекс ${j} → <b>${max}</b>.`,
+  },
+  'swm.ev.done': {
+    en: ans => `Answer: <b>${list(ans)}</b>. Every index entered the deque once and left at most once → O(n).`,
+    ru: ans => `Ответ: <b>${list(ans)}</b>. Каждый индекс вошёл в деку один раз и вышел не больше раза → O(n).`,
+  },
+
+  /* Two Sum II */
+  'tsii.ev.start': {
+    en: (target, n) => `The array is sorted. lo starts at the smallest number, hi at the largest; indices are counted from 1. Every step compares the sum with ${target} and moves one pointer.`,
+    ru: (target, n) => `Массив отсортирован. lo стоит на самом маленьком числе, hi — на самом большом; индексы считаем с 1. На каждом шаге сравниваем сумму с ${target} и двигаем один указатель.`,
+  },
+  'tsii.ev.big': {
+    en: (a, b, sum, target) => `${a} + ${b} = ${sum} > ${target}: too big. ${b} is too big even with ${a}, the smallest number still in play, so <b>hi−−</b> drops it for good.`,
+    ru: (a, b, sum, target) => `${a} + ${b} = ${sum} > ${target}: много. ${b} слишком велико даже с ${a}, самым маленьким из оставшихся, поэтому <b>hi−−</b> отбрасывает его насовсем.`,
+  },
+  'tsii.ev.small': {
+    en: (a, b, sum, target) => `${a} + ${b} = ${sum} < ${target}: too small. ${a} falls short even with ${b}, the largest number still in play, so <b>lo++</b> drops it for good.`,
+    ru: (a, b, sum, target) => `${a} + ${b} = ${sum} < ${target}: мало. ${a} не хватает даже с ${b}, самым большим из оставшихся, поэтому <b>lo++</b> отбрасывает его насовсем.`,
+  },
+  'tsii.ev.hit': {
+    en: (a, b, sum, i, j) => `${a} + ${b} = ${sum} — found. Answer: <b>[${i}, ${j}]</b>, counted from 1.`,
+    ru: (a, b, sum, i, j) => `${a} + ${b} = ${sum} — нашли. Ответ: <b>[${i}, ${j}]</b>, считая с 1.`,
+  },
+  'tsii.ev.none': {
+    en: target => `The pointers met: every number was dropped with a reason, so no pair adds up to ${target}. (LeetCode promises an answer; here the input is yours.)`,
+    ru: target => `Указатели встретились: каждое число отброшено с причиной, значит, пары с суммой ${target} нет. (LeetCode обещает, что ответ есть, но здесь входные данные твои.)`,
+  },
 };

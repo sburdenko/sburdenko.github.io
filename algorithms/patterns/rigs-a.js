@@ -1,7 +1,7 @@
 /** Editable rigs for chapters 01–04. */
-import * as A from './model-a.js?v=202610190803';
-import * as V from './views-a.js?v=202610190803';
-import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202610190803';
+import * as A from './model-a.js?v=202610191254';
+import * as V from './views-a.js?v=202610191254';
+import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202610191254';
 
 const nums = (extra = {}) => ({ key: 'nums', type: 'ints', minLen: 1, maxLen: 12, min: -99, max: 99, ...extra });
 const target = (extra = {}) => ({ key: 'target', type: 'int', min: -999, max: 999, ...extra });
@@ -50,6 +50,16 @@ export const RIGS_A = {
     random: next => ({ nums: randInts(next, randInt(next, 5, 10), 0, 9).map(v => (v < 4 ? 0 : v)) }),
     run: p => A.moveZeroesTrace(p.nums),
   }, V.moveZeroes),
+  twoSumII: defineRig({
+    fields: [nums({ key: 'numbers', minLen: 2, sorted: true }), target()],
+    example: { numbers: [-3, 1, 2, 4, 7, 11, 15], target: 9 },
+    random: next => {
+      const list = randInts(next, randInt(next, 5, 9), -9, 20).sort((x, y) => x - y);
+      const [i, j] = shuffle(next, list.map((_, x) => x)).slice(0, 2);
+      return { numbers: list, target: next() < 0.85 ? list[i] + list[j] : randInt(next, -10, 40) };
+    },
+    run: p => ({ ...A.twoSumIITrace(p.numbers, p.target), numbers: p.numbers, target: p.target }),
+  }, V.twoSumII),
   container: defineRig({
     fields: [{ key: 'h', type: 'ints', minLen: 2, maxLen: 12, min: 0, max: 9 }],
     example: { h: [1, 8, 6, 2, 5, 4, 8, 3, 7] },
@@ -170,4 +180,14 @@ export const RIGS_A = {
     random: next => ({ s: Array.from({ length: randInt(next, 7, 12) }, () => pick(next, 'AABBC')).join(''), k: randInt(next, 0, 2) }),
     run: p => ({ ...A.charReplacementTrace(p.s, p.k), s: p.s, k: p.k }),
   }, V.charReplace),
+  slidingMax: defineRig({
+    fields: [nums({ maxLen: 12 }), k()],
+    example: { nums: [1, 3, -1, -3, 5, 3, 6, 7], k: 3 },
+    random: next => {
+      const list = randInts(next, randInt(next, 6, 11), -5, 15);
+      return { nums: list, k: randInt(next, 2, Math.min(4, list.length)) };
+    },
+    check: kWithin,
+    run: p => ({ ...A.slidingMaxTrace(p.nums, p.k), nums: p.nums, k: p.k }),
+  }, V.slidingMax),
 };

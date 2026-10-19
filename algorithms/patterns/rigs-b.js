@@ -1,8 +1,8 @@
 /** Editable rigs for chapters 05–08. */
-import * as B from './model-b.js?v=202610190803';
-import * as V from './views-b.js?v=202610190803';
-import { treeFromLevelOrder, levelOrderOf } from './inputs.js?v=202610190803';
-import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202610190803';
+import * as B from './model-b.js?v=202610191254';
+import * as V from './views-b.js?v=202610191254';
+import { treeFromLevelOrder, levelOrderOf } from './inputs.js?v=202610191254';
+import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202610191254';
 
 const values = (extra = {}) => ({ key: 'values', type: 'ints', minLen: 1, maxLen: 8, min: -99, max: 99, ...extra });
 const tree = { key: 'root', type: 'tree', maxNodes: 15, maxDepth: 4, min: -99, max: 99 };
@@ -132,6 +132,15 @@ export const RIGS_B = {
     random: next => ({ grid: randomGrid(next, [0.55, 1]) }),
     run: p => B.islandsTrace(p.grid.map(r => r.join(''))),
   }, V.islands),
+  islandPerimeter: defineRig({
+    fields: [{ key: 'grid', type: 'grid', maxRows: 6, maxCols: 6, maxDigit: 1 }],
+    example: { grid: [[0, 1, 0, 0], [1, 1, 1, 0], [0, 1, 0, 0], [1, 1, 0, 0]] },
+    random: next => {
+      const rows = randInt(next, 3, 5), cols = randInt(next, 3, 5);
+      return { grid: Array.from({ length: rows }, () => Array.from({ length: cols }, () => (next() < 0.5 ? 1 : 0))) };
+    },
+    run: p => ({ ...B.islandPerimeterTrace(p.grid), grid: p.grid }),
+  }, V.islandPerimeter),
   oranges: defineRig({
     fields: [grid(2)],
     example: { grid: [[2, 1, 1, 0, 1], [1, 1, 0, 1, 1], [0, 1, 1, 1, 1], [0, 0, 1, 1, 2]] },

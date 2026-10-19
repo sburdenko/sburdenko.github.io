@@ -1,5 +1,5 @@
 /** Problems and C# solutions for chapters 01–04: hash map, two pointers, sliding window, binary search. */
-import { problem as p } from './problem.js?v=202610190803';
+import { problem as p } from './problem.js?v=202610191254';
 
 export const PROBLEMS_A = {
   hash: [
@@ -73,6 +73,16 @@ export const PROBLEMS_A = {
         write++;
     }
 }`),
+    p('twoSumII', 'Two Sum II - Input Array Is Sorted', 167, 'two-sum-ii-input-array-is-sorted', 'Medium', `public int[] TwoSum(int[] numbers, int target) {
+    int lo = 0, hi = numbers.Length - 1;
+    while (lo < hi) {
+        int sum = numbers[lo] + numbers[hi];
+        if (sum == target) return new[] { lo + 1, hi + 1 };  // 1-indexed
+        if (sum > target) hi--;           // numbers[hi] is too big even with the smallest partner
+        else lo++;                        // numbers[lo] is too small even with the biggest partner
+    }
+    return new int[0];                    // LeetCode promises one answer
+}`, true),
     p('container', 'Container With Most Water', 11, 'container-with-most-water', 'Medium', `public int MaxArea(int[] h) {
     int l = 0, r = h.Length - 1, best = 0;
     while (l < r) {
@@ -175,6 +185,18 @@ export const PROBLEMS_A = {
         }
     }
     return bestLen == int.MaxValue ? "" : s.Substring(bestL, bestLen);
+}`, true),
+    p('slidingMax', 'Sliding Window Maximum', 239, 'sliding-window-maximum', 'Hard', `public int[] MaxSlidingWindow(int[] nums, int k) {
+    var dq = new int[nums.Length];     // deque of indices: dq[head..tail), values decrease
+    int head = 0, tail = 0;
+    var res = new int[nums.Length - k + 1];
+    for (int i = 0; i < nums.Length; i++) {
+        while (head < tail && dq[head] <= i - k) head++;               // fell out on the left
+        while (head < tail && nums[dq[tail - 1]] <= nums[i]) tail--;   // never a maximum again
+        dq[tail++] = i;
+        if (i >= k - 1) res[i - k + 1] = nums[dq[head]];               // the front is the maximum
+    }
+    return res;
 }`, true)
   ],
   binary: [

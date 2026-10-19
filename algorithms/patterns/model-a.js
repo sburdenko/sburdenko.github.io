@@ -400,3 +400,54 @@ export function charReplacementTrace(str, k) {
   push('lrc.ev.done', [best], { l: bestLR ? bestLR[0] : 0, r: bestLR ? bestLR[1] : null });
   return { events, best };
 }
+
+/** Monotonic deque of indices: values decrease from front to back, so the front is the window maximum. */
+export function slidingMaxTrace(nums, k) {
+  const dq = [], ans = [], events = [];
+  const push = (key, args, extra = {}) => events.push(event(key, args, { i: null, l: null, dq: [...dq], ans: [...ans], gone: null, side: null, ...extra }));
+  push('swm.ev.start', [k]);
+  for (let i = 0; i < nums.length; i++) {
+    const l = i - k + 1, from = Math.max(0, l);
+    while (dq.length && dq[0] < l) {
+      const j = dq.shift();
+      push('swm.ev.out', [j, nums[j], l], { i, l: from, gone: j, side: 'front' });
+    }
+    while (dq.length && nums[dq.at(-1)] <= nums[i]) {
+      const j = dq.pop();
+      push('swm.ev.pop', [j, nums[j], nums[i], i], { i, l: from, gone: j, side: 'back' });
+    }
+    dq.push(i);
+    push('swm.ev.push', [i, nums[i], dq.length, l >= 0], { i, l: from });
+    if (l >= 0) {
+      ans.push(nums[dq[0]]);
+      push('swm.ev.max', [l, i, nums[dq[0]], dq[0]], { i, l });
+    }
+  }
+  push('swm.ev.done', [ans]);
+  return { events, ans };
+}
+
+/** Sorted input, pointers from both ends: a sum too big can only shrink by moving hi, too small only grow by moving lo. */
+export function twoSumIITrace(a, target) {
+  let lo = 0, hi = a.length - 1, found = null;
+  const events = [];
+  const push = (key, args) => events.push(event(key, args, { lo, hi, sum: lo < hi ? a[lo] + a[hi] : null, found }));
+  push('tsii.ev.start', [target, a.length]);
+  while (lo < hi) {
+    const sum = a[lo] + a[hi];
+    if (sum === target) {
+      found = [lo + 1, hi + 1];
+      push('tsii.ev.hit', [a[lo], a[hi], sum, lo + 1, hi + 1]);
+      return { events, found };
+    }
+    if (sum > target) {
+      push('tsii.ev.big', [a[lo], a[hi], sum, target, hi]);
+      hi--;
+    } else {
+      push('tsii.ev.small', [a[lo], a[hi], sum, target, lo]);
+      lo++;
+    }
+  }
+  push('tsii.ev.none', [target]);
+  return { events, found };
+}

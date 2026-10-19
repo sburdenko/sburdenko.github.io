@@ -61,6 +61,7 @@ for (const id of courses) {
 
   test(`content/${id}: язык без перевода показывается на английском`, async () => {
     const lid = lessonIds()[0];
+    if (!lid) return;   // у курса пока только план — нечего сверять
     const en = await loadLesson(id, lid, 'en');
     assert.deepEqual(await loadLesson(id, lid, 'xx'), en);
   });

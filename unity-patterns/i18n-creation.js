@@ -1,5 +1,5 @@
 /** Tape 05 strings: Factory, Object Pool, Singleton. */
-import { facts } from './facts.js?v=202610190803';
+import { facts } from './facts.js?v=202610191254';
 
 export const CREATION = {
   'factory.h2': { en: 'Factory: ask for a product, not for a type', ru: 'Factory: проси продукт, а не тип' },

@@ -208,6 +208,34 @@ export function islandsTrace(rows) {
   return { events, count, grid };
 }
 
+/** No traversal: every land cell brings 4 sides, every edge shared with land to the right or below takes 2 away. */
+export function islandPerimeterTrace(grid) {
+  const rows = grid.length, cols = grid[0].length, gain = grid.map(r => r.map(() => null)), shared = [], events = [];
+  let total = 0, land = 0;
+  const push = (key, args, extra = {}) => events.push(event(key, args, { cur: null, gain: gain.map(r => [...r]), shared: shared.map(s => [...s]), total, ...extra }));
+  push('per.ev.start', [rows, cols]);
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (!grid[r][c]) continue;
+      land++;
+      const before = total;
+      total += 4;
+      gain[r][c] = 4;
+      push('per.ev.land', [r, c, before, total], { cur: [r, c] });
+      for (const [dr, dc, key] of [[0, 1, 'per.ev.right'], [1, 0, 'per.ev.down']]) {
+        if (!grid[r + dr]?.[c + dc]) continue;
+        const was = total;
+        total -= 2;
+        gain[r][c] -= 2;
+        shared.push([r, c, r + dr, c + dc]);
+        push(key, [r, c, r + dr, c + dc, was, total], { cur: [r, c], edge: [r, c, r + dr, c + dc] });
+      }
+    }
+  }
+  push('per.ev.done', [total, land, shared.length]);
+  return { events, perimeter: total };
+}
+
 /** 0 empty, 1 fresh, 2 rotten. BFS from every rotten orange at once; one level is one minute. */
 export function orangesTrace(grid) {
   const g = grid.map(r => [...r]), events = [];

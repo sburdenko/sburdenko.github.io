@@ -56,12 +56,12 @@ export const HUB = {
   },
   'hub.tape6Title': { en: 'Algorithm patterns', ru: 'Паттерны алгоритмов' },
   'hub.tape6Desc': {
-    en: 'Twelve interview patterns from hash maps to DP: how to spot each one, a C# skeleton and 59 problems — each played step by step on its own editable rig, with a Hard one in every chapter.',
-    ru: 'Двенадцать паттернов для собеседования, от хеш-таблиц до DP: как узнать каждый, каркас на C# и 59 задач — каждая по шагам на своём редактируемом стенде, в каждой главе есть Hard.'
+    en: 'Fourteen interview patterns from hash maps to DP, matrices and shortest paths: how to spot each one, a C# skeleton and 72 problems — each played step by step on its own editable rig, with a Hard one in every chapter.',
+    ru: 'Четырнадцать паттернов для собеседования, от хеш-таблиц до DP, матриц и кратчайших путей: как узнать каждый, каркас на C# и 72 задачи — каждая по шагам на своём редактируемом стенде, в каждой главе есть Hard.'
   },
   'hub.tape6Tags': {
-    en: '<span>Algorithms</span><span>LeetCode</span><span>C#</span><span>12 patterns</span>',
-    ru: '<span>Алгоритмы</span><span>LeetCode</span><span>C#</span><span>12 паттернов</span>'
+    en: '<span>Algorithms</span><span>LeetCode</span><span>C#</span><span>14 patterns</span>',
+    ru: '<span>Алгоритмы</span><span>LeetCode</span><span>C#</span><span>14 паттернов</span>'
   },
   'hub.soonTag': { en: '<span>Soon</span>', ru: '<span>Скоро</span>' },
   'hub.soonGo': { en: '■ NOT RECORDED YET', ru: '■ ЗАПИСЬ НЕ НАЧАТА' },

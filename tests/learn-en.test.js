@@ -23,6 +23,18 @@ function rightInput(card) {
   }
 }
 
+/** goal без переводимых строк: вопросы стенда (q, explain, подписи вариантов) переводятся, остальное общее. */
+const TR_GOAL = new Set(['q', 'explain', 'label']);
+function goalShape(v) {
+  if (Array.isArray(v)) return v.map(goalShape);
+  if (v && typeof v === 'object') {
+    if ('ru' in v && 'en' in v) return '…';
+    return Object.fromEntries(Object.entries(v).filter(([k]) => !TR_GOAL.has(k)).map(([k, x]) => [k, goalShape(x)]));
+  }
+  return v;
+}
+const shape = (k, v) => (k === 'goal' ? goalShape(v) : v);
+
 /** Пути в объекте, где встречается кириллица. */
 function cyrillicPaths(v, path = '') {
   if (typeof v === 'string') return CYR.test(v) ? [`${path}: «${v.slice(0, 50)}»`] : [];
@@ -57,7 +69,7 @@ for (const c of COURSES.filter(c => c.load && (!only || c.id === only))) {
       assert.equal(l.cards.length, r.cards.length, `${at0}: число карточек`);
       l.cards.forEach((card, i) => {
         const rc = r.cards[i], at = `${at0} #${i + 1} (${rc.t})`;
-        for (const k of SAME) assert.deepEqual(card[k], rc[k], `${at}: поле ${k} должно совпадать с русским`);
+        for (const k of SAME) assert.deepEqual(shape(k, card[k]), shape(k, rc[k]), `${at}: поле ${k} должно совпадать с русским`);
         for (const k of ['options', 'items', 'pairs', 'tiles', 'labels']) {
           if (rc[k]) assert.equal(card[k]?.length, rc[k].length, `${at}: длина ${k}`);
         }

@@ -42,5 +42,13 @@ export const INPUTS = {
   'in.err.treeDistinct': { en: () => 'Tree values must be distinct here.', ru: () => 'Здесь значения в дереве не должны повторяться.' },
   'in.err.pattern': { en: () => 'A “*” must follow a letter or “.”.', ru: () => '«*» должна стоять после буквы или «.».' },
   'in.err.kDistinct': { en: n => `k must not exceed the number of distinct values (${n}).`, ru: n => `k не больше числа разных значений (${n}).` },
+  'in.err.matRows': { en: (a, b) => `The matrix needs ${a}–${b} rows separated by “|”, e.g. 1 2 | 3 4.`, ru: (a, b) => `В матрице от ${a} до ${b} строк через «|», например 1 2 | 3 4.` },
+  'in.err.square': { en: (r, c) => `The matrix must be square, now it is ${r} × ${c}.`, ru: (r, c) => `Матрица должна быть квадратной, сейчас она ${r} × ${c}.` },
+  'in.err.wedges': { en: () => 'Write edges as from>to:time, e.g. 2>1:1 2>3:1.', ru: () => 'Пиши рёбра как откуда>куда:время, например 2>1:1 2>3:1.' },
+  'in.err.selfLoop': { en: () => 'An edge must lead to another node.', ru: () => 'Ребро должно вести в другой узел.' },
+  'in.err.dupEdge': { en: () => 'Each from>to pair may appear only once.', ru: () => 'Каждая пара откуда>куда — не больше одного раза.' },
+  'in.err.node': { en: n => `Nodes are numbered from 1 to n (${n}).`, ru: n => `Узлы нумеруются от 1 до n (${n}).` },
+  'in.err.needZero': { en: () => 'The matrix needs at least one 0 — distances are measured to it.', ru: () => 'В матрице нужен хотя бы один 0 — до него и меряем расстояния.' },
+  'in.err.corners': { en: () => 'The start (0, 0) and the bottom-right corner must be empty (0).', ru: () => 'Старт (0, 0) и правый нижний угол должны быть пустыми (0).' },
   'in.err.tooBig': { en: n => `This input needs more than ${n} steps — make it smaller.`, ru: n => `Для этих данных нужно больше ${n} шагов — уменьши их.` },
 };
