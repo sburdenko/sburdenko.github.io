@@ -14,11 +14,11 @@
  *             варианты с event, answer можно не писать — верным считается вариант с ключом события at.
  * Действия: next, prev, reset (в начало), end (в конец или до вопроса), pick:N.
  */
-import { RIGS as TAPE_RIGS, runWithInput } from '../algorithms/patterns/rigs.js?v=202610171210';
-import { PROBLEMS, NAMES } from '../algorithms/patterns/problems.js?v=202610171210';
-import { DICT } from '../algorithms/patterns/i18n.js?v=202610171210';
-import { formatField } from '../algorithms/patterns/inputs.js?v=202610171210';
-import { tr } from './i18n.js?v=202610171210';
+import { RIGS as TAPE_RIGS, runWithInput } from '../algorithms/patterns/rigs.js?v=202610190810';
+import { PROBLEMS, NAMES } from '../algorithms/patterns/problems.js?v=202610190810';
+import { DICT } from '../algorithms/patterns/i18n.js?v=202610190810';
+import { formatField } from '../algorithms/patterns/inputs.js?v=202610190810';
+import { tr } from './i18n.js?v=202610190810';
 
 /** Строка кассеты на текущем языке: значение — строка или функция от аргументов события. */
 export function tapeText(key, args = []) {

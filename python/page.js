@@ -1,11 +1,11 @@
 /** Stand landing: six cassettes with progress, the overall progress panel and setup notes. */
-import { $, esc, bootVhs } from '../assets/vhs.js?v=202610171210';
-import { initI18n, t, onLang } from '../assets/i18n.js?v=202610171210';
-import { COMMON } from '../assets/i18n-common.js?v=202610171210';
-import { SHARED } from './shared/i18n-shared.js?v=202610171210';
-import { STAND } from './i18n.js?v=202610171210';
-import { CATALOG } from './shared/catalog.js?v=202610171210';
-import { summary, onProgress, exportProgress, importProgress, resetProgress } from './shared/progress.js?v=202610171210';
+import { $, esc, bootVhs } from '../assets/vhs.js?v=202610190810';
+import { initI18n, t, onLang } from '../assets/i18n.js?v=202610190810';
+import { COMMON } from '../assets/i18n-common.js?v=202610190810';
+import { SHARED } from './shared/i18n-shared.js?v=202610190810';
+import { STAND } from './i18n.js?v=202610190810';
+import { CATALOG } from './shared/catalog.js?v=202610190810';
+import { summary, onProgress, exportProgress, importProgress, resetProgress } from './shared/progress.js?v=202610190810';
 
 initI18n({ ...COMMON, ...SHARED, ...STAND });
 bootVhs();
