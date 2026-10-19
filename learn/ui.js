@@ -5,8 +5,8 @@
  * t('key', { n: 3 }) подставляет {n}; нет строки на языке — берётся английская, потом русская.
  * Модуль дожидается загрузки строк (top-level await), так что t() можно звать сразу.
  */
-import { getLang, LANGS } from './i18n.js?v=202610191643';
-import { readJson } from './content.js?v=202610191643';
+import { getLang, LANGS } from './i18n.js?v=202610191654';
+import { readJson } from './content.js?v=202610191654';
 
 const FALLBACKS = ['en', 'ru'];
 const need = [...new Set([...FALLBACKS, ...LANGS, getLang()])];
