@@ -2,7 +2,7 @@
  "id": "algo.u6.l4",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 15,
+ "minutes": 16,
  "cards": [
   {
    "t": "learn",
@@ -80,15 +80,37 @@
    "lang": "cs"
   },
   {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
-   "explain": "⟦⟧",
-   "wrong": {
-    "1": "⟦⟧",
-    "2": "⟦⟧"
-   }
+   "t": "rig",
+   "rig": "algo",
+   "problem": "cycleEntry",
+   "input": {
+    "n": 8,
+    "pos": 5
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 10,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 2,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:2", "end"]
   },
   {
    "t": "learn",

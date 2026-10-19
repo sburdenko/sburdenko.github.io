@@ -2,7 +2,7 @@
  "id": "algo.u7.l5",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 15,
+ "minutes": 16,
  "cards": [
   {
    "t": "learn",
@@ -20,15 +20,54 @@
    "lang": "cs"
   },
   {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["2", "1", "0"],
-   "answer": 0,
-   "explain": "⟦⟧",
-   "wrong": {
-    "1": "⟦⟧",
-    "2": "⟦⟧"
-   }
+   "t": "rig",
+   "rig": "algo",
+   "problem": "weightedPick",
+   "input": {
+    "w": [3, 1, 4, 2],
+    "r": 4
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 6,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 8,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 2,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:2", "end"]
   },
   {
    "t": "blanks",
@@ -69,16 +108,54 @@
    "lang": "cs"
   },
   {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
-   "explain": "⟦⟧",
-   "wrong": {
-    "1": "⟦⟧",
-    "2": "⟦⟧",
-    "3": "⟦⟧"
-   }
+   "t": "rig",
+   "rig": "algo",
+   "problem": "shuffle",
+   "input": {
+    "nums": [1, 2, 3, 4, 5, 6],
+    "j": [2, 4, 0, 1, 0]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 4,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 1,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 11,
+      "options": [
+       {
+        "label": "6 · 5 · 4 · 3 · 2 = 720 = 6!"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:1", "end", "pick:0", "end"]
   },
   {
    "t": "learn",
