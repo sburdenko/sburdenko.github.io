@@ -7,6 +7,7 @@ import { RIGS_AVALONIA } from './rigs-avalonia.js?v=202610171210';
 import { RIGS_CSHARP } from './rigs-csharp.js?v=202610171210';
 import { RIGS_THREE } from './rigs-three.js?v=202610171210';
 import { RIGS_HUNT } from './rigs-hunt.js?v=202610171210';
+import { RIGS_ALGO } from './rigs-algo.js?v=202610171210';
 import { RIGS_3D } from './rigs-3d.js?v=202610171210';
 import { THREAD_RIGS } from './rigs-threads.js?v=202610171210';
 import { runIL, jitInit, jitCall, compiledCount, RACE, raceTotal, raceWinner } from './models.js?v=202610171210';
@@ -161,7 +162,7 @@ function race(card, host, done) {
   }
 }
 
-const RIGS = { stack, jit, race, ...MEM_RIGS, ...THREAD_RIGS, ...RIGS_3D, ...RIGS_ASYNC, ...RIGS_HISTORY, ...RIGS_AVALONIA, ...RIGS_CSHARP, ...RIGS_THREE, ...RIGS_HUNT };
+const RIGS = { stack, jit, race, ...MEM_RIGS, ...THREAD_RIGS, ...RIGS_3D, ...RIGS_ASYNC, ...RIGS_HISTORY, ...RIGS_AVALONIA, ...RIGS_CSHARP, ...RIGS_THREE, ...RIGS_HUNT, ...RIGS_ALGO };
 
 export function mountRig(card, host, done) {
   RIGS[card.rig](card, host, done);

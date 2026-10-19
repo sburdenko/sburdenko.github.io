@@ -157,6 +157,7 @@ algorithms/patterns/
   inputs.js                разбор и проверка того, что вводит человек (без DOM)
   problems-*.js            задачи и решения на C#
   i18n-*.js ev-*.js        тексты глав и шагов { en, ru }; плеер берётся из bfs-dfs/player.js
+  *.d.ts                   типы для learn/ (стенд algo): typecheck не заходит в код кассеты
 index.html                 Bathys: главная страница, грузит learn/app.js
 shelf/index.html           полка кассет
 learn/
@@ -171,6 +172,7 @@ learn/
                            Grid, панели, привязки и селекторы Avalonia,
                            ограничения дженериков, замыкания, LINQ, Span, копии структур, switch,
                            «найди баг» — листинг с отметкой строк (models-hunt.js),
+                           задачи кассеты 06 по шагам с вопросом «что дальше?» (models-algo.js),
                            первая сцена, камера, иерархия, свет и текстуры Three.js (без DOM);
   three-view.js            живая WebGL-картинка: Three.js r170 с CDN, освобождает контекст, когда карточка ушла
                            у каждого init / act / goal — тесты проходят задание теми же действиями, что кнопки
@@ -219,6 +221,39 @@ bundle свежий; `tests/learn.test.js` и `tests/learn-en.test.js` прох�
 Новый урок пишут как два модуля (ru и en) и добавляют командой
 `node tools/content-add.mjs <курс> урок.js урок.en.js`, затем вписывают id в `course.json`.
 Курс из старых модулей переводит `node tools/content-convert.mjs <папка курса>`.
+
+## Стенд algo: задачи кассеты «Паттерны алгоритмов» в уроке
+
+`learn/models-algo.js` (модель без DOM) и `learn/rigs-algo.js` (отрисовка) показывают в уроке любую из 59 задач
+кассеты 06: трасса, SVG и тексты шагов берутся из `algorithms/patterns/` без копирования, стили SVG —
+правила `.stage …` из её `style.css`, подключённые с приставкой `.algo-rig`.
+
+```js
+{ t: 'rig', rig: 'algo', problem: 'coin',             // id задачи — id стенда кассеты, см. ALGO_IDS
+  input: { coins: [1, 2, 5], amount: 11 },            // необязательно: поверх примера кассеты, те же проверки полей
+  task: 'Предскажи dp[6] до того, как стенд его посчитает.',
+  goal: { step: 'end',                                // или { step: 5 }, или { event: 'dp.ev.done' } — куда дойти
+          ask: { at: 6, options: ['1', '2', '3'], answer: 1, q: '…', explain: '…' } },
+  solve: ['end', 'pick:1', 'end'] }
+```
+
+- Кнопки ⏮ ◀ ▶ ⏭ — действия `reset`, `prev`, `next`, `end`; счётчик «Шаг i из n»; под картинкой — текст шага
+  и переменные кассеты на текущем языке.
+- «Предскажи» (`goal.ask`, синоним `goal.predict`): `at` — событие, которое надо предсказать (номер или ключ;
+  ключ — первое такое событие). Стенд встаёт на шаг перед ним, ▶ и ⏭ заблокированы до верного ответа
+  (`pick:N`); неверный вариант зачёркивается. Варианты (2–4) — строки, `{ ru, en }` или
+  `{ event: '<ключ>', label }`; если все варианты с `event`, `answer` можно не писать — он берётся из трассы,
+  а если написан, модель сверяет его с трассой.
+- Цель выполнена, когда стенд дошёл до шага цели (по умолчанию — до конца, при одном вопросе без `step` —
+  до предсказанного события) и вопрос, если есть, решён. Ошибки в карточке (нет задачи, ввод вне правил,
+  `at` вне трассы) бросают исключение с понятным текстом — тесты ловят их сразу.
+- Задачи: hash — twoSum, dup, anagram, longestConsec, psum, firstMissing; twoptr — moveZeroes, container,
+  threeSum, trap; window — maxAvg, longest, minLen, charReplace, minWindow; binary — bsearch, rotated, koko,
+  median; stack — parens, daily, minStack, histogram; list — cycle, removeNth, reverse, lru, reverseK;
+  graph — flood, islands, oranges, course, ladder; tree — maxDepth, levelOrder, validBst, lca, maxPath;
+  heap — kth, stones, topK, mergeK, medianStream; back — subsets, perms, combSum, wordSearch, queens;
+  greedy — jump, stock, intervals, mergeIv, candy; dp — climb, coin, lcs, lis, edit, regex.
+  Названия и номера LeetCode — в `ALGO[id].title / num`; новая задача кассеты попадает в реестр сама.
 
 ## Вход через Google
 

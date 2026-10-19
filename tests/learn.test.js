@@ -347,11 +347,12 @@ const RIG_MODELS = {
   grid: gridRig, panels: panelRig, bind: bindRig, selectors: selRig,
   generics: genRig, closures: closureRig, linq: linqRig, allocs: allocRig, copies: copyRig, patterns: switchRig,
   tjfirst: firstRig, tjcam: camRig, tjgraph: graphRig, tjlight: lightRig, tjtex: texRig,
-  hunt: huntRig
+  hunt: huntRig, algo: algoRig
 };
 
 /** Можно ли нажать кнопку действия в текущем состоянии — как её покажет стенд. */
 function enabled(card, s, a) {
+  if (card.rig === 'algo') return algoCan(card, s, a);
   if (card.rig === 'memory') return a !== 'step' || s.f < s.frames.length - 1;
   if (card.rig === 'datarace' && a.startsWith('step:')) return raceCan(s, a.slice(5));
   if (card.rig === 'deadlock' && a.startsWith('step:')) return lockCan(s, a.slice(5));
@@ -398,6 +399,105 @@ test('каждый новый стенд решается своими кноп�
       }
     }
   });
+});
+
+/* ---------- стенд algo: задачи кассеты 06 по шагам ---------- */
+import { ALGO, ALGO_IDS, algoRig, algoRun, algoAsk, algoCan, tapeText } from '../learn/models-algo.js';
+import { PROBLEMS } from '../algorithms/patterns/problems.js';
+
+/** Проходит solve теми же проверками, что общий тест стендов: кнопка доступна, цель в начале не выполнена. */
+function solveAlgo(card) {
+  let s = algoRig.init(card);
+  assert.ok(!algoRig.goal(card, s), `${card.problem}: цель выполнена ещё до начала`);
+  for (const a of card.solve) {
+    assert.ok(algoCan(card, s, a), `${card.problem}: действие ${a} недоступно на шаге ${s.i}`);
+    s = algoRig.act(card, s, a);
+  }
+  return s;
+}
+
+test('algo: реестр собран из кассеты — все её задачи, у каждой трасса, вид и тексты на двух языках', () => {
+  assert.equal(ALGO_IDS.length, Object.values(PROBLEMS).flat().length);
+  for (const id of ALGO_IDS) {
+    const p = ALGO[id];
+    assert.ok(p.title && p.num && p.patternName, `${id}: нет названия`);
+    for (const [f, v] of Object.entries(p.i18n)) assert.ok(v.ru && v.en, `${id}: нет текста ${f}`);
+    const run = algoRun({ problem: id });
+    assert.ok(run.events.length > 1, `${id}: трасса из одного шага`);
+    for (const lang of ['ru', 'en']) {
+      useLang(lang);
+      for (const e of run.events) {
+        const text = tapeText(e.key, e.args);
+        assert.ok(text && text !== e.key && !/undefined|NaN/.test(text), `${id}/${lang}: нет текста шага ${e.key}`);
+        if (lang === 'en') assert.ok(!/[А-Яа-яЁё]/.test(text), `${id}: кириллица в английском шаге ${e.key}`);
+        assert.match(p.view(run, e), /^<svg /, `${id}: вид не SVG`);
+        for (const [key] of p.vars(run, e)) assert.notEqual(tapeText(key), key, `${id}: нет подписи ${key}`);
+      }
+    }
+    useLang('ru');
+  }
+});
+
+test('algo: каждая задача реестра — next доходит до конца, prev и reset возвращают, goal выполняется через solve', () => {
+  for (const id of ALGO_IDS) {
+    const card = { t: 'rig', rig: 'algo', problem: id, task: '…', goal: { step: 'end' }, solve: ['end'] };
+    const n = algoRun(card).events.length;
+    let s = algoRig.init(card), steps = 0;
+    while (algoCan(card, s, 'next')) { s = algoRig.act(card, s, 'next'); steps++; }
+    assert.equal(s.i, n - 1, `${id}: next не дошёл до конца`);
+    assert.equal(steps, n - 1);
+    assert.ok(algoRig.goal(card, s), `${id}: конец не засчитан`);
+    assert.equal(algoRig.act(card, s, 'next'), s, `${id}: next за концом меняет состояние`);
+    assert.equal(algoRig.act(card, s, 'prev').i, n - 2);
+    assert.equal(algoRig.act(card, s, 'reset').i, 0);
+    assert.ok(algoRig.goal(card, solveAlgo(card)), `${id}: solve не достигает цели`);
+  }
+});
+
+test('algo: input поверх примера проверяется правилами кассеты', () => {
+  const card = { problem: 'twoSum', input: { nums: [1, 4, 6], target: 10 } };
+  assert.deepEqual(algoRun(card).found, [1, 2]);
+  assert.throws(() => algoRun({ problem: 'twoSum', input: { nums: [1] } }), /ввод не подходит \(nums\)/);
+  assert.throws(() => algoRun({ problem: 'nope' }), /нет задачи/);
+  assert.equal(algoRun({ problem: 'coin', input: { coins: [1, 2, 5], amount: 11 } }).answer, 3, 'input заменяет поля примера');
+  assert.equal(algoRun({ problem: 'coin', input: { amount: 6 } }).answer, 2, 'пример кассеты: монеты 1, 3, 4');
+});
+
+test('algo: цель по событию — дойти до него', () => {
+  const card = { problem: 'twoSum', goal: { event: 'hash.ev.hit' }, solve: ['end'] };
+  const s = algoRig.act(card, algoRig.init(card), 'next');
+  assert.ok(!algoRig.goal(card, s));
+  assert.ok(algoRig.goal(card, solveAlgo(card)));
+  assert.throws(() => algoRig.goal({ problem: 'twoSum', goal: { event: 'hash.ev.none' } }, s), /нет события/);
+});
+
+test('algo: «предскажи» — стенд встаёт перед событием и пускает дальше после верного ответа', () => {
+  const ask = { at: 'hash.ev.hit', options: [{ event: 'hash.ev.miss', label: { ru: 'промах', en: 'miss' } }, { event: 'hash.ev.hit', label: { ru: 'нашли пару', en: 'found the pair' } }] };
+  const card = { problem: 'twoSum', goal: { ask }, solve: ['end', 'pick:1', 'next'] };
+  const { at, pause, answer } = algoAsk(card);
+  assert.equal(algoRun(card).events[at].key, 'hash.ev.hit');
+  assert.equal(answer, 1, 'answer выводится из варианта с ключом события');
+  let s = algoRig.act(card, algoRig.init(card), 'end');
+  assert.equal(s.i, pause, 'end останавливается на вопросе');
+  assert.ok(!algoCan(card, s, 'next') && !algoCan(card, s, 'end'), 'до ответа дальше нельзя');
+  s = algoRig.act(card, s, 'pick:0');
+  assert.deepEqual(s.wrong, [0]);
+  assert.ok(!algoCan(card, s, 'pick:0') && !algoCan(card, s, 'next'));
+  s = algoRig.act(card, s, 'pick:1');
+  assert.ok(s.solved && algoCan(card, s, 'next'));
+  assert.ok(!algoRig.goal(card, s), 'цель — дойти до предсказанного события');
+  assert.ok(algoRig.goal(card, algoRig.act(card, s, 'next')));
+  assert.ok(algoRig.goal(card, solveAlgo(card)));
+  // по номеру шага, с подписями-строками и целью «до конца»
+  const byIndex = { problem: 'coin', goal: { step: 'end', ask: { at: 3, options: ['a', 'b', 'c'], answer: 2 } }, solve: ['end', 'pick:2', 'end'] };
+  assert.equal(algoAsk(byIndex).pause, 2);
+  const half = algoRig.act(byIndex, algoRig.act(byIndex, algoRig.init(byIndex), 'end'), 'pick:2');
+  assert.ok(!algoRig.goal(byIndex, half), 'ответил, но до конца не дошёл');
+  assert.ok(algoRig.goal(byIndex, solveAlgo(byIndex)));
+  // ошибки автора карточки ловятся сразу
+  assert.throws(() => algoAsk({ problem: 'twoSum', goal: { ask: { ...ask, answer: 0 } } }), /по трассе/);
+  assert.throws(() => algoAsk({ problem: 'twoSum', goal: { ask: { at: 0, options: ['a', 'b'], answer: 0 } } }), /вне трассы/);
+  assert.throws(() => algoAsk({ problem: 'twoSum', goal: { ask: { at: 2, options: ['a'], answer: 0 } } }), /2–4/);
 });
 
 /* ---------- курс «Async/await до дна» ---------- */
