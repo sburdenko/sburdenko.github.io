@@ -12,6 +12,8 @@ import { EV_C } from './ev-c.js?v=202610191657';
 import { EV_D } from './ev-d.js?v=202610191657';
 import { EV_E } from './ev-e.js?v=202610191657';
 import { EV_F } from './ev-f.js?v=202610191657';
+import { CH_H } from './i18n-h.js?v=202610191657';
+import { EV_H } from './ev-h.js?v=202610191657';
 import { INPUTS } from './i18n-inputs.js?v=202610191657';
 
-export const DICT = { ...CORE, ...CH_A, ...CH_B, ...CH_C, ...CH_D, ...CH_E, ...EV_A, ...EV_B, ...EV_C, ...EV_D, ...EV_E, ...INPUTS, ...CH_F, ...EV_F };
+export const DICT = { ...CORE, ...CH_A, ...CH_B, ...CH_C, ...CH_D, ...CH_E, ...EV_A, ...EV_B, ...EV_C, ...EV_D, ...EV_E, ...INPUTS, ...CH_F, ...EV_F, ...CH_H, ...EV_H };

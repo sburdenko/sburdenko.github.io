@@ -210,3 +210,28 @@
 .stage .rcap.res{fill:var(--osd)}
 .stage .rcap.act{fill:#ffc2e3}
 @media (max-width:420px){.rig .crt{padding:14px 6px}}
+/* data structure design: trie, serialization tokens */
+.stage .endring{fill:none;stroke:var(--ok);stroke-width:1.6;opacity:.75}
+.stage .endring.on{stroke-width:2.6;opacity:1}
+.stage .slot{fill:#120b20;stroke:var(--line2);stroke-width:1}
+.stage .slot.on{fill:#3a2d5c;stroke:#8b7bb5}
+.stage .slot.ok{stroke:var(--ok);stroke-width:2.2}
+.stage .slot.new{fill:rgba(255,62,165,.3);stroke:var(--cpu);stroke-width:2.2}
+.stage .slot.bad{fill:rgba(255,92,108,.18);stroke:var(--bad);stroke-width:2.2}
+.stage .slot-t{font-size:11.5px;fill:var(--ink3);opacity:.55}
+.stage .slot-t.on{fill:#fff;opacity:1;font-weight:600}
+.stage .slot-t.ok{fill:var(--ok);opacity:1;font-weight:700}
+.stage .slot-t.new{fill:#ffc2e3;opacity:1;font-weight:700}
+.stage .slot-t.bad{fill:#ffb3bc;opacity:1;font-weight:700}
+.stage .stub{stroke:#6d5f8c;stroke-width:1.4;stroke-dasharray:3 3}
+.stage .stub.done{stroke:#8b7bb5}
+.stage .stub.cur{stroke:var(--osd);stroke-width:2.2}
+.stage .stub-t{font-size:12px;fill:var(--ink3)}
+.stage .stub-t.done{fill:#c9bde6}
+.stage .stub-t.cur{fill:var(--osd);font-weight:700}
+.stage .cell.nilc{fill:#120b20}
+.stage .cv.nilt{fill:var(--ink3)}
+.stage .cv.nilt.cur{fill:var(--osd)}
+.stage .cap{font-size:11.5px;fill:var(--ink3);text-anchor:start;letter-spacing:.03em}
+.stage .cap.corner{text-anchor:end}
+.stage .cap.on{fill:var(--osd);font-weight:700}

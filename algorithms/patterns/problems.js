@@ -5,6 +5,7 @@ import { PROBLEMS_C } from './problems-c.js?v=202610191657';
 import { PROBLEMS_D } from './problems-d.js?v=202610191657';
 import { PROBLEMS_E } from './problems-e.js?v=202610191657';
 import { PROBLEMS_F } from './problems-f.js?v=202610191657';
+import { PROBLEMS_H } from './problems-h.js?v=202610191657';
 
 export const NAMES = {
   hash: 'HashMap / HashSet', twoptr: 'Two Pointers', window: 'Sliding Window', binary: 'Binary Search',
@@ -12,6 +13,7 @@ export const NAMES = {
   heap: 'Heap / PriorityQueue', back: 'Backtracking', greedy: 'Greedy', dp: 'Dynamic Programming',
   matrix: 'Arrays & Matrices', paths: 'Shortest Paths · Dijkstra',
   bits: 'Bit Manipulation',
+  design: 'Data Structure Design',
 };
 
-export const PROBLEMS = { ...PROBLEMS_A, ...PROBLEMS_B, ...PROBLEMS_C, ...PROBLEMS_D, ...PROBLEMS_E, ...PROBLEMS_F };
+export const PROBLEMS = { ...PROBLEMS_A, ...PROBLEMS_B, ...PROBLEMS_C, ...PROBLEMS_D, ...PROBLEMS_E, ...PROBLEMS_F, ...PROBLEMS_H };
