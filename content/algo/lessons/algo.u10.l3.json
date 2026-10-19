@@ -1,0 +1,171 @@
+{
+ "id": "algo.u10.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 14,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "//            3\n//         /     \\\n//        5       1\n//       / \\     / \\\n//      6   2   0   8\n//         / \\\n//        7   4\n// LCA(7, 8) = 3    LCA(7, 4) = 2    LCA(5, 4) = 5",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "lca",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 11,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 16,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["gl = max(0, Gain(left))", "gr = max(0, Gain(right))", "best = max(best, val + gl + gr)", "⟦⟧"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "private int best;\n\npublic int MaxPathSum(TreeNode root) {\n    best = ___;\n    Gain(root);\n    return best;\n}\n\nprivate int Gain(TreeNode node) {\n    if (node == null) return 0;\n    int left = Math.Max(___, Gain(node.left));\n    int right = Math.Max(0, Gain(node.right));\n    best = Math.Max(best, ___);\n    return ___;\n}",
+   "tiles": ["int.MinValue", "int.MaxValue", "0", "node.val + left + right", "node.val + Math.Max(left, right)", "left + right", "node.val"],
+   "answer": ["int.MinValue", "0", "node.val + left + right", "node.val + Math.Max(left, right)"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "maxPath",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 4,
+      "options": ["best = 42; return 35", "best = 42; return 42", "best = 35; return 35"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 5,
+      "options": ["best = 42; return 25", "best = 34; return 25", "best = 42; return 34"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "private int best = 0;\n\npublic int MaxPathSum(TreeNode root) { Gain(root); return best; }\n\nprivate int Gain(TreeNode node) {\n    if (node == null) return 0;\n    int left = Math.Max(0, Gain(node.left));\n    int right = Math.Max(0, Gain(node.right));\n    best = Math.Max(best, node.val + left + right);\n    return node.val + Math.Max(left, right);\n}",
+   "answer": 0,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public TreeNode Lca(TreeNode root, TreeNode p, TreeNode q) {\n    var parent = new Dictionary<TreeNode, TreeNode> { [root] = null };\n    var stack = new Stack<TreeNode>();\n    stack.Push(root);\n    while (!parent.ContainsKey(p) || !parent.ContainsKey(q)) {\n        var node = stack.Pop();\n        if (node.left != null) { parent[node.left] = node; stack.Push(node.left); }\n        if (node.right != null) { parent[node.right] = node; stack.Push(node.right); }\n    }\n    var ancestors = new HashSet<TreeNode>();\n    for (var x = p; x != null; x = parent[x]) ancestors.Add(x);\n    var y = q;\n    while (!ancestors.Contains(y)) y = parent[y];\n    return y;\n}",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

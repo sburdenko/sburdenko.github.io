@@ -1,0 +1,170 @@
+{
+ "id": "algo.u10.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 14,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["node == null → 0", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "maxDepth",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 6,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 13,
+      "options": ["1 + max(1, 2) = 3", "max(1, 2) = 2", "1 + 1 + 2 = 4"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "size = queue.Count", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public IList<IList<int>> LevelOrder(TreeNode root) {\n    var res = new List<IList<int>>();\n    if (root == null) return ___;\n    var queue = new Queue<TreeNode>();\n    queue.Enqueue(root);\n    while (queue.Count > 0) {\n        var level = new List<int>();\n        for (int k = ___; k > 0; k--) {\n            var node = queue.___();\n            level.Add(node.val);\n            if (node.left != null) queue.Enqueue(___);\n            if (node.right != null) queue.Enqueue(node.right);\n        }\n        res.Add(___);\n    }\n    return res;\n}",
+   "tiles": ["res", "null", "queue.Count", "0", "Dequeue", "Pop", "node.left", "node", "level"],
+   "answer": ["res", "queue.Count", "Dequeue", "node.left", "level"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "levelOrder",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 3,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var res = new List<IList<int>>();\nif (root == null) return res;\nvar queue = new Queue<TreeNode>();\nqueue.Enqueue(root);\nwhile (queue.Count > 0) {\n    var level = new List<int>();\n    for (int k = 0; k < queue.Count; k++) {\n        var node = queue.Dequeue();\n        level.Add(node.val);\n        if (node.left != null) queue.Enqueue(node.left);\n        if (node.right != null) queue.Enqueue(node.right);\n    }\n    res.Add(level);\n}",
+   "answer": 6,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}
