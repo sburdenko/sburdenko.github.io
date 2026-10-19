@@ -1,0 +1,158 @@
+{
+ "id": "algo.u13.l5",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 16,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "LongestCommonSubsequence(\"abcde\", \"ace\");   // 3: \"ace\"\nLongestCommonSubsequence(\"abc\", \"def\");     // 0",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["2", "3", "1"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["a[i − 1] == b[j − 1] → ↖ + 1", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "for (int i = 1; i <= a.Length; i++)\n    for (int j = 1; j <= b.Length; j++)\n        dp[i, j] = a[___] == b[___]\n            ? ___\n            : ___;",
+   "tiles": ["i - 1", "i", "j - 1", "j", "dp[i - 1, j - 1] + 1", "dp[i - 1, j - 1]", "Math.Max(dp[i - 1, j], dp[i, j - 1])", "Math.Min(dp[i - 1, j], dp[i, j - 1])"],
+   "answer": ["i - 1", "j - 1", "dp[i - 1, j - 1] + 1", "Math.Max(dp[i - 1, j], dp[i, j - 1])"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "lcs",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 8,
+      "options": ["2", "1", "3"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 9,
+      "options": ["2", "3", "1"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var prev = new int[b.Length + 1];\nvar cur = new int[b.Length + 1];\nfor (int i = 1; i <= a.Length; i++) {\n    for (int j = 1; j <= b.Length; j++)\n        cur[j] = a[i - 1] == b[j - 1] ? prev[j - 1] + 1 : Math.Max(prev[j], cur[j - 1]);\n    prev = cur;\n}\nreturn prev[b.Length];",
+   "answer": 5,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "edit",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 5,
+      "options": ["1", "2", "0"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 15,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "dp[i − 1, j − 1] + 1"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "1 + min(↖, ↑, ←)"],
+    ["⟦⟧", "0"],
+    ["⟦⟧", "m + n − 2·LCS"]
+   ]
+  }
+ ]
+}

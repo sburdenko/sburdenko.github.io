@@ -1,0 +1,135 @@
+{
+ "id": "algo.u13.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 16,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "s = 1 … amount", "⟦⟧", "⟦⟧", "dp[amount] > amount → −1"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "var dp = new int[amount + 1];\nArray.Fill(dp, ___);\ndp[0] = ___;\nfor (int i = 1; i <= amount; i++)\n    foreach (int c in coins)\n        if (c <= i) dp[i] = Math.Min(dp[i], ___);\nreturn dp[amount] > amount ? ___ : dp[amount];",
+   "tiles": ["amount + 1", "int.MaxValue", "0", "1", "dp[i - c] + 1", "dp[i - 1] + 1", "-1", "0"],
+   "answer": ["amount + 1", "0", "dp[i - c] + 1", "-1"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "coin",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 3,
+      "options": ["dp[3] = 1", "dp[3] = 3", "dp[3] = 2"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 6,
+      "options": ["dp[6] = 2", "dp[6] = 3", "dp[6] = 1"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var dp = new int[amount + 1];\nArray.Fill(dp, int.MaxValue);\ndp[0] = 0;\nfor (int i = 1; i <= amount; i++)\n    foreach (int c in coins)\n        if (c <= i) dp[i] = Math.Min(dp[i], dp[i - c] + 1);\nreturn dp[amount] == int.MaxValue ? -1 : dp[amount];",
+   "answer": 5,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}
