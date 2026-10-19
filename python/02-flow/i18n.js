@@ -1,5 +1,5 @@
 /** All PY-02 strings: { key: { en, ru } }. */
-import { CH_A } from './i18n-a.js?v=202610191232';
-import { CH_B } from './i18n-b.js?v=202610191232';
+import { CH_A } from './i18n-a.js?v=202610191236';
+import { CH_B } from './i18n-b.js?v=202610191236';
 
 export const DICT = { ...CH_A, ...CH_B };

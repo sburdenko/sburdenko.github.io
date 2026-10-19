@@ -2,14 +2,14 @@
  * runProgram(source, options) → { events, out, error, lines }.
  * Each event is a frozen { kind, line, printed, mem, … } with the memory snapshot taken right after the step.
  */
-import { parse } from './parser.js?v=202610191232';
-import { PySyntaxError } from './lexer.js?v=202610191232';
-import { Interp, StepLimit } from './interp.js?v=202610191232';
-import { installBuiltins } from './builtins.js?v=202610191232';
-import { installModules } from './modules.js?v=202610191232';
-import { snapshot } from './snapshot.js?v=202610191232';
-import { PyError, resetIds } from './objects.js?v=202610191232';
-import { strOf } from './convert.js?v=202610191232';
+import { parse } from './parser.js?v=202610191236';
+import { PySyntaxError } from './lexer.js?v=202610191236';
+import { Interp, StepLimit } from './interp.js?v=202610191236';
+import { installBuiltins } from './builtins.js?v=202610191236';
+import { installModules } from './modules.js?v=202610191236';
+import { snapshot } from './snapshot.js?v=202610191236';
+import { PyError, resetIds } from './objects.js?v=202610191236';
+import { strOf } from './convert.js?v=202610191236';
 
 export const MAX_STEPS = 400;
 
