@@ -6,6 +6,8 @@ import * as B from '../algorithms/patterns/model-b.js';
 import * as C from '../algorithms/patterns/model-c.js';
 import * as D from '../algorithms/patterns/model-d.js';
 import * as E from '../algorithms/patterns/model-e.js';
+import * as F from '../algorithms/patterns/model-f.js';
+import { register, bitWidth, hexOf } from '../algorithms/patterns/view-kit.js';
 import { RIGS, PATTERN_IDS, runWithInput, MAX_STEPS } from '../algorithms/patterns/rigs.js';
 import { parseField, formatField, treeFromLevelOrder, levelOrderOf } from '../algorithms/patterns/inputs.js';
 import { PROBLEMS } from '../algorithms/patterns/problems.js';
@@ -614,6 +616,103 @@ test('the weighted edge field reads from>to:weight, triples or nested brackets',
   assert.equal(runWithInput(RIGS.obstacles, { grid: '100 000', k: '1' }).error[0], 'in.err.corners');
 });
 
+/* ---------- chapter 15: bit manipulation ---------- */
+/** Bits of a 32-bit word as a string, by division instead of bit operators: an independent reference. */
+const binary = v => { let u = v < 0 ? v + 2 ** 32 : v, s = ''; for (let i = 0; i < 32; i++) { s = (u % 2) + s; u = Math.floor(u / 2); } return s; };
+
+test('chapter 15: register traces agree with brute force', () => {
+  repeat(300, () => {
+    const n = Math.floor(next() * 2 ** 32);
+    const pop = F.popcountTrace(n);
+    const ones = [...binary(n)].filter(c => c === '1').length;
+    assert.equal(pop.count, ones, `${n}`);
+    assert.equal(pop.power, ones === 1);
+    for (const e of pop.events) if (e.key === 'pop.ev.and') assert.equal(binary(e.x).replace(/1(0*)$/, '0$1'), binary(e.and), 'x & (x − 1) clears exactly the lowest 1');
+
+    const size = len(1, 12), gone = len(0, size);
+    const nums = Array.from({ length: size + 1 }, (_, i) => i).filter(v => v !== gone).sort(() => next() - 0.5);
+    assert.equal(F.missingXorTrace(nums).answer, gone, `${nums}`);
+
+    const vals = [...new Set(ints(len(3, 7), -40, 40))];
+    if (vals.length >= 2) {
+      const [a, b, ...pairs] = vals;
+      const arr = [a, b, ...pairs, ...pairs].sort(() => next() - 0.5);
+      const single = F.singleIIITrace(arr);
+      assert.deepEqual(single.pair, [Math.min(a, b), Math.max(a, b)], `${arr}`);
+      const low = single.events.find(e => e.key === 'sn3.ev.low');
+      const diff = binary(a ^ b), at = 31 - diff.lastIndexOf('1');
+      assert.equal(low.args[3], at, 'x & −x is the lowest bit where a and b differ');
+    }
+
+    const m = len(0, 40);
+    assert.deepEqual(F.countBitsTrace(m).bits, Array.from({ length: m + 1 }, (_, i) => [...i.toString(2)].filter(c => c === '1').length));
+
+    const x = len(-1000, 1000), y = len(-1000, 1000), sum = F.sumBitsTrace(x, y);
+    assert.equal(sum.sum, x + y, `${x} + ${y}`);
+    assert.ok(sum.events.length <= 40, 'at most 32 rounds');
+
+    const pool = ints(len(1, 8), 0, 63), queries = Array.from({ length: len(1, 5) }, () => [len(0, 63), len(0, 63)]);
+    const brute = queries.map(([qx, qm]) => { const ok = pool.filter(v => v <= qm); return ok.length ? Math.max(...ok.map(v => qx ^ v)) : -1; });
+    assert.deepEqual(F.maxXorLimitTrace(pool, queries).answers, brute, `${pool} ${JSON.stringify(queries)}`);
+  });
+  assert.equal(F.popcountTrace(11).count, 3);
+  assert.equal(F.popcountTrace(4294967293).count, 31);
+  assert.equal(F.popcountTrace(0).count, 0);
+  assert.equal(F.missingXorTrace([3, 0, 1]).answer, 2);
+  assert.deepEqual(F.singleIIITrace([1, 2, 1, 3, 2, 5]).pair, [3, 5]);
+  assert.deepEqual(F.singleIIITrace([-1, 0]).pair, [-1, 0]);
+  assert.equal(F.sumBitsTrace(-1, 1).sum, 0);
+  assert.equal(F.sumBitsTrace(-1000, -1000).sum, -2000);
+  assert.deepEqual(F.maxXorLimitTrace([0, 1, 2, 3, 4], [[3, 1], [1, 3], [5, 6]]).answers, [3, 3, 7]);
+  assert.deepEqual(F.maxXorLimitTrace([5, 2, 4, 6, 6, 3], [[12, 4], [8, 1], [6, 3]]).answers, [15, -1, 5]);
+  const shown = [
+    [F.popcountTrace(52), ['pop.ev.minus', 'pop.ev.and', 'pop.ev.done']],
+    [F.popcountTrace(64), ['pop.ev.pow2']],
+    [F.missingXorTrace([9, 6, 4, 2, 3, 5, 7, 0, 1]), ['mis.ev.wait', 'mis.ev.meet', 'mis.ev.done']],
+    [F.singleIIITrace([1, 2, 1, 3, 2, 5]), ['sn3.ev.fold', 'sn3.ev.cancel', 'sn3.ev.neg', 'sn3.ev.low', 'sn3.ev.one', 'sn3.ev.zero']],
+    [F.countBitsTrace(12), ['cb.ev.even', 'cb.ev.odd', 'cb.ev.pow']],
+    [F.sumBitsTrace(13, 11), ['sum.ev.carry', 'sum.ev.nocarry']],
+    [F.sumBitsTrace(-3, 5), ['sum.ev.drop']],
+    [F.maxXorLimitTrace([5, 2, 4, 6, 6, 3], [[12, 4], [8, 1], [6, 3]]), ['mxl.ev.empty', 'mxl.ev.insert', 'mxl.ev.take', 'mxl.ev.same', 'mxl.ev.answer']],
+  ];
+  for (const [run, keys] of shown) for (const key of keys) assert.ok(keysOf(run).has(key), `the example shows ${key}`);
+});
+
+test('the register: width, hex, banks of 16 and marks', () => {
+  assert.equal(bitWidth([0, 255]), 8);
+  assert.equal(bitWidth([256]), 16);
+  assert.equal(bitWidth([65536]), 32);
+  assert.equal(bitWidth([-1]), 32, 'a negative int needs all 32 bits');
+  assert.equal(hexOf(-1), '0xFFFFFFFF');
+  assert.equal(hexOf(44, 8), '0x2C');
+  const wide = register([{ label: 'x', value: -6, ref: -5 }], { bits: 32, signed: true, cursor: 0 });
+  assert.equal((wide.match(/<rect class="bit /g) || []).length, 32);
+  assert.match(wide, /−6 · 0xFFFFFFFA/);
+  assert.equal((wide.match(/class="bit [^"]*chg/g) || []).length, 1, 'only bit 0 differs between −6 and −5');
+  assert.match(wide, /class="bitcol"/);
+  const narrow = register([{ label: 'n', value: 52 }], { bits: 8 });
+  assert.equal((narrow.match(/<rect class="bit one/g) || []).length, 3);
+  assert.match(narrow, /uint32 · 31…8 = 0/);
+  const [w32, w8] = [wide, narrow].map(s => Number(s.match(/viewBox="0 0 (\d+)/)[1]));
+  assert.ok(w32 <= 440 && w8 <= 250, `a 32-bit register wraps into two banks of 16: ${w32}, ${w8}`);
+});
+
+test('the uint field reads decimal, hex and binary', () => {
+  const spec = { type: 'uint', min: 0, max: 4294967295 };
+  for (const t of ['52', '0x34', '0b110100', '0b0011_0100', '0X34']) assert.equal(parseField(t, spec).value, 52, t);
+  assert.equal(parseField('4294967295', spec).value, 4294967295);
+  assert.equal(parseField('0xFFFFFFFF', spec).value, 4294967295);
+  assert.equal(parseField('4294967296', spec).error[0], 'in.err.range');
+  assert.equal(parseField('-1', spec).error[0], 'in.err.uint');
+  assert.equal(parseField('0x', spec).error[0], 'in.err.uint');
+  assert.equal(formatField(52, spec), '52');
+  assert.equal(runWithInput(RIGS.missingXor, { nums: '0 1 5' }).error[0], 'in.err.missing');
+  assert.equal(runWithInput(RIGS.missingXor, { nums: '0 1 1' }).error[0], 'in.err.distinct');
+  assert.equal(runWithInput(RIGS.singleIII, { nums: '1 1 2 2' }).error[0], 'in.err.twoSingles');
+  assert.equal(runWithInput(RIGS.singleIII, { nums: '1 2 3' }).error[0], 'in.err.twoSingles');
+  assert.equal(runWithInput(RIGS.maxXorLimit, { nums: '1 2', queries: '1 | 2' }).error[0], 'in.err.pairs');
+});
+
 /* ---------- wiring ---------- */
 const textsOf = (rig, params) => Object.fromEntries(rig.fields.map(f => [f.key, formatField(params[f.key], f)]));
 
@@ -655,7 +754,7 @@ test('input fields parse what people type and format back losslessly', () => {
 });
 
 test('every problem owns an editable rig: the example and random inputs parse, run and render', () => {
-  assert.equal(PATTERN_IDS.length, 14);
+  assert.equal(PATTERN_IDS.length, 15);
   const random = rng(7);
   for (const id of PATTERN_IDS) {
     for (const problem of PROBLEMS[id]) {

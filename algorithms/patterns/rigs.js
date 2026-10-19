@@ -4,10 +4,11 @@ import { RIGS_B } from './rigs-b.js?v=202610191254';
 import { RIGS_C } from './rigs-c.js?v=202610191254';
 import { RIGS_D } from './rigs-d.js?v=202610191254';
 import { RIGS_E } from './rigs-e.js?v=202610191254';
+import { RIGS_F } from './rigs-f.js?v=202610191254';
 import { parseField } from './inputs.js?v=202610191254';
 
-export const PATTERN_IDS = ['hash', 'twoptr', 'window', 'binary', 'stack', 'list', 'graph', 'tree', 'heap', 'back', 'greedy', 'dp', 'matrix', 'paths'];
-export const RIGS = { ...RIGS_A, ...RIGS_B, ...RIGS_C, ...RIGS_D, ...RIGS_E };
+export const PATTERN_IDS = ['hash', 'twoptr', 'window', 'binary', 'stack', 'list', 'graph', 'tree', 'heap', 'back', 'greedy', 'dp', 'matrix', 'paths', 'bits'];
+export const RIGS = { ...RIGS_A, ...RIGS_B, ...RIGS_C, ...RIGS_D, ...RIGS_E, ...RIGS_F };
 
 /** A trace longer than this is too tedious to step through; the page asks for smaller input instead. */
 export const MAX_STEPS = 250;

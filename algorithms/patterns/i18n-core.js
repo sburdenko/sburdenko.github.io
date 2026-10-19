@@ -2,12 +2,12 @@
 export const CORE = {
   'page.title': { en: 'Algorithm patterns · Tape 06', ru: 'Паттерны алгоритмов · Кассета 06' },
   'page.desc': {
-    en: 'Fourteen interview patterns and 72 problems: how to spot each pattern, a C# skeleton, and every problem played step by step on its own editable rig, with a solution.',
-    ru: 'Четырнадцать паттернов для собеседования и 72 задачи: как узнать паттерн, каркас на C#, и каждая задача по шагам на своём редактируемом стенде, с решением.',
+    en: 'Fifteen interview patterns and 78 problems: how to spot each pattern, a C# skeleton, and every problem played step by step on its own editable rig, with a solution.',
+    ru: 'Пятнадцать паттернов для собеседования и 78 задач: как узнать паттерн, каркас на C#, и каждая задача по шагам на своём редактируемом стенде, с решением.',
   },
   'hero.eyebrow': { en: 'Tape 06 · Algorithms · interview prep', ru: 'Кассета 06 · Алгоритмы · подготовка к собеседованию' },
   'hero.title': { en: 'Patterns', ru: 'Паттерны' },
-  'hero.subtitle': { en: 'fourteen moves, 72 problems', ru: 'четырнадцать приёмов, 72 задачи' },
+  'hero.subtitle': { en: 'fifteen moves, 78 problems', ru: 'пятнадцать приёмов, 78 задач' },
   'hero.lede': {
     en: 'Most interview problems are one of a dozen moves in disguise. Every chapter shows how to spot the move in the statement, gives a C# skeleton and plays four to six problems step by step, where <b>the same move works in a different way</b>. Every chapter has a Hard one, and the tabs marked MUST KNOW are the problems interviews ask most.',
     ru: 'Большая часть задач на собеседовании — один из дюжины приёмов в маскировке. В каждой главе: как узнать приём по условию, каркас на C# и от четырёх до шести задач по шагам, где <b>один и тот же приём работает по-разному</b>. В каждой главе есть задача Hard, а вкладки с пометкой НАДО ЗНАТЬ — то, что спрашивают чаще всего.',
