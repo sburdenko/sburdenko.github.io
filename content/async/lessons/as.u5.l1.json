@@ -2,19 +2,22 @@
  "id": "as.u5.l1",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 5,
+ "minutes": 10,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "tapline",
    "q": "⟦⟧",
    "code": "⟦⟧",
    "answer": 3,
-   "explain": "⟦⟧"
+   "explain": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "choice",
@@ -22,31 +25,86 @@
    "code": "⟦⟧",
    "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
-   "explain": "⟦⟧"
-  },
-  {
-   "t": "learn",
-   "title": "⟦⟧",
-   "body": "⟦⟧"
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   },
+   "lang": "cs"
   },
   {
    "t": "choice",
    "q": "⟦⟧",
+   "code": "⟦⟧",
    "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   },
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2, 3],
    "explain": "⟦⟧"
   },
   {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "⟦⟧"
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
   },
   {
-   "t": "multi",
+   "t": "choice",
    "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": [0, 1, 2],
+   "code": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   },
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   },
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
    "explain": "⟦⟧"
   },
   {
@@ -54,8 +112,9 @@
    "q": "⟦⟧",
    "pairs": [
     ["CS4014", "⟦⟧"],
-    ["async void", "⟦⟧"],
     ["_ = task", "⟦⟧"],
+    ["AsyncVoidMethodBuilder", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
     ["BackgroundService", "⟦⟧"]
    ]
   }

@@ -2,12 +2,14 @@
  "id": "as.u6.l1",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 6,
+ "minutes": 11,
  "cards": [
   {
    "t": "learn",
    "title": "⟦⟧",
-   "body": "⟦⟧"
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
   },
   {
    "t": "rig",
@@ -31,11 +33,6 @@
    "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
    "explain": "⟦⟧"
-  },
-  {
-   "t": "learn",
-   "title": "⟦⟧",
-   "body": "⟦⟧"
   },
   {
    "t": "rig",
@@ -64,7 +61,48 @@
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "⟦⟧"
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "public async Task<IActionResult> Save(Order o)\n{\n    await _db.SaveChangesAsync().ConfigureAwait(false);\n    var name = HttpContext.User.Identity!.Name;\n    return Ok(name);\n}",
+   "lang": "cs",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public async Task<IActionResult> Search(string q, ___ ct)\n{\n    var items = await _db.Products.Where(p => p.Name.Contains(q)).ToListAsync(___);\n    return Ok(items);\n}",
+   "lang": "cs",
+   "tiles": ["CancellationToken", "ct", "CancellationToken.None", "HttpContext", "CancellationTokenSource"],
+   "answer": ["CancellationToken", "ct"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
   },
   {
    "t": "tapline",
@@ -74,21 +112,18 @@
    "explain": "⟦⟧"
   },
   {
-   "t": "multi",
+   "t": "choice",
    "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": [0, 1, 2],
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
    "explain": "⟦⟧"
   },
   {
-   "t": "match",
+   "t": "multi",
    "q": "⟦⟧",
-   "pairs": [
-    ["ASP.NET Core", "⟦⟧"],
-    ["ASP.NET Framework", "⟦⟧"],
-    ["⟦⟧", "⟦⟧"],
-    ["BackgroundService", "⟦⟧"]
-   ]
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
   }
  ]
 }
