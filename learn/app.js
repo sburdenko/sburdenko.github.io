@@ -5,16 +5,16 @@
  *   #/dotnet      курс
  *   #/dotnet/<id> урок поверх курса
  */
-import { $, esc, startNoise, setLocale } from '../assets/vhs.js?v=202610190810';
-import { GROUPS, COURSES, findCourse, lessonsOf, loadCourses, courseTitle, courseBlurb } from './courses.js?v=202610190810';
-import { getLang, switchLang, tr, LANGS, LANG_NAMES } from './i18n.js?v=202610190810';
-import { t } from './ui.js?v=202610190810';
-import { auth } from './auth/auth.js?v=202610190810';
-import { CATEGORIES, MAX_TEXT, buildReport } from './reports/report.js?v=202610190810';
-import { submit, flushQueue, reportsEnabled } from './reports/reports.js?v=202610190810';
-import * as P from './progress.js?v=202610190810';
-import * as E from './engine.js?v=202610190810';
-import { renderCard, feedback } from './cards.js?v=202610190810';
+import { $, esc, startNoise, setLocale } from '../assets/vhs.js?v=202610191132';
+import { GROUPS, COURSES, findCourse, lessonsOf, loadCourses, courseTitle, courseBlurb } from './courses.js?v=202610191132';
+import { getLang, switchLang, tr, LANGS, LANG_NAMES } from './i18n.js?v=202610191132';
+import { t } from './ui.js?v=202610191132';
+import { auth } from './auth/auth.js?v=202610191132';
+import { CATEGORIES, MAX_TEXT, buildReport } from './reports/report.js?v=202610191132';
+import { submit, flushQueue, reportsEnabled } from './reports/reports.js?v=202610191132';
+import * as P from './progress.js?v=202610191132';
+import * as E from './engine.js?v=202610191132';
+import { renderCard, feedback } from './cards.js?v=202610191132';
 
 /** Полка кассет — отдельный модуль сайта. */
 const SHELF_URL = new URL('../shelf/', import.meta.url).href;

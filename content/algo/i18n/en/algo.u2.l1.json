@@ -29,7 +29,7 @@
  "cards/5/q": "Assemble the single-pass solution.",
  "cards/5/code": "public int[] TwoSum(int[] nums, int target) {\n    // value → index\n    var seen = new Dictionary<int, int>();\n    for (int i = 0; i < nums.Length; i++) {\n        int need = ___;\n        if (seen.TryGetValue(___, out int j))\n            return ___;\n        ___ = i;\n    }\n    return new int[0];\n}",
  "cards/5/explain": "We look for the complement need = target − nums[i]. TryGetValue answers “is it there?” and hands over the index j in a single lookup — j comes before i, so the answer is { j, i }. Then we remember the current number: seen[nums[i]] = i. The indexer, not Add: Add throws ArgumentException on a repeated key, for example on [1, 1, 5] with target = 10.",
- "cards/6/task": "Step through the trace on [3, 8, 2, 11, 7, 5], target = 9. Before the number 7 the rig stops and asks what the code does on that step: answer from the map on screen, then go to the end.",
+ "cards/6/task": "Step through the trace on [3, 8, 2, 11, 7, 5], target = 9. The rig stops twice and asks what the code does next: answer from the dictionary on screen, not from the whole array.",
  "cards/7/q": "On nums = [3, 2, 4], target = 6 this code returns [0, 0]. Tap the line with the bug.",
  "cards/7/explain": "The number goes into the dictionary before the check, which breaks the invariant “the map holds only what is left of i”. At i = 0: seen[3] = 0, we look up 6 − 3 = 3 — and find the element itself, answer [0, 0]. This is the classic target = 2x trap. The fix is the order: TryGetValue first, then seen[nums[i]] = i.",
  "cards/8/q": "The dictionary solution (check first, then insert). What is true? Select all.",
@@ -64,5 +64,9 @@
  "cards/12/pairs/2/1": "Counters, find walks the keys",
  "cards/12/pairs/3/0": "Only whether a repeat exists",
  "cards/12/pairs/3/1": "HashSet<int>: Add returned false",
- "cards/12/pairs/4/0": "n is known in advance"
+ "cards/12/pairs/4/0": "n is known in advance",
+ "cards/6/goal/asks/0/q": "x = 2, looking for 7. The array does contain a 7. What does the code do?",
+ "cards/6/goal/asks/0/explain": "The code only sees the dictionary, and so far it holds 3 and 8. The 7 is further right and not visited yet, so we store 2 → 2. The 7 will find the pair itself when we reach it: by then its partner 2 is already in the dictionary.",
+ "cards/6/goal/asks/1/q": "x = 7, looking for 2. What does the code do?",
+ "cards/6/goal/asks/1/explain": "2 is in the dictionary at index 2 — TryGetValue finds it and returns j = 2. We return { j, i } = { 2, 4 }: the partner index first, then the current one. No need to store 7 any more."
 }

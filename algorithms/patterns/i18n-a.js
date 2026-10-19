@@ -13,7 +13,7 @@ export const CH_A = {
   },
   'hash.pitfall': {
     en: '<b>Trap.</b> In Two Sum look up before inserting. Otherwise with target = 2x the number finds itself.',
-    ru: '<b>Ловушка.</b> В Two Sum сначала проверяй map, потом вставляй. Иначе при target = 2x число найдёт само себя.',
+    ru: '<b>Ловушка.</b> В Two Sum сначала проверяй словарь, потом вставляй. Иначе при target = 2x число найдёт само себя.',
   },
   'hash.tpl': {
     en: `var seen = new Dictionary<TKey, TValue>();
@@ -52,12 +52,12 @@ for (int i = 0; i < n; i++) {
     ru: t => `Ищем пару с суммой <b>${t}</b>. Один проход слева направо, запоминаем всё, что уже видели.`,
   },
   'hash.ev.miss': {
-    en: (x, need, i) => `x = ${x}, need ${need}. Not in the map — remember <b>${x} → ${i}</b> and move on.`,
-    ru: (x, need, i) => `x = ${x}, ищем ${need}. В map его нет — запоминаем <b>${x} → ${i}</b> и идём дальше.`,
+    en: (x, need, i) => `x = ${x}, need ${need}. Not in the dictionary — remember <b>${x} → ${i}</b> and move on.`,
+    ru: (x, need, i) => `x = ${x}, ищем ${need}. В словаре его нет — запоминаем <b>${x} → ${i}</b> и идём дальше.`,
   },
   'hash.ev.hit': {
-    en: (x, need, j, i) => `x = ${x}, need ${need}. It is already in the map at index ${j} → answer <b>[${j}, ${i}]</b>.`,
-    ru: (x, need, j, i) => `x = ${x}, ищем ${need}. Оно уже в map на индексе ${j} → ответ <b>[${j}, ${i}]</b>.`,
+    en: (x, need, j, i) => `x = ${x}, need ${need}. It is already in the dictionary at index ${j} → answer <b>[${j}, ${i}]</b>.`,
+    ru: (x, need, j, i) => `x = ${x}, ищем ${need}. Оно уже в словаре на индексе ${j} → ответ <b>[${j}, ${i}]</b>.`,
   },
   'hash.ev.none': { en: t => `The array is over: no pair sums to ${t}.`, ru: t => `Массив кончился: пары с суммой ${t} нет.` },
 

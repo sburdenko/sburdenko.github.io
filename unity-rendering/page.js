@@ -1,12 +1,12 @@
 /** Сборка кассеты «Батчинг в Unity»: язык, заставка, пульт, стенды, шпаргалка, вопросы. */
-import { $, bootVhs } from '../assets/vhs.js?v=202610190810';
-import { initI18n, t, onLang } from '../assets/i18n.js?v=202610190810';
-import { COMMON } from '../assets/i18n-common.js?v=202610190810';
-import { DICT } from './i18n.js?v=202610190810';
-import { initLanes } from './lanes.js?v=202610190810';
-import { initDeck } from './deck.js?v=202610190810';
-import { initStaticMini, initDynamicMini, initSrpMini, initInstancingMini, initGrdMini } from './minis.js?v=202610190810';
-import { PATHS } from './model.js?v=202610190810';
+import { $, bootVhs } from '../assets/vhs.js?v=202610191132';
+import { initI18n, t, onLang } from '../assets/i18n.js?v=202610191132';
+import { COMMON } from '../assets/i18n-common.js?v=202610191132';
+import { DICT } from './i18n.js?v=202610191132';
+import { initLanes } from './lanes.js?v=202610191132';
+import { initDeck } from './deck.js?v=202610191132';
+import { initStaticMini, initDynamicMini, initSrpMini, initInstancingMini, initGrdMini } from './minis.js?v=202610191132';
+import { PATHS } from './model.js?v=202610191132';
 
 initI18n({ ...COMMON, ...DICT });
 bootVhs();

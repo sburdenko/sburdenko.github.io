@@ -46,7 +46,7 @@ export function split(ru, en) {
 }
 
 /** JSON с отступами, но массивы из простых значений — в одну строку: структура остаётся компактной. */
-function pretty(v, ind = '') {
+export function pretty(v, ind = '') {
   const simple = x => x === null || typeof x !== 'object';
   if (Array.isArray(v)) {
     if (v.every(simple)) return '[' + v.map(x => JSON.stringify(x)).join(', ') + ']';

@@ -402,7 +402,7 @@ test('каждый новый стенд решается своими кноп�
 });
 
 /* ---------- стенд algo: задачи кассеты 06 по шагам ---------- */
-import { ALGO, ALGO_IDS, algoRig, algoRun, algoAsk, algoCan, tapeText } from '../learn/models-algo.js';
+import { ALGO, ALGO_IDS, algoRig, algoRun, algoAsk, algoAsks, algoAskAt, algoCan, tapeText } from '../learn/models-algo.js';
 import { PROBLEMS } from '../algorithms/patterns/problems.js';
 
 /** Проходит solve теми же проверками, что общий тест стендов: кнопка доступна, цель в начале не выполнена. */
@@ -498,6 +498,36 @@ test('algo: «предскажи» — стенд встаёт перед соб
   assert.throws(() => algoAsk({ problem: 'twoSum', goal: { ask: { ...ask, answer: 0 } } }), /по трассе/);
   assert.throws(() => algoAsk({ problem: 'twoSum', goal: { ask: { at: 0, options: ['a', 'b'], answer: 0 } } }), /вне трассы/);
   assert.throws(() => algoAsk({ problem: 'twoSum', goal: { ask: { at: 2, options: ['a'], answer: 0 } } }), /2–4/);
+});
+
+test('algo: несколько вопросов на одной трассе — по порядку, каждый держит стенд до ответа', () => {
+  const card = { problem: 'twoSum', goal: { asks: [
+    { at: 2, options: ['a', 'b'], answer: 0, q: 'первый?', explain: 'потому что' },
+    { at: 'hash.ev.hit', options: [{ event: 'hash.ev.miss', label: 'miss' }, { event: 'hash.ev.hit', label: 'hit' }] }
+  ] }, solve: ['end', 'pick:0', 'end', 'pick:1', 'next'] };
+  const [a1, a2] = algoAsks(card);
+  assert.equal(a1.pause, 1);
+  assert.ok(a2.at > a1.at);
+  let s = algoRig.act(card, algoRig.init(card), 'end');
+  assert.equal(s.i, a1.pause, 'end встаёт на первом вопросе');
+  s = algoRig.act(card, s, 'pick:1');
+  assert.deepEqual(s.wrong, [1]);
+  s = algoRig.act(card, s, 'pick:0');
+  assert.equal(s.done, 1);
+  assert.deepEqual(s.wrong, [], 'промахи сбрасываются для следующего вопроса');
+  assert.ok(!s.solved);
+  assert.deepEqual(algoAskAt(card, s), { ask: a1, k: 0, answered: true }, 'отвеченный вопрос виден на своём шаге');
+  s = algoRig.act(card, s, 'end');
+  assert.equal(s.i, a2.pause, 'end встаёт на втором вопросе');
+  assert.ok(!algoCan(card, s, 'next'));
+  s = algoRig.act(card, s, 'prev');
+  assert.ok(algoCan(card, s, 'next'), 'назад и снова вперёд — можно');
+  s = algoRig.act(card, s, 'next');
+  s = algoRig.act(card, s, 'pick:1');
+  assert.ok(s.solved && !algoRig.goal(card, s), 'цель — дойти до последнего предсказанного события');
+  assert.ok(algoRig.goal(card, algoRig.act(card, s, 'next')));
+  assert.ok(algoRig.goal(card, solveAlgo(card)));
+  assert.throws(() => algoAsks({ problem: 'twoSum', goal: { asks: [{ at: 3, options: ['a', 'b'], answer: 0 }, { at: 2, options: ['a', 'b'], answer: 0 }] } }), /по трассе/);
 });
 
 /* ---------- курс «Async/await до дна» ---------- */

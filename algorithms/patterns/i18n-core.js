@@ -33,7 +33,7 @@ export const CORE = {
 
   'var.target': { en: 'target', ru: 'target' },
   'var.need': { en: 'need', ru: 'ищем' },
-  'var.map': { en: 'map: value → index', ru: 'map: число → индекс' },
+  'var.map': { en: 'dictionary: value → index', ru: 'словарь: число → индекс' },
   'var.write': { en: 'write', ru: 'write' },
   'var.result': { en: 'array', ru: 'массив' },
   'var.window': { en: 'window (set)', ru: 'окно (set)' },

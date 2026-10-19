@@ -3,11 +3,11 @@
  * Стили SVG тоже кассетные: правила .stage/.vchip/.mk-* из её style.css подключаются один раз,
  * с приставкой .algo-rig, чтобы остальная её вёрстка не задела страницу курса.
  */
-import { esc } from '../assets/vhs.js?v=202610190810';
-import { drive } from './rig-kit.js?v=202610190810';
-import { tr } from './i18n.js?v=202610190810';
-import { ALGO, algoRig, algoRun, algoAsk, algoCan, algoBlocked, optionLabel, tapeText } from './models-algo.js?v=202610190810';
-import { t as tl } from './ui.js?v=202610190810';
+import { esc } from '../assets/vhs.js?v=202610191132';
+import { drive } from './rig-kit.js?v=202610191132';
+import { tr } from './i18n.js?v=202610191132';
+import { ALGO, algoRig, algoRun, algoAskAt, algoCan, algoBlocked, optionLabel, tapeText } from './models-algo.js?v=202610191132';
+import { t as tl } from './ui.js?v=202610191132';
 
 /* ---------- стили кассеты, точечно ---------- */
 
@@ -51,31 +51,32 @@ const DEFS = `<svg class="algo-defs" width="0" height="0" aria-hidden="true" foc
 const tbtn = (a, sym, label, cls, disabled) =>
   `<button type="button" class="${cls}" data-act="${a}" aria-label="${esc(label)}" title="${esc(label)}"${disabled ? ' disabled' : ''}>${sym}</button>`;
 
-function askBlock(card, s, ask) {
+/** Вопрос на текущем шаге: открытый (варианты и промахи) или уже отвеченный (верный вариант и разбор). */
+function askBlock(card, s, { ask, answered }) {
   const opts = ask.options.map((o, n) => {
-    const wrong = s.wrong.includes(n), right = s.solved && n === ask.answer;
+    const wrong = !answered && s.wrong.includes(n), right = answered && n === ask.answer;
     const cls = `btn algo-opt${wrong ? ' bad' : ''}${right ? ' ok' : ''}`;
     const mark = wrong ? '✗ ' : right ? '✓ ' : '';
     return `<button type="button" class="${cls}" data-act="pick:${n}"${algoCan(card, s, `pick:${n}`) ? '' : ' disabled'}>${mark}${esc(optionLabel(o))}</button>`;
   }).join('');
-  const fb = s.solved
-    ? `${tl('r.algo.right')}${ask.explain ? ` ${esc(tr(ask.explain))}` : ''}`
+  const fb = answered
+    ? `${tl('r.algo.right')}${ask.explain ? ` ${tr(ask.explain)}` : ''}`
     : s.wrong.length ? tl('r.algo.wrong') : tl('r.algo.askHint');
-  return `<div class="algo-ask${s.solved ? ' ok' : ''}" role="group" aria-label="${esc(tl('r.algo.askAria'))}">
-      <p class="algo-q">${esc(ask.q ? tr(ask.q) : tl('r.algo.ask'))}</p>
+  return `<div class="algo-ask${answered ? ' ok' : ''}" role="group" aria-label="${esc(tl('r.algo.askAria'))}">
+      <p class="algo-q">${ask.q ? tr(ask.q) : esc(tl('r.algo.ask'))}</p>
       <div class="algo-opts">${opts}</div>
       <p class="algo-fb" aria-live="polite">${fb}</p>
     </div>`;
 }
 
 function algo(card, host, done) {
-  const p = ALGO[card.problem], run = algoRun(card), ask = algoAsk(card), n = run.events.length;
+  const p = ALGO[card.problem], run = algoRun(card), n = run.events.length;
   loadTapeCss();
   let lastAct = null;
   // кнопки перерисовываются после каждого нажатия — фокус возвращается на ту же кнопку
   host.addEventListener('click', e => { lastAct = /** @type {HTMLElement} */ (e.target).closest('[data-act]')?.getAttribute('data-act') ?? null; }, true);
   const live = drive(card, host, algoRig, s => {
-    const e = run.events[s.i], last = s.i === n - 1, blocked = algoBlocked(card, s);
+    const e = run.events[s.i], last = s.i === n - 1, blocked = algoBlocked(card, s), here = algoAskAt(card, s);
     const vars = p.vars(run, e).map(([key, html]) => `<div class="row"><span class="k">${esc(tapeText(key))}</span><span class="v">${html}</span></div>`).join('');
     return `${DEFS}
       <div class="algo-head">
@@ -86,7 +87,7 @@ function algo(card, host, done) {
       <div class="stage algo-stage">${p.view(run, e)}</div>
       <div class="vm-note${last ? ' ret' : ''}" aria-live="polite">${tapeText(e.key, e.args)}</div>
       ${vars ? `<div class="algo-vars">${vars}</div>` : ''}
-      ${ask && s.i === ask.pause ? askBlock(card, s, ask) : ''}
+      ${here ? askBlock(card, s, here) : ''}
       <div class="algo-bar">
         <div class="btns">
           ${tbtn('reset', '⏮', tl('r.algo.first'), 'btn', !algoCan(card, s, 'reset'))}

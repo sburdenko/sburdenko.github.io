@@ -60,13 +60,24 @@
    "task": "⟦⟧",
    "goal": {
     "step": "end",
-    "ask": {
-     "at": "hash.ev.hit",
-     "options": ["seen[7] = 4", "return new[] { 2, 4 }", "return new[] { 1, 4 }"],
-     "answer": 1
-    }
+    "asks": [
+     {
+      "at": 3,
+      "options": ["seen[2] = 2", "return new[] { 2, 4 }", "return new[] { 0, 2 }"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": "hash.ev.hit",
+      "options": ["seen[7] = 4", "return new[] { 2, 4 }", "return new[] { 1, 4 }"],
+      "answer": 1,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
    },
-   "solve": ["end", "pick:1", "end"]
+   "solve": ["end", "pick:0", "end", "pick:1", "end"]
   },
   {
    "t": "tapline",

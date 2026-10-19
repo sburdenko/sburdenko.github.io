@@ -7,18 +7,19 @@
  *   problem — id из ALGO (совпадает с id стенда кассеты: twoSum, longest, islands, coin, …)
  *   input   — входные данные поверх примера кассеты; проверяются теми же правилами, что поля на её странице
  *   goal    — { step: 'end' | номер шага } или { event: '<ключ события>' }: куда нужно дойти (по умолчанию — до конца);
- *             goal.ask (или goal.predict) — вопрос «что будет дальше?»:
+ *             goal.asks — вопросы «что будет дальше?» по порядку трассы (goal.ask или goal.predict — один вопрос):
  *             { at: <номер события или ключ>, options: [вариант, …], answer: n, q?, explain? }
  *             at — событие, которое нужно предсказать: стенд встаёт на шаг перед ним и пускает дальше
  *             после верного ответа. Вариант — строка, { ru, en } или { event: '<ключ>', label }; если все
  *             варианты с event, answer можно не писать — верным считается вариант с ключом события at.
+ *             q, explain и label переводятся (в данных урока это строки из i18n), остальное — общее.
  * Действия: next, prev, reset (в начало), end (в конец или до вопроса), pick:N.
  */
-import { RIGS as TAPE_RIGS, runWithInput } from '../algorithms/patterns/rigs.js?v=202610190810';
-import { PROBLEMS, NAMES } from '../algorithms/patterns/problems.js?v=202610190810';
-import { DICT } from '../algorithms/patterns/i18n.js?v=202610190810';
-import { formatField } from '../algorithms/patterns/inputs.js?v=202610190810';
-import { tr } from './i18n.js?v=202610190810';
+import { RIGS as TAPE_RIGS, runWithInput } from '../algorithms/patterns/rigs.js?v=202610191132';
+import { PROBLEMS, NAMES } from '../algorithms/patterns/problems.js?v=202610191132';
+import { DICT } from '../algorithms/patterns/i18n.js?v=202610191132';
+import { formatField } from '../algorithms/patterns/inputs.js?v=202610191132';
+import { tr } from './i18n.js?v=202610191132';
 
 /** Строка кассеты на текущем языке: значение — строка или функция от аргументов события. */
 export function tapeText(key, args = []) {
@@ -69,11 +70,8 @@ export function algoRun(card) {
   return r.run;
 }
 
-/** Вопрос карточки с разобранным at: { at, pause, options, answer, q, explain } или null. */
-export function algoAsk(card) {
-  const ask = card.goal?.ask ?? card.goal?.predict;
-  if (!ask) return null;
-  const events = algoRun(card).events;
+/** Разбирает один вопрос: { at, pause, options, answer, q, explain }. */
+function parseAsk(card, ask, events) {
   const at = typeof ask.at === 'string' ? events.findIndex(e => e.key === ask.at) : ask.at;
   if (!Number.isInteger(at) || at < 1 || at >= events.length) throw new Error(`algo ${card.problem}: ask.at «${ask.at}» вне трассы (событий ${events.length}, первое предсказать нельзя)`);
   const options = ask.options ?? [];
@@ -86,12 +84,38 @@ export function algoAsk(card) {
   return { at, pause: at - 1, options, answer, q: ask.q, explain: ask.explain };
 }
 
+const asksCache = new WeakMap();
+
+/** Все вопросы карточки по порядку трассы (пустой массив, если вопросов нет). */
+export function algoAsks(card) {
+  if (asksCache.has(card)) return asksCache.get(card);
+  const g = card.goal ?? {};
+  const raw = g.asks ?? [g.ask ?? g.predict].filter(Boolean);
+  const events = algoRun(card).events;
+  const asks = raw.map(a => parseAsk(card, a, events));
+  asks.forEach((a, k) => { if (k && a.at <= asks[k - 1].at) throw new Error(`algo ${card.problem}: вопросы должны идти по трассе — at ${a.at} не позже ${asks[k - 1].at}`); });
+  asksCache.set(card, asks);
+  return asks;
+}
+
+/** Первый вопрос карточки или null. */
+export const algoAsk = card => algoAsks(card)[0] ?? null;
+
+/** Вопрос, на который ещё нужно ответить, или null. */
+export const algoCurrent = (card, s) => algoAsks(card)[s.done ?? 0] ?? null;
+
+/** Вопрос, который стоит на текущем шаге (отвеченный или нет), и его номер. */
+export function algoAskAt(card, s) {
+  const k = algoAsks(card).findIndex(a => a.pause === s.i);
+  return k < 0 ? null : { ask: algoAsks(card)[k], k, answered: k < (s.done ?? 0) };
+}
+
 /** Подпись варианта ответа на текущем языке. */
 export const optionLabel = o => tr(o && typeof o === 'object' && 'label' in o ? o.label : o);
 
 /** Шаг, до которого нужно дойти. */
 export function algoTarget(card) {
-  const events = algoRun(card).events, g = card.goal ?? {}, ask = algoAsk(card);
+  const events = algoRun(card).events, g = card.goal ?? {}, asks = algoAsks(card);
   if (g.event) {
     const i = events.findIndex(e => e.key === g.event);
     if (i < 0) throw new Error(`algo ${card.problem}: в трассе нет события ${g.event}`);
@@ -101,18 +125,18 @@ export function algoTarget(card) {
     if (g.step < 0 || g.step >= events.length) throw new Error(`algo ${card.problem}: шага ${g.step} нет (событий ${events.length})`);
     return g.step;
   }
-  return ask && g.step !== 'end' ? ask.at : events.length - 1;
+  return asks.length && g.step !== 'end' ? asks[asks.length - 1].at : events.length - 1;
 }
 
 /** Стенд стоит на вопросе и не пускает дальше. */
 export const algoBlocked = (card, s) => {
-  const ask = algoAsk(card);
-  return Boolean(ask && !s.solved && s.i === ask.pause);
+  const ask = algoCurrent(card, s);
+  return Boolean(ask && s.i === ask.pause);
 };
 
 /** Можно ли нажать кнопку действия — так её показывает стенд. */
 export function algoCan(card, s, a) {
-  const last = algoRun(card).events.length - 1, ask = algoAsk(card);
+  const last = algoRun(card).events.length - 1, ask = algoCurrent(card, s);
   const [k, v] = a.split(':');
   if (k === 'next' || k === 'end') return s.i < last && !algoBlocked(card, s);
   if (k === 'prev' || k === 'reset') return s.i > 0;
@@ -123,21 +147,23 @@ export function algoCan(card, s, a) {
 const seen = (s, i) => ({ ...s, i, max: Math.max(s.max, i) });
 
 export const algoRig = {
-  init: card => { algoRun(card); algoAsk(card); return { i: 0, max: 0, solved: false, wrong: [] }; },
+  /** done — сколько вопросов отвечено, solved — отвечены все, wrong — промахи на текущем вопросе. */
+  init: card => { algoRun(card); const n = algoAsks(card).length; return { i: 0, max: 0, done: 0, solved: n === 0, wrong: [] }; },
   act(card, s, a) {
     const [k, v] = a.split(':');
-    const last = algoRun(card).events.length - 1, ask = algoAsk(card);
+    const last = algoRun(card).events.length - 1, ask = algoCurrent(card, s);
     if (!['next', 'prev', 'reset', 'end', 'pick'].includes(k)) throw new Error(`неизвестное действие ${a}`);
     if (!algoCan(card, s, a)) return s;
     if (k === 'next') return seen(s, s.i + 1);
     if (k === 'prev') return { ...s, i: s.i - 1 };
     if (k === 'reset') return { ...s, i: 0 };
-    if (k === 'end') return seen(s, ask && !s.solved && s.i < ask.pause ? ask.pause : last);
+    if (k === 'end') return seen(s, ask && s.i < ask.pause ? ask.pause : last);
     const n = Number(v);
-    return n === ask.answer ? { ...s, solved: true } : { ...s, wrong: [...s.wrong, n] };
+    if (n !== ask.answer) return { ...s, wrong: [...s.wrong, n] };
+    const done = s.done + 1;
+    return { ...s, done, solved: done === algoAsks(card).length, wrong: [] };
   },
   goal(card, s) {
-    const ask = algoAsk(card);
-    return s.max >= algoTarget(card) && (!ask || s.solved);
+    return s.max >= algoTarget(card) && s.done === algoAsks(card).length;
   },
 };
