@@ -1,7 +1,7 @@
 /** PY-06 problems 20–30 and the bonus ones: strings and hashing, stack and queue, grids, backtracking and DP. */
-import { lit } from '../shared/py-code.js?v=202610191236';
-import { randInt, pick, randInts, shuffle } from '../../algorithms/patterns/rig-kit.js?v=202610191236';
-import { tuplesOf, intOf } from '../shared/struct-views.js?v=202610191236';
+import { lit } from '../shared/py-code.js?v=202610191240';
+import { randInt, pick, randInts, shuffle } from '../../algorithms/patterns/rig-kit.js?v=202610191240';
+import { tuplesOf, intOf } from '../shared/struct-views.js?v=202610191240';
 
 const num = (key, extra = {}) => ({ key, type: 'int', min: 0, max: 999, ...extra });
 const ints = (key, extra = {}) => ({ key, type: 'ints', minLen: 1, maxLen: 10, min: 0, max: 99, ...extra });

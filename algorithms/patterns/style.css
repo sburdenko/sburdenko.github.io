@@ -170,3 +170,19 @@
 /* phone widths: long Russian words in headings and the big title must not push the page sideways */
 .ch-head h2{overflow-wrap:anywhere;hyphens:auto}
 @media (max-width:420px){.hero h1.title{font-size:11.5vw}}
+/* island perimeter, game of life, shortest paths */
+.stage .cell.land{fill:#4a3d6e}
+.stage .shared{stroke:var(--bad);stroke-width:3;stroke-linecap:round;opacity:.75}
+.stage .shared.on{opacity:1;stroke-width:4.5}
+.stage .perim{stroke:var(--ok);stroke-width:3;stroke-linecap:round}
+.stage .cell.wall{fill:#3b1d2c;stroke:#7d3a55;stroke-width:1.4}
+.stage .cell.wall.broken{stroke:var(--bad);stroke-dasharray:4 3}
+.stage .badge-r.inf{fill:var(--ink3)}
+.stage .wt{font-size:12.5px;font-weight:700;fill:#c9bde6;paint-order:stroke;stroke:#0b0715;stroke-width:4px;stroke-linejoin:round}
+.stage .wt.on{fill:var(--osd)}
+.stage .wt.tree{fill:var(--ok)}
+.stage .edge.tree{stroke:var(--ok);stroke-width:2.2}
+.stage .edge.miss{stroke:var(--bad);stroke-dasharray:5 4}
+.stage .wt.miss{fill:#ffb3bc}
+.vchip.stale{text-decoration:line-through}
+.stage .corner{text-anchor:end}

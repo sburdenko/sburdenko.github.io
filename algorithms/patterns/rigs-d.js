@@ -1,7 +1,7 @@
 /** Editable rigs for chapter 13: arrays and matrices. */
-import * as D from './model-d.js?v=202610191236';
-import * as V from './views-d.js?v=202610191236';
-import { defineRig, randInt, randInts, shuffle } from './rig-kit.js?v=202610191236';
+import * as D from './model-d.js?v=202610191240';
+import * as V from './views-d.js?v=202610191240';
+import { defineRig, randInt, randInts, shuffle } from './rig-kit.js?v=202610191240';
 
 const matrix = (extra = {}) => ({ key: 'matrix', type: 'matrix', minRows: 1, maxRows: 6, maxCols: 6, min: -99, max: 99, ...extra });
 const counting = (rows, cols) => Array.from({ length: rows }, (_, r) => Array.from({ length: cols }, (_, c) => r * cols + c + 1));
@@ -37,6 +37,15 @@ export const RIGS_D = {
     random: next => ({ matrix: counting(randInt(next, 1, 5), randInt(next, 1, 5)) }),
     run: p => ({ ...D.spiralTrace(p.matrix), matrix: p.matrix }),
   }, V.spiral),
+  gameOfLife: defineRig({
+    fields: [{ key: 'board', type: 'grid', maxRows: 6, maxCols: 6, maxDigit: 1 }],
+    example: { board: [[0, 0, 0, 0, 0], [0, 1, 1, 1, 0], [0, 0, 0, 0, 0]] },
+    random: next => {
+      const rows = randInt(next, 3, 5), cols = randInt(next, 3, 5);
+      return { board: Array.from({ length: rows }, () => Array.from({ length: cols }, () => (next() < 0.4 ? 1 : 0))) };
+    },
+    run: p => ({ ...D.gameOfLifeTrace(p.board), board: p.board }),
+  }, V.gameOfLife),
   maxRect: defineRig({
     fields: [{ key: 'matrix', type: 'grid', maxRows: 5, maxCols: 6, maxDigit: 1 }],
     example: { matrix: ['10100', '10111', '11111', '10010'].map(r => [...r].map(Number)) },

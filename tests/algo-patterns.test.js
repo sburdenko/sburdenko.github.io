@@ -5,6 +5,7 @@ import * as A from '../algorithms/patterns/model-a.js';
 import * as B from '../algorithms/patterns/model-b.js';
 import * as C from '../algorithms/patterns/model-c.js';
 import * as D from '../algorithms/patterns/model-d.js';
+import * as E from '../algorithms/patterns/model-e.js';
 import { RIGS, PATTERN_IDS, runWithInput, MAX_STEPS } from '../algorithms/patterns/rigs.js';
 import { parseField, formatField, treeFromLevelOrder, levelOrderOf } from '../algorithms/patterns/inputs.js';
 import { PROBLEMS } from '../algorithms/patterns/problems.js';
@@ -473,6 +474,146 @@ test('the matrix field reads rows split by “|”, “;”, new lines or nested
   assert.equal(rotate.error[0], 'in.err.square');
 });
 
+/* ---------- Two Sum II, Island Perimeter, Game of Life and chapter 14 ---------- */
+const keysOf = run => new Set(run.events.map(e => e.key));
+const grid01 = (rows, cols, p) => Array.from({ length: rows }, () => Array.from({ length: cols }, () => (next() < p ? 1 : 0)));
+const N4 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+
+test('two sum II: every pointer move drops a number that has no partner left', () => {
+  repeat(300, () => {
+    const a = ints(len(2, 10), -9, 15).sort((x, y) => x - y), target = len(-10, 25);
+    const { found, events } = A.twoSumIITrace(a, target);
+    assert.equal(found !== null, a.some((v, i) => a.some((w, j) => j > i && v + w === target)), `${a} t=${target}`);
+    if (found) assert.ok(found[0] < found[1] && a[found[0] - 1] + a[found[1] - 1] === target);
+    for (const e of events) {
+      if (e.key === 'tsii.ev.big') assert.ok(a.slice(e.lo, e.hi).every(v => v + a[e.hi] !== target), 'hi had a partner');
+      if (e.key === 'tsii.ev.small') assert.ok(a.slice(e.lo + 1, e.hi + 1).every(v => v + a[e.lo] !== target), 'lo had a partner');
+    }
+  });
+  const keys = keysOf(A.twoSumIITrace([-3, 1, 2, 4, 7, 11, 15], 9));
+  for (const key of ['tsii.ev.big', 'tsii.ev.small', 'tsii.ev.hit']) assert.ok(keys.has(key), `the example shows ${key}`);
+  assert.deepEqual(A.twoSumIITrace([2, 7, 11, 15], 9).found, [1, 2]);
+  assert.deepEqual(A.twoSumIITrace([-1, 0], -1).found, [1, 2]);
+});
+
+test('island perimeter and game of life agree with brute force', () => {
+  repeat(200, () => {
+    const g = grid01(len(1, 6), len(1, 6), 0.5);
+    let sides = 0;
+    g.forEach((row, r) => row.forEach((v, c) => { if (v) sides += N4.filter(([dr, dc]) => !g[r + dr]?.[c + dc]).length; }));
+    assert.equal(B.islandPerimeterTrace(g).perimeter, sides, JSON.stringify(g));
+
+    const b = grid01(len(1, 6), len(1, 6), 0.4);
+    const nextGen = b.map((row, r) => row.map((v, c) => {
+      let live = 0;
+      for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) if ((dr || dc) && b[r + dr]?.[c + dc]) live++;
+      return live === 3 || (v && live === 2) ? 1 : 0;
+    }));
+    const life = D.gameOfLifeTrace(b);
+    assert.deepEqual(life.result, nextGen, JSON.stringify(b));
+    for (const e of life.events) assert.ok(e.b.flat().every(v => v >= 0 && v <= 3), 'two bits per cell');
+  });
+  assert.equal(B.islandPerimeterTrace([[0, 1, 0, 0], [1, 1, 1, 0], [0, 1, 0, 0], [1, 1, 0, 0]]).perimeter, 16);
+  const perKeys = keysOf(B.islandPerimeterTrace([[0, 1, 0, 0], [1, 1, 1, 0], [0, 1, 0, 0], [1, 1, 0, 0]]));
+  for (const key of ['per.ev.land', 'per.ev.right', 'per.ev.down']) assert.ok(perKeys.has(key), `the example shows ${key}`);
+  const blinker = D.gameOfLifeTrace([[0, 0, 0, 0, 0], [0, 1, 1, 1, 0], [0, 0, 0, 0, 0]]);
+  assert.deepEqual(blinker.result, [[0, 0, 1, 0, 0], [0, 0, 1, 0, 0], [0, 0, 1, 0, 0]]);
+  assert.deepEqual(D.gameOfLifeTrace(blinker.result).result, [[0, 0, 0, 0, 0], [0, 1, 1, 1, 0], [0, 0, 0, 0, 0]], 'the blinker flips back');
+  for (const key of ['gol.ev.born', 'gol.ev.under', 'gol.ev.lives', 'gol.ev.empty']) assert.ok(keysOf(blinker).has(key), `the blinker shows ${key}`);
+  assert.deepEqual(D.gameOfLifeTrace([[0, 1, 0], [0, 0, 1], [1, 1, 1], [0, 0, 0]]).result, [[0, 0, 0], [1, 0, 1], [0, 1, 1], [0, 1, 0]]);
+});
+
+/** Plain BFS steps from (0, 0) to the bottom-right corner through cells where pass(y, x) and step(r, c, y, x) hold; −1 if none. */
+function bfsSteps(rows, cols, pass, step = () => true) {
+  const dist = Array.from({ length: rows }, () => Array(cols).fill(-1)), queue = [[0, 0]];
+  dist[0][0] = 0;
+  while (queue.length) {
+    const [r, c] = queue.shift();
+    for (const [dr, dc] of N4) {
+      const y = r + dr, x = c + dc;
+      if (y < 0 || x < 0 || y >= rows || x >= cols || dist[y][x] >= 0 || !pass(y, x) || !step(r, c, y, x)) continue;
+      dist[y][x] = dist[r][c] + 1;
+      queue.push([y, x]);
+    }
+  }
+  return dist[rows - 1][cols - 1];
+}
+
+test('chapter 14: BFS distances, Dijkstra and BFS over states agree with brute force', () => {
+  repeat(150, () => {
+    const mat = grid01(len(1, 6), len(1, 6), 0.75);
+    mat[len(0, mat.length - 1)][len(0, mat[0].length - 1)] = 0;
+    const zeros = mat.flatMap((row, r) => row.map((v, c) => (v ? null : [r, c])).filter(Boolean));
+    const near = E.nearestZeroTrace(mat);
+    assert.deepEqual(near.dist, mat.map((row, r) => row.map((_, c) => Math.min(...zeros.map(([y, x]) => Math.abs(y - r) + Math.abs(x - c))))), JSON.stringify(mat));
+    assert.equal(near.events.filter(e => e.key === 'zom.ev.pop' || e.key === 'zom.ev.skip').length, mat.flat().length, 'every cell is dequeued once');
+
+    const n = len(1, 6), times = [];
+    for (let t = len(0, 10); t > 0; t--) {
+      const u = len(1, n), v = len(1, n);
+      if (u !== v && !times.some(([a, b]) => a === u && b === v)) times.push([u, v, len(0, 9)]);
+    }
+    const k = len(1, n), dist = Array(n + 1).fill(Infinity);
+    dist[k] = 0;
+    for (let round = 0; round < n; round++) for (const [u, v, w] of times) dist[v] = Math.min(dist[v], dist[u] + w);
+    const worst = Math.max(...dist.slice(1));
+    const delay = E.networkDelayTrace(times, n, k);
+    assert.equal(delay.answer, worst === Infinity ? -1 : worst, `${JSON.stringify(times)} n=${n} k=${k}`);
+    for (const e of delay.events) if (e.key === 'ndt.ev.stale') assert.ok(e.args[1] > e.args[2], 'a skipped entry is really stale');
+
+    const hc = len(1, 4), h = Array.from({ length: len(1, 4) }, () => ints(hc, 1, 9));
+    const climbable = limit => bfsSteps(h.length, hc, () => true, (r, c, y, x) => Math.abs(h[y][x] - h[r][c]) <= limit) >= 0;
+    let effort = 0;
+    while (!climbable(effort)) effort++;
+    assert.equal(E.minEffortTrace(h).effort, effort, JSON.stringify(h));
+
+    const grid = grid01(len(1, 4), len(1, 4), 0.4), walls = len(0, 2);
+    grid[0][0] = 0;
+    grid.at(-1)[grid[0].length - 1] = 0;
+    const cellsWithWalls = grid.flatMap((row, r) => row.map((v, c) => (v ? [r, c] : null)).filter(Boolean));
+    let best = -1;
+    const tryBreak = (from, broken) => {
+      const steps = bfsSteps(grid.length, grid[0].length, (y, x) => !grid[y][x] || broken.some(([a, b]) => a === y && b === x));
+      if (grid.length * grid[0].length === 1) best = 0;
+      else if (steps >= 0 && (best < 0 || steps < best)) best = steps;
+      if (broken.length < walls) for (let i = from; i < cellsWithWalls.length; i++) tryBreak(i + 1, [...broken, cellsWithWalls[i]]);
+    };
+    tryBreak(0, []);
+    assert.equal(E.obstaclesTrace(grid, walls).steps, best, `${JSON.stringify(grid)} k=${walls}`);
+  });
+  assert.deepEqual(E.nearestZeroTrace([[0, 0, 0], [0, 1, 0], [1, 1, 1]]).dist, [[0, 0, 0], [0, 1, 0], [1, 2, 1]]);
+  assert.equal(E.networkDelayTrace([[2, 1, 1], [2, 3, 1], [3, 4, 1]], 4, 2).answer, 2);
+  assert.equal(E.networkDelayTrace([[1, 2, 1]], 2, 2).answer, -1);
+  assert.equal(E.minEffortTrace([[1, 2, 2], [3, 8, 2], [5, 3, 5]]).effort, 2);
+  assert.equal(E.minEffortTrace([[1, 2, 3], [3, 8, 4], [5, 3, 5]]).effort, 1);
+  assert.equal(E.minEffortTrace([[1, 2, 1, 1, 1], [1, 2, 1, 2, 1], [1, 2, 1, 2, 1], [1, 2, 1, 2, 1], [1, 1, 1, 2, 1]]).effort, 0);
+  const lc = s => s.split(' ').map(r => [...r].map(Number));
+  assert.equal(E.obstaclesTrace(lc('000 110 000 011 000'), 1).steps, 6);
+  assert.equal(E.obstaclesTrace(lc('011 111 100'), 1).steps, -1);
+  assert.equal(E.obstaclesTrace(lc('0'), 0).steps, 0);
+  const shown = [
+    [E.nearestZeroTrace(lc('11101 11111 01111 11110')), ['zom.ev.level', 'zom.ev.pop', 'zom.ev.skip']],
+    [E.networkDelayTrace([[1, 2, 4], [1, 3, 1], [3, 2, 2], [2, 3, 1], [2, 4, 1], [3, 4, 5], [3, 5, 7], [4, 5, 3]], 5, 1), ['ndt.ev.relax', 'ndt.ev.keep', 'ndt.ev.stale', 'ndt.ev.done']],
+    [E.minEffortTrace([[5, 5, 6, 2], [7, 7, 6, 8], [3, 1, 6, 4]]), ['eff.ev.relax', 'eff.ev.settle', 'eff.ev.stale', 'eff.ev.done']],
+    [E.obstaclesTrace(lc('000 110 000 011 000'), 1), ['obs.ev.step', 'obs.ev.smash', 'obs.ev.dead', 'obs.ev.found']],
+  ];
+  for (const [run, keys] of shown) for (const key of keys) assert.ok(keysOf(run).has(key), `the example shows ${key}`);
+});
+
+test('the weighted edge field reads from>to:weight, triples or nested brackets', () => {
+  const spec = { type: 'wedges', minLen: 1, maxLen: 14, maxW: 20 };
+  for (const t of ['2>1:1 2>3:1', '[[2,1,1],[2,3,1]]', '2→1:1, 2→3:1', '2 1 1 2 3 1']) assert.deepEqual(parseField(t, spec).value, [[2, 1, 1], [2, 3, 1]], t);
+  assert.equal(formatField([[2, 1, 1], [2, 3, 1]], spec), '2>1:1 2>3:1');
+  assert.deepEqual(parseField('2>1:1 2>3', spec).error, ['in.err.wedges']);
+  assert.deepEqual(parseField('2>2:1', spec).error, ['in.err.selfLoop']);
+  assert.deepEqual(parseField('1>2:1 1>2:5', spec).error, ['in.err.dupEdge']);
+  assert.equal(parseField('1>2:99', spec).error[0], 'in.err.range');
+  assert.equal(runWithInput(RIGS.networkDelay, { times: '1>2:1 2>6:1', n: '5', k: '1' }).error[0], 'in.err.node');
+  assert.equal(runWithInput(RIGS.networkDelay, { times: '1>2:1', n: '2', k: '3' }).error[0], 'in.err.node');
+  assert.equal(runWithInput(RIGS.nearestZero, { mat: '111 111' }).error[0], 'in.err.needZero');
+  assert.equal(runWithInput(RIGS.obstacles, { grid: '100 000', k: '1' }).error[0], 'in.err.corners');
+});
+
 /* ---------- wiring ---------- */
 const textsOf = (rig, params) => Object.fromEntries(rig.fields.map(f => [f.key, formatField(params[f.key], f)]));
 
@@ -514,7 +655,7 @@ test('input fields parse what people type and format back losslessly', () => {
 });
 
 test('every problem owns an editable rig: the example and random inputs parse, run and render', () => {
-  assert.equal(PATTERN_IDS.length, 13);
+  assert.equal(PATTERN_IDS.length, 14);
   const random = rng(7);
   for (const id of PATTERN_IDS) {
     for (const problem of PROBLEMS[id]) {

@@ -2,7 +2,7 @@
 import {
   CELL, STEP, svg, text, rowWidth, cells, pointers, chip, chips,
   matrixXY, matrixCells, matrixIndex, matrixBox, matrixArrow,
-} from './view-kit.js?v=202610191236';
+} from './view-kit.js?v=202610191240';
 
 const TOP = 40;
 const has = (list, r, c) => list.some(([a, b]) => a === r && b === c);
@@ -131,5 +131,36 @@ export const maxRect = {
   },
   vars(run, e) {
     return [['var.stackCols', chips(e.stack.map(j => chip(`${j}:${e.h[j]}`, 'amb')))], ['var.best', chip(e.best, 'hit')]];
+  },
+};
+
+/* ---------- Game of Life ---------- */
+const bits = v => `${(v >> 1) & 1}${v & 1}`;
+
+export const gameOfLife = {
+  view(run, e) {
+    const cols = e.b[0].length;
+    const visited = (r, c) => e.at && (r < e.at[0] || (r === e.at[0] && c <= e.at[1]));
+    const four = v => ['', 'g1', 'g2', 'g3'][v], now = v => (v & 1 ? 'g3' : '');
+    const clsOf = (v, r, c) => {
+      if (e.at && e.at[0] === r && e.at[1] === c) return 'cur';
+      const near = has(e.around, r, c) || e.row === r ? ' win' : '';
+      if (e.phase === 'count') return (visited(r, c) ? four(v) : now(v)) + near;
+      if (e.phase === 'shift' && (e.row == null || r > e.row)) return four(v) + near;
+      return now(v) + near;
+    };
+    const overlay = at => e.b.map((row, r) => row.map((v, c) => {
+      const [x, y] = matrixXY(r, c, at);
+      return text(x + CELL - 9, y + 9, bits(v), 'idx');
+    }).join('')).join('') + (e.row != null ? matrixBox([e.row, 0, e.row, cols - 1], 'cutline-box', at) : '');
+    return matrixStage(e.b, clsOf, { overlay });
+  },
+  vars(run, e) {
+    const out = [];
+    if (e.at) {
+      const v = e.b[e.at[0]][e.at[1]];
+      out.push(['var.liveAround', chip(e.live, 'amb')], ['var.cellBits', chip(`${v} = ${bits(v)}₂`, v > 1 ? 'hit' : '')]);
+    }
+    return out;
   },
 };

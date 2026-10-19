@@ -1,5 +1,5 @@
 /** Problems and C# solutions for chapters 01–04: hash map, two pointers, sliding window, binary search. */
-import { problem as p } from './problem.js?v=202610191236';
+import { problem as p } from './problem.js?v=202610191240';
 
 export const PROBLEMS_A = {
   hash: [
@@ -73,6 +73,16 @@ export const PROBLEMS_A = {
         write++;
     }
 }`),
+    p('twoSumII', 'Two Sum II - Input Array Is Sorted', 167, 'two-sum-ii-input-array-is-sorted', 'Medium', `public int[] TwoSum(int[] numbers, int target) {
+    int lo = 0, hi = numbers.Length - 1;
+    while (lo < hi) {
+        int sum = numbers[lo] + numbers[hi];
+        if (sum == target) return new[] { lo + 1, hi + 1 };  // 1-indexed
+        if (sum > target) hi--;           // numbers[hi] is too big even with the smallest partner
+        else lo++;                        // numbers[lo] is too small even with the biggest partner
+    }
+    return new int[0];                    // LeetCode promises one answer
+}`, true),
     p('container', 'Container With Most Water', 11, 'container-with-most-water', 'Medium', `public int MaxArea(int[] h) {
     int l = 0, r = h.Length - 1, best = 0;
     while (l < r) {

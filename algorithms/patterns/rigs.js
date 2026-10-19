@@ -1,12 +1,21 @@
 /** Every problem's rig: editable fields, an example, a random generator and the trace to play. */
-import { RIGS_A } from './rigs-a.js?v=202610191236';
-import { RIGS_B } from './rigs-b.js?v=202610191236';
-import { RIGS_C } from './rigs-c.js?v=202610191236';
-import { RIGS_D } from './rigs-d.js?v=202610191236';
-import { parseField } from './inputs.js?v=202610191236';
+<<<<<<< HEAD
+import { RIGS_A } from './rigs-a.js?v=202610191240';
+import { RIGS_B } from './rigs-b.js?v=202610191240';
+import { RIGS_C } from './rigs-c.js?v=202610191240';
+import { RIGS_D } from './rigs-d.js?v=202610191240';
+import { parseField } from './inputs.js?v=202610191240';
+=======
+import { RIGS_A } from './rigs-a.js?v=202610191240';
+import { RIGS_B } from './rigs-b.js?v=202610191240';
+import { RIGS_C } from './rigs-c.js?v=202610191240';
+import { RIGS_D } from './rigs-d.js?v=202610191240';
+import { RIGS_E } from './rigs-e.js?v=202610191240';
+import { parseField } from './inputs.js?v=202610191240';
+>>>>>>> origin/sburdenko/algo-traces2
 
-export const PATTERN_IDS = ['hash', 'twoptr', 'window', 'binary', 'stack', 'list', 'graph', 'tree', 'heap', 'back', 'greedy', 'dp', 'matrix'];
-export const RIGS = { ...RIGS_A, ...RIGS_B, ...RIGS_C, ...RIGS_D };
+export const PATTERN_IDS = ['hash', 'twoptr', 'window', 'binary', 'stack', 'list', 'graph', 'tree', 'heap', 'back', 'greedy', 'dp', 'matrix', 'paths'];
+export const RIGS = { ...RIGS_A, ...RIGS_B, ...RIGS_C, ...RIGS_D, ...RIGS_E };
 
 /** A trace longer than this is too tedious to step through; the page asks for smaller input instead. */
 export const MAX_STEPS = 250;

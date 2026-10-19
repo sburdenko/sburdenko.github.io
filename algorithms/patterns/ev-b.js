@@ -70,6 +70,28 @@ export const EV_B = {
   'fill.ev.done': { en: n => `Filled <b>${n}</b> cells. O(R·C).`, ru: n => `Перекрашено клеток: <b>${n}</b>. O(R·C).` },
 
   /* Rotting Oranges */
+  /* Island Perimeter */
+  'per.ev.start': {
+    en: (rows, cols) => `${rows} × ${cols}: scan the cells row by row. Land adds 4 sides; a land neighbour to the right or below removes the side they share — 2 at once, one from each cell.`,
+    ru: (rows, cols) => `${rows} × ${cols}: обходим клетки по строкам. Суша добавляет 4 стороны; сосед-суша справа или снизу убирает общую сторону — сразу 2, по одной у каждой клетки.`,
+  },
+  'per.ev.land': {
+    en: (r, c, before, total) => `Land at (${r}, ${c}): +4 → ${before} + 4 = <b>${total}</b>. Now look right and down.`,
+    ru: (r, c, before, total) => `Суша в (${r}, ${c}): +4 → ${before} + 4 = <b>${total}</b>. Теперь смотрим вправо и вниз.`,
+  },
+  'per.ev.right': {
+    en: (r, c, r2, c2, was, total) => `(${r2}, ${c2}) to the right is land too: they share a side (red), and neither counts it — −2 → <b>${total}</b>.`,
+    ru: (r, c, r2, c2, was, total) => `Справа, в (${r2}, ${c2}), тоже суша: у клеток общая сторона (красная), и ни одна её не считает — −2 → <b>${total}</b>.`,
+  },
+  'per.ev.down': {
+    en: (r, c, r2, c2, was, total) => `(${r2}, ${c2}) below is land too: one more shared side — −2 → <b>${total}</b>. Left and up are not checked: those sides were counted from the other cell.`,
+    ru: (r, c, r2, c2, was, total) => `Снизу, в (${r2}, ${c2}), тоже суша: ещё одна общая сторона — −2 → <b>${total}</b>. Влево и вверх не смотрим: эти стороны учла соседняя клетка.`,
+  },
+  'per.ev.done': {
+    en: (total, land, shared) => `Perimeter: 4 × ${land} − 2 × ${shared} = <b>${total}</b> (outlined). No DFS and no visited set — one pass.`,
+    ru: (total, land, shared) => `Периметр: 4 × ${land} − 2 × ${shared} = <b>${total}</b> (обведён). Ни DFS, ни visited — один проход.`,
+  },
+
   'orange.ev.start': {
     en: (rotten, fresh) => `Put all ${rotten} rotten oranges into the queue at once — multi-source BFS. Fresh: ${fresh}.`,
     ru: (rotten, fresh) => `Кладём все гнилые апельсины (${rotten}) в очередь сразу — BFS из многих источников. Свежих: ${fresh}.`,

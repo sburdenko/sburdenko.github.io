@@ -1,5 +1,5 @@
 /** Views for chapters 01–04. view(run, event) → SVG string, vars(run, event) → [[i18nKey, html]]. */
-import { CELL, STEP, svg, text, rowWidth, cells, pointers, chip, chips, barLayout, bars, pointerAt } from './view-kit.js?v=202610191236';
+import { CELL, STEP, svg, text, rowWidth, cells, pointers, chip, chips, barLayout, bars, pointerAt } from './view-kit.js?v=202610191240';
 
 const TOP = 40;
 const framed = (n, h, inner) => svg(rowWidth(n) + 20, h, `<g transform="translate(10,0)">${inner}</g>`);
@@ -303,5 +303,24 @@ export const slidingMax = {
   },
   vars(run, e) {
     return [['var.k', chip(run.k)], ['var.deque', chips(e.dq.map((j, q) => chip(`${j}:${run.nums[j]}`, q === 0 ? 'hit' : 'amb')))]];
+  },
+};
+
+export const twoSumII = {
+  view(run, e) {
+    const a = run.numbers, done = e.key === 'tsii.ev.none';
+    const cls = a.map((_, j) => (j < e.lo || j > e.hi || done ? 'dim' : ''));
+    if (e.found) { cls[e.lo] = 'ok'; cls[e.hi] = 'ok'; } else if (!done) {
+      cls[e.lo] = e.key === 'tsii.ev.small' ? 'bad' : 'cur';
+      cls[e.hi] = e.key === 'tsii.ev.big' ? 'bad' : 'cur';
+    }
+    const marks = done ? [] : [{ i: e.lo, label: 'lo' }, { i: e.hi, label: 'hi', cls: 'p2' }];
+    let inner = cells(a, cls, { y: TOP, index: false }) + pointers(marks, { y: TOP, count: a.length });
+    a.forEach((_, j) => { inner += text(j * STEP + CELL / 2, TOP + CELL + 13, j + 1, 'idx'); });
+    return framed(a.length, 104, inner);
+  },
+  vars(run, e) {
+    const sum = e.sum == null ? '—' : e.sum, cls = e.sum == null ? '' : e.sum === run.target ? 'hit' : 'amb';
+    return [['var.target', chip(run.target)], ['var.sum', chip(sum, cls)], ['var.answer', chip(e.found ? `[${e.found.join(', ')}]` : '—', e.found ? 'hit' : '')]];
   },
 };
