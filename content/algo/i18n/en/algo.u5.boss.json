@@ -46,7 +46,7 @@
  "cards/6/options/2": "s.HasFlag(Status.Burning) && s.HasFlag(Status.Stunned) — the same thing, just more readable",
  "cards/6/explain": "All statuses are bits of one int: testing any combination is one AND and one comparison, with no allocations and the data close together in memory. (s & both) == both requires both bits; (s & both) != 0 requires at least one.",
  "cards/6/wrong/1": "A HashSet per unit is 2000 heap objects, hashing on every Contains and data scattered in memory. For 5 values it costs many times more than a mask.",
- "cards/6/wrong/2": "On .NET Core 2.1+ it really is a single test, but in Unity HasFlag may box the enum — allocations every frame across 2000 units.",
+ "cards/6/wrong/2": "On .NET Core 2.1+ it really is a single test, but in Unity, depending on the version and the backend, HasFlag may box the enum — that means allocations every frame across 2000 units. A mask is equally cheap everywhere, and it checks both bits in one operation.",
  "cards/7/q": "Interview code tests for odd numbers like this: if (x % 2 == 1). Where does the test go wrong?",
  "cards/7/options/0": "On negative odd numbers: −3 % 2 == −1",
  "cards/7/options/1": "On zero",
