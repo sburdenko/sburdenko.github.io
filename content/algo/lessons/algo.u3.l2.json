@@ -2,7 +2,7 @@
  "id": "algo.u3.l2",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 14,
+ "minutes": 15,
  "cards": [
   {
    "t": "learn",
@@ -26,15 +26,50 @@
    "lang": "cs"
   },
   {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
-   "explain": "⟦⟧",
-   "wrong": {
-    "1": "⟦⟧",
-    "2": "⟦⟧"
-   }
+   "t": "rig",
+   "rig": "algo",
+   "problem": "twoSumII",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 2,
+      "q": "⟦⟧",
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 3,
+      "q": "⟦⟧",
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
   },
   {
    "t": "learn",
