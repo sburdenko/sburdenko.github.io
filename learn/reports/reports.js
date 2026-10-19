@@ -5,10 +5,10 @@
  *
  * Адаптер — модуль с createSink(settings) → { add(report) }, как у входа (learn/auth).
  */
-import { AUTH_CONFIG } from '../auth/config.js?v=202610191738';
-import { isValidReport, loadQueue, saveQueue } from './report.js?v=202610191738';
+import { AUTH_CONFIG } from '../auth/config.js?v=202610191755';
+import { isValidReport, loadQueue, saveQueue } from './report.js?v=202610191755';
 
-const SINKS = { firebase: () => import('./firestore.js?v=202610191738') };
+const SINKS = { firebase: () => import('./firestore.js?v=202610191755') };
 const PROVIDER = AUTH_CONFIG.provider;   // тот же проект, что и вход
 /** Сколько ждать ответа сервера. Firestore без базы или без сети не падает, а ждёт бесконечно. */
 export const SEND_TIMEOUT_MS = 8000;
