@@ -31,5 +31,6 @@
  "units/0/source/title": "Microsoft Learn: выбор класса коллекции",
  "units/1/source/title": "Microsoft Learn: Dictionary<TKey,TValue>",
  "units/2/source/title": "LeetCode 42: Trapping Rain Water",
- "units/3/source/title": "LeetCode 239: Sliding Window Maximum"
+ "units/3/source/title": "LeetCode 239: Sliding Window Maximum",
+ "units/4/source/title": "Microsoft Learn: класс BitOperations"
 }

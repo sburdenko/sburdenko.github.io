@@ -1,0 +1,153 @@
+{
+ "id": "algo.u5.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 15,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public int GetSum(int a, int b) {\n    while (b != ___) {\n        int carry = ___;\n        a ___ b;\n        b = carry;\n    }\n    return a;\n}",
+   "tiles": ["0", "1", "(a & b) << 1", "(a | b) << 1", "(a ^ b) << 1", "^=", "&=", "|="],
+   "answer": ["0", "(a & b) << 1", "^="],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "sumBits",
+   "input": {
+    "a": -5,
+    "b": 7
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 2,
+      "options": [
+       {
+        "label": "a = −6, b = 8"
+       },
+       {
+        "label": "a = 2, b = 0"
+       },
+       {
+        "label": "a = −6, b = 4"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 31,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "OverflowException"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public int Divide(int dividend, int divisor) {\n    if (dividend == int.MinValue && divisor == -1) return int.MaxValue;\n    long a = Math.Abs(dividend), b = Math.Abs(divisor);\n    long q = 0;\n    for (int k = 31; k >= 0; k--)\n        if ((a >> k) >= b) { a -= b << k; q |= 1L << k; }\n    return (dividend < 0) != (divisor < 0) ? (int)-q : (int)q;\n}",
+   "answer": 2,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["x * 8 == x << 3", "x / 2 == x >> 1", "x % 8 == (x & 7)", "-x == ~x + 1", "Math.Abs(x) >= 0"],
+   "answer": [0, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "a ^ b"],
+    ["⟦⟧", "(a & b) << 1"],
+    ["⟦⟧", "int.MinValue / -1"],
+    ["⟦⟧", "Math.Abs((long)x)"],
+    ["⟦⟧", "x & 1023"]
+   ]
+  }
+ ]
+}
