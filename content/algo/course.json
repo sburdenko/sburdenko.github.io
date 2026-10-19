@@ -35,8 +35,8 @@
   {
    "id": "u6",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["algo.u6.l1", "algo.u6.l2", "algo.u6.l3", "algo.u6.l4", "algo.u6.l5", "algo.u6.boss"]
   },
   {
    "id": "u7",

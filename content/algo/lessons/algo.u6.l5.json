@@ -1,0 +1,154 @@
+{
+ "id": "algo.u6.l5",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 15,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["3 → 2 → 1 → 6 → 5 → 4 → 7 → 8", "3 → 2 → 1 → 6 → 5 → 4 → 8 → 7", "8 → 7 → 6 → 5 → 4 → 3 → 2 → 1"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "groupNext = kth.next", "⟦⟧", "groupPrev.next = kth", "groupPrev = first"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "tiles": ["kth.next", "kth", "groupNext", "null", "first", "dummy"],
+   "answer": ["kth.next", "groupNext", "kth", "first"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "reverseK",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 2,
+      "options": ["1.next = 6", "1.next = 4", "1.next = 7"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 3,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public ListNode ReverseKGroup(ListNode head, int k) {\n    var dummy = new ListNode(0, head);\n    var groupPrev = dummy;\n    while (true) {\n        var kth = groupPrev;\n        for (int i = 0; i < k && kth != null; i++) kth = kth.next;\n        if (kth == null) break;\n        var groupNext = kth.next;\n        ListNode prev = null, cur = groupPrev.next;\n        while (cur != groupNext) {\n            var next = cur.next;\n            cur.next = prev;\n            prev = cur;\n            cur = next;\n        }\n        var first = groupPrev.next;\n        groupPrev.next = kth;\n        groupPrev = first;\n    }\n    return dummy.next;\n}",
+   "answer": 8,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "int Reverse(int[] next, int head) {\n    int prev = -1, cur = head;\n    while (___) {\n        int nx = ___;\n        next[cur] = ___;\n        prev = cur;\n        cur = nx;\n    }\n    return prev;\n}",
+   "tiles": ["cur != -1", "cur != 0", "next[cur]", "next[prev]", "prev", "-1"],
+   "answer": ["cur != -1", "next[cur]", "prev"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["LinkedList<T>.Last", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}
