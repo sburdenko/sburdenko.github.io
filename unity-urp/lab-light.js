@@ -1,13 +1,13 @@
 /** CH.04 shadows + atlas, CH.05 mixed lighting + rendering layers. */
-import { $, fitCanvas, clamp, fmt } from '../assets/vhs.js?v=202610191654';
-import { t } from '../assets/i18n.js?v=202610191654';
-import { bindSeg, isPressed, togglePressed, tile } from '../assets/lab.js?v=202610191654';
-import { renderCode } from '../assets/code.js?v=202610191654';
-import { SNIPPETS } from './snippets.js?v=202610191654';
+import { $, fitCanvas, clamp, fmt } from '../assets/vhs.js?v=202610191657';
+import { t } from '../assets/i18n.js?v=202610191657';
+import { bindSeg, isPressed, togglePressed, tile } from '../assets/lab.js?v=202610191657';
+import { renderCode } from '../assets/code.js?v=202610191657';
+import { SNIPPETS } from './snippets.js?v=202610191657';
 import {
   shadowBudget, cascadeSplits, atlasLayout, LIGHT_MODES, MODE_MATRIX, characterInPillarShadow,
   LAYERS, layerMask, lightAffects,
-} from './model-light.js?v=202610191654';
+} from './model-light.js?v=202610191657';
 
 /* ---------------- Main light shadows ---------------- */
 export function initShadows() {
