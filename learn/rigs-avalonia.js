@@ -1,10 +1,10 @@
 /** Стенды курса «Avalonia: основы»: Grid, панели, привязки, селекторы стилей. */
-import { esc } from '../assets/vhs.js?v=202610191241';
-import { drive, act } from './rig-kit.js?v=202610191241';
-import { codeHtml } from './code-view.js?v=202610191241';
-import { tr } from './i18n.js?v=202610191241';
-import { COL_DEFS, WIDTHS, gridWidths, gridRig, PANELS, KIDS, arrange, panelRig, MODES, bindRig, TREE, select, selRig } from './models-avalonia.js?v=202610191241';
-import { t as tl } from './ui.js?v=202610191241';
+import { esc } from '../assets/vhs.js?v=202610191242';
+import { drive, act } from './rig-kit.js?v=202610191242';
+import { codeHtml } from './code-view.js?v=202610191242';
+import { tr } from './i18n.js?v=202610191242';
+import { COL_DEFS, WIDTHS, gridWidths, gridRig, PANELS, KIDS, arrange, panelRig, MODES, bindRig, TREE, select, selRig } from './models-avalonia.js?v=202610191242';
+import { t as tl } from './ui.js?v=202610191242';
 
 const seg = (items, cur, prefix) => `<div class="seg wrap literal">${items.map(([v, label]) => act(`${prefix}:${v}`, esc(tr(label)), '').replace('class=""', `aria-pressed="${String(v) === String(cur)}"`)).join('')}</div>`;
 const COLORS = ['var(--gpu)', 'var(--cpu)', '#b28dff', 'var(--osd)'];

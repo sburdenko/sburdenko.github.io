@@ -27,5 +27,9 @@
  "units/12/title": "Backtracking and dynamic programming",
  "units/12/blurb": "Decision trees, pruning, from recursion to a table, the unbounded knapsack, DP on two strings and LIS in O(n log n). How to spot DP in a problem and name the state and the transition.",
  "units/13/title": "Data structure design and final exam",
- "units/13/blurb": "LRU and LFU, the trie, tree serialization, object pools and ring buffers, from the LeetCode problem to an asset cache in a game. Then the exam on the whole course."
+ "units/13/blurb": "LRU and LFU, the trie, tree serialization, object pools and ring buffers, from the LeetCode problem to an asset cache in a game. Then the exam on the whole course.",
+ "units/0/source/title": "Microsoft Learn: Selecting a collection class",
+ "units/1/source/title": "Microsoft Learn: Dictionary<TKey,TValue>",
+ "units/2/source/title": "LeetCode 42: Trapping Rain Water",
+ "units/3/source/title": "LeetCode 239: Sliding Window Maximum"
 }

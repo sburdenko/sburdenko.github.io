@@ -6,24 +6,40 @@
    "id": "u1",
    "title": "⟦⟧",
    "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://learn.microsoft.com/en-us/dotnet/standard/collections/selecting-a-collection-class"
+   },
    "lessons": ["algo.u1.l1", "algo.u1.l2", "algo.u1.l3", "algo.u1.l4", "algo.u1.l5", "algo.u1.boss"]
   },
   {
    "id": "u2",
    "title": "⟦⟧",
    "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.dictionary-2"
+   },
    "lessons": ["algo.u2.l1", "algo.u2.l2", "algo.u2.l3", "algo.u2.l4", "algo.u2.boss"]
   },
   {
    "id": "u3",
    "title": "⟦⟧",
    "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://leetcode.com/problems/trapping-rain-water/"
+   },
    "lessons": ["algo.u3.l1", "algo.u3.l2", "algo.u3.l3", "algo.u3.l4", "algo.u3.l5", "algo.u3.boss"]
   },
   {
    "id": "u4",
    "title": "⟦⟧",
    "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://leetcode.com/problems/sliding-window-maximum/"
+   },
    "lessons": ["algo.u4.l1", "algo.u4.l2", "algo.u4.l3", "algo.u4.l4", "algo.u4.boss"]
   },
   {

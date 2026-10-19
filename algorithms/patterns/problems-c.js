@@ -1,5 +1,5 @@
 /** Problems and C# solutions for chapters 09–12: heap, backtracking, greedy, dynamic programming. */
-import { problem as p } from './problem.js?v=202610191241';
+import { problem as p } from './problem.js?v=202610191242';
 
 export const PROBLEMS_C = {
   heap: [

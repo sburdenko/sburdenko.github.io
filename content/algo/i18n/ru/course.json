@@ -27,5 +27,9 @@
  "units/12/title": "Перебор и динамика",
  "units/12/blurb": "Дерево решений, отсечения, от рекурсии к таблице, рюкзак без ограничений, DP на двух строках и LIS за O(n log n). Как узнать DP по условию и назвать состояние и переход.",
  "units/13/title": "Дизайн структур и финальный экзамен",
- "units/13/blurb": "LRU и LFU, префиксное дерево, сериализация дерева, пул объектов и кольцевой буфер — от задачи LeetCode до кэша ассетов в игре. В конце — экзамен по всему курсу."
+ "units/13/blurb": "LRU и LFU, префиксное дерево, сериализация дерева, пул объектов и кольцевой буфер — от задачи LeetCode до кэша ассетов в игре. В конце — экзамен по всему курсу.",
+ "units/0/source/title": "Microsoft Learn: выбор класса коллекции",
+ "units/1/source/title": "Microsoft Learn: Dictionary<TKey,TValue>",
+ "units/2/source/title": "LeetCode 42: Trapping Rain Water",
+ "units/3/source/title": "LeetCode 239: Sliding Window Maximum"
 }
