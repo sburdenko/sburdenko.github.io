@@ -23,8 +23,8 @@
   {
    "id": "u4",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["algo.u4.l1", "algo.u4.l2", "algo.u4.l3", "algo.u4.l4", "algo.u4.boss"]
   },
   {
    "id": "u5",

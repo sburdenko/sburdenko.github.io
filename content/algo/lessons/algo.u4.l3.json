@@ -1,0 +1,176 @@
+{
+ "id": "algo.u4.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 15,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "int ans = CharacterReplacement(\"AABABBA\", 1); // 4: \"AABA\" -> \"AAAA\"",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "charReplace",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 6,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 7,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public string MinWindow(string s, string t) {\n    var need = new Dictionary<char, int>();\n    foreach (char c in t) need[c] = need.GetValueOrDefault(c) + 1;\n    var have = new Dictionary<char, int>();\n    int formed = 0, l = 0, bestL = 0, bestLen = int.MaxValue;\n    for (int r = 0; r < s.Length; r++) {\n        char c = s[r];\n        have[c] = have.GetValueOrDefault(c) + 1;\n        if (need.TryGetValue(c, out int n) && have[c] == n) formed++;\n        while (___) {\n            if (r - l + 1 < bestLen) { bestLen = r - l + 1; bestL = l; }\n            char gone = ___;\n            have[gone]--;\n            if (need.TryGetValue(gone, out int m) && ___) formed--;\n        }\n    }\n    return bestLen == int.MaxValue ? \"\" : ___;\n}",
+   "tiles": ["formed == need.Count", "formed == t.Length", "s[l++]", "s[r]", "have[gone] < m", "have[gone] <= m", "s.Substring(bestL, bestLen)", "s.Substring(bestL, bestL + bestLen)"],
+   "answer": ["formed == need.Count", "s[l++]", "have[gone] < m", "s.Substring(bestL, bestLen)"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "minWindow",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 17,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "for (int r = 0; r < s.Length; r++) {\n    char c = s[r];\n    have[c] = have.GetValueOrDefault(c) + 1;\n    if (need.TryGetValue(c, out int n) && have[c] >= n) formed++;\n    while (formed == need.Count) {\n        if (r - l + 1 < bestLen) { bestLen = r - l + 1; bestL = l; }\n        char gone = s[l++];\n        have[gone]--;\n        if (need.TryGetValue(gone, out int m) && have[gone] < m) formed--;\n    }\n}",
+   "answer": 3,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "AtMost(k) − AtMost(k − 1)"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  }
+ ]
+}
