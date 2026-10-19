@@ -14,6 +14,7 @@
  *             варианты с event, answer можно не писать — верным считается вариант с ключом события at.
  *             q, explain и label переводятся (в данных урока это строки из i18n), остальное — общее.
  * Действия: next, prev, reset (в начало), end (в конец или до вопроса), pick:N.
+ *   Если первый вопрос стоит на at: 1, стенд уже на нём (шаг 0) — solve начинается с pick:N, а не с end.
  */
 import { RIGS as TAPE_RIGS, runWithInput } from '../algorithms/patterns/rigs.js?v=202610191154';
 import { PROBLEMS, NAMES } from '../algorithms/patterns/problems.js?v=202610191154';

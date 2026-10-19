@@ -159,8 +159,10 @@ body.in-lesson{overflow:hidden}
 .opts .opt.right:hover{border-color:var(--ok)}.opts .opt.wrong:hover{border-color:var(--bad)}
 
 /* строки кода, по которым тапают */
-.lines{display:grid;background:#07040f;border:1px solid var(--line);border-radius:12px;padding:8px;font:14.5px/1.5 var(--f-mono)}
+.lines{display:grid;grid-template-columns:minmax(0,1fr);background:#07040f;border:1px solid var(--line);border-radius:12px;padding:8px;font:14.5px/1.5 var(--f-mono)}
 .line{display:block;text-align:left;width:100%;padding:7px 10px;border-radius:8px;border:2px solid transparent;background:none;color:#e3dcfb;cursor:pointer;white-space:pre;overflow-x:auto;font:inherit}
+/* на телефоне длинная строка переносится: кнопка не прокручивается пальцем, и хвост строки иначе не виден */
+@media (max-width:640px){.lines{font-size:13px}.line{white-space:pre-wrap;overflow-wrap:anywhere}}
 .line:hover{background:rgba(255,255,255,.04)}
 .line[aria-pressed="true"]{border-color:var(--sel);background:rgba(38,227,234,.08)}
 .line.right{border-color:var(--ok);background:rgba(93,252,154,.1)}
