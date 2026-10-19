@@ -1,0 +1,199 @@
+{
+ "id": "algo.u11.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 16,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "⟦⟧", "minutes++", "fresh == 0 ? minutes : −1"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "var queue = new Queue<(int r, int c)>();\nfor (int r = 0; r < rows; r++)\n    for (int c = 0; c < cols; c++) {\n        if (grid[r][c] == 2) ___;\n        else if (grid[r][c] == 1) fresh++;\n    }\nint minutes = 0;\nwhile (queue.Count > 0 && ___) {\n    for (int k = ___; k > 0; k--) {\n        var (r, c) = queue.Dequeue();\n        foreach (var (dr, dc) in dirs) {\n            int nr = r + dr, nc = c + dc;\n            if (nr < 0 || nc < 0 || nr >= rows || nc >= cols || grid[nr][nc] != 1) continue;\n            grid[nr][nc] = ___;\n            fresh--;\n            queue.Enqueue((nr, nc));\n        }\n    }\n    minutes++;\n}\nreturn fresh == 0 ? minutes : ___;",
+   "tiles": ["queue.Enqueue((r, c))", "fresh++", "fresh > 0", "minutes > 0", "queue.Count", "rows", "2", "0", "-1", "minutes - 1"],
+   "answer": ["queue.Enqueue((r, c))", "fresh > 0", "queue.Count", "2", "-1"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "oranges",
+   "input": {
+    "grid": [
+     [2, 1, 1, 0, 1],
+     [1, 1, 0, 1, 0],
+     [0, 1, 1, 1, 1],
+     [0, 0, 1, 1, 2]
+    ]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 2,
+      "options": ["4", "5", "3"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": "orange.ev.done",
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "nearestZero",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 10,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 14,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "var queue = new Queue<(int r, int c)>();\nint fresh = 0, minutes = 0;\nfor (int r = 0; r < rows; r++)\n    for (int c = 0; c < cols; c++) {\n        if (grid[r][c] == 2) queue.Enqueue((r, c));\n        else if (grid[r][c] == 1) fresh++;\n    }\nwhile (queue.Count > 0) {\n    for (int k = queue.Count; k > 0; k--) {\n        var (r, c) = queue.Dequeue();\n        foreach (var (dr, dc) in dirs) {\n            int nr = r + dr, nc = c + dc;\n            if (nr < 0 || nc < 0 || nr >= rows || nc >= cols || grid[nr][nc] != 1) continue;\n            grid[nr][nc] = 2; fresh--;\n            queue.Enqueue((nr, nc));\n        }\n    }\n    minutes++;\n}\nreturn fresh == 0 ? minutes : -1;",
+   "answer": 7,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}
