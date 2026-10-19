@@ -1,0 +1,140 @@
+{
+ "id": "algo.u2.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 14,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public bool IsAnagram(string s, string t) {\n    if (s.Length != t.Length) return false;\n    char[] a = s.ToCharArray(), b = t.ToCharArray();\n    Array.Sort(a);\n    Array.Sort(b);\n    return new string(a) == new string(b);   // \"anagram\", \"nagaram\" → \"aaagmnr\"\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 3, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public bool IsAnagram(string s, string t) {\n    if (___) return false;\n    Span<int> counts = stackalloc int[26];\n    for (int i = 0; i < s.Length; i++) {\n        counts[___]++;\n        counts[t[i] - 'a']___;\n    }\n    foreach (int c in counts)\n        if (c ___ 0) return false;\n    return true;\n}",
+   "tiles": ["s.Length != t.Length", "s.Length == t.Length", "s[i] - 'a'", "s[i]", "--", "++", "!=", "=="],
+   "answer": ["s.Length != t.Length", "s[i] - 'a'", "--", "!="],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["s", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "anagram",
+   "input": {
+    "strs": ["tea", "eat", "aab", "bab", "aba", "ate"]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 4,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 1,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 5,
+      "options": ["groups[\"aab\"].Add(\"aba\")", "groups[\"aba\"] = new List<string>()", "groups[\"abb\"].Add(\"aba\")"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:1", "end", "pick:0", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "static string CountKey(string s) {\n    Span<int> counts = stackalloc int[26];\n    foreach (char c in s) counts[c - 'a']++;\n    var sb = new StringBuilder(64);\n    foreach (int n in counts)\n        sb.Append(n);\n    return sb.ToString();\n}",
+   "answer": 5,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "Span<int> counts = stackalloc int[26]"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}
