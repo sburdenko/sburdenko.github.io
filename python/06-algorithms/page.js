@@ -1,12 +1,12 @@
 /** PY-06 assembly: per chapter, problem tabs that each mount their own rig; plus the sorting race. */
-import { $, $$, esc } from '../../assets/vhs.js?v=202610191242';
-import { t, onLang } from '../../assets/i18n.js?v=202610191242';
-import { bootTape } from '../shared/tape.js?v=202610191242';
-import { mountRig } from '../shared/stepper.js?v=202610191242';
-import { isProblemDone, onProgress } from '../shared/progress.js?v=202610191242';
-import { DICT } from './i18n.js?v=202610191242';
-import { PROBLEMS } from './problems.js?v=202610191242';
-import { mountRace } from './race.js?v=202610191242';
+import { $, $$, esc } from '../../assets/vhs.js?v=202610191254';
+import { t, onLang } from '../../assets/i18n.js?v=202610191254';
+import { bootTape } from '../shared/tape.js?v=202610191254';
+import { mountRig } from '../shared/stepper.js?v=202610191254';
+import { isProblemDone, onProgress } from '../shared/progress.js?v=202610191254';
+import { DICT } from './i18n.js?v=202610191254';
+import { PROBLEMS } from './problems.js?v=202610191254';
+import { mountRace } from './race.js?v=202610191254';
 
 export const CHAPTERS = [
   { id: 'first', n: '01' }, { id: 'numbers', n: '02' }, { id: 'search', n: '03' }, { id: 'sorting', n: '04' },
