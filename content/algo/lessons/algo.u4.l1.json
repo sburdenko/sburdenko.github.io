@@ -1,0 +1,134 @@
+{
+ "id": "algo.u4.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 12,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["k = 1", "⟦⟧", "k = n"],
+   "answer": 1,
+   "explain": "⟦⟧",
+   "wrong": {
+    "0": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["sum = nums[0..k−1]", "r = k … n−1", "sum += nums[r] − nums[r−k]", "best = max(best, sum)", "⟦⟧"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public double FindMaxAverage(int[] nums, int k) {\n    int sum = 0;\n    for (int i = 0; i < ___; i++) sum += nums[i];\n    int best = ___;\n    for (int r = k; r < nums.Length; r++) {\n        sum += ___;\n        best = Math.Max(best, sum);\n    }\n    return ___;\n}",
+   "tiles": ["k", "nums.Length", "sum", "0", "nums[r] - nums[r - k]", "nums[r] - nums[r - k + 1]", "(double)best / k", "best / k"],
+   "answer": ["k", "sum", "nums[r] - nums[r - k]", "(double)best / k"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "maxAvg",
+   "input": {
+    "nums": [3, 8, 2, 6, 1, 9, 4, 7],
+    "k": 3
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 2,
+      "options": ["sum = 16 + 1 - 8;   // 9", "sum = 16 + 1 - 3;   // 14", "sum = 16 + 1 - 2;   // 15"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": "avg.ev.done",
+      "options": ["6.666…", "6", "20"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "void Update() {\n    float dt = Time.unscaledDeltaTime;\n    frames[head] = dt;\n    sum += dt - frames[head];\n    head = (head + 1) % N;\n    if (count < N) count++;\n}",
+   "answer": 2,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}
