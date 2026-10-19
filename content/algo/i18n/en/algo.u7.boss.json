@@ -63,5 +63,5 @@
  "cards/8/options/3": "Search in a rotated array with duplicates is O(log n) in the worst case",
  "cards/8/options/4": "Fisher–Yates is O(n log n)",
  "cards/8/options/5": "A loot table on prefix sums: building O(n), a pick O(log n)",
- "cards/8/explain": "log₂ 10⁹ ≈ 30. Koko is about log₂ max checks of O(n) each. The cut is searched over the shorter array. With duplicates the worst case is O(n): ones with a single two must be inspected almost everywhere. Fisher–Yates is a single pass of swaps: O(n). Prefixes are one pass, a pick is one upper_bound."
+ "cards/8/explain": "log₂ 10⁹ ≈ 30. Koko is about log₂ max checks of O(n) each. The cut is searched over the shorter array. With duplicates the worst case is O(n): in ones with a single two every cell has to be inspected. Fisher–Yates is a single pass of swaps: O(n). Prefixes are one pass, a pick is one upper_bound."
 }
