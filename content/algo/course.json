@@ -45,8 +45,12 @@
   {
    "id": "u5",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://learn.microsoft.com/en-us/dotnet/api/system.numerics.bitoperations"
+   },
+   "lessons": ["algo.u5.l1", "algo.u5.l2", "algo.u5.l3", "algo.u5.l4", "algo.u5.l5", "algo.u5.boss"]
   },
   {
    "id": "u6",

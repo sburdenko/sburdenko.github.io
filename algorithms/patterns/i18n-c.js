@@ -180,8 +180,8 @@ foreach (var item in items) {
     ru: (i, before, ai, reach) => `i = ${i}: reach = max(${before}, ${i} + ${ai}) = ${reach}.`,
   },
   'greedy.ev.zero': {
-    en: (i, before, ai, reach) => `i = ${i}: reach = max(${before}, ${i} + ${ai}) = ${reach}. A zero is harmless here: reach is already further.`,
-    ru: (i, before, ai, reach) => `i = ${i}: reach = max(${before}, ${i} + ${ai}) = ${reach}. Ноль здесь не страшен: reach уже дальше.`,
+    en: (i, before, ai, reach) => `i = ${i}: reach = max(${before}, ${i} + ${ai}) = ${reach}. ${reach > i ? 'A zero is harmless here: reach is already further.' : 'A zero, and reach stops right on it: no cell to the right can be reached.'}`,
+    ru: (i, before, ai, reach) => `i = ${i}: reach = max(${before}, ${i} + ${ai}) = ${reach}. ${reach > i ? 'Ноль здесь не страшен: reach уже дальше.' : 'Ноль, и reach стоит ровно на нём: правее не попасть ни в одну клетку.'}`,
   },
   'greedy.ev.win': {
     en: (i, before, ai, reach, last) => `i = ${i}: reach = max(${before}, ${i} + ${ai}) = ${reach} ≥ ${last} — the last index is reachable: <b>true</b>.`,
