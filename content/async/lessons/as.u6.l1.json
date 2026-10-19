@@ -9,7 +9,8 @@
    "title": "⟦⟧",
    "body": "⟦⟧",
    "code": "⟦⟧",
-   "lang": "cs"
+   "lang": "cs",
+   "deep": "⟦⟧"
   },
   {
    "t": "rig",
@@ -26,13 +27,6 @@
     "call": "result"
    },
    "solve": ["end"]
-  },
-  {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
-   "explain": "⟦⟧"
   },
   {
    "t": "rig",
@@ -81,6 +75,24 @@
    "lang": "cs"
   },
   {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
    "t": "blanks",
    "q": "⟦⟧",
    "code": "public async Task<IActionResult> Search(string q, ___ ct)\n{\n    var items = await _db.Products.Where(p => p.Name.Contains(q)).ToListAsync(___);\n    return Ok(items);\n}",
@@ -97,6 +109,13 @@
    "lang": "cs"
   },
   {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public async Task<IActionResult> Order(int id)\n{\n    var order = await _db.Orders.FindAsync(id);\n    _ = Task.Run(() => _db.SaveChangesAsync());\n    return Ok(order);\n}",
+   "answer": 3,
+   "explain": "⟦⟧"
+  },
+  {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
@@ -105,24 +124,10 @@
    "deep": "⟦⟧"
   },
   {
-   "t": "tapline",
-   "q": "⟦⟧",
-   "code": "public async Task<IActionResult> Order(int id)\n{\n    var order = await _db.Orders.FindAsync(id);\n    _ = Task.Run(() => _db.SaveChangesAsync());\n    return Ok(order);\n}",
-   "answer": 3,
-   "explain": "⟦⟧"
-  },
-  {
    "t": "choice",
    "q": "⟦⟧",
    "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
-   "explain": "⟦⟧"
-  },
-  {
-   "t": "multi",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": [0, 1, 2],
    "explain": "⟦⟧"
   }
  ]

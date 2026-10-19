@@ -2,10 +2,10 @@
  * Quiz cards: "what will it print", "does it crash", "fill the gap", "put lines in order".
  * mountQuiz(root, quiz, { tape }) — quiz texts live in the tape dictionary under `quiz.<id>.*`.
  */
-import { $, $$, esc, rng } from '../../assets/vhs.js?v=202610190745';
-import { t, onLang } from '../../assets/i18n.js?v=202610190745';
-import { pyBlock } from './py-code.js?v=202610190745';
-import { markQuiz, isQuizDone } from './progress.js?v=202610190745';
+import { $, $$, esc, rng } from '../../assets/vhs.js?v=202610190803';
+import { t, onLang } from '../../assets/i18n.js?v=202610190803';
+import { pyBlock } from './py-code.js?v=202610190803';
+import { markQuiz, isQuizDone } from './progress.js?v=202610190803';
 
 const normalize = s => String(s).trim().replace(/\s+/g, ' ').replace(/\s*([=,:()[\]])\s*/g, '$1');
 const hashOf = s => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);

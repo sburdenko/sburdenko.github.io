@@ -19,13 +19,6 @@
    "explain": "⟦⟧"
   },
   {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
-   "explain": "⟦⟧"
-  },
-  {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
@@ -44,6 +37,26 @@
   {
    "t": "choice",
    "q": "⟦⟧",
+   "code": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   },
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
    "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
    "explain": "⟦⟧"
@@ -67,15 +80,6 @@
    "q": "⟦⟧",
    "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
-   "explain": "⟦⟧"
-  },
-  {
-   "t": "blanks",
-   "q": "⟦⟧",
-   "code": "await Parallel.ForEachAsync(urls,\n    new ParallelOptions { ___ = 8 },\n    async (url, ct) => await DownloadAsync(url, ct));",
-   "lang": "cs",
-   "tiles": ["MaxDegreeOfParallelism", "CancellationToken", "Timeout", "Priority"],
-   "answer": ["MaxDegreeOfParallelism"],
    "explain": "⟦⟧"
   },
   {

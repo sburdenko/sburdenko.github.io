@@ -1,11 +1,11 @@
 /** CH.10 volumes, CH.11 STP + PSO, CH.12 diagnostics, CH.13 cheat sheet and interview. */
-import { $, fitCanvas, fmt, fmtI } from '../assets/vhs.js?v=202610190745';
-import { t } from '../assets/i18n.js?v=202610190745';
-import { bindSeg, isPressed, togglePressed, tile, visibleLoop } from '../assets/lab.js?v=202610190745';
-import { renderCode } from '../assets/code.js?v=202610190745';
-import { SNIPPETS } from './snippets.js?v=202610190745';
-import { blendVolumes } from './model-gi.js?v=202610190745';
-import { renderScaleModel, dpiRenderScale, jitter, psoFrames, PSO_TIMELINE, SYMPTOMS } from './model-output.js?v=202610190745';
+import { $, fitCanvas, fmt, fmtI } from '../assets/vhs.js?v=202610190803';
+import { t } from '../assets/i18n.js?v=202610190803';
+import { bindSeg, isPressed, togglePressed, tile, visibleLoop } from '../assets/lab.js?v=202610190803';
+import { renderCode } from '../assets/code.js?v=202610190803';
+import { SNIPPETS } from './snippets.js?v=202610190803';
+import { blendVolumes } from './model-gi.js?v=202610190803';
+import { renderScaleModel, dpiRenderScale, jitter, psoFrames, PSO_TIMELINE, SYMPTOMS } from './model-output.js?v=202610190803';
 
 /* ---------------- Volume blending ---------------- */
 export function initVolume() {

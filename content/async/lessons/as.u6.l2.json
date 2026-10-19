@@ -19,6 +19,13 @@
    "explain": "⟦⟧"
   },
   {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
    "t": "choice",
    "q": "⟦⟧",
    "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
@@ -113,17 +120,6 @@
    "q": "⟦⟧",
    "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
    "explain": "⟦⟧"
-  },
-  {
-   "t": "match",
-   "q": "⟦⟧",
-   "pairs": [
-    ["Dispatcher.Invoke", "⟦⟧"],
-    ["Control.BeginInvoke", "⟦⟧"],
-    ["Progress<T>", "⟦⟧"],
-    ["DispatcherSynchronizationContext", "⟦⟧"],
-    ["VerifyAccess", "⟦⟧"]
-   ]
   }
  ]
 }
