@@ -63,7 +63,7 @@
  "cards/13/pairs/1/0": "Reverse recursively",
  "cards/13/pairs/2/0": "Merge two sorted lists",
  "cards/13/pairs/2/1": "dummy and tail, the remainder with a single link",
- "cards/13/pairs/3/0": "Avoid a separate case for the head",
+ "cards/13/pairs/3/0": "Delete a node that may turn out to be the head",
  "cards/13/pairs/3/1": "A dummy node before the head",
  "cards/13/pairs/4/0": "A list of 10⁶ nodes",
  "cards/13/pairs/4/1": "Iteratively: recursion overflows the stack"
