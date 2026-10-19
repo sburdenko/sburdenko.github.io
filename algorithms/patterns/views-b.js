@@ -1,7 +1,7 @@
 /** Views for chapters 05–08: stack, linked list, grids and graphs, trees. */
 import {
   CELL, STEP, svg, text, rowWidth, cells, pointers, arrow, node, chip, chips,
-  barLayout, bars, gridCells, binaryTree,
+  barLayout, bars, gridCells, binaryTree, matrixXY, matrixCells, matrixIndex,
 } from './view-kit.js?v=202610191216';
 
 const TOP = 40, GAP_HALF = 3;
@@ -168,6 +168,40 @@ export const islands = {
   },
   vars(run, e) {
     return [['var.islands', chip(e.count, 'hit')], ['var.calls', chips(e.stack.map(([r, c]) => chip(`(${r},${c})`)))]];
+  },
+};
+
+/** A line on the border between two cells (shared) or on the outer side of one cell (perimeter). */
+const sideLine = (x1, y1, x2, y2, cls) => `<line class="${cls}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
+function borderOf([r1, c1, r2, c2], at, cls) {
+  const [x, y] = matrixXY(r1, c1, at);
+  return r2 === r1
+    ? sideLine(x + CELL + GAP_HALF, y - 2, x + CELL + GAP_HALF, y + CELL + 2, cls)
+    : sideLine(x - 2, y + CELL + GAP_HALF, x + CELL + 2, y + CELL + GAP_HALF, cls);
+}
+
+export const islandPerimeter = {
+  view(run, e) {
+    const g = run.grid, rows = g.length, cols = g[0].length, at = { x: 26, y: 26 }, done = e.key === 'per.ev.done';
+    const isCur = (r, c) => e.cur && e.cur[0] === r && e.cur[1] === c;
+    const clsOf = (v, r, c) => (!v ? 'seen' : isCur(r, c) ? 'cur' : e.gain[r][c] != null ? 'g0' : 'land');
+    const labelOf = (v, r, c) => (!v ? '' : e.gain[r][c] == null ? '1' : e.gain[r][c] ? `+${e.gain[r][c]}` : '0');
+    let s = matrixIndex(rows, cols, at) + matrixCells(g, clsOf, { ...at, labelOf });
+    s += e.shared.map(edge => borderOf(edge, at, e.edge && edge.join() === e.edge.join() ? 'shared on' : 'shared')).join('');
+    if (done) {
+      g.forEach((row, r) => row.forEach((v, c) => {
+        if (!v) return;
+        const [x, y] = matrixXY(r, c, at), o = GAP_HALF, w = CELL;
+        if (!g[r - 1]?.[c]) s += sideLine(x - o, y - o, x + w + o, y - o, 'perim');
+        if (!g[r + 1]?.[c]) s += sideLine(x - o, y + w + o, x + w + o, y + w + o, 'perim');
+        if (!row[c - 1]) s += sideLine(x - o, y - o, x - o, y + w + o, 'perim');
+        if (!row[c + 1]) s += sideLine(x + w + o, y - o, x + w + o, y + w + o, 'perim');
+      }));
+    }
+    return svg(at.x + rowWidth(cols) + 10, at.y + rowWidth(rows) + 10, s);
+  },
+  vars(run, e) {
+    return [['var.perimeter', chip(e.total, 'hit')], ['var.sharedEdges', chip(e.shared.length, e.shared.length ? 'amb' : '')]];
   },
 };
 

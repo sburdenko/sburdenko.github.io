@@ -153,3 +153,41 @@ export function maximalRectTrace(grid) {
   push('mrect.ev.done', [best]);
   return { events, best };
 }
+
+/**
+ * Game of Life in place with two bits per cell: bit 0 is the state now, bit 1 the state next.
+ * Pass 1 counts live neighbours by bit 0 (cells already visited hold 2 or 3, & 1 still reads their present)
+ * and writes the next state into bit 1. Pass 2 shifts every cell right by one.
+ */
+export function gameOfLifeTrace(input) {
+  const b = copy(input), rows = b.length, cols = b[0].length, events = [];
+  let phase = 'count', born = 0, died = 0;
+  const push = (key, args, extra = {}) => events.push(event(key, args, { b: copy(b), phase, at: null, around: [], live: null, row: null, ...extra }));
+  push('gol.ev.start', [rows, cols]);
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const around = [];
+      for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
+        if ((dr || dc) && r + dr >= 0 && r + dr < rows && c + dc >= 0 && c + dc < cols) around.push([r + dr, c + dc]);
+      }
+      const live = around.filter(([y, x]) => b[y][x] & 1).length, alive = b[r][c] & 1;
+      const marked = around.filter(([y, x]) => b[y][x] > 1).length; // already visited and holding a 1 in bit 1
+      let key;
+      if (alive && (live === 2 || live === 3)) { b[r][c] |= 2; key = 'gol.ev.lives'; }
+      else if (alive) { died++; key = live < 2 ? 'gol.ev.under' : 'gol.ev.over'; }
+      else if (live === 3) { b[r][c] |= 2; born++; key = 'gol.ev.born'; }
+      else key = 'gol.ev.empty';
+      push(key, [r, c, live, b[r][c], marked], { at: [r, c], around, live });
+    }
+  }
+  phase = 'shift';
+  push('gol.ev.turn', [born, died]);
+  for (let r = 0; r < rows; r++) {
+    const before = [...b[r]];
+    for (let c = 0; c < cols; c++) b[r][c] >>= 1;
+    push('gol.ev.shift', [r, before, [...b[r]]], { row: r });
+  }
+  phase = 'done';
+  push('gol.ev.done', [born, died]);
+  return { events, result: b };
+}

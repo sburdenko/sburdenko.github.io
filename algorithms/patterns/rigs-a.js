@@ -50,6 +50,16 @@ export const RIGS_A = {
     random: next => ({ nums: randInts(next, randInt(next, 5, 10), 0, 9).map(v => (v < 4 ? 0 : v)) }),
     run: p => A.moveZeroesTrace(p.nums),
   }, V.moveZeroes),
+  twoSumII: defineRig({
+    fields: [nums({ key: 'numbers', minLen: 2, sorted: true }), target()],
+    example: { numbers: [-3, 1, 2, 4, 7, 11, 15], target: 9 },
+    random: next => {
+      const list = randInts(next, randInt(next, 5, 9), -9, 20).sort((x, y) => x - y);
+      const [i, j] = shuffle(next, list.map((_, x) => x)).slice(0, 2);
+      return { numbers: list, target: next() < 0.85 ? list[i] + list[j] : randInt(next, -10, 40) };
+    },
+    run: p => ({ ...A.twoSumIITrace(p.numbers, p.target), numbers: p.numbers, target: p.target }),
+  }, V.twoSumII),
   container: defineRig({
     fields: [{ key: 'h', type: 'ints', minLen: 2, maxLen: 12, min: 0, max: 9 }],
     example: { h: [1, 8, 6, 2, 5, 4, 8, 3, 7] },

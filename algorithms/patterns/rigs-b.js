@@ -132,6 +132,15 @@ export const RIGS_B = {
     random: next => ({ grid: randomGrid(next, [0.55, 1]) }),
     run: p => B.islandsTrace(p.grid.map(r => r.join(''))),
   }, V.islands),
+  islandPerimeter: defineRig({
+    fields: [{ key: 'grid', type: 'grid', maxRows: 6, maxCols: 6, maxDigit: 1 }],
+    example: { grid: [[0, 1, 0, 0], [1, 1, 1, 0], [0, 1, 0, 0], [1, 1, 0, 0]] },
+    random: next => {
+      const rows = randInt(next, 3, 5), cols = randInt(next, 3, 5);
+      return { grid: Array.from({ length: rows }, () => Array.from({ length: cols }, () => (next() < 0.5 ? 1 : 0))) };
+    },
+    run: p => ({ ...B.islandPerimeterTrace(p.grid), grid: p.grid }),
+  }, V.islandPerimeter),
   oranges: defineRig({
     fields: [grid(2)],
     example: { grid: [[2, 1, 1, 0, 1], [1, 1, 0, 1, 1], [0, 1, 1, 1, 1], [0, 0, 1, 1, 2]] },

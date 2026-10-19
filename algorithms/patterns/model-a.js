@@ -426,3 +426,28 @@ export function slidingMaxTrace(nums, k) {
   push('swm.ev.done', [ans]);
   return { events, ans };
 }
+
+/** Sorted input, pointers from both ends: a sum too big can only shrink by moving hi, too small only grow by moving lo. */
+export function twoSumIITrace(a, target) {
+  let lo = 0, hi = a.length - 1, found = null;
+  const events = [];
+  const push = (key, args) => events.push(event(key, args, { lo, hi, sum: lo < hi ? a[lo] + a[hi] : null, found }));
+  push('tsii.ev.start', [target, a.length]);
+  while (lo < hi) {
+    const sum = a[lo] + a[hi];
+    if (sum === target) {
+      found = [lo + 1, hi + 1];
+      push('tsii.ev.hit', [a[lo], a[hi], sum, lo + 1, hi + 1]);
+      return { events, found };
+    }
+    if (sum > target) {
+      push('tsii.ev.big', [a[lo], a[hi], sum, target, hi]);
+      hi--;
+    } else {
+      push('tsii.ev.small', [a[lo], a[hi], sum, target, lo]);
+      lo++;
+    }
+  }
+  push('tsii.ev.none', [target]);
+  return { events, found };
+}

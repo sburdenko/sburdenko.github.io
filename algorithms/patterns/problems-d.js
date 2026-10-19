@@ -60,6 +60,24 @@ export const PROBLEMS_D = {
     }
     return res;
 }`, true),
+    p('gameOfLife', 'Game of Life', 289, 'game-of-life', 'Medium', `public void GameOfLife(int[][] board) {
+    int rows = board.Length, cols = board[0].Length;
+    for (int r = 0; r < rows; r++)        // pass 1: bit 0 = now, bit 1 = next
+        for (int c = 0; c < cols; c++) {
+            int live = 0;
+            for (int dr = -1; dr <= 1; dr++)
+                for (int dc = -1; dc <= 1; dc++) {
+                    int y = r + dr, x = c + dc;
+                    if ((dr != 0 || dc != 0) && y >= 0 && y < rows && x >= 0 && x < cols)
+                        live += board[y][x] & 1;          // & 1: the present, even if bit 1 is set
+                }
+            bool alive = (board[r][c] & 1) == 1;
+            if (live == 3 || (alive && live == 2)) board[r][c] |= 2;   // lives on or is born
+        }
+    for (int r = 0; r < rows; r++)        // pass 2: the future becomes the present
+        for (int c = 0; c < cols; c++)
+            board[r][c] >>= 1;
+}`),
     p('maxRect', 'Maximal Rectangle', 85, 'maximal-rectangle', 'Hard', `public int MaximalRectangle(char[][] matrix) {
     int cols = matrix[0].Length, best = 0;
     var h = new int[cols];                // column of 1s ending at this row

@@ -188,4 +188,26 @@ export const EV_A = {
     en: ans => `Answer: <b>${list(ans)}</b>. Every index entered the deque once and left at most once → O(n).`,
     ru: ans => `Ответ: <b>${list(ans)}</b>. Каждый индекс вошёл в деку один раз и вышел не больше раза → O(n).`,
   },
+
+  /* Two Sum II */
+  'tsii.ev.start': {
+    en: (target, n) => `The array is sorted. lo starts at the smallest number, hi at the largest; indices are counted from 1. Every step compares the sum with ${target} and moves one pointer.`,
+    ru: (target, n) => `Массив отсортирован. lo стоит на самом маленьком числе, hi — на самом большом; индексы считаем с 1. На каждом шаге сравниваем сумму с ${target} и двигаем один указатель.`,
+  },
+  'tsii.ev.big': {
+    en: (a, b, sum, target) => `${a} + ${b} = ${sum} > ${target}: too big. ${b} is too big even with ${a}, the smallest number still in play, so <b>hi−−</b> drops it for good.`,
+    ru: (a, b, sum, target) => `${a} + ${b} = ${sum} > ${target}: много. ${b} слишком велико даже с ${a}, самым маленьким из оставшихся, поэтому <b>hi−−</b> отбрасывает его насовсем.`,
+  },
+  'tsii.ev.small': {
+    en: (a, b, sum, target) => `${a} + ${b} = ${sum} < ${target}: too small. ${a} falls short even with ${b}, the largest number still in play, so <b>lo++</b> drops it for good.`,
+    ru: (a, b, sum, target) => `${a} + ${b} = ${sum} < ${target}: мало. ${a} не хватает даже с ${b}, самым большим из оставшихся, поэтому <b>lo++</b> отбрасывает его насовсем.`,
+  },
+  'tsii.ev.hit': {
+    en: (a, b, sum, i, j) => `${a} + ${b} = ${sum} — found. Answer: <b>[${i}, ${j}]</b>, counted from 1.`,
+    ru: (a, b, sum, i, j) => `${a} + ${b} = ${sum} — нашли. Ответ: <b>[${i}, ${j}]</b>, считая с 1.`,
+  },
+  'tsii.ev.none': {
+    en: target => `The pointers met: every number was dropped with a reason, so no pair adds up to ${target}. (LeetCode promises an answer; here the input is yours.)`,
+    ru: target => `Указатели встретились: каждое число отброшено с причиной, значит, пары с суммой ${target} нет. (LeetCode обещает, что ответ есть, но здесь входные данные твои.)`,
+  },
 };

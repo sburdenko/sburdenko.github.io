@@ -160,10 +160,24 @@ function parseEdges(text, spec) {
   return checkLength(found, spec) || (found.some(([a, b]) => a === b) ? fail('selfEdge') : null) || { value: found };
 }
 
+/** Weighted directed edges as from>to:weight (or [[u,v,w],…], or plain triples). Weights are non-negative. */
+function parseWeightedEdges(text, spec) {
+  const parts = clean(text).replace(/[[\](){}"',;|:>→-]/g, ' ').split(/\s+/).filter(Boolean);
+  if (parts.some(p => !/^\d+$/.test(p)) || parts.length % 3) return fail('wedges');
+  const found = [];
+  for (let i = 0; i < parts.length; i += 3) found.push([Number(parts[i]), Number(parts[i + 1]), Number(parts[i + 2])]);
+  const pairs = new Set(found.map(([u, v]) => `${u},${v}`));
+  return checkLength(found, spec)
+    || (found.some(([u, v]) => u === v) ? fail('selfLoop') : null)
+    || (pairs.size !== found.length ? fail('dupEdge') : null)
+    || (found.some(([, , w]) => w > spec.maxW) ? fail('range', 0, spec.maxW) : null)
+    || { value: found };
+}
+
 export const PARSERS = {
   ints: parseInts, int: parseInt1, str: parseStr, words: parseWords, grid: parseGrid,
   tree: parseTree, lists: parseLists, intervals: parseIntervals, ops: parseOps,
-  board: parseBoard, cache: parseCache, edges: parseEdges, matrix: parseMatrix,
+  board: parseBoard, cache: parseCache, edges: parseEdges, matrix: parseMatrix, wedges: parseWeightedEdges,
 };
 
 export const FORMATTERS = {
@@ -180,6 +194,7 @@ export const FORMATTERS = {
   cache: v => v.map(([op, k, x]) => (op === 'put' ? `put ${k} ${x}` : `get ${k}`)).join(', '),
   edges: v => v.map(([a, b]) => `${a}-${b}`).join(' '),
   matrix: v => v.map(r => r.join(' ')).join(' | '),
+  wedges: v => v.map(([u, w, t]) => `${u}>${w}:${t}`).join(' '),
 };
 
 export const parseField = (text, spec) => PARSERS[spec.type](text, spec);
