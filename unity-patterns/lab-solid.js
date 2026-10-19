@@ -1,10 +1,10 @@
 /** CH.00 pressure map and CH.01 SOLID change-impact rig. */
-import { $, esc } from '../assets/vhs.js?v=202610191219';
-import { t } from '../assets/i18n.js?v=202610191219';
-import { bindSeg, tile } from '../assets/lab.js?v=202610191219';
-import { renderCode } from '../assets/code.js?v=202610191219';
-import { PRINCIPLES, SOLID_CASES, applyRequest, totalImpact } from './model-solid.js?v=202610191219';
-import { SNIPPETS } from './snippets.js?v=202610191219';
+import { $, esc } from '../assets/vhs.js?v=202610191231';
+import { t } from '../assets/i18n.js?v=202610191231';
+import { bindSeg, tile } from '../assets/lab.js?v=202610191231';
+import { renderCode } from '../assets/code.js?v=202610191231';
+import { PRINCIPLES, SOLID_CASES, applyRequest, totalImpact } from './model-solid.js?v=202610191231';
+import { SNIPPETS } from './snippets.js?v=202610191231';
 
 export function initMap() {
   const box = $('#pressureMap');

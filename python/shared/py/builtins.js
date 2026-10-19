@@ -3,12 +3,12 @@ import {
   PyInt, PyBool, PyFloat, PyStr, PyBytes, PyList, PyTuple, PyDict, PySet, PyRange, PyFunction, PyBuiltin, PyMethod, PyClass, PyInstance,
   PyGenerator, PyProperty, PyStaticMethod, PyClassMethod, PyIterator, PySlice, PyError, NONE, TRUE, FALSE,
   int, float, bool, str, internStr, hashKey, UNHASHABLE, typeName, typeOf, isIntLike, isInstance, isSubclass, TYPES, isCallable, pyHash, floatRepr, normIndex, growAllocation, copiedSetSize,
-} from './objects.js?v=202610191219';
-import { EXC, makeExc, raise, pyError, isExceptionClass, excArgs } from './errors.js?v=202610191219';
-import { reprOf, strOf, formatValue, addr } from './convert.js?v=202610191219';
-import { truthy, iterate, toList, getitem, STOP, equals, compare, lengthOf, setOp, NOT_IMPLEMENTED, hashReady } from './ops.js?v=202610191219';
-import { PySuper } from './interp.js?v=202610191219';
-import { installTypeMethods } from './methods.js?v=202610191219';
+} from './objects.js?v=202610191231';
+import { EXC, makeExc, raise, pyError, isExceptionClass, excArgs } from './errors.js?v=202610191231';
+import { reprOf, strOf, formatValue, addr } from './convert.js?v=202610191231';
+import { truthy, iterate, toList, getitem, STOP, equals, compare, lengthOf, setOp, NOT_IMPLEMENTED, hashReady } from './ops.js?v=202610191231';
+import { PySuper } from './interp.js?v=202610191231';
+import { installTypeMethods } from './methods.js?v=202610191231';
 
 const argc = (name, args, min, max = min) => {
   if (args.length < min || args.length > max) {

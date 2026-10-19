@@ -3,11 +3,11 @@
  * Стили SVG тоже кассетные: правила .stage/.vchip/.mk-* из её style.css подключаются один раз,
  * с приставкой .algo-rig, чтобы остальная её вёрстка не задела страницу курса.
  */
-import { esc } from '../assets/vhs.js?v=202610191219';
-import { drive } from './rig-kit.js?v=202610191219';
-import { tr } from './i18n.js?v=202610191219';
-import { ALGO, algoRig, algoRun, algoAskAt, algoCan, algoBlocked, optionLabel, tapeText } from './models-algo.js?v=202610191219';
-import { t as tl } from './ui.js?v=202610191219';
+import { esc } from '../assets/vhs.js?v=202610191231';
+import { drive } from './rig-kit.js?v=202610191231';
+import { tr } from './i18n.js?v=202610191231';
+import { ALGO, algoRig, algoRun, algoAskAt, algoCan, algoBlocked, optionLabel, tapeText } from './models-algo.js?v=202610191231';
+import { t as tl } from './ui.js?v=202610191231';
 
 /* ---------- стили кассеты, точечно ---------- */
 
