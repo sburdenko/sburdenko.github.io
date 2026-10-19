@@ -1,8 +1,8 @@
 /** PY-03 assembly. */
-import { bootTape } from '../shared/tape.js?v=202610191641';
-import { DICT } from './i18n.js?v=202610191641';
-import { RIGS } from './rigs.js?v=202610191641';
-import { QUIZZES } from './quizzes.js?v=202610191641';
+import { bootTape } from '../shared/tape.js?v=202610191642';
+import { DICT } from './i18n.js?v=202610191642';
+import { RIGS } from './rigs.js?v=202610191642';
+import { QUIZZES } from './quizzes.js?v=202610191642';
 
 export const CHAPTERS = [
   { id: 'list', n: '01' }, { id: 'tuple', n: '02' }, { id: 'dict', n: '03' }, { id: 'set', n: '04' }, { id: 'stackq', n: '05' },

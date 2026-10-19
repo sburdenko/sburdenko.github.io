@@ -186,3 +186,27 @@
 .stage .wt.miss{fill:#ffb3bc}
 .vchip.stale{text-decoration:line-through}
 .stage .corner{text-anchor:end}
+/* bit manipulation: the register (view-kit.js register) */
+.stage .bit{fill:#120b20;stroke:var(--line2);stroke-width:1}
+.stage .bit.one{fill:#3a2d5c;stroke:#8b7bb5}
+.stage .bit.unk{fill:transparent;stroke-dasharray:3 3}
+.stage .bt{font-size:13px;font-weight:600}
+.stage .bt.zero{fill:var(--ink3);font-weight:400}
+.stage .bt.unk{fill:var(--ink3)}
+.stage .bit.chg{stroke:var(--osd);stroke-width:2.2}
+.stage .bt.chg{fill:var(--osd)}
+.stage .bit.low{fill:rgba(255,62,165,.32);stroke:var(--cpu);stroke-width:2}
+.stage .bit.ok{fill:rgba(93,252,154,.22);stroke:var(--ok);stroke-width:2}
+.stage .bt.ok{fill:var(--ok)}
+.stage .bit.bad{fill:rgba(255,92,108,.22);stroke:var(--bad);stroke-width:2.2}
+.stage .bt.bad{fill:#ffb3bc}
+.stage .bit.carry{fill:rgba(255,170,60,.22);stroke:var(--warn);stroke-width:2}
+.stage .bt.carry{fill:var(--warn)}
+.stage .bitcol{fill:rgba(255,210,63,.07);stroke:var(--osd);stroke-width:1.2;stroke-dasharray:4 3}
+.stage .rlbl{font-size:12px;text-anchor:end;fill:#c9bde6}
+.stage .rlbl.res{fill:var(--osd);font-weight:700}
+.stage .rlbl.act{fill:var(--cpu);font-weight:700}
+.stage .rcap{font-size:11px;text-anchor:start;fill:var(--ink3)}
+.stage .rcap.res{fill:var(--osd)}
+.stage .rcap.act{fill:#ffc2e3}
+@media (max-width:420px){.rig .crt{padding:14px 6px}}

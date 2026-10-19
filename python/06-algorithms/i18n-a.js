@@ -8,7 +8,7 @@ export const T_A = {
   'py.osd.stand': { en: 'PYTHON', ru: 'PYTHON' },
   'py.foot.stand': { en: 'Python stand', ru: 'Стенд Python' },
   'py.foot.prev02': { en: '◀ PY-02 · Flow', ru: '◀ PY-02 · Поток' },
-  'py.foot.tape06': { en: 'Tape 06 on the main shelf: 76 interview problems ►', ru: 'Кассета 06 на главной полке: 76 задач для собеседования ►' },
+  'py.foot.tape06': { en: 'Tape 06 on the main shelf: 82 interview problems ►', ru: 'Кассета 06 на главной полке: 82 задачи для собеседования ►' },
   'foot.stop': { en: '■ END OF TAPE', ru: '■ КОНЕЦ КАССЕТЫ' },
   'foot.src': { en: 'Source code and models:', ru: 'Исходный код и модели:' },
   'hero.eyebrow': { en: 'PY-06 · Python · stand B', ru: 'PY-06 · Python · стенд B' },

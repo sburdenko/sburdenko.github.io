@@ -1,5 +1,5 @@
 /** SVG primitives for the pattern rigs. Pure string builders: no DOM, safe to call from tests. */
-import { esc } from '../../assets/vhs.js?v=202610191641';
+import { esc } from '../../assets/vhs.js?v=202610191642';
 
 export const CELL = 44, GAP = 6, STEP = CELL + GAP;
 
@@ -167,4 +167,71 @@ export function matrixBox([r1, c1, r2, c2], cls, { x = 0, y = 0, pad = 3 } = {})
 export function matrixArrow([r1, c1], [r2, c2], cls = 'edge on', { x = 0, y = 0 } = {}) {
   const [x1, y1] = matrixXY(r1, c1, { x, y }), [x2, y2] = matrixXY(r2, c2, { x, y });
   return arrow(x1 + CELL / 2, y1 + CELL / 2, x2 + CELL / 2, y2 + CELL / 2, 8, cls);
+}
+
+/* ---------- the register: a 32-bit word, high bit on the left ---------- */
+export const BIT = 20, BIT_STEP = 22, NIBBLE_GAP = 5;
+/** Drawn this much larger than its viewBox: roomy on a desktop, and max-width: 100% shrinks it on a phone. */
+const REG_ZOOM = 1.35;
+
+/** The smallest register that shows every value: 8, 16 or 32 bits. A negative int needs all 32. */
+export function bitWidth(values) {
+  const max = Math.max(0, ...values.filter(v => v != null).map(v => v >>> 0));
+  return max < 0x100 ? 8 : max < 0x10000 ? 16 : 32;
+}
+
+export const hexOf = (v, bits = 32) =>
+  `0x${(bits === 32 ? v >>> 0 : v & ((1 << bits) - 1)).toString(16).toUpperCase().padStart(bits / 4, '0')}`;
+export const decOf = (v, signed = false) => String(signed ? v | 0 : v >>> 0).replace('-', '−');
+
+/**
+ * A register of 8, 16 or 32 bits: one row per operand, high bit on the left, nibbles spaced apart, the value in
+ * decimal and hex above its bits. 32 bits wrap into two banks of 16 (bits 31–16, then 15–0), so a phone still
+ * reads them and a column still lines up across the operands.
+ * rows: [{ label, value, ref?, marks?: [[mask, cls]], unknown?: mask, cls?, caption?: string | false, signed? }]
+ *   ref — bits that differ from ref are marked as changed; unknown — bits not decided yet, drawn as “·”.
+ * opts: { bits, signed, cursor: bit index to frame across all rows, labelChars: the widest row name in the run,
+ *   so the register does not shift sideways from step to step }.
+ */
+export function registerParts(rows, { bits = 32, signed = false, cursor = null, labelChars } = {}) {
+  const per = Math.min(bits, 16), banks = bits / per;
+  const REG_LABEL = Math.ceil((labelChars ?? Math.max(1, ...rows.map(r => String(r.label).length))) * 7.4) + 12;
+  const xOf = p => REG_LABEL + p * BIT_STEP + Math.floor(p / 4) * NIBBLE_GAP;
+  const width = xOf(per - 1) + BIT + 4;
+  let back = '', s = text(0, 9, `${signed ? 'int32' : 'uint32'}${bits < 32 ? ` · ${31}…${bits} = 0` : ''}`, 'lbl');
+  let y = 24;
+  for (let bank = 0; bank < banks; bank++) {
+    const hi = bits - 1 - bank * per;
+    for (let p = 0; p < per; p++) s += text(xOf(p) + BIT / 2, y, hi - p, `idx${hi - p === cursor ? ' need' : ''}`);
+    y += 12;
+    const top = y;
+    for (const row of rows) {
+      const sg = row.signed ?? signed;
+      if (bank === 0 && row.caption !== false) {
+        s += text(xOf(0), y + 6, row.caption ?? `${decOf(row.value, sg)} · ${hexOf(row.value, bits)}`, `rcap ${row.cls || ''}`);
+        y += 15;
+      }
+      s += text(REG_LABEL - 8, y + BIT / 2, row.label, `rlbl ${row.cls || ''}`);
+      for (let p = 0; p < per; p++) {
+        const i = hi - p, one = (row.value >>> i) & 1, unknown = row.unknown != null && (row.unknown >>> i) & 1;
+        const marks = (row.marks || []).filter(([mask]) => (mask >>> i) & 1).map(([, cls]) => cls);
+        if (row.ref != null && !unknown && ((row.ref ^ row.value) >>> i) & 1) marks.push('chg');
+        const cls = [unknown ? 'unk' : one ? 'one' : 'zero', ...marks, row.cls || ''].join(' ');
+        s += `<rect class="bit ${cls}" x="${xOf(p)}" y="${y}" width="${BIT}" height="${BIT}" rx="3"/>`
+          + text(xOf(p) + BIT / 2, y + BIT / 2 + 0.5, unknown ? '·' : one, `bt ${cls}`);
+      }
+      y += BIT + 5;
+    }
+    if (cursor != null && cursor <= hi && cursor > hi - per) {
+      const x = xOf(hi - cursor);
+      back += `<rect class="bitcol" x="${x - 3}" y="${top - 3}" width="${BIT + 6}" height="${y - top + 1}" rx="4"/>`;
+    }
+    y += 10;
+  }
+  return { inner: back + s, width, height: y - 6 };
+}
+
+export function register(rows, opts) {
+  const { inner, width, height } = registerParts(rows, opts);
+  return `<svg viewBox="0 0 ${width} ${height}" width="${Math.round(width * REG_ZOOM)}" height="${Math.round(height * REG_ZOOM)}" xmlns="http://www.w3.org/2000/svg" role="img">${inner}</svg>`;
 }
