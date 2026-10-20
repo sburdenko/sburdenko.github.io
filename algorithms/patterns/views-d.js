@@ -2,7 +2,7 @@
 import {
   CELL, STEP, svg, text, rowWidth, cells, pointers, chip, chips,
   matrixXY, matrixCells, matrixIndex, matrixBox, matrixArrow,
-} from './view-kit.js?v=202610201414';
+} from './view-kit.js?v=202610202037';
 
 const TOP = 40;
 const has = (list, r, c) => list.some(([a, b]) => a === r && b === c);

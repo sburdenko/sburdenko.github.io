@@ -2,7 +2,7 @@
 import {
   CELL, STEP, svg, text, rowWidth, cells, pointers, arcBelow, arrow, chip, chips,
   matrixXY, matrixCells, matrixIndex, matrixArrow,
-} from './view-kit.js?v=202610201414';
+} from './view-kit.js?v=202610202037';
 
 const TOP = 40;
 /** A dashed frame around cells i..j of a row drawn at (x, y). */

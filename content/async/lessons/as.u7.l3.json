@@ -2,7 +2,7 @@
  "id": "as.u7.l3",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 10,
+ "minutes": 12,
  "cards": [
   {
    "t": "learn",
@@ -64,9 +64,18 @@
    "explain": "⟦⟧"
   },
   {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "var errors = lines\n    .___()\n    .___(4)\n    .Where(l => Parse(l).IsError)\n    .ToList();",
+   "tiles": ["AsParallel", "WithDegreeOfParallelism", "AsOrdered", "ToParallel", "MaxDegreeOfParallelism"],
+   "answer": ["AsParallel", "WithDegreeOfParallelism"],
+   "explain": "⟦⟧"
+  },
+  {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
+   "code": "⟦⟧",
    "deep": "⟦⟧"
   },
   {
@@ -77,18 +86,17 @@
    "explain": "⟦⟧"
   },
   {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
    "t": "multi",
    "q": "⟦⟧",
    "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": [0, 2],
-   "explain": "⟦⟧"
-  },
-  {
-   "t": "blanks",
-   "q": "⟦⟧",
-   "code": "var errors = lines\n    .___()\n    .___(4)\n    .Where(l => Parse(l).IsError)\n    .ToList();",
-   "tiles": ["AsParallel", "WithDegreeOfParallelism", "AsOrdered", "ToParallel", "MaxDegreeOfParallelism"],
-   "answer": ["AsParallel", "WithDegreeOfParallelism"],
    "explain": "⟦⟧"
   },
   {
@@ -98,7 +106,7 @@
     ["Parallel.For", "⟦⟧"],
     ["Parallel.Invoke", "⟦⟧"],
     ["AsOrdered", "⟦⟧"],
-    ["ForAll", "⟦⟧"],
+    ["Interlocked.Add", "⟦⟧"],
     ["Parallel.ForEachAsync", "⟦⟧"]
    ]
   }

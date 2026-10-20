@@ -2,7 +2,7 @@
  "id": "as.u8.l1",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 10,
+ "minutes": 12,
  "cards": [
   {
    "t": "learn",
@@ -50,7 +50,7 @@
    "t": "blanks",
    "q": "⟦⟧",
    "code": "public void Run()\n{\n    long n = 0;\n    while (!Volatile.___(ref _stop)) n++;\n}\n\npublic void Stop() => Volatile.___(ref _stop, true);",
-   "tiles": ["Read", "Write", "Exchange", "MemoryBarrier"],
+   "tiles": ["Read", "Write", "Load", "Store"],
    "answer": ["Read", "Write"],
    "explain": "⟦⟧"
   },
@@ -76,6 +76,23 @@
    "title": "⟦⟧",
    "body": "⟦⟧",
    "deep": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "_total = Sum(data);\nawait SaveAsync();\nLog(_total);",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
   },
   {
    "t": "multi",

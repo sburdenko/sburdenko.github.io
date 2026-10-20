@@ -1,14 +1,14 @@
 /** Every problem's rig: editable fields, an example, a random generator and the trace to play. */
-import { RIGS_A } from './rigs-a.js?v=202610201414';
-import { RIGS_B } from './rigs-b.js?v=202610201414';
-import { RIGS_C } from './rigs-c.js?v=202610201414';
-import { RIGS_D } from './rigs-d.js?v=202610201414';
-import { RIGS_E } from './rigs-e.js?v=202610201414';
-import { RIGS_F } from './rigs-f.js?v=202610201414';
-import { RIGS_GAMES } from './rigs-games.js?v=202610201414';
-import { parseField } from './inputs.js?v=202610201414';
-import { RIGS_H } from './rigs-h.js?v=202610201414';
-import { RIGS_ARR } from './rigs-arr.js?v=202610201414';
+import { RIGS_A } from './rigs-a.js?v=202610202037';
+import { RIGS_B } from './rigs-b.js?v=202610202037';
+import { RIGS_C } from './rigs-c.js?v=202610202037';
+import { RIGS_D } from './rigs-d.js?v=202610202037';
+import { RIGS_E } from './rigs-e.js?v=202610202037';
+import { RIGS_F } from './rigs-f.js?v=202610202037';
+import { RIGS_GAMES } from './rigs-games.js?v=202610202037';
+import { parseField } from './inputs.js?v=202610202037';
+import { RIGS_H } from './rigs-h.js?v=202610202037';
+import { RIGS_ARR } from './rigs-arr.js?v=202610202037';
 
 export const PATTERN_IDS = ['hash', 'twoptr', 'window', 'binary', 'stack', 'list', 'graph', 'tree', 'heap', 'back', 'greedy', 'dp', 'matrix', 'paths', 'bits', 'games', 'design'];
 export const RIGS = { ...RIGS_A, ...RIGS_B, ...RIGS_C, ...RIGS_D, ...RIGS_E, ...RIGS_F, ...RIGS_GAMES, ...RIGS_H };
@@ -35,5 +35,5 @@ export function runWithInput(rig, texts) {
 
 Object.assign(RIGS, RIGS_ARR);
 /* Rigs of the problems added to existing chapters (rigs-bg.js). */
-import { RIGS_BG } from './rigs-bg.js?v=202610201414';
+import { RIGS_BG } from './rigs-bg.js?v=202610202037';
 Object.assign(RIGS, RIGS_BG);
