@@ -1,12 +1,12 @@
 /** Language-neutral problem metadata. Texts about the problems live in the i18n files. */
-import { PROBLEMS_A } from './problems-a.js?v=202610191755';
-import { PROBLEMS_B } from './problems-b.js?v=202610191755';
-import { PROBLEMS_C } from './problems-c.js?v=202610191755';
-import { PROBLEMS_D } from './problems-d.js?v=202610191755';
-import { PROBLEMS_E } from './problems-e.js?v=202610191755';
-import { PROBLEMS_F } from './problems-f.js?v=202610191755';
-import { PROBLEMS_GAMES } from './problems-games.js?v=202610191755';
-import { PROBLEMS_H } from './problems-h.js?v=202610191755';
+import { PROBLEMS_A } from './problems-a.js?v=202610201301';
+import { PROBLEMS_B } from './problems-b.js?v=202610201301';
+import { PROBLEMS_C } from './problems-c.js?v=202610201301';
+import { PROBLEMS_D } from './problems-d.js?v=202610201301';
+import { PROBLEMS_E } from './problems-e.js?v=202610201301';
+import { PROBLEMS_F } from './problems-f.js?v=202610201301';
+import { PROBLEMS_GAMES } from './problems-games.js?v=202610201301';
+import { PROBLEMS_H } from './problems-h.js?v=202610201301';
 
 export const NAMES = {
   hash: 'HashMap / HashSet', twoptr: 'Two Pointers', window: 'Sliding Window', binary: 'Binary Search',
