@@ -2,6 +2,8 @@
 const list = a => `[${a.join(', ')}]`;
 const ivs = a => (a.length ? a.map(([x, y]) => `[${x}, ${y}]`).join(' ') : '—');
 const neg = v => String(v).replace('-', '−');
+/** Второе слагаемое: отрицательное — в скобках, «2 + (−5)», а не «2 + −5». */
+const term = v => (v < 0 ? `(${neg(v)})` : neg(v));
 /** Russian plural: 1 комната, 2 комнаты, 5 комнат. */
 const ruN = (n, one, few, many) => {
   const t = Math.abs(n) % 100, u = t % 10;
@@ -16,12 +18,12 @@ export const EV_ARR = {
     ru: x => `cur — лучшая сумма подмассива, который <b>заканчивается здесь</b>, best — лучшая сумма на сейчас. Обе начинаются с nums[0] = ${neg(x)}, а не с 0: пустой подмассив не считается.`,
   },
   'kad.ev.extend': {
-    en: (i, x, old, cur, from) => `i = ${i}, x = ${neg(x)}: continue — cur + x = ${neg(old)} + ${neg(x)} = <b>${neg(cur)}</b> is not worse than x alone${old === 0 ? ' (cur was 0: continuing or starting over give the same sum, the code continues)' : ', because cur ≥ 0'}. The run is [${from}..${i}].`,
-    ru: (i, x, old, cur, from) => `i = ${i}, x = ${neg(x)}: продолжаем — cur + x = ${neg(old)} + ${neg(x)} = <b>${neg(cur)}</b> не хуже, чем x в одиночку${old === 0 ? ' (cur был 0: продолжить или начать заново — сумма одна и та же, код продолжает)' : ', потому что cur ≥ 0'}. Отрезок — [${from}..${i}].`,
+    en: (i, x, old, cur, from) => `i = ${i}, x = ${neg(x)}: continue — cur + x = ${neg(old)} + ${term(x)} = <b>${neg(cur)}</b> is not worse than x alone${old === 0 ? ' (cur was 0: continuing or starting over give the same sum, the code continues)' : ', because cur ≥ 0'}. The run is [${from}..${i}].`,
+    ru: (i, x, old, cur, from) => `i = ${i}, x = ${neg(x)}: продолжаем — cur + x = ${neg(old)} + ${term(x)} = <b>${neg(cur)}</b> не хуже, чем x в одиночку${old === 0 ? ' (cur был 0: продолжить или начать заново — сумма одна и та же, код продолжает)' : ', потому что cur ≥ 0'}. Отрезок — [${from}..${i}].`,
   },
   'kad.ev.restart': {
-    en: (i, x, old, sum) => `i = ${i}, x = ${neg(x)}: cur + x = ${neg(old)} + ${neg(x)} = ${neg(sum)} < x. A negative cur only drags x down — <b>start over</b> at i: cur = ${neg(x)}, the run is [${i}..${i}].`,
-    ru: (i, x, old, sum) => `i = ${i}, x = ${neg(x)}: cur + x = ${neg(old)} + ${neg(x)} = ${neg(sum)} < x. Отрицательный cur только тянет x вниз — <b>начинаем заново</b> с i: cur = ${neg(x)}, отрезок — [${i}..${i}].`,
+    en: (i, x, old, sum) => `i = ${i}, x = ${neg(x)}: cur + x = ${neg(old)} + ${term(x)} = ${neg(sum)} < x. A negative cur only drags x down — <b>start over</b> at i: cur = ${neg(x)}, the run is [${i}..${i}].`,
+    ru: (i, x, old, sum) => `i = ${i}, x = ${neg(x)}: cur + x = ${neg(old)} + ${term(x)} = ${neg(sum)} < x. Отрицательный cur только тянет x вниз — <b>начинаем заново</b> с i: cur = ${neg(x)}, отрезок — [${i}..${i}].`,
   },
   'kad.ev.best': {
     en: (i, was, best, from) => `cur = ${neg(best)} beats best = ${neg(was)}: best = <b>${neg(best)}</b>, the subarray [${from}..${i}].`,
@@ -129,7 +131,7 @@ export const EV_ARR = {
   },
   'up.ev.rowInit': {
     en: n => `row = [1, …, 1] — the first row of the table (${n} cells). From here on the same array is overwritten row by row.`,
-    ru: n => `row = [1, …, 1] — первая строка таблицы (${n} клеток). Дальше этот же массив перезаписывается строка за строкой.`,
+    ru: n => `row = [1, …, 1] — первая строка таблицы (${ruN(n, 'клетка', 'клетки', 'клеток')}). Дальше этот же массив перезаписывается строка за строкой.`,
   },
   'up.ev.rowCell': {
     en: (r, c, old, left, v) => `${c === 1 ? `Row ${r}: row[0] stays 1. ` : ''}row[${c}] += row[${c - 1}]: before the write row[${c}] = ${old} is still the cell <b>above</b>, row[${c - 1}] = ${left} is already the cell on the <b>left</b> → ${v}.`,
@@ -137,7 +139,7 @@ export const EV_ARR = {
   },
   'up.ev.done': {
     en: (m, n, paths, mode, binom) => `Paths: <b>${paths}</b>. ${mode === 'row' ? `Memory: ${enN(n, 'cell')} instead of ${m * n}.` : 'The same numbers fit in one row: row[c] += row[c − 1].'} Check by counting: every path is ${m - 1} downs and ${n - 1} rights in some order, C(${m + n - 2}, ${m - 1}) = ${binom}.`,
-    ru: (m, n, paths, mode, binom) => `Путей: <b>${paths}</b>. ${mode === 'row' ? `Памяти: ${ruN(n, 'клетка', 'клетки', 'клеток')} вместо ${m * n}.` : 'Те же числа помещаются в одну строку: row[c] += row[c − 1].'} Проверка комбинаторикой: путь — это ${m - 1} шагов вниз и ${n - 1} вправо в каком-то порядке, C(${m + n - 2}, ${m - 1}) = ${binom}.`,
+    ru: (m, n, paths, mode, binom) => `Путей: <b>${paths}</b>. ${mode === 'row' ? `Памяти: ${ruN(n, 'клетка', 'клетки', 'клеток')} вместо ${m * n}.` : 'Те же числа помещаются в одну строку: row[c] += row[c − 1].'} Проверка комбинаторикой: путь — это ${ruN(m - 1, 'шаг', 'шага', 'шагов')} вниз и ${n - 1} вправо в каком-то порядке, C(${m + n - 2}, ${m - 1}) = ${binom}.`,
   },
 
   /* ---------- Coin Change II against Combination Sum IV ---------- */
