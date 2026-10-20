@@ -2,7 +2,7 @@
  "id": "algo.u8.l3",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 16,
+ "minutes": 17,
  "cards": [
   {
    "t": "learn",
@@ -132,24 +132,57 @@
    "deep": "⟦⟧"
   },
   {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "kadane",
+   "input": {
+    "nums": [2, -5, 3, -1, 4, -10, 2]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 2,
+      "options": [
+       {
+        "event": "kad.ev.restart",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "kad.ev.extend",
+        "label": "⟦⟧"
+       }
+      ],
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 7,
+      "options": [
+       {
+        "event": "kad.ev.extend",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "kad.ev.restart",
+        "label": "⟦⟧"
+       }
+      ],
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
    "t": "tapline",
    "q": "⟦⟧",
    "code": "public int MaxSubArray(int[] nums) {\n    int cur = 0, best = int.MinValue;\n    foreach (int x in nums) {\n        cur = Math.Max(0, cur + x);\n        best = Math.Max(best, cur);\n    }\n    return best;\n}",
    "answer": 3,
    "explain": "⟦⟧",
    "lang": "cs"
-  },
-  {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
-   "explain": "⟦⟧",
-   "wrong": {
-    "1": "⟦⟧",
-    "2": "⟦⟧",
-    "3": "⟦⟧"
-   }
   },
   {
    "t": "learn",
