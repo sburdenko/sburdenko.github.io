@@ -2,7 +2,7 @@
  "id": "algo.u11.l3",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 15,
+ "minutes": 16,
  "cards": [
   {
    "t": "learn",
@@ -134,6 +134,60 @@
    "body": "⟦⟧",
    "code": "⟦⟧",
    "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "cloneGraph",
+   "input": {
+    "edges": [
+     [1, 2],
+     [1, 4],
+     [2, 3],
+     [3, 4]
+    ]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 6,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 10,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
   },
   {
    "t": "tapline",
