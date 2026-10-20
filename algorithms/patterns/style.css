@@ -262,3 +262,15 @@
 .stage .cap{font-size:11.5px;fill:var(--ink3);text-anchor:start;letter-spacing:.03em}
 .stage .cap.corner{text-anchor:end}
 .stage .cap.on{fill:var(--osd);font-weight:700}
+/* added problems: Kruskal components, Pacific Atlantic oceans, grid coordinates */
+.stage .node.comp0{fill:rgba(38,227,234,.28);stroke:var(--gpu)}
+.stage .node.comp1{fill:rgba(255,62,165,.28);stroke:var(--cpu)}
+.stage .node.comp2{fill:rgba(255,210,63,.26);stroke:var(--osd)}
+.stage .node.comp3{fill:rgba(93,252,154,.24);stroke:var(--ok)}
+.stage .node.comp4{fill:rgba(160,123,255,.3);stroke:#a07bff}
+.stage .cell.pac{fill:rgba(38,227,234,.24);stroke:rgba(38,227,234,.7)}
+.stage .cell.atl{fill:rgba(255,170,60,.22);stroke:rgba(255,170,60,.7)}
+.stage .cell.both{fill:rgba(93,252,154,.3);stroke:var(--ok);stroke-width:2}
+.stage .pa-p{fill:var(--gpu);opacity:.75}
+.stage .pa-a{fill:var(--warn);opacity:.75}
+.stage .pa-tick{fill:var(--ok);font-weight:700}

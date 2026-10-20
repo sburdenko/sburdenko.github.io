@@ -19,3 +19,7 @@ export const NAMES = {
 };
 
 export const PROBLEMS = { ...PROBLEMS_A, ...PROBLEMS_B, ...PROBLEMS_C, ...PROBLEMS_D, ...PROBLEMS_E, ...PROBLEMS_F, ...PROBLEMS_GAMES, ...PROBLEMS_H };
+
+/* Problems added to existing chapters (problems-bg.js): appended to the end of each chapter's list. */
+import { PROBLEMS_BG } from './problems-bg.js?v=202610191738';
+for (const [id, list] of Object.entries(PROBLEMS_BG)) PROBLEMS[id] = [...PROBLEMS[id], ...list];

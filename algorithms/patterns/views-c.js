@@ -240,7 +240,7 @@ export const wordSearch = {
       const here = e.cur && e.cur[0] === r && e.cur[1] === c;
       const cls = `${onPath.has(`${r},${c}`) ? 'onpath' : 'sq-l'}${here ? (e.miss ? ' bad-c' : ' focus') : ''}`;
       return { cls, label: ch, tcls: 'letter' };
-    }, { size: 46, step: 50 });
+    }, { size: 46, step: 50, coords: true });
   },
   vars(run, e) {
     const got = e.path.length;

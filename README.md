@@ -28,7 +28,7 @@
 | 03 | [Two Pointers](./algorithms/two-pointers/) | Opposite pointers, fast & slow / Floyd, and LeetCode 287. Rewindable array and linked-list examples, highlighted pseudocode, C# templates, and interview questions. This lesson is in English. |
 | 04 | [URP Field Guide](./unity-urp/) | Глава за главой по книге Unity о URP (Unity 6): где живёт каждая настройка, выбор рендерера по жёстким ограничениям, MSAA, GPU Resident Drawer, тени и атлас теней, режимы смешанного света, Rendering Layers, probes против APV и протечки, эффекты, пять шейдеров из книги, Render Objects, Render Graph и слияние native passes, volumes, STP, прогрев PSO, диагностика, вопросы. Ошибки книги помечены «Сверено с книгой». |
 | 05 | [Паттерны и SOLID](./unity-patterns/) | Книга Unity «Level up your code with design patterns and SOLID»: цена изменений по SOLID, factory, семантика `ObjectPool<T>`, singleton при загрузке сцен, command с undo/redo, state machine, observer и забытые подписки, MVP против MVVM, strategy, память flyweight, dirty flag, выбор паттерна и вопросы. |
-| 06 | [Паттерны алгоритмов](./algorithms/patterns/) | Семнадцать паттернов для собеседования: HashMap/HashSet, Two Pointers, Sliding Window, Binary Search, монотонный стек, fast & slow, DFS/BFS, деревья, куча, backtracking, greedy, DP, массивы и матрицы, кратчайшие пути (BFS и Дейкстра), битовые операции (общий вид «регистр»: 32 бита по шагам), дизайн структур (префиксное дерево, сериализация дерева, кольцевая очередь, LFU-кэш). Для каждого — признаки в условии, каркас на C# и от четырёх до семи задач LeetCode (всего 91) с разными вариантами приёма; у каждой задачи свой стенд с перемоткой и решение. В каждой главе есть задача Hard, ключевые задачи помечены «надо знать». Входные данные любого стенда редактируются прямо на странице, есть кнопки «Случайно» и «Пример». Two Pointers и BFS/DFS ссылаются на кассеты 02 и 03 и дополняют их. |
+| 06 | [Паттерны алгоритмов](./algorithms/patterns/) | Семнадцать паттернов для собеседования: HashMap/HashSet, Two Pointers, Sliding Window, Binary Search, монотонный стек, fast & slow, DFS/BFS, деревья, куча, backtracking, greedy, DP, массивы и матрицы, кратчайшие пути (BFS и Дейкстра), битовые операции (общий вид «регистр»: 32 бита по шагам), дизайн структур (префиксное дерево, сериализация дерева, кольцевая очередь, LFU-кэш). Для каждого — признаки в условии, каркас на C# и от четырёх до семи задач LeetCode (всего 97) с разными вариантами приёма; у каждой задачи свой стенд с перемоткой и решение. В каждой главе есть задача Hard, ключевые задачи помечены «надо знать». Входные данные любого стенда редактируются прямо на странице, есть кнопки «Случайно» и «Пример». Two Pointers и BFS/DFS ссылаются на кассеты 02 и 03 и дополняют их. |
 
 ### Стенд B · Python
 
@@ -224,7 +224,7 @@ bundle свежий; `tests/learn.test.js` и `tests/learn-en.test.js` прох�
 
 ## Стенд algo: задачи кассеты «Паттерны алгоритмов» в уроке
 
-`learn/models-algo.js` (модель без DOM) и `learn/rigs-algo.js` (отрисовка) показывают в уроке любую из 91 задачи
+`learn/models-algo.js` (модель без DOM) и `learn/rigs-algo.js` (отрисовка) показывают в уроке любую из 97 задач
 кассеты 06: трасса, SVG и тексты шагов берутся из `algorithms/patterns/` без копирования, стили SVG —
 правила `.stage …` из её `style.css`, подключённые с приставкой `.algo-rig`.
 

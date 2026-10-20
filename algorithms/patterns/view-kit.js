@@ -66,14 +66,20 @@ export function bars(values, lay, cls = []) {
     + `<line class="axis" x1="4" x2="${lay.width - 4}" y1="${lay.base}" y2="${lay.base}"/>`;
 }
 
-export function gridCells(rows, cellOf, { size = 40, step = 44, pad = 8 } = {}) {
+/** coords: row numbers on the left and column numbers on top (from 0), the grid moves right and down to make room. */
+export function gridCells(rows, cellOf, { size = 40, step = 44, pad = 8, coords = false } = {}) {
+  const ox = pad + (coords ? 16 : 0), oy = pad + (coords ? 16 : 0);
   let s = '';
+  if (coords) {
+    rows[0].forEach((_, c) => { s += text(ox + c * step + size / 2, oy - 10, c, 'idx'); });
+    rows.forEach((_, r) => { s += text(ox - 12, oy + r * step + size / 2, r, 'idx'); });
+  }
   rows.forEach((row, r) => row.forEach((v, c) => {
     const { cls, label, tcls = '' } = cellOf(v, r, c);
-    const x = pad + c * step, y = pad + r * step;
+    const x = ox + c * step, y = oy + r * step;
     s += `<rect class="gcell ${cls}" x="${x}" y="${y}" width="${size}" height="${size}" rx="5"/>` + text(x + size / 2, y + size / 2, label, `gt ${tcls}`);
   }));
-  return svg(rows[0].length * step + pad + 4, rows.length * step + pad + 4, s);
+  return svg(rows[0].length * step + ox + 4, rows.length * step + oy + 4, s);
 }
 
 /** Binary tree from layoutTree(): clsOf(node) → class, badgeOf(node) → text or null, noteOf(node) → text under the node. */

@@ -31,3 +31,7 @@ export function runWithInput(rig, texts) {
   if (run.events.length > MAX_STEPS) return { error: ['in.err.tooBig', MAX_STEPS], field: null };
   return { run, params };
 }
+
+/* Rigs of the problems added to existing chapters (rigs-bg.js). */
+import { RIGS_BG } from './rigs-bg.js?v=202610191738';
+Object.assign(RIGS, RIGS_BG);
