@@ -11,7 +11,7 @@
  "cards/2/options/0": "≈ 6·10⁷ and ≈ 3·10⁶: generation is about 20 times cheaper",
  "cards/2/options/1": "≈ 2.5·10⁷ and ≈ 6.5·10⁵: word length doesn't affect the cost",
  "cards/2/options/2": "The same: both ways compare every word with every other",
- "cards/2/explain": "Pairs: 5000²/2 · 5 ≈ 6.25·10⁷ character comparisons. Generation: 5000 · 5 positions · 26 letters · 5 for the string and its hash ≈ 3.25·10⁶. The difference is N versus 26·L: 5000 versus 130.",
+ "cards/2/explain": "Pairs: 5000²/2 · 5 ≈ 6.25·10⁷ character comparisons. Generation: 5000 · 5 positions · 26 letters · 5 for the string and its hash ≈ 3.25·10⁶. The ratio of the costs is N/2 versus 26·L: 2500 versus 130, about 19 times.",
  "cards/2/wrong/1": "Length enters both costs: comparing a pair is up to L characters, and each candidate is a new string of length L that also has to be hashed.",
  "cards/2/wrong/2": "Generation doesn't compare words with each other: it builds L·26 candidates and asks the set, at O(L) each.",
  "cards/3/title": "Level-order BFS to the target",

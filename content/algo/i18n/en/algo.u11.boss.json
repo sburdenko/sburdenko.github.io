@@ -75,9 +75,9 @@
  "cards/8/q": "Complexity of the unit's solutions. What is true? Select all.",
  "cards/8/options/0": "Number of Islands is O(m·n) time",
  "cards/8/options/1": "Kahn's algorithm is O(V + E)",
- "cards/8/options/2": "Union-Find with union by size and compression is almost O(1) per operation, amortized",
+ "cards/8/options/2": "Union-Find with union by rank and path compression is almost O(1) per operation, amortized",
  "cards/8/options/3": "A multi-source BFS from k sources is O(k·m·n)",
  "cards/8/options/4": "#1293 is O(m·n): each cell enters the queue once",
  "cards/8/options/5": "Recursive DFS on a 300×300 grid of solid land is safe with a 1 MB stack",
- "cards/8/explain": "Islands: each cell once; Kahn: each vertex and each edge once; Union-Find: O(α(n)), α ≤ 4. A multi-source BFS is one traversal: all sources in one queue, O(m·n) for any k. In #1293 the queue holds states, not cells: O(m·n·k). Recursion over 9·10⁴ cells of solid land takes about 5 MB of stack."
+ "cards/8/explain": "Islands: each cell once; Kahn: each vertex and each edge once; Union-Find: O(α(n)), α ≤ 4. A multi-source BFS is one traversal: all sources in one queue, O(m·n) for any k. In #1293 the queue holds states, not cells: O(m·n·k). Recursion over 9·10⁴ cells of solid land takes 5–9 MB of stack."
 }
