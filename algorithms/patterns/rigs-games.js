@@ -1,7 +1,7 @@
 /** Editable rigs for chapter 16: games — paths and space. */
-import * as G from './model-games.js?v=202610201343';
-import * as V from './views-games.js?v=202610201343';
-import { defineRig, randInt, shuffle, pick } from './rig-kit.js?v=202610201343';
+import * as G from './model-games.js?v=202610201414';
+import * as V from './views-games.js?v=202610201414';
+import { defineRig, randInt, shuffle, pick } from './rig-kit.js?v=202610201414';
 
 const rows = text => text.split(' ').map(r => [...r].map(Number));
 const randomBits = (next, n, m, p) => Array.from({ length: n }, () => Array.from({ length: m }, () => (next() < p ? 1 : 0)));

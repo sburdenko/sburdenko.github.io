@@ -2,7 +2,7 @@
  * Pure traces for chapter 17: data structure design — a trie, tree serialization, a circular queue and an LFU
  * cache. Same contract as model-a.js: every event is a complete snapshot with an i18n key and its arguments.
  */
-import { layoutTree } from './model-b.js?v=202610201343';
+import { layoutTree } from './model-b.js?v=202610201414';
 
 const event = (key, args, state) => ({ key, args, ...state });
 
