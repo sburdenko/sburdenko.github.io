@@ -1,12 +1,12 @@
 /** CH.08 shader steps + Fresnel halo, CH.09 Render Objects, Render Graph and pass merging. */
-import { $, $$, fitCanvas, clamp } from '../assets/vhs.js?v=202610201312';
-import { t } from '../assets/i18n.js?v=202610201312';
-import { bindSeg, isPressed, setPressed, togglePressed, tile } from '../assets/lab.js?v=202610201312';
-import { renderCode } from '../assets/code.js?v=202610201312';
-import { SHADERS, SNIPPETS } from './snippets.js?v=202610201312';
+import { $, $$, fitCanvas, clamp } from '../assets/vhs.js?v=202610201316';
+import { t } from '../assets/i18n.js?v=202610201316';
+import { bindSeg, isPressed, setPressed, togglePressed, tile } from '../assets/lab.js?v=202610201316';
+import { renderCode } from '../assets/code.js?v=202610201316';
+import { SHADERS, SNIPPETS } from './snippets.js?v=202610201316';
 import {
   SHADER_STEPS, SHADER_CAPS, addedLines, fresnelHaloAlpha, lambert, silhouetteSummary, buildFrameGraph, nativePasses,
-} from './model-frame.js?v=202610201312';
+} from './model-frame.js?v=202610201316';
 
 const hexToRgb = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
 

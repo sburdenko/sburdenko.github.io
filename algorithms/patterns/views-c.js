@@ -2,7 +2,7 @@
 import {
   CELL, STEP, svg, text, rowWidth, cells, pointers, arcBelow, node, chip, chips,
   barLayout, bars, gridCells, decisionTreeView, dpTable,
-} from './view-kit.js?v=202610201312';
+} from './view-kit.js?v=202610201316';
 
 const TOP = 40;
 const framed = (n, h, inner) => svg(rowWidth(n) + 20, h, `<g transform="translate(10,0)">${inner}</g>`);
@@ -240,7 +240,7 @@ export const wordSearch = {
       const here = e.cur && e.cur[0] === r && e.cur[1] === c;
       const cls = `${onPath.has(`${r},${c}`) ? 'onpath' : 'sq-l'}${here ? (e.miss ? ' bad-c' : ' focus') : ''}`;
       return { cls, label: ch, tcls: 'letter' };
-    }, { size: 46, step: 50 });
+    }, { size: 46, step: 50, coords: true });
   },
   vars(run, e) {
     const got = e.path.length;
