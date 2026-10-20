@@ -2,12 +2,12 @@
  * Bonus A: six sorts race on the same array. The traces are produced by JS versions of the same algorithms the
  * Python problems show, counting comparisons and swaps; one transport steps all six in lockstep.
  */
-import { $, $$, esc } from '../../assets/vhs.js?v=202610202014';
-import { t, onLang } from '../../assets/i18n.js?v=202610202014';
-import { createPlayer, bindTransport } from '../../algorithms/bfs-dfs/player.js?v=202610202014';
-import { barLayout, bars, svg, text } from '../../algorithms/patterns/view-kit.js?v=202610202014';
-import { parseField, formatField } from '../shared/fields.js?v=202610202014';
-import { randInts, randInt } from '../../algorithms/patterns/rig-kit.js?v=202610202014';
+import { $, $$, esc } from '../../assets/vhs.js?v=202610202037';
+import { t, onLang } from '../../assets/i18n.js?v=202610202037';
+import { createPlayer, bindTransport } from '../../algorithms/bfs-dfs/player.js?v=202610202037';
+import { barLayout, bars, svg, text } from '../../algorithms/patterns/view-kit.js?v=202610202037';
+import { parseField, formatField } from '../shared/fields.js?v=202610202037';
+import { randInts, randInt } from '../../algorithms/patterns/rig-kit.js?v=202610202037';
 
 const FIELD = { key: 'a', type: 'ints', minLen: 2, maxLen: 12, min: 1, max: 40 };
 const EXAMPLE = [23, 7, 31, 12, 4, 19, 27, 9];
