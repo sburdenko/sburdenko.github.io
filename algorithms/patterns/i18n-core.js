@@ -2,12 +2,12 @@
 export const CORE = {
   'page.title': { en: 'Algorithm patterns · Tape 06', ru: 'Паттерны алгоритмов · Кассета 06' },
   'page.desc': {
-    en: 'Fifteen interview patterns and 82 problems: how to spot each pattern, a C# skeleton, and every problem played step by step on its own editable rig, with a solution.',
-    ru: 'Пятнадцать паттернов для собеседования и 82 задачи: как узнать паттерн, каркас на C#, и каждая задача по шагам на своём редактируемом стенде, с решением.',
+    en: 'Seventeen interview patterns and 91 problems: how to spot each pattern, a C# skeleton, and every problem played step by step on its own editable rig, with a solution.',
+    ru: 'Семнадцать паттернов для собеседования и 91 задача: как узнать паттерн, каркас на C#, и каждая задача по шагам на своём редактируемом стенде, с решением.',
   },
   'hero.eyebrow': { en: 'Tape 06 · Algorithms · interview prep', ru: 'Кассета 06 · Алгоритмы · подготовка к собеседованию' },
   'hero.title': { en: 'Patterns', ru: 'Паттерны' },
-  'hero.subtitle': { en: 'fifteen moves, 82 problems', ru: 'пятнадцать приёмов, 82 задачи' },
+  'hero.subtitle': { en: 'seventeen moves, 91 problems', ru: 'семнадцать приёмов, 91 задача' },
   'hero.lede': {
     en: 'Most interview problems are one of a dozen moves in disguise. Every chapter shows how to spot the move in the statement, gives a C# skeleton and plays four to seven problems step by step, where <b>the same move works in a different way</b>. Every chapter has a Hard one, and the tabs marked MUST KNOW are the problems interviews ask most.',
     ru: 'Большая часть задач на собеседовании — один из дюжины приёмов в маскировке. В каждой главе: как узнать приём по условию, каркас на C# и от четырёх до семи задач по шагам, где <b>один и тот же приём работает по-разному</b>. В каждой главе есть задача Hard, а вкладки с пометкой НАДО ЗНАТЬ — то, что спрашивают чаще всего.',
@@ -96,8 +96,8 @@ export const CORE = {
 
   'foot.stop': { en: '■ STOP · END OF TAPE 06', ru: '■ СТОП · КОНЕЦ КАССЕТЫ 06' },
   'foot.line': {
-    en: 'The code uses <code>PriorityQueue&lt;TElement, TPriority&gt;</code> from .NET 6+. Unity (.NET Standard 2.1) does not have it — ask which .NET the interview assumes.',
-    ru: 'В коде используется <code>PriorityQueue&lt;TElement, TPriority&gt;</code> из .NET 6+. В Unity (.NET Standard 2.1) его нет — уточни на собеседовании, какую версию .NET подразумевают.',
+    en: 'The code uses <code>PriorityQueue&lt;TElement, TPriority&gt;</code> from .NET 6+. Unity (.NET Standard 2.1) does not have it — ask which .NET the interview assumes. Chapter 16 is written for C# 9 and brings its own binary heap.',
+    ru: 'В коде используется <code>PriorityQueue&lt;TElement, TPriority&gt;</code> из .NET 6+. В Unity (.NET Standard 2.1) его нет — уточни на собеседовании, какую версию .NET подразумевают. Глава 16 написана под C# 9 и несёт свою двоичную кучу.',
   },
   'foot.tape3': { en: 'Tape 03: Two Pointers', ru: 'Кассета 03: Two Pointers' },
 };

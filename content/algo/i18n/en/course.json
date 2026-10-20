@@ -15,7 +15,8 @@
  "units/6/title": "Binary search",
  "units/6/blurb": "Boundary invariants without off-by-one errors, the rotated array, searching on the answer, the median of two arrays. For games: a weighted loot table, a fair Fisher–Yates shuffle and seed determinism — System.Random versus UnityEngine.Random.",
  "units/7/title": "Sorting, intervals and greedy",
- "units/7/blurb": "How .NET sorts and when you do not need to, merging and inserting intervals, one-pass greedy, Kadane, and how to prove a greedy solution is correct.",
+ "units/7/blurb": "What Array.Sort guarantees and when you need no sort, a ulong sort key for rendering, merging and inserting intervals, a sweep for a sound timeline, one-pass greedy, Kadane, and how to prove a greedy solution is correct.",
+ "units/7/source/title": "LeetCode 56: Merge Intervals",
  "units/8/title": "Heaps and top-K",
  "units/8/blurb": "A size-k heap versus quickselect, frequencies and nearest points, merging k lists and a streaming median. PriorityQueue in .NET 6+ and your own heap for Unity.",
  "units/9/title": "Trees",
@@ -31,5 +32,6 @@
  "units/0/source/title": "Microsoft Learn: Selecting a collection class",
  "units/1/source/title": "Microsoft Learn: Dictionary<TKey,TValue>",
  "units/2/source/title": "LeetCode 42: Trapping Rain Water",
- "units/3/source/title": "LeetCode 239: Sliding Window Maximum"
+ "units/3/source/title": "LeetCode 239: Sliding Window Maximum",
+ "units/4/source/title": "Microsoft Learn: BitOperations class"
 }

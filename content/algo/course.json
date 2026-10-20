@@ -45,8 +45,12 @@
   {
    "id": "u5",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://learn.microsoft.com/en-us/dotnet/api/system.numerics.bitoperations"
+   },
+   "lessons": ["algo.u5.l1", "algo.u5.l2", "algo.u5.l3", "algo.u5.l4", "algo.u5.l5", "algo.u5.boss"]
   },
   {
    "id": "u6",
@@ -63,8 +67,12 @@
   {
    "id": "u8",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://leetcode.com/problems/merge-intervals/"
+   },
+   "lessons": ["algo.u8.l1", "algo.u8.l2", "algo.u8.l3", "algo.u8.l4", "algo.u8.boss"]
   },
   {
    "id": "u9",
@@ -93,8 +101,8 @@
   {
    "id": "u13",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["algo.u13.l1", "algo.u13.l2", "algo.u13.l3", "algo.u13.l4", "algo.u13.l5", "algo.u13.l6", "algo.u13.boss"]
   },
   {
    "id": "u14",

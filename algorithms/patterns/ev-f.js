@@ -17,8 +17,8 @@ export const EV_F = {
     ru: () => 'В n = 0 единиц нет: цикл не выполнится ни разу. Ответ <b>0</b> — и 0 не степень двойки.',
   },
   'pop.ev.minus': {
-    en: (step, tz) => `Step ${step}: n − 1. Subtracting 1 borrows from the lowest 1 (bit ${tz}): it becomes 0, ${tz ? `the ${tz} zero(s) below it become 1s` : 'there are no zeros below it'}; every bit above stays as it was.`,
-    ru: (step, tz) => `Шаг ${step}: n − 1. Вычитание занимает у младшей единицы (бит ${tz}): она становится 0, ${tz ? `нули под ней (${tz}) — единицами` : 'нулей под ней нет'}; все биты выше остаются как были.`,
+    en: (step, tz) => `Step ${step}: n − 1. Subtracting 1 borrows from the lowest 1 (bit ${tz}): it becomes 0, ${tz ? `the ${tz === 1 ? 'zero' : `${tz} zeros`} below it ${tz === 1 ? 'becomes 1' : 'become 1s'}` : 'there are no zeros below it'}; every bit above stays as it was.`,
+    ru: (step, tz) => `Шаг ${step}: n − 1. Вычитание занимает у младшей единицы (бит ${tz}): она становится 0, ${tz ? `${tz === 1 ? 'ноль под ней — единицей' : `${ru(tz, 'ноль', 'нуля', 'нулей')} под ней — единицами`}` : 'нулей под ней нет'}; все биты выше остаются как были.`,
   },
   'pop.ev.and': {
     en: (count, tz, and) => `n & (n − 1): above bit ${tz} the two rows agree, from bit ${tz} down they are opposite — so only the lowest 1 disappears. count = <b>${count}</b>${and ? `, n = ${and}` : ', and n = 0: the loop ends'}.`,
@@ -125,8 +125,8 @@ export const EV_F = {
     ru: (round, a, b, s) => `Раунд ${round}: a & b = 0 — ни в одном столбце нет двух единиц, переносить нечего. Значит, a ^ b = <b>${s}</b> — это уже сумма.`,
   },
   'sum.ev.drop': {
-    en: (round, a, b, s, carry) => `Round ${round}: a ^ b = ${s}, carries (a & b) << 1 = ${carry} — and the carry out of bit 31 falls off the register. Not a bug: in two’s complement this is exactly how a negative and a positive number add up.`,
-    ru: (round, a, b, s, carry) => `Раунд ${round}: a ^ b = ${s}, переносы (a & b) << 1 = ${carry} — а перенос из бита 31 выпадает за край регистра. Это не ошибка: в дополнительном коде именно так и складываются отрицательное и положительное число.`,
+    en: (round, a, b, s, carry) => `Round ${round}: a ^ b = ${s}, carries (a & b) << 1 = ${carry} — and the carry out of bit 31 falls off the register. Not a bug: in two’s complement the sum is taken modulo 2³², so whatever falls off bit 31 is simply dropped.`,
+    ru: (round, a, b, s, carry) => `Раунд ${round}: a ^ b = ${s}, переносы (a & b) << 1 = ${carry} — а перенос из бита 31 выпадает за край регистра. Это не ошибка: в дополнительном коде сумма берётся по модулю 2³², и всё, что выпало за бит 31, просто отбрасывается.`,
   },
   'sum.ev.done': {
     en: (sum, a0, b0, rounds) => `b = 0: no carries left after ${rounds} round(s). ${a0} + ${b0} = <b>${sum}</b> without a single +.`,

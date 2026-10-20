@@ -1,0 +1,151 @@
+{
+ "id": "algo.u5.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 15,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["Physics.Raycast(ray, out hit, 100f, 8)", "Physics.Raycast(ray, out hit, 100f, 1 << 8)", "Physics.Raycast(ray, out hit, 100f, ~8)", "Physics.Raycast(ray, out hit, 100f, LayerMask.NameToLayer(\"Enemy\"))"],
+   "answer": 1,
+   "explain": "⟦⟧",
+   "wrong": {
+    "0": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["n = 52 = 110100", "n − 1 = 110011", "n & (n − 1) = 110000", "count++", "⟦⟧"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public int HammingWeight(int n) {\n    uint x = ___;\n    int count = 0;\n    while (x != 0) {\n        x ___ x - 1;\n        count++;\n    }\n    return count;\n}\n\npublic bool IsPowerOfTwo(int n) => ___ && (n & (n - 1)) == 0;",
+   "tiles": ["(uint)n", "n", "&=", "|=", "^=", "n > 0", "n >= 0", "n != 0"],
+   "answer": ["(uint)n", "&=", "n > 0"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "popcount",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 3,
+      "options": [
+       {
+        "label": "101111₂ = 47"
+       },
+       {
+        "label": "100000₂ = 32"
+       },
+       {
+        "label": "011111₂ = 31"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 6,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "n = 16, count = 3"
+       },
+       {
+        "label": "n = 31, count = 3"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public bool IsPowerOfTwo(int n) {\n    if (n == 0) return false;\n    return (n & (n - 1)) == 0;\n}",
+   "answer": 1,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "(x >> k) & 1"],
+    ["⟦⟧", "x & (x - 1)"],
+    ["⟦⟧", "x > 0 && (x & (x - 1)) == 0"],
+    ["⟦⟧", "popcount(a ^ b)"],
+    ["⟦⟧", "1 << layer"]
+   ]
+  }
+ ]
+}
