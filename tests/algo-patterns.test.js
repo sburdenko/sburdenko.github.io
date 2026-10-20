@@ -9,6 +9,7 @@ import * as E from '../algorithms/patterns/model-e.js';
 import * as F from '../algorithms/patterns/model-f.js';
 import * as GM from '../algorithms/patterns/model-games.js';
 import * as H from '../algorithms/patterns/model-h.js';
+import * as ARR from '../algorithms/patterns/model-arr.js';
 import { register, bitWidth, hexOf } from '../algorithms/patterns/view-kit.js';
 import { RIGS, PATTERN_IDS, runWithInput, MAX_STEPS } from '../algorithms/patterns/rigs.js';
 import { parseField, formatField, treeFromLevelOrder, levelOrderOf } from '../algorithms/patterns/inputs.js';
@@ -1267,4 +1268,151 @@ test('every chapter has texts for each problem, at least one Hard, and code', ()
     assert.ok(PROBLEMS[id].some(p => p.diff === 'Hard'), `${id}: no Hard problem`);
     assert.ok(PROBLEMS[id].length >= 4 && PROBLEMS[id].length <= 7, `${id}: 4–7 problems`);
   }
+});
+
+/* ---------- problems appended to chapters 02, 04, 10, 11, 12, 13 (model-arr.js) ---------- */
+test('maximum subarray: Kadane agrees with every subarray, restarts exactly when cur < 0', () => {
+  repeat(400, () => {
+    const nums = next() < 0.2 ? ints(len(1, 7), -9, -1) : ints(len(1, 10), -8, 8);
+    let best = -Infinity;
+    for (let i = 0; i < nums.length; i++) for (let j = i; j < nums.length; j++) best = Math.max(best, nums.slice(i, j + 1).reduce((a, b) => a + b, 0));
+    const run = ARR.kadaneTrace(nums), [a, b] = run.range;
+    assert.equal(run.best, best, `${nums}`);
+    assert.equal(nums.slice(a, b + 1).reduce((x, y) => x + y, 0), best, 'the range sums to best');
+    run.events.slice(1).forEach((e, k) => {
+      const before = run.events[k];
+      if (e.key === 'kad.ev.restart') assert.ok(before.cur < 0, 'restart only after a negative cur');
+      if (e.key === 'kad.ev.extend') assert.ok(before.cur >= 0, 'extend only after cur ≥ 0');
+      if (e.key === 'kad.ev.best') assert.ok(e.best > before.best);
+    });
+    assert.equal(run.events.at(-1).key, nums.every(v => v < 0) ? 'kad.ev.allNeg' : 'kad.ev.done');
+  });
+  const ex = RIGS.kadane.run(RIGS.kadane.example);
+  assert.equal(ex.best, 6);
+  assert.deepEqual(ex.range, [3, 6]);
+  assert.deepEqual(keysOf(ex), new Set(['kad.ev.start', 'kad.ev.extend', 'kad.ev.restart', 'kad.ev.best', 'kad.ev.done']));
+  assert.equal(ARR.kadaneTrace([-3, -1, -2]).best, -1, 'all negative: the largest element, not 0');
+});
+
+/** Merge Intervals with closed ends, the independent method for Insert Interval. */
+const mergeClosed = list => [...list].sort((p, q) => p[0] - q[0]).reduce((out, [a, b]) => {
+  if (out.length && a <= out.at(-1)[1]) out.at(-1)[1] = Math.max(out.at(-1)[1], b);
+  else out.push([a, b]);
+  return out;
+}, []);
+
+test('insert interval: three phases agree with sorting everything and merging', () => {
+  const random = rng(11);
+  repeat(400, () => {
+    const p = RIGS.insertIv.random(random), nw = p.newInterval[0];
+    const run = ARR.insertIntervalTrace(p.intervals, nw);
+    assert.deepEqual(run.result, mergeClosed([...p.intervals, nw]), JSON.stringify(p));
+    const order = run.events.filter(e => e.i != null).map(e => e.phase);
+    assert.deepEqual(order, [...order].sort((x, y) => ['left', 'absorb', 'right'].indexOf(x) - ['left', 'absorb', 'right'].indexOf(y)), 'phases never go back');
+    for (const e of run.events) {
+      if (e.key !== 'ins.ev.touch') continue;
+      const [, a, b, s0, e0] = e.args;
+      assert.ok(a === e0 || b === s0, 'a touch shares exactly one end');
+    }
+  });
+  const ex = RIGS.insertIv.run(RIGS.insertIv.example);
+  assert.deepEqual(ex.result, [[1, 2], [3, 10], [12, 16]], 'LeetCode #57 example 2');
+  assert.deepEqual(keysOf(ex), new Set(['ins.ev.start', 'ins.ev.left', 'ins.ev.absorb', 'ins.ev.touch', 'ins.ev.place', 'ins.ev.right', 'ins.ev.done']));
+  assert.deepEqual(ARR.insertIntervalTrace([], [2, 5]).result, [[2, 5]]);
+  assert.deepEqual(runWithInput(RIGS.insertIv, { intervals: '1-3 2-5', newInterval: '4-6' }).error, ['in.err.ivSorted', 1, 2]);
+  assert.equal(runWithInput(RIGS.insertIv, { intervals: '1-3', newInterval: '4-6 7-8' }).error[0], 'in.err.len');
+});
+
+test('sort colors: the flag sorts in one pass and every step keeps the four zones', () => {
+  repeat(400, () => {
+    const nums = ints(len(1, 12), 0, 2);
+    const run = ARR.sortColorsTrace(nums);
+    assert.deepEqual(run.result, [...nums].sort((x, y) => x - y));
+    assert.ok(run.looks <= nums.length, 'at most n looks');
+    run.events.forEach((e, k) => {
+      assert.ok(e.a.slice(0, e.lo).every(v => v === 0) && e.a.slice(e.lo, e.mid).every(v => v === 1) && e.a.slice(e.hi + 1).every(v => v === 2), `zones at step ${k}`);
+      if (e.key === 'sc.ev.two') assert.equal(e.mid, run.events[k - 1].mid, 'a 2 never moves mid');
+    });
+  });
+  assert.deepEqual(keysOf(RIGS.sortColors.run(RIGS.sortColors.example)), new Set(['sc.ev.start', 'sc.ev.zero', 'sc.ev.one', 'sc.ev.two', 'sc.ev.done']));
+});
+
+test('LIS with tails: the length agrees with the O(n²) DP, tails[k] is the smallest end of length k + 1', () => {
+  repeat(400, () => {
+    const nums = ints(len(1, 12), 0, 12), L = [];
+    nums.forEach((x, i) => { L[i] = 1 + Math.max(0, ...nums.slice(0, i).map((y, j) => (y < x ? L[j] : 0))); });
+    const run = ARR.lisTailsTrace(nums), best = Math.max(...L);
+    assert.equal(run.length, best, `${nums}`);
+    assert.deepEqual(run.tails, run.tails.map((_, k) => Math.min(...nums.filter((_, i) => L[i] >= k + 1))), 'tails[k] = the smallest end of length k + 1');
+    assert.equal(run.lis.length, best);
+    assert.ok(run.lis.every((v, k) => !k || run.lis[k - 1] < v), 'the rebuilt LIS increases');
+    let at = 0;
+    for (const v of run.lis) { at = nums.indexOf(v, at) + 1; assert.ok(at > 0, 'the rebuilt LIS is a subsequence'); }
+    run.events.forEach((e, k) => { if (e.i != null) assert.ok(e.probes.length <= Math.ceil(Math.log2(run.events[k - 1].tails.length + 1)), 'O(log n) probes'); });
+  });
+  const ex = RIGS.lisTails.run(RIGS.lisTails.example);
+  assert.equal(ex.length, 6);
+  assert.deepEqual(ex.tails, [2, 3, 6, 8, 10, 13]);
+  assert.equal(ex.events.at(-1).args[3], false, 'the example shows that tails is not a subsequence');
+  assert.deepEqual(keysOf(ex), new Set(['lt.ev.start', 'lt.ev.append', 'lt.ev.replace', 'lt.ev.equal', 'lt.ev.done']));
+});
+
+test('unique paths: the table and the single row give the binomial, row[c] holds above-then-left', () => {
+  const paths = (r, c) => (r === 0 || c === 0 ? 1 : paths(r - 1, c) + paths(r, c - 1));
+  for (let m = 1; m <= 7; m++) for (let n = 1; n <= 7; n++) {
+    const table = ARR.uniquePathsTrace(m, n, 'table'), row = ARR.uniquePathsTrace(m, n, 'row');
+    assert.equal(table.paths, paths(m - 1, n - 1), `${m}×${n}`);
+    assert.equal(row.paths, table.paths);
+    assert.equal(table.paths, ARR.binomial(m + n - 2, m - 1));
+    for (const e of row.events) {
+      if (e.key !== 'up.ev.rowCell') continue;
+      const [r, c, old, left] = e.args;
+      assert.equal(old, paths(r - 1, c), 'before the write row[c] is the cell above');
+      assert.equal(left, paths(r, c - 1), 'row[c − 1] is already the cell on the left');
+    }
+  }
+  assert.equal(RIGS.uniquePaths.run(RIGS.uniquePaths.example).paths, 28, 'LeetCode #62: 3 × 7');
+  assert.equal(runWithInput(RIGS.uniquePaths, { m: '3', n: '3', mode: 'r' }).run.paths, 6, 'a unique prefix picks the mode');
+});
+
+test('coin order: coins-outer counts combinations, sums-outer counts sequences — checked by enumeration', () => {
+  const combos = (coins, s, from = 0) => (s === 0 ? 1 : coins.slice(from).reduce((n, c, k) => n + (c <= s ? combos(coins, s - c, from + k) : 0), 0));
+  const seqs = (coins, s) => (s === 0 ? 1 : coins.reduce((n, c) => n + (c <= s ? seqs(coins, s - c) : 0), 0));
+  repeat(200, () => {
+    const coins = [...new Set(ints(len(1, 4), 1, 6))], amount = len(0, 10);
+    for (const order of ARR.ORDERS) {
+      const run = ARR.coinOrderTrace(coins, amount, order), want = order === 'coins-outer' ? combos(coins, amount) : seqs(coins, amount);
+      assert.equal(run.answer, want, `${coins} ${amount} ${order}`);
+      assert.equal(run.ways.length, want, 'one listed way per count');
+      assert.equal(new Set(run.ways.map(w => w.join('+'))).size, want, 'no way twice');
+      if (order === 'coins-outer') assert.equal(new Set(run.ways.map(w => [...w].sort().join('+'))).size, want, 'no combination in two orders');
+      const last = run.events.at(-1);
+      for (let s = 1; s <= amount; s++) assert.equal(last.dp[s], last.table.reduce((sum, r) => sum + (r[s] ?? 0), 0), 'dp[s] is the sum of its column');
+    }
+  });
+  assert.equal(RIGS.coinOrder.run(RIGS.coinOrder.example).answer, 4);
+  assert.equal(RIGS.coinOrder.run({ ...RIGS.coinOrder.example, order: 'sums-outer' }).answer, 7, 'LeetCode #377 example');
+  assert.equal(ARR.coinOrderTrace([1, 2, 5], 5, 'coins-outer').answer, 4, 'LeetCode #518 example');
+  for (const order of ARR.ORDERS) assert.ok(keysOf(RIGS.coinOrder.run({ ...RIGS.coinOrder.example, order })).has('co.ev.add'));
+  assert.ok(keysOf(ARR.coinOrderTrace([2, 3], 5, 'sums-outer')).has('co.ev.zero'));
+});
+
+test('meeting rooms: the sweep peak equals the most meetings at one moment, and the rooms never clash', () => {
+  const random = rng(5);
+  repeat(400, () => {
+    const list = RIGS.meetingRooms.random(random).intervals;
+    const run = ARR.meetingRoomsTrace(list);
+    const most = Math.max(...list.map(([t]) => list.filter(([a, b]) => a <= t && t < b).length));
+    assert.equal(run.peak, most, JSON.stringify(list));
+    assert.equal(run.rooms, run.peak, 'the greedy reuse opens exactly peak rooms');
+    list.forEach(([a, b], p) => list.forEach(([c, d], q) => {
+      if (p < q && run.room[p] === run.room[q]) assert.ok(b <= c || d <= a, 'one room, no overlap');
+    }));
+    assert.ok(ARR.startsFirstPeak(list) >= run.peak);
+  });
+  const ex = RIGS.meetingRooms.run(RIGS.meetingRooms.example);
+  assert.equal(ex.peak, 2);
+  assert.equal(ARR.startsFirstPeak(RIGS.meetingRooms.example.intervals), 3, 'starts first would open a room too many');
+  assert.equal(ARR.meetingRoomsTrace([[0, 30], [5, 10], [15, 20]]).peak, 2, 'LeetCode #253 example');
+  assert.deepEqual(keysOf(ex), new Set(['mr.ev.start', 'mr.ev.peak', 'mr.ev.open', 'mr.ev.close', 'mr.ev.free', 'mr.ev.done']));
 });

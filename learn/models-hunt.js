@@ -6,8 +6,8 @@
  * card.bugs   — [{ lines: [номера строк], title, why, cat? }]: любая из строк баги засчитывает его
  * card.goal   — { min, maxFalse }: сколько багов нужно найти и сколько ложных отметок допустимо
  */
-import { tr } from './i18n.js?v=202610201301';
-import { t as tl } from './ui.js?v=202610201301';
+import { tr } from './i18n.js?v=202610201312';
+import { t as tl } from './ui.js?v=202610201312';
 
 export const HUNT_DEFAULT = { maxFalse: 2 };
 
