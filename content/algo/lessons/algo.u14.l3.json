@@ -1,0 +1,176 @@
+{
+ "id": "algo.u14.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 13,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["8", "11", "4", "6"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public void Insert(string word) {\n    var node = root;\n    foreach (char ch in word)\n        node = node.next[___] ??= new Node();\n    ___;\n}\n\npublic bool Search(string word) => Find(word)?.end == true;\n\npublic bool StartsWith(string prefix) => ___;\n\nprivate Node Find(string s) {\n    var node = root;\n    foreach (char ch in s) {\n        node = node.next[ch - 'a'];\n        if (node == null) return ___;\n    }\n    return node;\n}",
+   "tiles": ["ch - 'a'", "ch", "node.end = true", "root.end = true", "Find(prefix) != null", "Find(prefix)?.end == true", "null", "root"],
+   "answer": ["ch - 'a'", "node.end = true", "Find(prefix) != null", "null"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "trie",
+   "input": {
+    "ops": [
+     ["insert", "card"],
+     ["insert", "care"],
+     ["search", "car"],
+     ["startsWith", "car"],
+     ["insert", "car"],
+     ["search", "car"],
+     ["insert", "cat"],
+     ["search", "cab"],
+     ["startsWith", "ca"]
+    ]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 14,
+      "options": [
+       {
+        "event": "trie.ev.word",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "trie.ev.notWord",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "trie.ev.miss",
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 1,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 19,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:1", "end", "pick:0", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public void Insert(string word) {\n    var node = root;\n    foreach (char ch in word) {\n        node = node.next[ch - 'a'] ??= new Node();\n        node.end = true;\n    }\n}",
+   "answer": 4,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Search(word)", "⟦⟧"],
+    ["StartsWith(prefix)", "⟦⟧"],
+    ["⟦⟧", "Dictionary<char, Node>"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}
