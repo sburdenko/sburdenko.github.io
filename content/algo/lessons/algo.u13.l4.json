@@ -2,7 +2,7 @@
  "id": "algo.u13.l4",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 16,
+ "minutes": 17,
  "cards": [
   {
    "t": "learn",
@@ -88,16 +88,55 @@
    "lang": "cs"
   },
   {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
-   "explain": "⟦⟧",
-   "wrong": {
-    "1": "⟦⟧",
-    "2": "⟦⟧",
-    "3": "⟦⟧"
-   }
+   "t": "rig",
+   "rig": "algo",
+   "problem": "coinOrder",
+   "input": {
+    "coins": [1, 2],
+    "amount": 4,
+    "order": "sums-outer"
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 8,
+      "options": [
+       {
+        "label": "dp[3] += dp[1] = 1 → 3"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "dp[3] += dp[2] = 2 → 4"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 11,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
   },
   {
    "t": "multi",

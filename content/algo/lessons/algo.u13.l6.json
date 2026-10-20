@@ -2,7 +2,7 @@
  "id": "algo.u13.l6",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 16,
+ "minutes": 17,
  "cards": [
   {
    "t": "learn",
@@ -46,16 +46,50 @@
    "lang": "cs"
   },
   {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["[3, 8, 9] → 3", "[4, 8, 9] → 3", "[4, 10] → 2", "[3, 4, 8, 9] → 4"],
-   "answer": 0,
-   "explain": "⟦⟧",
-   "wrong": {
-    "1": "⟦⟧",
-    "2": "⟦⟧",
-    "3": "⟦⟧"
-   }
+   "t": "rig",
+   "rig": "algo",
+   "problem": "lisTails",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 6,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 9,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
   },
   {
    "t": "blanks",
