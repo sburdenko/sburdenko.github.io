@@ -169,8 +169,8 @@ export const EV_B = {
     ru: (n, ready) => `Бейджи — сколько требований ещё ждёт каждый курс. Готовы сейчас: ${ready.length ? list(ready) : 'нет'}.`,
   },
   'crs.ev.take': {
-    en: (c, next, freed) => `Take course ${c}.${next.length ? ` It unlocks ${list(next)}` : ' Nothing depends on it'}${freed.length ? `; ready now: ${list(freed)}.` : '.'}`,
-    ru: (c, next, freed) => `Берём курс ${c}.${next.length ? ` Он открывает ${list(next)}` : ' От него ничего не зависит'}${freed.length ? `; готовы теперь: ${list(freed)}.` : '.'}`,
+    en: (c, next, freed) => `Take course ${c}.${next.length ? ` Each of ${list(next)} loses one prerequisite` : ' Nothing depends on it'}${freed.length ? `; ready now: ${list(freed)}.` : '.'}`,
+    ru: (c, next, freed) => `Берём курс ${c}.${next.length ? ` У ${list(next)} становится на одно условие меньше` : ' От него ничего не зависит'}${freed.length ? `; готовы теперь: ${list(freed)}.` : '.'}`,
   },
   'crs.ev.done': {
     en: (ok, order, stuck) => (ok ? `All courses taken in the order ${list(order)} — <b>possible</b>.` : `Courses ${list(stuck)} wait for each other in a cycle — <b>impossible</b>.`),
