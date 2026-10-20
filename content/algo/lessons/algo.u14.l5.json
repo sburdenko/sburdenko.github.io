@@ -1,0 +1,173 @@
+{
+ "id": "algo.u14.l5",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 15,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "head = 0, tail = 4", "head = 0, tail = 3", "head = 3, tail = 0"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "EnQueue: count == k → false", "DeQueue: head = (head + 1) % k", "Rear = a[(head + count − 1) % k]"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "public bool EnQueue(int value) {\n    if (___) return false;\n    a[___] = value;\n    count++;\n    return true;\n}\n\npublic bool DeQueue() {\n    if (count == 0) return false;\n    head = ___;\n    count--;\n    return true;\n}\n\npublic int Rear() => count == 0 ? -1 : a[___];",
+   "tiles": ["count == a.Length", "count == 0", "(head + count) % a.Length", "head + count", "(head + 1) % a.Length", "head + 1", "(head + count - 1) % a.Length", "head + count - 1"],
+   "answer": ["count == a.Length", "(head + count) % a.Length", "(head + 1) % a.Length", "(head + count - 1) % a.Length"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "circularQueue",
+   "input": {
+    "k": 4,
+    "ops": [
+     ["enQueue", 1],
+     ["enQueue", 2],
+     ["enQueue", 3],
+     ["deQueue"],
+     ["deQueue"],
+     ["enQueue", 4],
+     ["enQueue", 5],
+     ["enQueue", 6],
+     ["enQueue", 7],
+     ["Rear"],
+     ["deQueue"],
+     ["deQueue"],
+     ["Front"],
+     ["isFull"]
+    ]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 7,
+      "options": [
+       "a[0] = 5",
+       "a[4] = 5",
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 10,
+      "options": ["6", "3", "5"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public int Front() => count == 0 ? -1 : a[head];\n\npublic int Rear() => count == 0 ? -1 : a[head + count - 1];\n\npublic bool DeQueue() {\n    if (count == 0) return false;\n    head = (head + 1) % a.Length;\n    count--;\n    return true;\n}",
+   "answer": 2,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "(head + count) % k"],
+    ["⟦⟧", "a[(head + count − 1) % k]"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}
