@@ -17,5 +17,13 @@ import { EV_GAMES } from './ev-games.js?v=202610191738';
 import { INPUTS } from './i18n-inputs.js?v=202610191738';
 import { CH_H } from './i18n-h.js?v=202610191738';
 import { EV_H } from './ev-h.js?v=202610191738';
+import { CH_ARR, P_ARR } from './i18n-arr.js?v=202610191738';
+import { EV_ARR } from './ev-arr.js?v=202610191738';
 
 export const DICT = { ...CORE, ...CH_A, ...CH_B, ...CH_C, ...CH_D, ...CH_E, ...EV_A, ...EV_B, ...EV_C, ...EV_D, ...EV_E, ...INPUTS, ...CH_F, ...EV_F, ...CH_GAMES, ...EV_GAMES, ...CH_H, ...EV_H };
+
+/* Problems appended to existing chapters (problems-arr.js): their texts follow the chapter's own. */
+Object.assign(DICT, CH_ARR, EV_ARR);
+for (const [id, texts] of Object.entries(P_ARR)) {
+  DICT[`${id}.p`] = { en: [...DICT[`${id}.p`].en, ...texts.en], ru: [...DICT[`${id}.p`].ru, ...texts.ru] };
+}

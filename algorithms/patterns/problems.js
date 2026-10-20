@@ -7,6 +7,7 @@ import { PROBLEMS_E } from './problems-e.js?v=202610191738';
 import { PROBLEMS_F } from './problems-f.js?v=202610191738';
 import { PROBLEMS_GAMES } from './problems-games.js?v=202610191738';
 import { PROBLEMS_H } from './problems-h.js?v=202610191738';
+import { PROBLEMS_ARR } from './problems-arr.js?v=202610191738';
 
 export const NAMES = {
   hash: 'HashMap / HashSet', twoptr: 'Two Pointers', window: 'Sliding Window', binary: 'Binary Search',
@@ -19,3 +20,6 @@ export const NAMES = {
 };
 
 export const PROBLEMS = { ...PROBLEMS_A, ...PROBLEMS_B, ...PROBLEMS_C, ...PROBLEMS_D, ...PROBLEMS_E, ...PROBLEMS_F, ...PROBLEMS_GAMES, ...PROBLEMS_H };
+
+/* Problems that joined existing chapters later go after the chapter's own ones, so the {chapter}.p texts stay index-aligned. */
+for (const [id, list] of Object.entries(PROBLEMS_ARR)) PROBLEMS[id] = [...PROBLEMS[id], ...list];

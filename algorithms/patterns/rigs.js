@@ -8,6 +8,7 @@ import { RIGS_F } from './rigs-f.js?v=202610191738';
 import { RIGS_GAMES } from './rigs-games.js?v=202610191738';
 import { parseField } from './inputs.js?v=202610191738';
 import { RIGS_H } from './rigs-h.js?v=202610191738';
+import { RIGS_ARR } from './rigs-arr.js?v=202610191738';
 
 export const PATTERN_IDS = ['hash', 'twoptr', 'window', 'binary', 'stack', 'list', 'graph', 'tree', 'heap', 'back', 'greedy', 'dp', 'matrix', 'paths', 'bits', 'games', 'design'];
 export const RIGS = { ...RIGS_A, ...RIGS_B, ...RIGS_C, ...RIGS_D, ...RIGS_E, ...RIGS_F, ...RIGS_GAMES, ...RIGS_H };
@@ -31,3 +32,5 @@ export function runWithInput(rig, texts) {
   if (run.events.length > MAX_STEPS) return { error: ['in.err.tooBig', MAX_STEPS], field: null };
   return { run, params };
 }
+
+Object.assign(RIGS, RIGS_ARR);
