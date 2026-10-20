@@ -1,0 +1,161 @@
+{
+ "id": "algo.u12.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 17,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "while (pq.TryDequeue(out int u, out int d)) {\n    if (___) continue;\n    foreach (var (v, w) in adj[u])\n        if (___) {\n            dist[v] = d + w;\n            ___;\n        }\n}\nint max = 0;\nfor (int v = 1; v <= n; v++) {\n    if (dist[v] == int.MaxValue) return ___;\n    max = Math.Max(max, dist[v]);\n}\nreturn max;",
+   "tiles": ["d > dist[u]", "d < dist[u]", "d + w < dist[v]", "dist[v] == int.MaxValue", "pq.Enqueue(v, dist[v])", "pq.Enqueue(v, w)", "-1", "max"],
+   "answer": ["d > dist[u]", "d + w < dist[v]", "pq.Enqueue(v, dist[v])", "-1"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "networkDelay",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 5,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": "ndt.ev.stale",
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "answer": 3,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

@@ -87,8 +87,8 @@
   {
    "id": "u12",
    "title": "⟦⟧",
-   "soon": true,
-   "blurb": "⟦⟧"
+   "blurb": "⟦⟧",
+   "lessons": ["algo.u12.l1", "algo.u12.l2", "algo.u12.l3", "algo.u12.l4", "algo.u12.l5", "algo.u12.boss"]
   },
   {
    "id": "u13",

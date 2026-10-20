@@ -1,0 +1,149 @@
+{
+ "id": "algo.u12.l5",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 17,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "for (int j = 0; j < queries.Length; j++) {\n    int x = queries[j][0], y = queries[j][1], r = queries[j][2], cx = x / size, cy = y / size;\n    for (int gy = ___; gy <= cy + 1; gy++)\n        for (int gx = cx - 1; gx <= ___; gx++) {\n            if (!grid.TryGetValue(___, out var bucket)) continue;\n            foreach (int i in bucket) {\n                int dx = points[i][0] - x, dy = points[i][1] - y;\n                if (___) answer[j]++;\n            }\n        }\n}",
+   "tiles": ["cy - 1", "cy", "cx + 1", "cx", "Key(gx, gy)", "Key(cx, cy)", "dx * dx + dy * dy <= r * r", "dx * dx + dy * dy < r * r"],
+   "answer": ["cy - 1", "cx + 1", "Key(gx, gy)", "dx * dx + dy * dy <= r * r"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "spatialGrid",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 17,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 33,
+      "options": [
+       {
+        "event": "sg.ev.hit",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "sg.ev.miss",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "sg.ev.empty",
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 1,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:1", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "static long Key(int cx, int cy) => ((long)cx << 32) | cy;\n\nint CountNear(Vector2 p, float r) {\n    int cx = Mathf.FloorToInt(p.x / size), cy = Mathf.FloorToInt(p.y / size), count = 0;\n    for (int gy = cy - 1; gy <= cy + 1; gy++)\n        for (int gx = cx - 1; gx <= cx + 1; gx++) {\n            if (!grid.TryGetValue(Key(gx, gy), out var bucket)) continue;\n            foreach (var q in bucket)\n                if ((q - p).sqrMagnitude <= r * r) count++;\n        }\n    return count;\n}",
+   "answer": 0,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "NativeParallelMultiHashMap"]
+   ]
+  }
+ ]
+}
