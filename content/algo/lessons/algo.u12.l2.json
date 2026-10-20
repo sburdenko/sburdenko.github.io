@@ -1,0 +1,202 @@
+{
+ "id": "algo.u12.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 17,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "while (pq.TryDequeue(out var cell, out int e)) {\n    var (r, c) = cell;\n    if (e > effort[r, c]) continue;\n    if (r == rows - 1 && c == cols - 1) return ___;\n    for (int d = 0; d < 4; d++) {\n        int y = r + dr[d], x = c + dc[d];\n        if (y < 0 || x < 0 || y >= rows || x >= cols) continue;\n        int cost = ___;\n        if (___) {\n            effort[y, x] = cost;\n            pq.Enqueue((y, x), cost);\n        }\n    }\n}",
+   "tiles": ["e", "effort[0, 0]", "Math.Max(e, Math.Abs(heights[y][x] - heights[r][c]))", "e + Math.Abs(heights[y][x] - heights[r][c])", "cost < effort[y, x]", "cost > effort[y, x]"],
+   "answer": ["e", "Math.Max(e, Math.Abs(heights[y][x] - heights[r][c]))", "cost < effort[y, x]"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "minEffort",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 4,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": "eff.ev.done",
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "answer": 8,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "swim",
+   "input": {
+    "grid": [
+     [0, 1, 10, 12],
+     [13, 2, 11, 14],
+     [15, 9, 6, 4],
+     [8, 7, 3, 5]
+    ]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 6,
+      "options": [
+       {
+        "event": "sw.ev.island",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "sw.ev.grow",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "sw.ev.merge",
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 2,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 10,
+      "options": [
+       {
+        "event": "sw.ev.island",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "sw.ev.grow",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "sw.ev.merge",
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 2,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:2", "end", "pick:2", "end"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

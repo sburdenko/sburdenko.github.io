@@ -1,0 +1,145 @@
+{
+ "id": "algo.u12.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 16,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "for (int k = 0; k < 4; k++) {\n    int y = r + Dr[k], x = c + Dc[k], next = y * cols + x;\n    if (y < 0 || x < 0 || y >= rows || x >= cols || ___) continue;\n    if (___) continue;\n    Integration[next] = ___;\n    Push(heap, ref count, ((long)Integration[next] << 20) | (long)next);\n}\n// ...\nfor (int k = 0; k < 4; k++) {\n    int y = r + Dr[k], x = c + Dc[k];\n    if (y < 0 || x < 0 || y >= rows || x >= cols) continue;\n    int v = ___;\n    if (v < best) { best = v; Direction[cell] = (sbyte)k; }\n}",
+   "tiles": ["cost[y][x] == 0", "cost[y][x] == 1", "Integration[next] != int.MaxValue", "Integration[next] == int.MaxValue", "d + cost[y][x]", "d + cost[r][c]", "Integration[y * cols + x]", "cost[y][x]"],
+   "answer": ["cost[y][x] == 0", "Integration[next] != int.MaxValue", "d + cost[y][x]", "Integration[y * cols + x]"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "flowField",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 27,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 30,
+      "options": [
+       {
+        "event": "ff.ev.rowCut",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "ff.ev.row",
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "for (int cell = 0; cell < size; cell++) {\n    if (Integration[cell] == 0 || Integration[cell] == int.MaxValue) continue;\n    int r = cell / cols, c = cell % cols, best = int.MaxValue;\n    for (int k = 0; k < 4; k++) {\n        int y = r + Dr[k], x = c + Dc[k];\n        if (y < 0 || x < 0 || y >= rows || x >= cols) continue;\n        int v = cost[y][x];\n        if (v < best) { best = v; Direction[cell] = (sbyte)k; }\n    }\n}",
+   "answer": 6,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}
