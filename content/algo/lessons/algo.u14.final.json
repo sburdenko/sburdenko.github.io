@@ -178,7 +178,7 @@
   {
    "t": "choice",
    "q": "⟦⟧",
-   "code": "class Player { public int Id, Score; }\n\nvar byScore = Comparer<Player>.Create(\n    (a, b) => b.Score.CompareTo(a.Score));\nvar board = new SortedSet<Player>(byScore);\nvar players = new Dictionary<int, Player>();\n\nvoid AddScore(int id, int score) {\n    if (players.TryGetValue(id, out var p)) {\n        board.Remove(p);\n        p.Score += score;\n    } else {\n        p = new Player { Id = id, Score = score };\n        players[id] = p;\n    }\n    board.Add(p);\n}\n\nint Top(int k) {\n    int sum = 0;\n    foreach (var p in board) { if (k-- == 0) break; sum += p.Score; }\n    return sum;\n}",
+   "code": "class Player { public int Id, Score; }\n\nclass Leaderboard {\n    readonly Dictionary<int, Player> players = new Dictionary<int, Player>();\n    readonly SortedSet<Player> board = new SortedSet<Player>(\n        Comparer<Player>.Create((a, b) => b.Score.CompareTo(a.Score)));\n\n    public void AddScore(int id, int score) {\n        if (players.TryGetValue(id, out var p)) {\n            board.Remove(p);\n            p.Score += score;\n        } else {\n            p = new Player { Id = id, Score = score };\n            players[id] = p;\n        }\n        board.Add(p);\n    }\n\n    public int Top(int k) {\n        int sum = 0;\n        foreach (var p in board) { if (k-- == 0) break; sum += p.Score; }\n        return sum;\n    }\n}",
    "lang": "cs",
    "options": ["90", "100", "140", "⟦⟧"],
    "answer": 0,
