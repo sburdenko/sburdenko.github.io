@@ -2,7 +2,7 @@
  "id": "as.u7.l1",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 9,
+ "minutes": 11,
  "cards": [
   {
    "t": "learn",
@@ -25,6 +25,7 @@
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
+   "code": "⟦⟧",
    "deep": "⟦⟧"
   },
   {
@@ -86,25 +87,32 @@
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
+   "code": "⟦⟧",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var cts = new CancellationTokenSource();\nTask load = Task.Run(() => Thread.Sleep(3000));\nTask cont = load.ContinueWith(_ => Console.WriteLine(\"cont\"), cts.Token);\n\ncts.Cancel();\nawait cont;",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
    "code": "⟦⟧"
   },
   {
    "t": "multi",
    "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": [0, 1, 3],
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3, 4],
    "explain": "⟦⟧"
-  },
-  {
-   "t": "match",
-   "q": "⟦⟧",
-   "pairs": [
-    ["OnlyOnFaulted", "⟦⟧"],
-    ["NotOnCanceled", "⟦⟧"],
-    ["ExecuteSynchronously", "⟦⟧"],
-    ["LazyCancellation", "⟦⟧"],
-    ["TaskScheduler.Default", "⟦⟧"]
-   ]
   }
  ]
 }

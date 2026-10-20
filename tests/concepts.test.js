@@ -9,7 +9,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadCourseFromSource } from '../learn/content.js';
 
-const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6'] };
+const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7'] };
 
 /** Понятие → шаблон. Шаблоны ловят API и устойчивые термины, а не имена из примеров кода. */
 const CONCEPTS = {
@@ -62,7 +62,47 @@ const CONCEPTS = {
     'Awaitable.BackgroundThreadAsync': /\bBackgroundThreadAsync\b|\bMainThreadAsync\b/,
     'destroyCancellationToken': /\bdestroyCancellationToken\b/,
     'UniTask': /\bUniTask\b/,
-    'BackgroundService': /\bBackgroundService\b|\bIHostedService\b/
+    'BackgroundService': /\bBackgroundService\b|\bIHostedService\b/,
+    'TaskScheduler.Current': /\bTaskScheduler\.Current\b/,
+    'TaskScheduler.Default': /\bTaskScheduler\.Default\b/,
+    'FromCurrentSynchronizationContext': /\bFromCurrentSynchronizationContext\b/,
+    'Task.Factory.StartNew': /\bStartNew\b/,
+    'TaskContinuationOptions': /\bTaskContinuationOptions\b/,
+    'OnlyOn/NotOn': /\b(OnlyOn|NotOn)(RanToCompletion|Faulted|Canceled)\b/,
+    'ExecuteSynchronously': /\bExecuteSynchronously\b/,
+    'LazyCancellation': /\bLazyCancellation\b/,
+    'TaskCanceledException': /\bTaskCanceledException\b/,
+    'Unwrap': /\bUnwrap\b/,
+    'TaskCreationOptions': /\bTaskCreationOptions\b/,
+    'PreferFairness': /\bPreferFairness\b/,
+    'AttachedToParent': /\bAttachedToParent\b/,
+    'DenyChildAttach': /\bDenyChildAttach\b/,
+    'HideScheduler': /\bHideScheduler\b/,
+    'ConcurrentExclusiveSchedulerPair': /\bConcurrentExclusiveSchedulerPair\b/,
+    'очереди пула': /локальн\S* очеред|глобальн\S* очеред/i,
+    'кража работы': /краж\S* работы|work stealing/i,
+    'Parallel.For/ForEach': /\bParallel\.(For|ForEach)\b/,
+    'Parallel.Invoke': /\bParallel\.Invoke\b/,
+    'ParallelLoopState': /\bParallelLoopState\b|\.Break\(\)|LowestBreakIteration/,
+    'MaxDegreeOfParallelism': /\bMaxDegreeOfParallelism\b/,
+    'Environment.ProcessorCount': /\bProcessorCount\b/,
+    'localInit/localFinally': /\blocal(Init|Finally)\b/,
+    'Interlocked': /\bInterlocked\b/,
+    'count++ гонка': /\bcount\+\+/,
+    'ложное разделение': /ложн\S* разделени|false sharing|кэш-лини/i,
+    'PLINQ AsParallel': /\bAsParallel\b|\bPLINQ\b/,
+    'AsOrdered': /\bAsOrdered\b/,
+    'WithDegreeOfParallelism': /\bWithDegreeOfParallelism\b/,
+    'ForAll': /\bForAll\b/,
+    'Timer.Change': /\bTimeout\.Infinite\b|\.Change\(/,
+    'System.Timers.Timer': /\bSystem\.Timers\.Timer\b|\bElapsed\b|\bAutoReset\b/,
+    'PeriodicTimer': /\bPeriodicTimer\b|\bWaitForNextTickAsync\b/,
+    'IsBackground': /\bIsBackground\b|фонов\S* пот/i,
+    'Thread.Join': /\bJoin\(\)/,
+    'Thread.Abort': /\bThread\.Abort\b|\bThreadAbortException\b/,
+    'CancellationToken.Register': /\.Register\(|\bCancellationTokenRegistration\b/,
+    'CreateLinkedTokenSource': /\bCreateLinkedTokenSource\b/,
+    'CancelAfter': /\bCancelAfter\b/
   }
 };
 

@@ -2,7 +2,7 @@
  "id": "as.u7.l4",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 10,
+ "minutes": 11,
  "cards": [
   {
    "t": "learn",
@@ -62,6 +62,17 @@
    "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
    "answer": 0,
    "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "static void Main()\n{\n    var t = new Thread(() =>\n    {\n        Thread.Sleep(2000);\n        File.WriteAllText(\"done.txt\", \"ok\");\n    }) { IsBackground = true };\n\n    t.Start();\n    t.Join();\n    Console.WriteLine(\"main end\");\n}",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
   },
   {
    "t": "learn",

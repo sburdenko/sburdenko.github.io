@@ -2,7 +2,7 @@
  "id": "as.u7.boss",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 6,
+ "minutes": 8,
  "boss": true,
  "cards": [
   {
@@ -41,6 +41,28 @@
    "options": [".AsOrdered()", ".WithDegreeOfParallelism(1)", ".OrderBy(r => r)", "⟦⟧"],
    "answer": 0,
    "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "await Parallel.ForEachAsync(urls,\n    async (url, ct) => await UploadAsync(url, ct));",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧"
+   }
   },
   {
    "t": "choice",
