@@ -1,0 +1,144 @@
+{
+ "id": "algo.u11.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 11,
+ "cards": [
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "islands",
+   "input": {
+    "grid": [
+     [1, 1, 0, 1, 1],
+     [0, 1, 0, 0, 1],
+     [1, 0, 1, 1, 0],
+     [1, 0, 0, 1, 0],
+     [0, 1, 1, 0, 1]
+    ]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 4,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 14,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public int CountComponents(int n, int[][] edges) {\n    var parent = new int[n];\n    for (int i = 0; i < n; i++) parent[i] = i;\n    int Find(int x) {\n        while (parent[x] != x) x = parent[x] = parent[parent[x]];\n        return x;\n    }\n    int count = n;\n    foreach (var e in edges) {\n        int a = Find(e[0]), b = Find(e[1]);\n        parent[a] = b;\n        count--;\n    }\n    return count;\n}",
+   "answer": 11,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  }
+ ]
+}
