@@ -9,7 +9,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadCourseFromSource } from '../learn/content.js';
 
-const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6'] };
+const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u8'] };
 
 /** Понятие → шаблон. Шаблоны ловят API и устойчивые термины, а не имена из примеров кода. */
 const CONCEPTS = {
@@ -62,7 +62,45 @@ const CONCEPTS = {
     'Awaitable.BackgroundThreadAsync': /\bBackgroundThreadAsync\b|\bMainThreadAsync\b/,
     'destroyCancellationToken': /\bdestroyCancellationToken\b/,
     'UniTask': /\bUniTask\b/,
-    'BackgroundService': /\bBackgroundService\b|\bIHostedService\b/
+    'BackgroundService': /\bBackgroundService\b|\bIHostedService\b/,
+    'Volatile.Read/Write': /\bVolatile\.(Read|Write)\b/,
+    'volatile': /\bvolatile\b/,
+    'acquire/release': /\b(acquire|release)\b/,
+    'полный барьер': /полн\S* барьер|\bMemoryBarrier\b/,
+    'CS0677': /\bCS0677\b/,
+    'Interlocked': /\bInterlocked\b/,
+    'Interlocked.Exchange': /Interlocked\.Exchange\b/,
+    'CompareExchange': /\bCompareExchange\b|\bCAS\b/,
+    'Interlocked.Read': /Interlocked\.Read\b/,
+    'ImmutableInterlocked': /\bImmutableInterlocked\b/,
+    'SpinWait': /\bSpinWait\b|\bSpinOnce\b|\bSpinUntil\b/,
+    'SpinLock': /\bSpinLock\b/,
+    'lockTaken': /\blockTaken\b|ref bool/,
+    'защитная копия': /защитн\S* копи/,
+    'LockRecursionException': /\bLockRecursionException\b/,
+    'WaitHandle': /\bWaitHandle\b|\bWaitOne\b|\bWaitAny\b|\bWaitAll\b/,
+    'Mutex': /\bMutex\b|\bReleaseMutex\b/,
+    'AbandonedMutexException': /\bAbandonedMutexException\b/,
+    'Semaphore': /\bSemaphore\b/,
+    'AutoResetEvent': /\bAutoResetEvent\b/,
+    'ManualResetEvent': /\bManualResetEvent(Slim)?\b/,
+    'PlatformNotSupportedException': /\bPlatformNotSupportedException\b/,
+    'Monitor': /\bMonitor\b/,
+    'Monitor.Wait/Pulse': /Monitor\.Wait\b|\bPulse(All)?\b/,
+    'Thread.Abort': /\bThread\.?Abort\b|\bThreadAbortException\b/,
+    'Monitor.TryEnter': /\bTryEnter\b/,
+    'sync block': /\bsync block\b/,
+    'Lock.EnterScope': /\bEnterScope\b/,
+    'CS9216': /\bCS9216\b/,
+    'ReaderWriterLockSlim': /\bReaderWriterLock(Slim)?\b|\bupgradeable\b/,
+    'Lazy<T>': /\bLazy\b/,
+    'LazyThreadSafetyMode': /\b(LazyThreadSafetyMode|ExecutionAndPublication|PublicationOnly)\b/,
+    'LazyInitializer': /\bLazyInitializer\b|\bEnsureInitialized\b/,
+    'двойная проверка': /двойн\S* проверк|double-checked/,
+    'ConcurrentDictionary': /\bConcurrentDictionary\b/,
+    'GetOrAdd': /\bGetOrAdd\b|\bAddOrUpdate\b/,
+    'ConcurrentQueue/Stack/Bag': /\bConcurrent(Queue|Stack|Bag)\b/,
+    'BlockingCollection': /\bBlockingCollection\b/
   }
 };
 

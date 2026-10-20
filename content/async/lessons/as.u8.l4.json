@@ -49,6 +49,24 @@
    "code": "⟦⟧"
   },
   {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "void Transfer(Account from, Account to, decimal sum)\n{\n    lock (from)\n    {\n        lock (to)\n        {\n            from.Balance -= sum;\n            to.Balance   += sum;\n        }\n    }\n}",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
    "t": "blanks",
    "q": "⟦⟧",
    "code": "private readonly ___ _gate = new();\n\npublic void Add(int x)\n{\n    using (_gate.___())\n    {\n        _sum += x;\n    }\n}",

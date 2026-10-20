@@ -42,15 +42,17 @@
    "deep": "⟦⟧"
   },
   {
-   "t": "match",
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
    "q": "⟦⟧",
-   "pairs": [
-    ["Mutex", "⟦⟧"],
-    ["Semaphore", "⟦⟧"],
-    ["AutoResetEvent", "⟦⟧"],
-    ["ManualResetEvent", "⟦⟧"],
-    ["SpinLock", "⟦⟧"]
-   ]
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
   },
   {
    "t": "learn",
@@ -67,11 +69,15 @@
    "explain": "⟦⟧"
   },
   {
-   "t": "choice",
+   "t": "match",
    "q": "⟦⟧",
-   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
-   "answer": 0,
-   "explain": "⟦⟧"
+   "pairs": [
+    ["Mutex", "⟦⟧"],
+    ["Semaphore", "⟦⟧"],
+    ["AutoResetEvent", "⟦⟧"],
+    ["ManualResetEvent", "⟦⟧"],
+    ["SpinLock", "⟦⟧"]
+   ]
   },
   {
    "t": "multi",
