@@ -2,7 +2,7 @@
  * Problems added to existing chapters, with C# 9 solutions (Unity: no PriorityQueue, so the heap is hand-made).
  * problems.js appends each list to the end of its chapter; the texts in i18n-bg.js follow the same order.
  */
-import { problem as p } from './problem.js?v=202610201333';
+import { problem as p } from './problem.js?v=202610201343';
 
 export const PROBLEMS_BG = {
   bits: [
