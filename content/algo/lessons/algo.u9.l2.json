@@ -2,7 +2,7 @@
  "id": "algo.u9.l2",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 15,
+ "minutes": 16,
  "cards": [
   {
    "t": "learn",
@@ -92,6 +92,64 @@
    "body": "⟦⟧",
    "code": "⟦⟧",
    "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "kClosest",
+   "input": {
+    "points": [
+     [3, 3],
+     [5, -1],
+     [-2, 4],
+     [1, -2],
+     [-4, -3],
+     [0, 2],
+     [6, 1]
+    ],
+    "k": 3
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 6,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 10,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
   },
   {
    "t": "tapline",

@@ -78,7 +78,7 @@ export const EV_B = {
   /* Rotting Oranges */
   /* Island Perimeter */
   'per.ev.start': {
-    en: (rows, cols) => `${rows} × ${cols}: scan the cells row by row. Land adds 4 sides; a land neighbour to the right or below removes the side they share — 2 at once, one from each cell.`,
+    en: (rows, cols) => `${rows} × ${cols}: scan the cells row by row. Land adds 4 sides; a land neighbor to the right or below removes the side they share — 2 at once, one from each cell.`,
     ru: (rows, cols) => `${rows} × ${cols}: обходим клетки по строкам. Суша добавляет 4 стороны; сосед-суша справа или снизу убирает общую сторону — сразу 2, по одной у каждой клетки.`,
   },
   'per.ev.land': {
@@ -169,8 +169,8 @@ export const EV_B = {
     ru: (n, ready) => `Бейджи — сколько требований ещё ждёт каждый курс. Готовы сейчас: ${ready.length ? list(ready) : 'нет'}.`,
   },
   'crs.ev.take': {
-    en: (c, next, freed) => `Take course ${c}.${next.length ? ` It unlocks ${list(next)}` : ' Nothing depends on it'}${freed.length ? `; ready now: ${list(freed)}.` : '.'}`,
-    ru: (c, next, freed) => `Берём курс ${c}.${next.length ? ` Он открывает ${list(next)}` : ' От него ничего не зависит'}${freed.length ? `; готовы теперь: ${list(freed)}.` : '.'}`,
+    en: (c, next, freed) => `Take course ${c}.${next.length ? ` Each of ${list(next)} loses one prerequisite` : ' Nothing depends on it'}${freed.length ? `; ready now: ${list(freed)}.` : '.'}`,
+    ru: (c, next, freed) => `Берём курс ${c}.${next.length ? ` У ${list(next)} становится на одно условие меньше` : ' От него ничего не зависит'}${freed.length ? `; готовы теперь: ${list(freed)}.` : '.'}`,
   },
   'crs.ev.done': {
     en: (ok, order, stuck) => (ok ? `All courses taken in the order ${list(order)} — <b>possible</b>.` : `Courses ${list(stuck)} wait for each other in a cycle — <b>impossible</b>.`),

@@ -1,8 +1,8 @@
 /** Step texts for the chapter 13 rigs: arrays and matrices. */
 const list = a => `[${a.join(', ')}]`;
-/** Game of Life: a note when some neighbours already carry their future in bit 1. */
+/** Game of Life: a note when some neighbors already carry their future in bit 1. */
 const hint = (marked, lang) => (!marked ? '' : lang === 'en'
-  ? ` Neighbours already holding 2 or 3: ${marked} — & 1 still reads their present.`
+  ? ` Neighbors already holding 2 or 3: ${marked} — & 1 still reads their present.`
   : ` Соседей, где уже записано 2 или 3: ${marked} — & 1 всё равно читает их настоящее.`);
 
 export const EV_D = {
@@ -162,27 +162,27 @@ export const EV_D = {
 
   /* Game of Life */
   'gol.ev.start': {
-    en: (rows, cols) => `${rows} × ${cols}. Every cell gets two bits: bit 0 (right) is the state now, bit 1 (left) the state next. Pass 1 writes only bit 1, so the present stays readable for the neighbours not counted yet.`,
+    en: (rows, cols) => `${rows} × ${cols}. Every cell gets two bits: bit 0 (right) is the state now, bit 1 (left) the state next. Pass 1 writes only bit 1, so the present stays readable for the neighbors not counted yet.`,
     ru: (rows, cols) => `${rows} × ${cols}. У каждой клетки два бита: бит 0 (правый) — состояние сейчас, бит 1 (левый) — состояние потом. Первый проход пишет только бит 1, поэтому настоящее остаётся читаемым для соседей, которых ещё не считали.`,
   },
   'gol.ev.lives': {
-    en: (r, c, live, v, marked) => `(${r}, ${c}) is alive with ${live} live neighbours — it survives: bit 1 = 1, the cell becomes <b>${v}</b>.${hint(marked, 'en')}`,
+    en: (r, c, live, v, marked) => `(${r}, ${c}) is alive with ${live} live neighbors — it survives: bit 1 = 1, the cell becomes <b>${v}</b>.${hint(marked, 'en')}`,
     ru: (r, c, live, v, marked) => `(${r}, ${c}) жива, живых соседей ${live} — выживает: бит 1 = 1, в клетке теперь <b>${v}</b>.${hint(marked, 'ru')}`,
   },
   'gol.ev.under': {
-    en: (r, c, live, v, marked) => `(${r}, ${c}) is alive but has only ${live} live neighbour(s) — it dies of loneliness. Bit 1 stays 0, the cell keeps <b>${v}</b>: alive now, dead next.${hint(marked, 'en')}`,
+    en: (r, c, live, v, marked) => `(${r}, ${c}) is alive but has only ${live} live neighbor(s) — it dies of loneliness. Bit 1 stays 0, the cell keeps <b>${v}</b>: alive now, dead next.${hint(marked, 'en')}`,
     ru: (r, c, live, v, marked) => `(${r}, ${c}) жива, но живых соседей всего ${live} — умирает от одиночества. Бит 1 остаётся 0, в клетке <b>${v}</b>: сейчас жива, потом нет.${hint(marked, 'ru')}`,
   },
   'gol.ev.over': {
-    en: (r, c, live, v, marked) => `(${r}, ${c}) is alive with ${live} live neighbours — overcrowded, it dies. Bit 1 stays 0, the cell keeps <b>${v}</b>.${hint(marked, 'en')}`,
+    en: (r, c, live, v, marked) => `(${r}, ${c}) is alive with ${live} live neighbors — overcrowded, it dies. Bit 1 stays 0, the cell keeps <b>${v}</b>.${hint(marked, 'en')}`,
     ru: (r, c, live, v, marked) => `(${r}, ${c}) жива, живых соседей ${live} — перенаселение, умирает. Бит 1 остаётся 0, в клетке <b>${v}</b>.${hint(marked, 'ru')}`,
   },
   'gol.ev.born': {
-    en: (r, c, live, v, marked) => `(${r}, ${c}) is dead with exactly 3 live neighbours — it is born: bit 1 = 1, the cell becomes <b>${v}</b> (dead now, alive next).${hint(marked, 'en')}`,
+    en: (r, c, live, v, marked) => `(${r}, ${c}) is dead with exactly 3 live neighbors — it is born: bit 1 = 1, the cell becomes <b>${v}</b> (dead now, alive next).${hint(marked, 'en')}`,
     ru: (r, c, live, v, marked) => `(${r}, ${c}) мертва, и живых соседей ровно 3 — рождается: бит 1 = 1, в клетке теперь <b>${v}</b> (сейчас мертва, потом жива).${hint(marked, 'ru')}`,
   },
   'gol.ev.empty': {
-    en: (r, c, live, v, marked) => `(${r}, ${c}) is dead with ${live} live neighbour(s), not 3 — it stays dead, <b>${v}</b>.${hint(marked, 'en')}`,
+    en: (r, c, live, v, marked) => `(${r}, ${c}) is dead with ${live} live neighbor(s), not 3 — it stays dead, <b>${v}</b>.${hint(marked, 'en')}`,
     ru: (r, c, live, v, marked) => `(${r}, ${c}) мертва, живых соседей ${live}, а не 3 — остаётся мёртвой, <b>${v}</b>.${hint(marked, 'ru')}`,
   },
   'gol.ev.turn': {

@@ -1,13 +1,13 @@
 /** Стенды раздела про потоки: гонка данных, взаимная блокировка, пул потоков. */
-import { esc, fmtI } from '../assets/vhs.js?v=202610201301';
-import { drive, act } from './rig-kit.js?v=202610201301';
+import { esc, fmtI } from '../assets/vhs.js?v=202610201414';
+import { drive, act } from './rig-kit.js?v=202610201414';
 import {
   raceRig, raceCan, raceFinished, raceDone, RACE_STEPS, RACE_CODE,
   lockRig, lockCan, lockFinished, lockStatus,
   poolRig, poolBlocked, poolAvgWait
-} from './models-threads.js?v=202610201301';
-import { tr } from './i18n.js?v=202610201301';
-import { t as tl, bi } from './ui.js?v=202610201301';
+} from './models-threads.js?v=202610201414';
+import { tr } from './i18n.js?v=202610201414';
+import { t as tl, bi } from './ui.js?v=202610201414';
 
 /* ---------- гонка данных ---------- */
 

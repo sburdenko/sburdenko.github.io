@@ -2,7 +2,7 @@
  "id": "algo.u13.l3",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 15,
+ "minutes": 16,
  "cards": [
   {
    "t": "learn",
@@ -103,6 +103,57 @@
    "tiles": ["1", "0", "1", "0", "+=", "=", "n - 1", "n"],
    "answer": ["1", "1", "+=", "n - 1"],
    "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "uniquePaths",
+   "input": {
+    "m": 4,
+    "n": 4,
+    "mode": "row"
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 7,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 8,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
   },
   {
    "t": "multi",

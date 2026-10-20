@@ -2,7 +2,7 @@
  "id": "algo.u8.l2",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 17,
+ "minutes": 19,
  "cards": [
   {
    "t": "learn",
@@ -102,6 +102,48 @@
    "lang": "cs"
   },
   {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "insertIv",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 2,
+      "options": [
+       {
+        "event": "ins.ev.absorb",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "ins.ev.left",
+        "label": "⟦⟧"
+       }
+      ],
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 4,
+      "options": [
+       {
+        "event": "ins.ev.touch",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "ins.ev.place",
+        "label": "⟦⟧"
+       }
+      ],
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
    "t": "tapline",
    "q": "⟦⟧",
    "code": "public int[][] Insert(int[][] ivs, int[] add) {\n    var res = new List<int[]>();\n    int i = 0, n = ivs.Length, s = add[0], e = add[1];\n    while (i < n && ivs[i][1] <= s) res.Add(ivs[i++]);\n    while (i < n && ivs[i][0] <= e) {\n        s = Math.Min(s, ivs[i][0]);\n        e = Math.Max(e, ivs[i][1]);\n        i++;\n    }\n    res.Add(new[] { s, e });\n    while (i < n) res.Add(ivs[i++]);\n    return res.ToArray();\n}",
@@ -151,16 +193,39 @@
    "lang": "cs"
   },
   {
-   "t": "choice",
-   "q": "⟦⟧",
-   "options": ["2", "3", "4", "1"],
-   "answer": 0,
-   "explain": "⟦⟧",
-   "wrong": {
-    "1": "⟦⟧",
-    "2": "⟦⟧",
-    "3": "⟦⟧"
-   }
+   "t": "rig",
+   "rig": "algo",
+   "problem": "meetingRooms",
+   "input": {
+    "intervals": [
+     [0, 3],
+     [1, 2],
+     [2, 5],
+     [3, 4]
+    ]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 3,
+      "options": [
+       {
+        "event": "mr.ev.free",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "mr.ev.peak",
+        "label": "⟦⟧"
+       }
+      ],
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end"]
   },
   {
    "t": "order",

@@ -5,16 +5,16 @@
  *   #/dotnet      курс
  *   #/dotnet/<id> урок поверх курса
  */
-import { $, esc, startNoise, setLocale } from '../assets/vhs.js?v=202610201301';
-import { GROUPS, COURSES, findCourse, lessonsOf, loadCourses, courseTitle, courseBlurb } from './courses.js?v=202610201301';
-import { getLang, switchLang, tr, LANGS, LANG_NAMES } from './i18n.js?v=202610201301';
-import { t } from './ui.js?v=202610201301';
-import { auth } from './auth/auth.js?v=202610201301';
-import { CATEGORIES, MAX_TEXT, buildReport } from './reports/report.js?v=202610201301';
-import { submit, flushQueue, reportsEnabled } from './reports/reports.js?v=202610201301';
-import * as P from './progress.js?v=202610201301';
-import * as E from './engine.js?v=202610201301';
-import { renderCard, feedback } from './cards.js?v=202610201301';
+import { $, esc, startNoise, setLocale } from '../assets/vhs.js?v=202610201414';
+import { GROUPS, COURSES, findCourse, lessonsOf, loadCourses, courseTitle, courseBlurb } from './courses.js?v=202610201414';
+import { getLang, switchLang, tr, LANGS, LANG_NAMES } from './i18n.js?v=202610201414';
+import { t } from './ui.js?v=202610201414';
+import { auth } from './auth/auth.js?v=202610201414';
+import { CATEGORIES, MAX_TEXT, buildReport } from './reports/report.js?v=202610201414';
+import { submit, flushQueue, reportsEnabled } from './reports/reports.js?v=202610201414';
+import * as P from './progress.js?v=202610201414';
+import * as E from './engine.js?v=202610201414';
+import { renderCard, feedback } from './cards.js?v=202610201414';
 
 /** Полка кассет — отдельный модуль сайта. */
 const SHELF_URL = new URL('../shelf/', import.meta.url).href;
@@ -507,7 +507,8 @@ function finish() {
   const all = lessonsOf(findCourse(courseId));
   const next = all[all.indexOf(lesson) + 1];
   const min = Math.floor(res.ms / 60000), sec = String(Math.floor(res.ms / 1000) % 60).padStart(2, '0');
-  const title = t(lesson.boss ? 'r.unit' : res.mistakes === 0 ? 'r.perfect' : 'r.lesson');
+  // последний урок курса — финал всего курса, а не раздела
+  const title = t(lesson.boss ? (next ? 'r.unit' : 'r.course') : res.mistakes === 0 ? 'r.perfect' : 'r.lesson');
   const best = before && before.stars >= res.stars ? '' : before ? `<p class="lede">${esc(t('r.record'))}</p>` : '';
   $('#lp').style.width = '100%';
   $('#lc').textContent = `${state.total} / ${state.total}`;

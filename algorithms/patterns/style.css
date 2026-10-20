@@ -262,3 +262,31 @@
 .stage .cap{font-size:11.5px;fill:var(--ink3);text-anchor:start;letter-spacing:.03em}
 .stage .cap.corner{text-anchor:end}
 .stage .cap.on{fill:var(--osd);font-weight:700}
+/* appended rigs: Kadane, Insert Interval, Sort Colors, LIS tails, Unique Paths, loop order, Meeting Rooms II */
+.stage .span.ghost{fill:none;stroke:var(--ink3);stroke-dasharray:4 3}
+.stage .span.absorbed{fill:rgba(255,62,165,.16);stroke:var(--cpu);stroke-dasharray:4 3}
+.stage .span.past{fill:#1d1430;stroke:var(--line);opacity:.7}
+.stage .cell.col0{fill:rgba(255,92,108,.32);stroke:#ff8a96}
+.stage .cell.col1{fill:rgba(233,226,255,.16);stroke:#c9bde6}
+.stage .cell.col2{fill:rgba(38,227,234,.26);stroke:var(--gpu)}
+.stage .cell.mid{stroke:var(--osd);stroke-width:3}
+.stage .cell.swapped{stroke-dasharray:5 3}
+.stage .zone{stroke-width:1}
+.stage .zone.z0{fill:rgba(255,92,108,.22);stroke:#ff8a96}
+.stage .zone.z1{fill:rgba(233,226,255,.1);stroke:#c9bde6}
+.stage .zone.zq{fill:rgba(255,210,63,.1);stroke:var(--osd);stroke-dasharray:4 3}
+.stage .zone.z2{fill:rgba(38,227,234,.18);stroke:var(--gpu)}
+.stage .zone-t{font-size:11px;font-weight:700}
+.stage .zone-t.zq{fill:var(--osd)}
+/* added problems: Kruskal components, Pacific Atlantic oceans, grid coordinates */
+.stage .node.comp0{fill:rgba(38,227,234,.28);stroke:var(--gpu)}
+.stage .node.comp1{fill:rgba(255,62,165,.28);stroke:var(--cpu)}
+.stage .node.comp2{fill:rgba(255,210,63,.26);stroke:var(--osd)}
+.stage .node.comp3{fill:rgba(93,252,154,.24);stroke:var(--ok)}
+.stage .node.comp4{fill:rgba(160,123,255,.3);stroke:#a07bff}
+.stage .cell.pac{fill:rgba(38,227,234,.24);stroke:rgba(38,227,234,.7)}
+.stage .cell.atl{fill:rgba(255,170,60,.22);stroke:rgba(255,170,60,.7)}
+.stage .cell.both{fill:rgba(93,252,154,.3);stroke:var(--ok);stroke-width:2}
+.stage .pa-p{fill:var(--gpu);opacity:.75}
+.stage .pa-a{fill:var(--warn);opacity:.75}
+.stage .pa-tick{fill:var(--ok);font-weight:700}
