@@ -1,0 +1,255 @@
+{
+ "id": "algo.u14.final",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 22,
+ "boss": true,
+ "cards": [
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "nearestZero",
+   "input": {
+    "mat": [
+     [1, 1, 1, 1, 1, 1],
+     [1, 0, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 0],
+     [1, 1, 1, 1, 1, 1]
+    ]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 2,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 1,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 23,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 2,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:1", "end", "pick:2", "end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public bool SearchMatrix(int[][] matrix, int target) {\n    int rows = matrix.Length, cols = matrix[0].Length;\n    int lo = 0, hi = rows * cols - 1;\n    while (lo <= hi) {\n        int mid = lo + (hi - lo) / 2;\n        int v = matrix[mid / rows][mid % rows];\n        if (v == target) return true;\n        if (v < target) lo = mid + 1;\n        else hi = mid - 1;\n    }\n    return false;\n}",
+   "answer": 5,
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "meetingRooms",
+   "input": {
+    "intervals": [
+     [2, 6],
+     [1, 4],
+     [5, 9],
+     [4, 7],
+     [9, 12],
+     [6, 8],
+     [10, 11]
+    ]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 5,
+      "options": [
+       {
+        "event": "mr.ev.open",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "mr.ev.peak",
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 1,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 6,
+      "options": [
+       {
+        "event": "mr.ev.free",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "mr.ev.peak",
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:1", "end", "pick:0", "end"]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "class Player { public int Id, Score; }\n\nvar byScore = Comparer<Player>.Create(\n    (a, b) => b.Score.CompareTo(a.Score));\nvar board = new SortedSet<Player>(byScore);\nvar players = new Dictionary<int, Player>();\n\nvoid AddScore(int id, int score) {\n    if (players.TryGetValue(id, out var p)) {\n        board.Remove(p);\n        p.Score += score;\n    } else {\n        p = new Player { Id = id, Score = score };\n        players[id] = p;\n    }\n    board.Add(p);\n}\n\nint Top(int k) {\n    int sum = 0;\n    foreach (var p in board) { if (k-- == 0) break; sum += p.Score; }\n    return sum;\n}",
+   "lang": "cs",
+   "options": ["90", "100", "140", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "lisTails",
+   "input": {
+    "nums": [5, 8, 3, 6, 1, 7, 4]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 4,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 1,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 6,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 2,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:1", "end", "pick:2", "end"]
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2, 4],
+   "explain": "⟦⟧"
+  }
+ ]
+}
