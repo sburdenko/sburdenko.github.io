@@ -2,7 +2,7 @@
 import {
   svg, text, node, chip, chips, register, hexOf, decOf, rowWidth,
   matrixCells, matrixIndex, matrixBox, matrixXY, CELL,
-} from './view-kit.js?v=202610201414';
+} from './view-kit.js?v=202610202014';
 
 const ALL = -1;
 const bit = i => (2 ** i) >>> 0;

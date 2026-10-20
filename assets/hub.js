@@ -1,11 +1,11 @@
 /** Полка: язык, VHS-эффекты и вторая полка — стенд Python с прогрессом. */
-import { $, esc, bootVhs } from './vhs.js?v=202610201414';
-import { initI18n, t, onLang } from './i18n.js?v=202610201414';
-import { COMMON } from './i18n-common.js?v=202610201414';
-import { HUB } from './i18n-hub.js?v=202610201414';
-import { TAPE_CARDS } from '../python/i18n.js?v=202610201414';
-import { CATALOG } from '../python/shared/catalog.js?v=202610201414';
-import { summary } from '../python/shared/progress.js?v=202610201414';
+import { $, esc, bootVhs } from './vhs.js?v=202610202014';
+import { initI18n, t, onLang } from './i18n.js?v=202610202014';
+import { COMMON } from './i18n-common.js?v=202610202014';
+import { HUB } from './i18n-hub.js?v=202610202014';
+import { TAPE_CARDS } from '../python/i18n.js?v=202610202014';
+import { CATALOG } from '../python/shared/catalog.js?v=202610202014';
+import { summary } from '../python/shared/progress.js?v=202610202014';
 
 initI18n({ ...COMMON, ...HUB, ...TAPE_CARDS });
 bootVhs();

@@ -25,16 +25,6 @@
    "code": "private static readonly Lazy<Settings> _settings =\n    new(() => Settings.Load());                          // ExecutionAndPublication\n\nprivate static readonly Lazy<Parser> _parser =\n    new(() => new Parser(), LazyThreadSafetyMode.PublicationOnly);\n\npublic static Settings Settings => _settings.Value;"
   },
   {
-   "t": "match",
-   "q": "⟦⟧",
-   "pairs": [
-    ["ExecutionAndPublication", "⟦⟧"],
-    ["PublicationOnly", "⟦⟧"],
-    ["LazyThreadSafetyMode.None", "⟦⟧"],
-    ["LazyInitializer.EnsureInitialized", "⟦⟧"]
-   ]
-  },
-  {
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
@@ -49,6 +39,16 @@
    "wrong": {
     "1": "⟦⟧"
    }
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["ExecutionAndPublication", "⟦⟧"],
+    ["PublicationOnly", "⟦⟧"],
+    ["LazyThreadSafetyMode.None", "⟦⟧"],
+    ["LazyInitializer.EnsureInitialized", "⟦⟧"]
+   ]
   },
   {
    "t": "learn",
@@ -76,6 +76,23 @@
    "tiles": ["Lazy", "Value", "Task", "Result", "Func"],
    "answer": ["Lazy", "Value"],
    "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
   },
   {
    "t": "learn",
