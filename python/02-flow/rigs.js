@@ -1,6 +1,6 @@
 /** PY-02 rigs: conditions, loops, functions, scope, recursion, closures. */
-import { lit } from '../shared/py-code.js?v=202610201323';
-import { randInt, pick, randInts } from '../../algorithms/patterns/rig-kit.js?v=202610201323';
+import { lit } from '../shared/py-code.js?v=202610201331';
+import { randInt, pick, randInts } from '../../algorithms/patterns/rig-kit.js?v=202610201331';
 
 const num = (key, extra = {}) => ({ key, type: 'int', min: -999, max: 999, ...extra });
 const CALLSTACK = { kind: 'callstack', label: 'call stack' };

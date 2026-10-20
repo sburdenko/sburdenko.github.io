@@ -78,7 +78,7 @@ export const EV_B = {
   /* Rotting Oranges */
   /* Island Perimeter */
   'per.ev.start': {
-    en: (rows, cols) => `${rows} × ${cols}: scan the cells row by row. Land adds 4 sides; a land neighbour to the right or below removes the side they share — 2 at once, one from each cell.`,
+    en: (rows, cols) => `${rows} × ${cols}: scan the cells row by row. Land adds 4 sides; a land neighbor to the right or below removes the side they share — 2 at once, one from each cell.`,
     ru: (rows, cols) => `${rows} × ${cols}: обходим клетки по строкам. Суша добавляет 4 стороны; сосед-суша справа или снизу убирает общую сторону — сразу 2, по одной у каждой клетки.`,
   },
   'per.ev.land': {

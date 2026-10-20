@@ -1,7 +1,7 @@
 /** Editable rigs for the problems that joined chapters 02, 04, 09, 11, 12 and 13 later (see model-arr.js). */
-import * as M from './model-arr.js?v=202610201323';
-import * as V from './views-arr.js?v=202610201323';
-import { defineRig, randInt, randInts, pick } from './rig-kit.js?v=202610201323';
+import * as M from './model-arr.js?v=202610201331';
+import * as V from './views-arr.js?v=202610201331';
+import { defineRig, randInt, randInts, pick } from './rig-kit.js?v=202610201331';
 
 /** Sorted, pairwise disjoint intervals inside [0, max]: what Insert Interval promises. */
 function randomDisjoint(next, count, max) {

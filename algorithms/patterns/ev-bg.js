@@ -127,15 +127,15 @@ export const EV_BG = {
     ru: () => 'Копируем старт: 1 → 1′ — в словарь, 1 — в очередь. Копия создаётся при первой встрече с узлом, а не когда он выходит из очереди.',
   },
   'cg.ev.pop': {
-    en: (cur, adj) => `Take ${cur} from the queue. Its neighbours: ${adj.join(', ')}. For each one, ${cur}′ must get a reference to that neighbour’s copy.`,
+    en: (cur, adj) => `Take ${cur} from the queue. Its neighbors: ${adj.join(', ')}. For each one, ${cur}′ must get a reference to that neighbor’s copy.`,
     ru: (cur, adj) => `Берём ${cur} из очереди. Его соседи: ${adj.join(', ')}. Для каждого ${cur}′ должен получить ссылку на копию этого соседа.`,
   },
   'cg.ev.new': {
-    en: (cur, nb) => `${nb} has no copy yet: create ${nb}′, write ${nb} → ${nb}′, put ${nb} into the queue — and add ${nb}′ to the neighbours of ${cur}′.`,
+    en: (cur, nb) => `${nb} has no copy yet: create ${nb}′, write ${nb} → ${nb}′, put ${nb} into the queue — and add ${nb}′ to the neighbors of ${cur}′.`,
     ru: (cur, nb) => `У ${nb} копии ещё нет: создаём ${nb}′, записываем ${nb} → ${nb}′, ставим ${nb} в очередь — и добавляем ${nb}′ в соседи ${cur}′.`,
   },
   'cg.ev.link': {
-    en: (cur, nb, state) => `${nb}′ already exists (${state === 'done' ? `${nb} is processed` : `${nb} waits in the queue`}): no new node, <b>only the reference</b> — ${nb}′ goes into the neighbours of ${cur}′. Making another copy would split the graph.`,
+    en: (cur, nb, state) => `${nb}′ already exists (${state === 'done' ? `${nb} is processed` : `${nb} waits in the queue`}): no new node, <b>only the reference</b> — ${nb}′ goes into the neighbors of ${cur}′. Making another copy would split the graph.`,
     ru: (cur, nb, state) => `${nb}′ уже есть (${state === 'done' ? `${nb} уже обработан` : `${nb} ждёт в очереди`}): новый узел не нужен, <b>только ссылка</b> — ${nb}′ попадает в соседи ${cur}′. Вторая копия разорвала бы граф.`,
   },
   'cg.ev.done': {
@@ -179,11 +179,11 @@ export const EV_BG = {
     ru: (side, count) => `${OCEAN[side].ru} океан: все клетки ${EDGE_OF[side].ru} (${count}) касаются его, вода из них туда попадает. Все сразу — в очередь.`,
   },
   'pa.ev.climb': {
-    en: (side, r, c, h, added, lower) => `${at(r, c)}, height ${h}, reaches ${OCEAN_OF[side].en}. ${added.length > 1 ? 'Neighbours' : 'A neighbour'} at least as high: ${added.map(([y, x, v]) => `${at(y, x)} = ${v}`).join(', ')} — water from ${added.length > 1 ? 'them runs down here, so they reach' : 'there runs down here, so it reaches'} it too.${lower ? ` ${enPlural(lower, 'lower neighbour')} — water from there cannot climb.` : ''}`,
+    en: (side, r, c, h, added, lower) => `${at(r, c)}, height ${h}, reaches ${OCEAN_OF[side].en}. ${added.length > 1 ? 'Neighbors' : 'A neighbor'} at least as high: ${added.map(([y, x, v]) => `${at(y, x)} = ${v}`).join(', ')} — water from ${added.length > 1 ? 'them runs down here, so they reach' : 'there runs down here, so it reaches'} it too.${lower ? ` ${enPlural(lower, 'lower neighbor')} — water from there cannot climb.` : ''}`,
     ru: (side, r, c, h, added, lower) => `${at(r, c)}, высота ${h}, достаёт до ${OCEAN_OF[side].ru}. ${added.length > 1 ? 'Соседи' : 'Сосед'} не ниже: ${added.map(([y, x, v]) => `${at(y, x)} = ${v}`).join(', ')} — вода ${added.length > 1 ? 'из них стекает сюда, значит, и они достают' : 'оттуда стекает сюда, значит, и он достаёт'}.${lower ? ` Ниже — ${ru(lower, 'сосед', 'соседа', 'соседей')}: оттуда вода сюда не поднимется.` : ''}`,
   },
   'pa.ev.stuck': {
-    en: (side, r, c, h, added, lower) => `${at(r, c)}, height ${h}: nothing new — ${lower ? `${enPlural(lower, 'neighbour')} lower, the rest already marked` : 'every neighbour is already marked'}.`,
+    en: (side, r, c, h, added, lower) => `${at(r, c)}, height ${h}: nothing new — ${lower ? `${enPlural(lower, 'neighbor')} lower, the rest already marked` : 'every neighbor is already marked'}.`,
     ru: (side, r, c, h, added, lower) => `${at(r, c)}, высота ${h}: ничего нового — ${lower ? `${ru(lower, 'сосед ниже', 'соседа ниже', 'соседей ниже')}, остальные уже отмечены` : 'все соседи уже отмечены'}.`,
   },
   'pa.ev.both': {

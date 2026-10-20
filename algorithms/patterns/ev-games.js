@@ -12,10 +12,10 @@ const H_EN = { chebyshev: 'Chebyshev max(dr, dc)', octile: 'octile max + 0.41·m
 const H_RU = { chebyshev: 'Чебышёву max(dr, dc)', octile: 'октилю max + 0,41·min', manhattan: 'Манхэттену dr + dc', zero: 'h = 0' };
 const H_RU_NOM = { chebyshev: 'Чебышёв', octile: 'октиль', manhattan: 'Манхэттен', zero: 'h = 0' };
 
-/** The tail of a neighbour step: closed neighbours skipped, and whether a closed one would have been shorter. */
+/** The tail of a neighbor step: closed neighbors skipped, and whether a closed one would have been shorter. */
 const skippedEn = (closed, kept, missed) => [
-  closed ? ` ${closed} closed neighbour(s) are skipped${missed ? ` — though ${missed} of them would be shorter through here: this h is inconsistent, and A* does not reopen closed cells` : ''}.` : '',
-  kept ? ` ${kept} open neighbour(s) already have a g that is no worse.` : '',
+  closed ? ` ${closed} closed neighbor(s) are skipped${missed ? ` — though ${missed} of them would be shorter through here: this h is inconsistent, and A* does not reopen closed cells` : ''}.` : '',
+  kept ? ` ${kept} open neighbor(s) already have a g that is no worse.` : '',
 ].join('');
 const skippedRu = (closed, kept, missed) => [
   closed ? ` Закрытых соседей (${closed}) пропускаем${missed ? ` — хотя к ${missed} из них отсюда путь короче: эта h несогласованна, а закрытые клетки A* заново не открывает` : ''}.` : '',
@@ -37,7 +37,7 @@ export const EV_GAMES = {
     ru: cell => `${cell} занята, свободного пути нет вовсе. Ответ <b>−1</b> ещё до поиска.`,
   },
   'ast.ev.pop': {
-    en: (cell, g, h, f, left) => `Take ${cell} from the heap: f = ${g} + ${fx(h)} = ${fx(f)} is ${left ? `the smallest of ${left + 1}` : 'the only entry'}. It goes into the closed set — its g = ${g} is final. Now its 8 neighbours.`,
+    en: (cell, g, h, f, left) => `Take ${cell} from the heap: f = ${g} + ${fx(h)} = ${fx(f)} is ${left ? `the smallest of ${left + 1}` : 'the only entry'}. It goes into the closed set — its g = ${g} is final. Now its 8 neighbors.`,
     ru: (cell, g, h, f, left) => `Берём из кучи ${cell}: f = ${g} + ${fxRu(h)} = ${fxRu(f)} — ${left ? `наименьшее из ${left + 1}` : 'единственная запись'}. Клетка уходит в закрытое множество — её g = ${g} окончательно. Теперь её 8 соседей.`,
   },
   'ast.ev.open': {
@@ -53,7 +53,7 @@ export const EV_GAMES = {
     ru: (cell, opened, better, closed, kept, missed) => `Из ${cell} ничего нового и ничего лучше.${skippedRu(closed, kept, missed)}`,
   },
   'ast.ev.dead': {
-    en: cell => `${cell} has no free neighbours at all — only walls and the edge of the map. Nothing enters the heap.`,
+    en: cell => `${cell} has no free neighbors at all — only walls and the edge of the map. Nothing enters the heap.`,
     ru: cell => `У ${cell} нет ни одного свободного соседа — только стены и край карты. В кучу ничего не идёт.`,
   },
   'ast.ev.stale': {
@@ -83,19 +83,19 @@ export const EV_GAMES = {
     ru: goals => `Фаза 2, поле интеграции. ${goals.length > 1 ? `Все цели — ${list(goals)} — получают 0 и сразу встают в очередь, как нули в 01 Matrix.` : `Цель ${goals[0]} получает 0 и встаёт в очередь; будь целей несколько, они стартовали бы все сразу, как нули в 01 Matrix.`} Поиск идёт от целей наружу, а не от юнитов.`,
   },
   'ff.ev.relax': {
-    en: (cell, d, moves) => `Pop ${cell} with integration ${d}, the smallest in the queue. Its neighbours get integration = ${d} + their own cost: ${moves.join('; ')}. Set once — whoever reaches a cell first comes from the cheapest side.`,
+    en: (cell, d, moves) => `Pop ${cell} with integration ${d}, the smallest in the queue. Its neighbors get integration = ${d} + their own cost: ${moves.join('; ')}. Set once — whoever reaches a cell first comes from the cheapest side.`,
     ru: (cell, d, moves) => `Вынимаем ${cell} с интеграцией ${d} — наименьшей в очереди. Соседи получают интеграцию = ${d} + своя цена: ${moves.join('; ')}. Ставим один раз — кто первым дошёл до клетки, тот и пришёл с самой дешёвой стороны.`,
   },
   'ff.ev.settle': {
-    en: (cell, d) => `Pop ${cell} with integration ${d}: every passable neighbour already has its value — nothing to add.`,
+    en: (cell, d) => `Pop ${cell} with integration ${d}: every passable neighbor already has its value — nothing to add.`,
     ru: (cell, d) => `Вынимаем ${cell} с интеграцией ${d}: у всех проходимых соседей значение уже есть — добавлять нечего.`,
   },
   'ff.ev.row': {
-    en: (r, arrows, cut, open) => (open ? `Phase 3, the direction field, row ${r}: each of its ${arrows} cell(s) points at the neighbour with the smallest integration (ties: up, right, down, left). The small number is the integration.` : `Phase 3, row ${r}: only walls and goals, no arrows.`),
+    en: (r, arrows, cut, open) => (open ? `Phase 3, the direction field, row ${r}: each of its ${arrows} cell(s) points at the neighbor with the smallest integration (ties: up, right, down, left). The small number is the integration.` : `Phase 3, row ${r}: only walls and goals, no arrows.`),
     ru: (r, arrows, cut, open) => (open ? `Фаза 3, поле направлений, строка ${r}: стрелок — ${arrows}, каждая указывает на соседа с наименьшей интеграцией (при равенстве: вверх, вправо, вниз, влево). Маленькое число — интеграция.` : `Фаза 3, строка ${r}: только стены и цели, стрелок нет.`),
   },
   'ff.ev.rowCut': {
-    en: (r, arrows, cut) => `Phase 3, the direction field, row ${r}: ${arrows} arrow(s) to the neighbour with the smallest integration, and ${cut} cell(s) marked × — walls cut them off from every goal, their integration stayed ∞, and no arrow can lead anywhere.`,
+    en: (r, arrows, cut) => `Phase 3, the direction field, row ${r}: ${arrows} arrow(s) to the neighbor with the smallest integration, and ${cut} cell(s) marked × — walls cut them off from every goal, their integration stayed ∞, and no arrow can lead anywhere.`,
     ru: (r, arrows, cut) => `Фаза 3, поле направлений, строка ${r}: стрелок к соседу с наименьшей интеграцией — ${arrows}, а клеток с × — ${cut}: стены отрезали их от всех целей, интеграция осталась ∞, и стрелке вести некуда.`,
   },
   'ff.ev.done': {
@@ -177,7 +177,7 @@ export const EV_GAMES = {
     ru: (n, s, e) => `${n} × ${n}, высоты 0..${n * n - 1}, все разные. Вода поднимается на уровень за шаг; в момент t намокает ровно одна клетка — та, что высоты t. S на высоте ${s}, E — ${e}: ответ не меньше ${Math.max(s, e)}.`,
   },
   'sw.ev.island': {
-    en: (t, cell) => `t = ${t}: ${cell} gets wet, but none of its neighbours is wet yet — a new pool of its own.`,
+    en: (t, cell) => `t = ${t}: ${cell} gets wet, but none of its neighbors is wet yet — a new pool of its own.`,
     ru: (t, cell) => `t = ${t}: намокает ${cell}, но ни один сосед ещё не мокрый — отдельный новый водоём.`,
   },
   'sw.ev.grow': {

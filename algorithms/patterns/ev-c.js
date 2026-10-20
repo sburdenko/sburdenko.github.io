@@ -82,11 +82,11 @@ export const EV_C = {
 
   /* Candy */
   'candy.ev.start': { en: n => `${n} children, everyone starts with 1 candy.`, ru: n => `Детей: ${n}, у каждого сначала по 1 конфете.` },
-  'candy.ev.pass1': { en: () => 'Pass 1, left → right: fix the rule against the left neighbour.', ru: () => 'Проход 1, слева направо: чиним правило относительно левого соседа.' },
+  'candy.ev.pass1': { en: () => 'Pass 1, left → right: fix the rule against the left neighbor.', ru: () => 'Проход 1, слева направо: чиним правило относительно левого соседа.' },
   'candy.ev.left': { en: (i, r, rl, c) => `rating ${r} > ${rl} on the left → ${c} candies.`, ru: (i, r, rl, c) => `рейтинг ${r} > ${rl} слева → ${c} конфет.` },
-  'candy.ev.pass2': { en: () => 'Pass 2, right → left: fix the rule against the right neighbour without breaking pass 1.', ru: () => 'Проход 2, справа налево: чиним правило относительно правого соседа, не ломая проход 1.' },
+  'candy.ev.pass2': { en: () => 'Pass 2, right → left: fix the rule against the right neighbor without breaking pass 1.', ru: () => 'Проход 2, справа налево: чиним правило относительно правого соседа, не ломая проход 1.' },
   'candy.ev.right': { en: (i, r, rr, old, c) => `rating ${r} > ${rr} on the right → max(${old}, ${c}) = ${c}.`, ru: (i, r, rr, old, c) => `рейтинг ${r} > ${rr} справа → max(${old}, ${c}) = ${c}.` },
-  'candy.ev.done': { en: total => `Total: <b>${total}</b> candies. Two greedy passes satisfy both neighbours.`, ru: total => `Всего: <b>${total}</b> конфет. Два жадных прохода удовлетворяют обоих соседей.` },
+  'candy.ev.done': { en: total => `Total: <b>${total}</b> candies. Two greedy passes satisfy both neighbors.`, ru: total => `Всего: <b>${total}</b> конфет. Два жадных прохода удовлетворяют обоих соседей.` },
 
   /* Climbing Stairs */
   'climb.ev.start': { en: n => `ways[i] = ways to reach step i. ways[0] = ways[1] = 1. Target: step ${n}.`, ru: n => `ways[i] — сколькими способами дойти до ступени i. ways[0] = ways[1] = 1. Цель: ступень ${n}.` },

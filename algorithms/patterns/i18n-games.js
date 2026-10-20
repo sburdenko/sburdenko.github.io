@@ -26,7 +26,7 @@ while (open.TryPop(out int u)) {
     if (closed[u] == search) continue;      // stale entry
     closed[u] = search;
     if (u == goal) return g[u];
-    foreach (var (v, cost) in Neighbours(u)) {
+    foreach (var (v, cost) in Neighbors(u)) {
         int cand = g[u] + cost;
         if (closed[v] == search) continue;
         if (opened[v] == search && cand >= g[v]) continue;
@@ -44,7 +44,7 @@ while (open.TryPop(out int u)) {
     if (closed[u] == search) continue;      // устаревшая запись
     closed[u] = search;
     if (u == goal) return g[u];
-    foreach (var (v, cost) in Neighbours(u)) {
+    foreach (var (v, cost) in Neighbors(u)) {
         int cand = g[u] + cost;
         if (closed[v] == search) continue;
         if (opened[v] == search && cand >= g[v]) continue;
@@ -61,13 +61,13 @@ int Find(int x) => parent[x] == x ? x : parent[x] = Find(parent[x]);`,
         variant: 'A*: Dijkstra with an aim',
         task: 'An n × n grid of 0 (open) and 1 (blocked). Return the length, in cells, of the shortest clear path from the top-left to the bottom-right cell moving in 8 directions, or −1. In the rig the field h switches the heuristic: chebyshev, octile, manhattan or zero.',
         idea: 'Dijkstra takes the cell with the smallest g, the distance from the start. A* takes the smallest f = g + h, where h estimates the rest of the way. With 8 directions and a diagonal that costs 1, the exact rest on an empty map is Chebyshev, max(dr, dc): it never overestimates, so the first time the goal leaves the heap its g is final. Ties on f go to the smaller h — the cell nearer the goal — and the search runs straight at it.',
-        why: 'h = 0 is Dijkstra (here simply BFS): the same answer, many more expanded cells — compare the counter. Manhattan, or octile while a diagonal costs 1, overestimates: fewer cells, but the path can come out longer. In a game a NavMesh (Unity AI Navigation, NavMeshAgent) covers big open 3D worlds with a few polygons; a grid suits tile maps, RTS and obstacles that change. Keep nodes as structs in one array indexed by cell (g, parent, marks) instead of class Node: no garbage, and neighbours sit close in memory. Make the closed set an int array of search numbers, closed[cell] == search, so the next search only does search++ instead of clearing it. Many agents: run the searches in an IJobParallelFor compiled by Burst, over NativeArray grids and heaps, with one scratch buffer per worker thread. Unity’s .NET has no PriorityQueue (.NET 6+) — bring a binary heap.',
+        why: 'h = 0 is Dijkstra (here simply BFS): the same answer, many more expanded cells — compare the counter. Manhattan, or octile while a diagonal costs 1, overestimates: fewer cells, but the path can come out longer. In a game a NavMesh (Unity AI Navigation, NavMeshAgent) covers big open 3D worlds with a few polygons; a grid suits tile maps, RTS and obstacles that change. Keep nodes as structs in one array indexed by cell (g, parent, marks) instead of class Node: no garbage, and neighbors sit close in memory. Make the closed set an int array of search numbers, closed[cell] == search, so the next search only does search++ instead of clearing it. Many agents: run the searches in an IJobParallelFor compiled by Burst, over NativeArray grids and heaps, with one scratch buffer per worker thread. Unity’s .NET has no PriorityQueue (.NET 6+) — bring a binary heap.',
         cx: 'O(E log V) in the worst case, like Dijkstra, V = n², E ≤ 8V; with a good h far less · O(V) memory',
       },
       {
         variant: 'Flow field: one search for every unit',
         task: 'The frame is 01 Matrix (#542): the distance from every cell to the nearest target. A flow field adds a cost per cell — 0 is a wall, 1–9 is what crossing the cell costs — and turns distances into arrows: for every cell, where should a unit standing there step to reach the nearest goal most cheaply?',
-        idea: 'Three fields. The cost field is the map as given. The integration field is Dijkstra from all goals at once (like the multi-source BFS of 01 Matrix): integration = the cost of the cell + the smallest integration of a neighbour. The direction field points every cell at its neighbour with the smallest integration. A unit only reads the arrow under its feet, every frame.',
+        idea: 'Three fields. The cost field is the map as given. The integration field is Dijkstra from all goals at once (like the multi-source BFS of 01 Matrix): integration = the cost of the cell + the smallest integration of a neighbor. The direction field points every cell at its neighbor with the smallest integration. A unit only reads the arrow under its feet, every frame.',
         why: 'A* per unit is one search per unit; a thousand units heading for one base share a single Dijkstra over the map, and then pay O(1) each — the price is O(cells) memory per goal. With every cost 1 this is exactly the BFS of 01 Matrix. The cost sits on the cell, so the first time a cell is reached is already its cheapest: no stale entries, no decrease-key, and with small integer costs a bucket queue replaces the heap. Recompute only when the map or the goal changes, and only the chunks that changed: big maps are split into sectors joined by portals (hierarchical flow fields). In Unity the three fields are NativeArrays, the build is an IJob with Burst, and steering is an IJobParallelFor over the units. Real games also use 8 directions without cutting corners, and smooth the motion: the arrow only says where to go.',
         cx: 'O(C log C) to build, C = cells (O(C) with a bucket queue) · O(1) per unit per step · O(C) memory',
       },
@@ -87,8 +87,8 @@ int Find(int x) => parent[x] == x ? x : parent[x] = Find(parent[x]);`,
       },
       {
         variant: 'Union-Find as the water rises',
-        task: 'An n × n grid of distinct heights 0..n² − 1. At time t the water stands at height t everywhere, and you can swim between neighbouring cells whose heights are both ≤ t. Return the smallest t at which you can get from the top-left to the bottom-right corner.',
-        idea: 'Let the water rise one level at a time. At time t the cell of height t gets wet — heights are all different, so it is exactly one cell, known up front. Union it with every wet neighbour. The answer is the first t at which both corners share a root.',
+        task: 'An n × n grid of distinct heights 0..n² − 1. At time t the water stands at height t everywhere, and you can swim between neighboring cells whose heights are both ≤ t. Return the smallest t at which you can get from the top-left to the bottom-right corner.',
+        idea: 'Let the water rise one level at a time. At time t the cell of height t gets wet — heights are all different, so it is exactly one cell, known up front. Union it with every wet neighbor. The answer is the first t at which both corners share a root.',
         why: 'This problem has three solutions, and an interviewer likes to hear all three. Dijkstra where a path costs its highest cell — max instead of +, as in Path With Minimum Effort (#1631): O(n² log n). Binary search on t with a BFS over the cells ≤ t: O(n² log n). And this one, Union-Find in order of height: O(n² · α(n)) here, because the heights 0..n² − 1 give the order for free; arbitrary heights need a sort first. In games the same move answers “at what water level do these two areas join” — flooding, erosion, which islands a rising tide cuts off.',
         cx: 'O(n² · α(n)) time (plus O(n² log n) for sorting arbitrary heights) · O(n²) memory',
       },

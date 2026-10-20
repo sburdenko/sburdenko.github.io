@@ -18,11 +18,11 @@ export const EV_E = {
     ru: (d, count) => `Все клетки на расстоянии ${d - 1} обработаны. В очереди теперь ровно клетки на расстоянии <b>${d}</b> — их ${count}.`,
   },
   'zom.ev.pop': {
-    en: (r, c, d, count, next) => `Take (${r}, ${c}) at distance ${d}. ${count} unknown neighbour(s) get <b>${next}</b> and join the queue — set right now, on enqueue: no later wave can bring them closer.`,
+    en: (r, c, d, count, next) => `Take (${r}, ${c}) at distance ${d}. ${count} unknown neighbor(s) get <b>${next}</b> and join the queue — set right now, on enqueue: no later wave can bring them closer.`,
     ru: (r, c, d, count, next) => `Берём (${r}, ${c}) на расстоянии ${d}. Неизвестные соседи (${count}) получают <b>${next}</b> и встают в очередь — ставим сразу, при добавлении: следующие волны ближе не будут.`,
   },
   'zom.ev.skip': {
-    en: (r, c, d) => `Take (${r}, ${c}) at distance ${d}: every neighbour already has a distance — nothing to add.`,
+    en: (r, c, d) => `Take (${r}, ${c}) at distance ${d}: every neighbor already has a distance — nothing to add.`,
     ru: (r, c, d) => `Берём (${r}, ${c}) на расстоянии ${d}: у всех соседей расстояние уже есть — добавлять нечего.`,
   },
   'zom.ev.done': {
@@ -66,11 +66,11 @@ export const EV_E = {
     ru: (rows, cols) => `${rows} × ${cols}. Маршрут стоит столько, сколько его самый крутой шаг, а не сумма. Дейкстра всё равно работает: вдоль маршрута такая цена не уменьшается. effort (маленькое число в углу) на старте 0, в остальных клетках ∞.`,
   },
   'eff.ev.relax': {
-    en: (r, c, e, moves) => `Pop (${r}, ${c}) with effort ${e} — the smallest in the queue, so it is final. Neighbours that improve: ${moves.join('; ')}.`,
+    en: (r, c, e, moves) => `Pop (${r}, ${c}) with effort ${e} — the smallest in the queue, so it is final. Neighbors that improve: ${moves.join('; ')}.`,
     ru: (r, c, e, moves) => `Вынимаем (${r}, ${c}) с усилием ${e} — наименьшее в очереди, значит, оно окончательно. Соседи, которым стало лучше: ${moves.join('; ')}.`,
   },
   'eff.ev.settle': {
-    en: (r, c, e) => `Pop (${r}, ${c}) with effort ${e}: final, but no neighbour gets a smaller effort through it.`,
+    en: (r, c, e) => `Pop (${r}, ${c}) with effort ${e}: final, but no neighbor gets a smaller effort through it.`,
     ru: (r, c, e) => `Вынимаем (${r}, ${c}) с усилием ${e}: оно окончательно, но ни одному соседу через неё не стало лучше.`,
   },
   'eff.ev.stale': {
@@ -88,7 +88,7 @@ export const EV_E = {
     ru: (k, rows, cols) => `BFS по состояниям (строка, столбец, осталось ломаний). Старт: (0, 0) · ${k}. Число в клетке — шаг, на котором до неё впервые дошли; маленькие числа в углу — с каким запасом ломаний до неё доходили.`,
   },
   'obs.ev.step': {
-    en: (r, c, rem, d, count, broke, blocked) => `State (${r}, ${c}) · ${rem}, step ${d}: ${count} new state(s) through empty cells, at step ${d + 1}.${blocked ? ` No breaks left, so ${blocked} neighbouring wall(s) stay shut.` : ''}`,
+    en: (r, c, rem, d, count, broke, blocked) => `State (${r}, ${c}) · ${rem}, step ${d}: ${count} new state(s) through empty cells, at step ${d + 1}.${blocked ? ` No breaks left, so ${blocked} neighboring wall(s) stay shut.` : ''}`,
     ru: (r, c, rem, d, count, broke, blocked) => `Состояние (${r}, ${c}) · ${rem}, шаг ${d}: новых состояний через пустые клетки — ${count}, они на шаге ${d + 1}.${blocked ? ` Ломаний не осталось, поэтому соседние стены (${blocked}) не пройти.` : ''}`,
   },
   'obs.ev.smash': {
@@ -96,7 +96,7 @@ export const EV_E = {
     ru: (r, c, rem, d, count, broke) => `Состояние (${r}, ${c}) · ${rem}, шаг ${d}: новых состояний — ${count}; в ${broke} из них <b>ломаем стену</b>, и дальше они идут с запасом ${rem - 1}.`,
   },
   'obs.ev.dead': {
-    en: (r, c, rem, d, count, broke, blocked) => `State (${r}, ${c}) · ${rem}: every neighbouring state is already seen${blocked ? ' or is a wall with no breaks left' : ''} — nothing new.`,
+    en: (r, c, rem, d, count, broke, blocked) => `State (${r}, ${c}) · ${rem}: every neighboring state is already seen${blocked ? ' or is a wall with no breaks left' : ''} — nothing new.`,
     ru: (r, c, rem, d, count, broke, blocked) => `Состояние (${r}, ${c}) · ${rem}: все соседние состояния уже встречались${blocked ? ' или упираются в стену без запаса ломаний' : ''} — ничего нового.`,
   },
   'obs.ev.found': {

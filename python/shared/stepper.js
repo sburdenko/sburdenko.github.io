@@ -2,16 +2,16 @@
  * Mounts one rig: editable inputs → Python source → trace → code panel, picture, console, explanation and transport.
  * rig = { id, code: params => string | string, fields, example, random, check, stdin, files, view, notes, hide, maxSteps, problem }
  */
-import { $, $$, esc } from '../../assets/vhs.js?v=202610201323';
-import { t, onLang, applyTo } from '../../assets/i18n.js?v=202610201323';
-import { createPlayer, bindTransport } from '../../algorithms/bfs-dfs/player.js?v=202610201323';
-import { runProgram, formatTraceback, MAX_STEPS } from './py/run.js?v=202610201323';
-import { renderPyCode } from './py-code.js?v=202610201323';
-import { memoryView, currentNames } from './memory-view.js?v=202610201323';
-import { structView } from './struct-views.js?v=202610201323';
-import { explain } from './explain.js?v=202610201323';
-import { parseField, formatField } from './fields.js?v=202610201323';
-import { markProblem } from './progress.js?v=202610201323';
+import { $, $$, esc } from '../../assets/vhs.js?v=202610201331';
+import { t, onLang, applyTo } from '../../assets/i18n.js?v=202610201331';
+import { createPlayer, bindTransport } from '../../algorithms/bfs-dfs/player.js?v=202610201331';
+import { runProgram, formatTraceback, MAX_STEPS } from './py/run.js?v=202610201331';
+import { renderPyCode } from './py-code.js?v=202610201331';
+import { memoryView, currentNames } from './memory-view.js?v=202610201331';
+import { structView } from './struct-views.js?v=202610201331';
+import { explain } from './explain.js?v=202610201331';
+import { parseField, formatField } from './fields.js?v=202610201331';
+import { markProblem } from './progress.js?v=202610201331';
 
 const shell = rig => `
   <div class="rig-head"><p class="lbl" data-i18n="py.ui.rigTag">RIG · STEP BY STEP</p><h3 class="rig-title"></h3></div>
@@ -135,7 +135,7 @@ export function mountRig(root, rig, { tape = '', titles = {} } = {}) {
   /* ---------- try it yourself ---------- */
   $('[data-try]', root).addEventListener('click', async event => {
     event.currentTarget.disabled = true;
-    const { mountRepl } = await import('./repl.js?v=202610201323');
+    const { mountRepl } = await import('./repl.js?v=202610201331');
     const inputs = rig.stdin ? (typeof rig.stdin === 'function' ? rig.stdin(params) : (params[rig.stdin] ?? [])) : [];
     mountRepl(replSlot, { code: sourceOf(rig, params), stdin: inputs, files: run ? run.files : {} });
   });
