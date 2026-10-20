@@ -2,7 +2,7 @@
  "id": "algo.u5.l3",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 14,
+ "minutes": 15,
  "cards": [
   {
    "t": "learn",
@@ -91,6 +91,56 @@
    "body": "⟦⟧",
    "code": "⟦⟧",
    "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "reverseBits",
+   "input": {
+    "n": 11,
+    "mode": "loop"
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 3,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "r = 111₂ = 7"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 5,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
   },
   {
    "t": "tapline",
