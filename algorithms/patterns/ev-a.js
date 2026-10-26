@@ -1,4 +1,4 @@
-/** Step texts for the chapter 01–04 rigs added next to the original ones in i18n-a.js. */
+/** Step texts for the hash map, two pointers, sliding window, binary search rigs added next to the original ones in i18n-a.js. */
 const list = a => `[${a.join(', ')}]`;
 /** Russian plural: 1 элемент, 2 элемента, 5 элементов. */
 const ru = (n, one, few, many) => {

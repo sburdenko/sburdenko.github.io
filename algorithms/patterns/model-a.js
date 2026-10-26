@@ -1,5 +1,5 @@
 /**
- * Pure traces for chapters 01–04: hash map, two pointers, sliding window, binary search.
+ * Pure traces for the hash map, two pointers, sliding window, binary search.
  * Every event is a complete snapshot, so the player can rewind; texts are i18n keys with arguments.
  */
 const event = (key, args, state) => ({ key, args, ...state });

@@ -1,4 +1,4 @@
-/** Step texts for the chapter 14 rigs: shortest paths. */
+/** Step texts for the shortest paths rigs. */
 const list = a => a.join(', ');
 const chain = a => a.join(' → ');
 /** Russian plural: 1 шаг, 2 шага, 5 шагов. */

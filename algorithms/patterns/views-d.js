@@ -1,8 +1,8 @@
-/** Views for chapter 13: arrays and matrices. view(run, event) → SVG string, vars(run, event) → [[i18nKey, html]]. */
+/** Views for arrays and matrices. view(run, event) → SVG string, vars(run, event) → [[i18nKey, html]]. */
 import {
   CELL, STEP, svg, text, rowWidth, cells, pointers, chip, chips,
   matrixXY, matrixCells, matrixIndex, matrixBox, matrixArrow,
-} from './view-kit.js?v=202610202037';
+} from './view-kit.js?v=202610261057';
 
 const TOP = 40;
 const has = (list, r, c) => list.some(([a, b]) => a === r && b === c);

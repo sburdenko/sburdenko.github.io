@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&family=Unbounded:wght@500;700;900&family=VT323&display=swap">
-<link rel="stylesheet" href="../../assets/vhs.css?v=202610202037">
-<link rel="stylesheet" href="./style.css?v=202610202037">
+<link rel="stylesheet" href="../../assets/vhs.css?v=202610261057">
+<link rel="stylesheet" href="./style.css?v=202610261057">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📼</text></svg>">
 <script>
 /* Страница живёт на модулях: если граф импортов не собрался, всё замирает молча.
@@ -102,10 +102,24 @@
   <div class="probs" data-probs="twoptr"></div>
 </section>
 
-<!-- ============ SLIDING WINDOW ============ -->
-<section class="chapter" id="window" data-ch="CH.03 WINDOW">
+<!-- ============ ARRAYS · MATRICES ============ -->
+<section class="chapter" id="matrix" data-ch="CH.03 MATRIX">
   <div class="ch-head">
-    <p class="osdtag">CH.03 // SLIDING WINDOW</p>
+    <p class="osdtag">CH.03 // ARRAYS · MATRICES</p>
+    <h2 data-i18n="matrix.h2"></h2>
+    <p class="kicker" data-i18n="matrix.essence"></p>
+  </div>
+  <div class="two">
+    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="matrix.signals"></ul><p class="reason" data-i18n="matrix.pitfall"></p></div>
+    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="matrix"></pre></div>
+  </div>
+  <div class="probs" data-probs="matrix"></div>
+</section>
+
+<!-- ============ SLIDING WINDOW ============ -->
+<section class="chapter" id="window" data-ch="CH.04 WINDOW">
+  <div class="ch-head">
+    <p class="osdtag">CH.04 // SLIDING WINDOW</p>
     <h2 data-i18n="window.h2"></h2>
     <p class="kicker" data-i18n="window.essence"></p>
   </div>
@@ -117,9 +131,9 @@
 </section>
 
 <!-- ============ BINARY SEARCH ============ -->
-<section class="chapter" id="binary" data-ch="CH.04 BINARY">
+<section class="chapter" id="binary" data-ch="CH.05 BINARY">
   <div class="ch-head">
-    <p class="osdtag">CH.04 // BINARY SEARCH</p>
+    <p class="osdtag">CH.05 // BINARY SEARCH</p>
     <h2 data-i18n="binary.h2"></h2>
     <p class="kicker" data-i18n="binary.essence"></p>
   </div>
@@ -131,9 +145,9 @@
 </section>
 
 <!-- ============ STACK · MONOTONIC STACK ============ -->
-<section class="chapter" id="stack" data-ch="CH.05 STACK">
+<section class="chapter" id="stack" data-ch="CH.06 STACK">
   <div class="ch-head">
-    <p class="osdtag">CH.05 // STACK · MONOTONIC STACK</p>
+    <p class="osdtag">CH.06 // STACK · MONOTONIC STACK</p>
     <h2 data-i18n="stack.h2"></h2>
     <p class="kicker" data-i18n="stack.essence"></p>
   </div>
@@ -145,9 +159,9 @@
 </section>
 
 <!-- ============ LINKED LIST · FAST &amp; SLOW ============ -->
-<section class="chapter" id="list" data-ch="CH.06 LIST">
+<section class="chapter" id="list" data-ch="CH.07 LIST">
   <div class="ch-head">
-    <p class="osdtag">CH.06 // LINKED LIST · FAST &amp; SLOW</p>
+    <p class="osdtag">CH.07 // LINKED LIST · FAST &amp; SLOW</p>
     <h2 data-i18n="list.h2"></h2>
     <p class="kicker" data-i18n="list.essence"></p>
   </div>
@@ -157,21 +171,6 @@
   </div>
   <p class="tapelink" data-i18n="list.tape"></p>
   <div class="probs" data-probs="list"></div>
-</section>
-
-<!-- ============ DFS · BFS ============ -->
-<section class="chapter" id="graph" data-ch="CH.07 DFS·BFS">
-  <div class="ch-head">
-    <p class="osdtag">CH.07 // DFS · BFS</p>
-    <h2 data-i18n="graph.h2"></h2>
-    <p class="kicker" data-i18n="graph.essence"></p>
-  </div>
-  <div class="two">
-    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="graph.signals"></ul><p class="reason" data-i18n="graph.pitfall"></p></div>
-    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="graph"></pre></div>
-  </div>
-  <p class="tapelink" data-i18n="graph.tape"></p>
-  <div class="probs" data-probs="graph"></div>
 </section>
 
 <!-- ============ TREES ============ -->
@@ -188,10 +187,25 @@
   <div class="probs" data-probs="tree"></div>
 </section>
 
-<!-- ============ HEAP · PRIORITY QUEUE ============ -->
-<section class="chapter" id="heap" data-ch="CH.09 HEAP">
+<!-- ============ DFS · BFS ============ -->
+<section class="chapter" id="graph" data-ch="CH.09 DFS·BFS">
   <div class="ch-head">
-    <p class="osdtag">CH.09 // HEAP · PRIORITY QUEUE</p>
+    <p class="osdtag">CH.09 // DFS · BFS</p>
+    <h2 data-i18n="graph.h2"></h2>
+    <p class="kicker" data-i18n="graph.essence"></p>
+  </div>
+  <div class="two">
+    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="graph.signals"></ul><p class="reason" data-i18n="graph.pitfall"></p></div>
+    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="graph"></pre></div>
+  </div>
+  <p class="tapelink" data-i18n="graph.tape"></p>
+  <div class="probs" data-probs="graph"></div>
+</section>
+
+<!-- ============ HEAP · PRIORITY QUEUE ============ -->
+<section class="chapter" id="heap" data-ch="CH.10 HEAP">
+  <div class="ch-head">
+    <p class="osdtag">CH.10 // HEAP · PRIORITY QUEUE</p>
     <h2 data-i18n="heap.h2"></h2>
     <p class="kicker" data-i18n="heap.essence"></p>
   </div>
@@ -202,10 +216,24 @@
   <div class="probs" data-probs="heap"></div>
 </section>
 
-<!-- ============ BACKTRACKING ============ -->
-<section class="chapter" id="back" data-ch="CH.10 BACKTRACK">
+<!-- ============ SHORTEST PATHS · DIJKSTRA ============ -->
+<section class="chapter" id="paths" data-ch="CH.11 PATHS">
   <div class="ch-head">
-    <p class="osdtag">CH.10 // BACKTRACKING</p>
+    <p class="osdtag">CH.11 // SHORTEST PATHS · DIJKSTRA</p>
+    <h2 data-i18n="paths.h2"></h2>
+    <p class="kicker" data-i18n="paths.essence"></p>
+  </div>
+  <div class="two">
+    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="paths.signals"></ul><p class="reason" data-i18n="paths.pitfall"></p></div>
+    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="paths"></pre></div>
+  </div>
+  <div class="probs" data-probs="paths"></div>
+</section>
+
+<!-- ============ BACKTRACKING ============ -->
+<section class="chapter" id="back" data-ch="CH.12 BACKTRACK">
+  <div class="ch-head">
+    <p class="osdtag">CH.12 // BACKTRACKING</p>
     <h2 data-i18n="back.h2"></h2>
     <p class="kicker" data-i18n="back.essence"></p>
   </div>
@@ -217,9 +245,9 @@
 </section>
 
 <!-- ============ GREEDY ============ -->
-<section class="chapter" id="greedy" data-ch="CH.11 GREEDY">
+<section class="chapter" id="greedy" data-ch="CH.13 GREEDY">
   <div class="ch-head">
-    <p class="osdtag">CH.11 // GREEDY</p>
+    <p class="osdtag">CH.13 // GREEDY</p>
     <h2 data-i18n="greedy.h2"></h2>
     <p class="kicker" data-i18n="greedy.essence"></p>
   </div>
@@ -231,9 +259,9 @@
 </section>
 
 <!-- ============ DYNAMIC PROGRAMMING ============ -->
-<section class="chapter" id="dp" data-ch="CH.12 DP">
+<section class="chapter" id="dp" data-ch="CH.14 DP">
   <div class="ch-head">
-    <p class="osdtag">CH.12 // DYNAMIC PROGRAMMING</p>
+    <p class="osdtag">CH.14 // DYNAMIC PROGRAMMING</p>
     <h2 data-i18n="dp.h2"></h2>
     <p class="kicker" data-i18n="dp.essence"></p>
   </div>
@@ -242,34 +270,6 @@
     <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="dp"></pre></div>
   </div>
   <div class="probs" data-probs="dp"></div>
-</section>
-
-<!-- ============ ARRAYS · MATRICES ============ -->
-<section class="chapter" id="matrix" data-ch="CH.13 MATRIX">
-  <div class="ch-head">
-    <p class="osdtag">CH.13 // ARRAYS · MATRICES</p>
-    <h2 data-i18n="matrix.h2"></h2>
-    <p class="kicker" data-i18n="matrix.essence"></p>
-  </div>
-  <div class="two">
-    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="matrix.signals"></ul><p class="reason" data-i18n="matrix.pitfall"></p></div>
-    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="matrix"></pre></div>
-  </div>
-  <div class="probs" data-probs="matrix"></div>
-</section>
-
-<!-- ============ SHORTEST PATHS · DIJKSTRA ============ -->
-<section class="chapter" id="paths" data-ch="CH.14 PATHS">
-  <div class="ch-head">
-    <p class="osdtag">CH.14 // SHORTEST PATHS · DIJKSTRA</p>
-    <h2 data-i18n="paths.h2"></h2>
-    <p class="kicker" data-i18n="paths.essence"></p>
-  </div>
-  <div class="two">
-    <div class="spot"><h4 data-i18n="ui.signals">How to spot it</h4><ul class="why" data-i18n="paths.signals"></ul><p class="reason" data-i18n="paths.pitfall"></p></div>
-    <div class="spot"><h4 data-i18n="ui.template">Skeleton · C#</h4><pre class="code" data-tpl="paths"></pre></div>
-  </div>
-  <div class="probs" data-probs="paths"></div>
 </section>
 
 <!-- ============ BIT MANIPULATION ============ -->
@@ -325,6 +325,6 @@
   </ul>
 </footer>
 
-<script type="module" src="./page.js?v=202610202037"></script>
+<script type="module" src="./page.js?v=202610261057"></script>
 </body>
 </html>

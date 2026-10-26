@@ -1,4 +1,4 @@
-/** Step texts for the chapter 13 rigs: arrays and matrices. */
+/** Step texts for the arrays and matrices rigs. */
 const list = a => `[${a.join(', ')}]`;
 /** Game of Life: a note when some neighbors already carry their future in bit 1. */
 const hint = (marked, lang) => (!marked ? '' : lang === 'en'

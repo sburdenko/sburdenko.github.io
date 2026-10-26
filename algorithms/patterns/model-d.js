@@ -1,5 +1,5 @@
 /**
- * Pure traces for chapter 13: arrays and matrices walked in a planned order.
+ * Pure traces for arrays and matrices walked in a planned order.
  * Same contract as model-a.js: every event is a complete snapshot with an i18n key and its arguments.
  */
 const event = (key, args, state) => ({ key, args, ...state });

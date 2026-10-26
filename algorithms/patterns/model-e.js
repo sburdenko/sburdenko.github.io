@@ -1,5 +1,5 @@
 /**
- * Pure traces for chapter 14: shortest paths. BFS when every step costs 1, Dijkstra when steps have weights.
+ * Pure traces for shortest paths. BFS when every step costs 1, Dijkstra when steps have weights.
  * Same contract as model-a.js: every event is a complete snapshot with an i18n key and its arguments.
  */
 const event = (key, args, state) => ({ key, args, ...state });

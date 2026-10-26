@@ -1,4 +1,4 @@
-/** Pure traces for chapters 09–12: heap, backtracking, greedy, dynamic programming. Same contract as model-a.js. */
+/** Pure traces for the heap, backtracking, greedy, dynamic programming. Same contract as model-a.js. */
 const event = (key, args, state) => ({ key, args, ...state });
 const byValue = (a, b) => a < b;
 

@@ -1,4 +1,4 @@
-/** Step texts for the chapter 05–08 rigs added next to the original ones in i18n-b.js. */
+/** Step texts for the stack, linked list, DFS/BFS, trees rigs added next to the original ones in i18n-b.js. */
 const list = a => `[${a.join(', ')}]`;
 const chain = a => a.join(' → ');
 /** Russian plural: 1 шаг, 2 шага, 5 шагов. */

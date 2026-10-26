@@ -1,8 +1,8 @@
-/** Views for chapters 05–08: stack, linked list, grids and graphs, trees. */
+/** Views for the stack, linked list, grids and graphs, trees. */
 import {
   CELL, STEP, svg, text, rowWidth, cells, pointers, arrow, node, chip, chips,
   barLayout, bars, gridCells, binaryTree, matrixXY, matrixCells, matrixIndex,
-} from './view-kit.js?v=202610202037';
+} from './view-kit.js?v=202610261057';
 
 const TOP = 40, GAP_HALF = 3;
 const framed = (n, h, inner) => svg(rowWidth(n) + 20, h, `<g transform="translate(10,0)">${inner}</g>`);

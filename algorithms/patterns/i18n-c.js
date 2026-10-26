@@ -1,4 +1,4 @@
-/** Tape 06 chapters 09–12: heap, backtracking, greedy, dynamic programming. */
+/** Tape 06 chapters: heap, backtracking, greedy, dynamic programming. */
 const plus = parts => parts.join(' + ');
 
 export const CH_C = {

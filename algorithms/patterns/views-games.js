@@ -2,8 +2,8 @@
 import {
   CELL, STEP, svg, text, rowWidth, node, chip, chips, arrow,
   matrixXY, matrixCells, matrixIndex,
-} from './view-kit.js?v=202610202037';
-import { HEURISTICS } from './model-games.js?v=202610202037';
+} from './view-kit.js?v=202610261057';
+import { HEURISTICS } from './model-games.js?v=202610261057';
 
 const has = (list, r, c) => list.some(([a, b]) => a === r && b === c);
 const fx = v => (Number.isInteger(v) ? String(v) : v.toFixed(1));
