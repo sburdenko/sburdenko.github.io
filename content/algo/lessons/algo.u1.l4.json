@@ -2,7 +2,7 @@
  "id": "algo.u1.l4",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 13,
+ "minutes": 15,
  "cards": [
   {
    "t": "learn",
@@ -55,6 +55,62 @@
    "code": "⟦⟧",
    "lang": "cs",
    "deep": "⟦⟧"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "dupWindow",
+   "input": {
+    "nums": [1, 2, 3, 1, 4, 1],
+    "k": 2
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 5,
+      "options": [
+       {
+        "event": "dw.ev.add",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "dw.ev.hit",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "dw.ev.evict",
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 9,
+      "options": [
+       {
+        "event": "dw.ev.hit",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "dw.ev.add",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "dw.ev.evict",
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
   },
   {
    "t": "choice",

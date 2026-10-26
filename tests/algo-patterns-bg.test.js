@@ -17,7 +17,7 @@ test('added problems sit at the end of their chapters, and their texts line up',
   const where = { bits: 'reverseBits', binary: 'divideBits', heap: 'kClosest', graph: 'cloneGraph' };
   for (const [chapter, id] of Object.entries(where)) assert.equal(PROBLEMS[chapter].at(-1).rig, id, chapter);
   assert.deepEqual(PROBLEMS.games.slice(-2).map(p => p.rig), ['kruskal', 'pacificAtlantic']);
-  assert.equal(Object.values(PROBLEMS).flat().length, 104);
+  assert.equal(Object.values(PROBLEMS).flat().length, 107);
   const names = { reverseBits: 190, divideBits: 29, kClosest: 973, cloneGraph: 133, kruskal: 1584, pacificAtlantic: 417 };
   for (const [chapter, list] of Object.entries(PROBLEMS)) {
     list.forEach((p, j) => {

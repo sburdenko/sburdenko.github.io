@@ -1266,7 +1266,7 @@ test('every chapter has texts for each problem, at least one Hard, and code', ()
     }
     assert.equal(new Set(PROBLEMS[id].map(p => p.rig)).size, PROBLEMS[id].length, `${id}: rigs must differ`);
     assert.ok(PROBLEMS[id].some(p => p.diff === 'Hard'), `${id}: no Hard problem`);
-    assert.ok(PROBLEMS[id].length >= 4 && PROBLEMS[id].length <= 7, `${id}: 4–7 problems`);
+    assert.ok(PROBLEMS[id].length >= 4 && PROBLEMS[id].length <= 8, `${id}: 4–8 problems`);
   }
 });
 

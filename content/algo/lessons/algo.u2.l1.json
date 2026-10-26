@@ -2,7 +2,7 @@
  "id": "algo.u2.l1",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 12,
+ "minutes": 13,
  "cards": [
   {
    "t": "learn",
@@ -100,6 +100,38 @@
    "body": "⟦⟧",
    "code": "⟦⟧",
    "lang": "cs"
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "dup",
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": "dup.ev.hit",
+      "options": [
+       {
+        "event": "dup.ev.hit",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "dup.ev.add",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "dup.ev.none",
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end"]
   },
   {
    "t": "order",
