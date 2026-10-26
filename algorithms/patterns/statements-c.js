@@ -80,13 +80,13 @@ export const ST_C = {
       text: 'Даны слова <code>begin</code> и <code>end</code> одной длины и словарь <code>words</code>. За один шаг можно заменить в слове ровно одну букву, и каждое получившееся слово должно быть в словаре (<code>begin</code> в словаре быть не обязано). Верни число слов в самой короткой цепочке от <code>begin</code> до <code>end</code>, считая оба конца, или 0, если такой цепочки нет.',
       limits: '1 ≤ длина слова ≤ 10, 1 ≤ words.length ≤ 5000, только строчные латинские буквы, слова словаря различны, begin ≠ end.',
       note: 'кратчайшая цепочка hit → hot → dot → dog → cog состоит из 5 слов.',
-      fact: 'Игру придумал Льюис Кэрролл и в 1879 году печатал в Vanity Fair под названием «Doublets»: HEAD → HEAL → TEAL → TELL → TALL → TAIL. Жди вопроса про двунаправленную BFS — две волны навстречу.',
+      fact: 'Эта головоломка старше компьютеров: в 1879 году журнал Vanity Fair печатал её под названием «Doublets»: HEAD → HEAL → TEAL → TELL → TALL → TAIL. Жди вопроса про двунаправленную BFS — две волны навстречу.',
     },
     en: {
       text: 'You get two words <code>begin</code> and <code>end</code> of equal length and a word list <code>words</code>. One step changes exactly one letter, and every word you get must be in the list (<code>begin</code> itself need not be). Return the number of words in the shortest chain from <code>begin</code> to <code>end</code>, counting both ends, or 0 if no chain exists.',
       limits: '1 ≤ word length ≤ 10, 1 ≤ words.length ≤ 5000, lowercase English letters only, list words are distinct, begin ≠ end.',
       note: 'the shortest chain hit → hot → dot → dog → cog has 5 words.',
-      fact: 'Lewis Carroll invented the game and ran it in Vanity Fair in 1879 as “Doublets”: HEAD → HEAL → TEAL → TELL → TALL → TAIL. Expect a follow-up on bidirectional BFS, two waves meeting halfway.',
+      fact: 'The puzzle predates computers: in 1879 Vanity Fair ran it as “Doublets”: HEAD → HEAL → TEAL → TELL → TALL → TAIL. Expect a follow-up on bidirectional BFS, two waves meeting halfway.',
     },
   },
   cloneGraph: {
