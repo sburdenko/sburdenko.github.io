@@ -1,8 +1,8 @@
 /** Editable rigs for chapter 15: bit manipulation. */
-import * as F from './model-f.js?v=202610262021';
-import * as V from './views-f.js?v=202610262021';
-import { bitWidth } from './view-kit.js?v=202610262021';
-import { defineRig, randInt, randInts, distinctInts, shuffle, pick } from './rig-kit.js?v=202610262021';
+import * as F from './model-f.js?v=202610262045';
+import * as V from './views-f.js?v=202610262045';
+import { bitWidth } from './view-kit.js?v=202610262045';
+import { defineRig, randInt, randInts, distinctInts, shuffle, pick } from './rig-kit.js?v=202610262045';
 
 /** Every value a trace shows, so the register keeps one width for the whole run. */
 const widthOf = (events, fields) => bitWidth(events.flatMap(e => fields.map(f => e[f])).filter(v => typeof v === 'number'));
