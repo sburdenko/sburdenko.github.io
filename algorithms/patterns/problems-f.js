@@ -1,5 +1,5 @@
 /** Problems and C# solutions for chapter 15: bit manipulation. C# 9: no >>> (it arrived in C# 11), so unsigned shifts go through uint. */
-import { problem as p } from './problem.js?v=202610261057';
+import { problem as p } from './problem.js?v=202610261132';
 
 export const PROBLEMS_F = {
   bits: [

@@ -1,7 +1,7 @@
 /** Editable rigs for arrays and matrices. */
-import * as D from './model-d.js?v=202610261057';
-import * as V from './views-d.js?v=202610261057';
-import { defineRig, randInt, randInts, shuffle } from './rig-kit.js?v=202610261057';
+import * as D from './model-d.js?v=202610261132';
+import * as V from './views-d.js?v=202610261132';
+import { defineRig, randInt, randInts, shuffle } from './rig-kit.js?v=202610261132';
 
 const matrix = (extra = {}) => ({ key: 'matrix', type: 'matrix', minRows: 1, maxRows: 6, maxCols: 6, min: -99, max: 99, ...extra });
 const counting = (rows, cols) => Array.from({ length: rows }, (_, r) => Array.from({ length: cols }, (_, c) => r * cols + c + 1));

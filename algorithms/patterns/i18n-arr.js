@@ -57,6 +57,7 @@ export const P_ARR = {
 
 export const CH_ARR = {
   'var.curSum': { en: 'cur (ends here)', ru: 'cur (кончается здесь)' },
+  'var.curRange': { en: 'current run', ru: 'текущий отрезок' },
   'var.bestRange': { en: 'best subarray', ru: 'лучший подмассив' },
   'var.ivPhase': { en: 'phase', ru: 'фаза' },
   'var.se': { en: 'new interval [s, e]', ru: 'новый интервал [s, e]' },
