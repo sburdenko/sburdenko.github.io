@@ -114,13 +114,13 @@ export const ST_D = {
       text: 'Дано неотрицательное целое число <code>n</code>. Верни, сколько единиц в его двоичной записи (вес Хэмминга).',
       limits: 'в оригинале 1 ≤ n ≤ 2³¹ − 1 (в старой версии — любое 32-битное беззнаковое); на стенде 0 ≤ n ≤ 2³² − 1.',
       note: '52 = 110100₂.',
-      fact: 'Приём <code>x & (x − 1)</code> носит имя Кернигана, но первым его описал Питер Вегнер в 1960 году в Communications of the ACM — больше чем за десять лет до появления языка C.',
+      fact: 'Приём <code>x & (x − 1)</code> часто считают фольклором программистов на C, но первым его описал Питер Вегнер в 1960 году в Communications of the ACM — больше чем за десять лет до появления языка C.',
     },
     en: {
       text: 'Given a non-negative integer <code>n</code>, return how many 1 bits its binary form has (its Hamming weight).',
       limits: 'in the original 1 ≤ n ≤ 2³¹ − 1 (an older version allowed any 32-bit unsigned value); in the rig 0 ≤ n ≤ 2³² − 1.',
       note: '52 = 110100₂.',
-      fact: 'The <code>x & (x − 1)</code> trick carries Kernighan’s name, but Peter Wegner described it in Communications of the ACM in 1960, more than a decade before the C language existed.',
+      fact: 'The <code>x & (x − 1)</code> trick is often taken for C programmers’ folklore, but Peter Wegner described it in Communications of the ACM in 1960, more than a decade before the C language existed.',
     },
   },
   missingXor: {

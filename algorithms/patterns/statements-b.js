@@ -176,13 +176,13 @@ export const ST_B = {
       text: 'Дана голова односвязного списка. Верни <code>true</code>, если, идя по ссылкам <code>next</code>, можно попасть в узел повторно (в списке есть цикл), иначе <code>false</code>. На стенде список задан числами: <code>n</code> узлов с номерами 0…n−1, а <code>next</code> последнего узла ведёт на узел <code>pos</code> (<code>-1</code> — на null). Сам <code>pos</code> решению не передаётся. Дополнительно: справиться с O(1) памяти.',
       limits: 'до 10⁴ узлов, −10⁵ ≤ val ≤ 10⁵, pos = −1 или корректный индекс.',
       note: 'последний узел 7 указывает на узел 2.',
-      fact: '«Черепаху и зайца» приписывают Роберту Флойду со слов Кнута (1969), но в опубликованных работах Флойда этого алгоритма нет. Ричард Брент в 1980 году предложил вариант с «телепортирующейся» черепахой.',
+      fact: '«Черепаху и зайца» принято приписывать Роберту Флойду, но в его опубликованных работах этого алгоритма нет. Ричард Брент в 1980 году предложил вариант с «телепортирующейся» черепахой.',
     },
     en: {
       text: 'You are given the head of a singly linked list. Return <code>true</code> if following the <code>next</code> links can reach some node again (the list has a cycle), otherwise <code>false</code>. In the rig the list is described by numbers: <code>n</code> nodes numbered 0…n−1, and the last node\'s <code>next</code> points to node <code>pos</code> (<code>-1</code> means null). The solution does not receive <code>pos</code>. Follow-up: use O(1) memory.',
       limits: 'up to 10⁴ nodes, −10⁵ ≤ val ≤ 10⁵, pos = −1 or a valid index.',
       note: 'the last node 7 points back to node 2.',
-      fact: 'The tortoise and hare is credited to Robert Floyd on Knuth\'s word (1969), yet it appears in none of Floyd\'s published work. In 1980 Richard Brent proposed a variant with a "teleporting" tortoise.',
+      fact: 'The tortoise and hare is usually credited to Robert Floyd, yet it appears in none of his published work. In 1980 Richard Brent proposed a variant with a "teleporting" tortoise.',
     },
   },
   cycleEntry: {

@@ -1,10 +1,10 @@
 /** Стенд «найди баг»: листинг с нажимаемыми строками. Логика — в models-hunt.js. */
-import { esc } from '../assets/vhs.js?v=202610261308';
-import { drive, act } from './rig-kit.js?v=202610261308';
-import { codeHtml } from './code-view.js?v=202610261308';
-import { tr } from './i18n.js?v=202610261308';
-import { huntAnalyze, huntNeed, huntSummary, huntRig } from './models-hunt.js?v=202610261308';
-import { t as tl } from './ui.js?v=202610261308';
+import { esc } from '../assets/vhs.js?v=202610262021';
+import { drive, act } from './rig-kit.js?v=202610262021';
+import { codeHtml } from './code-view.js?v=202610262021';
+import { tr } from './i18n.js?v=202610262021';
+import { huntAnalyze, huntNeed, huntSummary, huntRig } from './models-hunt.js?v=202610262021';
+import { t as tl } from './ui.js?v=202610262021';
 
 function hunt(card, host, done) {
   const lines = card.code.split('\n');
