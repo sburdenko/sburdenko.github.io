@@ -19,11 +19,33 @@
 .rig{display:grid;gap:16px}
 .rig-head{display:grid;gap:6px}
 .rig-name{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
-.rig-head h3{font-family:var(--f-mono);font-size:17px;font-weight:600;letter-spacing:.02em}
+.rig-head h3{margin:0}
+.rig-title{font-family:var(--f-mono);font-size:17px;font-weight:600;letter-spacing:.02em}
 .rig-meta{font-family:var(--f-mono);font-size:13px;color:var(--ink3)}
+.rig-name{align-items:center}
+.pick{position:relative}
+.pick-btn{display:flex;align-items:center;gap:10px;cursor:pointer;padding:5px 10px 5px 12px;margin-left:-12px;background:transparent;border:1px solid var(--line2);border-radius:5px;color:#fff;transition:border-color .15s,background .15s}
+.pick-btn:hover,.pick-btn[aria-expanded="true"]{border-color:var(--osd);background:rgba(255,210,63,.06)}
+.pick-btn .pick-arrow{font-size:13px;color:var(--osd);transition:transform .15s}
+.pick-btn[aria-expanded="true"] .pick-arrow{transform:rotate(180deg)}
+.pick-list{position:absolute;z-index:30;top:calc(100% + 6px);left:-12px;width:min(480px,calc(100vw - 32px));max-height:min(60vh,520px);overflow-y:auto;margin:0;padding:6px;list-style:none;background:#0d0820;border:1px solid var(--line2);border-radius:6px;box-shadow:0 18px 40px -12px rgba(0,0,0,.85)}
+.pick-list:focus{outline:none;border-color:var(--osd)}
+.opt{display:grid;grid-template-columns:24px 1fr;gap:2px 10px;padding:8px 10px;border-radius:4px;cursor:pointer;border:1px solid transparent}
+.opt .n{grid-row:span 3;font:12px/1.6 var(--f-mono);color:var(--ink3)}
+.opt .nm{font-weight:600;font-size:15px;color:#fff}
+.opt .v{font:700 10.5px/1.3 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--osd)}
+.opt .meta{font:12px var(--f-mono);color:var(--ink3)}
+.opt .must{color:var(--osd);font-weight:700;letter-spacing:.06em}
+.opt.active{background:rgba(255,210,63,.08);border-color:rgba(255,210,63,.35)}
+.opt[aria-selected="true"] .nm::after{content:" ●";color:var(--osd);font-size:11px;vertical-align:middle}
+.opt.hard .n{color:var(--bad)}
+.pick-steps{display:flex;gap:4px}
+.pick-steps .btn{padding:4px 10px;min-height:0}
+.rig-fact{flex:1 1 280px;margin:0 0 0 auto;max-width:560px;font-size:13.5px;line-height:1.45;color:var(--ink2);padding:6px 12px;border-left:2px solid var(--gpu);background:rgba(38,227,234,.05);border-radius:0 4px 4px 0}
+.rig-fact .lbl{color:var(--gpu);margin-right:4px}
 .rig-meta .leet{font-size:13px}
 /* условие задачи — над стендом: трассу читают, глядя на него */
-.rig-task{display:grid;gap:4px;padding:10px 14px;border:1px solid var(--line);border-radius:5px;background:rgba(7,4,15,.45)}
+.rig-task{display:grid;gap:8px}
 .rig-task p{margin:0;font-size:15.5px;line-height:1.55;color:#e3dcfb}
 .rig-task p code{font-size:.92em}
 .rig-task .st-limits{font-size:14px;color:var(--ink2)}
@@ -35,10 +57,26 @@
 /* стенд и кнопки рядом с переменными и вводом, чтобы всё помещалось в один экран */
 .rig-grid{display:grid;gap:16px;align-items:start}
 .rig-main,.rig-side{display:grid;gap:12px;min-width:0;align-content:start}
-@media (min-width:1100px){.rig-grid{grid-template-columns:minmax(0,1.75fr) minmax(260px,1fr)}.rig-side .editor{display:grid;gap:10px}.rig-side .editor .fields{flex-direction:column}.rig-side .editor .fld{flex-wrap:wrap}.rig-side .editor input{width:100%}.rig-side .rig-vars{flex-direction:column;gap:10px}}
+.rig-side{gap:0}
+@media (max-width:1099px){.rig-side{order:-1}}
+@media (max-width:480px){.itab{padding:10px 9px;letter-spacing:.06em}}
+@media (min-width:1100px){.rig-grid{grid-template-columns:minmax(0,1.3fr) minmax(360px,1fr)}.rig-side{position:sticky;top:64px}.ibody{max-height:max(320px,calc(100vh - 240px));overflow:auto}}
+.itabs{display:flex;gap:2px;border-bottom:1px solid var(--line2);overflow-x:auto;scrollbar-width:none}
+.itab{flex:none}
+.itab{font:700 11.5px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);background:transparent;border:1px solid transparent;border-bottom:0;border-radius:5px 5px 0 0;padding:10px 12px;margin-bottom:-1px;cursor:pointer;transition:color .15s}
+.itab:hover{color:var(--ink)}
+.itab[aria-selected="true"]{color:var(--osd);border-color:var(--line2);background:#0b0716}
+.itab.bad::after{content:" ●";color:var(--bad)}
+.ibody{padding:14px 16px;border:1px solid var(--line2);border-top:0;border-radius:0 0 5px 5px;background:#0b0716;scrollbar-width:thin}
+.ipane[hidden]{display:none!important}
+.ibody .editor{display:grid;gap:10px;padding:0;border:0;background:none}
+.ibody .editor .fields{flex-direction:column}
+.ibody .editor .fld{flex-wrap:wrap}
+.ibody .editor input{width:100%}
+.ibody .pcode pre.code{margin:0;font-size:12.5px;max-height:none}
 .rig .crt{padding:14px 12px;min-height:120px;display:flex;justify-content:center;align-items:center;overflow-x:auto}
 .rig .stage{display:flex;justify-content:center;min-width:0;max-width:100%}
-.rig .stage svg{max-width:100%;max-height:min(56vh,560px);width:auto;height:auto;overflow:visible;font-family:var(--f-mono)}
+.rig .stage svg{max-width:100%;max-height:min(46vh,460px);width:auto;height:auto;overflow:visible;font-family:var(--f-mono)}
 .explanation{min-height:3.4em;border-left:3px solid var(--osd);padding:12px 16px;background:rgba(255,210,63,.04);font-size:16.5px;color:#fff}
 .rig-vars{display:flex;flex-wrap:wrap;gap:10px 22px}
 .rv{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
@@ -103,29 +141,15 @@
 
 /* ---------- problems ---------- */
 .probs{display:grid;gap:14px}
-.ptabs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:10px}
-.ptab{display:grid;gap:5px;text-align:left;cursor:pointer;padding:12px 14px;background:var(--bg2);border:1px solid var(--line2);border-radius:5px;color:var(--ink);font-family:var(--f-body);transition:border-color .15s,background .15s}
-.ptab:hover{border-color:var(--ink3)}
-.ptab[aria-selected="true"]{border-color:var(--osd);background:rgba(255,210,63,.07);box-shadow:0 0 16px -6px rgba(255,210,63,.5)}
-.ptab .v{font:700 11px/1.3 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--osd)}
-.ptab .nm{font-weight:600;font-size:15.5px;line-height:1.3;color:#fff}
-.ptab .meta{font:12px var(--f-mono);color:var(--ink3)}
 .diff{font-style:normal;font-weight:700}
 .diff.Easy{color:var(--ok)}.diff.Medium{color:var(--warn)}.diff.Hard{color:var(--bad)}
-.ppanel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:24px;align-items:start}
-@media (max-width:900px){.ppanel{grid-template-columns:minmax(0,1fr)}}
-.pinfo{display:grid;gap:14px;align-content:start}
-.pinfo h3 .lc{font-family:var(--f-mono);font-size:14px;color:var(--ink3);font-weight:400}
-.pinfo dl{margin:0;display:grid;gap:12px}
+.pinfo dl{margin:0;display:grid;gap:14px}
 .pinfo dd{margin:4px 0 0;font-size:15.5px;line-height:1.55;color:#e3dcfb}
 .pinfo dd.cx{font-family:var(--f-mono);font-size:13.5px;color:#fff}
 .pinfo .leet{font-family:var(--f-mono);font-size:13px}
 .pcode{display:grid;gap:8px;min-width:0}
 
 /* ---------- rigs added with the per-problem stands ---------- */
-.ptab.hard{border-color:rgba(255,92,108,.45)}
-.ptab.hard[aria-selected="true"]{border-color:var(--bad);background:rgba(255,92,108,.08);box-shadow:0 0 16px -6px rgba(255,92,108,.6)}
-.ptab .must{color:var(--osd);font-weight:700;letter-spacing:.06em}
 .stage .ptr.p3 path{fill:var(--ok)}
 .stage .ptr.p3 text{fill:var(--ok)}
 .stage .cell.g0,.vchip.g0{fill:rgba(38,227,234,.28);border-color:var(--gpu)}
