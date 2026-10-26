@@ -674,7 +674,7 @@ export const EX_D = {
     ops: {
       unit: { ru: 'шагов цикла', en: 'loop turns' },
       naive: { ru: 'все 32 бита', en: 'all 32 bits', count: () => 32 },
-      ours: { ru: 'x &amp; (x − 1)', en: 'x &amp; (x − 1)', count: p => ones(p.n) },
+      ours: { ru: 'снятие младшей единицы', en: 'clearing the lowest one', count: p => ones(p.n) },
     },
     predict: [],
     followups: [
@@ -687,7 +687,7 @@ export const EX_D = {
     ],
     related: [
       { id: 'countBits', ru: 'то же число единиц, но сразу для всех 0..n', en: 'the same count of ones, for all of 0..n at once' },
-      { id: 'singleIII', ru: 'родственный приём x &amp; −x — младшая единица', en: 'the sibling trick x &amp; −x picks the lowest one' },
+      { id: 'singleIII', ru: 'родственный приём: x and −x оставляет младшую единицу', en: 'a sibling trick: x and −x keeps the lowest one' },
     ],
   },
 
@@ -795,12 +795,12 @@ export const EX_D = {
         for (let i = 1; i <= p.n; i++) turns += bitLength(i);
         return turns;
       } },
-      ours: { ru: 'bits[i &gt;&gt; 1] + (i &amp; 1)', en: 'bits[i &gt;&gt; 1] + (i &amp; 1)', count: p => p.n },
+      ours: { ru: 'из ответа для i / 2', en: 'from the answer for i / 2', count: p => p.n },
     },
     predict: [
       { q: { ru: 'Какое число i следующее: нечётное, чётное или степень двойки?', en: 'What is the next i: odd, even, or a power of two?' },
-        keys: { 'cb.ev.odd': { ru: 'нечётное: +1 к i &gt;&gt; 1', en: 'odd: +1 on top of i &gt;&gt; 1' },
-                'cb.ev.even': { ru: 'чётное: столько же, сколько у i &gt;&gt; 1', en: 'even: the same as i &gt;&gt; 1' },
+        keys: { 'cb.ev.odd': { ru: 'нечётное: на 1 больше, чем у i / 2', en: 'odd: one more than i / 2' },
+                'cb.ev.even': { ru: 'чётное: столько же, сколько у i / 2', en: 'even: the same as i / 2' },
                 'cb.ev.pow': { ru: 'степень двойки: одна единица', en: 'a power of two: a single one' } } },
     ],
     followups: [
@@ -834,7 +834,7 @@ export const EX_D = {
       } },
     },
     predict: [
-      { q: { ru: 'Что даст a &amp; b в этом раунде?', en: 'What will a &amp; b give in this round?' },
+      { q: { ru: 'Что покажут общие единицы a и b в этом раунде?', en: 'What do the shared ones of a and b show this round?' },
         keys: { 'sum.ev.carry': { ru: 'есть перенос, ещё раунд', en: 'a carry, one more round' },
                 'sum.ev.nocarry': { ru: 'переносов нет, готово', en: 'no carry, done' },
                 'sum.ev.drop': { ru: 'перенос вылетает за 31-й бит', en: 'a carry falls off bit 31' } } },

@@ -243,8 +243,8 @@ export const EX_A = {
   firstMissing: {
     tricky: [
       { input: { nums: '1, 2, 3' },
-        ru: 'Все ячейки 1..n заняты: ответ не внутри массива, а n + 1 = 4. Код, который ищет только «первую ячейку без своего числа», вернёт мусор.',
-        en: 'Every slot 1..n is filled: the answer is outside the array, n + 1 = 4. Code that only looks for “the first slot missing its value” returns garbage.' },
+        ru: 'Все ячейки 1..n заняты: ответ не внутри массива, а n + 1 = 4. Код, который ищет только «первую ячейку без своего числа», здесь ничего не найдёт.',
+        en: 'Every slot 1..n is filled: the answer is outside the array, n + 1 = 4. Code that only looks for “the first slot missing its value” finds nothing here.' },
       { input: { nums: '7, 8, 9' },
         ru: 'Ответ «максимум + 1» здесь даст 10. Но 1 нет вовсе, значит ответ 1.',
         en: '“Maximum + 1” gives 10 here. But 1 is missing altogether, so the answer is 1.' },
@@ -877,8 +877,8 @@ export const EX_A = {
         ru: 'Если писать новое состояние сразу, первая клетка умрёт, средняя увидит лишь одного соседа и тоже умрёт — выйдет 000. Верно — 010: средняя выживает с двумя соседями.',
         en: 'Write the new state immediately and the first cell dies, the middle sees only one neighbour and dies too — you get 000. The answer is 010: the middle survives with two neighbours.' },
       { input: { board: '11 11' },
-        ru: 'Края не склеены: у каждой клетки блока 2 × 2 ровно 3 соседа, блок неподвижен. С ошибочным «тором» соседи посчитаются дважды, и блок умрёт.',
-        en: 'Edges do not wrap: every cell of the 2 × 2 block has exactly 3 neighbours, so the block is still. With an accidental torus neighbours are counted twice and the block dies.' },
+        ru: 'Края не склеены: у каждой клетки блока 2 × 2 ровно 3 соседа, блок неподвижен. С ошибочным «тором» соседи посчитаются по нескольку раз, и блок умрёт от перенаселения.',
+        en: 'Edges do not wrap: every cell of the 2 × 2 block has exactly 3 neighbours, so the block is still. With an accidental torus neighbours are counted several times and the block dies of overcrowding.' },
     ],
     ops: {
       unit: { ru: 'записей', en: 'writes' },
@@ -922,8 +922,8 @@ export const EX_A = {
   maxRect: {
     tricky: [
       { input: { matrix: '111' },
-        ru: 'Забудешь в конце строки вытолкнуть стек нулевой высотой — столбики так и не посчитаются, ответ 0. Верно — 3.',
-        en: 'Forget to flush the stack with a zero height at the end of the row and the bars are never counted, giving 0. The answer is 3.' },
+        ru: 'Забудешь в конце строки вытолкнуть остаток стека нулевой высотой — самый широкий прямоугольник не посчитается, и выйдет 2. Верно — 3.',
+        en: 'Forget to flush the rest of the stack with a zero height at the end of the row and the widest rectangle is never measured, giving 2. The answer is 3.' },
       { input: { matrix: '0110 1111 0110' },
         ru: 'Самая длинная строка единиц даёт 4, но выше прямоугольник 3 × 2 по средним столбцам. Ответ — 6.',
         en: 'The longest row of ones gives 4, but the 3 × 2 rectangle in the middle columns is bigger. The answer is 6.' },
@@ -969,8 +969,8 @@ export const EX_A = {
   uniquePaths: {
     tricky: [
       { input: { m: '1', n: '1', mode: 'table' },
-        ru: 'Старт совпадает с финишем: путь один — пустой. Код, который считает только шаги, вернёт 0. Ответ — 1.',
-        en: 'Start equals finish: there is one path, the empty one. Code that counts only moves returns 0. The answer is 1.' },
+        ru: 'Старт совпадает с финишем: путь один — пустой. Если в базе написать «в клетку старта 0 путей», ответ выйдет 0. Верно — 1.',
+        en: 'Start equals finish: there is one path, the empty one. Seed the start cell with “0 paths” and you return 0. The answer is 1.' },
       { input: { m: '1', n: '7', mode: 'row' },
         ru: 'Одна строка: идти можно только вправо, путь один. Ответ — 1, а внутренний цикл не делает ни шага.',
         en: 'One row: you can only go right, so there is one path. The answer is 1, and the inner loop never runs.' },
