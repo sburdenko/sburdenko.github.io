@@ -1,8 +1,8 @@
 /** PY-01 assembly. */
-import { bootTape } from '../shared/tape.js?v=202610261206';
-import { DICT } from './i18n.js?v=202610261206';
-import { RIGS } from './rigs.js?v=202610261206';
-import { QUIZZES } from './quizzes.js?v=202610261206';
+import { bootTape } from '../shared/tape.js?v=202610261308';
+import { DICT } from './i18n.js?v=202610261308';
+import { RIGS } from './rigs.js?v=202610261308';
+import { QUIZZES } from './quizzes.js?v=202610261308';
 
 export const CHAPTERS = [
   { id: 'print', n: '01' }, { id: 'names', n: '02' }, { id: 'numbers', n: '03' }, { id: 'strings', n: '04' }, { id: 'types', n: '05' },
