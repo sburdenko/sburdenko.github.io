@@ -1,7 +1,7 @@
 /** Editable rigs for the chapters heap, backtracking, greedy, dynamic programming. */
-import * as C from './model-c.js?v=202610261153';
-import * as V from './views-c.js?v=202610261153';
-import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202610261153';
+import * as C from './model-c.js?v=202610261206';
+import * as V from './views-c.js?v=202610261206';
+import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202610261206';
 
 const nums = (extra = {}) => ({ key: 'nums', type: 'ints', minLen: 1, maxLen: 10, min: -99, max: 99, ...extra });
 const word = key => ({ key, type: 'str', chars: 'a-z', charsLabel: 'a–z', minLen: 0, maxLen: 7 });

@@ -5,8 +5,8 @@
  * состояние, goal(card.goal, состояние) → выполнено ли задание. Те же действия шлют кнопки стенда
  * и тесты, поэтому тест может пройти задание «руками» и проверить, что оно выполнимо.
  */
-import { tr } from './i18n.js?v=202610261153';
-import { t as tl } from './ui.js?v=202610261153';
+import { tr } from './i18n.js?v=202610261206';
+import { t as tl } from './ui.js?v=202610261206';
 
 const clone = x => structuredClone(x);
 
