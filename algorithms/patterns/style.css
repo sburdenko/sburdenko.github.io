@@ -17,18 +17,32 @@
 
 /* ---------- rig ---------- */
 .rig{display:grid;gap:16px}
-.rig-head{display:grid;gap:6px}
-.rig-name{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.rig-head{display:grid;gap:8px}
+.rig-head > .lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* The title row keeps its geometry whatever the problem: a fixed-width picker, arrows and meta under it, a fact box sized to the chapter's longest fact. */
+.rig-name{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:10px 24px;align-items:start}
+@media (max-width:860px){.rig-name{grid-template-columns:minmax(0,1fr)}}
+.pick-col{display:grid;gap:8px;min-width:0}
+.pick-box{position:relative;min-width:0}
+.pick-btn .rig-title{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
+.pick-row{display:flex;align-items:center;gap:12px;min-width:0}
+.pick-steps .btn{padding:4px 10px;min-height:0}
+.rig-meta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.rig-fact{display:grid;font-size:13.5px;line-height:1.45;color:var(--ink2);padding:6px 12px;border-left:2px solid var(--gpu);background:rgba(38,227,234,.05);border-radius:0 4px 4px 0}
+.rig-fact .fact-one{grid-area:1/1;margin:0;visibility:hidden}
+.rig-fact .fact-one.on{visibility:visible}
+.rig-fact:empty{display:none}
+.rig-meta .must-short,.rig-meta .leet-short{display:none}
+@media (max-width:480px){.rig-meta .must-long{display:none}.rig-meta .must-short{display:inline}.pick-row{gap:8px}}
+@media (max-width:360px){.pick-steps .btn{padding:4px 8px}.pick-row{gap:6px}.rig-meta .leet-long{display:none}.rig-meta .leet-short{display:inline}.rig-meta{font-size:12px}}
 .rig-head h3{margin:0}
 .rig-title{font-family:var(--f-mono);font-size:17px;font-weight:600;letter-spacing:.02em}
 .rig-meta{font-family:var(--f-mono);font-size:13px;color:var(--ink3)}
-.rig-name{align-items:center}
-.pick{position:relative}
-.pick-btn{display:flex;align-items:center;gap:10px;cursor:pointer;padding:5px 10px 5px 12px;margin-left:-12px;background:transparent;border:1px solid var(--line2);border-radius:5px;color:#fff;transition:border-color .15s,background .15s}
+.pick-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;cursor:pointer;padding:5px 10px 5px 12px;background:transparent;border:1px solid var(--line2);border-radius:5px;color:#fff;transition:border-color .15s,background .15s}
 .pick-btn:hover,.pick-btn[aria-expanded="true"]{border-color:var(--osd);background:rgba(255,210,63,.06)}
 .pick-btn .pick-arrow{font-size:13px;color:var(--osd);transition:transform .15s}
 .pick-btn[aria-expanded="true"] .pick-arrow{transform:rotate(180deg)}
-.pick-list{position:absolute;z-index:30;top:calc(100% + 6px);left:-12px;width:min(480px,calc(100vw - 32px));max-height:min(60vh,520px);overflow-y:auto;margin:0;padding:6px;list-style:none;background:#0d0820;border:1px solid var(--line2);border-radius:6px;box-shadow:0 18px 40px -12px rgba(0,0,0,.85)}
+.pick-list{position:absolute;z-index:30;top:calc(100% + 6px);left:0;width:min(480px,calc(100vw - 32px));max-height:min(60vh,520px);overflow-y:auto;margin:0;padding:6px;list-style:none;background:#0d0820;border:1px solid var(--line2);border-radius:6px;box-shadow:0 18px 40px -12px rgba(0,0,0,.85)}
 .pick-list:focus{outline:none;border-color:var(--osd)}
 .opt{display:grid;grid-template-columns:24px 1fr;gap:2px 10px;padding:8px 10px;border-radius:4px;cursor:pointer;border:1px solid transparent}
 .opt .n{grid-row:span 3;font:12px/1.6 var(--f-mono);color:var(--ink3)}
@@ -40,8 +54,6 @@
 .opt[aria-selected="true"] .nm::after{content:" ●";color:var(--osd);font-size:11px;vertical-align:middle}
 .opt.hard .n{color:var(--bad)}
 .pick-steps{display:flex;gap:4px}
-.pick-steps .btn{padding:4px 10px;min-height:0}
-.rig-fact{flex:1 1 280px;margin:0 0 0 auto;max-width:560px;font-size:13.5px;line-height:1.45;color:var(--ink2);padding:6px 12px;border-left:2px solid var(--gpu);background:rgba(38,227,234,.05);border-radius:0 4px 4px 0}
 .rig-fact .lbl{color:var(--gpu);margin-right:4px}
 .rig-meta .leet{font-size:13px}
 /* условие задачи — над стендом: трассу читают, глядя на него */
@@ -331,3 +343,6 @@
 .stage .pa-p{fill:var(--gpu);opacity:.75}
 .stage .pa-a{fill:var(--warn);opacity:.75}
 .stage .pa-tick{fill:var(--ok);font-weight:700}
+
+/* The step counter keeps its width so the speed slider never shifts. */
+.rig .transport [data-t="pos"]{min-width:13ch;text-align:right;font-variant-numeric:tabular-nums}

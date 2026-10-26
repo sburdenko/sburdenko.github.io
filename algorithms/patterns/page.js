@@ -1,14 +1,14 @@
 /** Tape 06 assembly: language, map, skeletons and, per chapter, four problem tabs that each drive their own rig. */
-import { $, $$, esc, bootVhs } from '../../assets/vhs.js?v=202610262021';
-import { initI18n, t, onLang, getLang } from '../../assets/i18n.js?v=202610262021';
-import { COMMON } from '../../assets/i18n-common.js?v=202610262021';
-import { renderCode } from '../../assets/code.js?v=202610262021';
-import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202610262021';
-import { DICT } from './i18n.js?v=202610262021';
-import { RIGS, PATTERN_IDS, runWithInput } from './rigs.js?v=202610262021';
-import { formatField } from './inputs.js?v=202610262021';
-import { PROBLEMS, NAMES } from './problems.js?v=202610262021';
-import { STATEMENTS } from './statements.js?v=202610262021';
+import { $, $$, esc, bootVhs } from '../../assets/vhs.js?v=202610262045';
+import { initI18n, t, onLang, getLang } from '../../assets/i18n.js?v=202610262045';
+import { COMMON } from '../../assets/i18n-common.js?v=202610262045';
+import { renderCode } from '../../assets/code.js?v=202610262045';
+import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202610262045';
+import { DICT } from './i18n.js?v=202610262045';
+import { RIGS, PATTERN_IDS, runWithInput } from './rigs.js?v=202610262045';
+import { formatField } from './inputs.js?v=202610262045';
+import { PROBLEMS, NAMES } from './problems.js?v=202610262045';
+import { STATEMENTS } from './statements.js?v=202610262045';
 
 const pad = n => String(n).padStart(2, '0');
 
@@ -17,13 +17,17 @@ const shell = () => `<div class="panel rig">
     <div class="rig-head">
       <p class="lbl"><span data-i18n="ui.rigTag">RIG · STEP BY STEP</span> · <span class="rig-count"></span></p>
       <div class="rig-name">
-        <div class="pick">
-          <h3><button type="button" class="pick-btn" aria-haspopup="listbox" aria-expanded="false"><span class="rig-title"></span><span class="pick-arrow" aria-hidden="true">▾</span></button></h3>
-          <ul class="pick-list" role="listbox" tabindex="-1" data-i18n-aria="ui.problemsAria" hidden></ul>
+        <div class="pick-col">
+          <div class="pick-box">
+            <h3><button type="button" class="pick-btn" aria-haspopup="listbox" aria-expanded="false"><span class="rig-title"></span><span class="pick-arrow" aria-hidden="true">▾</span></button></h3>
+            <ul class="pick-list" role="listbox" tabindex="-1" data-i18n-aria="ui.problemsAria" hidden></ul>
+          </div>
+          <div class="pick-row">
+            <span class="pick-steps"><button type="button" class="btn" data-step="-1" data-i18n-title="ui.prevProblem" data-i18n-aria="ui.prevProblem">◀</button><button type="button" class="btn" data-step="1" data-i18n-title="ui.nextProblem" data-i18n-aria="ui.nextProblem">▶</button></span>
+            <span class="rig-meta"></span>
+          </div>
         </div>
-        <span class="pick-steps"><button type="button" class="btn" data-step="-1" data-i18n-title="ui.prevProblem" data-i18n-aria="ui.prevProblem">◀</button><button type="button" class="btn" data-step="1" data-i18n-title="ui.nextProblem" data-i18n-aria="ui.nextProblem">▶</button></span>
-        <span class="rig-meta"></span>
-        <p class="rig-fact"></p>
+        <div class="rig-fact"></div>
       </div>
     </div>
     <div class="rig-grid">
@@ -135,10 +139,14 @@ function mountChapter(root) {
   /* Everything about the problem shares one card beside the rig, a tab each, so the whole problem fits one screen. */
   function renderInfo() {
     const p = PROBLEMS[id][selected], text = t(`${id}.p`)[selected];
-    meta.innerHTML = `#${p.num} · <i class="diff ${p.diff}">${p.diff}</i>${p.must ? ` · <b class="must">${t('ui.hard')}</b>` : ''} · <a class="leet" href="https://leetcode.com/problems/${p.slug}/" target="_blank" rel="noopener">${t('ui.leet')}</a>`;
-    const note = STATEMENTS[p.rig]?.[getLang()]?.fact;
-    fact.hidden = !note;
-    fact.innerHTML = note ? `<span class="lbl">${t('ui.fact')}</span> ${note}` : '';
+    meta.innerHTML = `#${p.num} · <i class="diff ${p.diff}">${p.diff}</i>${p.must ? ` · <b class="must" title="${t('ui.hard')}"><span class="must-long">${t('ui.hard')}</span><span class="must-short" aria-hidden="true">★</span></b>` : ''} · <a class="leet" href="https://leetcode.com/problems/${p.slug}/" target="_blank" rel="noopener" title="${t('ui.leet')}"><span class="leet-long">LeetCode</span><span class="leet-short">LC</span> ↗</a>`;
+    /* Every fact of the chapter sits in the same grid cell and only the current one shows, so the box is as tall as the
+       longest and nothing below it moves when the problem changes. */
+    fact.innerHTML = PROBLEMS[id].map((q, j) => {
+      const text = STATEMENTS[q.rig]?.[getLang()]?.fact;
+      return text ? `<p class="fact-one"${j === selected ? '' : ' aria-hidden="true"'}><span class="lbl">${t('ui.fact')}</span> ${text}</p>` : '';
+    }).join('');
+    $$('.fact-one', fact).forEach((el, j) => el.classList.toggle('on', j === selected));
     task.innerHTML = statement(p.rig) ?? `<p>${text.task}</p>`;
     info.innerHTML = `<dl>
         <div><dt class="lbl">${t('ui.idea')}</dt><dd>${text.idea}</dd></div>
@@ -223,6 +231,7 @@ function mountChapter(root) {
     const p = PROBLEMS[id][j];
     rig = RIGS[p.rig];
     title.textContent = p.name;
+    pickBtn.title = p.name;
     renderTabs();
     renderInfo();
     setTexts(edits.get(j) || textsOf(rig.example));
@@ -252,7 +261,7 @@ function mountChapter(root) {
     else if (event.key === 'Escape') { event.preventDefault(); close(); }
     else if (event.key === 'Tab') close(false);
   });
-  document.addEventListener('pointerdown', event => { if (isOpen() && !event.target.closest('.pick')?.contains(list)) close(false); });
+  document.addEventListener('pointerdown', event => { if (isOpen() && !event.target.closest('.pick-box')?.contains(list)) close(false); });
   root.querySelectorAll('[data-step]').forEach(b => b.addEventListener('click', () =>
     select((selected + Number(b.dataset.step) + PROBLEMS[id].length) % PROBLEMS[id].length)));
   onLang(() => {
