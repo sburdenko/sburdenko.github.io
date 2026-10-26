@@ -1,4 +1,4 @@
-/** Tape 06 chapter 13: arrays and matrices walked in a planned order. */
+/** Tape 06 chapter: arrays and matrices walked in a planned order. */
 export const CH_D = {
   'matrix.short': {
     en: 'Rotate, spiral, zero out, multiply the rest — in place, without extra memory',
@@ -54,7 +54,7 @@ for (int r = 0; r < rows; r++)        // проход 2: пишем ответ
     ],
   },
 
-  /* labels of the chapter 13 rig variables */
+  /* labels of the arrays and matrices rig variables */
   'var.prefixProd': { en: 'prefix', ru: 'prefix' },
   'var.suffixProd': { en: 'suffix', ru: 'suffix' },
   'var.swaps': { en: 'swaps', ru: 'обменов' },

@@ -1,10 +1,10 @@
 /** Стенды курса «Async/await до дна»: таймлайн потоков, машина состояний, комбинаторы задач. */
-import { esc } from '../assets/vhs.js?v=202610202037';
-import { codeHtml } from './code-view.js?v=202610202037';
-import { tr, plural } from './i18n.js?v=202610202037';
-import { drive, act } from './rig-kit.js?v=202610202037';
-import { CTX, IO_TICKS, timelineRig, SM_SOURCE, SM_MOVENEXT, smRig, TASKS, combine, combineRig } from './models-async.js?v=202610202037';
-import { t as tl, tp } from './ui.js?v=202610202037';
+import { esc } from '../assets/vhs.js?v=202610261057';
+import { codeHtml } from './code-view.js?v=202610261057';
+import { tr, plural } from './i18n.js?v=202610261057';
+import { drive, act } from './rig-kit.js?v=202610261057';
+import { CTX, IO_TICKS, timelineRig, SM_SOURCE, SM_MOVENEXT, smRig, TASKS, combine, combineRig } from './models-async.js?v=202610261057';
+import { t as tl, tp } from './ui.js?v=202610261057';
 
 const seg = (items, cur, prefix) => `<div class="seg wrap">${items.map(([v, label]) => act(`${prefix}:${v}`, esc(label), '').replace('class=""', `aria-pressed="${String(v) === String(cur)}"`)).join('')}</div>`;
 

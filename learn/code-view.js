@@ -1,6 +1,6 @@
 /** Подсветка кода для карточек и стендов: C# — общим подсветчиком сайта, CIL и таблицы — простым своим. */
-import { esc } from '../assets/vhs.js?v=202610202037';
-import { highlight } from '../assets/code.js?v=202610202037';
+import { esc } from '../assets/vhs.js?v=202610261057';
+import { highlight } from '../assets/code.js?v=202610261057';
 
 export function codeHtml(src, lang) {
   if (!lang || lang === 'cs') return highlight(src);

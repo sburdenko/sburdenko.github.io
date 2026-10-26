@@ -1,8 +1,8 @@
-/** Views for chapter 14: shortest paths. view(run, event) → SVG string, vars(run, event) → [[i18nKey, html]]. */
+/** Views for shortest paths. view(run, event) → SVG string, vars(run, event) → [[i18nKey, html]]. */
 import {
   CELL, svg, text, rowWidth, node, chip, chips,
   matrixXY, matrixCells, matrixIndex,
-} from './view-kit.js?v=202610202037';
+} from './view-kit.js?v=202610261057';
 
 const has = (list, r, c) => list.some(([a, b]) => a === r && b === c);
 const inf = d => (d === Infinity || d == null ? '∞' : d);

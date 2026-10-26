@@ -1,4 +1,4 @@
-/** Pure traces for chapters 05–08: stack, linked list, grid and graph search, trees. Same contract as model-a.js. */
+/** Pure traces for the stack, linked list, grid and graph search, trees. Same contract as model-a.js. */
 const event = (key, args, state) => ({ key, args, ...state });
 const inf = v => (v === Infinity ? '+∞' : v === -Infinity ? '−∞' : v);
 const DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]];

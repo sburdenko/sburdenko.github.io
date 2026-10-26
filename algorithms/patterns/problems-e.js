@@ -1,5 +1,5 @@
-/** Problems and C# solutions for chapter 14: shortest paths. */
-import { problem as p } from './problem.js?v=202610202037';
+/** Problems and C# solutions for shortest paths. */
+import { problem as p } from './problem.js?v=202610261057';
 
 export const PROBLEMS_E = {
   paths: [

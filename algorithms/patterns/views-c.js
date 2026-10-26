@@ -1,8 +1,8 @@
-/** Views for chapters 09–12: heap, backtracking, greedy, dynamic programming. */
+/** Views for the heap, backtracking, greedy, dynamic programming. */
 import {
   CELL, STEP, svg, text, rowWidth, cells, pointers, arcBelow, node, chip, chips,
   barLayout, bars, gridCells, decisionTreeView, dpTable,
-} from './view-kit.js?v=202610202037';
+} from './view-kit.js?v=202610261057';
 
 const TOP = 40;
 const framed = (n, h, inner) => svg(rowWidth(n) + 20, h, `<g transform="translate(10,0)">${inner}</g>`);

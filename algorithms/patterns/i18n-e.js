@@ -1,4 +1,4 @@
-/** Tape 06 chapter 14: shortest paths — BFS when every step costs 1, Dijkstra when steps have weights. */
+/** Tape 06 chapter: shortest paths — BFS when every step costs 1, Dijkstra when steps have weights. */
 export const CH_E = {
   'paths.short': {
     en: 'Fewest steps or the cheapest route: BFS layers, Dijkstra, BFS over states',
@@ -60,7 +60,7 @@ while (pq.TryDequeue(out int u, out int d)) {
     ],
   },
 
-  /* labels of the chapter 14 rig variables */
+  /* labels of the shortest paths rig variables */
   'var.distLevel': { en: 'distance', ru: 'расстояние' },
   'var.pqueue': { en: 'priority queue, smallest first', ru: 'очередь с приоритетом, меньшее первым' },
   'var.finalized': { en: 'final', ru: 'окончательны' },

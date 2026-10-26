@@ -1,4 +1,4 @@
-/** Tape 06 chapters 01–04: hash map, two pointers, sliding window, binary search. */
+/** Tape 06 chapters: hash map, two pointers, sliding window, binary search. */
 export const CH_A = {
   /* ---------- 01 HashMap / HashSet ---------- */
   'hash.short': { en: 'Find a pair, a repeat or a group faster than O(n²)', ru: 'Найти пару, повтор или группу быстрее O(n²)' },

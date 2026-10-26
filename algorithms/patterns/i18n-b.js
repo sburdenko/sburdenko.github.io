@@ -1,4 +1,4 @@
-/** Tape 06 chapters 05–08: stack, linked list, DFS/BFS, trees. */
+/** Tape 06 chapters: stack, linked list, DFS/BFS, trees. */
 export const CH_B = {
   /* ---------- 05 Stack / Monotonic Stack ---------- */
   'stack.short': { en: 'Brackets and nesting; “the next greater or smaller”', ru: 'Скобки и вложенность; «следующий больший или меньший»' },

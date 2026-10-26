@@ -1,4 +1,4 @@
-/** Step texts for the chapter 09–12 rigs added next to the original ones in i18n-c.js. */
+/** Step texts for the heap, backtracking, greedy, dynamic programming rigs added next to the original ones in i18n-c.js. */
 const list = a => `[${a.join(', ')}]`;
 
 export const EV_C = {
