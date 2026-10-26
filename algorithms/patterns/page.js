@@ -9,7 +9,7 @@ import { RIGS, PATTERN_IDS, runWithInput } from './rigs.js?v=202610262045';
 import { formatField } from './inputs.js?v=202610262045';
 import { PROBLEMS, NAMES } from './problems.js?v=202610262045';
 import { STATEMENTS } from './statements.js?v=202610262045';
-import { EXTRAS, forkOf, countOps } from './extras.js?v=202610262045';
+import { EXTRAS, forkOf, answerOf, countOps } from './extras.js?v=202610262045';
 
 const pad = n => String(n).padStart(2, '0');
 
@@ -136,7 +136,7 @@ function mountChapter(root) {
   explanation.addEventListener('click', event => {
     const button = event.target.closest('[data-guess-key]');
     if (!button || pending < 0) return;
-    const at = pending, right = run.events[at].key, group = forkOf(extra(), run.events[at]);
+    const at = pending, group = forkOf(extra(), run.events[at]), right = answerOf(group, run.events[at]);
     const ok = button.dataset.guessKey === right;
     score.all++;
     if (ok) score.hit++;

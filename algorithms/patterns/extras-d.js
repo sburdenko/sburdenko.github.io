@@ -446,7 +446,11 @@ export const EX_D = {
       } },
       ours: { ru: 'два числа', en: 'two numbers', count: p => Math.max(0, p.n - 1) },
     },
-    predict: [],
+    predict: [
+      { q: { ru: 'Считаем ещё одну ступень или уже дошли до n?', en: 'Compute one more step, or have we reached n?' },
+        keys: { 'climb.ev.step': { ru: 'ещё ступень: сумма двух предыдущих', en: 'one more step: the sum of the previous two' },
+                'climb.ev.done': { ru: 'i = n, ответ готов', en: 'i = n, the answer is ready' } } },
+    ],
     followups: [
       { ru: { q: 'А если за шаг можно подняться на 1, 2 или 3 ступени?', a: 'ways[i] = ways[i − 1] + ways[i − 2] + ways[i − 3], и хранить нужно три последних значения. Для любого набора шагов S — сумма по s из S, O(n·|S|).' },
         en: { q: 'What if a move climbs 1, 2 or 3 steps?', a: 'ways[i] = ways[i − 1] + ways[i − 2] + ways[i − 3], keeping the last three values. For any set of moves S it is a sum over S, O(n·|S|).' } },
@@ -519,7 +523,11 @@ export const EX_D = {
         (i, j) => (p.a[i] === p.b[j] ? [[i + 1, j + 1]] : [[i + 1, j], [i, j + 1]])) },
       ours: { ru: 'таблица', en: 'table', count: p => p.a.length * p.b.length },
     },
-    predict: [],
+    predict: [
+      { q: { ru: 'Осталась ли в таблице непосчитанная клетка?', en: 'Is there a cell of the table left to fill?' },
+        keys: { 'lcs.ev.cell': { ru: 'да, считаем следующую', en: 'yes, fill the next one' },
+                'lcs.ev.done': { ru: 'нет, ответ в правом нижнем углу', en: 'no, the answer is in the bottom-right corner' } } },
+    ],
     followups: [
       { ru: { q: 'Память O(min(n, m))?', a: 'Клетке нужны только текущая и предыдущая строки: храни две строки длины короткой строки или одну плюс переменную для диагонали.' },
         en: { q: 'O(min(n, m)) memory?', a: 'A cell needs only the current and the previous row: keep two rows as long as the shorter string, or one row plus a variable for the diagonal.' } },
@@ -548,7 +556,11 @@ export const EX_D = {
       naive: { ru: 'взять или пропустить', en: 'take or skip', count: p => lisNaiveCompares(p.nums) },
       ours: { ru: 'dp за n²', en: 'n² dp', count: p => p.nums.length * (p.nums.length - 1) / 2 },
     },
-    predict: [],
+    predict: [
+      { q: { ru: 'Есть ли ещё элемент, для которого нужен dp?', en: 'Is there another element that needs its dp?' },
+        keys: { 'lis.ev.cell': { ru: 'да, считаем dp[i]', en: 'yes, compute dp[i]' },
+                'lis.ev.done': { ru: 'нет, берём максимум dp', en: 'no, take the maximum dp' } } },
+    ],
     followups: [
       { ru: { q: 'Быстрее, чем n²?', a: 'Массив tails: tails[k] — наименьший хвост возрастающей подпоследовательности длины k + 1. Для каждого x бинарным поиском найди первый ≥ x и замени его: O(n log n).' },
         en: { q: 'Faster than n²?', a: 'Keep tails: tails[k] is the smallest tail of an increasing subsequence of length k + 1. For each x binary-search the first value ≥ x and replace it: O(n log n).' } },
@@ -581,7 +593,11 @@ export const EX_D = {
         (i, j) => (p.a[i] === p.b[j] ? [[i + 1, j + 1]] : [[i + 1, j], [i, j + 1], [i + 1, j + 1]])) },
       ours: { ru: 'таблица', en: 'table', count: p => p.a.length * p.b.length },
     },
-    predict: [],
+    predict: [
+      { q: { ru: 'Осталась ли в таблице непосчитанная клетка?', en: 'Is there a cell of the table left to fill?' },
+        keys: { 'ed.ev.cell': { ru: 'да, считаем следующую', en: 'yes, fill the next one' },
+                'ed.ev.done': { ru: 'нет, ответ в правом нижнем углу', en: 'no, the answer is in the bottom-right corner' } } },
+    ],
     followups: [
       { ru: { q: 'У вставки, удаления и замены разные цены?', a: 'Переходы те же, только вместо +1 прибавляй цену своей операции; базовые строка и столбец — накопленные цены вставок и удалений.' },
         en: { q: 'Insert, delete and replace have different costs?', a: 'Same transitions, add each operation’s own cost instead of 1; the base row and column hold accumulated insert and delete costs.' } },
@@ -613,7 +629,11 @@ export const EX_D = {
       naive: { ru: 'перебор с откатами', en: 'backtracking', count: p => regexNaiveCompares(p.s, p.p) },
       ours: { ru: 'таблица', en: 'table', count: p => p.s.length * p.p.length },
     },
-    predict: [],
+    predict: [
+      { q: { ru: 'Осталась ли в таблице непосчитанная клетка?', en: 'Is there a cell of the table left to fill?' },
+        keys: { 'rx.ev.cell': { ru: 'да, считаем следующую', en: 'yes, fill the next one' },
+                'rx.ev.done': { ru: 'нет, ответ в правом нижнем углу', en: 'no, the answer is in the bottom-right corner' } } },
+    ],
     followups: [
       { ru: { q: 'Рекурсия с мемоизацией вместо таблицы?', a: 'Те же состояния (i, j), O(|s|·|p|), но считаются только достижимые; зато глубина рекурсии до |s| + |p|.' },
         en: { q: 'Memoized recursion instead of the table?', a: 'Same (i, j) states and O(|s|·|p|), but only reachable ones get computed; the price is recursion depth up to |s| + |p|.' } },
@@ -676,7 +696,12 @@ export const EX_D = {
       naive: { ru: 'все 32 бита', en: 'all 32 bits', count: () => 32 },
       ours: { ru: 'снятие младшей единицы', en: 'clearing the lowest one', count: p => ones(p.n) },
     },
-    predict: [],
+    predict: [
+      { q: { ru: 'x после снятия младшей единицы. Что дальше?', en: 'x after clearing its lowest one. What next?' },
+        keys: { 'pop.ev.minus': { ru: 'x ≠ 0, ещё круг', en: 'x ≠ 0, one more turn' },
+                'pop.ev.done': { ru: 'x = 0, единиц было несколько', en: 'x = 0, there were several ones' },
+                'pop.ev.pow2': { ru: 'x = 0, единица была одна — степень двойки', en: 'x = 0, a single one: a power of two' } } },
+    ],
     followups: [
       { ru: { q: 'Без цикла вообще?', a: 'SWAR: x − ((x &gt;&gt; 1) &amp; 0x55555555), затем суммы по 4 и 8 битов масками и умножение на 0x01010101 со сдвигом на 24 — около 12 операций на любое число.' },
         en: { q: 'With no loop at all?', a: 'SWAR: x − ((x &gt;&gt; 1) &amp; 0x55555555), then sums over 4 and 8 bits with masks and a multiply by 0x01010101 shifted right by 24: about 12 operations for any value.' } },

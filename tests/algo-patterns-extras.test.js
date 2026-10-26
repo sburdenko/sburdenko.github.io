@@ -2,7 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { rng } from '../assets/rand.js';
-import { EXTRAS, countOps } from '../algorithms/patterns/extras.js';
+import { EXTRAS, countOps, answerOf } from '../algorithms/patterns/extras.js';
 import { RIGS, runWithInput } from '../algorithms/patterns/rigs.js';
 import { PROBLEMS } from '../algorithms/patterns/problems.js';
 import { DICT } from '../algorithms/patterns/i18n.js';
@@ -54,11 +54,17 @@ test('predict forks name real event keys, and the example trace reaches every fo
       bilingual(group.q, `${id} fork question`);
       const keys = Object.keys(group.keys);
       assert.ok(keys.length >= 2 && keys.length <= 4, `${id}: 2–4 branches`);
-      for (const key of keys) {
-        assert.ok(DICT[key], `${id}: event key ${key}`);
-        bilingual(group.keys[key], `${id} branch ${key}`);
+      for (const key of keys) bilingual(group.keys[key], `${id} branch ${key}`);
+      const asks = group.on ? [group.on].flat() : keys;
+      for (const key of asks) assert.ok(DICT[key], `${id}: event key ${key}`);
+      const forks = events.filter((e, i) => i >= 1 && asks.includes(e.key));
+      assert.ok(forks.length, `${id}: the example reaches ${asks.join('/')}`);
+      if (group.on) {
+        for (const e of forks) assert.ok(keys.includes(answerOf(group, e)), `${id}: branch ${answerOf(group, e)} is an option`);
+        assert.ok(new Set(forks.map(e => answerOf(group, e))).size >= 2 || forks.length === 1, `${id}: the example takes more than one branch`);
+      } else {
+        assert.ok(!keys.some(k => /\.ev\.(start|done|init)$/.test(k)) || keys.length > 2, `${id}: a fork is not "step or the end"`);
       }
-      assert.ok(events.some((e, i) => i >= 1 && keys.includes(e.key)), `${id}: the example reaches ${keys.join('/')}`);
     }
   }
 });

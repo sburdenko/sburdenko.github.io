@@ -9,8 +9,15 @@ import { EX_D } from './extras-d.js?v=202610262045';
 
 export const EXTRAS = { ...EX_A, ...EX_B, ...EX_C, ...EX_D };
 
-/** The predict group that asks before this event, if any. */
-export const forkOf = (extra, event) => (event ? extra?.predict?.find(group => event.key in group.keys) : undefined);
+/**
+ * A predict group asks before an event. Either its options are event keys (the next event's key is the answer), or it
+ * names the events it asks before in `on` and `branch(event)` returns the option the event took (a key of `keys`).
+ */
+export const forkOf = (extra, event) =>
+  (event ? extra?.predict?.find(group => (group.on ? [group.on].flat().includes(event.key) : event.key in group.keys)) : undefined);
+
+/** The option an event took at its fork. */
+export const answerOf = (group, event) => (group.on ? String(group.branch(event)) : event.key);
 
 /** Operation count of one side of the counter, or null when the function fails on odd input. */
 export function countOps(side, params) {

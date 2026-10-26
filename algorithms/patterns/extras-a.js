@@ -145,7 +145,11 @@ export const EX_A = {
       } },
       ours: { ru: 'поиск ключа в словаре', en: 'dictionary key lookups', count: p => p.strs.length },
     },
-    predict: [],
+    predict: [
+      { q: { ru: 'Остались ещё слова или все разложены?', en: 'Are there words left, or is everything sorted into groups?' },
+        keys: { 'anag.ev.key': { ru: 'ещё слово — строим ключ', en: 'another word: build its key' },
+                'anag.ev.done': { ru: 'слова кончились — группы готовы', en: 'no words left: the groups are ready' } } },
+    ],
     followups: [
       { ru: { q: 'Слова длинные, а алфавит — 26 букв. Как сделать ключ быстрее сортировки?', a: 'Посчитай буквы в <code>int[26]</code> и склей счётчики в строку вроде «1#0#2#…». Ключ строится за O(k) вместо O(k log k).' },
         en: { q: 'Words are long and the alphabet has 26 letters. How do you build the key faster than sorting?', a: 'Count letters into an <code>int[26]</code> and join the counts into a string like “1#0#2#…”. The key costs O(k) instead of O(k log k).' } },
@@ -224,7 +228,11 @@ export const EX_A = {
       naive: { ru: 'все подмассивы', en: 'all subarrays', count: p => (p.nums.length * (p.nums.length + 1)) / 2 },
       ours: { ru: 'префиксы в словаре', en: 'prefix sums in a dictionary', count: p => p.nums.length },
     },
-    predict: [],
+    predict: [
+      { q: { ru: 'Остались ещё числа или подсчёт закончен?', en: 'Are there numbers left, or is the count final?' },
+        keys: { 'psum.ev.step': { ru: 'ещё число — обновляем sum и смотрим sum − k', en: 'another number: update sum and look up sum − k' },
+                'psum.ev.done': { ru: 'массив кончился — count окончательный', en: 'the array is over: count is final' } } },
+    ],
     followups: [
       { ru: { q: 'А если нужна самая длинная такая подстрока, а не их число?', a: 'В словаре храни не счётчик, а первый индекс каждого префикса и не перезаписывай его. Длина — i − first[sum − k]. Это #325.' },
         en: { q: 'What if you need the longest such subarray instead of the count?', a: 'Store the first index of each prefix instead of a count and never overwrite it. The length is i − first[sum − k]. That is #325.' } },
@@ -498,7 +506,11 @@ export const EX_A = {
       naive: { ru: 'все пары линий', en: 'all pairs of lines', count: p => (p.h.length * (p.h.length - 1)) / 2 },
       ours: { ru: 'встречные указатели', en: 'two pointers', count: p => p.h.length - 1 },
     },
-    predict: [],
+    predict: [
+      { q: { ru: 'Указатели ещё не встретились? Считаем новую площадь или конец?', en: 'Have the pointers met yet? Another area, or the end?' },
+        keys: { 'water.ev.step': { ru: 'L &lt; R — считаем площадь и двигаем низкую', en: 'L &lt; R: measure the area and move the shorter line' },
+                'water.ev.done': { ru: 'L = R — ответ готов', en: 'L = R: the answer is ready' } } },
+    ],
     followups: [
       { ru: { q: 'Линии стоят не через 1, а в точках x[i] (по возрастанию)?', a: 'Ширина — x[r] − x[l], и она по-прежнему только убывает, пока указатели сходятся. Значит, довод «двигай низкую» не меняется, алгоритм тот же.' },
         en: { q: 'Lines are not 1 apart but at positions x[i] (increasing)?', a: 'Width becomes x[r] − x[l], and it still only shrinks as the pointers close in. So the “move the shorter one” argument holds and the algorithm is the same.' } },
@@ -983,7 +995,11 @@ export const EX_A = {
       naive: { ru: 'рекурсия без запоминания', en: 'recursion without memo', count: p => 2 * binomial(p.m + p.n - 2, p.m - 1) - 1 },
       ours: { ru: 'таблица DP', en: 'DP table', count: p => p.m * p.n },
     },
-    predict: [],
+    predict: [
+      { q: { ru: 'С чего начнётся заполнение в этом режиме?', en: 'How does filling start in this mode?' },
+        keys: { 'up.ev.base': { ru: 'база таблицы: первая строка и первый столбец — единицы', en: 'table base: first row and first column are ones' },
+                'up.ev.rowInit': { ru: 'один массив row = [1, …, 1]', en: 'a single array row = [1, …, 1]' } } },
+    ],
     followups: [
       { ru: { q: 'm и n до 10⁵, ответ по модулю 10⁹ + 7?', a: 'Таблица уже велика, нужна формула C(m + n − 2, m − 1): предпосчитай факториалы и обратные к ним по малой теореме Ферма. O(m + n).' },
         en: { q: 'm and n up to 10⁵, answer modulo 10⁹ + 7?', a: 'The table is too big now; use the formula C(m + n − 2, m − 1): precompute factorials and their inverses via Fermat’s little theorem. O(m + n).' } },
@@ -1013,7 +1029,11 @@ export const EX_A = {
       naive: { ru: 'сумма каждого окна заново', en: 'sum every window from scratch', count: p => (p.nums.length - p.k + 1) * p.k },
       ours: { ru: 'скользящая сумма', en: 'running window sum', count: p => p.k + 2 * (p.nums.length - p.k) },
     },
-    predict: [],
+    predict: [
+      { q: { ru: 'Окну есть куда сдвинуться или это было последнее?', en: 'Can the window still slide, or was that the last one?' },
+        keys: { 'avg.ev.slide': { ru: 'сдвиг: +новый справа, −ушедший слева', en: 'slide: +new on the right, −old on the left' },
+                'avg.ev.done': { ru: 'r дошёл до конца — делим лучшую сумму на k', en: 'r reached the end: divide the best sum by k' } } },
+    ],
     followups: [
       { ru: { q: 'Много запросов с разными k по одному массиву?', a: 'Префиксные суммы один раз: сумма окна [l, r] = P[r + 1] − P[l] за O(1). Каждый запрос — O(n) без пересчёта окон.' },
         en: { q: 'Many queries with different k over the same array?', a: 'Prefix sums once: the sum of window [l, r] is P[r + 1] − P[l] in O(1). Each query is O(n) with no window recomputation.' } },
