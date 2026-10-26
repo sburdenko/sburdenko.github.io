@@ -2,7 +2,7 @@
  "id": "algo.u10.l1",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 14,
+ "minutes": 16,
  "cards": [
   {
    "t": "learn",
@@ -59,6 +59,55 @@
      {
       "at": 13,
       "options": ["1 + max(1, 2) = 3", "max(1, 2) = 2", "1 + 1 + 2 = 4"],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["end", "pick:0", "end", "pick:0", "end"]
+  },
+  {
+   "t": "rig",
+   "rig": "algo",
+   "problem": "invertTree",
+   "input": {
+    "root": [3, 9, 20, 4, null, 15, 7, null, null, null, null, null, 8]
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 4,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 11,
+      "options": [
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       },
+       {
+        "label": "⟦⟧"
+       }
+      ],
       "answer": 0,
       "q": "⟦⟧",
       "explain": "⟦⟧"

@@ -1,5 +1,5 @@
 /** Views for the chapters hash map, two pointers, sliding window, binary search. view(run, event) → SVG string, vars(run, event) → [[i18nKey, html]]. */
-import { CELL, STEP, svg, text, rowWidth, cells, pointers, chip, chips, barLayout, bars, pointerAt, arcBelow } from './view-kit.js?v=202610261132';
+import { CELL, STEP, svg, text, rowWidth, cells, pointers, chip, chips, barLayout, bars, pointerAt, arcBelow } from './view-kit.js?v=202610261206';
 
 const TOP = 40;
 const framed = (n, h, inner) => svg(rowWidth(n) + 20, h, `<g transform="translate(10,0)">${inner}</g>`);

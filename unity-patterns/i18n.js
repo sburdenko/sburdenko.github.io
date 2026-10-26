@@ -1,8 +1,8 @@
 /** Every string of tape 05, merged from the chapter dictionaries. */
-import { CORE } from './i18n-core.js?v=202610261132';
-import { CREATION } from './i18n-creation.js?v=202610261132';
-import { BEHAVIOR } from './i18n-behavior.js?v=202610261132';
-import { DATA } from './i18n-data.js?v=202610261132';
-import { CHOOSE } from './i18n-choose.js?v=202610261132';
+import { CORE } from './i18n-core.js?v=202610261206';
+import { CREATION } from './i18n-creation.js?v=202610261206';
+import { BEHAVIOR } from './i18n-behavior.js?v=202610261206';
+import { DATA } from './i18n-data.js?v=202610261206';
+import { CHOOSE } from './i18n-choose.js?v=202610261206';
 
 export const DICT = { ...CORE, ...CREATION, ...BEHAVIOR, ...DATA, ...CHOOSE };

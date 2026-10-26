@@ -2,7 +2,7 @@
  "id": "algo.u3.l1",
  "title": "⟦⟧",
  "sub": "⟦⟧",
- "minutes": 14,
+ "minutes": 15,
  "cards": [
   {
    "t": "learn",
@@ -116,12 +116,63 @@
    "lang": "cs"
   },
   {
-   "t": "tapline",
-   "q": "⟦⟧",
-   "code": "public bool IsPalindrome(string s) {\n    int l = 0, r = s.Length - 1;\n    while (l < r) {\n        while (!char.IsLetterOrDigit(s[l])) l++;\n        while (l < r && !char.IsLetterOrDigit(s[r])) r--;\n        if (char.ToLowerInvariant(s[l]) != char.ToLowerInvariant(s[r])) return false;\n        l++; r--;\n    }\n    return true;\n}",
-   "answer": 3,
-   "explain": "⟦⟧",
-   "lang": "cs"
+   "t": "rig",
+   "rig": "algo",
+   "problem": "palindrome",
+   "input": {
+    "s": "No lemon, no melon"
+   },
+   "task": "⟦⟧",
+   "goal": {
+    "step": "end",
+    "asks": [
+     {
+      "at": 1,
+      "options": [
+       {
+        "event": "pal.ev.match",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "pal.ev.mismatch",
+        "label": "'N' != 'n' — return false"
+       },
+       {
+        "event": "pal.ev.skipL",
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     },
+     {
+      "at": 10,
+      "options": [
+       {
+        "event": "pal.ev.skipL",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "pal.ev.skipR",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "pal.ev.mismatch",
+        "label": "⟦⟧"
+       },
+       {
+        "event": "pal.ev.done",
+        "label": "⟦⟧"
+       }
+      ],
+      "answer": 0,
+      "q": "⟦⟧",
+      "explain": "⟦⟧"
+     }
+    ]
+   },
+   "solve": ["pick:0", "end", "pick:0", "end"]
   },
   {
    "t": "learn",
