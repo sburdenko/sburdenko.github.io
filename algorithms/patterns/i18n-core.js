@@ -31,6 +31,7 @@ export const CORE = {
   'ui.guessScore': { en: (h, n) => `guessed ${h} of ${n}`, ru: (h, n) => `угадано ${h} из ${n}` },
   'ui.guessRight': { en: '✓ Right.', ru: '✓ Верно.' },
   'ui.guessWrong': { en: label => `✗ No — ${label}.`, ru: label => `✗ Нет — ${label}.` },
+  'ui.opsSmall': { en: '— no gain on input this small; it grows with n', ru: '— на таком маленьком входе выигрыша нет, он растёт с n' },
   'ui.followTab': { en: 'Follow-ups', ru: 'Вопросы' },
   'ui.followHint': { en: 'What interviewers ask once the problem is solved. Think first, then open the answer.', ru: 'Что спрашивают, когда задача уже решена. Сначала подумай, потом открой ответ.' },
   'ui.related': { en: 'Related problems', ru: 'Похожие задачи' },

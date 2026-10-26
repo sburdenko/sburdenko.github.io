@@ -296,9 +296,16 @@ export const EX_C = {
         count: p => (p.image[p.sr][p.sc] === p.color ? 1 : 1 + 4 * regionSize(p.image, p.sr, p.sc, p.image[p.sr][p.sc])) },
     },
     predict: [
-      { q: { ru: 'Клетка покрашена. DFS найдёт ещё клетку старого цвета или заливка закончена?', en: 'A cell is painted. Will the DFS find another cell of the old colour, or is the fill done?' },
-        keys: { 'fill.ev.paint': { ru: 'красим ещё клетку', en: 'paint another cell' },
-                'fill.ev.done': { ru: 'заливка закончена', en: 'the fill is done' } } },
+      { q: { ru: 'DFS идёт вниз, вверх, вправо, влево и откатывается из тупика. Сколько уже покрашенных соседей окажется у следующей покрашенной клетки?', en: 'The DFS goes down, up, right, left and backs out of dead ends. How many already painted neighbours will the next painted cell have?' },
+        on: 'fill.ev.paint',
+        branch: e => {
+          const [r, c] = e.args, to = e.img[r][c];
+          const n = DIR4.filter(([dr, dc]) => inGrid(e.img, r + dr, c + dc) && e.img[r + dr][c + dc] === to).length;
+          return n >= 2 ? 'many' : String(n);
+        },
+        keys: { 0: { ru: 'ни одного — это стартовая клетка', en: 'none: it is the start cell' },
+                1: { ru: 'один — тот, из которого пришли', en: 'one: the cell we came from' },
+                many: { ru: 'два и больше — область замыкается в кольцо', en: 'two or more: the region closes a loop' } } },
     ],
     followups: [
       { ru: { q: 'А если соседями считаются и диагональные клетки?', a: 'Добавь четыре диагональных направления — O(R·C) не меняется. Но области, которые касаются только углом, сольются в одну.' },
@@ -449,9 +456,11 @@ export const EX_C = {
         } },
     },
     predict: [
-      { q: { ru: 'Будет ли ещё минута гниения, или процесс закончен?', en: 'Will there be another minute of rotting, or is it over?' },
-        keys: { 'orange.ev.minute': { ru: 'ещё минута', en: 'another minute' },
-                'orange.ev.done': { ru: 'всё, итог', en: 'over, final answer' } } },
+      { q: { ru: 'Гниль идёт ещё минуту. Останутся ли после неё свежие апельсины?', en: 'Rot spreads for one more minute. Will any fresh oranges be left after it?' },
+        on: 'orange.ev.minute',
+        branch: e => (e.args[2] === 0 ? 'none' : 'left'),
+        keys: { none: { ru: 'нет, сгниют последние', en: 'no, the last ones rot' },
+                left: { ru: 'да, кто-то ещё свежий', en: 'yes, some are still fresh' } } },
     ],
     followups: [
       { ru: { q: 'У клеток разное время заражения: из одной в другую гниль идёт w минут.', a: 'Слои BFS больше не равны минутам. Нужна Дейкстра из всех гнилых сразу: все они в очереди с приоритетом с временем 0, ответ — наибольшее расстояние.' },
@@ -506,9 +515,11 @@ export const EX_C = {
         } },
     },
     predict: [
-      { q: { ru: 'Остался ли курс, у которого все требования уже выполнены?', en: 'Is there still a course whose prerequisites are all done?' },
-        keys: { 'crs.ev.take': { ru: 'да, берём его', en: 'yes, take it' },
-                'crs.ev.done': { ru: 'нет, итог', en: 'no, final answer' } } },
+      { q: { ru: 'Берём первый готовый курс. Станет ли после него готов ещё какой-то курс (бейдж упадёт до 0)?', en: 'We take the first ready course. Will that make another course ready (its badge drops to 0)?' },
+        on: 'crs.ev.take',
+        branch: e => (e.args[2].length ? 'frees' : 'none'),
+        keys: { frees: { ru: 'да, кто-то освободится', en: 'yes, someone is freed' },
+                none: { ru: 'нет, никто', en: 'no, nobody' } } },
     ],
     followups: [
       { ru: { q: 'Ответ «нельзя» — покажи сам цикл.', a: 'DFS с тремя цветами: белый, серый (на стеке), чёрный. Ребро в серую вершину — цикл; его вершины — хвост стека от этой вершины.' },
@@ -769,9 +780,11 @@ export const EX_C = {
         } },
     },
     predict: [
-      { q: { ru: 'В куче ещё есть головы?', en: 'Are there heads left in the heap?' },
-        keys: { 'mk.ev.take': { ru: 'да, достаём минимальную', en: 'yes, take the smallest' },
-                'mk.ev.done': { ru: 'нет, слияние закончено', en: 'no, the merge is done' } } },
+      { q: { ru: 'Достаём самую маленькую голову. Положим ли вместо неё следующий узел того же списка?', en: 'We take the smallest head. Will the next node of the same list take its place?' },
+        on: 'mk.ev.take',
+        branch: e => (e.args[2] === null ? 'empty' : 'refill'),
+        keys: { refill: { ru: 'да, у списка есть следующий узел', en: 'yes, the list has a next node' },
+                empty: { ru: 'нет, список опустел', en: 'no, the list is now empty' } } },
     ],
     followups: [
       { ru: { q: 'Можно без кучи за то же O(N log k)?', a: 'Сливай списки парами, как в сортировке слиянием: log k раундов, каждый O(N). Доп. память O(1), если сливать узлы на месте.' },
@@ -813,7 +826,18 @@ export const EX_C = {
           return low.cmp + high.cmp + extra;
         } },
     },
-    predict: [],
+    predict: [
+      { q: { ru: 'Следующее число из потока: в low или в high? (low — если оно не больше вершины low)', en: 'The next number from the stream: into low or high? (low if it is not above the top of low)' },
+        on: 'mstr.ev.add',
+        branch: e => (e.args[1] ? 'low' : 'high'),
+        keys: { low: { ru: 'в low', en: 'into low' },
+                high: { ru: 'в high', en: 'into high' } } },
+      { q: { ru: 'После вставки размеры куч разъедутся — придётся переложить вершину?', en: 'After the insert, will the heap sizes drift apart so a top has to move?' },
+        on: 'mstr.ev.add',
+        branch: e => (e.args[2] === null ? 'stay' : 'move'),
+        keys: { stay: { ru: 'нет, баланс в порядке', en: 'no, the balance holds' },
+                move: { ru: 'да, переносим вершину', en: 'yes, move a top across' } } },
+    ],
     followups: [
       { ru: { q: 'Нужна не медиана, а 90-й перцентиль.', a: 'Те же две кучи, только баланс другой: нижняя держит ⌈0,9·n⌉ элементов, верхняя — остальные. Ответ — вершина нижней.' },
         en: { q: 'You need the 90th percentile, not the median.', a: 'The same two heaps with a different balance: the lower one holds ⌈0.9·n⌉ elements, the upper one the rest. The answer is the lower top.' } },
@@ -1572,7 +1596,7 @@ export const EX_C = {
       naive: { ru: 'для каждого начала пересчитать идущие встречи', en: 'for each start, count the meetings in progress',
         count: p => {
           let cmp = 0;
-          for (const [t] of p.intervals) for (const [a, b] of p.intervals) { cmp++; if (a <= t) cmp++; void b; }
+          for (const [t] of p.intervals) for (const [a] of p.intervals) cmp += a <= t ? 2 : 1;   // a ≤ t, then t < b only when needed
           return cmp;
         } },
       ours: { ru: 'развёртка по событиям', en: 'a sweep over events',

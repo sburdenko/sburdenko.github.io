@@ -1,15 +1,15 @@
 /** Tape 06 assembly: language, map, skeletons and, per chapter, four problem tabs that each drive their own rig. */
-import { $, $$, esc, bootVhs } from '../../assets/vhs.js?v=202610262045';
-import { initI18n, t, onLang, getLang } from '../../assets/i18n.js?v=202610262045';
-import { COMMON } from '../../assets/i18n-common.js?v=202610262045';
-import { renderCode } from '../../assets/code.js?v=202610262045';
-import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202610262045';
-import { DICT } from './i18n.js?v=202610262045';
-import { RIGS, PATTERN_IDS, runWithInput } from './rigs.js?v=202610262045';
-import { formatField } from './inputs.js?v=202610262045';
-import { PROBLEMS, NAMES } from './problems.js?v=202610262045';
-import { STATEMENTS } from './statements.js?v=202610262045';
-import { EXTRAS, forkOf, answerOf, countOps } from './extras.js?v=202610262045';
+import { $, $$, esc, bootVhs } from '../../assets/vhs.js?v=202610262121';
+import { initI18n, t, onLang, getLang } from '../../assets/i18n.js?v=202610262121';
+import { COMMON } from '../../assets/i18n-common.js?v=202610262121';
+import { renderCode } from '../../assets/code.js?v=202610262121';
+import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202610262121';
+import { DICT } from './i18n.js?v=202610262121';
+import { RIGS, PATTERN_IDS, runWithInput } from './rigs.js?v=202610262121';
+import { formatField } from './inputs.js?v=202610262121';
+import { PROBLEMS, NAMES } from './problems.js?v=202610262121';
+import { STATEMENTS } from './statements.js?v=202610262121';
+import { EXTRAS, forkOf, answerOf, countOps } from './extras.js?v=202610262121';
 
 const pad = n => String(n).padStart(2, '0');
 
@@ -161,7 +161,7 @@ function mountChapter(root) {
     const o = extra()?.ops, naive = o && params && countOps(o.naive, params), ours = o && params && countOps(o.ours, params);
     if (naive == null || ours == null) { opsEl.innerHTML = ''; opsEl.title = ''; return; }
     const n = v => v.toLocaleString(L() === 'ru' ? 'ru-RU' : 'en-US');
-    opsEl.innerHTML = `<span class="lbl">${o.unit[L()]}</span> ${o.naive[L()]} <b class="ops-naive">${n(naive)}</b> · ${o.ours[L()]} <b class="ops-ours">${n(ours)}</b>`;
+    opsEl.innerHTML = `<span class="lbl">${o.unit[L()]}</span> ${o.naive[L()]} <b class="ops-naive">${n(naive)}</b> · ${o.ours[L()]} <b class="ops-ours">${n(ours)}</b>${ours >= naive ? ` <span class="ops-note">${t('ui.opsSmall')}</span>` : ''}`;
     opsEl.title = opsEl.textContent;
   }
 
