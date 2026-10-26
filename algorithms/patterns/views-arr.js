@@ -2,36 +2,47 @@
 import {
   CELL, STEP, svg, text, rowWidth, cells, pointers, arcBelow, arrow, chip, chips,
   matrixXY, matrixCells, matrixIndex, matrixArrow,
-} from './view-kit.js?v=202610261057';
+} from './view-kit.js?v=202610261132';
 
 const TOP = 40;
 /** A dashed frame around cells i..j of a row drawn at (x, y). */
 const frame = (i, j, x, y, cls) => (j < i ? '' : `<rect class="${cls}" x="${x + i * STEP - 4}" y="${y - 4}" width="${(j - i) * STEP + CELL + 8}" height="${CELL + 8}" rx="8"/>`);
 
 /* ---------- Maximum Subarray: Kadane ---------- */
-const sumText = terms => terms.map((v, k) => (k ? `${v < 0 ? '−' : '+'} ${Math.abs(v)}` : String(v).replace('-', '−'))).join(' ');
+const neg = v => String(v).replace('-', '−');
+/** Second term of a sum: a negative one goes in brackets, «2 + (−5)», not «2 + −5». */
+const term = v => (v < 0 ? `(${neg(v)})` : neg(v));
+const sumText = terms => terms.map((v, k) => (k ? `${v < 0 ? '−' : '+'} ${Math.abs(v)}` : neg(v))).join(' ');
 export const kadane = {
   view(run, e) {
     const n = run.nums.length, x = 52, y2 = TOP + CELL + 44, arcY = y2 + CELL + 18, done = e.i == null;
     const inRun = j => !done && j >= e.from && j <= e.i;
     const clsN = run.nums.map((_, j) => (j === e.i ? 'cur' : inRun(j) ? 'win' : ''));
     const clsC = e.ending.map((v, j) => (v === null ? 'dim' : j === e.i ? (e.key === 'kad.ev.best' ? 'ok' : 'cur') : j === e.bestRange[1] ? 'ok' : ''));
-    let s = text(4, TOP + CELL / 2, 'nums', 'lbl') + cells(run.nums, clsN, { x, y: TOP })
-      + frame(e.bestRange[0], e.bestRange[1], x, TOP, 'best')
+    const [b0, b1] = e.bestRange;
+    // рамка лучшего отрезка шире клетки, чтобы не сливаться с рамкой текущей клетки i
+    const best = `<rect class="best" x="${x + b0 * STEP - 7}" y="${TOP - 7}" width="${(b1 - b0) * STEP + CELL + 14}" height="${CELL + 14}" rx="9"/>`;
+    let s = text(4, TOP + CELL / 2, 'nums', 'lbl') + cells(run.nums.map(neg), clsN, { x, y: TOP }) + best
       + pointers([{ i: e.i, label: 'i' }], { x, y: TOP, count: n })
-      + text(4, y2 + CELL / 2, 'cur', 'lbl') + cells(e.ending.map(v => (v === null ? '·' : v)), clsC, { x, y: y2, index: false });
-    if (e.key === 'kad.ev.extend') s += arcBelow(e.i - 1, e.i, arcY, 12, 'pick', `+${run.nums[e.i]}`, x);
-    if (e.key === 'kad.ev.restart') {
-      const cut = x + e.i * STEP - 3;
-      s += `<line class="cutline" x1="${cut}" y1="${TOP - 6}" x2="${cut}" y2="${y2 + CELL + 6}"/>`;
+      + text(4, y2 + CELL / 2, 'cur', 'lbl') + cells(e.ending.map(v => (v === null ? '·' : neg(v))), clsC, { x, y: y2, index: false });
+    // сам выбор Кадане: max(x, cur + x) — продолжить отрезок или начать заново
+    const choice = (xv, old) => text(x, arcY + 50, `max(${neg(xv)}, ${neg(old)} + ${term(xv)}) = ${neg(Math.max(xv, old + xv))}`, 'cap on');
+    if (e.key === 'kad.ev.extend') {
+      const [, xv, old] = e.args;
+      s += arcBelow(e.i - 1, e.i, arcY, 12, 'pick', `+${term(xv)}`, x) + choice(xv, old);
     }
-    return svg(x + rowWidth(n) + 10, arcY + 44, s);
+    if (e.key === 'kad.ev.restart') {
+      const [, xv, old] = e.args, cut = x + e.i * STEP - 3;
+      s += `<line class="cutline" x1="${cut}" y1="${TOP - 6}" x2="${cut}" y2="${y2 + CELL + 6}"/>` + choice(xv, old);
+    }
+    return svg(x + rowWidth(n) + 10, arcY + 64, s);
   },
   vars(run, e) {
     const [a, b] = e.bestRange;
     return [
-      ['var.curSum', chip(e.cur, e.i != null ? 'new' : '')],
-      ['var.best', chip(e.best, 'hit')],
+      ['var.curSum', chip(neg(e.cur), e.i != null ? 'new' : '')],
+      ...(e.i != null ? [['var.curRange', chip(`[${e.from}..${e.i}]`, 'g')]] : []),
+      ['var.best', chip(neg(e.best), 'hit')],
       ['var.bestRange', chip(`[${a}..${b}] = ${sumText(run.nums.slice(a, b + 1))}`, 'hit')],
     ];
   },
