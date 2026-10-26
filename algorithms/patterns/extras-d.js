@@ -447,9 +447,11 @@ export const EX_D = {
       ours: { ru: 'два числа', en: 'two numbers', count: p => Math.max(0, p.n - 1) },
     },
     predict: [
-      { q: { ru: 'Считаем ещё одну ступень или уже дошли до n?', en: 'Compute one more step, or have we reached n?' },
-        keys: { 'climb.ev.step': { ru: 'ещё ступень: сумма двух предыдущих', en: 'one more step: the sum of the previous two' },
-                'climb.ev.done': { ru: 'i = n, ответ готов', en: 'i = n, the answer is ready' } } },
+      { q: { ru: 'ways[i] = ways[i−1] + ways[i−2]: первое слагаемое — пути с последним шагом в 1 ступень, второе — в 2. Каких путей к следующей ступени больше?', en: 'ways[i] = ways[i−1] + ways[i−2]: the first term counts paths ending with a 1-step, the second with a 2-step. Which paths to the next step are more numerous?' },
+        on: 'climb.ev.step', branch: e => (e.args[1] > e.args[2] ? 'one' : e.args[1] < e.args[2] ? 'two' : '='),
+        keys: { one: { ru: 'с последним шагом в 1 ступень', en: 'ending with a 1-step' },
+                two: { ru: 'с последним шагом в 2 ступени', en: 'ending with a 2-step' },
+                '=': { ru: 'поровну', en: 'equally many' } } },
     ],
     followups: [
       { ru: { q: 'А если за шаг можно подняться на 1, 2 или 3 ступени?', a: 'ways[i] = ways[i − 1] + ways[i − 2] + ways[i − 3], и хранить нужно три последних значения. Для любого набора шагов S — сумма по s из S, O(n·|S|).' },
@@ -524,9 +526,11 @@ export const EX_D = {
       ours: { ru: 'таблица', en: 'table', count: p => p.a.length * p.b.length },
     },
     predict: [
-      { q: { ru: 'Осталась ли в таблице непосчитанная клетка?', en: 'Is there a cell of the table left to fill?' },
-        keys: { 'lcs.ev.cell': { ru: 'да, считаем следующую', en: 'yes, fill the next one' },
-                'lcs.ev.done': { ru: 'нет, ответ в правом нижнем углу', en: 'no, the answer is in the bottom-right corner' } } },
+      { q: { ru: 'Откуда возьмётся значение следующей клетки?', en: 'Where does the value of the next cell come from?' },
+        on: 'lcs.ev.cell', branch: e => e.args[4],
+        keys: { match: { ru: 'буквы равны — диагональ + 1', en: 'the letters are equal: diagonal + 1' },
+                up: { ru: 'буквы разные, сверху не меньше — берём сверху', en: 'the letters differ, above is not smaller: take above' },
+                left: { ru: 'буквы разные, слева больше — берём слева', en: 'the letters differ, left is larger: take left' } } },
     ],
     followups: [
       { ru: { q: 'Память O(min(n, m))?', a: 'Клетке нужны только текущая и предыдущая строки: храни две строки длины короткой строки или одну плюс переменную для диагонали.' },
@@ -557,9 +561,11 @@ export const EX_D = {
       ours: { ru: 'dp за n²', en: 'n² dp', count: p => p.nums.length * (p.nums.length - 1) / 2 },
     },
     predict: [
-      { q: { ru: 'Есть ли ещё элемент, для которого нужен dp?', en: 'Is there another element that needs its dp?' },
-        keys: { 'lis.ev.cell': { ru: 'да, считаем dp[i]', en: 'yes, compute dp[i]' },
-                'lis.ev.done': { ru: 'нет, берём максимум dp', en: 'no, take the maximum dp' } } },
+      { q: { ru: 'Каким выйдет dp следующего элемента?', en: 'What will the dp of the next element be?' },
+        on: 'lis.ev.cell', branch: e => (e.args[4] === 1 ? 'one' : e.args[4] > Math.max(0, ...e.dp.slice(0, e.args[0])) ? 'up' : 'keep'),
+        keys: { one: { ru: '1 — раньше нет меньших (или они не помогают)', en: '1: nothing smaller comes before it' },
+                up: { ru: 'новый рекорд — продлевает самую длинную цепочку', en: 'a new record: it extends the longest chain' },
+                keep: { ru: 'больше 1, но не выше уже лучшего dp', en: 'above 1, but no higher than the best dp so far' } } },
     ],
     followups: [
       { ru: { q: 'Быстрее, чем n²?', a: 'Массив tails: tails[k] — наименьший хвост возрастающей подпоследовательности длины k + 1. Для каждого x бинарным поиском найди первый ≥ x и замени его: O(n log n).' },
@@ -594,9 +600,12 @@ export const EX_D = {
       ours: { ru: 'таблица', en: 'table', count: p => p.a.length * p.b.length },
     },
     predict: [
-      { q: { ru: 'Осталась ли в таблице непосчитанная клетка?', en: 'Is there a cell of the table left to fill?' },
-        keys: { 'ed.ev.cell': { ru: 'да, считаем следующую', en: 'yes, fill the next one' },
-                'ed.ev.done': { ru: 'нет, ответ в правом нижнем углу', en: 'no, the answer is in the bottom-right corner' } } },
+      { q: { ru: 'Как получится следующая клетка?', en: 'How is the next cell filled?' },
+        on: 'ed.ev.cell', branch: e => e.args[4],
+        keys: { keep: { ru: 'буквы равны — бесплатно по диагонали', en: 'the letters are equal: free, along the diagonal' },
+                replace: { ru: 'замена ↖ — 1 + диагональ (при ничьей выбираем её)', en: 'replace ↖: 1 + diagonal (it wins ties)' },
+                delete: { ru: 'удаление ↑ — 1 + клетка сверху', en: 'delete ↑: 1 + the cell above' },
+                insert: { ru: 'вставка ← — 1 + клетка слева', en: 'insert ←: 1 + the cell to the left' } } },
     ],
     followups: [
       { ru: { q: 'У вставки, удаления и замены разные цены?', a: 'Переходы те же, только вместо +1 прибавляй цену своей операции; базовые строка и столбец — накопленные цены вставок и удалений.' },
@@ -630,9 +639,12 @@ export const EX_D = {
       ours: { ru: 'таблица', en: 'table', count: p => p.s.length * p.p.length },
     },
     predict: [
-      { q: { ru: 'Осталась ли в таблице непосчитанная клетка?', en: 'Is there a cell of the table left to fill?' },
-        keys: { 'rx.ev.cell': { ru: 'да, считаем следующую', en: 'yes, fill the next one' },
-                'rx.ev.done': { ru: 'нет, ответ в правом нижнем углу', en: 'no, the answer is in the bottom-right corner' } } },
+      { q: { ru: 'Чем решится следующая клетка?', en: 'What decides the next cell?' },
+        on: 'rx.ev.cell', branch: e => ({ match: 'diag', mismatch: 'no', zero: 'zero', more: 'more', 'star-fail': 'no' })[e.args[4]],
+        keys: { diag: { ru: 'символ совпал (или «.») — копируем диагональ', en: 'the character matches (or “.”): copy the diagonal' },
+                zero: { ru: '«x*» — ноль копий: две колонки левее ✓', en: '“x*” as zero copies: two columns left is ✓' },
+                more: { ru: '«x*» съедает ещё символ: клетка сверху ✓', en: '“x*” eats one more character: the cell above is ✓' },
+                no: { ru: 'ничего не подходит — сразу ·', en: 'nothing fits: · right away' } } },
     ],
     followups: [
       { ru: { q: 'Рекурсия с мемоизацией вместо таблицы?', a: 'Те же состояния (i, j), O(|s|·|p|), но считаются только достижимые; зато глубина рекурсии до |s| + |p|.' },

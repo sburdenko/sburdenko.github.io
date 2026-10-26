@@ -146,9 +146,10 @@ export const EX_A = {
       ours: { ru: 'поиск ключа в словаре', en: 'dictionary key lookups', count: p => p.strs.length },
     },
     predict: [
-      { q: { ru: 'Остались ещё слова или все разложены?', en: 'Are there words left, or is everything sorted into groups?' },
-        keys: { 'anag.ev.key': { ru: 'ещё слово — строим ключ', en: 'another word: build its key' },
-                'anag.ev.done': { ru: 'слова кончились — группы готовы', en: 'no words left: the groups are ready' } } },
+      { q: { ru: 'Ключ следующего слова (его буквы по алфавиту) уже есть в словаре?', en: 'The key of the next word (its letters sorted): is it in the dictionary already?' },
+        on: 'anag.ev.key', branch: e => (e.args[2] ? 'new' : 'old'),
+        keys: { new: { ru: 'нет — открываем новую группу', en: 'no: open a new group' },
+                old: { ru: 'да — дописываем слово в его группу', en: 'yes: append the word to its group' } } },
     ],
     followups: [
       { ru: { q: 'Слова длинные, а алфавит — 26 букв. Как сделать ключ быстрее сортировки?', a: 'Посчитай буквы в <code>int[26]</code> и склей счётчики в строку вроде «1#0#2#…». Ключ строится за O(k) вместо O(k log k).' },
@@ -229,9 +230,11 @@ export const EX_A = {
       ours: { ru: 'префиксы в словаре', en: 'prefix sums in a dictionary', count: p => p.nums.length },
     },
     predict: [
-      { q: { ru: 'Остались ещё числа или подсчёт закончен?', en: 'Are there numbers left, or is the count final?' },
-        keys: { 'psum.ev.step': { ru: 'ещё число — обновляем sum и смотрим sum − k', en: 'another number: update sum and look up sum − k' },
-                'psum.ev.done': { ru: 'массив кончился — count окончательный', en: 'the array is over: count is final' } } },
+      { q: { ru: 'Следующее число: на сколько вырастет count? Сколько раз раньше встречался префикс sum − k?', en: 'Next number: how much does count grow? How often has the prefix sum − k appeared before?' },
+        on: 'psum.ev.step', branch: e => (e.args[4] === 0 ? '0' : e.args[4] === 1 ? '1' : '2+'),
+        keys: { 0: { ru: 'на 0 — такого префикса не было', en: 'by 0: that prefix never appeared' },
+                1: { ru: 'на 1 — префикс встречался один раз', en: 'by 1: the prefix appeared once' },
+                '2+': { ru: 'на 2 и больше — префикс встречался несколько раз', en: 'by 2 or more: the prefix appeared several times' } } },
     ],
     followups: [
       { ru: { q: 'А если нужна самая длинная такая подстрока, а не их число?', a: 'В словаре храни не счётчик, а первый индекс каждого префикса и не перезаписывай его. Длина — i − first[sum − k]. Это #325.' },
@@ -507,9 +510,11 @@ export const EX_A = {
       ours: { ru: 'встречные указатели', en: 'two pointers', count: p => p.h.length - 1 },
     },
     predict: [
-      { q: { ru: 'Указатели ещё не встретились? Считаем новую площадь или конец?', en: 'Have the pointers met yet? Another area, or the end?' },
-        keys: { 'water.ev.step': { ru: 'L &lt; R — считаем площадь и двигаем низкую', en: 'L &lt; R: measure the area and move the shorter line' },
-                'water.ev.done': { ru: 'L = R — ответ готов', en: 'L = R: the answer is ready' } } },
+      { q: { ru: 'Какой указатель сдвинем после этой пары?', en: 'Which pointer moves after this pair?' },
+        on: 'water.ev.step', branch: e => e.args[5],
+        keys: { L: { ru: 'левый — левая линия ниже', en: 'the left one: the left line is lower' },
+                R: { ru: 'правый — правая линия ниже', en: 'the right one: the right line is lower' },
+                '=': { ru: 'любой — высоты равны (берём R)', en: 'either: equal heights (we take R)' } } },
     ],
     followups: [
       { ru: { q: 'Линии стоят не через 1, а в точках x[i] (по возрастанию)?', a: 'Ширина — x[r] − x[l], и она по-прежнему только убывает, пока указатели сходятся. Значит, довод «двигай низкую» не меняется, алгоритм тот же.' },
@@ -1030,9 +1035,10 @@ export const EX_A = {
       ours: { ru: 'скользящая сумма', en: 'running window sum', count: p => p.k + 2 * (p.nums.length - p.k) },
     },
     predict: [
-      { q: { ru: 'Окну есть куда сдвинуться или это было последнее?', en: 'Can the window still slide, or was that the last one?' },
-        keys: { 'avg.ev.slide': { ru: 'сдвиг: +новый справа, −ушедший слева', en: 'slide: +new on the right, −old on the left' },
-                'avg.ev.done': { ru: 'r дошёл до конца — делим лучшую сумму на k', en: 'r reached the end: divide the best sum by k' } } },
+      { q: { ru: 'Окно сдвигается: +новый справа, −ушедший слева. Побьёт ли новая сумма рекорд best?', en: 'The window slides: +new on the right, −old on the left. Does the new sum beat the record best?' },
+        on: 'avg.ev.slide', branch: e => (e.args[3] ? 'rec' : 'no'),
+        keys: { rec: { ru: 'да — sum станет больше best', en: 'yes: sum gets above best' },
+                no: { ru: 'нет — best не меняется', en: 'no: best stays as it is' } } },
     ],
     followups: [
       { ru: { q: 'Много запросов с разными k по одному массиву?', a: 'Префиксные суммы один раз: сумма окна [l, r] = P[r + 1] − P[l] за O(1). Каждый запрос — O(n) без пересчёта окон.' },

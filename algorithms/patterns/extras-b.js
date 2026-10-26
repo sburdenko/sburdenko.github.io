@@ -183,9 +183,10 @@ export const EX_B = {
       } },
     },
     predict: [
-      { q: { ru: 'Пробуем ещё одну скорость или lo уже сошёлся с hi?', en: 'Do we try one more speed, or have lo and hi met?' },
-        keys: { 'koko.ev.probe': { ru: 'проверяем ещё скорость', en: 'check another speed' },
-                'koko.ev.done': { ru: 'lo = hi, ответ готов', en: 'lo = hi, the answer is ready' } } },
+      { q: { ru: 'Пробуем k — середину [lo..hi]. Успеет ли Коко за h часов?', en: 'We try k, the middle of [lo..hi]. Does Koko finish within h hours?' },
+        on: 'koko.ev.probe', branch: e => (e.args[4] ? 'fits' : 'slow'),
+        keys: { fits: { ru: 'успевает — пробуем медленнее: hi = k', en: 'she does: try slower, hi = k' },
+                slow: { ru: 'не успевает — нужно быстрее: lo = k + 1', en: 'she does not: go faster, lo = k + 1' } } },
     ],
     followups: [
       { ru: { q: 'Можно ли сузить диапазон поиска?', a: 'Да: <code>lo = ⌈sum / h⌉</code> — медленнее не успеть даже без простоев, <code>hi = max</code> — быстрее бессмысленно, куча всё равно занимает час. Это экономит пару шагов, асимптотика та же.' },
@@ -286,9 +287,11 @@ export const EX_B = {
       } },
     },
     predict: [
-      { q: { ru: 'Разрез уже верный — считаем медиану, или двигаем i ещё раз?', en: 'Is the cut right already, so we compute the median, or do we move i again?' },
-        keys: { 'med.ev.cut': { ru: 'ещё один разрез', en: 'one more cut' },
-                'med.ev.done': { ru: 'медиана готова', en: 'the median is ready' } } },
+      { q: { ru: 'Следующий разрез i (середина оставшегося диапазона): что скажет проверка краёв?', en: 'The next cut i (the middle of the range left): what does the edge check say?' },
+        on: 'med.ev.cut', branch: e => e.args[6],
+        keys: { right: { ru: 'B слева &gt; A справа — A даёт мало, i вправо', en: 'B left &gt; A right: A gives too little, i moves right' },
+                left: { ru: 'A слева &gt; B справа — A даёт много, i влево', en: 'A left &gt; B right: A gives too much, i moves left' },
+                ok: { ru: 'оба левых края ≤ обоих правых — разрез верный', en: 'both left ends ≤ both right ends: the cut is right' } } },
     ],
     followups: [
       { ru: { q: 'А k-й по величине элемент двух массивов?', a: 'Тот же разрез, только слева должно оказаться k чисел: <code>half = k</code>, i ищем в [max(0, k − n), min(k, m)]. Ответ — больший из левых краёв.' },
@@ -676,9 +679,11 @@ export const EX_B = {
       ours: { ru: 'prev / cur', en: 'prev / cur', count: p => p.values.length },
     },
     predict: [
-      { q: { ru: 'cur ещё не null — разворачиваем следующую ссылку, или пора отдавать prev?', en: 'Is cur still non-null, so we flip the next link, or is it time to return prev?' },
-        keys: { 'rev.ev.step': { ru: 'разворачиваем ссылку', en: 'flip a link' },
-                'rev.ev.done': { ru: 'cur = null, ответ prev', en: 'cur = null, return prev' } } },
+      { q: { ru: 'Следующий шаг разворачивает cur.next. Куда он теперь будет указывать?', en: 'The next step flips cur.next. Where will it point now?' },
+        on: 'rev.ev.step', branch: e => (e.args[1] === null ? 'null' : 'prev'),
+        keys: { null: { ru: 'на null — cur была головой, теперь она хвост', en: 'at null: cur was the head, now it is the tail' },
+                prev: { ru: 'на prev — предыдущий, уже развёрнутый узел', en: 'at prev, the node before it, already flipped' },
+                next: { ru: 'остаётся на next — стрелку не трогаем', en: 'it stays on next: the arrow is left alone' } } },
     ],
     followups: [
       { ru: { q: 'Проверь, что список — палиндром, за O(1) памяти (#234).', a: 'Найди середину (slow/fast), разверни вторую половину, сравни с первой, а потом разверни обратно, чтобы вернуть список вызывающему коду в прежнем виде.' },
@@ -869,9 +874,12 @@ export const EX_B = {
       ours: { ru: 'BFS, очередь по уровням', en: 'BFS, a queue by levels', count: p => countNodes(treeOf(p.root)) },
     },
     predict: [
-      { q: { ru: 'В очереди ещё есть узлы — будет новый уровень, или обход закончен?', en: 'Are there nodes left in the queue, so another level comes, or is the traversal over?' },
-        keys: { 'lvl.ev.level': { ru: 'новый уровень', en: 'another level' },
-                'lvl.ev.done': { ru: 'очередь пуста', en: 'the queue is empty' } } },
+      { q: { ru: 'Берём следующий уровень. Сколько детей его узлы поставят в очередь — по сравнению с размером самого уровня?', en: 'We take the next level. How many children do its nodes put into the queue, compared with the size of the level itself?' },
+        on: 'lvl.ev.level', branch: e => (e.args[2] === 0 ? 'none' : e.args[2] < e.args[1].length ? 'fewer' : e.args[2] === e.args[1].length ? 'same' : 'more'),
+        keys: { none: { ru: 'ни одного — это последний уровень', en: 'none: this is the last level' },
+                fewer: { ru: 'меньше, чем узлов в уровне', en: 'fewer than the nodes in the level' },
+                same: { ru: 'столько же', en: 'the same number' },
+                more: { ru: 'больше — следующий уровень шире', en: 'more: the next level is wider' } } },
     ],
     followups: [
       { ru: { q: 'Обход «змейкой» (#103)?', a: 'Тот же BFS, только каждый второй уровень записываем задом наперёд — разворотом списка или вставкой в начало дека.' },
@@ -1008,9 +1016,12 @@ export const EX_B = {
       ours: { ru: 'один пост-порядок', en: 'one post-order pass', count: p => countNodes(treeOf(p.root)) },
     },
     predict: [
-      { q: { ru: 'Ещё какой-то узел должен вернуть спуск, или все уже посчитаны?', en: 'Does some node still have to return its descent, or are they all done?' },
-        keys: { 'mps.ev.ret': { ru: 'ещё узел возвращает спуск', en: 'another node returns its descent' },
-                'mps.ev.done': { ru: 'все узлы посчитаны', en: 'every node is done' } } },
+      { q: { ru: 'Следующий узел возвращает родителю спуск. Через кого он его продолжит?', en: 'The next node returns its descent to the parent. Which way does the descent continue?' },
+        on: 'mps.ev.ret', branch: e => (Math.max(e.args[1], e.args[2]) === 0 ? 'none' : e.args[1] === e.args[2] ? '=' : e.args[1] > e.args[2] ? 'L' : 'R'),
+        keys: { L: { ru: 'через левого ребёнка — его выгода больше', en: 'through the left child: its gain is larger' },
+                R: { ru: 'через правого ребёнка — его выгода больше', en: 'through the right child: its gain is larger' },
+                '=': { ru: 'через любого — выгоды равны и больше 0', en: 'through either: the gains are equal and above 0' },
+                none: { ru: 'ни через кого — обе выгоды 0, возвращает только себя', en: 'through neither: both gains are 0, it returns just itself' } } },
     ],
     followups: [
       { ru: { q: 'Верни сам путь, а не только сумму.', a: 'Запомни узел-вершину лучшего пути и для каждого узла — в какого ребёнка ведёт его лучший спуск. Путь — спуск влево от вершины задом наперёд, сама вершина и спуск вправо.' },
