@@ -1,6 +1,6 @@
 /** Tape 06 assembly: language, map, skeletons and, per chapter, four problem tabs that each drive their own rig. */
 import { $, $$, esc, bootVhs } from '../../assets/vhs.js?v=202610261206';
-import { initI18n, t, onLang } from '../../assets/i18n.js?v=202610261206';
+import { initI18n, t, onLang, getLang } from '../../assets/i18n.js?v=202610261206';
 import { COMMON } from '../../assets/i18n-common.js?v=202610261206';
 import { renderCode } from '../../assets/code.js?v=202610261206';
 import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202610261206';
@@ -8,6 +8,7 @@ import { DICT } from './i18n.js?v=202610261206';
 import { RIGS, PATTERN_IDS, runWithInput } from './rigs.js?v=202610261206';
 import { formatField } from './inputs.js?v=202610261206';
 import { PROBLEMS, NAMES } from './problems.js?v=202610261206';
+import { STATEMENTS } from './statements.js?v=202610261206';
 
 const pad = n => String(n).padStart(2, '0');
 
@@ -15,26 +16,36 @@ const pad = n => String(n).padStart(2, '0');
 const shell = () => `<h4 data-i18n="ui.problems"></h4>
   <div class="ptabs" role="tablist" data-i18n-aria="ui.problemsAria"></div>
   <div class="panel rig" role="tabpanel">
-    <div class="rig-head"><p class="lbl" data-i18n="ui.rigTag">RIG · STEP BY STEP</p><h3 class="rig-title"></h3></div>
-    <div class="editor">
-      <div class="fields"></div>
-      <div class="ed-actions">
-        <button type="button" class="btn" data-ed="random" data-i18n="in.random">🎲 Random</button>
-        <button type="button" class="btn" data-ed="example" data-i18n="in.example">↺ Example</button>
-      </div>
-      <p class="ed-msg" aria-live="polite"></p>
+    <div class="rig-head">
+      <p class="lbl" data-i18n="ui.rigTag">RIG · STEP BY STEP</p>
+      <div class="rig-name"><h3 class="rig-title"></h3><span class="rig-meta"></span></div>
+      <div class="rig-task"></div>
     </div>
-    <div class="crt"><div class="stage"></div></div>
-    <div class="explanation" aria-live="polite"></div>
-    <div class="rig-vars"></div>
-    <div class="transport">
-      <button class="btn" data-t="first" data-i18n-title="tr.first" data-i18n-aria="tr.first">|◀</button>
-      <button class="btn" data-t="back" data-i18n-title="tr.back" data-i18n-aria="tr.back">◀</button>
-      <button class="btn primary" data-t="play">► PLAY</button>
-      <button class="btn" data-t="fwd" data-i18n-title="tr.fwd" data-i18n-aria="tr.fwd">▶</button>
-      <button class="btn" data-t="end" data-i18n-title="tr.end" data-i18n-aria="tr.end">▶|</button>
-      <span class="spd"><span data-i18n="tr.speedLabel">SPEED</span><input type="range" min="1" max="8" value="2" data-i18n-aria="tr.speedAria"><b data-t="sps">2</b><span data-i18n="tr.perSec">/s</span></span>
-      <span class="lbl" data-t="pos"></span>
+    <div class="rig-grid">
+      <div class="rig-main">
+        <div class="crt"><div class="stage"></div></div>
+        <div class="transport">
+          <button class="btn" data-t="first" data-i18n-title="tr.first" data-i18n-aria="tr.first">|◀</button>
+          <button class="btn" data-t="back" data-i18n-title="tr.back" data-i18n-aria="tr.back">◀</button>
+          <button class="btn primary" data-t="play">► PLAY</button>
+          <button class="btn" data-t="fwd" data-i18n-title="tr.fwd" data-i18n-aria="tr.fwd">▶</button>
+          <button class="btn" data-t="end" data-i18n-title="tr.end" data-i18n-aria="tr.end">▶|</button>
+          <span class="spd"><span data-i18n="tr.speedLabel">SPEED</span><input type="range" min="1" max="8" value="2" data-i18n-aria="tr.speedAria"><b data-t="sps">2</b><span data-i18n="tr.perSec">/s</span></span>
+          <span class="lbl" data-t="pos"></span>
+        </div>
+        <div class="explanation" aria-live="polite"></div>
+      </div>
+      <div class="rig-side">
+        <div class="rig-vars"></div>
+        <div class="editor">
+          <div class="fields"></div>
+          <div class="ed-actions">
+            <button type="button" class="btn" data-ed="random" data-i18n="in.random">🎲 Random</button>
+            <button type="button" class="btn" data-ed="example" data-i18n="in.example">↺ Example</button>
+          </div>
+          <p class="ed-msg" aria-live="polite"></p>
+        </div>
+      </div>
     </div>
   </div>
   <div class="ppanel panel"></div>`;
@@ -47,6 +58,7 @@ bootVhs();
 function mountChapter(root) {
   const id = root.dataset.probs;
   const tabs = $('.ptabs', root), info = $('.ppanel', root), title = $('.rig-title', root);
+  const meta = $('.rig-meta', root), task = $('.rig-task', root);
   const stage = $('.stage', root), explanation = $('.explanation', root), vars = $('.rig-vars', root);
   let selected = 0, rig = null, run = null, frame = null;
 
@@ -69,17 +81,29 @@ function mountChapter(root) {
       <span class="meta">#${p.num} · <i class="diff ${p.diff}">${p.diff}</i>${p.must ? ` · <b class="must">${t('ui.hard')}</b>` : ''}</span></button>`).join('');
   }
 
+  /* The full statement: what is given and returned, the limits and the rig's own example with its answer. */
+  function statement(rigId) {
+    const st = STATEMENTS[rigId], text = st?.[getLang()];
+    if (!text) return null;
+    return `<span class="lbl">${t('ui.task')}</span><p>${text.text}</p>
+      ${text.limits ? `<p class="st-limits"><span class="lbl">${t('ui.limits')}</span> ${text.limits}</p>` : ''}
+      <div class="st-ex"><span class="lbl">${t('ui.example')}</span>
+        <code><b>${t('ui.input')}:</b> ${esc(st.ex.in)}</code>
+        <code><b>${t('ui.output')}:</b> ${esc(st.ex.out)}</code>
+        ${text.note ? `<span class="st-note">${text.note}</span>` : ''}</div>`;
+  }
+
+  /* The statement sits right above the rig: the trace is read against it. The rest of the write-up goes below. */
   function renderInfo() {
     const p = PROBLEMS[id][selected], text = t(`${id}.p`)[selected];
+    meta.innerHTML = `#${p.num} · <i class="diff ${p.diff}">${p.diff}</i>${p.must ? ` · <b class="must">${t('ui.hard')}</b>` : ''} · <a class="leet" href="https://leetcode.com/problems/${p.slug}/" target="_blank" rel="noopener">${t('ui.leet')}</a>`;
+    task.innerHTML = statement(p.rig) ?? `<span class="lbl">${t('ui.task')}</span><p>${text.task}</p>`;
     info.innerHTML = `<div class="pinfo">
-        <h3>${esc(p.name)} <span class="lc">#${p.num}</span></h3>
         <dl>
-          <div><dt class="lbl">${t('ui.task')}</dt><dd>${text.task}</dd></div>
           <div><dt class="lbl">${t('ui.idea')}</dt><dd>${text.idea}</dd></div>
           <div><dt class="lbl">${t('ui.why')}</dt><dd class="reason">${text.why}</dd></div>
           <div><dt class="lbl">${t('ui.cx')}</dt><dd class="cx">${text.cx}</dd></div>
         </dl>
-        <a class="leet" href="https://leetcode.com/problems/${p.slug}/" target="_blank" rel="noopener">${t('ui.leet')}</a>
       </div>
       <div class="pcode"><p class="lbl">${t('ui.code')}</p><pre class="code"></pre></div>`;
     renderCode($('.pcode pre', info), p.code);
