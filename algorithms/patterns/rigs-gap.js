@@ -1,8 +1,8 @@
 /** Editable rigs for the problems in model-gap.js; the chapters they belong to are listed in problems-gap.js. */
-import * as M from './model-gap.js?v=202610261308';
-import * as V from './views-gap.js?v=202610261308';
-import { treeFromLevelOrder, levelOrderOf } from './inputs.js?v=202610261308';
-import { defineRig, randInt, randInts, pick, shuffle } from './rig-kit.js?v=202610261308';
+import * as M from './model-gap.js?v=202610262021';
+import * as V from './views-gap.js?v=202610262021';
+import { treeFromLevelOrder, levelOrderOf } from './inputs.js?v=202610262021';
+import { defineRig, randInt, randInts, pick, shuffle } from './rig-kit.js?v=202610262021';
 
 const PHRASES = [
   'A man, a plan, a canal: Panama', 'race a car', 'Was it a car or a cat I saw?', "No 'x' in Nixon", '0P',

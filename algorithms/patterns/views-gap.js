@@ -1,6 +1,6 @@
 /** Views for the problems in model-gap.js. view(run, event) → SVG string, vars(run, event) → [[i18nKey, html]]. */
-import { CELL, STEP, svg, text, rowWidth, cells, pointers, pointerAt, node, chip, chips } from './view-kit.js?v=202610261308';
-import { layoutLinks } from './model-gap.js?v=202610261308';
+import { CELL, STEP, svg, text, rowWidth, cells, pointers, pointerAt, node, chip, chips } from './view-kit.js?v=202610262021';
+import { layoutLinks } from './model-gap.js?v=202610262021';
 
 /* ---------- Valid Palindrome: the string wraps into rows of small cells ---------- */
 const PC = 30, PSTEP = 33, PER_ROW = 12, PROW = 80, PTOP = 34;

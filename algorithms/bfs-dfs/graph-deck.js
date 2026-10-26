@@ -1,10 +1,10 @@
 /** Пульт «граф»: узлы и рёбра, дерево обхода, слои BFS и глубина DFS. */
-import { $, $$, fitCanvas, press, fmtI, onVisible } from '../../assets/vhs.js?v=202610261308';
-import { t, onLang } from '../../assets/i18n.js?v=202610261308';
-import { makeGraph, graphNeighbors, traverse, stateAt, pathTo } from './traversal.js?v=202610261308';
-import { drawGraph, graphLayout, nodeAtPoint } from './graph-view.js?v=202610261308';
-import { renderPseudo, renderFrontier, noteFor, tile, COL } from './panels.js?v=202610261308';
-import { createPlayer, bindTransport } from './player.js?v=202610261308';
+import { $, $$, fitCanvas, press, fmtI, onVisible } from '../../assets/vhs.js?v=202610262021';
+import { t, onLang } from '../../assets/i18n.js?v=202610262021';
+import { makeGraph, graphNeighbors, traverse, stateAt, pathTo } from './traversal.js?v=202610262021';
+import { drawGraph, graphLayout, nodeAtPoint } from './graph-view.js?v=202610262021';
+import { renderPseudo, renderFrontier, noteFor, tile, COL } from './panels.js?v=202610262021';
+import { createPlayer, bindTransport } from './player.js?v=202610262021';
 
 export function initGraphDeck() {
   const cv = $('#graphCv'), side = $('#graphSide'), statsEl = $('#graphStats'), tip = $('#graphTip');

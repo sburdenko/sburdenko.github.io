@@ -21,6 +21,8 @@ test('statements are filled in both languages, en without Cyrillic', () => {
     assert.ok(st.ex?.in && st.ex?.out, `${id}: example`);
     for (const lang of ['en', 'ru']) {
       assert.ok(st[lang]?.text?.length > 40, `${id} ${lang}: text`);
+      const fact = String(st[lang].fact ?? '').replace(/<[^>]+>/g, '');
+      assert.ok(fact.length >= 60 && fact.length <= 240, `${id} ${lang}: fact of ${fact.length} characters`);
       assert.equal(Boolean(st[lang].limits), Boolean(st[lang === 'en' ? 'ru' : 'en'].limits), `${id}: limits in both languages`);
       assert.equal(Boolean(st[lang].note), Boolean(st[lang === 'en' ? 'ru' : 'en'].note), `${id}: note in both languages`);
     }
