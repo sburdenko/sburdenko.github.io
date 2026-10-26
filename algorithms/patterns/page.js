@@ -1,14 +1,15 @@
 /** Tape 06 assembly: language, map, skeletons and, per chapter, four problem tabs that each drive their own rig. */
-import { $, $$, esc, bootVhs } from '../../assets/vhs.js?v=202610262045';
-import { initI18n, t, onLang, getLang } from '../../assets/i18n.js?v=202610262045';
-import { COMMON } from '../../assets/i18n-common.js?v=202610262045';
-import { renderCode } from '../../assets/code.js?v=202610262045';
-import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202610262045';
-import { DICT } from './i18n.js?v=202610262045';
-import { RIGS, PATTERN_IDS, runWithInput } from './rigs.js?v=202610262045';
-import { formatField } from './inputs.js?v=202610262045';
-import { PROBLEMS, NAMES } from './problems.js?v=202610262045';
-import { STATEMENTS } from './statements.js?v=202610262045';
+import { $, $$, esc, bootVhs } from '../../assets/vhs.js?v=202610262121';
+import { initI18n, t, onLang, getLang } from '../../assets/i18n.js?v=202610262121';
+import { COMMON } from '../../assets/i18n-common.js?v=202610262121';
+import { renderCode } from '../../assets/code.js?v=202610262121';
+import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202610262121';
+import { DICT } from './i18n.js?v=202610262121';
+import { RIGS, PATTERN_IDS, runWithInput } from './rigs.js?v=202610262121';
+import { formatField } from './inputs.js?v=202610262121';
+import { PROBLEMS, NAMES } from './problems.js?v=202610262121';
+import { STATEMENTS } from './statements.js?v=202610262121';
+import { EXTRAS, forkOf, answerOf, countOps } from './extras.js?v=202610262121';
 
 const pad = n => String(n).padStart(2, '0');
 
@@ -43,6 +44,11 @@ const shell = () => `<div class="panel rig">
           <span class="lbl" data-t="pos"></span>
         </div>
         <div class="explanation" aria-live="polite"></div>
+        <div class="rig-tools">
+          <p class="rig-ops"></p>
+          <span class="guess-score lbl" aria-live="polite"></span>
+          <button type="button" class="btn guess" aria-pressed="false" data-i18n="ui.guess">🎯 Guess the move</button>
+        </div>
         <div class="rig-vars"></div>
       </div>
       <div class="rig-side">
@@ -50,18 +56,22 @@ const shell = () => `<div class="panel rig">
           <button type="button" class="itab" role="tab" data-pane="task" aria-selected="true" data-i18n="ui.task">Task</button>
           <button type="button" class="itab" role="tab" data-pane="idea" aria-selected="false" tabindex="-1" data-i18n="ui.solution">Solution</button>
           <button type="button" class="itab" role="tab" data-pane="code" aria-selected="false" tabindex="-1" data-i18n="ui.codeTab">C#</button>
+          <button type="button" class="itab" role="tab" data-pane="follow" aria-selected="false" tabindex="-1" data-i18n="ui.followTab">Follow-ups</button>
           <button type="button" class="itab" role="tab" data-pane="input" aria-selected="false" tabindex="-1" data-i18n="ui.inputTab">Your input</button>
         </div>
         <div class="ibody">
           <div class="ipane rig-task" role="tabpanel" data-pane="task"></div>
           <div class="ipane pinfo" role="tabpanel" data-pane="idea" hidden></div>
           <div class="ipane pcode" role="tabpanel" data-pane="code" hidden><pre class="code"></pre></div>
+          <div class="ipane follow" role="tabpanel" data-pane="follow" hidden></div>
           <div class="ipane editor" role="tabpanel" data-pane="input" hidden>
             <div class="fields"></div>
             <div class="ed-actions">
               <button type="button" class="btn" data-ed="random" data-i18n="in.random">🎲 Random</button>
               <button type="button" class="btn" data-ed="example" data-i18n="in.example">↺ Example</button>
+              <button type="button" class="btn tricky" data-ed="tricky"></button>
             </div>
+            <p class="ed-tricky" hidden></p>
             <p class="ed-msg" aria-live="polite"></p>
           </div>
         </div>
@@ -80,19 +90,80 @@ function mountChapter(root) {
   const count = $('.rig-count', root), fact = $('.rig-fact', root);
   const meta = $('.rig-meta', root), task = $('.rig-task', root);
   const stage = $('.stage', root), explanation = $('.explanation', root), vars = $('.rig-vars', root);
-  let selected = 0, rig = null, run = null, frame = null;
+  let selected = 0, rig = null, run = null, frame = null, params = null;
+  const extra = () => EXTRAS[PROBLEMS[id][selected].rig];
+  const L = () => getLang();
+
+  /* Guess mode: before an event that is one branch of a fork, the rig steps back and asks which branch comes next. */
+  const guessBtn = $('.guess', root), scoreEl = $('.guess-score', root);
+  let guessing = false, asked = new Set(), pending = -1, lastIndex = 0, verdict = null, score = { hit: 0, all: 0 }, resume = 0;
+  const resetGuess = () => { asked = new Set(); pending = -1; verdict = null; lastIndex = 0; clearTimeout(resume); };
+  const showScore = () => { scoreEl.textContent = guessing && score.all ? t('ui.guessScore', score.hit, score.all) : ''; };
+  function quizHtml(event) {
+    const group = forkOf(extra(), event);
+    return `<p class="quiz-q">${group.q[L()]}</p><div class="quiz-opts">${Object.entries(group.keys)
+      .map(([key, label]) => `<button type="button" class="btn" data-guess-key="${esc(key)}">${label[L()]}</button>`).join('')}</div>`;
+  }
 
   const paint = next => {
+    const prev = lastIndex;
+    lastIndex = next.index;
     frame = next;
+    if (guessing && pending < 0 && next.index > prev && next.index - prev <= 3) {
+      for (let j = Math.max(1, prev + 1); j <= next.index; j++) {
+        if (asked.has(j) || !forkOf(extra(), next.run.events[j])) continue;
+        asked.add(j);
+        pending = j;
+        resume = next.playing ? 1 : 0;
+        player.seek(j - 1);
+        return;
+      }
+    }
+    if (pending >= 0 && next.index !== pending - 1) pending = -1;
     const event = next.run.events[next.index];
     stage.innerHTML = rig.view(run, event);
-    explanation.innerHTML = t(event.key, ...event.args);
+    const said = verdict && verdict.at === next.index
+      ? `<span class="verdict ${verdict.ok ? 'ok' : 'bad'}">${verdict.ok ? t('ui.guessRight') : t('ui.guessWrong', verdict.label)}</span> ` : '';
+    explanation.innerHTML = pending >= 0 ? quizHtml(next.run.events[pending]) : said + t(event.key, ...event.args);
+    explanation.classList.toggle('asking', pending >= 0);
     vars.innerHTML = rig.vars(run, event)
       .map(([key, html]) => `<div class="rv"><span class="lbl">${t(key)}</span><span class="rv-val">${html}</span></div>`).join('');
     sync(next);
   };
   const player = createPlayer(paint);
   const sync = bindTransport($('.transport', root), player);
+
+  explanation.addEventListener('click', event => {
+    const button = event.target.closest('[data-guess-key]');
+    if (!button || pending < 0) return;
+    const at = pending, group = forkOf(extra(), run.events[at]), right = answerOf(group, run.events[at]);
+    const ok = button.dataset.guessKey === right;
+    score.all++;
+    if (ok) score.hit++;
+    verdict = { at, ok, label: group.keys[right][L()] };
+    pending = -1;
+    showScore();
+    player.seek(at);
+    if (resume) resume = setTimeout(() => player.play(), 1400);
+  });
+  guessBtn.addEventListener('click', () => {
+    guessing = !guessing;
+    guessBtn.setAttribute('aria-pressed', String(guessing));
+    score = { hit: 0, all: 0 };
+    resetGuess();
+    showScore();
+    if (frame) { lastIndex = frame.index; paint(frame); }
+  });
+
+  /* Naive vs ours: the same unit counted on the current input, so the gap grows as the input does. */
+  const opsEl = $('.rig-ops', root);
+  function renderOps() {
+    const o = extra()?.ops, naive = o && params && countOps(o.naive, params), ours = o && params && countOps(o.ours, params);
+    if (naive == null || ours == null) { opsEl.innerHTML = ''; opsEl.title = ''; return; }
+    const n = v => v.toLocaleString(L() === 'ru' ? 'ru-RU' : 'en-US');
+    opsEl.innerHTML = `<span class="lbl">${o.unit[L()]}</span> ${o.naive[L()]} <b class="ops-naive">${n(naive)}</b> · ${o.ours[L()]} <b class="ops-ours">${n(ours)}</b>${ours >= naive ? ` <span class="ops-note">${t('ui.opsSmall')}</span>` : ''}`;
+    opsEl.title = opsEl.textContent;
+  }
 
   /* The chapter's problems live in a dropdown on the rig's title: one line instead of a grid of cards. */
   function renderTabs() {
@@ -154,6 +225,21 @@ function mountChapter(root) {
         <div><dt class="lbl">${t('ui.cx')}</dt><dd class="cx">${text.cx}</dd></div>
       </dl>`;
     renderCode($('.pcode pre', root), p.code);
+    const ex = extra();
+    const related = (ex?.related ?? []).map(r => {
+      const at = WHERE[r.id];
+      return at ? `<li><a href="#${at.chapter}" data-goto="${esc(r.id)}">${esc(PROBLEMS[at.chapter][at.j].name)}</a> <span class="rel-ch">${esc(NAMES[at.chapter])}</span><span class="rel-why">${r[L()]}</span></li>` : '';
+    }).join('');
+    if (related) info.insertAdjacentHTML('beforeend', `<div class="related"><p class="lbl">${t('ui.related')}</p><ul>${related}</ul></div>`);
+    $('.ipane[data-pane="follow"]', root).innerHTML = ex?.followups?.length
+      ? `<p class="follow-hint">${t('ui.followHint')}</p>${ex.followups.map(f => `<details><summary>${f[L()].q}</summary><p>${f[L()].a}</p></details>`).join('')}`
+      : '';
+    $('.itab[data-pane="follow"]', root).hidden = !ex?.followups?.length;
+    const tricks = ex?.tricky ?? [];
+    trickyBtn.hidden = !tricks.length;
+    trickyBtn.textContent = trickyAt >= 0 && tricks.length > 1 ? t('ui.trickyOf', trickyAt + 1, tricks.length) : t('ui.tricky');
+    trickyNote.hidden = trickyAt < 0;
+    if (trickyAt >= 0) trickyNote.innerHTML = `<b>⚠</b> ${tricks[trickyAt][L()]}`;
   }
 
   const itabs = $$('.itab', root), panes = $$('.ipane', root);
@@ -181,6 +267,8 @@ function mountChapter(root) {
 
   /* Edited texts per problem survive switching tabs back and forth. */
   const edits = new Map();
+  const trickyBtn = $('[data-ed="tricky"]', root), trickyNote = $('.ed-tricky', root);
+  let trickyAt = -1;
   const fields = $('.fields', root), message = $('.ed-msg', root);
   let error = null, timer = 0;
   const textsOf = params => Object.fromEntries(rig.fields.map(f => [f.key, formatField(params[f.key], f)]));
@@ -209,7 +297,13 @@ function mountChapter(root) {
     const result = runWithInput(rig, texts);
     error = result.error ? result : null;
     showMessage();
-    if (!error) { run = result.run; player.load(run); }
+    if (!error) {
+      run = result.run;
+      params = result.params;
+      resetGuess();
+      player.load(run);
+      renderOps();
+    }
   }
 
   function setTexts(texts) {
@@ -217,17 +311,29 @@ function mountChapter(root) {
     apply();
   }
 
+  const dropTricky = () => { trickyAt = -1; renderInfo(); };
+  trickyBtn.addEventListener('click', () => {
+    const tricks = extra()?.tricky ?? [];
+    if (!tricks.length) return;
+    trickyAt = (trickyAt + 1) % tricks.length;
+    setTexts({ ...textsOf(rig.example), ...tricks[trickyAt].input });
+    renderInfo();
+  });
   fields.addEventListener('input', event => {
+    if (trickyAt >= 0) dropTricky();
     fit(event.target);
     clearTimeout(timer);
     timer = setTimeout(apply, 300);
   });
   fields.addEventListener('keydown', event => { if (event.key === 'Enter') apply(); });
-  root.querySelector('[data-ed="random"]').addEventListener('click', () => setTexts(textsOf(rig.random(Math.random))));
-  root.querySelector('[data-ed="example"]').addEventListener('click', () => setTexts(textsOf(rig.example)));
+  root.querySelector('[data-ed="random"]').addEventListener('click', () => { trickyAt = -1; setTexts(textsOf(rig.random(Math.random))); renderInfo(); });
+  root.querySelector('[data-ed="example"]').addEventListener('click', () => { trickyAt = -1; setTexts(textsOf(rig.example)); renderInfo(); });
 
   function select(j) {
     selected = j;
+    trickyAt = -1;
+    score = { hit: 0, all: 0 };
+    showScore();
     const p = PROBLEMS[id][j];
     rig = RIGS[p.rig];
     title.textContent = p.name;
@@ -268,10 +374,25 @@ function mountChapter(root) {
     renderTabs();
     renderInfo();
     showMessage();
+    renderOps();
+    showScore();
     if (frame) paint(frame);
   });
   select(0);
+  MOUNTS[id] = select;
 }
+
+/* Where each problem lives, for the related-problem links. */
+const WHERE = Object.fromEntries(Object.entries(PROBLEMS).flatMap(([chapter, list]) => list.map((p, j) => [p.rig, { chapter, j }])));
+const MOUNTS = {};
+document.addEventListener('click', event => {
+  const link = event.target.closest('[data-goto]');
+  const at = link && WHERE[link.dataset.goto];
+  if (!at || !MOUNTS[at.chapter]) return;
+  event.preventDefault();
+  MOUNTS[at.chapter](at.j);
+  document.getElementById(at.chapter).querySelector('.rig').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
 
 function renderMap() {
   $('#patternMap').innerHTML = PATTERN_IDS.map((id, i) =>

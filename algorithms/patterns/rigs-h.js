@@ -1,8 +1,8 @@
 /** Editable rigs for chapter 17: data structure design. */
-import * as H from './model-h.js?v=202610262045';
-import * as V from './views-h.js?v=202610262045';
-import { treeFromLevelOrder, levelOrderOf } from './inputs.js?v=202610262045';
-import { defineRig, randInt, pick, shuffle } from './rig-kit.js?v=202610262045';
+import * as H from './model-h.js?v=202610262121';
+import * as V from './views-h.js?v=202610262121';
+import { treeFromLevelOrder, levelOrderOf } from './inputs.js?v=202610262121';
+import { defineRig, randInt, pick, shuffle } from './rig-kit.js?v=202610262121';
 
 /** The trie view stays readable up to this many nodes (root not counted). */
 export const TRIE_NODES = 24;

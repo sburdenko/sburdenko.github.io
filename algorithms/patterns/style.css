@@ -67,7 +67,7 @@
 .st-ex code b{color:var(--osd);font-weight:600}
 .st-note{flex-basis:100%;font-size:14px;color:var(--ink3)}
 /* стенд и кнопки рядом с переменными и вводом, чтобы всё помещалось в один экран */
-.rig-grid{display:grid;gap:16px;align-items:start}
+.rig-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
 .rig-main,.rig-side{display:grid;gap:12px;min-width:0;align-content:start}
 .rig-side{gap:0}
 @media (max-width:1099px){.rig-side{order:-1}}
@@ -79,7 +79,7 @@
 .itab:hover{color:var(--ink)}
 .itab[aria-selected="true"]{color:var(--osd);border-color:var(--line2);background:#0b0716}
 .itab.bad::after{content:" ●";color:var(--bad)}
-.ibody{padding:14px 16px;border:1px solid var(--line2);border-top:0;border-radius:0 0 5px 5px;background:#0b0716;scrollbar-width:thin}
+.ibody{overflow-wrap:anywhere;padding:14px 16px;border:1px solid var(--line2);border-top:0;border-radius:0 0 5px 5px;background:#0b0716;scrollbar-width:thin}
 .ipane[hidden]{display:none!important}
 .ibody .editor{display:grid;gap:10px;padding:0;border:0;background:none}
 .ibody .editor .fields{flex-direction:column}
@@ -346,3 +346,37 @@
 
 /* The step counter keeps its width so the speed slider never shifts. */
 .rig .transport [data-t="pos"]{min-width:13ch;text-align:right;font-variant-numeric:tabular-nums}
+
+/* Under the step text: the naive-vs-ours counter on one line and the guess-the-move switch. */
+.rig-tools{display:flex;align-items:center;gap:8px 14px;min-width:0}
+.rig-ops{flex:1 1 auto;min-width:0;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:13px/1.4 var(--f-mono);color:var(--ink2)}
+.rig-ops .lbl{margin-right:6px}
+.rig-ops .ops-naive{color:var(--bad)}
+.rig-ops .ops-ours{color:var(--ok)}
+.rig-ops .ops-note{color:var(--ink3)}
+.guess-score{white-space:nowrap}
+.btn.guess{flex:none;padding:6px 12px;min-height:0;font-size:12px}
+.btn.guess[aria-pressed="true"]{border-color:var(--gpu);color:var(--gpu);background:rgba(38,227,234,.08)}
+.explanation.asking{border-left-color:var(--gpu);background:rgba(38,227,234,.05)}
+.quiz-q{margin:0 0 10px;font-size:16px}
+.quiz-opts{display:flex;flex-wrap:wrap;gap:8px}
+.quiz-opts .btn{text-transform:none;letter-spacing:.02em;font-size:13px;white-space:normal;text-align:left;max-width:100%;min-width:0}
+.verdict{font-weight:700}
+.verdict.ok{color:var(--ok)}
+.verdict.bad{color:#ffb3bc}
+.follow{display:grid;gap:8px}
+.follow-hint{margin:0 0 4px;font-size:14px;color:var(--ink3)}
+.follow details{border:1px solid var(--line);border-radius:5px;background:rgba(7,4,15,.5)}
+.follow summary{cursor:pointer;padding:10px 12px;font-size:15px;color:#fff;list-style-position:inside}
+.follow details[open] summary{color:var(--osd)}
+.follow details p{margin:0;padding:0 12px 12px;font-size:14.5px;line-height:1.55;color:#e3dcfb}
+.related{margin-top:16px;display:grid;gap:8px}
+.related ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.related li{display:grid;gap:2px}
+.related a{font-weight:600;color:var(--gpu)}
+.related .rel-ch{font:11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.related .rel-why{font-size:14px;color:var(--ink2)}
+.ed-tricky{margin:0;padding:8px 12px;border-left:2px solid var(--warn);background:rgba(255,177,61,.06);font-size:14px;line-height:1.5;color:#ffe2b5}
+.ed-tricky b{color:var(--warn)}
+.btn.tricky{border-color:rgba(255,177,61,.5);color:var(--warn)}
+@media (max-width:480px){.rig-tools{flex-wrap:wrap}.rig-ops{flex-basis:100%}}
