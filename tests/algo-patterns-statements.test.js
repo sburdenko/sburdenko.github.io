@@ -7,7 +7,7 @@ import { PROBLEMS } from '../algorithms/patterns/problems.js';
 import { formatField } from '../algorithms/patterns/inputs.js';
 
 const rigIds = Object.values(PROBLEMS).flat().map(p => p.rig);
-const digits = s => String(s).replace(/\D/g, '');
+const digits = s => String(s).replace(/[A-Za-z_]\w*/g, '').replace(/\D/g, '');
 const letters = s => String(s).replace(/[^A-Za-z]/g, '');
 const WORDY = new Set(['words', 'str']);
 
