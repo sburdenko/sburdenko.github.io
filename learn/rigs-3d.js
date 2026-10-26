@@ -1,8 +1,8 @@
 /** Стенды курса «3D-форматы». Логика — в models-3d.js, здесь отрисовка и кнопки. */
-import { esc, RM } from '../assets/vhs.js?v=202610261206';
-import { drive, act } from './rig-kit.js?v=202610261206';
-import { tr, getLang, plural } from './i18n.js?v=202610261206';
-import { t as tl, bi, tp } from './ui.js?v=202610261206';
+import { esc, RM } from '../assets/vhs.js?v=202610261308';
+import { drive, act } from './rig-kit.js?v=202610261308';
+import { tr, getLang, plural } from './i18n.js?v=202610261308';
+import { t as tl, bi, tp } from './ui.js?v=202610261308';
 import {
   HOUSE, signedArea, meshObj, meshStl, stlBinarySize, meshRig,
   tessInfo, cylinderTris, tessRig,
@@ -13,7 +13,7 @@ import {
   BIM, BIM_TRIS, bimFilter, bimRig,
   CLASH_ITEMS, findClashes, clashRig,
   PC_FORMATS, PC_COUNTS, pcSize, pcCloud, pcRig
-} from './models-3d.js?v=202610261206';
+} from './models-3d.js?v=202610261308';
 
 const fmtBytes = b => {
   const [B, KB, MB, GB] = tl('r.3d.sizeUnits').split('|');
