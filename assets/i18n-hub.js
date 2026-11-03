@@ -63,6 +63,15 @@ export const HUB = {
     en: '<span>Algorithms</span><span>LeetCode</span><span>C#</span><span>16 patterns</span>',
     ru: '<span>Алгоритмы</span><span>LeetCode</span><span>C#</span><span>16 паттернов</span>'
   },
+  'hub.tape7Title': { en: 'Drawing thousands', ru: 'Рисуем тысячи' },
+  'hub.tape7Desc': {
+    en: 'Rendering without GameObjects in Unity 6: Draw* versus Render*, GraphicsBuffer and its targets, an indirect args buffer cell by cell, a GPU-culling frame without readback, BatchRendererGroup, particles and a 2000-lamp case.',
+    ru: 'Рендер без GameObject в Unity 6: Draw* против Render*, GraphicsBuffer и его роли, args-буфер для indirect по ячейкам, кадр GPU-culling без readback, BatchRendererGroup, партиклы и кейс с 2000 лампочек.'
+  },
+  'hub.tape7Tags': {
+    en: '<span>Rendering</span><span>Indirect</span><span>GraphicsBuffer</span><span>Unity 6</span>',
+    ru: '<span>Рендер</span><span>Indirect</span><span>GraphicsBuffer</span><span>Unity 6</span>'
+  },
   'hub.soonTag': { en: '<span>Soon</span>', ru: '<span>Скоро</span>' },
   'hub.soonGo': { en: '■ NOT RECORDED YET', ru: '■ ЗАПИСЬ НЕ НАЧАТА' },
   'osd.bathys': { en: '◀ BATHYS', ru: '◀ BATHYS' },

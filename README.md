@@ -29,6 +29,7 @@
 | 04 | [URP Field Guide](./unity-urp/) | Глава за главой по книге Unity о URP (Unity 6): где живёт каждая настройка, выбор рендерера по жёстким ограничениям, MSAA, GPU Resident Drawer, тени и атлас теней, режимы смешанного света, Rendering Layers, probes против APV и протечки, эффекты, пять шейдеров из книги, Render Objects, Render Graph и слияние native passes, volumes, STP, прогрев PSO, диагностика, вопросы. Ошибки книги помечены «Сверено с книгой». |
 | 05 | [Паттерны и SOLID](./unity-patterns/) | Книга Unity «Level up your code with design patterns and SOLID»: цена изменений по SOLID, factory, семантика `ObjectPool<T>`, singleton при загрузке сцен, command с undo/redo, state machine, observer и забытые подписки, MVP против MVVM, strategy, память flyweight, dirty flag, выбор паттерна и вопросы. |
 | 06 | [Паттерны алгоритмов](./algorithms/patterns/) | Семнадцать паттернов для собеседования, от простого к сложному: HashMap/HashSet, Two Pointers, массивы и матрицы, Sliding Window, Binary Search, монотонный стек, fast & slow, деревья, DFS/BFS, куча, кратчайшие пути (BFS и Дейкстра), backtracking, greedy, DP, битовые операции (общий вид «регистр»: 32 бита по шагам), игры: путь и пространство (A*, flow field, пространственная сетка, Union-Find), дизайн структур (префиксное дерево, сериализация дерева, кольцевая очередь, LFU-кэш). Для каждого — признаки в условии, каркас на C# и от четырёх до восьми задач LeetCode (всего 107) с разными вариантами приёма; у каждой задачи свой стенд с перемоткой и решение. В каждой главе есть задача Hard, ключевые задачи помечены «надо знать». Входные данные любого стенда редактируются прямо на странице, есть кнопки «Случайно» и «Пример». Two Pointers и BFS/DFS ссылаются на кассеты 02 и 03 и дополняют их. |
+| 07 | [Рисуем тысячи](./unity-gpu-draw/) | Рендер без GameObject в Unity 6, продолжение кассеты 01: карта всех способов рисовать по двум осям (кто владеет объектом, где живут данные), сетка `Graphics.Draw*` → `Graphics.Render*` с кодом и тем, что читает шейдер, `RenderParams` и его значения по умолчанию, `GraphicsBuffer` и его роли (`Target`), args-буфер `IndirectDrawIndexedArgs` по ячейкам, кадр GPU-culling (Append → CopyCount → `RenderMeshIndirect`) против наивного readback, `BatchRendererGroup` и кто его заполняет, Shuriken против VFX Graph, кейс «2000 мигающих лампочек», выбор инструмента и вопросы. |
 
 ### Стенд B · Python
 
@@ -134,7 +135,7 @@ assets/i18n.js             локализация: t(), data-i18n, перекл�
 assets/i18n-common.js      общие строки (строка состояния, перемотка)
 assets/i18n-hub.js         строки полки
 assets/lab.js  assets/code.js   общие помощники стендов и подсветка C#/HLSL
-unity-urp/  unity-patterns/
+unity-urp/  unity-patterns/  unity-gpu-draw/
   model-*.js               чистые модели стендов (без DOM), покрыты тестами
   lab-*.js                 стенды по главам
   i18n-*.js  snippets.js   тексты глав { en, ru } и код из книг

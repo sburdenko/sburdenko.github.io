@@ -1,5 +1,5 @@
 /** Editable rig inputs: the parsers of tape 06 plus free text, floats and stdin lines. Pure. */
-import { PARSERS, FORMATTERS } from '../../algorithms/patterns/inputs.js?v=202610262121';
+import { PARSERS, FORMATTERS } from '../../algorithms/patterns/inputs.js?v=202611032107';
 
 const fail = (key, ...args) => ({ error: [`in.err.${key}`, ...args] });
 

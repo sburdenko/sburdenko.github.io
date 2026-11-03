@@ -1,8 +1,8 @@
 /** Editable rigs for the problems in model-bg.js; the chapters they belong to are listed in problems-bg.js. */
-import * as M from './model-bg.js?v=202610262121';
-import * as V from './views-bg.js?v=202610262121';
-import { bitWidth } from './view-kit.js?v=202610262121';
-import { defineRig, randInt, shuffle, pick } from './rig-kit.js?v=202610262121';
+import * as M from './model-bg.js?v=202611032107';
+import * as V from './views-bg.js?v=202611032107';
+import { bitWidth } from './view-kit.js?v=202611032107';
+import { defineRig, randInt, shuffle, pick } from './rig-kit.js?v=202611032107';
 
 const pairs = m => m[0].length === 2;
 const keyOf = (a, b) => `${Math.min(a, b)},${Math.max(a, b)}`;
