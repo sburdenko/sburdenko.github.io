@@ -10,6 +10,7 @@ import { DICT as BFS } from '../algorithms/bfs-dfs/i18n.js';
 import { DICT as UNITY } from '../unity-rendering/i18n.js';
 import { PATHS, TECHNIQUES, unavailableReason, available } from '../unity-rendering/model.js';
 import { DICT as URP } from '../unity-urp/i18n.js';
+import { DICT as DRAW } from '../unity-gpu-draw/i18n.js';
 import { DICT as PATTERNS } from '../unity-patterns/i18n.js';
 import { DICT as ALGO } from '../algorithms/patterns/i18n.js';
 import { INPUTS } from '../algorithms/patterns/i18n-inputs.js';
@@ -30,6 +31,7 @@ const PAGES = [
   { name: 'BFS/DFS', dicts: [COMMON, BFS], html: ['algorithms/bfs-dfs/index.html'], js: jsFiles('algorithms/bfs-dfs') },
   { name: 'батчинг', dicts: [COMMON, UNITY], html: ['unity-rendering/index.html'], js: jsFiles('unity-rendering') },
   { name: 'URP', dicts: [COMMON, URP], html: ['unity-urp/index.html'], js: jsFiles('unity-urp') },
+  { name: 'рисуем тысячи', dicts: [COMMON, DRAW], html: ['unity-gpu-draw/index.html'], js: jsFiles('unity-gpu-draw') },
   { name: 'паттерны', dicts: [COMMON, PATTERNS], html: ['unity-patterns/index.html'], js: jsFiles('unity-patterns') },
   { name: 'паттерны алгоритмов', dicts: [COMMON, ALGO], html: ['algorithms/patterns/index.html'], js: jsFiles('algorithms/patterns') },
   { name: 'стенд Python', dicts: [COMMON, SHARED, STAND], html: ['python/index.html'], js: ['python/page.js'] },
@@ -40,7 +42,7 @@ const PAGES = [
 ];
 
 test('у каждой строки есть оба языка и один и тот же тип значения', () => {
-  for (const dict of [COMMON, HUB, BFS, UNITY, URP, PATTERNS, ALGO, SHARED, FIELD_ERRORS, STAND, PY01, PY02, PY03, PY06]) {
+  for (const dict of [COMMON, HUB, BFS, UNITY, URP, DRAW, PATTERNS, ALGO, SHARED, FIELD_ERRORS, STAND, PY01, PY02, PY03, PY06]) {
     for (const [key, value] of Object.entries(dict)) {
       assert.ok(value.en !== undefined, `${key}: нет английского варианта`);
       assert.ok(value.ru !== undefined, `${key}: нет русского варианта`);
@@ -100,7 +102,7 @@ test('семейства ключей, которые код собирает н
 
 test('английский и русский словари не перепутаны местами', () => {
   const cyrillic = /[а-яё]/i;
-  for (const dict of [COMMON, HUB, BFS, UNITY, URP, PATTERNS, ALGO, SHARED, FIELD_ERRORS, STAND, PY01, PY02, PY03, PY06]) {
+  for (const dict of [COMMON, HUB, BFS, UNITY, URP, DRAW, PATTERNS, ALGO, SHARED, FIELD_ERRORS, STAND, PY01, PY02, PY03, PY06]) {
     for (const [key, value] of Object.entries(dict)) {
       if (typeof value.en !== 'string') continue;
       // примеры кода вроде "привет" внутри <code> — не перевод
