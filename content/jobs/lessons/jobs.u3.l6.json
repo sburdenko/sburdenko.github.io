@@ -71,11 +71,11 @@
    "checks": [
     {
      "label": "⟦⟧",
-     "re": "^\\s*(?:private\\s+)?JobHandle\\s+(\\w+)\\s*;[\\s\\S]*void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\b\\1\\s*=\\s*RaycastCommand\\s*\\.\\s*ScheduleBatch\\s*\\(\\s*commands\\s*,\\s*results\\s*,"
+     "re": "^\\s*(?:(?:private|public|internal|protected)\\s+)?JobHandle\\s+(\\w+)\\s*(?:=\\s*default(?:\\s*\\(\\s*JobHandle\\s*\\))?\\s*)?;[\\s\\S]*void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\b\\1\\s*=\\s*RaycastCommand\\s*\\.\\s*ScheduleBatch\\s*\\(\\s*commands\\s*,\\s*results\\s*,"
     },
     {
      "label": "⟦⟧",
-     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*(?:\\bQueryParameters\\b(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*commands\\s*\\[[^\\]]+\\]\\s*=\\s*new\\s+RaycastCommand\\s*\\(|commands\\s*\\[[^\\]]+\\]\\s*=\\s*new\\s+RaycastCommand\\s*\\([^;]*\\bQueryParameters\\b)"
+     "re": "^(?=[\\s\\S]*\\bQueryParameters\\b)[\\s\\S]*?void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*commands\\s*\\[[^\\]]+\\]\\s*=\\s*new\\s+RaycastCommand\\s*\\("
     },
     {
      "label": "⟦⟧",
@@ -89,7 +89,7 @@
     },
     {
      "label": "⟦⟧",
-     "re": "void\\s+LateUpdate\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\(\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.\\s*collider\\s*!=\\s*null"
+     "re": "void\\s+LateUpdate\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\(\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.\\s*(?:collider\\s*(?:!=\\s*null|\\))|colliderInstanceID\\s*!=\\s*0)"
     },
     {
      "label": "⟦⟧",

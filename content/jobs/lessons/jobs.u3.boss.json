@@ -130,11 +130,11 @@
     },
     {
      "label": "⟦⟧",
-     "re": "void\\s+Execute\\s*\\(\\s*int\\s+\\w+\\s*,\\s*TransformAccess\\s+(\\w+)\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\b\\1\\s*\\.\\s*(?:localRotation|rotation)\\s*="
+     "re": "void\\s+Execute\\s*\\(\\s*int\\s+\\w+\\s*,\\s*TransformAccess\\s+(\\w+)\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\b\\1\\s*\\.\\s*(?:localRotation|rotation)\\s*\\*?="
     },
     {
      "label": "⟦⟧",
-     "re": "^\\s*(?:private\\s+)?JobHandle\\s+(\\w+)\\s*;[\\s\\S]*void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\b\\1\\s*=\\s*new\\s+SpinJob\\b[^;]*\\.\\s*Schedule\\s*\\(\\s*transforms\\b"
+     "re": "^\\s*(?:(?:private|public|internal|protected)\\s+)?JobHandle\\s+(\\w+)\\s*(?:=\\s*default(?:\\s*\\(\\s*JobHandle\\s*\\))?\\s*)?;[\\s\\S]*void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\b\\1\\s*=\\s*new\\s+SpinJob\\b[^;]*\\.\\s*Schedule\\s*\\(\\s*transforms\\b"
     },
     {
      "label": "⟦⟧",

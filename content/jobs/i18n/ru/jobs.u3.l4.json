@@ -52,6 +52,7 @@
  "cards/11/checks/3/label": "В Execute нет throw",
  "cards/11/checks/4/label": "Debug.Log вызывается с интерполяцией $\"...\"",
  "cards/11/checks/5/label": "В Debug.Log нет склейки строк через +",
+ "cards/11/checks/6/label": "Нет using System.Diagnostics: рядом с UnityEngine он делает Debug неоднозначным",
  "cards/11/explain": "В редакторе CheckIndex работает и бросает понятное исключение, которое Burst покажет в консоли. В билде метода и его вызова нет, а значит, нет и abort. Склейка строк в Burst не компилируется, интерполяция с float — да. Атрибут написан полностью, потому что using System.Diagnostics рядом с UnityEngine сделал бы Debug неоднозначным.",
  "cards/12/q": "Интервьюер: «В редакторе твой Burst-джоб медленнее, чем обещали. Что проверишь, прежде чем делать выводы?»",
  "cards/12/options/0": "Что меряю уже скомпилированный Burst без лишних проверок: дождаться компиляции, выключить Jobs Debugger и Safety Checks, а итог замерить в билде",

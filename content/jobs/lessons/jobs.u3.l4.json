@@ -120,6 +120,11 @@
      "label": "⟦⟧",
      "re": "Debug\\.Log\\s*\\([^;]*\"\\s*\\+",
      "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "^\\s*using\\s+System\\.Diagnostics\\s*;",
+     "not": true
     }
    ],
    "solution": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing UnityEngine;\n\n[BurstCompile]\nstruct ApplyDamageJob : IJob\n{\n    public NativeArray<float> hp;\n    public int target;\n    public float damage;\n\n    public void Execute()\n    {\n        CheckIndex(target, hp.Length);   // compiled out of player builds\n        hp[target] -= damage;\n        Debug.Log($\"hp left: {hp[target]}\");\n    }\n\n    [System.Diagnostics.Conditional(\"ENABLE_UNITY_COLLECTIONS_CHECKS\")]\n    static void CheckIndex(int index, int length)\n    {\n        if (index < 0 || index >= length)\n            throw new System.ArgumentOutOfRangeException(\"index\");\n    }\n}",

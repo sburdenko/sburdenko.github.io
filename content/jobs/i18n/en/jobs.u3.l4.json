@@ -52,6 +52,7 @@
  "cards/11/checks/3/label": "Execute has no throw",
  "cards/11/checks/4/label": "Debug.Log is called with an interpolated $\"...\"",
  "cards/11/checks/5/label": "Debug.Log has no string concatenation with +",
+ "cards/11/checks/6/label": "No using System.Diagnostics: next to UnityEngine it makes Debug ambiguous",
  "cards/11/explain": "In the Editor CheckIndex runs and throws a clear exception that Burst shows in the console. In a build the method and its call are gone, so there is no abort either. String concatenation doesn’t compile in Burst; interpolation with a float does. The attribute is written in full because a using System.Diagnostics next to UnityEngine would make Debug ambiguous.",
  "cards/12/q": "Interviewer: “In the Editor your Burst job is slower than promised. What do you check before drawing conclusions?”",
  "cards/12/options/0": "That I’m measuring already compiled Burst without extra checks: wait for compilation, turn off the Jobs Debugger and Safety Checks, and take the final measurement in a build",
