@@ -1,0 +1,134 @@
+{
+ "id": "jobs.u3.l5",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 16,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// managed C#: fine, but not in Burst\ninterface ISpeedRule { float Speed(float d, float v); }\nList<ISpeedRule> rules;           // class objects, virtual calls\nFunc<float, float, float> rule;   // a delegate is a managed object too\n\n// Burst: the simplest way is a data tag plus a switch\nenum RuleKind : byte { Flee, Approach }\nstatic float Speed(RuleKind k, float d, float v) => k switch\n{\n    RuleKind.Flee => v * 2f,\n    _ => math.min(v, d),\n};",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]                        // the containing type\npublic static class Rules\n{\n    // the \"interface\": a plain, non-generic delegate\n    public delegate float SpeedRule(float distance, float baseSpeed);\n\n    [BurstCompile]                    // the method itself\n    [MonoPInvokeCallback(typeof(SpeedRule))]   // AOT namespace, for IL2CPP\n    public static float Flee(float distance, float baseSpeed) => baseSpeed * 2f;\n\n    [BurstCompile]\n    [MonoPInvokeCallback(typeof(SpeedRule))]\n    public static float Approach(float distance, float baseSpeed) =>\n        math.min(baseSpeed, distance);\n}\n\n// once, from managed code (Awake or a static constructor), then cache it\nFunctionPointer<Rules.SpeedRule> flee =\n    BurstCompiler.CompileFunctionPointer<Rules.SpeedRule>(Rules.Flee);",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "Execute: rule.Invoke(...)"],
+   "code": "[BurstCompile]\nstruct MoveJob : IJobParallelFor\n{\n    public FunctionPointer<Rules.SpeedRule> rule;   // just an address\n    [ReadOnly] public NativeArray<float> distance;\n    public NativeArray<float> speed;\n    public float baseSpeed;\n\n    public void Execute(int i) =>\n        speed[i] = rule.Invoke(distance[i], baseSpeed);  // indirect call\n}\n\n// the level config picks the rule at runtime, the job stays the same\nvar job = new MoveJob { rule = level.panic ? flee : approach,\n                        distance = distance, speed = speed, baseSpeed = 3f };\nhandle = job.Schedule(distance.Length, 64);",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["delegate float Rule(float d, float v);", "delegate void Blend(in float4 a, in float4 b, out float4 r);", "delegate float4 Shift(float4 v);", "delegate void Sum(NativeArray<float> data);", "delegate T Pick<T>(T a, T b);"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// one call per batch, not per element: the loop lives inside the pointer\npublic unsafe delegate void ScaleBatch(float* data, int count, float k);\n\n[BurstCompile]\nunsafe struct ScaleJob : IJobParallelForBatch   // Collections: Execute(start, count)\n{\n    public FunctionPointer<ScaleBatch> fn;\n    public NativeArray<float> data;\n    public float k;\n\n    public void Execute(int start, int count)\n    {\n        float* p = (float*)data.GetUnsafePtr() + start;\n        fn.Invoke(p, count, k);       // the overhead is paid once per batch\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public interface ISpeedRule { float Speed(float distance, float baseSpeed); }\n\npublic struct Flee : ISpeedRule\n{\n    public float Speed(float distance, float baseSpeed) => baseSpeed * 2f;\n}\n\n[BurstCompile]\nstruct MoveJob<TRule> : IJobParallelFor where TRule : struct, ISpeedRule\n{\n    public TRule rule;                 // a struct, its type known at compile time\n    [ReadOnly] public NativeArray<float> distance;\n    public NativeArray<float> speed;\n    public float baseSpeed;\n\n    public void Execute(int i) => speed[i] = rule.Speed(distance[i], baseSpeed);\n}\n\n// a concrete type at the call site: Burst compiles MoveJob<Flee>\nhandle = new MoveJob<Flee> { distance = distance, speed = speed, baseSpeed = 3f }\n    .Schedule(distance.Length, 64);",
+   "lang": "cs"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using AOT;\nusing Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\n\n[BurstCompile]\npublic static class Rules\n{\n    public delegate float SpeedRule(float distance, float baseSpeed);\n\n    // TODO: a Burst-compiled rule Flee that returns baseSpeed * 2\n}\n\n[BurstCompile]\nstruct MoveJob : IJobParallelFor\n{\n    // TODO: the rule as a field\n    [ReadOnly] public NativeArray<float> distance;\n    public NativeArray<float> speed;\n    public float baseSpeed;\n\n    public void Execute(int i)\n    {\n        // TODO: speed[i] = the rule applied to distance[i] and baseSpeed\n    }\n}\n\npublic static class RuleSetup\n{\n    public static FunctionPointer<Rules.SpeedRule> Compile()\n    {\n        // TODO: compile Rules.Flee into a function pointer\n        return default;\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "\\[[^\\[\\]]*\\bBurstCompile\\b[^\\[\\]]*\\](?:\\s*\\[[^\\[\\]]*\\])*\\s*(?:public\\s+|internal\\s+|private\\s+)?static\\s+float\\s+Flee\\s*\\("
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\[[^\\[\\]]*\\bMonoPInvokeCallback(?:Attribute)?\\s*\\(\\s*typeof\\s*\\(\\s*(?:Rules\\s*\\.\\s*)?SpeedRule\\s*\\)\\s*\\)[^\\[\\]]*\\](?:\\s*\\[[^\\[\\]]*\\])*\\s*(?:public\\s+|internal\\s+|private\\s+)?static\\s+float\\s+Flee\\s*\\("
+    },
+    {
+     "label": "⟦⟧",
+     "re": "static\\s+float\\s+Flee\\s*\\(\\s*float\\s+\\w+\\s*,\\s*float\\s+(\\w+)\\s*\\)[\\s\\S]*?(?:\\b\\1\\s*\\*\\s*2|\\b2(?:\\.0)?f?\\s*\\*\\s*\\1\\b)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "struct\\s+MoveJob[\\s\\S]*FunctionPointer\\s*<\\s*(?:Rules\\s*\\.\\s*)?SpeedRule\\s*>\\s+\\w+\\s*;"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\([^)]*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.\\s*Invoke\\s*\\(\\s*distance\\s*\\[\\s*\\w+\\s*\\]\\s*,\\s*baseSpeed\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "BurstCompiler\\s*\\.\\s*CompileFunctionPointer\\s*<\\s*(?:Rules\\s*\\.\\s*)?SpeedRule\\s*>\\s*\\(\\s*(?:Rules\\s*\\.\\s*)?Flee\\s*\\)"
+    }
+   ],
+   "solution": "using AOT;\nusing Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\n\n[BurstCompile]\npublic static class Rules\n{\n    public delegate float SpeedRule(float distance, float baseSpeed);\n\n    [BurstCompile]\n    [MonoPInvokeCallback(typeof(SpeedRule))]   // needed for IL2CPP\n    public static float Flee(float distance, float baseSpeed) => baseSpeed * 2f;\n}\n\n[BurstCompile]\nstruct MoveJob : IJobParallelFor\n{\n    public FunctionPointer<Rules.SpeedRule> rule;   // picked at runtime\n    [ReadOnly] public NativeArray<float> distance;\n    public NativeArray<float> speed;\n    public float baseSpeed;\n\n    public void Execute(int i)\n    {\n        speed[i] = rule.Invoke(distance[i], baseSpeed);\n    }\n}\n\npublic static class RuleSetup\n{\n    public static FunctionPointer<Rules.SpeedRule> Compile()\n    {\n        // once, from managed code; the caller caches the result\n        return BurstCompiler.CompileFunctionPointer<Rules.SpeedRule>(Rules.Flee);\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public abstract class Stats\n{\n    // one slot of native memory, visible to C# and to Burst code\n    public static readonly SharedStatic<int> Hits =\n        SharedStatic<int>.GetOrCreate<Stats, HitsKey>();\n    class HitsKey { }                  // a key type that names this field\n\n    static Stats() { Hits.Data = 0; }  // initialise in C# before Burst reads it\n}\n\n[BurstCompile]\nstruct CountJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float> distance;\n    public void Execute(int i)\n    {\n        if (distance[i] < 1f)\n            Interlocked.Increment(ref Stats.Hits.Data);   // Data is a ref\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "[BurstCompile]\nstruct DamageJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float> damage;\n    public void Execute(int i)\n    {\n        if (damage[i] > 0f)\n            Stats.Hits.Data++;\n    }\n}",
+   "answer": 7,
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "FunctionPointer<T>"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "SharedStatic<T>"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

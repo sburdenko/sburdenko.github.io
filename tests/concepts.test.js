@@ -9,7 +9,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadCourseFromSource } from '../learn/content.js';
 
-const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'u8'], jobs: [] };
+const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'u8'], jobs: ['u3'] };
 
 /** Понятие → шаблон. Шаблоны ловят API и устойчивые термины, а не имена из примеров кода. */
 const CONCEPTS = {
@@ -188,6 +188,24 @@ const CONCEPTS = {
     'EntityCommandBuffer': /\bEntityCommandBuffer\b|\bECB\b/,
     'sync point': /\bsync point|точк\w* синхронизации/i,
     'Baking': /\bBak(ing|er)\b/,
+    'CompileFunctionPointer': /\bCompileFunctionPointer\b/,
+    'MonoPInvokeCallback': /\bMonoPInvokeCallback\b/,
+    'SharedStatic.GetOrCreate': /\bGetOrCreate\b/,
+    'static readonly': /\bstatic readonly\b/,
+    'Interlocked': /\bInterlocked\b/,
+    'TransformAccess': /\bTransformAccess\b/,
+    'ScheduleReadOnly': /\b(Schedule|Run)ReadOnly\b/,
+    'ScheduleBatch': /\bScheduleBatch\b/,
+    'QueryParameters': /\bQueryParameters\b/,
+    'maxHits': /\bmaxHits\b/,
+    'batch query commands': /\b(Spherecast|Boxcast|Capsulecast|OverlapSphere|OverlapBox|OverlapCapsule|ClosestPoint)Command\b/,
+    'ColliderHit': /\bColliderHit\b/,
+    'ProfilerMarker': /\bProfilerMarker\b/,
+    'Development Build': /\bDevelopment Build\b/,
+    'Enable Safety Checks': /\bEnable Safety Checks\b/,
+    'mulps/mulss': /\bv?mul[sp]s\b/,
+    'FMA': /\bFMA\b/,
+    'fixed-point': /\bfixed-point\b/,
   }
 };
 
