@@ -202,6 +202,13 @@ const CONCEPTS = {
     'try/finally': /\bfinally\b/,
     'боксинг': /боксинг|\bboxing\b/i,
     'Synchronous Compilation': /\bSynchronous Compilation\b|\bCompileSynchronously\b/,
+    'NativeHashMap': /\bNativeHashMap\b/,
+    'NativeParallelMultiHashMap': /\bNativeParallelMultiHashMap\b/,
+    'AsParallelWriter': /\bAsParallelWriter\b/,
+    'Dispose(JobHandle)': /\bDispose\(\s*(JobHandle|handle)\s*\)/,
+    'NativeLeakDetectionMode': /\b(EnabledWithStackTrace|Leak Detection Level)\b/,
+    'prefix sum': /prefix sum|exclusive scan/i,
+    'WaitForJobGroupID': /\bWaitForJobGroupID\b/,
   }
 };
 

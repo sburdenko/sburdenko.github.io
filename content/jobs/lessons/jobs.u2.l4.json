@@ -1,0 +1,133 @@
+{
+ "id": "jobs.u2.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 14,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "var a = new NativeArray<float>(1024, Allocator.Persistent);\n// a is a pointer + length (+ a safety handle in the Editor)\nvar b = a;      // a copy of the struct: the same memory\na.Dispose();    // frees the memory; the GC never will",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "code": "var perFrame = new NativeArray<int>(64, Allocator.Temp);      // main thread, this frame only\nvar forJob   = new NativeArray<int>(n, Allocator.TempJob);    // into a job, Dispose within 4 frames\nvar longLive = new NativeArray<int>(n, Allocator.Persistent); // until you call Dispose",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["Allocator.TempJob", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct NeighboursJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float3> positions;\n    public NativeArray<int> counts;\n\n    public void Execute(int i)\n    {\n        // scratch memory of this job: released when the job ends\n        var near = new NativeList<int>(16, Allocator.Temp);\n        FindNear(positions, i, ref near);\n        counts[i] = near.Length;\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "void Update()\n{\n    var cells = new NativeArray<int>(count, Allocator.Temp);\n    var job = new GridJob { positions = positions, cells = cells };\n    handle = job.Schedule(count, 64);\n    JobHandle.ScheduleBatchedJobs();\n}",
+   "answer": 2,
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Allocator.Temp", "⟦⟧"],
+    ["Allocator.TempJob", "⟦⟧"],
+    ["Allocator.Persistent", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "NativeList<int> hits;     // reused every frame\nJobHandle handle;\n\nvoid Awake() => hits = new NativeList<int>(1024, Allocator.Persistent);\n\nvoid Update()\n{\n    hits.Clear();                         // length 0, the memory stays\n    handle = new HitJob { hits = hits }.Schedule();\n    JobHandle.ScheduleBatchedJobs();\n}\n\nvoid LateUpdate() => handle.Complete();\n\nvoid OnDestroy()\n{\n    handle.Complete();                    // a job may still use the buffer\n    if (hits.IsCreated) hits.Dispose();\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "public class Boids : MonoBehaviour\n{\n    public int count = 10000;\n    NativeArray<float3> velocities;\n    JobHandle handle;\n\n    void Update()\n    {\n        velocities = new NativeArray<float3>(count, Allocator.TempJob);\n        handle = new SteerJob { velocities = velocities }.Schedule(count, 64);\n        JobHandle.ScheduleBatchedJobs();\n    }\n\n    void LateUpdate()\n    {\n        handle.Complete();\n        Apply(velocities);\n        velocities.Dispose();\n    }\n\n    // TODO: allocate once, reuse every frame, free once\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Awake\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*Allocator\\.Persistent"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*new\\s+NativeArray",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+(?:Late)?Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Dispose\\s*\\(",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+OnDestroy\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Dispose\\s*\\("
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+OnDestroy\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\(\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Dispose\\s*\\("
+    }
+   ],
+   "solution": "public class Boids : MonoBehaviour\n{\n    public int count = 10000;\n    NativeArray<float3> velocities;\n    JobHandle handle;\n\n    void Awake()\n    {\n        velocities = new NativeArray<float3>(count, Allocator.Persistent);   // once\n    }\n\n    void Update()\n    {\n        handle = new SteerJob { velocities = velocities }.Schedule(count, 64);\n        JobHandle.ScheduleBatchedJobs();\n    }\n\n    void LateUpdate()\n    {\n        handle.Complete();\n        Apply(velocities);\n    }\n\n    void OnDestroy()\n    {\n        handle.Complete();                        // this frame's job may still run\n        if (velocities.IsCreated) velocities.Dispose();\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "var tmp = new NativeArray<float>(n, Allocator.TempJob);\nJobHandle h = new BlurJob { src = src, tmp = tmp }.Schedule(n, 64);\nh = new CopyJob { tmp = tmp, dst = dst }.Schedule(n, 64, h);\nh = tmp.Dispose(h);   // a job frees it after CopyJob; no wait here",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// Edit > Preferences > Jobs > Leak Detection Level, or from code:\nNativeLeakDetection.Mode = NativeLeakDetectionMode.EnabledWithStackTrace;",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [1, 2, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

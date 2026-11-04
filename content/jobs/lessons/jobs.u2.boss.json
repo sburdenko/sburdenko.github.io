@@ -1,0 +1,165 @@
+{
+ "id": "jobs.u2.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 20,
+ "cards": [
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "struct SumJob : IJob\n{\n    [ReadOnly] public NativeArray<float> values;\n    public float sum;\n    public void Execute() { for (int i = 0; i < values.Length; i++) sum += values[i]; }\n}\n\nvar job = new SumJob { values = values };\njob.Schedule().Complete();\nDebug.Log(job.sum);   // 0",
+   "lang": "cs",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "void Update()\n{\n    JobHandle move = moveJob.Schedule(count, 64);\n    JobHandle hash = hashJob.Schedule(count, 64, move);\n    hash.Complete();\n    JobHandle hit = hitJob.Schedule(count, 64, hash);\n    handle = applyJob.Schedule(count, 64, hit);\n    JobHandle.ScheduleBatchedJobs();\n}",
+   "answer": 4,
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "public class Radar : MonoBehaviour\n{\n    NativeArray<float3> positions;   // Persistent, filled in Awake\n    NativeArray<float> weights;      // Persistent, filled in Awake\n    NativeList<int> visible;         // Persistent, capacity = positions.Length\n    NativeReference<float> total;    // Persistent\n    JobHandle handle;\n\n    void Update()\n    {\n        visible.Clear();\n        var cull = new CullJob { positions = positions, camera = transform.position,\n                                 maxDistSq = 2500f, visible = visible.AsParallelWriter() };\n        var sum = new SumJob { visible = visible, weights = weights, total = total };\n        // TODO: cull in parallel, then sum after it; collect the result in LateUpdate\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "cull\\s*\\.\\s*Schedule\\s*\\(\\s*positions\\.Length\\s*,\\s*\\d+"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "handle\\s*=\\s*sum\\s*\\.\\s*Schedule\\s*\\(\\s*(?!\\))"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*JobHandle\\.ScheduleBatchedJobs\\s*\\(\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\(\\)",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+LateUpdate\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\(\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*total\\.Value"
+    }
+   ],
+   "solution": "public class Radar : MonoBehaviour\n{\n    NativeArray<float3> positions;   // Persistent, filled in Awake\n    NativeArray<float> weights;      // Persistent, filled in Awake\n    NativeList<int> visible;         // Persistent, capacity = positions.Length\n    NativeReference<float> total;    // Persistent\n    JobHandle handle;\n\n    void Update()\n    {\n        visible.Clear();\n        var cull = new CullJob { positions = positions, camera = transform.position,\n                                 maxDistSq = 2500f, visible = visible.AsParallelWriter() };\n        var sum = new SumJob { visible = visible, weights = weights, total = total };\n        JobHandle culled = cull.Schedule(positions.Length, 64);\n        handle = sum.Schedule(culled);          // runs after the cull, no wait here\n        JobHandle.ScheduleBatchedJobs();\n    }\n\n    void LateUpdate()\n    {\n        handle.Complete();                      // completes the whole chain\n        ShowOnRadar(total.Value);\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["NativeList<T>.ParallelWriter", "⟦⟧"],
+    ["NativeQueue<T>.ParallelWriter", "⟦⟧"],
+    ["NativeParallelHashMap.ParallelWriter", "⟦⟧"],
+    ["NativeStream", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "JobHandle ScheduleHeat(NativeArray<float3> positions, NativeArray<float> heat)\n{\n    var tmp = new NativeArray<float>(positions.Length, Allocator.TempJob);\n    JobHandle a = new SampleJob { positions = positions, tmp = tmp }.Schedule(positions.Length, 64);\n    JobHandle b = new BlurJob { src = tmp, dst = heat }.Schedule(positions.Length, 64);\n    b.Complete();\n    a.Complete();\n    tmp.Dispose();\n    return b;\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "new\\s+BlurJob[\\s\\S]*?\\.Schedule\\s*\\(\\s*positions\\.Length\\s*,\\s*\\d+\\s*,\\s*\\w+\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\.Complete\\(\\)",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "tmp\\s*\\.\\s*Dispose\\s*\\(\\s*\\w+\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "tmp\\s*\\.\\s*Dispose\\s*\\(\\s*\\)",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "return\\s+tmp\\s*\\.\\s*Dispose\\s*\\(\\s*\\w+\\s*\\)|(\\w+)\\s*=\\s*tmp\\s*\\.\\s*Dispose\\s*\\(\\s*\\w+\\s*\\)\\s*;[\\s\\S]*return\\s+\\1\\s*;"
+    }
+   ],
+   "solution": "JobHandle ScheduleHeat(NativeArray<float3> positions, NativeArray<float> heat)\n{\n    var tmp = new NativeArray<float>(positions.Length, Allocator.TempJob);\n    JobHandle a = new SampleJob { positions = positions, tmp = tmp }.Schedule(positions.Length, 64);\n    JobHandle b = new BlurJob { src = tmp, dst = heat }.Schedule(positions.Length, 64, a);  // reads tmp after a\n    // no Complete here: the caller completes the returned handle later\n    JobHandle freed = tmp.Dispose(b);   // a job frees tmp after the blur\n    return freed;\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// the frame shape to aim for\nvoid Update()\n{\n    visible.Clear();\n    JobHandle h = move.ScheduleParallel(count, 64, default);\n    h = cull.Schedule(count, 64, h);\n    handle = sum.Schedule(h);\n    JobHandle.ScheduleBatchedJobs();\n}\n\nvoid LateUpdate()\n{\n    handle.Complete();\n    ShowOnRadar(total.Value);\n}",
+   "lang": "cs"
+  }
+ ]
+}
