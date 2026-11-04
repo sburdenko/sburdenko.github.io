@@ -1,0 +1,132 @@
+{
+ "id": "jobs.u2.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 14,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// In the Editor every container carries a hidden safety handle:\n// ENABLE_UNITY_COLLECTIONS_CHECKS → an AtomicSafetyHandle inside the struct.\n\nJobHandle h = new MoveJob { pos = pos, vel = vel, dt = dt }\n    .Schedule(pos.Length, 64);   // recorded: MoveJob writes pos, reads vel\nfloat3 p = pos[0];               // checked: MoveJob still writes pos → exception\nh.Complete();                    // the marks are cleared\np = pos[0];                      // fine now",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// 1. Two independent jobs touch one container, at least one writes\nvar a = new MoveJob { pos = pos, vel = vel }.Schedule(n, 64);\nvar b = new CenterJob { pos = pos, center = c }.Schedule();\n//      → InvalidOperationException on the second Schedule\n\n// 2. The main thread touches data of a pending job\npos[0] = float3.zero;   // a job writes or reads pos → InvalidOperationException\n\n// 3. Inside a job: a write to a [ReadOnly] container → InvalidOperationException\n// 4. IJobParallelFor writes outside its own range   → IndexOutOfRangeException",
+   "lang": "cs"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "void Update()\n{\n    handle = new MoveJob { pos = pos, vel = vel, dt = Time.deltaTime }\n        .Schedule(pos.Length, 64);\n    JobHandle.ScheduleBatchedJobs();\n    pos[0] = spawnPoint;\n    UpdateUI();\n}\n\nvoid LateUpdate() => handle.Complete();",
+   "answer": 5,
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧",
+   "code": "// Editor: the race below is an exception on the very first run.\n// Player: no safety handles, no checks. CenterJob reads pos\n// while MoveJob is half-way through writing it. Nothing is reported.\n\n// Your own checks: compiled out of the Player together with Unity's\n[Conditional(\"ENABLE_UNITY_COLLECTIONS_CHECKS\")]\nstatic void CheckIndex(int i, int length)\n{\n    if ((uint)i >= (uint)length)\n        throw new ArgumentOutOfRangeException(\"index\");\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// Edit > Preferences > Jobs > Enable Jobs Debugger\n//     conflicts between jobs and with the main thread (Editor only)\n// Jobs > Burst > Enable Safety Checks: Off / On / Force On\n//     checks inside Burst-compiled code; back to On after an Editor reload\n\n[BurstCompile(DisableSafetyChecks = true)]   // this job only; Force On overrides it\nstruct HotJob : IJobParallelFor\n{\n    public NativeArray<float> data;\n    public void Execute(int i) => data[i] *= 2f;\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct SplitJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float2> segments;\n    // job i writes 2*i and 2*i+1: no overlap by construction, but not [i]\n    [NativeDisableParallelForRestriction] public NativeArray<float> ends;\n\n    public void Execute(int i)\n    {\n        ends[2 * i]     = segments[i].x;\n        ends[2 * i + 1] = segments[i].y;\n    }\n}\n\n// [NativeDisableContainerSafetyRestriction] - no checks at all for this field\n// [NativeDisableUnsafePtrRestriction]      - allows a raw pointer field",
+   "lang": "cs"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "[NativeDisableParallelForRestriction]"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "JobHandle moved = new MoveJob { pos = pos, vel = vel, dt = dt }\n    .Schedule(pos.Length, 64);\n\n// CenterJob reads pos: it may start only after MoveJob is done\nhandle = new CenterJob { pos = pos, center = center }.Schedule(moved);\nJobHandle.ScheduleBatchedJobs();   // the main thread does not wait here",
+   "lang": "cs"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "[BurstCompile]\nstruct CenterJob : IJob\n{\n    public NativeArray<float3> pos;\n    public NativeReference<float3> center;\n\n    public void Execute()\n    {\n        float3 s = float3.zero;\n        for (int i = 0; i < pos.Length; i++) s += pos[i];\n        center.Value = s / pos.Length;\n    }\n}\n\npublic class Swarm : MonoBehaviour\n{\n    NativeArray<float3> pos, vel;      // allocated in Awake\n    NativeReference<float3> center;\n    JobHandle handle;\n\n    void Update()\n    {\n        var move = new MoveJob { pos = pos, vel = vel, dt = Time.deltaTime };\n        var avg = new CenterJob { pos = pos, center = center };\n        JobHandle moved = move.Schedule(pos.Length, 64);\n        handle = avg.Schedule();       // TODO: throws in the Editor\n        JobHandle.ScheduleBatchedJobs();\n    }\n\n    void LateUpdate()\n    {\n        handle.Complete();\n        Debug.Log(center.Value);\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "(\\w+)\\s*=\\s*move\\.Schedule\\([^;]*;[\\s\\S]*avg\\.Schedule\\(\\s*(?:dependsOn\\s*:\\s*)?\\1\\s*\\)|avg\\.Schedule\\(\\s*(?:dependsOn\\s*:\\s*)?move\\.Schedule\\("
+    },
+    {
+     "label": "⟦⟧",
+     "re": "struct\\s+CenterJob(?:(?!\\b(?:struct|class)\\b)[\\s\\S])*\\[\\s*ReadOnly\\s*\\]\\s*public\\s+NativeArray\\s*<\\s*float3\\s*>\\s+pos\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "NativeDisable\\w*Restriction",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\(\\)",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+LateUpdate\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\(\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*center\\.Value"
+    }
+   ],
+   "solution": "[BurstCompile]\nstruct CenterJob : IJob\n{\n    [ReadOnly] public NativeArray<float3> pos;   // CenterJob only reads pos\n    public NativeReference<float3> center;\n\n    public void Execute()\n    {\n        float3 s = float3.zero;\n        for (int i = 0; i < pos.Length; i++) s += pos[i];\n        center.Value = s / pos.Length;\n    }\n}\n\npublic class Swarm : MonoBehaviour\n{\n    NativeArray<float3> pos, vel;      // allocated in Awake\n    NativeReference<float3> center;\n    JobHandle handle;\n\n    void Update()\n    {\n        var move = new MoveJob { pos = pos, vel = vel, dt = Time.deltaTime };\n        var avg = new CenterJob { pos = pos, center = center };\n        JobHandle moved = move.Schedule(pos.Length, 64);\n        handle = avg.Schedule(moved);  // starts after MoveJob\n        JobHandle.ScheduleBatchedJobs();\n    }\n\n    void LateUpdate()\n    {\n        handle.Complete();             // completes MoveJob too\n        Debug.Log(center.Value);\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}
