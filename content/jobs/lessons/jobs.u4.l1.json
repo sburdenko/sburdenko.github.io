@@ -94,11 +94,11 @@
     },
     {
      "label": "⟦⟧",
-     "re": "\\.Position\\s*\\+=\\s*(?:\\w+\\.Value\\s*\\*\\s*DeltaTime|DeltaTime\\s*\\*\\s*\\w+\\.Value)"
+     "re": "(?:\\.Position\\s*(?:\\+=|=\\s*\\w+\\.Position\\s*\\+)\\s*|=\\s*\\w+\\.Translate\\s*\\(\\s*)(?:\\w+\\.Value\\s*\\*\\s*DeltaTime|DeltaTime\\s*\\*\\s*\\w+\\.Value)"
     },
     {
      "label": "⟦⟧",
-     "re": "void\\s+OnUpdate\\s*\\([^)]*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.ScheduleParallel\\s*\\("
+     "re": "void\\s+OnUpdate\\s*\\([^)]*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*(?:\\.ScheduleParallel\\s*\\(\\s*\\)|state\\.Dependency\\s*=[^;]*\\.ScheduleParallel\\s*\\(\\s*state\\.Dependency\\s*\\))"
     },
     {
      "label": "⟦⟧",
