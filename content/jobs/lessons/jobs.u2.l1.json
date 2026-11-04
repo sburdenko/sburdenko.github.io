@@ -107,7 +107,7 @@
     },
     {
      "label": "⟦⟧",
-     "re": "new\\s*(?:NativeReference\\s*<\\s*float\\s*>\\s*)?\\(\\s*Allocator\\.TempJob\\b"
+     "re": "new\\s*(?:NativeReference\\s*<\\s*float\\s*>\\s*)?\\([^;]*Allocator\\.TempJob\\b"
     },
     {
      "label": "⟦⟧",

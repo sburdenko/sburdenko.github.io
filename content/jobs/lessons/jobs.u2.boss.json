@@ -50,7 +50,7 @@
     },
     {
      "label": "⟦⟧",
-     "re": "handle\\s*=\\s*sum\\s*\\.\\s*Schedule\\s*\\(\\s*(?!\\))"
+     "re": "(\\w+)\\s*=\\s*cull\\s*\\.\\s*Schedule\\s*\\([^;]*;[\\s\\S]*\\bhandle\\s*=\\s*sum\\s*\\.\\s*Schedule\\s*\\(\\s*(?:dependsOn\\s*:\\s*)?\\1\\s*\\)|\\bhandle\\s*=\\s*sum\\s*\\.\\s*Schedule\\s*\\(\\s*(?:dependsOn\\s*:\\s*)?cull\\s*\\.\\s*Schedule\\s*\\("
     },
     {
      "label": "⟦⟧",
@@ -111,7 +111,7 @@
    "checks": [
     {
      "label": "⟦⟧",
-     "re": "new\\s+BlurJob[\\s\\S]*?\\.Schedule\\s*\\(\\s*positions\\.Length\\s*,\\s*\\d+\\s*,\\s*\\w+\\s*\\)"
+     "re": "(\\w+)\\s*=\\s*new\\s+SampleJob[^;]*;[\\s\\S]*new\\s+BlurJob[^;]*\\.Schedule\\s*\\(\\s*positions\\.Length\\s*,\\s*\\d+\\s*,\\s*(?:dependsOn\\s*:\\s*)?\\1\\s*\\)"
     },
     {
      "label": "⟦⟧",
@@ -120,7 +120,7 @@
     },
     {
      "label": "⟦⟧",
-     "re": "tmp\\s*\\.\\s*Dispose\\s*\\(\\s*\\w+\\s*\\)"
+     "re": "(\\w+)\\s*=\\s*new\\s+BlurJob[^;]*;[\\s\\S]*tmp\\s*\\.\\s*Dispose\\s*\\(\\s*\\1\\s*\\)"
     },
     {
      "label": "⟦⟧",

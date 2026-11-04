@@ -18,7 +18,7 @@
  "cards/3/checks/0/label": "В CullJob есть поле NativeList<int>.ParallelWriter",
  "cards/3/checks/1/label": "Индекс добавляется через AddNoResize",
  "cards/3/checks/2/label": "Нет обычного Add(...)",
- "cards/3/checks/3/label": "Список создаётся с ёмкостью и Allocator.TempJob",
+ "cards/3/checks/3/label": "Список создаётся с ёмкостью positions.Length и Allocator.TempJob",
  "cards/3/checks/4/label": "В джоб передаётся AsParallelWriter()",
  "cards/3/checks/5/label": "Джоб планируется по positions.Length",
  "cards/3/explain": "Ёмкость positions.Length — верхняя граница: видимых не больше, чем всех. AddNoResize берёт слот атомарно, и потоки не мешают друг другу. Порядок индексов в visible от запуска к запуску разный — если он важен, сортируй после или собирай иначе.",

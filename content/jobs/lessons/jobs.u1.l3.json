@@ -85,7 +85,7 @@
     },
     {
      "label": "⟦⟧",
-     "re": "\\.Schedule\\s*\\(\\s*\\w+\\.Length\\s*,\\s*\\d+"
+     "re": "\\.Schedule\\s*\\(\\s*(?:arrayLength\\s*:\\s*)?\\w+\\.Length\\s*,\\s*(?:innerloopBatchCount\\s*:\\s*)?\\d+"
     }
    ],
    "solution": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing Unity.Mathematics;\n\n[BurstCompile]\nstruct DistanceJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float3> positions;\n    public NativeArray<float> distances;\n    public float3 target;\n\n    public void Execute(int index)   // one element per call\n    {\n        distances[index] = math.distance(positions[index], target);\n    }\n}\n\nstatic class DistanceScheduler\n{\n    public static JobHandle ScheduleDistances(NativeArray<float3> positions, NativeArray<float> distances, float3 target)\n    {\n        var job = new DistanceJob { positions = positions, distances = distances, target = target };\n        return job.Schedule(positions.Length, 64);   // length, batch size\n    }\n}",

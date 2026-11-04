@@ -33,7 +33,7 @@
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "int hp = 42;\nfloat3 pos = new float3(1f, 0f, 2f);\n\nDebug.Log(\"Job started\");                      // literal: OK\nDebug.Log($\"hp = {hp}, pos = {pos}\");          // interpolation with primitives and vectors: OK\nFixedString128Bytes msg = $\"hp = {hp}\";         // assigned to a FixedString: OK\n\nDebug.Log(\"hp = \" + hp.ToString());            // concatenation and ToString: error",
+   "code": "int hp = 42;\nfloat3 pos = new float3(1f, 0f, 2f);\n\nDebug.Log(\"Job started\");                      // literal: OK\nDebug.Log($\"hp = {hp}, pos = {pos}\");          // interpolation with primitives and vectors: OK\nFixedString128Bytes msg = $\"hp = {hp}\";         // assigned to a FixedString: OK\n\nDebug.Log(\"hp = \" + hp.ToString());            // concatenation, ToString: compile error",
    "lang": "cs"
   },
   {
