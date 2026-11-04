@@ -1,0 +1,15 @@
+{
+ "title": "Jobs + Burst для собеседования",
+ "units/0/title": "Основа: джобы и Burst",
+ "units/0/blurb": "Две разные вещи — потоки и компилятор, что можно и нельзя в Burst, виды джобов и разница между Schedule, Run и Complete. Проверяют, что ты их реально использовал.",
+ "units/0/source/title": "Unity Manual: Job system",
+ "units/1/title": "Данные, безопасность и зависимости",
+ "units/1/blurb": "Как данные попадают в джоб и обратно, safety system и гонки, граф зависимостей, аллокаторы и утечки, запись из параллельного джоба и batchSize. Здесь отваливаются мидлы.",
+ "units/1/source/title": "Collections package manual",
+ "units/2/title": "Глубже: как Burst делает код быстрым",
+ "units/2/blurb": "Векторизация и Burst Inspector, SoA против AoS, детерминизм float, отладка Burst, FunctionPointer и SharedStatic, трансформы и физика из джобов и когда Burst не нужен.",
+ "units/2/source/title": "Burst package manual",
+ "units/3/title": "Entities и как отвечать на собеседовании",
+ "units/3/blurb": "Entities поверх Jobs и Burst, структурные изменения и sync points, гибрид с GameObject и честные ограничения, и как рассказать про свой опыт так, чтобы узнали своего.",
+ "units/3/source/title": "Entities package manual"
+}

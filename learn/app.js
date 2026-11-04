@@ -5,16 +5,16 @@
  *   #/dotnet      курс
  *   #/dotnet/<id> урок поверх курса
  */
-import { $, esc, startNoise, setLocale } from '../assets/vhs.js?v=202611032107';
-import { GROUPS, COURSES, findCourse, lessonsOf, loadCourses, courseTitle, courseBlurb } from './courses.js?v=202611032107';
-import { getLang, switchLang, tr, LANGS, LANG_NAMES } from './i18n.js?v=202611032107';
-import { t } from './ui.js?v=202611032107';
-import { auth } from './auth/auth.js?v=202611032107';
-import { CATEGORIES, MAX_TEXT, buildReport } from './reports/report.js?v=202611032107';
-import { submit, flushQueue, reportsEnabled } from './reports/reports.js?v=202611032107';
-import * as P from './progress.js?v=202611032107';
-import * as E from './engine.js?v=202611032107';
-import { renderCard, feedback } from './cards.js?v=202611032107';
+import { $, esc, startNoise, setLocale } from '../assets/vhs.js?v=202611040838';
+import { GROUPS, COURSES, findCourse, lessonsOf, loadCourses, courseTitle, courseBlurb } from './courses.js?v=202611040838';
+import { getLang, switchLang, tr, LANGS, LANG_NAMES } from './i18n.js?v=202611040838';
+import { t } from './ui.js?v=202611040838';
+import { auth } from './auth/auth.js?v=202611040838';
+import { CATEGORIES, MAX_TEXT, buildReport } from './reports/report.js?v=202611040838';
+import { submit, flushQueue, reportsEnabled } from './reports/reports.js?v=202611040838';
+import * as P from './progress.js?v=202611040838';
+import * as E from './engine.js?v=202611040838';
+import { renderCard, feedback } from './cards.js?v=202611040838';
 
 /** Полка кассет — отдельный модуль сайта. */
 const SHELF_URL = new URL('../shelf/', import.meta.url).href;
@@ -573,6 +573,11 @@ addEventListener('keydown', e => {
     return;
   }
   if (!run) return;
+  // в редакторе кода клавиши принадлежат тексту: проверка — Ctrl/Cmd+Enter, остальное не перехватываем
+  if (e.target instanceof HTMLTextAreaElement) {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && run.key && run.key({ key: 'Enter', target: e.target })) e.preventDefault();
+    return;
+  }
   if (run.view !== null) {
     // в просмотре прошлого стрелки листают, Esc возвращает к уроку, а не закрывает его
     if (e.key === 'ArrowLeft') review(run.view - 1);

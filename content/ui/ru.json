@@ -153,5 +153,12 @@
  "course.unity.title": "Unity для программиста",
  "course.unity.blurb": "Жизненный цикл MonoBehaviour, корутины, физика и рендер.",
  "course.algo.title": "Алгоритмы",
- "course.algo.blurb": "Паттерны задач с собеседований — короткими уроками."
+ "course.algo.blurb": "Паттерны задач с собеседований — короткими уроками.",
+ "c.write": "Пиши код прямо в поле. Tab — отступ, Ctrl+Enter — проверить.",
+ "c.writeChecks": "Требования к коду:",
+ "c.writeAria": "Редактор кода",
+ "c.solution": "Образец решения:",
+ "c.writeMissed": "Не выполнено требований: {n}. Посмотри на крестики и сравни с образцом.",
+ "course.jobs.title": "Jobs + Burst",
+ "course.jobs.blurb": "Многопоточность и Burst для сеньорского собеседования: от Schedule и Complete до векторизации и Entities — с кодом, который пишешь сам."
 }

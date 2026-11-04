@@ -1,7 +1,7 @@
 /** Editable rigs for the chapters hash map, two pointers, sliding window, binary search. */
-import * as A from './model-a.js?v=202611032107';
-import * as V from './views-a.js?v=202611032107';
-import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202611032107';
+import * as A from './model-a.js?v=202611040838';
+import * as V from './views-a.js?v=202611040838';
+import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202611040838';
 
 const nums = (extra = {}) => ({ key: 'nums', type: 'ints', minLen: 1, maxLen: 12, min: -99, max: 99, ...extra });
 const target = (extra = {}) => ({ key: 'target', type: 'int', min: -999, max: 999, ...extra });

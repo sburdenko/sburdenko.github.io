@@ -9,7 +9,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadCourseFromSource } from '../learn/content.js';
 
-const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'u8'] };
+const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'u8'], jobs: [] };
 
 /** Понятие → шаблон. Шаблоны ловят API и устойчивые термины, а не имена из примеров кода. */
 const CONCEPTS = {
@@ -139,12 +139,62 @@ const CONCEPTS = {
     'GetOrAdd': /\bGetOrAdd\b|\bAddOrUpdate\b/,
     'ConcurrentQueue/Stack/Bag': /\bConcurrent(Queue|Stack|Bag)\b/,
     'BlockingCollection': /\bBlockingCollection\b/
+  },
+  jobs: {
+    'IJob': /\bIJob\b/,
+    'IJobParallelFor': /\bIJobParallelFor\b/,
+    'IJobFor': /\bIJobFor\b/,
+    'IJobParallelForTransform': /\bIJobParallelForTransform\b/,
+    'TransformAccessArray': /\bTransformAccessArray\b/,
+    'IJobEntity': /\bIJobEntity\b/,
+    'IJobChunk': /\bIJobChunk\b/,
+    'BurstCompile': /\bBurstCompile\b/,
+    'HPC#': /\bHPC#/,
+    'LLVM': /\bLLVM\b/,
+    'JobHandle': /\bJobHandle\b/,
+    'ScheduleParallel': /\bScheduleParallel\b/,
+    'Complete()': /\.Complete\(\)/,
+    'ScheduleBatchedJobs': /\bScheduleBatchedJobs\b/,
+    'CombineDependencies': /\bCombineDependencies\b/,
+    'NativeArray': /\bNativeArray\b/,
+    'NativeList': /\bNativeList\b/,
+    'NativeReference': /\bNativeReference\b/,
+    'NativeQueue': /\bNativeQueue\b/,
+    'NativeParallelHashMap': /\bNativeParallelHashMap\b/,
+    'NativeStream': /\bNativeStream\b/,
+    'ParallelWriter': /\bParallelWriter\b/,
+    'AddNoResize': /\bAddNoResize\b/,
+    '[ReadOnly]': /\bReadOnly\b/,
+    '[WriteOnly]': /\bWriteOnly\b/,
+    'NativeDisableParallelForRestriction': /\bNativeDisableParallelForRestriction\b/,
+    'NativeDisableContainerSafetyRestriction': /\bNativeDisableContainerSafetyRestriction\b/,
+    'Allocator.Temp': /\bAllocator\.Temp\b/,
+    'Allocator.TempJob': /\bAllocator\.TempJob\b/,
+    'Allocator.Persistent': /\bAllocator\.Persistent\b/,
+    'NativeLeakDetection': /\bNativeLeakDetection\b/,
+    'FixedString': /\bFixedString\w*/,
+    'stackalloc': /\bstackalloc\b/,
+    'SIMD': /\bSIMD\b/,
+    'NoAlias': /\bNoAlias\b/,
+    'math.select': /\bmath\.select\b/,
+    'Burst Inspector': /\bBurst Inspector\b/,
+    'SoA': /\bSoA\b/,
+    'AoS': /\bAoS\b/,
+    'FloatMode': /\bFloatMode\b/,
+    'FloatPrecision': /\bFloatPrecision\b/,
+    'FunctionPointer': /\bFunctionPointer\b/,
+    'SharedStatic': /\bSharedStatic\b/,
+    'RaycastCommand': /\bRaycastCommand\b/,
+    'EntityCommandBuffer': /\bEntityCommandBuffer\b|\bECB\b/,
+    'sync point': /\bsync point|точк\w* синхронизации/i,
+    'Baking': /\bBak(ing|er)\b/,
   }
 };
 
 const html = s => String(s ?? '').replace(/<[^>]+>/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 const teaching = c => (c.t === 'learn' ? [c.title, c.body, c.code, ...(c.flow ?? [])] : []).map(html).join('\n');
-const testing = c => (c.t === 'learn' ? [] : [c.q, c.task, c.code, c.explain, ...(c.options ?? []), ...(c.items ?? []), ...(c.pairs ?? []).flat(), ...(c.tiles ?? []), ...Object.values(c.wrong ?? {})]).map(html).join('\n');
+// у write вопросом считаются задание, заготовка и требования; образец решения — это ответ, а не вопрос
+const testing = c => (c.t === 'learn' ? [] : [c.q, c.task, c.code, c.starter, c.explain, ...(c.options ?? []), ...(c.items ?? []), ...(c.pairs ?? []).flat(), ...(c.tiles ?? []), ...Object.values(c.wrong ?? {}), ...(c.checks ?? []).map(x => x.label)]).map(html).join('\n');
 
 for (const [courseId, units] of Object.entries(CHECKED)) {
   test(`${courseId}: понятия объясняются раньше, чем о них спрашивают (${units.join(', ')})`, async () => {

@@ -3,9 +3,9 @@
  * (course.<id>.title и course.<id>.blurb) в content/ui/<язык>.json.
  * jsonCourse('id') даёт загрузчик на каждый язык; loadCourses(lang) подгружает нужный.
  */
-import { tr } from './i18n.js?v=202611032107';
-import { jsonCourse } from './content.js?v=202611032107';
-import { bi } from './ui.js?v=202611032107';
+import { tr } from './i18n.js?v=202611040838';
+import { jsonCourse } from './content.js?v=202611040838';
+import { bi } from './ui.js?v=202611040838';
 
 /** Группы на полке курсов — по порядку показа. */
 export const GROUPS = [
@@ -27,6 +27,7 @@ export const COURSES = [
   { id: 'three2', group: 'gfx', badge: 'TJS 2', color: '#ffd166', soon: true, title: bi('course.three2.title'), blurb: bi('course.three2.blurb') },
   { id: 'three3', group: 'gfx', badge: 'TJS 3', color: '#ff6b9a', soon: true, title: bi('course.three3.title'), blurb: bi('course.three3.blurb') },
   { id: 'unity', group: 'more', badge: 'Unity', color: 'var(--ok)', soon: true, title: bi('course.unity.title'), blurb: bi('course.unity.blurb') },
+  { id: 'jobs', group: 'more', badge: 'Burst', color: '#ff9a3d', title: bi('course.jobs.title'), blurb: bi('course.jobs.blurb'), load: jsonCourse('jobs') },
   { id: 'algo', group: 'more', badge: 'Algo', color: 'var(--osd)', title: bi('course.algo.title'), blurb: bi('course.algo.blurb'), load: jsonCourse('algo') }
 ];
 

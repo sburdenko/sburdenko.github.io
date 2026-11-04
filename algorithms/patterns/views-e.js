@@ -2,7 +2,7 @@
 import {
   CELL, svg, text, rowWidth, node, chip, chips,
   matrixXY, matrixCells, matrixIndex,
-} from './view-kit.js?v=202611032107';
+} from './view-kit.js?v=202611040838';
 
 const has = (list, r, c) => list.some(([a, b]) => a === r && b === c);
 const inf = d => (d === Infinity || d == null ? '∞' : d);
