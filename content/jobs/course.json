@@ -10,7 +10,9 @@
     "title": "⟦⟧",
     "url": "https://docs.unity3d.com/6000.0/Documentation/Manual/job-system.html"
    },
-   "soon": true
+   "lessons": [
+    "jobs.u1.l4"
+   ]
   },
   {
    "id": "u2",

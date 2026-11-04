@@ -1,10 +1,10 @@
 /** Пульт «двумерный массив»: лабиринт, обход по клеткам, пошаговая перемотка. */
-import { $, $$, fitCanvas, press, fmtI, onVisible } from '../../assets/vhs.js?v=202611040838';
-import { t, onLang } from '../../assets/i18n.js?v=202611040838';
-import { makeGrid, gridNeighbors, gridXY, traverse, stateAt, pathTo, WALL, FREE } from './traversal.js?v=202611040838';
-import { drawGrid, gridLayout, cellAtPoint } from './grid-view.js?v=202611040838';
-import { renderPseudo, renderFrontier, noteFor, tile, COL } from './panels.js?v=202611040838';
-import { createPlayer, bindTransport } from './player.js?v=202611040838';
+import { $, $$, fitCanvas, press, fmtI, onVisible } from '../../assets/vhs.js?v=202611040856';
+import { t, onLang } from '../../assets/i18n.js?v=202611040856';
+import { makeGrid, gridNeighbors, gridXY, traverse, stateAt, pathTo, WALL, FREE } from './traversal.js?v=202611040856';
+import { drawGrid, gridLayout, cellAtPoint } from './grid-view.js?v=202611040856';
+import { renderPseudo, renderFrontier, noteFor, tile, COL } from './panels.js?v=202611040856';
+import { createPlayer, bindTransport } from './player.js?v=202611040856';
 
 const ODD = n => (n % 2 ? n : n + 1);
 

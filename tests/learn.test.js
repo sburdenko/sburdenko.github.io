@@ -158,6 +158,7 @@ function rightInput(card) {
     case 'multi': return [...card.answer];
     case 'order': return card.items.map((_, i) => i);
     case 'blanks': return [...card.answer];
+    case 'write': return card.solution;
     default: return undefined;
   }
 }
@@ -178,7 +179,7 @@ test('каждая карточка корректна, а верный отве
     const at = `${l.id} #${i + 1} (${c.t})`;
     assert.ok(E.TYPES.has(c.t), `${at}: неизвестный тип`);
     if (E.GRADED.has(c.t)) {
-      assert.ok(c.q, `${at}: нет вопроса`);
+      assert.ok(c.q || (c.t === 'write' && c.task), `${at}: нет вопроса`);
       assert.ok(E.check(c, rightInput(c)), `${at}: верный ответ не проходит проверку`);
     }
     if (c.t === 'learn') assert.ok(c.title && c.body, `${at}: нет заголовка или текста`);

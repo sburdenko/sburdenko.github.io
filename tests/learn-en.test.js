@@ -19,6 +19,7 @@ function rightInput(card) {
     case 'multi': return [...card.answer];
     case 'order': return card.items.map((_, i) => i);
     case 'blanks': return [...card.answer];
+    case 'write': return card.solution;
     default: return undefined;
   }
 }
@@ -74,13 +75,18 @@ for (const c of COURSES.filter(c => c.load && (!only || c.id === only))) {
           if (rc[k]) assert.equal(card[k]?.length, rc[k].length, `${at}: длина ${k}`);
         }
         if (rc.code) assert.equal(card.code.split('\n').length, rc.code.split('\n').length, `${at}: в коде другое число строк`);
+        if (rc.t === 'write') {
+          assert.equal(card.starter.split('\n').length, rc.starter.split('\n').length, `${at}: в заготовке другое число строк`);
+          assert.equal(card.solution.split('\n').length, rc.solution.split('\n').length, `${at}: в образце другое число строк`);
+          assert.deepEqual(card.checks.map(c => [c.re, c.flags, c.not]), rc.checks.map(c => [c.re, c.flags, c.not]), `${at}: требования — это код, их не переводят`);
+        }
         if (rc.t === 'rig' && rc.options) assert.deepEqual(card.options, rc.options, `${at}: options стенда — это код, их не переводят`);
         if (rc.bugs) assert.deepEqual(card.bugs.map(b => b.lines), rc.bugs.map(b => b.lines), `${at}: строки багов должны совпадать с русскими`);
         if (rc.steps) assert.equal(card.steps.length, rc.steps.length, `${at}: шаги стенда`);
         if (Array.isArray(rc.variants)) assert.deepEqual(card.variants, rc.variants, `${at}: variants`);
         else if (rc.variants && typeof rc.variants === 'object') assert.deepEqual(Object.keys(card.variants), Object.keys(rc.variants), `${at}: варианты`);
         if (E.GRADED.has(card.t)) {
-          assert.ok(card.q, `${at}: нет вопроса`);
+          assert.ok(card.q || (card.t === 'write' && card.task), `${at}: нет вопроса`);
           assert.ok(E.check(card, rightInput(card)), `${at}: верный ответ не проходит проверку`);
         }
         if (card.t === 'choice' || card.t === 'multi') {

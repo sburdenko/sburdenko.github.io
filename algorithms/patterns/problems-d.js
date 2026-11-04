@@ -1,5 +1,5 @@
 /** Problems and C# solutions for arrays and matrices. */
-import { problem as p } from './problem.js?v=202611040838';
+import { problem as p } from './problem.js?v=202611040856';
 
 export const PROBLEMS_D = {
   matrix: [

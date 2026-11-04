@@ -2,10 +2,10 @@
  * Extras per problem, keyed by rig id: tricky inputs, an operation counter (naive vs ours), predict-the-step forks,
  * interviewer follow-ups and related problems. Shape: see extras-a.js.
  */
-import { EX_A } from './extras-a.js?v=202611040838';
-import { EX_B } from './extras-b.js?v=202611040838';
-import { EX_C } from './extras-c.js?v=202611040838';
-import { EX_D } from './extras-d.js?v=202611040838';
+import { EX_A } from './extras-a.js?v=202611040856';
+import { EX_B } from './extras-b.js?v=202611040856';
+import { EX_C } from './extras-c.js?v=202611040856';
+import { EX_D } from './extras-d.js?v=202611040856';
 
 export const EXTRAS = { ...EX_A, ...EX_B, ...EX_C, ...EX_D };
 
