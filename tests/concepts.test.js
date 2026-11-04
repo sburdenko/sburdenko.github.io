@@ -9,7 +9,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadCourseFromSource } from '../learn/content.js';
 
-const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'u8'], jobs: [] };
+const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'u8'], jobs: ['u1'] };
 
 /** Понятие → шаблон. Шаблоны ловят API и устойчивые термины, а не имена из примеров кода. */
 const CONCEPTS = {
@@ -188,6 +188,20 @@ const CONCEPTS = {
     'EntityCommandBuffer': /\bEntityCommandBuffer\b|\bECB\b/,
     'sync point': /\bsync point|точк\w* синхронизации/i,
     'Baking': /\bBak(ing|er)\b/,
+    'Run()': /\.Run\(|\bRun\(\)/,
+    'batchSize': /\bbatchSize\b|\binnerloopBatchCount\b/,
+    'TransformAccess': /\bTransformAccess\b/,
+    'ScheduleReadOnly': /\bScheduleReadOnly\b|\bRunReadOnly\b/,
+    'IJobParallelForDefer': /\bIJobParallelForDefer\b/,
+    'IJobParallelForBatch': /\bIJobParallelForBatch\b/,
+    'IJobFilter': /\bIJobFilter\b/,
+    'Unity.Mathematics': /\bUnity\.Mathematics\b|\bfloat3\b/,
+    'Debug.Log': /\bDebug\.Log/,
+    'ENABLE_UNITY_COLLECTIONS_CHECKS': /\bENABLE_UNITY_COLLECTIONS_CHECKS\b/,
+    'catch': /\bcatch\b/,
+    'try/finally': /\bfinally\b/,
+    'боксинг': /боксинг|\bboxing\b/i,
+    'Synchronous Compilation': /\bSynchronous Compilation\b|\bCompileSynchronously\b/,
   }
 };
 

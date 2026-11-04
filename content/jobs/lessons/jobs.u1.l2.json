@@ -1,0 +1,157 @@
+{
+ "id": "jobs.u1.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 18,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct BadJob : IJob\n{\n    public float[] values;                    // managed array: error\n    public string label;                      // string field: error\n    public System.Func<float, float> rule;    // delegate: error\n\n    public void Execute()\n    {\n        object boxed = 42;                    // boxing: error\n        var list = new System.Collections.Generic.List<int>();   // class: error\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// needs \"Allow 'unsafe' Code\" for the pointer\n[BurstCompile]\nstruct GoodJob : IJob\n{\n    [ReadOnly] public NativeArray<float> values;   // instead of float[]\n    public FixedString32Bytes label;              // instead of string\n    public NativeArray<float3> output;\n\n    public unsafe void Execute()\n    {\n        int* scratch = stackalloc int[16];         // small buffer on the stack\n        scratch[0] = values.Length;\n        float3 p = new float3(1f, 2f, 3f);         // Unity.Mathematics\n        output[0] = p * values[0];\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["float[] values", "NativeArray<float> values"],
+    ["string name", "FixedString64Bytes name"],
+    ["Func<float, float> rule", "FunctionPointer<T>"],
+    ["⟦⟧", "SharedStatic<int>"],
+    ["⟦⟧", "stackalloc int[16]"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "int hp = 42;\nfloat3 pos = new float3(1f, 0f, 2f);\n\nDebug.Log(\"Job started\");                      // literal: OK\nDebug.Log($\"hp = {hp}, pos = {pos}\");          // interpolation with primitives and vectors: OK\nFixedString128Bytes msg = $\"hp = {hp}\";         // assigned to a FixedString: OK\n\nDebug.Log(\"hp = \" + hp.ToString());            // concatenation and ToString: error",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "catch (Exception e) { … }", "⟦⟧", "object o = myStruct;"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using System.Collections.Generic;\nusing Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing UnityEngine;\n\n[BurstCompile]\nstruct DamageJob : IJob\n{\n    public float[] damage;\n    public List<int> crits;                  // indices of critical hits\n    public NativeArray<float> total;\n\n    public void Execute()\n    {\n        float sum = 0f;\n        for (int i = 0; i < damage.Length; i++) sum += damage[i];\n        for (int i = 0; i < crits.Count; i++) sum += damage[crits[i]];\n        total[0] = sum;\n        Debug.Log(\"Total damage: \" + sum.ToString());\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*ReadOnly\\s*\\]\\s*(?:public\\s+)?NativeArray\\s*<\\s*float\\s*>\\s+damage\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*ReadOnly\\s*\\]\\s*(?:public\\s+)?Native(?:Array|List)\\s*<\\s*int\\s*>\\s+crits\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\b(?:float|int)\\s*\\[\\s*\\]|\\bList\\s*<",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "Debug\\.Log\\s*\\(\\s*\\$\""
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\.ToString\\s*\\(|\"\\s*\\+|\\+\\s*\\$?\"",
+     "not": true
+    }
+   ],
+   "solution": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing UnityEngine;\n\n[BurstCompile]\nstruct DamageJob : IJob\n{\n    [ReadOnly] public NativeArray<float> damage;   // was float[]\n    [ReadOnly] public NativeArray<int> crits;      // was List<int>\n    public NativeArray<float> total;\n\n    public void Execute()\n    {\n        float sum = 0f;\n        for (int i = 0; i < damage.Length; i++) sum += damage[i];\n        for (int i = 0; i < crits.Length; i++) sum += damage[crits[i]];   // Length, not Count\n        total[0] = sum;\n        Debug.Log($\"Total damage: {sum}\");          // Burst formats it, no managed string\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧",
+   "code": "using System;\nusing System.Diagnostics;\n\n[BurstCompile]\nstruct PickJob : IJob\n{\n    [ReadOnly] public NativeArray<float> weights;\n    public int index;\n\n    public void Execute()\n    {\n        CheckIndex(index, weights.Length);   // the call disappears from player builds\n        // ...\n    }\n\n    [Conditional(\"ENABLE_UNITY_COLLECTIONS_CHECKS\")]\n    static void CheckIndex(int index, int length)\n    {\n        if (index < 0 || index >= length)\n            throw new ArgumentException(\"Index is out of range\");\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using System;\nusing Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\n\n[BurstCompile]\nstruct FillJob : IJob\n{\n    public NativeArray<float> buffer;\n    public int count;\n    public float value;\n\n    public void Execute()\n    {\n        if (count < 0 || count > buffer.Length)\n            throw new ArgumentException(\"count is out of range\");\n        for (int i = 0; i < count; i++) buffer[i] = value;\n    }\n\n    // TODO: static void CheckCount(int count, int length)\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "using\\s+System\\.Diagnostics\\s*;|System\\.Diagnostics\\.Conditional"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "Conditional\\s*\\(\\s*\"ENABLE_UNITY_COLLECTIONS_CHECKS\"\\s*\\)[^\\]]*\\]\\s*(?:\\[[^\\]]*\\]\\s*)*(?:\\w+\\s+)*void\\s+CheckCount\\s*\\("
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+CheckCount\\s*\\((?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\bthrow\\s+new\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\bCheckCount\\s*\\("
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\bthrow\\b",
+     "not": true
+    }
+   ],
+   "solution": "using System;\nusing System.Diagnostics;\nusing Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\n\n[BurstCompile]\nstruct FillJob : IJob\n{\n    public NativeArray<float> buffer;\n    public int count;\n    public float value;\n\n    public void Execute()\n    {\n        CheckCount(count, buffer.Length);   // compiled out of player builds\n        for (int i = 0; i < count; i++) buffer[i] = value;\n    }\n\n    [Conditional(\"ENABLE_UNITY_COLLECTIONS_CHECKS\")]\n    static void CheckCount(int count, int length)\n    {\n        if (count < 0 || count > length)\n            throw new ArgumentException(\"count is out of range\");\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "interface IRule { float Apply(float x); }\nstruct DoubleRule : IRule { public float Apply(float x) => x * 2f; }\n\n[BurstCompile]\nstruct ApplyJob<T> : IJob where T : struct, IRule\n{\n    public T rule;                       // a concrete struct: no boxing\n    public NativeArray<float> data;\n    public void Execute()\n    {\n        for (int i = 0; i < data.Length; i++) data[i] = rule.Apply(data[i]);\n    }\n}\n\nIRule boxed = new DoubleRule();          // boxing: not allowed in Burst code",
+   "lang": "cs"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "[BurstCompile]\nstruct ScoreJob : IJob\n{\n    [ReadOnly] public NativeArray<int> points;\n    public NativeArray<int> total;\n    public FixedString32Bytes tag;\n\n    public void Execute()\n    {\n        int sum = 0;\n        foreach (int p in points) sum += p;\n        object boxed = sum;\n        total[0] = sum;\n    }\n}",
+   "answer": 11,
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}
