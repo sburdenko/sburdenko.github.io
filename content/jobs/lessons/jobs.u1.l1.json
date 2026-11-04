@@ -79,7 +79,7 @@
    "checks": [
     {
      "label": "⟦⟧",
-     "re": "\\[\\s*BurstCompile[^\\]]*\\]\\s*(?:(?:public|internal)\\s+)?struct\\s+MoveJob\\s*:\\s*IJob\\b"
+     "re": "\\[\\s*BurstCompile[^\\]]*\\]\\s*(?:(?:public|internal|private)\\s+)?struct\\s+MoveJob\\s*:\\s*IJob\\b"
     },
     {
      "label": "⟦⟧",
@@ -99,7 +99,7 @@
     },
     {
      "label": "⟦⟧",
-     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\bfor\\s*\\(",
+     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\b(?:for|foreach|while)\\s*\\(",
      "not": true
     }
    ],

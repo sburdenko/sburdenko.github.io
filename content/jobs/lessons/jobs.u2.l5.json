@@ -50,7 +50,7 @@
     },
     {
      "label": "⟦⟧",
-     "re": "new\\s+NativeList\\s*<\\s*int\\s*>\\s*\\(\\s*[\\w.]+\\s*,\\s*Allocator\\.TempJob\\s*\\)"
+     "re": "new\\s*(?:NativeList\\s*<\\s*int\\s*>\\s*)?\\(\\s*(?:initialCapacity\\s*:\\s*)?\\w+\\.Length\\s*,\\s*(?:allocator\\s*:\\s*)?Allocator\\.TempJob\\s*\\)"
     },
     {
      "label": "⟦⟧",

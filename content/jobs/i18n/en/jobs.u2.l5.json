@@ -18,7 +18,7 @@
  "cards/3/checks/0/label": "CullJob has a NativeList<int>.ParallelWriter field",
  "cards/3/checks/1/label": "The index is appended with AddNoResize",
  "cards/3/checks/2/label": "There is no plain Add(...)",
- "cards/3/checks/3/label": "The list is created with a capacity and Allocator.TempJob",
+ "cards/3/checks/3/label": "The list is created with capacity positions.Length and Allocator.TempJob",
  "cards/3/checks/4/label": "The job gets AsParallelWriter()",
  "cards/3/checks/5/label": "The job is scheduled over positions.Length",
  "cards/3/explain": "Capacity positions.Length is the upper bound: there cannot be more visible items than items. AddNoResize takes a slot atomically, so the threads do not get in each other’s way. The order of indices in visible changes from run to run — if it matters, sort afterwards or collect differently.",
