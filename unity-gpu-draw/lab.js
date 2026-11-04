@@ -1,13 +1,13 @@
 /** Tape 07 rigs: the map, the Draw* → Render* grid, buffers, the args buffer, a GPU-culling frame, BRG, particles,
  *  lamps, the chooser and the interview. Each init returns a render function for language switches. */
-import { $, $$, fitCanvas, clamp, fmt, fmtI, bytes, esc } from '../assets/vhs.js?v=202611040929';
-import { t } from '../assets/i18n.js?v=202611040929';
-import { renderCode } from '../assets/code.js?v=202611040929';
-import { bindSeg, togglePressed, setPressed, tile, visibleLoop, cssVar } from '../assets/lab.js?v=202611040929';
+import { $, $$, fitCanvas, clamp, fmt, fmtI, bytes, esc } from '../assets/vhs.js?v=202611040944';
+import { t } from '../assets/i18n.js?v=202611040944';
+import { renderCode } from '../assets/code.js?v=202611040944';
+import { bindSeg, togglePressed, setPressed, tile, visibleLoop, cssVar } from '../assets/lab.js?v=202611040944';
 import {
   PATHS, pathsIn, GEOMETRY, COUNT, apiCell, ARGS_MESH, ARGS_FIELDS, drawIndexed,
   makeField, cull, cullSteps, cullTimeline, lampOn, lampLevel, lampCost, particleTool, particleSystemsCost, SCENARIOS,
-} from './model.js?v=202611040929';
+} from './model.js?v=202611040944';
 
 const card = (title, body) => `<h3>${title}</h3>${body}`;
 

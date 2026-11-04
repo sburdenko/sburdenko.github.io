@@ -1,5 +1,5 @@
 /** Recursive-descent parser: tokens → AST. Node shapes are plain objects with a `t` tag and a `line`. */
-import { tokenize, PySyntaxError } from './lexer.js?v=202611040929';
+import { tokenize, PySyntaxError } from './lexer.js?v=202611040944';
 
 const AUG = new Set(['+=', '-=', '*=', '/=', '//=', '%=', '**=', '&=', '|=', '^=', '<<=', '>>=']);
 const COMPARE = new Set(['<', '>', '==', '!=', '<=', '>=']);

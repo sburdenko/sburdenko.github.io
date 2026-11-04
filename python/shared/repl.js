@@ -1,8 +1,8 @@
 /** "Run it yourself": a small editor with live highlighting, a stdin box and the output of real Python. */
-import { $, esc } from '../../assets/vhs.js?v=202611040929';
-import { t, onLang } from '../../assets/i18n.js?v=202611040929';
-import { highlightPy } from './py-code.js?v=202611040929';
-import { runPython, loadPython } from './pyodide-loader.js?v=202611040929';
+import { $, esc } from '../../assets/vhs.js?v=202611040944';
+import { t, onLang } from '../../assets/i18n.js?v=202611040944';
+import { highlightPy } from './py-code.js?v=202611040944';
+import { runPython, loadPython } from './pyodide-loader.js?v=202611040944';
 
 export function mountRepl(root, { code = '', stdin = [], files = {} } = {}) {
   root.classList.add('repl');

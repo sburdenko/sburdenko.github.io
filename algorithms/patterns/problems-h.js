@@ -1,5 +1,5 @@
 /** Problems and C# solutions for chapter 17: data structure design. C# 9 (Unity): target-typed new() is fine, ??= too. */
-import { problem as p } from './problem.js?v=202611040929';
+import { problem as p } from './problem.js?v=202611040944';
 
 export const PROBLEMS_H = {
   design: [
