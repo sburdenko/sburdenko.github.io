@@ -1,9 +1,9 @@
-import { renderGraph } from './graph-view.js?v=202611040944';
-import { bootVhs } from '../../assets/vhs.js?v=202611040944';
-import { register } from '../../assets/i18n.js?v=202611040944';
-import { COMMON } from '../../assets/i18n-common.js?v=202611040944';
-import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202611040944';
-import { oppositeTrace, floydTrace, floydLinks } from './model.js?v=202611040944';
+import { renderGraph } from './graph-view.js?v=202611040947';
+import { bootVhs } from '../../assets/vhs.js?v=202611040947';
+import { register } from '../../assets/i18n.js?v=202611040947';
+import { COMMON } from '../../assets/i18n-common.js?v=202611040947';
+import { createPlayer, bindTransport } from '../bfs-dfs/player.js?v=202611040947';
+import { oppositeTrace, floydTrace, floydLinks } from './model.js?v=202611040947';
 
 register(COMMON);
 bootVhs();

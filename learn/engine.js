@@ -6,7 +6,7 @@
  * ответили верно. Карточки без ответа (learn, rig) просто пролистываются. В match ошибки
  * видны сразу на карточке, поэтому она считается ошибочной, но повторно не ставится.
  */
-import { rng } from '../assets/rand.js?v=202611040944';
+import { rng } from '../assets/rand.js?v=202611040947';
 
 export const GRADED = new Set(['choice', 'multi', 'order', 'blanks', 'tapline', 'write']);
 export const TYPES = new Set([...GRADED, 'learn', 'rig', 'match']);
