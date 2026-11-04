@@ -1,0 +1,165 @@
+{
+ "id": "jobs.u3.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 22,
+ "boss": true,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// SoA: separate arrays, only the bytes the loop needs, back to back\n[BurstCompile]\nstruct DampJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float> speed;     // [NoAlias] by default in a job\n    public NativeArray<float> damped;\n    public float k, limit;\n\n    // no branch: math.select keeps the loop vectorizable (mulps, not mulss)\n    public void Execute(int i) =>\n        damped[i] = math.select(0f, speed[i] * k, speed[i] > limit);\n}\n\n// determinism, where it matters: [BurstCompile(FloatMode = FloatMode.Deterministic)]\n// rule chosen at runtime: FunctionPointer<T>, in batches; known at compile time: MyJob<TRule>\n// transforms: TransformAccessArray + IJobParallelForTransform, different roots\n// physics: RaycastCommand.ScheduleBatch; first of all: the Profiler",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "[BurstCompile]\nstruct ClampJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float> v;\n    public NativeArray<float> r;\n    public float k;\n    public void Execute(int i)\n    {\n        if (v[i] > 0f) r[i] = v[i] * k;\n        else r[i] = 0f;\n    }\n}",
+   "lang": "cs",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "handle.Complete();\nfor (int i = 0; i < count; i++)\n{\n    for (int k = 0; k < maxHits; k++)\n    {\n        RaycastHit hit = results[i * maxHits + k];\n        if (hit.collider == null) continue;\n        Damage(hit.collider, hit.point);\n    }\n}",
+   "answer": 6,
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\n\npublic interface ISpeedRule\n{\n    float Speed(float distance, float baseSpeed);\n}\n\npublic struct Flee : ISpeedRule\n{\n    public float Speed(float distance, float baseSpeed) => baseSpeed * 2f;\n}\n\n[BurstCompile]\nstruct MoveJob : IJobParallelFor\n{\n    public FunctionPointer<Rules.SpeedRule> rule;   // TODO: a generic rule instead\n    [ReadOnly] public NativeArray<float> distance;\n    public NativeArray<float> speed;\n    public float baseSpeed;\n\n    public void Execute(int i) => speed[i] = rule.Invoke(distance[i], baseSpeed);\n}\n\npublic static class Steering\n{\n    public static JobHandle Schedule(NativeArray<float> distance, NativeArray<float> speed, float baseSpeed)\n    {\n        // TODO: schedule MoveJob with the Flee rule, batch size 64\n        return default;\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "struct\\s+MoveJob\\s*<\\s*(\\w+)\\s*>\\s*:\\s*IJobParallelFor\\s+where\\s+\\1\\s*:\\s*(?:struct|unmanaged)\\s*,\\s*ISpeedRule\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "struct\\s+MoveJob\\s*<\\s*(\\w+)\\s*>[\\s\\S]*?public\\s+\\1\\s+\\w+\\s*;"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\.\\s*Speed\\s*\\(\\s*distance\\s*\\[\\s*\\w+\\s*\\]\\s*,\\s*baseSpeed\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\bFunctionPointer\\b",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "new\\s+MoveJob\\s*<\\s*Flee\\s*>[\\s\\S]*?\\.\\s*Schedule\\s*\\("
+    },
+    {
+     "label": "⟦⟧",
+     "re": "static\\s+JobHandle\\s+Schedule\\s*<",
+     "not": true
+    }
+   ],
+   "solution": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\n\npublic interface ISpeedRule\n{\n    float Speed(float distance, float baseSpeed);\n}\n\npublic struct Flee : ISpeedRule\n{\n    public float Speed(float distance, float baseSpeed) => baseSpeed * 2f;\n}\n\n[BurstCompile]\nstruct MoveJob<TRule> : IJobParallelFor where TRule : struct, ISpeedRule\n{\n    public TRule rule;                               // known at compile time\n    [ReadOnly] public NativeArray<float> distance;\n    public NativeArray<float> speed;\n    public float baseSpeed;\n\n    public void Execute(int i) => speed[i] = rule.Speed(distance[i], baseSpeed);\n}\n\npublic static class Steering\n{\n    public static JobHandle Schedule(NativeArray<float> distance, NativeArray<float> speed, float baseSpeed)\n    {\n        // a concrete type here, not a generic method: Burst finds MoveJob<Flee> in a build\n        return new MoveJob<Flee> { distance = distance, speed = speed, baseSpeed = baseSpeed }\n            .Schedule(distance.Length, 64);\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Burst;\nusing Unity.Jobs;\nusing Unity.Mathematics;\nusing UnityEngine;\nusing UnityEngine.Jobs;\n\n// was: a Spinner component with its own Update on each of 10 000 objects\npublic class SpinManager : MonoBehaviour\n{\n    public Transform[] items;        // all at the scene root\n    public float degreesPerSecond = 90f;\n\n    TransformAccessArray transforms;\n\n    void Awake()\n    {\n        // TODO: create the TransformAccessArray from items\n    }\n\n    void Update()\n    {\n        foreach (var t in items)\n            t.Rotate(0f, degreesPerSecond * Time.deltaTime, 0f);\n    }\n\n    // TODO: LateUpdate and OnDestroy\n}\n\n[BurstCompile]\nstruct SpinJob : IJobParallelForTransform\n{\n    public quaternion delta;\n\n    // TODO: Execute(int index, TransformAccess transform)\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Awake\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\btransforms\\s*=\\s*new\\s+TransformAccessArray\\s*\\(\\s*items\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\(\\s*int\\s+\\w+\\s*,\\s*TransformAccess\\s+(\\w+)\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\b\\1\\s*\\.\\s*(?:localRotation|rotation)\\s*="
+    },
+    {
+     "label": "⟦⟧",
+     "re": "^\\s*(?:private\\s+)?JobHandle\\s+(\\w+)\\s*;[\\s\\S]*void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\b\\1\\s*=\\s*new\\s+SpinJob\\b[^;]*\\.\\s*Schedule\\s*\\(\\s*transforms\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "struct\\s+SpinJob(?:(?!\\b(?:struct|class)\\s+\\w+)[\\s\\S])*\\bTime\\s*\\.",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+LateUpdate\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\(\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+OnDestroy\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\(\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\btransforms\\s*\\.\\s*Dispose\\s*\\(\\s*\\)"
+    }
+   ],
+   "solution": "using Unity.Burst;\nusing Unity.Jobs;\nusing Unity.Mathematics;\nusing UnityEngine;\nusing UnityEngine.Jobs;\n\n// was: a Spinner component with its own Update on each of 10 000 objects\npublic class SpinManager : MonoBehaviour\n{\n    public Transform[] items;        // all at the scene root\n    public float degreesPerSecond = 90f;\n\n    TransformAccessArray transforms;\n    JobHandle handle;\n\n    void Awake()\n    {\n        transforms = new TransformAccessArray(items);\n    }\n\n    void Update()\n    {\n        // Time is main-thread API: compute the rotation here, pass it in\n        var delta = quaternion.RotateY(math.radians(degreesPerSecond * Time.deltaTime));\n        handle = new SpinJob { delta = delta }.Schedule(transforms);\n        JobHandle.ScheduleBatchedJobs();\n    }\n\n    void LateUpdate() => handle.Complete();\n\n    void OnDestroy()\n    {\n        handle.Complete();           // the job may still be using the transforms\n        transforms.Dispose();\n    }\n}\n\n[BurstCompile]\nstruct SpinJob : IJobParallelForTransform\n{\n    public quaternion delta;\n\n    public void Execute(int index, TransformAccess transform)\n    {\n        transform.localRotation = math.mul(transform.localRotation, delta);\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// at the start of SpinManager.Awake, before new TransformAccessArray(items):\n// 10 000 cubes at the scene root, no shared parent\nitems = new Transform[10000];\nfor (int i = 0; i < items.Length; i++)\n{\n    var go = GameObject.CreatePrimitive(PrimitiveType.Cube);\n    go.transform.position = new Vector3(i % 100, 0.5f, i / 100) * 1.5f;\n    items[i] = go.transform;\n}",
+   "lang": "cs"
+  }
+ ]
+}

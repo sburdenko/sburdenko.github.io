@@ -223,6 +223,20 @@ const CONCEPTS = {
     'Jobs Debugger': /\bJobs Debugger\b/,
     'BurstDiscard': /\bBurstDiscard\b/,
     'CompileSynchronously': /\bCompileSynchronously\b|\bSynchronous Compilation\b/,
+    'CompileFunctionPointer': /\bCompileFunctionPointer\b/,
+    'MonoPInvokeCallback': /\bMonoPInvokeCallback\b/,
+    'SharedStatic.GetOrCreate': /\bGetOrCreate\b/,
+    'static readonly': /\bstatic readonly\b/,
+    'Interlocked': /\bInterlocked\b/,
+    'ScheduleBatch': /\bScheduleBatch\b/,
+    'QueryParameters': /\bQueryParameters\b/,
+    'maxHits': /\bmaxHits\b/,
+    'batch query commands': /\b(Spherecast|Boxcast|Capsulecast|OverlapSphere|OverlapBox|OverlapCapsule|ClosestPoint)Command\b/,
+    'ColliderHit': /\bColliderHit\b/,
+    'ProfilerMarker': /\bProfilerMarker\b/,
+    'Development Build': /\bDevelopment Build\b/,
+    'Enable Safety Checks': /\bEnable Safety Checks\b/,
+    'mulps/mulss': /\bv?mul[sp]s\b/,
   }
 };
 
