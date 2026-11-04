@@ -22,7 +22,11 @@
     "title": "⟦⟧",
     "url": "https://docs.unity3d.com/Packages/com.unity.collections@2.5/manual/index.html"
    },
-   "soon": true
+   "lessons": [
+    "jobs.u2.l1",
+    "jobs.u2.l2",
+    "jobs.u2.l3"
+   ]
   },
   {
    "id": "u3",
