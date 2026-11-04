@@ -1,7 +1,7 @@
 /** Editable rigs for shortest paths. */
-import * as E from './model-e.js?v=202611040947';
-import * as V from './views-e.js?v=202611040947';
-import { defineRig, randInt, shuffle } from './rig-kit.js?v=202611040947';
+import * as E from './model-e.js?v=202611040949';
+import * as V from './views-e.js?v=202611040949';
+import { defineRig, randInt, shuffle } from './rig-kit.js?v=202611040949';
 
 const bits = (key, maxRows, maxCols) => ({ key, type: 'grid', maxRows, maxCols, maxDigit: 1 });
 const randomBits = (next, rows, cols, p) => Array.from({ length: rows }, () => Array.from({ length: cols }, () => (next() < p ? 1 : 0)));

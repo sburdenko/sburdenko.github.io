@@ -1,5 +1,5 @@
 /** Problems and C# solutions for shortest paths. */
-import { problem as p } from './problem.js?v=202611040947';
+import { problem as p } from './problem.js?v=202611040949';
 
 export const PROBLEMS_E = {
   paths: [
