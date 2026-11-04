@@ -1,0 +1,180 @@
+{
+ "id": "jobs.u4.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 24,
+ "cards": [
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "[BurstCompile]\nstruct ScoreJob : IJob\n{\n    [ReadOnly] public NativeArray<int> kills;\n    public NativeReference<int> total;\n    public string playerName;\n    public void Execute()\n    {\n        int sum = 0;\n        for (int i = 0; i < kills.Length; i++) sum += kills[i];\n        total.Value = sum;\n    }\n}",
+   "answer": 5,
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing Unity.Mathematics;\nusing UnityEngine;\n\n[BurstCompile]\nstruct VelocityJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float3> targets;\n    [ReadOnly] public NativeArray<float3> positions;\n    public NativeArray<float3> velocities;\n    public void Execute(int i) => velocities[i] = math.normalizesafe(targets[i] - positions[i]);\n}\n\n[BurstCompile]\nstruct IntegrateJob : IJobParallelFor\n{\n    public NativeArray<float3> velocities;   // TODO: this job only reads it\n    public NativeArray<float3> positions;\n    public float dt;\n    public void Execute(int i) => positions[i] += velocities[i] * dt;\n}\n\npublic class Movers : MonoBehaviour\n{\n    NativeArray<float3> targets, positions, velocities;   // Persistent, see Awake\n\n    void Update()\n    {\n        var v = new VelocityJob { targets = targets, positions = positions, velocities = velocities }\n            .Schedule(positions.Length, 64);\n        v.Complete();\n        new IntegrateJob { velocities = velocities, positions = positions, dt = Time.deltaTime }\n            .Schedule(positions.Length, 64).Complete();\n    }\n    // TODO: complete late\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "struct\\s+IntegrateJob(?:(?!struct\\s)[\\s\\S])*\\[\\s*ReadOnly\\s*\\]\\s*public\\s+NativeArray<float3>\\s+velocities"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "(\\w+)\\s*=\\s*new\\s+VelocityJob[\\s\\S]*?\\.Schedule\\s*\\([^;]*;[\\s\\S]*new\\s+IntegrateJob[\\s\\S]*?\\.Schedule\\s*\\([^;]*,\\s*(?:dependsOn\\s*:\\s*)?\\1\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "^\\s*(?:private\\s+|public\\s+)?JobHandle\\s+\\w+\\s*;",
+     "flags": "m"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "JobHandle\\.ScheduleBatchedJobs\\s*\\(\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+LateUpdate\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\s*\\(\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\s*\\(\\s*\\)",
+     "not": true
+    }
+   ],
+   "solution": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing Unity.Mathematics;\nusing UnityEngine;\n\n[BurstCompile]\nstruct VelocityJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float3> targets;\n    [ReadOnly] public NativeArray<float3> positions;\n    public NativeArray<float3> velocities;\n    public void Execute(int i) => velocities[i] = math.normalizesafe(targets[i] - positions[i]);\n}\n\n[BurstCompile]\nstruct IntegrateJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float3> velocities;\n    public NativeArray<float3> positions;\n    public float dt;\n    public void Execute(int i) => positions[i] += velocities[i] * dt;\n}\n\npublic class Movers : MonoBehaviour\n{\n    NativeArray<float3> targets, positions, velocities;   // Persistent, see Awake\n    JobHandle handle;\n    void Update()\n    {\n        var v = new VelocityJob { targets = targets, positions = positions, velocities = velocities }\n            .Schedule(positions.Length, 64);\n        handle = new IntegrateJob { velocities = velocities, positions = positions, dt = Time.deltaTime }\n            .Schedule(positions.Length, 64, v);   // runs after VelocityJob, no wait\n        JobHandle.ScheduleBatchedJobs();          // wake the workers now\n    }\n    void LateUpdate() => handle.Complete();       // the whole chain is done here\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing Unity.Mathematics;\n\nstruct Unit\n{\n    public float3 position;\n    public quaternion rotation;\n    public float damage, armor, health;\n}\n\n[BurstCompile]\nstruct DamageJob : IJobFor\n{\n    public NativeArray<Unit> units;\n    public void Execute(int i)\n    {\n        Unit u = units[i];\n        if (u.armor > 0f) u.health -= u.damage * 0.5f;\n        else u.health -= u.damage;\n        units[i] = u;\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*BurstCompile[^\\]]*\\]\\s*(?:public\\s+)?struct\\s+DamageJob\\s*:\\s*IJobFor\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "^(?=[\\s\\S]*NativeArray<float>\\s+damage\\b)(?=[\\s\\S]*NativeArray<float>\\s+armor\\b)(?=[\\s\\S]*NativeArray<float>\\s+health\\b)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*ReadOnly\\s*\\]\\s*(?:public\\s+)?NativeArray<float>\\s+(?:damage|armor)\\b[\\s\\S]*\\[\\s*ReadOnly\\s*\\]\\s*(?:public\\s+)?NativeArray<float>\\s+(?:damage|armor)\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "math\\.select\\s*\\("
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\bif\\s*\\(|\\?[^?;:]*:",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "NativeArray<\\s*Unit\\s*>",
+     "not": true
+    }
+   ],
+   "solution": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing Unity.Mathematics;\n\n// SoA: one array per field instead of an array of Unit structs;\n// position and rotation live in arrays of their own for other jobs\n// this job reads damage and armor and writes health, nothing else\n\n[BurstCompile]\nstruct DamageJob : IJobFor\n{\n    [ReadOnly] public NativeArray<float> damage;\n    [ReadOnly] public NativeArray<float> armor;\n    public NativeArray<float> health;\n\n    public void Execute(int i)\n    {\n        float full = damage[i];\n        // both values are computed, the mask picks one: no branch\n        float hit = math.select(full, full * 0.5f, armor[i] > 0f);\n        health[i] -= hit;\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// step 4, the shape to end up with\nJobHandle handle;\n\nvoid Update()\n{\n    handle = new SteerJob { /* NativeArrays, dt, maxSpeed */ }\n        .ScheduleParallel(count, 64, default);\n    JobHandle.ScheduleBatchedJobs();\n}\n\nvoid LateUpdate() => handle.Complete();\n\nvoid OnDestroy()\n{\n    handle.Complete();\n    positions.Dispose(); velocities.Dispose(); targets.Dispose();\n}",
+   "lang": "cs"
+  }
+ ]
+}

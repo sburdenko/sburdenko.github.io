@@ -27,7 +27,13 @@ export interface MatchCard { t: 'match'; q: string; pairs: [string, string][]; c
 /** Стенд: rig — имя стенда в rigs*.js, solve — действия, которые выполняют задание (проверяются тестами). */
 export interface RigCard { t: 'rig'; rig: string; task: string; goal?: any; solve?: string[]; [field: string]: any }
 
-export type Card = LearnCard | ChoiceCard | MultiCard | OrderCard | BlanksCard | TaplineCard | MatchCard | RigCard;
+/** Требование к коду карточки write: регулярное выражение по коду без комментариев; not — его быть не должно. */
+export interface WriteCheck { label: string; re: string; flags?: string; not?: boolean }
+
+/** Написать код: заготовка starter, требования checks, образец solution показывается после ошибки. */
+export interface WriteCard { t: 'write'; task: string; starter: string; checks: WriteCheck[]; solution: string; explain?: string; lang?: string }
+
+export type Card = LearnCard | ChoiceCard | MultiCard | OrderCard | BlanksCard | TaplineCard | MatchCard | RigCard | WriteCard;
 
 export interface Lesson { id: string; title: string; sub: string; minutes: number; cards: Card[] }
 

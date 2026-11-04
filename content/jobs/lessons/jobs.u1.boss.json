@@ -1,0 +1,167 @@
+{
+ "id": "jobs.u1.boss",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 22,
+ "boss": true,
+ "cards": [
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "IJob"],
+    ["⟦⟧", "IJobParallelFor"],
+    ["⟦⟧", "IJobParallelForTransform"],
+    ["⟦⟧", "IJobFor"],
+    ["⟦⟧", "IJobEntity"]
+   ]
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "void Update()\n{\n    var job = new MoveJob { positions = positions, dt = Time.deltaTime };\n    handle = job.ScheduleParallel(positions.Length, 64, default);\n    JobHandle.ScheduleBatchedJobs();\n    Debug.Log(positions[0]);\n}\n\nvoid LateUpdate()\n{\n    handle.Complete();\n}",
+   "answer": 5,
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing Unity.Mathematics;\n\n// TODO: [BurstCompile] struct HealJob : IJobFor\n\nstatic class Healing\n{\n    public static JobHandle Schedule(NativeArray<float> hp, NativeArray<float> regen,\n                                     float dt, float maxHp, JobHandle dependsOn)\n    {\n        // TODO: create HealJob and schedule it in parallel\n        return dependsOn;\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*BurstCompile[^\\]]*\\]\\s*(?:(?:public|internal)\\s+)?struct\\s+HealJob\\s*:\\s*IJobFor\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*ReadOnly\\s*\\]\\s*(?:public\\s+)?NativeArray\\s*<\\s*float\\s*>\\s+regen\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\(\\s*int\\s+(\\w+)\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*hp\\s*\\[\\s*\\1\\s*\\]\\s*=[^;]*math\\.min\\s*\\("
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\([^)]*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\bfor\\s*\\(",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\.ScheduleParallel\\s*\\(\\s*hp\\.Length\\s*,\\s*\\d+\\s*,\\s*dependsOn\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "return\\s+dependsOn\\s*;",
+     "not": true
+    }
+   ],
+   "solution": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing Unity.Mathematics;\n\n[BurstCompile]\nstruct HealJob : IJobFor\n{\n    public NativeArray<float> hp;\n    [ReadOnly] public NativeArray<float> regen;\n    public float dt, maxHp;\n\n    public void Execute(int i)\n    {\n        hp[i] = math.min(hp[i] + regen[i] * dt, maxHp);\n    }\n}\n\nstatic class Healing\n{\n    public static JobHandle Schedule(NativeArray<float> hp, NativeArray<float> regen,\n                                     float dt, float maxHp, JobHandle dependsOn)\n    {\n        var job = new HealJob { hp = hp, regen = regen, dt = dt, maxHp = maxHp };\n        return job.ScheduleParallel(hp.Length, 64, dependsOn);   // many workers, batches of 64\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing UnityEngine;\nusing UnityEngine.Jobs;\n\npublic class Mover : MonoBehaviour\n{\n    TransformAccessArray transforms;     // filled in Awake\n    NativeArray<Vector3> velocity;       // Allocator.Persistent\n    JobHandle handle;\n\n    void Update()\n    {\n        // TODO: schedule VelocityJob over transforms\n    }\n\n    void LateUpdate()\n    {\n        // TODO: wait for the job\n    }\n}\n\n// TODO: [BurstCompile] struct VelocityJob : IJobParallelForTransform",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*BurstCompile[^\\]]*\\]\\s*(?:(?:public|internal)\\s+)?struct\\s+VelocityJob\\s*:\\s*IJobParallelForTransform\\b"
+    },
+    {
+     "label": "Execute(int index, TransformAccess transform)",
+     "re": "void\\s+Execute\\s*\\(\\s*int\\s+\\w+\\s*,\\s*TransformAccess\\s+\\w+\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*ReadOnly\\s*\\]\\s*(?:public\\s+)?NativeArray\\s*<\\s*Vector3\\s*>\\s+velocity\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Schedule\\s*\\(\\s*transforms\\b(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*JobHandle\\.ScheduleBatchedJobs\\s*\\(\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+LateUpdate\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\s*\\(\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\s*\\(\\s*\\)",
+     "not": true
+    }
+   ],
+   "solution": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing UnityEngine;\nusing UnityEngine.Jobs;\n\npublic class Mover : MonoBehaviour\n{\n    TransformAccessArray transforms;     // filled in Awake\n    NativeArray<Vector3> velocity;       // Allocator.Persistent\n    JobHandle handle;\n\n    void Update()\n    {\n        var job = new VelocityJob { velocity = velocity, dt = Time.deltaTime };\n        handle = job.Schedule(transforms);\n        JobHandle.ScheduleBatchedJobs();   // wake the workers now\n    }\n\n    void LateUpdate()\n    {\n        handle.Complete();                 // the transforms are written by now\n    }\n}\n\n[BurstCompile]\nstruct VelocityJob : IJobParallelForTransform\n{\n    [ReadOnly] public NativeArray<Vector3> velocity;\n    public float dt;\n\n    public void Execute(int index, TransformAccess transform)\n    {\n        transform.position += velocity[index] * dt;\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public class Swarm : MonoBehaviour\n{\n    const int Count = 200_000;\n    NativeArray<float3> pos, vel;\n    JobHandle handle;\n\n    void Awake()\n    {\n        pos = new NativeArray<float3>(Count, Allocator.Persistent);\n        vel = new NativeArray<float3>(Count, Allocator.Persistent);\n    }\n\n    void OnDestroy()\n    {\n        handle.Complete();   // never free memory a job may still use\n        pos.Dispose();\n        vel.Dispose();\n    }\n}",
+   "lang": "cs"
+  }
+ ]
+}

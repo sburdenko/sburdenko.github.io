@@ -105,7 +105,8 @@ const SHAPE = {
   blanks: { need: { q: is.str, code: is.str, tiles: is.strs, answer: is.strs }, may: { explain: is.str, lang: is.str } },
   tapline: { need: { q: is.str, code: is.str, answer: is.num }, may: { explain: is.str, lang: is.str } },
   match: { need: { q: is.str, pairs: is.pairs }, may: { code: is.str, lang: is.str } },
-  rig: { need: { rig: is.str, task: is.str }, may: null }   // у стендов своя форма полей
+  rig: { need: { rig: is.str, task: is.str }, may: null },   // у стендов своя форма полей
+  write: { need: { task: is.str, starter: is.str, checks: v => Array.isArray(v) && v.length > 0 && v.every(c => is.str(c.label) && is.str(c.re)), solution: is.str }, may: { explain: is.str, lang: is.str } }
 };
 
 for (const id of courses) {

@@ -1,0 +1,127 @@
+{
+ "id": "jobs.u3.l7",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 15,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// every frame: gather from objects, compute, scatter back\nfor (int i = 0; i < enemies.Count; i++)\n    pos[i] = enemies[i].transform.position;          // main thread, one by one\n\nvar h = new SteerJob { pos = pos, vel = vel }.Schedule(enemies.Count, 64);\nh.Complete();                                        // the job itself: 0.1 ms\n\nfor (int i = 0; i < enemies.Count; i++)\n    enemies[i].transform.position = pos[i];          // main thread again\n\n// if the two loops cost 2 ms, Burst sped up the cheap part",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// 16 elements: the work is cheaper than scheduling it\n// 1) plain C#: often the right answer\nfor (int i = 0; i < slots.Length; i++) slots[i].Refresh();\n\n// 2) the same Burst job, but Run(): no queue, no threads\nnew ScoreJob { scores = scores }.Run(scores.Length);\n\n// 3) a Burst static method called directly from the main thread\n[BurstCompile]\nstatic class Score\n{\n    [BurstCompile]\n    public static unsafe float Sum(float* data, int count)   // no NativeArray here\n    {\n        float s = 0f;\n        for (int i = 0; i < count; i++) s += data[i];\n        return s;\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// a poor Burst candidate: branches, strings, Unity API, events\nvoid Think(Npc npc)\n{\n    if (npc.Quest != null && npc.Quest.State == \"active\")\n        ui.ShowHint(npc.Quest.Title);\n    var target = FindObjectsByType<Player>(FindObjectsSortMode.None)[0];  // every frame\n    if (npc.GetComponent<Health>().Value < 10) npc.Flee(target);\n}\n\n// a good one: the numeric core over arrays\n[BurstCompile]\nstruct ThreatJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float3> npcPos;\n    public float3 playerPos;\n    [WriteOnly] public NativeArray<float> threat;\n    public void Execute(int i) => threat[i] = 1f / (1f + math.distancesq(npcPos[i], playerPos));\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// a thin managed shell, a Burst core inside\npublic class CrowdSystem : MonoBehaviour\n{\n    NativeArray<float3> pos, vel;            // Persistent, owned here only\n    JobHandle handle;\n\n    void Update()   { handle = new SteerJob { pos = pos, vel = vel }.Schedule(pos.Length, 64); }\n    void LateUpdate() { handle.Complete(); }\n    void OnDestroy() { handle.Complete(); pos.Dispose(); vel.Dispose(); }\n}\n\n// the core is plain math with no Unity API: easy to test with Burst off,\n// where the same code runs as ordinary C#",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "using Unity.Profiling;\n\npublic class CrowdSystem : MonoBehaviour\n{\n    // created once; the name is what you will see in the Profiler\n    static readonly ProfilerMarker s_Steer = new ProfilerMarker(\"Crowd.Steer\");\n\n    void Update()\n    {\n        using (s_Steer.Auto())      // Begin here, End at the closing brace\n        {\n            SteerAll();\n        }\n        MoveAll();\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "void Update()\n{\n    var enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);\n    for (int i = 0; i < enemies.Length; i++)\n        pos[i] = enemies[i].transform.position;\n    new SteerJob { pos = pos, vel = vel }.Run(enemies.Length);\n    for (int i = 0; i < enemies.Length; i++)\n        enemies[i].transform.position = pos[i];\n}",
+   "answer": 2,
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using System.Diagnostics;\nusing UnityEngine;\n\npublic class Crowd : MonoBehaviour\n{\n    // TODO: a marker named \"Crowd.Steer\"\n\n    void Update()\n    {\n        var sw = Stopwatch.StartNew();\n        SteerAll();\n        UnityEngine.Debug.Log($\"Steer: {sw.Elapsed.TotalMilliseconds} ms\");\n        MoveAll();\n    }\n\n    void SteerAll() { /* ... */ }\n    void MoveAll() { /* ... */ }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "using\\s+Unity\\.Profiling\\s*;"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "(?:static\\s+readonly|readonly\\s+static)\\s+ProfilerMarker\\s+\\w+\\s*=\\s*new\\s*(?:ProfilerMarker\\s*)?\\(\\s*\"Crowd\\.Steer\"\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\busing\\s*(?:\\(\\s*)?(?:var\\s+\\w+\\s*=\\s*)?\\w+\\s*\\.\\s*Auto\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\bSteerAll\\s*\\("
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\bnew\\s+ProfilerMarker\\b",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\bStopwatch\\b|\\bDebug\\s*\\.\\s*Log\\s*\\(",
+     "not": true
+    }
+   ],
+   "solution": "using Unity.Profiling;\nusing UnityEngine;\n\npublic class Crowd : MonoBehaviour\n{\n    static readonly ProfilerMarker s_Steer = new ProfilerMarker(\"Crowd.Steer\");\n\n    void Update()\n    {\n        using (s_Steer.Auto())      // visible in the Profiler, no allocation\n        {\n            SteerAll();\n        }\n        MoveAll();\n    }\n\n    void SteerAll() { /* ... */ }\n    void MoveAll() { /* ... */ }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

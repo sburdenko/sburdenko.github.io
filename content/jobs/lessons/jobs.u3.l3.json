@@ -1,0 +1,130 @@
+{
+ "id": "jobs.u3.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 15,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "float big = 1e8f;\nfloat a = (big + 1f) - big;   // 0: 1e8 + 1 rounds back to 1e8\nfloat b = (big - big) + 1f;   // 1: the same numbers in another order\n\n// a vectorized sum is 8 partial sums added up at the end: another order\n// a * b + c as one FMA instruction: one rounding instead of two\n// sin, exp, pow: each library and instruction set has its own approximation",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// Strict: two roundings, round(round(a * b) + c)\nfloat r1 = a * b + c;\n\n// one rounding, round(a * b + c): more accurate, but different bits\n// Fast may fuse r1 into an FMA too; math.mad says so explicitly:\n// \"with fast math on some architectures it could be converted to an FMA\"\nfloat r2 = math.mad(a, b, c);",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]                                        // FloatMode.Default = Strict\nstruct PhysicsStepJob : IJob { public void Execute() { } }\n\n[BurstCompile(FloatMode = FloatMode.Fast)]           // reorder, reciprocals, FMA\nstruct SparksJob : IJob { public void Execute() { } }\n\n[BurstCompile(FloatMode = FloatMode.Deterministic)]  // Burst 1.8.25+, 64-bit only\nstruct LockstepJob : IJob { public void Execute() { } }\n\n// a default for a whole assembly, written above the types in a file:\n// [assembly: BurstCompile(FloatMode = FloatMode.Deterministic)]",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// FloatPrecision: how accurate math.sin, math.exp, math.pow... are, in ulp\n[BurstCompile(FloatPrecision.Low, FloatMode.Fast)]   // a visual effect\nstruct WaveJob : IJobParallelFor\n{\n    public NativeArray<float3> points;\n    public float time;\n    public void Execute(int i)\n    {\n        float3 p = points[i];\n        p.y = math.sin(p.x + time);   // Low: up to 350 ulp for sin\n        points[i] = p;\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["FloatMode.Strict", "⟦⟧"],
+    ["FloatMode.Fast", "⟦⟧"],
+    ["FloatMode.Deterministic", "⟦⟧"],
+    ["FloatPrecision.Low", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// same inputs, same order, same build and CPU: the same bits every run\n// NOT promised in Strict or Fast: x64 vs ARM64, an SSE4 vs an AVX2 code path,\n// Burst vs Mono/IL2CPP for the same formula\n\n// the order is yours to fix; no FloatMode does it for you\nNativeQueue<float> hits;   // filled from a parallel job via ParallelWriter\nfloat total = 0f;\nwhile (hits.TryDequeue(out float d))\n    total += d;            // arrival order differs between runs: so does the sum",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// 16.16 fixed point: the value times 65536, stored in an int\npublic struct Fix\n{\n    public int raw;\n    public static Fix FromInt(int v) => new Fix { raw = v << 16 };\n    public static Fix operator +(Fix a, Fix b) => new Fix { raw = a.raw + b.raw };\n    public static Fix operator *(Fix a, Fix b)\n        => new Fix { raw = (int)(((long)a.raw * b.raw) >> 16) };\n}\n// integer math gives the same bits on every CPU and in every runtime;\n// the price: a narrow range, overflow, and your own sqrt and sin",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing Unity.Mathematics;\n\n// sparks: purely visual, speed over accuracy\n[BurstCompile]   // TODO\nstruct ParticleJob : IJobParallelFor\n{\n    public NativeArray<float3> pos;\n    [ReadOnly] public NativeArray<float3> vel;\n    public float dt;\n    public void Execute(int i) => pos[i] += vel[i] * dt;\n}\n\n// lockstep simulation: every 64-bit client must get the same bits\n[BurstCompile]   // TODO\nstruct SimStepJob : IJob\n{\n    public NativeArray<float3> unitPos;\n    public float dt;\n    public void Execute()\n    {\n        for (int i = 0; i < unitPos.Length; i++)\n            unitPos[i] += new float3(0f, 0f, 1f) * dt;\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*BurstCompile\\s*\\([^)]*FloatMode\\.Fast[^)]*\\)\\s*\\]\\s*(?:public\\s+)?struct\\s+ParticleJob\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*BurstCompile\\s*\\([^)]*FloatPrecision\\.Low[^)]*\\)\\s*\\]\\s*(?:public\\s+)?struct\\s+ParticleJob\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*BurstCompile\\s*\\([^)]*FloatMode\\.Deterministic[^)]*\\)\\s*\\]\\s*(?:public\\s+)?struct\\s+SimStepJob\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*BurstCompile\\s*\\]\\s*(?:public\\s+)?struct\\s+(?:ParticleJob|SimStepJob)\\b",
+     "not": true
+    }
+   ],
+   "solution": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing Unity.Mathematics;\n\n// sparks: purely visual, speed over accuracy\n[BurstCompile(FloatPrecision.Low, FloatMode.Fast)]\nstruct ParticleJob : IJobParallelFor\n{\n    public NativeArray<float3> pos;\n    [ReadOnly] public NativeArray<float3> vel;\n    public float dt;\n    public void Execute(int i) => pos[i] += vel[i] * dt;\n}\n\n// lockstep simulation: every 64-bit client must get the same bits\n[BurstCompile(FloatMode = FloatMode.Deterministic)]\nstruct SimStepJob : IJob\n{\n    public NativeArray<float3> unitPos;\n    public float dt;\n    public void Execute()\n    {\n        for (int i = 0; i < unitPos.Length; i++)\n            unitPos[i] += new float3(0f, 0f, 1f) * dt;\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "title": "Jobs + Burst for the interview",
+ "units/0/title": "Basics: jobs and Burst",
+ "units/0/blurb": "Two separate things — threads and a compiler, what Burst can and cannot compile, the kinds of jobs and Schedule versus Run versus Complete. This is where they check you have really used them.",
+ "units/0/source/title": "Unity Manual: Job system",
+ "units/1/title": "Data, safety and dependencies",
+ "units/1/blurb": "How data gets into a job and back, the safety system and races, the dependency graph, allocators and leaks, writing from a parallel job and batchSize. This is where mid-levels drop out.",
+ "units/1/source/title": "Collections package manual",
+ "units/2/title": "Deeper: how Burst makes code fast",
+ "units/2/blurb": "Vectorization and the Burst Inspector, SoA versus AoS, float determinism, debugging Burst, FunctionPointer and SharedStatic, transforms and physics from jobs, and when Burst is not worth it.",
+ "units/2/source/title": "Burst package manual",
+ "units/3/title": "Entities and how to answer at the interview",
+ "units/3/blurb": "Entities on top of Jobs and Burst, structural changes and sync points, the hybrid with GameObjects and honest limits, and how to talk about your own experience so they recognise one of their own.",
+ "units/3/source/title": "Entities package manual"
+}

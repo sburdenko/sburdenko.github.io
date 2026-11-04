@@ -1,0 +1,134 @@
+{
+ "id": "jobs.u2.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 13,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct SumJob : IJob\n{\n    [ReadOnly] public NativeArray<float> input;\n    public float sum;                 // lives in the job's copy\n\n    public void Execute()\n    {\n        for (int i = 0; i < input.Length; i++)\n            sum += input[i];\n    }\n}\n\nvar job = new SumJob { input = input };\njob.Schedule().Complete();\nDebug.Log(job.sum);                   // 0: the job summed into its own copy",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "struct GoodJob : IJob\n{\n    public NativeArray<float3> positions;  // a container: points to shared memory\n    public float dt;                       // plain values are copied\n    public int count;\n    public bool loop;                      // works in practice\n    public FixedString64Bytes label;       // a string with no heap\n    public void Execute() { }\n}\n\nstruct BadJob : IJob\n{\n    public float[] values;     // managed array\n    public string name;        // reference type\n    public Transform target;   // UnityEngine object\n    public List<int> ids;      // managed collection\n    public void Execute() { }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["NativeArray<float3> positions", "⟦⟧", "string name", "int[] ids", "FixedString64Bytes label", "GameObject target"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧",
+   "code": "[BurstCompile]\nstruct SumJob : IJob\n{\n    [ReadOnly] public NativeArray<float> input;\n    public NativeReference<float> result;   // one value in native memory\n\n    public void Execute()\n    {\n        float s = 0f;\n        for (int i = 0; i < input.Length; i++)\n            s += input[i];\n        result.Value = s;                    // lands in shared memory\n    }\n}\n\nvar result = new NativeReference<float>(Allocator.TempJob);\nnew SumJob { input = input, result = result }.Schedule().Complete();\nfloat total = result.Value;                 // read after Complete()\nresult.Dispose();",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct DamageJob : IJobParallelFor\n{\n    [ReadOnly]  public NativeArray<float> armor;  // read only: other jobs may read it too\n    [WriteOnly] public NativeArray<float> dealt;  // written only: reading it throws\n    public NativeArray<float> hp;                 // read and written: exclusive\n    public float damage;\n\n    public void Execute(int i)\n    {\n        float d = math.max(0f, damage - armor[i]);\n        dealt[i] = d;\n        hp[i] -= d;\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "struct CountJob : IJob\n{\n    [___] public NativeArray<int> ids;\n    public ___<int> count;\n\n    public void Execute()\n    {\n        int n = 0;\n        for (int i = 0; i < ids.Length; i++)\n            if (ids[i] > 0) n++;\n        count.___ = n;\n    }\n}",
+   "lang": "cs",
+   "tiles": ["ReadOnly", "WriteOnly", "NativeReference", "NativeArray", "Value", "Length"],
+   "answer": ["ReadOnly", "NativeReference", "Value"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "[BurstCompile]\nstruct HealJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float> regen;\n    [ReadOnly] public NativeArray<float> hp;\n    public float dt;\n\n    public void Execute(int i)\n    {\n        float add = regen[i] * dt;\n        hp[i] = math.min(100f, hp[i] + add);\n    }\n}",
+   "answer": 10,
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "var a = new SpeedJob  { positions = positions, speeds = speeds };\nvar b = new BoundsJob { positions = positions, bounds = bounds };\nJobHandle ha = a.Schedule(positions.Length, 64);\nJobHandle hb = b.Schedule();   // no dependency on ha\n// in both structs: public NativeArray<float3> positions;  (no [ReadOnly])",
+   "lang": "cs",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "[BurstCompile]\nstruct SumJob : IJob\n{\n    public NativeArray<float> input;\n    public float sum;\n\n    public void Execute()\n    {\n        for (int i = 0; i < input.Length; i++)\n            sum += input[i];\n    }\n}\n\npublic static class Stats\n{\n    public static float Sum(NativeArray<float> input)\n    {\n        var job = new SumJob { input = input };\n        job.Schedule().Complete();\n        return job.sum;   // TODO: always 0\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*ReadOnly\\s*\\]\\s*public\\s+NativeArray\\s*<\\s*float\\s*>"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "struct\\s+SumJob(?:(?!\\b(?:struct|class)\\b)[\\s\\S])*public\\s+NativeReference\\s*<\\s*float\\s*>\\s+\\w+\\s*;"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\(\\s*\\)(?:(?!\\b(?:struct|class)\\b)[\\s\\S])*\\.Value\\s*\\+?=(?!=)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "struct\\s+SumJob(?:(?!\\b(?:struct|class)\\b)[\\s\\S])*public\\s+float\\s+\\w+\\s*;",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "new\\s*(?:NativeReference\\s*<\\s*float\\s*>\\s*)?\\([^;]*Allocator\\.TempJob\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\.Complete\\(\\)[\\s\\S]*=\\s*\\w+\\.Value\\s*;[\\s\\S]*\\.Dispose\\(\\s*\\)"
+    }
+   ],
+   "solution": "[BurstCompile]\nstruct SumJob : IJob\n{\n    [ReadOnly] public NativeArray<float> input;\n    public NativeReference<float> result;\n\n    public void Execute()\n    {\n        float s = 0f;\n        for (int i = 0; i < input.Length; i++) s += input[i];\n        result.Value = s;   // one write to shared native memory\n    }\n}\n\npublic static class Stats\n{\n    public static float Sum(NativeArray<float> input)\n    {\n        var result = new NativeReference<float>(Allocator.TempJob);\n        new SumJob { input = input, result = result }.Schedule().Complete();\n        float total = result.Value;   // read only after Complete()\n        result.Dispose();             // TempJob: free it yourself\n        return total;\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

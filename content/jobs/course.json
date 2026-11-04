@@ -1,0 +1,75 @@
+{
+ "id": "jobs",
+ "title": "⟦⟧",
+ "units": [
+  {
+   "id": "u1",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://docs.unity3d.com/6000.0/Documentation/Manual/job-system.html"
+   },
+   "lessons": [
+    "jobs.u1.l1",
+    "jobs.u1.l2",
+    "jobs.u1.l3",
+    "jobs.u1.l4",
+    "jobs.u1.boss"
+   ]
+  },
+  {
+   "id": "u2",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://docs.unity3d.com/Packages/com.unity.collections@2.5/manual/index.html"
+   },
+   "lessons": [
+    "jobs.u2.l1",
+    "jobs.u2.l2",
+    "jobs.u2.l3",
+    "jobs.u2.l4",
+    "jobs.u2.l5",
+    "jobs.u2.l6",
+    "jobs.u2.boss"
+   ]
+  },
+  {
+   "id": "u3",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://docs.unity3d.com/Packages/com.unity.burst@1.8/manual/index.html"
+   },
+   "lessons": [
+    "jobs.u3.l1",
+    "jobs.u3.l2",
+    "jobs.u3.l3",
+    "jobs.u3.l4",
+    "jobs.u3.l5",
+    "jobs.u3.l6",
+    "jobs.u3.l7",
+    "jobs.u3.boss"
+   ]
+  },
+  {
+   "id": "u4",
+   "title": "⟦⟧",
+   "blurb": "⟦⟧",
+   "source": {
+    "title": "⟦⟧",
+    "url": "https://docs.unity3d.com/Packages/com.unity.entities@1.3/manual/index.html"
+   },
+   "lessons": [
+    "jobs.u4.l1",
+    "jobs.u4.l2",
+    "jobs.u4.l3",
+    "jobs.u4.l4",
+    "jobs.u4.boss"
+   ]
+  }
+ ]
+}

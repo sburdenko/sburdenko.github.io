@@ -1,0 +1,147 @@
+{
+ "id": "jobs.u3.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 17,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// Jobs > Burst > Enable Compilation off: every job runs as plain C#\n[BurstCompile]\nstruct SpawnJob : IJob\n{\n    public NativeArray<float3> points;\n    public void Execute()\n    {\n        for (int i = 0; i < points.Length; i++)\n            points[i] = Place(i);   // a managed breakpoint works here\n    }\n    static float3 Place(int i) => new float3(i, 0f, 0f);\n}\n\n// the Editor compiles Burst in the background: early frames may run managed code;\n// for profiling or a Burst-vs-managed comparison, wait for it\n[BurstCompile(CompileSynchronously = true)]\nstruct WarmJob : IJob { public void Execute() { } }",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// Edit > Preferences > Jobs > Use Job Threads off:\n// every job runs on the main thread right when it is scheduled.\n// The same from code (0 workers), and back to automatic:\nJobsUtility.JobWorkerCount = 0;\nJobsUtility.ResetJobWorkerCount();\n\n// or a single job: the same Execute, the same Burst code, no threads\nnew SpawnJob { points = points }.Run();",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// this job only: no optimizations, with debug info; players respect it too\n[BurstCompile(Debug = true)]\nstruct SpawnJob : IJob { public void Execute() { } }\n\n// all Burst code at once: Jobs > Burst > Native Debug Mode Compilation,\n// then attach a native debugger (Visual Studio, Xcode) to the Editor or the player.\n// Player: Development Build or Force Debug Information, symbols in lib_burst_generated\n\n// a code breakpoint that Burst supports\nSystem.Diagnostics.Debugger.Break();",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct ScanJob : IJob\n{\n    public NativeArray<float3> pos;\n    public FixedString64Bytes label;   // text in a field: only FixedString\n\n    public void Execute()\n    {\n        int i = 7;\n        float3 p = pos[i];\n        Debug.Log(\"scan started\");      // a literal: fine\n        Debug.Log($\"pos[{i}] = {p}\");    // int and float3 arguments: fine\n        // Debug.Log(\"pos \" + p);       // concatenation: not supported\n        LogManaged(i);                  // does nothing under Burst\n    }\n\n    [BurstDiscard]   // left out of Burst compilation; must return void\n    static void LogManaged(int i) => Debug.Log(System.DateTime.Now + \" \" + i);\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "Debug.Log(\"done\")", "⟦⟧"],
+   "answer": [0, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct HealJob : IJob\n{\n    public NativeArray<float> hp;\n    public float amount;\n\n    public void Execute()\n    {\n        CheckAmount(amount);   // the call disappears from player builds\n        for (int i = 0; i < hp.Length; i++) hp[i] += amount;\n    }\n\n    // System.Diagnostics, not UnityEngine: both have a Debug class\n    [System.Diagnostics.Conditional(\"ENABLE_UNITY_COLLECTIONS_CHECKS\")]\n    static void CheckAmount(float a)\n    {\n        if (!(a >= 0f))\n            throw new System.ArgumentException(\"amount must be >= 0\");\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// Edit > Preferences > Jobs > Leak Detection Level, or from code:\nNativeLeakDetection.Mode = NativeLeakDetectionMode.EnabledWithStackTrace;\n\nNativeArray<float> buffer;\nvoid Awake()     => buffer = new NativeArray<float>(1024, Allocator.Persistent);\nvoid OnDestroy() { if (buffer.IsCreated) buffer.Dispose(); }   // forget it: a leak",
+   "lang": "cs"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct CollideJob : IJob\n{\n    static readonly ProfilerMarker s_Broad = new ProfilerMarker(\"Collide.Broad\");\n\n    public void Execute()\n    {\n        using (s_Broad.Auto())   // a named block inside the job in the Profiler Timeline\n        {\n            // broad phase ...\n        }\n    }\n}\n// measuring in the Editor: Jobs Debugger and Safety Checks add their own cost;\n// final numbers come from a player build",
+   "lang": "cs"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing UnityEngine;\n\n[BurstCompile]\nstruct ApplyDamageJob : IJob\n{\n    public NativeArray<float> hp;\n    public int target;\n    public float damage;\n\n    public void Execute()\n    {\n        // TODO: move the check into CheckIndex, fix the log\n        if (target < 0 || target >= hp.Length)\n            throw new System.ArgumentOutOfRangeException(\"target\");\n        hp[target] -= damage;\n        Debug.Log(\"hp left: \" + hp[target]);\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "Conditional\\s*\\(\\s*\"ENABLE_UNITY_COLLECTIONS_CHECKS\"\\s*\\)\\s*\\]\\s*(?:(?:private|public|internal)\\s+)?static\\s+void\\s+CheckIndex\\s*\\("
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+CheckIndex\\s*\\([^)]*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\bthrow\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\([^)]*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\bCheckIndex\\s*\\("
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\([^)]*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\bthrow\\b",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "Debug\\.Log\\s*\\(\\s*\\$\""
+    },
+    {
+     "label": "⟦⟧",
+     "re": "Debug\\.Log\\s*\\([^;]*\"\\s*\\+",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "^\\s*using\\s+System\\.Diagnostics\\s*;",
+     "not": true
+    }
+   ],
+   "solution": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing UnityEngine;\n\n[BurstCompile]\nstruct ApplyDamageJob : IJob\n{\n    public NativeArray<float> hp;\n    public int target;\n    public float damage;\n\n    public void Execute()\n    {\n        CheckIndex(target, hp.Length);   // compiled out of player builds\n        hp[target] -= damage;\n        Debug.Log($\"hp left: {hp[target]}\");\n    }\n\n    [System.Diagnostics.Conditional(\"ENABLE_UNITY_COLLECTIONS_CHECKS\")]\n    static void CheckIndex(int index, int length)\n    {\n        if (index < 0 || index >= length)\n            throw new System.ArgumentOutOfRangeException(\"index\");\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

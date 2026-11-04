@@ -1,0 +1,124 @@
+{
+ "id": "jobs.u1.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 14,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct SortJob : IJob\n{\n    public NativeArray<int> values;\n    public void Execute() => values.Sort();   // one Execute, one worker thread\n}\n\nJobHandle h = new SortJob { values = values }.Schedule();",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct ScaleJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float> input;\n    public NativeArray<float> output;\n    public float k;\n\n    public void Execute(int index)\n    {\n        output[index] = input[index] * k;   // only your own index\n    }\n}\n\nJobHandle h = new ScaleJob { input = input, output = output, k = 2f }\n    .Schedule(input.Length, 64);            // length, batch size",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct DecayJob : IJobFor\n{\n    public NativeArray<float> heat;\n    public float k;\n    public void Execute(int i) => heat[i] *= k;\n}\n\nvar job = new DecayJob { heat = heat, k = 0.95f };\njob.Run(heat.Length);                                     // main thread, in order\nJobHandle a = job.Schedule(heat.Length, default);         // one worker, in order\nJobHandle b = job.ScheduleParallel(heat.Length, 64, a);   // many workers, in batches",
+   "lang": "cs"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["IJob: Schedule()", "⟦⟧"],
+    ["IJobFor: Run(n)", "⟦⟧"],
+    ["IJobFor: Schedule(n, dep)", "⟦⟧"],
+    ["IJobFor: ScheduleParallel(n, 64, dep)", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct VelocityJob : IJobParallelForTransform\n{\n    [ReadOnly] public NativeArray<Vector3> velocity;\n    public float dt;\n\n    public void Execute(int index, TransformAccess transform)\n    {\n        transform.position += velocity[index] * dt;\n    }\n}\n\nvar transforms = new TransformAccessArray(bulletTransforms);   // Transform[]; Dispose() later\nJobHandle h = new VelocityJob { velocity = velocity, dt = Time.deltaTime }\n    .Schedule(transforms);",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing Unity.Mathematics;\n\n[BurstCompile]\nstruct DistanceJob : IJob\n{\n    [ReadOnly] public NativeArray<float3> positions;\n    public NativeArray<float> distances;\n    public float3 target;\n\n    public void Execute()\n    {\n        for (int i = 0; i < positions.Length; i++)\n            distances[i] = math.distance(positions[i], target);\n    }\n}\n\nstatic class DistanceScheduler\n{\n    public static JobHandle ScheduleDistances(NativeArray<float3> positions, NativeArray<float> distances, float3 target)\n    {\n        var job = new DistanceJob { positions = positions, distances = distances, target = target };\n        return job.Schedule();   // TODO: schedule over the array\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*BurstCompile[^\\]]*\\]\\s*(?:(?:public|internal)\\s+)?struct\\s+DistanceJob\\s*:\\s*IJobParallelFor\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\(\\s*int\\s+\\w+\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\(\\s*int\\s+(\\w+)\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*distances\\s*\\[\\s*\\1\\s*\\]\\s*=(?!=)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\([^)]*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\bfor\\s*\\(",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\.Schedule\\s*\\(\\s*(?:arrayLength\\s*:\\s*)?\\w+\\.Length\\s*,\\s*(?:innerloopBatchCount\\s*:\\s*)?\\d+"
+    }
+   ],
+   "solution": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing Unity.Mathematics;\n\n[BurstCompile]\nstruct DistanceJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float3> positions;\n    public NativeArray<float> distances;\n    public float3 target;\n\n    public void Execute(int index)   // one element per call\n    {\n        distances[index] = math.distance(positions[index], target);\n    }\n}\n\nstatic class DistanceScheduler\n{\n    public static JobHandle ScheduleDistances(NativeArray<float3> positions, NativeArray<float> distances, float3 target)\n    {\n        var job = new DistanceJob { positions = positions, distances = distances, target = target };\n        return job.Schedule(positions.Length, 64);   // length, batch size\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// Entities 1.x: Execute runs for every entity with LocalTransform and Speed\n[BurstCompile]\npartial struct MoveJob : IJobEntity\n{\n    public float dt;\n    void Execute(ref LocalTransform transform, in Speed speed)\n    {\n        transform.Position.y += speed.Value * dt;\n    }\n}\n\n// in ISystem.OnUpdate:\nnew MoveJob { dt = SystemAPI.Time.DeltaTime }.ScheduleParallel();",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "[BurstCompile]\nstruct DecayJob : ___\n{\n    public NativeArray<float> heat;\n    public void Execute(___ i) => heat[i] *= 0.95f;\n}\n\nJobHandle h = new DecayJob { heat = heat }.___(heat.Length, 64, default);",
+   "tiles": ["IJobFor", "IJob", "int", "float", "ScheduleParallel", "Schedule"],
+   "answer": ["IJobFor", "int", "ScheduleParallel"],
+   "lang": "cs",
+   "explain": "⟦⟧"
+  }
+ ]
+}

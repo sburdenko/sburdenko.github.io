@@ -6,9 +6,9 @@
  * ответили верно. Карточки без ответа (learn, rig) просто пролистываются. В match ошибки
  * видны сразу на карточке, поэтому она считается ошибочной, но повторно не ставится.
  */
-import { rng } from '../assets/rand.js?v=202611032107';
+import { rng } from '../assets/rand.js?v=202611041010';
 
-export const GRADED = new Set(['choice', 'multi', 'order', 'blanks', 'tapline']);
+export const GRADED = new Set(['choice', 'multi', 'order', 'blanks', 'tapline', 'write']);
 export const TYPES = new Set([...GRADED, 'learn', 'rig', 'match']);
 
 /** Перемешивание Фишера–Йетса по seed: один seed — один порядок. */
@@ -37,8 +37,8 @@ const sameSet = (a, b) => Array.isArray(a) && a.length === b.length && b.every(v
 /**
  * Проверка ответа. input — в исходных индексах карточки, не в индексах показа:
  * choice/tapline — число, multi — массив индексов, order — массив индексов items
- * в том порядке, как их расставил человек, blanks — массив строк по пропускам.
- * @param {{ t: string, answer?: any, items?: string[] }} card — достаточно полей t, answer и items
+ * в том порядке, как их расставил человек, blanks — массив строк по пропускам, write — текст кода.
+ * @param {{ t: string, answer?: any, items?: string[], checks?: { re: string, flags?: string, not?: boolean }[] }} card — поля t, answer, items или checks
  * @param {any} [input]
  * @returns {boolean}
  */
@@ -48,8 +48,27 @@ export function check(card, input) {
     case 'multi': return sameSet(input, card.answer);
     case 'order': return sameList(input, card.items.map((_, i) => i));
     case 'blanks': return sameList(input, card.answer);
+    case 'write': return writeResults(card, input).every(Boolean);
     default: return true;
   }
+}
+
+/**
+ * Код без комментариев: требование карточки write не должно выполняться закомментированной строкой.
+ * @param {string} src
+ */
+export const stripComments = src => String(src ?? '').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
+
+/**
+ * Какие требования карточки write выполнены в коде: по одному true/false на проверку.
+ * Проверка — регулярное выражение по коду без комментариев; not — выражения быть не должно.
+ * @param {{ checks?: { re: string, flags?: string, not?: boolean }[] }} card
+ * @param {string} code
+ * @returns {boolean[]}
+ */
+export function writeResults(card, code) {
+  const src = stripComments(code);
+  return (card.checks ?? []).map(c => new RegExp(c.re, c.flags ?? 'm').test(src) !== Boolean(c.not));
 }
 
 /**

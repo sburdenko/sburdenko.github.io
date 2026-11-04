@@ -1,0 +1,91 @@
+{
+ "id": "jobs.u4.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 16,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "⟦⟧"]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// profiling in the Editor: wait for Burst instead of running managed code first\n[BurstCompile(CompileSynchronously = true)]\nstruct NeighboursJob : IJobParallelFor { /* ... */ }\n// or Jobs > Burst > Synchronous Compilation, then let it warm up a few frames\n\n// more reliable: a Development Build on the target device,\n// the same ProfilerMarker, the same scene, before and after",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "using Unity.Profiling;\n\nstatic readonly ProfilerMarker s_Neighbours = new ProfilerMarker(\"Units.Neighbours\");\n\nvoid Update()\n{\n    using (s_Neighbours.Auto())   // shows up in the Profiler: Hierarchy and Timeline\n    {\n        FindNeighbours();\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// AoS: one struct per unit; a speed loop drags every field through the cache\nstruct Unit { public float3 position; public quaternion rotation; public float speed; }\nNativeArray<Unit> units;\n\n// SoA: one array per field; the speed loop reads contiguous floats only\nNativeArray<float> speeds;\n\n// Jobs > Burst > Open Inspector, \"Highlight SIMD Scalar vs Packed\":\n//   mulss          -> one float per instruction (scalar)\n//   mulps / vmulps -> 4 or 8 floats per instruction (packed)",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "JobHandle handle;\n\nvoid Update()\n{\n    handle = new NeighboursJob { positions = positions, result = result }\n        .Schedule(positions.Length, 64);\n    JobHandle.ScheduleBatchedJobs();   // the workers start now\n}\n\nvoid LateUpdate()\n{\n    handle.Complete();   // Timeline: is there a long WaitForJobGroupID here?\n    ApplyNeighbours(result);\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Profile first, then Burst the hot loop", "⟦⟧"],
+    ["SoA so Burst can vectorize", "⟦⟧"],
+    ["I check it in the Burst Inspector", "⟦⟧"],
+    ["Schedule early, complete late", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "⟦⟧",
+   "lang": "txt"
+  }
+ ]
+}

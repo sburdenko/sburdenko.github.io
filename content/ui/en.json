@@ -153,5 +153,13 @@
  "course.unity.title": "Unity for programmers",
  "course.unity.blurb": "The MonoBehaviour lifecycle, coroutines, physics and rendering.",
  "course.algo.title": "Algorithms",
- "course.algo.blurb": "Interview problem patterns in short lessons."
+ "course.algo.blurb": "Interview problem patterns in short lessons.",
+ "c.write": "Type your code right in the box. Tab indents, Ctrl+Enter checks.",
+ "c.writeChecks": "Requirements:",
+ "c.writeAria": "Code editor",
+ "c.solution": "Reference solution:",
+ "c.writeMissed": "Requirements not met: {n}. Look at the crosses and compare with the reference.",
+ "course.jobs.title": "Jobs + Burst",
+ "course.jobs.blurb": "Multithreading and Burst for a senior interview: from Schedule and Complete to vectorization and Entities — with code you write yourself.",
+ "course.jobs.source": "Based on {link}. Package versions are given in the lessons where they matter."
 }

@@ -1,0 +1,135 @@
+{
+ "id": "jobs.u4.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 17,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "var em = state.EntityManager;\nEntity e = em.CreateEntity(typeof(LocalTransform), typeof(Health), typeof(Team)); // structural\nem.AddComponent<Stunned>(e);          // structural: e moves to another archetype\nem.RemoveComponent<Stunned>(e);       // structural: and back again\nem.SetSharedComponent(e, new Team { Id = 2 }); // structural: another chunk\nem.SetComponentData(e, new Health { Value = 50f }); // NOT structural: a write\nem.DestroyEntity(e);                  // structural",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "EntityManager.AddComponent", "⟦⟧", "⟦⟧"],
+   "code": "public void OnUpdate(ref SystemState state)\n{\n    new MoveJob { DeltaTime = SystemAPI.Time.DeltaTime }.ScheduleParallel();\n    // a structural change: main thread only, and a sync point —\n    // it waits for the jobs scheduled so far, then rearranges chunks\n    state.EntityManager.AddComponent<Stunned>(target);\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["EntityManager.AddComponent<Stunned>(e)", "EntityManager.Instantiate(prefab)", "EntityManager.SetSharedComponent(e, new Team { Id = 2 })", "EntityManager.SetComponentData(e, new Health { Value = 50f })", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "public void OnUpdate(ref SystemState state)\n{\n    float dt = SystemAPI.Time.DeltaTime;\n    new MoveJob { DeltaTime = dt }.ScheduleParallel();\n    new PoisonJob { DeltaTime = dt }.ScheduleParallel();\n    state.EntityManager.Instantiate(bulletPrefab);\n    new AimJob { DeltaTime = dt }.ScheduleParallel();\n}",
+   "answer": 5,
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\npartial struct StunOnHitJob : IJobEntity\n{\n    public EntityCommandBuffer.ParallelWriter Ecb;\n    void Execute(Entity entity, [ChunkIndexInQuery] int sortKey, in Hit hit)\n    {\n        Ecb.AddComponent<Stunned>(sortKey, entity);   // recorded, not applied\n        Ecb.RemoveComponent<Hit>(sortKey, entity);\n    }\n}\n\n// in OnUpdate:\nvar ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()\n    .CreateCommandBuffer(state.WorldUnmanaged);\nnew StunOnHitJob { Ecb = ecb.AsParallelWriter() }.ScheduleParallel();\n// no Playback(), no Dispose(): the ECB system does both",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "var ecb = new EntityCommandBuffer(Allocator.TempJob);\nJobHandle h = new StunOnHitJob { Ecb = ecb.AsParallelWriter() }\n    .ScheduleParallel(state.Dependency);\nh.Complete();                        // recording must be finished\necb.Playback(state.EntityManager);   // main thread; the changes happen here\necb.Dispose();                       // you created it, you dispose it",
+   "lang": "cs"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Burst;\nusing Unity.Entities;\n\npublic struct Health : IComponentData { public float Value; }\n\n[BurstCompile]\npublic partial struct DestroyDeadJob : IJobEntity\n{\n    // TODO: an ECB parallel writer field\n    void Execute(Entity entity, in Health health)\n    {\n        // TODO: destroy the entity when health.Value <= 0\n    }\n}\n\n[BurstCompile]\npublic partial struct DeathSystem : ISystem\n{\n    [BurstCompile]\n    public void OnUpdate(ref SystemState state)\n    {\n        foreach (var (health, entity) in\n                 SystemAPI.Query<RefRO<Health>>().WithEntityAccess())\n            if (health.ValueRO.Value <= 0f)\n                state.EntityManager.DestroyEntity(entity);\n        // TODO: get an ECB from EndSimulationEntityCommandBufferSystem, schedule the job\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "EntityCommandBuffer\\.ParallelWriter\\s+\\w+\\s*;"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\([^)]*\\[\\s*ChunkIndexInQuery\\s*\\]\\s*int\\s+\\w+"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\w+\\.DestroyEntity\\s*\\(\\s*\\w+\\s*,\\s*\\w+\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "EndSimulationEntityCommandBufferSystem\\.Singleton[\\s\\S]*CreateCommandBuffer\\s*\\(\\s*state\\.WorldUnmanaged\\s*\\)[\\s\\S]*\\.AsParallelWriter\\s*\\(\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "EntityManager\\.DestroyEntity",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\.(?:Playback|Dispose)\\s*\\(",
+     "not": true
+    }
+   ],
+   "solution": "using Unity.Burst;\nusing Unity.Entities;\n\npublic struct Health : IComponentData { public float Value; }\n\n[BurstCompile]\npublic partial struct DestroyDeadJob : IJobEntity\n{\n    public EntityCommandBuffer.ParallelWriter Ecb;\n    void Execute(Entity entity, [ChunkIndexInQuery] int sortKey, in Health health)\n    {\n        if (health.Value <= 0f) Ecb.DestroyEntity(sortKey, entity); // recorded only\n    }\n}\n\n[BurstCompile]\npublic partial struct DeathSystem : ISystem\n{\n    [BurstCompile]\n    public void OnUpdate(ref SystemState state)\n    {\n        var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()\n            .CreateCommandBuffer(state.WorldUnmanaged);\n        new DestroyDeadJob { Ecb = ecb.AsParallelWriter() }.ScheduleParallel();\n        // the ECB system waits for the job, plays the commands back\n        // at the end of the simulation group and disposes the buffer\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public struct Stunned : IComponentData, IEnableableComponent\n{\n    public float TimeLeft;\n}\n\n// the archetype stays the same: only the entity's enabled bit flips\nstate.EntityManager.SetComponentEnabled<Stunned>(e, true);\nbool stunned = state.EntityManager.IsComponentEnabled<Stunned>(e);\n\n// queries treat a disabled component as missing:\n// this job only visits entities whose Stunned is enabled\npartial struct StunTimerJob : IJobEntity\n{\n    public float DeltaTime;\n    void Execute(ref Stunned stunned) => stunned.TimeLeft -= DeltaTime;\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  }
+ ]
+}

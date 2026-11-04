@@ -1,0 +1,131 @@
+{
+ "id": "jobs.u4.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 15,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "using Unity.Entities;\nusing Unity.Mathematics;\n\n// components: plain structs with data, no behaviour\npublic struct Velocity : IComponentData { public float3 Value; }\npublic struct Health   : IComponentData { public float Value; }\n\n// an entity is just an ID (Index + Version) that components hang on\nEntity e = entityManager.CreateEntity(typeof(Velocity), typeof(Health));\nentityManager.SetComponentData(e, new Health { Value = 100f });",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "code": "// archetype A = { LocalTransform, Velocity }\n// one 16 KiB chunk of archetype A, an array per component:\n//   Entity[]          e0  e1  e2  ...  eN\n//   LocalTransform[]  t0  t1  t2  ...  tN\n//   Velocity[]        v0  v1  v2  ...  vN\n//\n// a move system reads LocalTransform[] and Velocity[] front to back;\n// add Health to e1 -> e1 is copied into a chunk of archetype\n// B = { LocalTransform, Velocity, Health }, eN fills the hole in A",
+   "lang": "cs"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["Entity", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "using Unity.Burst;\nusing Unity.Entities;\nusing Unity.Transforms;\n\n[BurstCompile]\npublic partial struct MoveSystem : ISystem\n{\n    [BurstCompile]\n    public void OnUpdate(ref SystemState state)\n    {\n        float dt = SystemAPI.Time.DeltaTime;\n        // main thread: every chunk whose archetype has both components\n        foreach (var (transform, velocity) in\n                 SystemAPI.Query<RefRW<LocalTransform>, RefRO<Velocity>>())\n            transform.ValueRW.Position += velocity.ValueRO.Value * dt;\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\npublic partial struct PoisonJob : IJobEntity\n{\n    public float DeltaTime;\n    // ref = read-write, in = read-only; the query is built from these parameters\n    void Execute(ref Health health, in Poison poison)\n        => health.Value -= poison.DamagePerSecond * DeltaTime;\n}\n\n// in PoisonSystem.OnUpdate (an ISystem):\nnew PoisonJob { DeltaTime = SystemAPI.Time.DeltaTime }.ScheduleParallel();\n// no handle, no Complete(): the call reads and updates state.Dependency",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "[BurstCompile]\npublic ___ struct ShieldRegenJob : IJobEntity\n{\n    public float DeltaTime;\n    void Execute(___ Shield shield, ___ ShieldRegen regen)\n        => shield.Value += regen.PerSecond * DeltaTime;\n}\n\n// in ShieldSystem.OnUpdate:\nnew ShieldRegenJob { DeltaTime = SystemAPI.Time.DeltaTime }.___();",
+   "tiles": ["partial", "ref", "in", "ScheduleParallel", "static", "out", "Run", "readonly"],
+   "answer": ["partial", "ref", "in", "ScheduleParallel"],
+   "explain": "⟦⟧",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// MoveSystem:   ref LocalTransform, in Velocity   -> writes LocalTransform\n// AimSystem:    in LocalTransform, ref Aim        -> reads LocalTransform\n//\n// Entities knows the read/write sets of both systems, so AimSystem's\n// state.Dependency already contains MoveSystem's job:\n//   MoveJob (workers) ──► AimJob (workers) ──► ... ──► render reads results\n// nobody calls Complete() in between",
+   "lang": "cs"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Burst;\nusing Unity.Entities;\nusing Unity.Mathematics;\nusing Unity.Transforms;\n\npublic struct Velocity : IComponentData { public float3 Value; }\n\n[BurstCompile]\npublic partial struct MoveJob : IJobEntity\n{\n    public float DeltaTime;\n    // TODO: Execute over LocalTransform (read-write) and Velocity (read-only)\n}\n\n[BurstCompile]\npublic partial struct MoveSystem : ISystem\n{\n    [BurstCompile]\n    public void OnUpdate(ref SystemState state)\n    {\n        float dt = SystemAPI.Time.DeltaTime;\n        foreach (var (transform, velocity) in\n                 SystemAPI.Query<RefRW<LocalTransform>, RefRO<Velocity>>())\n            transform.ValueRW.Position += velocity.ValueRO.Value * dt;\n        // TODO: replace the main-thread loop with MoveJob\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\([^)]*\\bref\\s+LocalTransform\\s+\\w+"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\([^)]*\\bin\\s+Velocity\\s+\\w+"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "(?:\\.Position\\s*(?:\\+=|=\\s*\\w+\\.Position\\s*\\+)\\s*|=\\s*\\w+\\.Translate\\s*\\(\\s*)(?:\\w+\\.Value\\s*\\*\\s*DeltaTime|DeltaTime\\s*\\*\\s*\\w+\\.Value)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+OnUpdate\\s*\\([^)]*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*(?:\\.ScheduleParallel\\s*\\(\\s*\\)|state\\.Dependency\\s*=[^;]*\\.ScheduleParallel\\s*\\(\\s*state\\.Dependency\\s*\\))"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "SystemAPI\\.Query\\s*<",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\.Complete\\s*\\(\\s*\\)",
+     "not": true
+    }
+   ],
+   "solution": "using Unity.Burst;\nusing Unity.Entities;\nusing Unity.Mathematics;\nusing Unity.Transforms;\n\npublic struct Velocity : IComponentData { public float3 Value; }\n\n[BurstCompile]\npublic partial struct MoveJob : IJobEntity\n{\n    public float DeltaTime;\n    void Execute(ref LocalTransform transform, in Velocity velocity)\n        => transform.Position += velocity.Value * DeltaTime;\n}\n\n[BurstCompile]\npublic partial struct MoveSystem : ISystem\n{\n    [BurstCompile]\n    public void OnUpdate(ref SystemState state)\n    {\n        // runs on the workers, in parallel over chunks;\n        // state.Dependency is read and updated by the generated code\n        new MoveJob { DeltaTime = SystemAPI.Time.DeltaTime }\n            .ScheduleParallel();\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

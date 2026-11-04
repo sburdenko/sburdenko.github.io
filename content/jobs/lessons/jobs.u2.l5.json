@@ -1,0 +1,126 @@
+{
+ "id": "jobs.u2.l5",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 15,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct CullJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float3> positions;\n    public NativeList<int> visible;   // shared by every thread\n    public float3 camera;\n    public float maxDistSq;\n\n    public void Execute(int i)\n    {\n        if (math.distancesq(positions[i], camera) < maxDistSq)\n            visible.Add(i);           // not thread-safe: may grow and reallocate\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct BlastJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float3> enemies;\n    public NativeList<int>.ParallelWriter hit;   // append-only, shared\n    public float3 center;\n    public float radiusSq;\n\n    public void Execute(int i)\n    {\n        if (math.distancesq(enemies[i], center) < radiusSq)\n            hit.AddNoResize(i);                  // takes a slot atomically, never grows\n    }\n}\n\nvar hit = new NativeList<int>(enemies.Length, Allocator.TempJob);   // capacity up front\nvar h = new BlastJob { enemies = enemies, hit = hit.AsParallelWriter(),\n                       center = c, radiusSq = r * r }.Schedule(enemies.Length, 64);",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "[BurstCompile]\nstruct CullJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float3> positions;\n    public float3 camera;\n    public float maxDistSq;\n    // TODO: a field to append visible indices to\n\n    public void Execute(int i)\n    {\n        if (math.distancesq(positions[i], camera) < maxDistSq)\n        {\n            // TODO: append i\n        }\n    }\n}\n\nJobHandle ScheduleCull(NativeArray<float3> positions, float3 camera, out NativeList<int> visible)\n{\n    visible = new NativeList<int>(Allocator.TempJob);\n    var job = new CullJob { positions = positions, camera = camera, maxDistSq = 50f * 50f };\n    // TODO: hand the job a parallel writer and schedule it\n    return default;\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "NativeList\\s*<\\s*int\\s*>\\s*\\.\\s*ParallelWriter\\s+\\w+\\s*;"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\.AddNoResize\\s*\\(\\s*\\w+\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\.Add\\s*\\(",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "new\\s*(?:NativeList\\s*<\\s*int\\s*>\\s*)?\\(\\s*(?:initialCapacity\\s*:\\s*)?\\w+\\.Length\\s*,\\s*(?:allocator\\s*:\\s*)?Allocator\\.TempJob\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\.AsParallelWriter\\s*\\(\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\.Schedule\\s*\\(\\s*positions\\.Length\\s*,\\s*\\d+\\s*[,)]"
+    }
+   ],
+   "solution": "[BurstCompile]\nstruct CullJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float3> positions;\n    public float3 camera;\n    public float maxDistSq;\n    public NativeList<int>.ParallelWriter visible;   // append-only from many threads\n\n    public void Execute(int i)\n    {\n        if (math.distancesq(positions[i], camera) < maxDistSq)\n        {\n            visible.AddNoResize(i);                  // takes a slot atomically\n        }\n    }\n}\n\nJobHandle ScheduleCull(NativeArray<float3> positions, float3 camera, out NativeList<int> visible)\n{\n    visible = new NativeList<int>(positions.Length, Allocator.TempJob);   // capacity up front\n    var job = new CullJob { positions = positions, camera = camera, maxDistSq = 50f * 50f };\n    job.visible = visible.AsParallelWriter();\n    return job.Schedule(positions.Length, 64);\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "var events = new NativeQueue<DamageEvent>(Allocator.TempJob);   // grows by blocks\njob.events = events.AsParallelWriter();                          // .Enqueue(e) in Execute\n\nvar grid = new NativeParallelMultiHashMap<int, int>(count, Allocator.TempJob); // capacity up front\nhashJob.cells = grid.AsParallelWriter();                         // .Add(cell, i) in Execute",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "var stream = new NativeStream(count, Allocator.TempJob);   // one buffer per index\njob.contacts = stream.AsWriter();                          // NativeStream.Writer field\n\npublic void Execute(int i)\n{\n    contacts.BeginForEachIndex(i);\n    for (int j = 0; j < neighbours; j++)\n        if (Touch(i, j)) contacts.Write(new Contact(i, j));\n    contacts.EndForEachIndex();\n}\n\n// later, on one thread: buffers in index order\nvar reader = stream.AsReader();\nfor (int i = 0; i < reader.ForEachCount; i++)\n{\n    int n = reader.BeginForEachIndex(i);\n    for (int k = 0; k < n; k++) Resolve(reader.Read<Contact>());\n    reader.EndForEachIndex();\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["CountJob: counts[i]", "ScanJob: offsets[i], total", "WriteJob: output[offsets[i] + k]"],
+   "code": "[BurstCompile]\nstruct ScanJob : IJob\n{\n    [ReadOnly] public NativeArray<int> counts;\n    public NativeArray<int> offsets;\n    public NativeReference<int> total;\n\n    public void Execute()\n    {\n        int sum = 0;\n        for (int i = 0; i < counts.Length; i++)\n        {\n            offsets[i] = sum;          // exclusive: everything before i\n            sum += counts[i];\n        }\n        total.Value = sum;\n    }\n}\n\n// WriteJob: [NativeDisableParallelForRestriction] public NativeArray<Hit> output;\nJobHandle h = countJob.Schedule(n, 64);\nh = scanJob.Schedule(h);\nh = writeJob.Schedule(n, 64, h);   // writes output[offsets[i] + k]",
+   "lang": "cs"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "NativeList.ParallelWriter.AddNoResize"],
+    ["⟦⟧", "NativeQueue.ParallelWriter.Enqueue"],
+    ["⟦⟧", "NativeParallelMultiHashMap.ParallelWriter"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

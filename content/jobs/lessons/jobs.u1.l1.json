@@ -1,0 +1,129 @@
+{
+ "id": "jobs.u1.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 13,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// Job System: this struct is a unit of work for the worker threads\nstruct AddJob : IJob\n{\n    public NativeArray<float> a, b;\n    public void Execute()\n    {\n        for (int i = 0; i < a.Length; i++) a[i] += b[i];\n    }\n}\n\n// Burst: one attribute, and the same Execute becomes native SIMD code\n[BurstCompile]\nstruct AddJobBurst : IJob { /* same fields and Execute */ }",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct SumJob : IJob\n{\n    [ReadOnly] public NativeArray<float> values;   // input, read only\n    public NativeArray<float> result;              // output, one element\n\n    public void Execute()\n    {\n        float sum = 0f;\n        for (int i = 0; i < values.Length; i++) sum += values[i];\n        result[0] = sum;\n    }\n}\n\nvar result = new NativeArray<float>(1, Allocator.TempJob);\nJobHandle h = new SumJob { values = values, result = result }.Schedule();\nh.Complete();                // wait for the job\nfloat sum = result[0];       // safe to read now\nresult.Dispose();",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "code": "// 2. a job without Burst: worker threads, managed code\nstruct SlowJob : IJob { public void Execute() { /* ... */ } }\n\n// 3. Burst without worker threads: the job runs in place\nnew SumJob { values = values, result = result }.Run();\n\n// 4. both: Burst-compiled code on a worker thread\nJobHandle h = new SumJob { values = values, result = result }.Schedule();",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\npublic static class MathBurst\n{\n    [BurstCompile]\n    public static void MultiplyAdd(in float4 a, in float4 b, in float4 add, out float4 result)\n    {\n        result = a * b + add;\n    }\n}\n\n// an ordinary call from the main thread runs Burst-compiled code\nMathBurst.MultiplyAdd(a, b, c, out float4 r);",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "deep": "⟦⟧",
+   "code": "// scalar C#: one float per instruction\nfor (int i = 0; i < n; i++) pos[i] += vel[i] * dt;\n\n// the same loop under Burst with AVX: 8 floats per instruction\n// vmulps ymm1, ymm0, [vel + i]   ; 8 multiplies\n// vaddps ymm1, ymm1, [pos + i]   ; 8 adds",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing UnityEngine;\n\npublic class Mover : MonoBehaviour\n{\n    NativeArray<float> positions, velocities;   // Allocator.Persistent, allocated in Awake\n\n    void Update()\n    {\n        float dt = Time.deltaTime;\n        for (int i = 0; i < positions.Length; i++)\n            positions[i] += velocities[i] * dt;\n    }\n}\n\n// TODO: [BurstCompile] struct MoveJob : IJob",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*BurstCompile[^\\]]*\\]\\s*(?:(?:public|internal|private)\\s+)?struct\\s+MoveJob\\s*:\\s*IJob\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*ReadOnly\\s*\\]\\s*(?:public\\s+)?NativeArray\\s*<\\s*float\\s*>\\s+velocities\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "struct\\s+MoveJob(?:(?!\\bstruct\\s|\\bclass\\s)[\\s\\S])*public\\s+float\\s+dt\\s*;"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*positions\\s*\\[\\s*\\w+\\s*\\]\\s*(?:\\+=|=)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Schedule\\s*\\((?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\s*\\(\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\b(?:for|foreach|while)\\s*\\(",
+     "not": true
+    }
+   ],
+   "solution": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing UnityEngine;\n\npublic class Mover : MonoBehaviour\n{\n    NativeArray<float> positions, velocities;   // Allocator.Persistent, allocated in Awake\n\n    void Update()\n    {\n        var job = new MoveJob { positions = positions, velocities = velocities, dt = Time.deltaTime };\n        JobHandle h = job.Schedule();\n        h.Complete();   // for now; lesson 4 moves it later in the frame\n    }\n}\n\n[BurstCompile]\nstruct MoveJob : IJob\n{\n    public NativeArray<float> positions;\n    [ReadOnly] public NativeArray<float> velocities;\n    public float dt;   // main-thread APIs such as Time are not available in a job\n\n    public void Execute()\n    {\n        for (int i = 0; i < positions.Length; i++)\n            positions[i] += velocities[i] * dt;\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  }
+ ]
+}

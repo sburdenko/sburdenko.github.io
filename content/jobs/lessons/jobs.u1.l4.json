@@ -1,0 +1,135 @@
+{
+ "id": "jobs.u1.l4",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 12,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct ScaleJob : IJobParallelFor\n{\n    [ReadOnly] public NativeArray<float> input;\n    public NativeArray<float> output;\n    public float k;\n    public void Execute(int i) => output[i] = input[i] * k;\n}\n\nvar job = new ScaleJob { input = input, output = output, k = 2f };\nJobHandle handle = job.Schedule(input.Length, 64); // queued, not running yet\nJobHandle.ScheduleBatchedJobs();                   // now the workers see it",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["Schedule → JobHandle", "⟦⟧", "⟦⟧"],
+   "code": "job.Run();                        // here and now, on this thread\nJobHandle h = job.Schedule(n, 64); // queued\n// ... the main thread does its own work ...\nh.Complete();                     // wait; the data is safe to read",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "JobHandle handle;   // a field: lives from Update to LateUpdate\n\nvoid Update()\n{\n    handle = new ScaleJob { input = input, output = output, k = 2f }\n        .Schedule(input.Length, 64);\n    JobHandle.ScheduleBatchedJobs();\n}\n\nvoid LateUpdate()\n{\n    handle.Complete();\n    Use(output);\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "tapline",
+   "q": "⟦⟧",
+   "code": "void Update()\n{\n    var job = new ScaleJob { input = input, output = output, k = 2f };\n    handle = job.Schedule(input.Length, 64);\n    handle.Complete();\n    UpdateAI();\n    UpdateUI();\n}",
+   "answer": 4,
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 3],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "public class Scaler : MonoBehaviour\n{\n    NativeArray<float> input, output;   // Persistent, allocated in Awake\n\n    void Update()\n    {\n        var job = new ScaleJob { input = input, output = output, k = 2f };\n        JobHandle handle = job.Schedule(input.Length, 64);\n        handle.Complete();\n        Use(output);\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "^\\s*(?:private\\s+|public\\s+)?JobHandle\\s+\\w+\\s*;",
+     "flags": "m"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "Schedule\\([^;]*;[\\s\\S]{0,120}?JobHandle\\.ScheduleBatchedJobs\\(\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+LateUpdate\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\(\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+LateUpdate\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\(\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*Use\\(\\s*output\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\(\\)",
+     "not": true
+    }
+   ],
+   "solution": "public class Scaler : MonoBehaviour\n{\n    NativeArray<float> input, output;   // Persistent, allocated in Awake\n    JobHandle handle;\n\n    void Update()\n    {\n        var job = new ScaleJob { input = input, output = output, k = 2f };\n        handle = job.Schedule(input.Length, 64);\n        JobHandle.ScheduleBatchedJobs();   // wake the workers now\n    }\n\n    void LateUpdate()\n    {\n        handle.Complete();\n        Use(output);\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// small data, result needed right now\nnew ScaleJob { input = input, output = output, k = 2f }.Run(input.Length);",
+   "lang": "cs"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "LateUpdate: handle.Complete()", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "void Update()\n{\n    var result = new NativeArray<float>(count, Allocator.TempJob);\n    var job = new SumJob { input = input, result = result };\n    JobHandle h = job.Schedule();\n    Debug.Log(result[0]);\n    result.Dispose();\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "\\bh\\.Complete\\(\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "h\\.Complete\\(\\)[\\s\\S]*result\\[\\s*0\\s*\\]"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "h\\.Complete\\(\\)[\\s\\S]*result\\.Dispose\\("
+    },
+    {
+     "label": "⟦⟧",
+     "re": "result\\.Dispose\\("
+    }
+   ],
+   "solution": "void Update()\n{\n    var result = new NativeArray<float>(count, Allocator.TempJob);\n    var job = new SumJob { input = input, result = result };\n    JobHandle h = job.Schedule();\n    h.Complete();                 // wait before touching the data\n    Debug.Log(result[0]);\n    result.Dispose();             // free it only after the job is done\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}

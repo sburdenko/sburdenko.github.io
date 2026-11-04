@@ -1,0 +1,140 @@
+{
+ "id": "jobs.u3.l6",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 17,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// 10 000 objects, each with its own Update: 10 000 calls a frame\npublic class Bob : MonoBehaviour\n{\n    public float phase;\n    void Update()\n    {\n        var p = transform.localPosition;\n        p.y = Mathf.Sin(Time.time + phase);   // main-thread API, one by one\n        transform.localPosition = p;\n    }\n}\n\n// inside a job none of this is allowed:\n// transform, GameObject, GetComponent, Physics.Raycast, Time.time",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "using UnityEngine.Jobs;\n\n[BurstCompile]\nstruct BobJob : IJobParallelForTransform\n{\n    [ReadOnly] public NativeArray<float> phase;\n    public float time;                       // Time.time, passed in as a field\n\n    public void Execute(int i, TransformAccess t)\n    {\n        var p = t.localPosition;\n        p.y = math.sin(time + phase[i]);\n        t.localPosition = p;\n    }\n}\n\nTransformAccessArray transforms;   // Awake: new TransformAccessArray(bobTransforms)\nJobHandle handle;\n\nvoid Update()\n{\n    handle = new BobJob { phase = phase, time = Time.time }.Schedule(transforms);\n    JobHandle.ScheduleBatchedJobs();\n}\nvoid LateUpdate() => handle.Complete();\nvoid OnDestroy() { handle.Complete(); transforms.Dispose(); phase.Dispose(); }",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// Scene A: one parent, 10 000 children\n//   Enemies\n//     Enemy_0 ... Enemy_9999   -> one shared root: Schedule uses ONE thread\n//\n// Scene B: 10 000 objects at the scene root\n//   Enemy_0 ... Enemy_9999     -> different roots: spread over the workers\n\n// gather positions in parallel whatever the hierarchy\n[BurstCompile]\nstruct GatherJob : IJobParallelForTransform\n{\n    [WriteOnly] public NativeArray<float3> positions;\n    public void Execute(int i, TransformAccess t)\n    {\n        if (t.isValid) positions[i] = t.position;\n    }\n}\nhandle = new GatherJob { positions = positions }.ScheduleReadOnly(transforms, 64);",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 2, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "int n = 500;\nvar commands = new NativeArray<RaycastCommand>(n, Allocator.TempJob);\nvar results  = new NativeArray<RaycastHit>(n * maxHits, Allocator.TempJob);\n\nvar query = new QueryParameters(groundMask);   // layerMask, triggers, back faces\nfor (int i = 0; i < n; i++)\n    commands[i] = new RaycastCommand(agents[i].position, Vector3.down, query, 10f);\n\n// the rays run in jobs, in parallel with each other\nJobHandle h = RaycastCommand.ScheduleBatch(commands, results, 32, maxHits);\n// ... other main-thread work ...\nh.Complete();          // results are off-limits until here",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "h.Complete();\nfor (int i = 0; i < n; i++)\n{\n    for (int k = 0; k < maxHits; k++)\n    {\n        RaycastHit hit = results[i * maxHits + k];  // command i starts at i * maxHits\n        if (hit.collider == null) break;            // first empty slot: stop\n        OnHit(i, hit.point, hit.normal);\n    }\n}\ncommands.Dispose();\nresults.Dispose();\n\n// chain: a Burst job fills the commands, the batch depends on it\nJobHandle fill = new FillRaysJob { origins = origins, commands = commands }.Schedule(n, 64);\nJobHandle cast = RaycastCommand.ScheduleBatch(commands, results, 32, 1, fill);",
+   "lang": "cs"
+  },
+  {
+   "t": "order",
+   "q": "⟦⟧",
+   "items": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Collections;\nusing Unity.Jobs;\nusing UnityEngine;\n\npublic class GroundProbe : MonoBehaviour\n{\n    public Transform[] agents;          // 500 agents\n    public LayerMask groundMask;\n    float[] groundY;\n\n    NativeArray<RaycastCommand> commands;\n    NativeArray<RaycastHit> results;\n\n    void Awake()\n    {\n        commands = new NativeArray<RaycastCommand>(agents.Length, Allocator.Persistent);\n        results = new NativeArray<RaycastHit>(agents.Length, Allocator.Persistent);\n        groundY = new float[agents.Length];\n    }\n\n    void Update()\n    {\n        // TODO: replace 500 Physics.Raycast calls with one batch\n        for (int i = 0; i < agents.Length; i++)\n            if (Physics.Raycast(agents[i].position, Vector3.down, out var hit, 10f, groundMask))\n                groundY[i] = hit.point.y;\n    }\n\n    void OnDestroy()\n    {\n        commands.Dispose();\n        results.Dispose();\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "^\\s*(?:(?:private|public|internal|protected)\\s+)?JobHandle\\s+(\\w+)\\s*(?:=\\s*default(?:\\s*\\(\\s*JobHandle\\s*\\))?\\s*)?;[\\s\\S]*void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\b\\1\\s*=\\s*RaycastCommand\\s*\\.\\s*ScheduleBatch\\s*\\(\\s*commands\\s*,\\s*results\\s*,"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "^(?=[\\s\\S]*\\bQueryParameters\\b)[\\s\\S]*?void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*commands\\s*\\[[^\\]]+\\]\\s*=\\s*new\\s+RaycastCommand\\s*\\("
+    },
+    {
+     "label": "⟦⟧",
+     "re": "Physics\\s*\\.\\s*Raycast\\s*\\(",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Update\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\(\\)",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+LateUpdate\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\(\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.\\s*(?:collider\\s*(?:!=\\s*null|\\))|colliderInstanceID\\s*!=\\s*0)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+OnDestroy\\s*\\(\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Complete\\(\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\.Dispose\\(\\)"
+    }
+   ],
+   "solution": "using Unity.Collections;\nusing Unity.Jobs;\nusing UnityEngine;\n\npublic class GroundProbe : MonoBehaviour\n{\n    public Transform[] agents;          // 500 agents\n    public LayerMask groundMask;\n    float[] groundY;\n\n    NativeArray<RaycastCommand> commands;\n    NativeArray<RaycastHit> results;\n    JobHandle handle;\n\n    void Awake()\n    {\n        commands = new NativeArray<RaycastCommand>(agents.Length, Allocator.Persistent);\n        results = new NativeArray<RaycastHit>(agents.Length, Allocator.Persistent);\n        groundY = new float[agents.Length];\n    }\n\n    void Update()\n    {\n        var query = new QueryParameters(groundMask);\n        for (int i = 0; i < agents.Length; i++)\n            commands[i] = new RaycastCommand(agents[i].position, Vector3.down, query, 10f);\n        handle = RaycastCommand.ScheduleBatch(commands, results, 32, 1);\n        JobHandle.ScheduleBatchedJobs();\n    }\n\n    void LateUpdate()\n    {\n        handle.Complete();\n        for (int i = 0; i < agents.Length; i++)\n            if (results[i].collider != null)        // maxHits = 1: one slot per ray\n                groundY[i] = results[i].point.y;\n    }\n\n    void OnDestroy()\n    {\n        handle.Complete();                      // the batch may still write to results\n        commands.Dispose();\n        results.Dispose();\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

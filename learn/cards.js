@@ -8,11 +8,11 @@
  *   reveal(ok) — подсветить верное и неверное после проверки;
  *   key(e) — горячие клавиши (цифры выбирают вариант).
  */
-import { esc } from '../assets/vhs.js?v=202611032107';
-import { codeHtml } from './code-view.js?v=202611032107';
-import { shuffle, scramble, check, blankCount } from './engine.js?v=202611032107';
-import { mountRig } from './rigs.js?v=202611032107';
-import { t } from './ui.js?v=202611032107';
+import { esc } from '../assets/vhs.js?v=202611041010';
+import { codeHtml } from './code-view.js?v=202611041010';
+import { shuffle, scramble, check, blankCount, writeResults } from './engine.js?v=202611041010';
+import { mountRig } from './rigs.js?v=202611041010';
+import { t } from './ui.js?v=202611041010';
 
 const h = (tag, cls, html) => {
   const el = document.createElement(tag);
@@ -261,6 +261,43 @@ function match(card, host, api, seed) {
   return { mode: 'auto' };
 }
 
+/* ---------- write ---------- */
+function write(card, host, api) {
+  host.append(h('p', 'q', esc(card.task)));
+  const ta = h('textarea', 'code-edit');
+  ta.value = card.starter;
+  ta.spellcheck = false;
+  ta.setAttribute('autocapitalize', 'off');
+  ta.setAttribute('autocomplete', 'off');
+  ta.setAttribute('aria-label', t('c.writeAria'));
+  const fit = () => { ta.rows = Math.max(6, ta.value.split('\n').length + 1); };
+  fit();
+  ta.oninput = () => { fit(); api.ready(ta.value.trim() !== card.starter.trim()); };
+  ta.onkeydown = e => {
+    if (e.key !== 'Tab' || e.shiftKey) return;
+    e.preventDefault();
+    const { selectionStart: a, selectionEnd: b } = ta;
+    ta.setRangeText('    ', a, b, 'end');
+    ta.oninput();
+  };
+  const list = h('ul', 'checks');
+  const items = card.checks.map(c => {
+    const li = h('li', '', `<i></i><span>${esc(c.label)}</span>`);
+    list.append(li);
+    return li;
+  });
+  host.append(ta, h('p', 'hint', t('c.write')), h('p', 'checks-h', t('c.writeChecks')), list);
+  return {
+    mode: 'check',
+    input: () => ta.value,
+    reveal(ok) {
+      ta.readOnly = true;
+      writeResults(card, ta.value).forEach((pass, i) => items[i].classList.add(pass ? 'right' : 'wrong'));
+      if (!ok) host.append(h('p', 'checks-h', t('c.solution')), codeBlock(card.solution, card.lang));
+    }
+  };
+}
+
 /* ---------- rig ---------- */
 function rig(card, host, api) {
   const box = h('div', 'rig');
@@ -274,7 +311,7 @@ function rig(card, host, api) {
   return { mode: 'auto' };
 }
 
-const RENDER = { learn, choice: (c, h2, a, s) => options(c, h2, a, s, false), multi: (c, h2, a, s) => options(c, h2, a, s, true), tapline, order, blanks, match, rig };
+const RENDER = { learn, choice: (c, h2, a, s) => options(c, h2, a, s, false), multi: (c, h2, a, s) => options(c, h2, a, s, true), tapline, order, blanks, match, rig, write };
 
 export function renderCard(card, host, api, seed) {
   return RENDER[card.t](card, host, api, seed);
@@ -288,6 +325,7 @@ export function feedback(card, input, ok) {
   if (card.t === 'choice') parts.push(t('c.right', { a: card.options[card.answer] }));
   if (card.t === 'order') parts.push(t('c.rightOrder', { a: card.items.map((s, i) => `${i + 1}) ${s}`).join(' ') }));
   if (card.t === 'blanks') parts.push(t('c.rightBlanks', { a: card.answer.join(', ') }));
+  if (card.t === 'write') parts.push(t('c.writeMissed', { n: String(writeResults(card, input).filter(x => !x).length) }));
   if (card.explain) parts.push(card.explain);
   return parts.join(' ');
 }
