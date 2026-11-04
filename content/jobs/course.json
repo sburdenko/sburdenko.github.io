@@ -32,7 +32,12 @@
     "title": "⟦⟧",
     "url": "https://docs.unity3d.com/Packages/com.unity.burst@1.8/manual/index.html"
    },
-   "soon": true
+   "lessons": [
+    "jobs.u3.l1",
+    "jobs.u3.l2",
+    "jobs.u3.l3",
+    "jobs.u3.l4"
+   ]
   },
   {
    "id": "u4",

@@ -1,0 +1,131 @@
+{
+ "id": "jobs.u3.l1",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 14,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "[BurstCompile]\nstruct MulJob : IJob\n{\n    [ReadOnly] public NativeArray<float> a, b;\n    public NativeArray<float> c;\n\n    public void Execute()\n    {\n        for (int i = 0; i < c.Length; i++)\n            c[i] = a[i] * b[i];   // AVX2: 8 floats per vmulps\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// vectorizes: independent iterations, contiguous memory\nfor (int i = 0; i < n; i++) c[i] = a[i] * k + b[i];\n\n// does not: early exit, the trip count is unknown\nfor (int i = 0; i < n; i++) { if (a[i] < 0f) break; c[i] = a[i]; }\n\n// does not: each step needs the previous one\nfor (int i = 1; i < n; i++) a[i] = a[i - 1] * 0.5f + b[i];\n\n// float sum: vectorizing it means reordering the additions\nfor (int i = 0; i < n; i++) sum += a[i];",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["for (i…) output[i] = math.sqrt(a[i]) * k;", "for (i…) { if (a[i] == target) { found = i; break; } }", "for (i = 1…) a[i] += a[i - 1];", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// a static Burst method on raw pointers: Burst cannot know they don't overlap\n[BurstCompile]\nstatic unsafe class Kernels\n{\n    [BurstCompile]\n    public static void Add([NoAlias] float* dst, [NoAlias] float* src, int n)\n    {\n        for (int i = 0; i < n; i++)\n            dst[i] += src[i];   // promised no overlap: free to vectorize\n    }\n}\n\n// in a job, NativeArray fields are NoAlias by default\nstruct AddJob : IJob\n{\n    public NativeArray<float> dst;\n    [ReadOnly] public NativeArray<float> src;\n    [NativeDisableContainerSafetyRestriction]\n    public NativeArray<float> scratch;   // this one may alias the others\n    public void Execute() { /* ... */ }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// a branch per element: SIMD lanes would need different paths\nif (v > max) r = max; else r = v;\n\n// both values are ready, a mask picks one: no jump\nr = math.select(v, max, v > max);   // select(ifFalse, ifTrue, condition)\n\n// the same for 4 lanes at once: v4 > max4 is a bool4\nfloat4 r4 = math.select(v4, max4, v4 > max4);",
+   "lang": "cs"
+  },
+  {
+   "t": "blanks",
+   "q": "⟦⟧",
+   "code": "[BurstCompile]\nstruct ClampSpeedJob : IJobFor\n{\n    public NativeArray<float> speed;\n    public float maxSpeed;\n\n    public void Execute(int i)\n    {\n        float s = speed[i];\n        speed[i] = math.select(___, ___, s > maxSpeed);\n    }\n}",
+   "lang": "cs",
+   "tiles": ["s", "maxSpeed", "0f", "speed"],
+   "answer": ["s", "maxSpeed"],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// scalar single: one float per instruction\nvmulss  xmm0, xmm0, dword ptr [rcx + 4*rax]\n// packed single, AVX: ymm = 256 bits = 8 floats\nvmulps  ymm0, ymm0, ymmword ptr [rcx + 4*rax]\n// SSE without the v prefix: xmm = 128 bits = 4 floats\nmulps   xmm0, xmm1",
+   "lang": "il"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": ".LBB0_4:\n    vmovss  xmm1, dword ptr [rdx + 4*rax]\n    vmulss  xmm1, xmm1, dword ptr [r8 + 4*rax]\n    vmovss  dword ptr [rcx + 4*rax], xmm1\n    inc     rax\n    cmp     rax, r9\n    jl      .LBB0_4",
+   "lang": "il",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\n\n[BurstCompile]\nstruct DamageJob : IJobFor\n{\n    [ReadOnly] public NativeArray<float> hp;\n    [ReadOnly] public NativeArray<float> damage;\n    public NativeArray<float> result;\n\n    public void Execute(int i)\n    {\n        // TODO: no if, use math.select\n        if (hp[i] > damage[i])\n            result[i] = hp[i] - damage[i];\n        else\n            result[i] = 0f;\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "^\\s*using\\s+Unity\\.Mathematics\\s*;",
+     "flags": "m"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\(\\s*int\\s+\\w+\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*math\\.select\\s*\\("
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+Execute\\s*\\(\\s*int\\s+\\w+\\s*\\)(?:(?!void\\s+\\w+\\s*\\()[\\s\\S])*\\bif\\s*\\(",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "result\\s*\\[\\s*\\w+\\s*\\]\\s*="
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*BurstCompile[^\\]]*\\]\\s*(?:public\\s+)?struct\\s+DamageJob\\b"
+    }
+   ],
+   "solution": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing Unity.Mathematics;\n\n[BurstCompile]\nstruct DamageJob : IJobFor\n{\n    [ReadOnly] public NativeArray<float> hp;\n    [ReadOnly] public NativeArray<float> damage;\n    public NativeArray<float> result;\n\n    public void Execute(int i)\n    {\n        float left = hp[i] - damage[i];\n        // both values exist, the mask picks one: no jump\n        result[i] = math.select(0f, left, left > 0f);\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "code": "[BurstCompile]\nstatic unsafe class Kernels\n{\n    [BurstCompile]\n    public static void Scale(float* dst, float* src, float k, int n)\n    {\n        for (int i = 0; i < n; i++)\n            dst[i] = src[i] * k;\n    }\n}",
+   "lang": "cs",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

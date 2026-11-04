@@ -9,7 +9,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadCourseFromSource } from '../learn/content.js';
 
-const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'u8'], jobs: [] };
+const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'u8'], jobs: ['u3'] };
 
 /** Понятие → шаблон. Шаблоны ловят API и устойчивые термины, а не имена из примеров кода. */
 const CONCEPTS = {
@@ -188,6 +188,21 @@ const CONCEPTS = {
     'EntityCommandBuffer': /\bEntityCommandBuffer\b|\bECB\b/,
     'sync point': /\bsync point|точк\w* синхронизации/i,
     'Baking': /\bBak(ing|er)\b/,
+    'mulss/mulps': /\bv?mul[sp]s\b/,
+    'кэш-линия': /кэш-лини|\bcache line/i,
+    'hot/cold split': /\bhot\/cold\b/i,
+    'архетип': /архетип|\barchetype/i,
+    'чанк': /чанк|\bchunk/i,
+    'FMA': /\bFMA\b/,
+    'ulp': /\bulp\b/,
+    'fixed-point': /\bfixed[- ]point\b/i,
+    'Enable Compilation': /\bEnable Compilation\b/,
+    'Use Job Threads': /\bUse Job Threads\b|\bJobWorkerCount\b/,
+    'Native Debug Mode': /\bNative Debug Mode\b/,
+    'Jobs Debugger': /\bJobs Debugger\b/,
+    'ENABLE_UNITY_COLLECTIONS_CHECKS': /\bENABLE_UNITY_COLLECTIONS_CHECKS\b/,
+    'BurstDiscard': /\bBurstDiscard\b/,
+    'CompileSynchronously': /\bCompileSynchronously\b|\bSynchronous Compilation\b/,
   }
 };
 
