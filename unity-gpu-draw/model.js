@@ -1,6 +1,6 @@
 /** Tape 07 models: the map of drawing paths, the Draw* → Render* grid, an indirect args buffer, a GPU-culling frame,
  *  blinking lamps and particles. Pure functions: the rigs draw what these return. */
-import { rng } from '../assets/rand.js?v=202611040949';
+import { rng } from '../assets/rand.js?v=202611041010';
 
 /* ---------------- CH.00 map: two axes ---------------- */
 

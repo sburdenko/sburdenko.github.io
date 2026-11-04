@@ -1,5 +1,5 @@
 /** Problems and C# solutions for the heap, backtracking, greedy, dynamic programming. */
-import { problem as p } from './problem.js?v=202611040949';
+import { problem as p } from './problem.js?v=202611041010';
 
 export const PROBLEMS_C = {
   heap: [
