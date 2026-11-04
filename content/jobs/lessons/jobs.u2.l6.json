@@ -1,0 +1,106 @@
+{
+ "id": "jobs.u2.l6",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 12,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// IJobParallelFor: Schedule(length, innerloopBatchCount)\nhandle = moveJob.Schedule(count, 64);                  // 64 iterations per batch\n\n// IJobFor: Run, Schedule (one worker) or ScheduleParallel\nhandle = moveForJob.ScheduleParallel(count, 64, dependsOn);",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "flow": ["⟦⟧", "⟦⟧", "⟦⟧"],
+   "code": "// 10 000 items, batchSize 64 -> 157 batches\n// the batches are spread over the workers;\n// a worker that runs dry steals half of another's remaining batches\nhandle = job.Schedule(10_000, 64);\nJobHandle.ScheduleBatchedJobs();",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["2", "8", "1", "500"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// light: a few multiply-adds per element\nmove.ScheduleParallel(particles.Length, 64, default);\n\n// heavy and uneven: each agent searches for a path\npath.ScheduleParallel(agents.Length, 1, default);",
+   "lang": "cs",
+   "deep": "⟦⟧"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// measure, don't guess: try several values, compare in the Timeline\nstatic readonly ProfilerMarker s_Wait = new ProfilerMarker(\"Crowd.Complete\");\n\nvoid LateUpdate()\n{\n    using (s_Wait.Auto()) handle.Complete();   // how long the main thread waits\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 4],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "public class Crowd : MonoBehaviour\n{\n    NativeArray<float3> pos, vel;       // 100 000 particles\n    NativeArray<Agent> agents;          // 200 agents\n    JobHandle moveHandle, pathHandle;\n\n    void Update()\n    {\n        var move = new MoveJob { pos = pos, vel = vel, dt = Time.deltaTime };   // IJobFor\n        var path = new PathJob { agents = agents };                             // IJobFor\n        // TODO: pick the batch sizes\n        moveHandle = move.ScheduleParallel(pos.Length, 1, default);\n        pathHandle = path.ScheduleParallel(agents.Length, 256, default);\n        JobHandle.ScheduleBatchedJobs();\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "\\.ScheduleParallel\\s*\\(\\s*pos\\.Length\\s*,\\s*(?:3[2-9]|[4-9]\\d|1[01]\\d|12[0-8])\\s*,"
+    },
+    {
+     "label": "PathJob: batchSize 1",
+     "re": "\\.ScheduleParallel\\s*\\(\\s*agents\\.Length\\s*,\\s*1\\s*,"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\.Complete\\(\\)",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "ScheduleParallel[\\s\\S]*JobHandle\\.ScheduleBatchedJobs\\s*\\(\\s*\\)"
+    }
+   ],
+   "solution": "public class Crowd : MonoBehaviour\n{\n    NativeArray<float3> pos, vel;       // 100 000 particles\n    NativeArray<Agent> agents;          // 200 agents\n    JobHandle moveHandle, pathHandle;\n\n    void Update()\n    {\n        var move = new MoveJob { pos = pos, vel = vel, dt = Time.deltaTime };   // IJobFor\n        var path = new PathJob { agents = agents };                             // IJobFor\n        // cheap iterations: big batches; expensive, uneven ones: batch of 1\n        moveHandle = move.ScheduleParallel(pos.Length, 64, default);\n        pathHandle = path.ScheduleParallel(agents.Length, 1, default);\n        JobHandle.ScheduleBatchedJobs();\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}

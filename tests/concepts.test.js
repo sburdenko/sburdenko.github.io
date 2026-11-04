@@ -9,7 +9,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadCourseFromSource } from '../learn/content.js';
 
-const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'u8'], jobs: [] };
+const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'u8'], jobs: ['u2'] };
 
 /** Понятие → шаблон. Шаблоны ловят API и устойчивые термины, а не имена из примеров кода. */
 const CONCEPTS = {
@@ -188,6 +188,14 @@ const CONCEPTS = {
     'EntityCommandBuffer': /\bEntityCommandBuffer\b|\bECB\b/,
     'sync point': /\bsync point|точк\w* синхронизации/i,
     'Baking': /\bBak(ing|er)\b/,
+    'NativeHashMap': /\bNativeHashMap\b/,
+    'NativeParallelMultiHashMap': /\bNativeParallelMultiHashMap\b/,
+    'AsParallelWriter': /\bAsParallelWriter\b/,
+    'Dispose(JobHandle)': /\bDispose\(\s*(JobHandle|handle)\s*\)/,
+    'NativeLeakDetectionMode': /\b(EnabledWithStackTrace|Leak Detection Level)\b/,
+    'prefix sum': /prefix sum|exclusive scan/i,
+    'IJobParallelForBatch': /\bIJobParallelForBatch\b/,
+    'WaitForJobGroupID': /\bWaitForJobGroupID\b/,
   }
 };
 
