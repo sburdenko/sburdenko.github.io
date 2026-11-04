@@ -1,5 +1,5 @@
 /** Problems and C# solutions for the stack, linked list, DFS/BFS, trees. */
-import { problem as p } from './problem.js?v=202611040927';
+import { problem as p } from './problem.js?v=202611040929';
 
 export const PROBLEMS_B = {
   stack: [

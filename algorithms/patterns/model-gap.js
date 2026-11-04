@@ -3,7 +3,7 @@
  * (hash map) and Invert Binary Tree (trees). Same contract as model-a.js: every event is a complete snapshot
  * with an i18n key and its arguments.
  */
-import { layoutTree } from './model-b.js?v=202611040927';
+import { layoutTree } from './model-b.js?v=202611040929';
 
 const event = (key, args, state) => ({ key, args, ...state });
 

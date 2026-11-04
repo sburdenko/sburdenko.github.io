@@ -13,10 +13,10 @@
  * { signIn(method), signOut() } и вызывает emit(user) при каждом изменении пользователя.
  * Сменить Firebase на другой сервис — значит написать новый адаптер и поменять provider в config.js.
  */
-import { AUTH_CONFIG } from './config.js?v=202611040927';
+import { AUTH_CONFIG } from './config.js?v=202611040929';
 
 const ADAPTERS = {
-  firebase: () => import('./firebase.js?v=202611040927')
+  firebase: () => import('./firebase.js?v=202611040929')
 };
 
 function createAuth(config) {
