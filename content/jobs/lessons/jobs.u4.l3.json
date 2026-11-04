@@ -45,11 +45,11 @@
     },
     {
      "label": "⟦⟧",
-     "re": "GetEntity\\s*\\(\\s*(?:\\w+\\s*,\\s*)?TransformUsageFlags\\.Dynamic\\s*\\)"
+     "re": "GetEntity\\s*\\(\\s*(?:\\w+\\s*,\\s*)?(?:\\w+\\s*:\\s*)?TransformUsageFlags\\.Dynamic\\s*\\)"
     },
     {
      "label": "⟦⟧",
-     "re": "AddComponent\\s*\\(\\s*\\w+\\s*,\\s*new\\s+Speed\\b"
+     "re": "AddComponent\\s*(?:<\\s*Speed\\s*>\\s*)?\\([^;]*\\bnew\\s+Speed\\b"
     },
     {
      "label": "⟦⟧",
@@ -76,7 +76,7 @@
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "// old tutorials (Entities 0.x)            Entities 1.x\n// Translation, Rotation, NonUniformScale  LocalTransform\n// IConvertGameObjectToEntity              Baker<T> on an authoring MonoBehaviour\n// [GenerateAuthoringComponent]            authoring class + a hand-written Baker\n// Entities.ForEach in SystemBase          IJobEntity, SystemAPI.Query in ISystem",
+   "code": "// old tutorials (Entities 0.x)            Entities 1.x\n// Translation, Rotation, Scale           LocalTransform\n// NonUniformScale                         PostTransformMatrix\n// IConvertGameObjectToEntity              Baker<T> on an authoring MonoBehaviour\n// [GenerateAuthoringComponent]            authoring class + a hand-written Baker\n// Entities.ForEach in SystemBase          IJobEntity, SystemAPI.Query in ISystem",
    "lang": "cs"
   },
   {

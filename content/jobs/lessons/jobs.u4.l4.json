@@ -68,8 +68,8 @@
    "q": "⟦⟧",
    "pairs": [
     ["Profile first, then Burst the hot loop", "⟦⟧"],
-    ["SoA so the compiler can vectorize", "⟦⟧"],
-    ["I check the Burst Inspector", "⟦⟧"],
+    ["SoA so Burst can vectorize", "⟦⟧"],
+    ["I check it in the Burst Inspector", "⟦⟧"],
     ["Schedule early, complete late", "⟦⟧"]
    ]
   },

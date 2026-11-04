@@ -42,7 +42,7 @@
     },
     {
      "label": "⟦⟧",
-     "re": "(\\w+)\\s*=\\s*new\\s+VelocityJob[\\s\\S]*?\\.Schedule\\s*\\([^;]*;[\\s\\S]*new\\s+IntegrateJob[\\s\\S]*?\\.Schedule\\s*\\([^;]*,\\s*\\1\\s*\\)"
+     "re": "(\\w+)\\s*=\\s*new\\s+VelocityJob[\\s\\S]*?\\.Schedule\\s*\\([^;]*;[\\s\\S]*new\\s+IntegrateJob[\\s\\S]*?\\.Schedule\\s*\\([^;]*,\\s*(?:dependsOn\\s*:\\s*)?\\1\\s*\\)"
     },
     {
      "label": "⟦⟧",
@@ -118,7 +118,7 @@
     },
     {
      "label": "⟦⟧",
-     "re": "\\[\\s*ReadOnly\\s*\\]\\s*public\\s+NativeArray<float>\\s+(?:damage|armor)\\b[\\s\\S]*\\[\\s*ReadOnly\\s*\\]\\s*public\\s+NativeArray<float>\\s+(?:damage|armor)\\b"
+     "re": "\\[\\s*ReadOnly\\s*\\]\\s*(?:public\\s+)?NativeArray<float>\\s+(?:damage|armor)\\b[\\s\\S]*\\[\\s*ReadOnly\\s*\\]\\s*(?:public\\s+)?NativeArray<float>\\s+(?:damage|armor)\\b"
     },
     {
      "label": "⟦⟧",

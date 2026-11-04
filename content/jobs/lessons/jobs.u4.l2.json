@@ -8,7 +8,7 @@
    "t": "learn",
    "title": "⟦⟧",
    "body": "⟦⟧",
-   "code": "var em = state.EntityManager;\nEntity e = em.CreateEntity(typeof(LocalTransform), typeof(Health)); // structural\nem.AddComponent<Stunned>(e);          // structural: e moves to another archetype\nem.RemoveComponent<Stunned>(e);       // structural: and back again\nem.SetSharedComponent(e, new Team { Id = 2 }); // structural: another chunk\nem.SetComponentData(e, new Health { Value = 50f }); // NOT structural: a write\nem.DestroyEntity(e);                  // structural",
+   "code": "var em = state.EntityManager;\nEntity e = em.CreateEntity(typeof(LocalTransform), typeof(Health), typeof(Team)); // structural\nem.AddComponent<Stunned>(e);          // structural: e moves to another archetype\nem.RemoveComponent<Stunned>(e);       // structural: and back again\nem.SetSharedComponent(e, new Team { Id = 2 }); // structural: another chunk\nem.SetComponentData(e, new Health { Value = 50f }); // NOT structural: a write\nem.DestroyEntity(e);                  // structural",
    "lang": "cs"
   },
   {
