@@ -209,6 +209,20 @@ const CONCEPTS = {
     'NativeLeakDetectionMode': /\b(EnabledWithStackTrace|Leak Detection Level)\b/,
     'prefix sum': /prefix sum|exclusive scan/i,
     'WaitForJobGroupID': /\bWaitForJobGroupID\b/,
+    'mulss/mulps': /\bv?mul[sp]s\b/,
+    'кэш-линия': /кэш-лини|\bcache line/i,
+    'hot/cold split': /\bhot\/cold\b/i,
+    'архетип': /архетип|\barchetype/i,
+    'чанк': /чанк|\bchunk/i,
+    'FMA': /\bFMA\b/,
+    'ulp': /\bulp\b/,
+    'fixed-point': /\bfixed[- ]point\b/i,
+    'Enable Compilation': /\bEnable Compilation\b/,
+    'Use Job Threads': /\bUse Job Threads\b|\bJobWorkerCount\b/,
+    'Native Debug Mode': /\bNative Debug Mode\b/,
+    'Jobs Debugger': /\bJobs Debugger\b/,
+    'BurstDiscard': /\bBurstDiscard\b/,
+    'CompileSynchronously': /\bCompileSynchronously\b|\bSynchronous Compilation\b/,
   }
 };
 

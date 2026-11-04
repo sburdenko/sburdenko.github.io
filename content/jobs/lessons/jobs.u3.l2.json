@@ -1,0 +1,127 @@
+{
+ "id": "jobs.u3.l2",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 14,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// memory comes in 64-byte lines: touching one float loads 16 of them\nNativeArray<float> hp;            // 16 floats = one 64-byte line\nfloat a = hp[0];                  // miss: the whole line comes in\nfloat b = hp[1];                  // hit: already in L1\n\n// sequential walk: the prefetcher loads the next lines ahead of you\nfor (int i = 0; i < hp.Length; i++) sum += hp[i];\n// random walk: every access can be a miss\nfor (int i = 0; i < idx.Length; i++) sum += hp[idx[i]];",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "struct Unit                      // 52 bytes\n{\n    public float3 position;      // 12  hot\n    public float3 velocity;      // 12  hot\n    public quaternion rotation;  // 16\n    public float health;         //  4\n    public float cooldown;       //  4\n    public int team;             //  4\n}\n\n// the loop needs 24 bytes per unit, but all 52 go through the cache\nfor (int i = 0; i < units.Length; i++)\n{\n    Unit u = units[i];\n    u.position += u.velocity * dt;\n    units[i] = u;\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// SoA: one array per field; the hot loop touches only what it needs\n[BurstCompile]\nstruct MoveJob : IJobParallelFor\n{\n    public NativeArray<float3> positions;\n    [ReadOnly] public NativeArray<float3> velocities;\n    public float dt;\n    public void Execute(int i) => positions[i] += velocities[i] * dt;\n}\n// rotation, health, cooldown and team live in arrays of their own\n\n// fully split: 8 x coordinates side by side fill one ymm register\nNativeArray<float> px, py, pz, vx, vy, vz;",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// hot: read every frame by the movement and collision jobs\nNativeList<float3> positions, velocities;\n// warm: read by AI a few times a second\nNativeList<float> health, cooldown;\n// cold: UI and save games\nNativeList<FixedString32Bytes> names;\n\n// removing unit i: swap-back in EVERY list, or the indices drift apart\npositions.RemoveAtSwapBack(i);\nvelocities.RemoveAtSwapBack(i);\nhealth.RemoveAtSwapBack(i);\ncooldown.RemoveAtSwapBack(i);\nnames.RemoveAtSwapBack(i);",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "public struct Velocity : IComponentData { public float3 Value; }\n\n[BurstCompile]\npartial struct MoveJob : IJobEntity\n{\n    public float dt;\n    // per chunk: walks only the LocalTransform and Velocity arrays\n    void Execute(ref LocalTransform t, in Velocity v) => t.Position += v.Value * dt;\n}\n\n// chunk (16 KiB) of archetype {LocalTransform, Velocity, Health}:\n// [Entity e0 e1 e2 …][LocalTransform t0 t1 t2 …][Velocity v0 v1 …][Health h0 h1 …]",
+   "lang": "cs"
+  },
+  {
+   "t": "match",
+   "q": "⟦⟧",
+   "pairs": [
+    ["AoS: NativeArray<Unit>", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["⟦⟧", "⟦⟧"],
+    ["Hot/cold split", "⟦⟧"]
+   ]
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing Unity.Mathematics;\n\nstruct Boid { public float3 position; public float3 velocity; public float4 color; public int flockId; }\n\n[BurstCompile]\nstruct MoveJob : IJobFor\n{\n    // TODO: replace with two arrays, positions and velocities\n    public NativeArray<Boid> boids;\n    public float dt;\n\n    public void Execute(int i)\n    {\n        Boid b = boids[i];\n        b.position += b.velocity * dt;\n        boids[i] = b;\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "(?:public\\s+)?NativeArray\\s*<\\s*float3\\s*>\\s+positions\\s*;"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*ReadOnly\\s*\\]\\s*(?:public\\s+)?NativeArray\\s*<\\s*float3\\s*>\\s+velocities\\s*;"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "NativeArray\\s*<\\s*Boid\\s*>",
+     "not": true
+    },
+    {
+     "label": "⟦⟧",
+     "re": "positions\\s*\\[\\s*(\\w+)\\s*\\]\\s*(?=[^;]*\\bdt\\b)(?:\\+=|=\\s*positions\\s*\\[\\s*\\1\\s*\\]\\s*\\+)[^;]*velocities\\s*\\[\\s*\\1\\s*\\]"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "\\[\\s*BurstCompile[^\\]]*\\]\\s*(?:public\\s+)?struct\\s+MoveJob\\b"
+    }
+   ],
+   "solution": "using Unity.Burst;\nusing Unity.Collections;\nusing Unity.Jobs;\nusing Unity.Mathematics;\n\nstruct Boid { public float3 position; public float3 velocity; public float4 color; public int flockId; }\n\n[BurstCompile]\nstruct MoveJob : IJobFor\n{\n    public NativeArray<float3> positions;              // read and written\n    [ReadOnly] public NativeArray<float3> velocities;  // read only\n    public float dt;\n\n    public void Execute(int i)\n    {\n        // 24 useful bytes per boid instead of 44\n        positions[i] += velocities[i] * dt;\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  }
+ ]
+}
