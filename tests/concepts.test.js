@@ -9,7 +9,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadCourseFromSource } from '../learn/content.js';
 
-const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'u8'], jobs: [] };
+const CHECKED = { async: ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'u8'], jobs: ['u4'] };
 
 /** Понятие → шаблон. Шаблоны ловят API и устойчивые термины, а не имена из примеров кода. */
 const CONCEPTS = {
@@ -188,6 +188,25 @@ const CONCEPTS = {
     'EntityCommandBuffer': /\bEntityCommandBuffer\b|\bECB\b/,
     'sync point': /\bsync point|точк\w* синхронизации/i,
     'Baking': /\bBak(ing|er)\b/,
+    'IComponentData': /\bIComponentData\b/,
+    'ISystem': /\bISystem\b/,
+    'SystemAPI.Query': /\bSystemAPI\.Query\b/,
+    'RefRW/RefRO': /\bRef(RW|RO)\b/,
+    'state.Dependency': /\bstate\.Dependency\b/,
+    'LocalTransform': /\bLocalTransform\b/,
+    'архетип': /архетип|\barchetypes?\b/i,
+    'чанк': /чанк|\bchunks?\b/i,
+    'структурное изменение': /структурн\S* изменени|\bstructural change/i,
+    'ISharedComponentData': /\bISharedComponentData\b|\bSetSharedComponent\b/,
+    'Playback': /\bPlayback\b/,
+    'ChunkIndexInQuery': /\bChunkIndexInQuery\b/,
+    'EndSimulationEntityCommandBufferSystem': /\bEndSimulationEntityCommandBufferSystem\b/,
+    'IEnableableComponent': /\bIEnableableComponent\b|\benableable/i,
+    'SetComponentEnabled': /\bSetComponentEnabled\b/,
+    'subscene': /\bsubscenes?\b|сабсцен/i,
+    'TransformUsageFlags': /\bTransformUsageFlags\b/,
+    'Entities Graphics': /\bEntities Graphics\b/,
+    'managed-компонент': /managed-компонент|\bmanaged components?\b/i,
   }
 };
 

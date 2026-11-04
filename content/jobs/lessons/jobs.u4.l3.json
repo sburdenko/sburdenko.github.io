@@ -1,0 +1,128 @@
+{
+ "id": "jobs.u4.l3",
+ "title": "⟦⟧",
+ "sub": "⟦⟧",
+ "minutes": 16,
+ "cards": [
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "using Unity.Entities;\nusing UnityEngine;\n\npublic struct Gun : IComponentData { public Entity Bullet; public float Cooldown; }\n\n// authoring: a MonoBehaviour on a GameObject inside a subscene\npublic class GunAuthoring : MonoBehaviour\n{\n    public GameObject bulletPrefab;\n    public float cooldown = 0.2f;\n\n    class Baker : Baker<GunAuthoring>\n    {\n        public override void Bake(GunAuthoring authoring)\n        {\n            Entity e = GetEntity(TransformUsageFlags.Dynamic);     // it moves\n            AddComponent(e, new Gun\n            {\n                Bullet = GetEntity(authoring.bulletPrefab, TransformUsageFlags.Dynamic),\n                Cooldown = authoring.cooldown\n            });\n        }\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// GetEntity(TransformUsageFlags.None)       data only, no transform\n// GetEntity(TransformUsageFlags.Renderable) drawn, never moves\n// GetEntity(TransformUsageFlags.Dynamic)    moves at runtime: LocalTransform\n\n// at runtime the prefab is already an entity; no GameObject is involved\nGun gun = SystemAPI.GetComponent<Gun>(shooter);\nEntity bullet = ecb.Instantiate(gun.Bullet);\necb.SetComponent(bullet, LocalTransform.FromPosition(muzzle));",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "write",
+   "task": "⟦⟧",
+   "starter": "using Unity.Entities;\nusing UnityEngine;\n\npublic struct Speed : IComponentData { public float Value; }\n\npublic class SpeedAuthoring : MonoBehaviour\n{\n    public float metersPerSecond = 5f;\n\n    class Baker : Baker<SpeedAuthoring>\n    {\n        public override void Bake(SpeedAuthoring authoring)\n        {\n            // TODO: get the entity of a moving object\n            // TODO: add Speed with the value from authoring\n        }\n    }\n}",
+   "checks": [
+    {
+     "label": "⟦⟧",
+     "re": "class\\s+\\w+\\s*:\\s*Baker\\s*<\\s*SpeedAuthoring\\s*>"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "public\\s+override\\s+void\\s+Bake\\s*\\(\\s*SpeedAuthoring\\s+\\w+\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "GetEntity\\s*\\(\\s*(?:\\w+\\s*,\\s*)?TransformUsageFlags\\.Dynamic\\s*\\)"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "AddComponent\\s*\\(\\s*\\w+\\s*,\\s*new\\s+Speed\\b"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "Value\\s*=\\s*\\w+\\.metersPerSecond"
+    },
+    {
+     "label": "⟦⟧",
+     "re": "void\\s+(?:Awake|Start|Update)\\s*\\(",
+     "not": true
+    }
+   ],
+   "solution": "using Unity.Entities;\nusing UnityEngine;\n\npublic struct Speed : IComponentData { public float Value; }\n\npublic class SpeedAuthoring : MonoBehaviour\n{\n    public float metersPerSecond = 5f;\n\n    class Baker : Baker<SpeedAuthoring>\n    {\n        public override void Bake(SpeedAuthoring authoring)\n        {\n            Entity e = GetEntity(TransformUsageFlags.Dynamic); // it moves at runtime\n            AddComponent(e, new Speed { Value = authoring.metersPerSecond });\n        }\n    }\n}",
+   "lang": "cs",
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// a regular GameObject (camera rig, UI marker) that follows one entity\npublic class FollowEntity : MonoBehaviour\n{\n    public Entity target;   // set by whoever spawned it\n\n    void LateUpdate()\n    {\n        var em = World.DefaultGameObjectInjectionWorld.EntityManager;\n        if (!em.Exists(target)) return;\n        // waits for jobs that are writing LocalTransform, so read it late\n        transform.position = em.GetComponentData<LocalTransform>(target).Position;\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// old tutorials (Entities 0.x)            Entities 1.x\n// Translation, Rotation, NonUniformScale  LocalTransform\n// IConvertGameObjectToEntity              Baker<T> on an authoring MonoBehaviour\n// [GenerateAuthoringComponent]            authoring class + a hand-written Baker\n// Entities.ForEach in SystemBase          IJobEntity, SystemAPI.Query in ISystem",
+   "lang": "cs"
+  },
+  {
+   "t": "multi",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": [0, 1, 2],
+   "explain": "⟦⟧"
+  },
+  {
+   "t": "learn",
+   "title": "⟦⟧",
+   "body": "⟦⟧",
+   "code": "// the light path: one hot loop, no Entities\npublic class PathManager : MonoBehaviour\n{\n    NativeArray<float3> positions;   // Persistent, filled from the 200 objects\n    JobHandle handle;\n\n    void Update()\n    {\n        handle = new PathJob { positions = positions }.Schedule(positions.Length, 16);\n        JobHandle.ScheduleBatchedJobs();\n    }\n\n    void LateUpdate()\n    {\n        handle.Complete();\n        // copy the results back to the GameObjects\n    }\n}",
+   "lang": "cs"
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧",
+   "wrong": {
+    "1": "⟦⟧",
+    "2": "⟦⟧",
+    "3": "⟦⟧"
+   }
+  },
+  {
+   "t": "choice",
+   "q": "⟦⟧",
+   "options": ["⟦⟧", "⟦⟧", "⟦⟧", "⟦⟧"],
+   "answer": 0,
+   "explain": "⟦⟧"
+  }
+ ]
+}
