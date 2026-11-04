@@ -1,8 +1,8 @@
 /** Editable rigs for the chapters stack, linked list, DFS/BFS, trees. */
-import * as B from './model-b.js?v=202611040856';
-import * as V from './views-b.js?v=202611040856';
-import { treeFromLevelOrder, levelOrderOf } from './inputs.js?v=202611040856';
-import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202611040856';
+import * as B from './model-b.js?v=202611040927';
+import * as V from './views-b.js?v=202611040927';
+import { treeFromLevelOrder, levelOrderOf } from './inputs.js?v=202611040927';
+import { defineRig, randInt, randInts, pick, shuffle, distinctInts } from './rig-kit.js?v=202611040927';
 
 const values = (extra = {}) => ({ key: 'values', type: 'ints', minLen: 1, maxLen: 8, min: -99, max: 99, ...extra });
 const tree = { key: 'root', type: 'tree', maxNodes: 15, maxDepth: 4, min: -99, max: 99 };

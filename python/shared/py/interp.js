@@ -6,10 +6,10 @@ import {
   PyInt, PyBool, PyFloat, PyStr, PyBytes, PyList, PyTuple, PyDict, PySet, PyRange, PyFunction, PyBuiltin, PyMethod, PyClass, PyInstance,
   PyGenerator, PyModule, PyProperty, PyStaticMethod, PyClassMethod, PyIterator, PySlice, PyError, NONE, TRUE, FALSE, ELLIPSIS,
   int, float, bool, str, internStr, hashKey, UNHASHABLE, typeName, typeOf, isIntLike, isInstance, TYPES, isCallable,
-} from './objects.js?v=202611040856';
-import { EXC, makeExc, raise, pyError, isExceptionClass, excArgs } from './errors.js?v=202611040856';
-import { reprOf, strOf, formatValue } from './convert.js?v=202611040856';
-import { binop, unary, compare, truthy, iterate, toList, getitem, setitem, delitem, STOP, NOT_IMPLEMENTED, equals, hashReady } from './ops.js?v=202611040856';
+} from './objects.js?v=202611040927';
+import { EXC, makeExc, raise, pyError, isExceptionClass, excArgs } from './errors.js?v=202611040927';
+import { reprOf, strOf, formatValue } from './convert.js?v=202611040927';
+import { binop, unary, compare, truthy, iterate, toList, getitem, setitem, delitem, STOP, NOT_IMPLEMENTED, equals, hashReady } from './ops.js?v=202611040927';
 
 export class StepLimit extends Error { constructor(max) { super(`step limit ${max}`); this.max = max; } }
 
